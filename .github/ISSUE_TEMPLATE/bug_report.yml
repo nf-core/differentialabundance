@@ -48,6 +48,6 @@ body:
 
         * OS _(eg. CentOS Linux, macOS, Linux Mint)_
 
-        * Version of differentialabundance/differentialabundance _(eg. 1.1, 1.5, 1.8.2)_
+        * Version of nf-core/differentialabundance _(eg. 1.1, 1.5, 1.8.2)_
 
         "

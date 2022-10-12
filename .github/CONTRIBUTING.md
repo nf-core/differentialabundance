@@ -1,9 +1,9 @@
-# differentialabundance/differentialabundance: Contributing Guidelines
+# nf-core/differentialabundance: Contributing Guidelines
 
 Hi there!
-Many thanks for taking an interest in improving differentialabundance/differentialabundance.
+Many thanks for taking an interest in improving nf-core/differentialabundance.
 
-We try to manage the required tasks for differentialabundance/differentialabundance using GitHub issues, you probably came to this page when creating one.
+We try to manage the required tasks for nf-core/differentialabundance using GitHub issues, you probably came to this page when creating one.
 Please use the pre-filled template to save time.
 
 However, don't be put off by this template - other more general issues and suggestions are welcome!
@@ -11,10 +11,10 @@ Contributions to the code are even more welcome ;)
 
 ## Contribution workflow
 
-If you'd like to write some code for differentialabundance/differentialabundance, the standard workflow is as follows:
+If you'd like to write some code for nf-core/differentialabundance, the standard workflow is as follows:
 
-1. Check that there isn't already an issue about your idea in the [differentialabundance/differentialabundance issues](https://github.com/differentialabundance/differentialabundance/issues) to avoid duplicating work. If there isn't one already, please create one so that others know you're working on this
-2. [Fork](https://help.github.com/en/github/getting-started-with-github/fork-a-repo) the [differentialabundance/differentialabundance repository](https://github.com/differentialabundance/differentialabundance) to your GitHub account
+1. Check that there isn't already an issue about your idea in the [nf-core/differentialabundance issues](https://github.com/nf-core/differentialabundance/issues) to avoid duplicating work. If there isn't one already, please create one so that others know you're working on this
+2. [Fork](https://help.github.com/en/github/getting-started-with-github/fork-a-repo) the [nf-core/differentialabundance repository](https://github.com/nf-core/differentialabundance) to your GitHub account
 3. Make the necessary changes / additions within your forked repository following [Pipeline conventions](#pipeline-contribution-conventions)
 4. Use `nf-core schema build` and add any new parameters to the pipeline JSON schema (requires [nf-core tools](https://github.com/nf-core/tools) >= 1.10).
 5. Submit a Pull Request against the `dev` branch and wait for the code to be reviewed and merged
@@ -52,7 +52,7 @@ These tests are run both with the latest available version of `Nextflow` and als
 
 ## Pipeline contribution conventions
 
-To make the differentialabundance/differentialabundance code and processing logic more understandable for new contributors and to ensure quality, we semi-standardise the way the code and other contributions are written.
+To make the nf-core/differentialabundance code and processing logic more understandable for new contributors and to ensure quality, we semi-standardise the way the code and other contributions are written.
 
 ### Adding a new step
 
