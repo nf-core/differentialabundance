@@ -1,4 +1,4 @@
-id: "differentialabundance-differentialabundance-methods-description"
+id: "nf-core-differentialabundance-methods-description"
 description: "Suggested text and references to use when describing pipeline usage within the methods section of a publication."
 section_name: "nf-core/differentialabundance Methods Description"
 section_href: "https://github.com/nf-core/differentialabundance"
