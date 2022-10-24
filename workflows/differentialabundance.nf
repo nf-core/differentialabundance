@@ -11,11 +11,12 @@ WorkflowDifferentialabundance.initialise(params, log)
 
 // TODO nf-core: Add all file path parameters for the pipeline to the list below
 // Check input path parameters to see if they exist
-def checkPathParamList = [ params.input, params.multiqc_config, params.fasta ]
-for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
+//def checkPathParamList = [ params.input, params.multiqc_config, params.fasta ]
+//for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
 // Check mandatory parameters
-if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
+if (params.counts) { ch_merged_gene_counts = file(params.counts) } else { exit 1, 'Gene counts not specified!' }
+if (params.samplesheet) { ch_samplesheet = file(params.samplesheet) } else { exit 1, 'Samplesheet not specified!' }
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -23,11 +24,13 @@ if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input sample
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
+/*
+TODO
 ch_multiqc_config          = Channel.fromPath("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
 ch_multiqc_custom_config   = params.multiqc_config ? Channel.fromPath( params.multiqc_config, checkIfExists: true ) : Channel.empty()
 ch_multiqc_logo            = params.multiqc_logo   ? Channel.fromPath( params.multiqc_logo, checkIfExists: true ) : Channel.empty()
 ch_multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
-
+*/
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     IMPORT LOCAL MODULES/SUBWORKFLOWS
@@ -38,6 +41,7 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 include { INPUT_CHECK } from '../subworkflows/local/input_check'
+include { IMPORTMERGEDCOUNTS } from '../modules/local/importmergedcounts/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -48,9 +52,8 @@ include { INPUT_CHECK } from '../subworkflows/local/input_check'
 //
 // MODULE: Installed directly from nf-core/modules
 //
-include { FASTQC                      } from '../modules/nf-core/fastqc/main'
-include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
+include { DESEQ2_DIFFERENTIAL } from '../modules/nf-core/deseq2/differential/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -60,7 +63,7 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoft
 
 // Info required for completion email and summary
 def multiqc_report = []
-
+//TODO: make lowercase? https://nf-co.re/docs/contributing/guidelines/requirements/workflow_name
 workflow DIFFERENTIALABUNDANCE {
 
     ch_versions = Channel.empty()
@@ -68,26 +71,59 @@ workflow DIFFERENTIALABUNDANCE {
     //
     // SUBWORKFLOW: Read in samplesheet, validate and stage input files
     //
-    INPUT_CHECK (
-        ch_input
-    )
-    ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
+    //TODO
+    //INPUT_CHECK (
+    //    ch_input
+    //)
+    //ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
 
     //
-    // MODULE: Run FastQC
+    // MODULE: Run ImportMergedCounts
     //
-    FASTQC (
-        INPUT_CHECK.out.reads
+    IMPORTMERGEDCOUNTS (
+        ch_samplesheet,
+        ch_merged_gene_counts
     )
-    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
+    ch_modified_samplesheet = IMPORTMERGEDCOUNTS.out.ch_modified_samplesheet //file(IMPORTMERGEDCOUNTS.out.ch_modified_samplesheet.first())
+    ch_modified_gene_counts = IMPORTMERGEDCOUNTS.out.ch_modified_gene_counts //file(IMPORTMERGEDCOUNTS.out.ch_modified_gene_counts.first())
+    ch_versions = ch_versions.mix(IMPORTMERGEDCOUNTS.out.versions)
 
-    CUSTOM_DUMPSOFTWAREVERSIONS (
-        ch_versions.unique().collectFile(name: 'collated_versions.yml')
+    ch_contrast_meta = Channel.fromPath(params.contrast_meta)
+
+   // ch_contrast_meta.dump(tag:"1")
+    ch_modified_samplesheet.dump(tag:"2")
+    ch_modified_gene_counts.dump(tag:"3")
+
+
+//    ch_in = Channel.fromPath(params.contrast_meta)
+//        .splitCsv ( header:true, sep:',' )
+    //ch_input.dump(tag:'input')
+    DESEQ2_DIFFERENTIAL (
+        Channel.fromPath(params.contrast_meta)
+        .splitCsv ( header:true, sep:',' )
+        .map{
+            tuple(
+                it,
+                ch_modified_samplesheet,
+                ch_modified_gene_counts
+                )
+        }
+        .dump(tag:'input')
     )
+
+
+
+
+
+
+    //TODO CUSTOM_DUMPSOFTWAREVERSIONS (
+    //    ch_versions.unique().collectFile(name: 'collated_versions.yml')
+    //)
 
     //
     // MODULE: MultiQC
-    //
+    // TODO
+    /*
     workflow_summary    = WorkflowDifferentialabundance.paramsSummaryMultiqc(workflow, summary_params)
     ch_workflow_summary = Channel.value(workflow_summary)
 
@@ -108,6 +144,7 @@ workflow DIFFERENTIALABUNDANCE {
     )
     multiqc_report = MULTIQC.out.report.toList()
     ch_versions    = ch_versions.mix(MULTIQC.out.versions)
+    */
 }
 
 /*

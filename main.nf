@@ -15,7 +15,7 @@ nextflow.enable.dsl = 2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-params.fasta = WorkflowMain.getGenomeAttribute(params, 'fasta')
+//TODO params.fasta = WorkflowMain.getGenomeAttribute(params, 'fasta')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -36,7 +36,7 @@ include { DIFFERENTIALABUNDANCE } from './workflows/differentialabundance'
 //
 // WORKFLOW: Run main nf-core/differentialabundance analysis pipeline
 //
-workflow DIFFERENTIALABUNDANCE_DIFFERENTIALABUNDANCE {
+workflow NFCORE_DIFFERENTIALABUNDANCE {
     DIFFERENTIALABUNDANCE ()
 }
 
@@ -51,7 +51,7 @@ workflow DIFFERENTIALABUNDANCE_DIFFERENTIALABUNDANCE {
 // See: https://github.com/nf-core/rnaseq/issues/619
 //
 workflow {
-    DIFFERENTIALABUNDANCE_DIFFERENTIALABUNDANCE ()
+    NFCORE_DIFFERENTIALABUNDANCE ()
 }
 
 /*

@@ -10,13 +10,23 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["input", "outdir"],
+            "required": ["counts", "outdir"],
             "properties": {
-                "input": {
+                "counts": {
                     "type": "string",
                     "format": "file-path",
-                    "mimetype": "text/csv",
-                    "pattern": "^\\S+\\.csv$",
+                    "mimetype": "text/txt",
+                    "pattern": "^\\S+\\.txt$",
+                    "schema": "assets/schema_input.json",
+                    "description": "Path to comma-separated file containing information about the samples in the experiment.",
+                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row.",
+                    "fa_icon": "fas fa-file-csv"
+                },
+                "samplesheet": {
+                    "type": "string",
+                    "format": "file-path",
+                    "mimetype": "text/tsv",
+                    "pattern": "^\\S+\\.tsv$",
                     "schema": "assets/schema_input.json",
                     "description": "Path to comma-separated file containing information about the samples in the experiment.",
                     "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row.",
