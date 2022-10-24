@@ -88,33 +88,20 @@ workflow DIFFERENTIALABUNDANCE {
     ch_modified_gene_counts = IMPORTMERGEDCOUNTS.out.ch_modified_gene_counts //file(IMPORTMERGEDCOUNTS.out.ch_modified_gene_counts.first())
     ch_versions = ch_versions.mix(IMPORTMERGEDCOUNTS.out.versions)
 
-    ch_contrast_meta = Channel.fromPath(params.contrast_meta)
-
-   // ch_contrast_meta.dump(tag:"1")
-    ch_modified_samplesheet.dump(tag:"2")
-    ch_modified_gene_counts.dump(tag:"3")
-
-
-//    ch_in = Channel.fromPath(params.contrast_meta)
-//        .splitCsv ( header:true, sep:',' )
-    //ch_input.dump(tag:'input')
-    DESEQ2_DIFFERENTIAL (
-        Channel.fromPath(params.contrast_meta)
+    ch_input = Channel.fromPath(params.contrast_meta)
         .splitCsv ( header:true, sep:',' )
         .map{
             tuple(
                 it,
-                ch_modified_samplesheet,
-                ch_modified_gene_counts
+                ch_modified_samplesheet.val,
+                ch_modified_gene_counts.val
                 )
         }
-        .dump(tag:'input')
+
+    DESEQ2_DIFFERENTIAL (
+        ch_input,
+        IMPORTMERGEDCOUNTS.out.finished
     )
-
-
-
-
-
 
     //TODO CUSTOM_DUMPSOFTWAREVERSIONS (
     //    ch_versions.unique().collectFile(name: 'collated_versions.yml')

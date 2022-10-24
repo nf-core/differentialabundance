@@ -15,6 +15,7 @@ process IMPORTMERGEDCOUNTS {
     path "*.tsv"                  , emit: ch_modified_gene_counts
     path "*.csv"                  , emit: ch_modified_samplesheet
     path "versions.yml"           , emit: versions
+    val true                      , emit: finished
 
     when:
     task.ext.when == null || task.ext.when

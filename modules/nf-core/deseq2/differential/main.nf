@@ -8,7 +8,8 @@ process DESEQ2_DIFFERENTIAL {
         'quay.io/biocontainers/bioconductor-deseq2:1.34.0--r41hc247a5b_3' }"
 
     input:
-    tuple val(meta), path(samplesheet), path(counts)
+    tuple val(meta), val(samplesheet), val(counts)
+    val finished
 
     output:
     tuple val(meta), path("*.deseq2.results.tsv")              , emit: results
