@@ -2,6 +2,16 @@
     "name": "nf-core/differentialabundance",
     "homePage": "https://github.com/nf-core/differentialabundance",
     "repos": {
+        "git@github.com:pinin4fjords/nf-core-modules.git": {
+            "modules": {
+                "pinin4fjords": {
+                    "shinyngs/validatefomcomponents": {
+                        "branch": "shinyngs/validatefomcomponents_installable",
+                        "git_sha": "1c819acf3d54f536599a8ac4051e1922561ac979"
+                    }
+                }
+            }
+        },
         "https://github.com/nf-core/modules.git": {
             "modules": {
                 "nf-core": {
