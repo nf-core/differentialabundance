@@ -13,8 +13,8 @@ class WorkflowDifferentialabundance {
         genomeExistsError(params, log)
 
 
-        if (!params.fasta) {
-            log.error "Genome fasta file not specified with e.g. '--fasta genome.fa' or via a detectable config file."
+        if (!params.counts) {
+            log.error "Counts file not specified with e.g. '--counts counts.tsv'."
             System.exit(1)
         }
     }
