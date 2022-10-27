@@ -1,4 +1,4 @@
-name: nf-core CI
+name: CI
 # This workflow runs the pipeline with the minimal test dataset to check that it completes without any syntax errors
 on:
   push:
@@ -10,6 +10,7 @@ on:
 
 env:
   NXF_ANSI_LOG: false
+  CAPSULE_LOG: none
 
 jobs:
   test:
@@ -19,9 +20,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        NXF_VER:
-          - "21.10.3"
-          - "latest-everything"
+        # Nextflow versions
+        include:
+          # Test pipeline minimum Nextflow version
+          - NXF_VER: "21.10.3"
+            NXF_EDGE: ""
+          # Test latest edge release of Nextflow
+          - NXF_VER: ""
+            NXF_EDGE: "1"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v2
@@ -37,3 +43,69 @@ jobs:
         # Remember that you can parallelise this by using strategy.matrix
         run: |
           nextflow run ${GITHUB_WORKSPACE} -profile test,docker --outdir ./results
+
+  parameters:
+    name: Test workflow parameters
+    runs-on: ubuntu-latest
+    env:
+      NXF_VER: "21.10.3"
+      NXF_ANSI_LOG: false
+    strategy:
+      # This tells github to continue running other profile tests if some tests fail (default cancels all tests upon failure)
+      fail-fast: false
+      matrix:
+        config:
+          [
+            "test",
+          #  "test_contrast_matrix",
+          #  "test_contrast_list",
+          #  "test_no_multiqc",
+          #  "test_relevel",
+          #  "test_skip_pathway_analysis",
+            "test_star_rsem",
+            "test_star_salmon",
+          #  "test_use_vst",
+          #  "test_batcheffect",
+          ]
+    steps:
+      - name: Check out pipeline code
+        uses: actions/checkout@v2
+
+      - name: Install Nextflow
+        uses: nf-core/setup-nextflow@v1
+        with:
+          version: "${{ matrix.NXF_VER }}"
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip pytest-workflow
+
+      - name: Run pipeline with tests settings
+        uses: Wandalen/wretry.action@v1.0.11
+        with:
+          command: pytest --tag ${{ matrix.config }} --kwdof --git-aware --color=yes
+          attempt_limit: 3
+
+      - name: Output log on failure
+        if: failure()
+        run: |
+          sudo apt install bat > /dev/null
+          batcat --decorations=always --color=always /tmp/pytest_workflow_*/*/log.{out,err}
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs-${{ matrix.profile }}
+          path: |
+            /tmp/pytest_workflow_*/*/.nextflow.log
+            /tmp/pytest_workflow_*/*/log.out
+            /tmp/pytest_workflow_*/*/log.err
+            /tmp/pytest_workflow_*/*/work
+            !/tmp/pytest_workflow_*/*/work/conda
+            !/tmp/pytest_workflow_*/*/work/singularity
+            /tmp/pytest_workflow_*/**/.command.log

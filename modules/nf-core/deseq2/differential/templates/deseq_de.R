@@ -94,6 +94,7 @@ library(BiocParallel)
 ## READ IN COUNTS FILE AND SAMPLE METADATA    ##
 ################################################
 ################################################
+write.table(opt\$count_file, file="/home-link/iivow01/git/differentialabundance/error/cnttt")
 
 count.table <-
     read.delim(
@@ -196,10 +197,17 @@ model <- paste(model, opt\$contrast_variable, sep = ' + ')
 ################################################
 
 dds <- DESeqDataSetFromMatrix(
-    countData = round(count.table),
+    countData = count.table,
     colData = sample.sheet,
     design = as.formula(model)
 )
+#TODO:
+options(max.print=3000000)
+count.table <- count.table[ order(row.names(count.table)), ]
+write.table(count.table, file="/home-link/iivow01/git/differentialabundance/comp/di_cnt")
+capture.output(sample.sheet, file="/home-link/iivow01/git/differentialabundance/comp/di_sht")
+capture.output(as.formula(model), file="/home-link/iivow01/git/differentialabundance/comp/di_form")
+capture.output(model, file="/home-link/iivow01/git/differentialabundance/comp/di_mod")
 
 dds <- DESeq(
     dds,
@@ -208,7 +216,7 @@ dds <- DESeq(
     minReplicatesForReplace = opt\$min_replicates_for_replace,
     useT = opt\$use_t,
     sfType = opt\$sf_type,
-    parallel=TRUE, BPPARAM=MulticoreParam(opt\$cores)
+    parallel=F, BPPARAM=MulticoreParam(opt\$cores)
 )
 
 comp.results <-
@@ -254,7 +262,7 @@ cat("Saving results for ", contrast.name, " ...\n", sep = "")
 # results
 
 write.table(
-    format(data.frame(gene_id = rownames(comp.results), comp.results), nsmall = 8),
+    data.frame(gene_id = rownames(comp.results), comp.results),
     file = paste(output_prefix, 'deseq2.results.tsv', sep = '.'),
     col.names = TRUE,
     row.names = FALSE,

@@ -24,7 +24,7 @@ input:
       type: file
       description: |
         Raw TSV-format expression matrix as output from the nf-core RNA-seq workflow
-  - contrast_meta:
+  - contrast_file:
       type: map
       description: |
         Groovy Map containing contrast information
