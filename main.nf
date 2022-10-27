@@ -1,9 +1,12 @@
 #!/usr/bin/env nextflow
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    differentialabundance/differentialabundance
+    nf-core/differentialabundance
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/differentialabundance/differentialabundance
+    Github : https://github.com/nf-core/differentialabundance
+
+    Website: https://nf-co.re/differentialabundance
+    Slack  : https://nfcore.slack.com/channels/differentialabundance
 ----------------------------------------------------------------------------------------
 */
 
@@ -34,9 +37,9 @@ WorkflowMain.initialise(workflow, params, log)
 include { DIFFERENTIALABUNDANCE } from './workflows/differentialabundance'
 
 //
-// WORKFLOW: Run main differentialabundance/differentialabundance analysis pipeline
+// WORKFLOW: Run main nf-core/differentialabundance analysis pipeline
 //
-workflow DIFFERENTIALABUNDANCE_DIFFERENTIALABUNDANCE {
+workflow NFCORE_DIFFERENTIALABUNDANCE {
     DIFFERENTIALABUNDANCE ()
 }
 
@@ -51,7 +54,7 @@ workflow DIFFERENTIALABUNDANCE_DIFFERENTIALABUNDANCE {
 // See: https://github.com/nf-core/rnaseq/issues/619
 //
 workflow {
-    DIFFERENTIALABUNDANCE_DIFFERENTIALABUNDANCE ()
+    NFCORE_DIFFERENTIALABUNDANCE ()
 }
 
 /*

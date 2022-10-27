@@ -13,7 +13,7 @@ process SAMPLESHEET_CHECK {
     path '*.csv'       , emit: csv
     path "versions.yml", emit: versions
 
-    script: // This script is bundled with the pipeline, in differentialabundance/differentialabundance/bin/
+    script: // This script is bundled with the pipeline, in nf-core/differentialabundance/bin/
     """
     check_samplesheet.py \\
         $samplesheet \\

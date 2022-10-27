@@ -1,4 +1,4 @@
-# differentialabundance/differentialabundance: Output
+# nf-core/differentialabundance: Output
 
 ## Introduction
 
