@@ -1,6 +1,6 @@
 {
-    "name": "differentialabundance/differentialabundance",
-    "homePage": "https://github.com/differentialabundance/differentialabundance",
+    "name": "nf-core/differentialabundance",
+    "homePage": "https://github.com/nf-core/differentialabundance",
     "repos": {
         "https://github.com/nf-core/modules.git": {
             "modules": {
