@@ -69,7 +69,7 @@ workflow DIFFERENTIALABUNDANCE {
     file_gtf = file(params.gtf) 
     GUNZIP_GTF([["id": file_gtf.simpleName], file_gtf])
 
-    exp_meta = [ "id":"SRP254919"  ]
+    exp_meta = [ "id": params.study_name  ]
 
     // Get a features table from the GTF and combine with the matrix and sample
     // annotation (fom = features/ observations/ matrix)
