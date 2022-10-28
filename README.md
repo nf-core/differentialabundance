@@ -63,7 +63,7 @@ The nf-core/differentialabundance pipeline comes with documentation about the pi
 
 ## Credits
 
-nf-core/differentialabundance was originally written by Oskar Wacker.
+nf-core/differentialabundance was originally written by Oskar Wacker, Jonathan Manning.
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 
@@ -84,14 +84,8 @@ For further information or help, don't hesitate to get in touch on the [Slack `#
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 
-<!-- TODO is the following part okay? -->
-
-You can cite the `nf-core` publication as follows:
-
-<!-- TODO ????? -->
-
-
 This pipeline uses code and infrastructure developed and maintained by the [nf-core](https://nf-co.re) community, reused here under the [MIT license](https://github.com/nf-core/tools/blob/master/LICENSE).
+You can cite the `nf-core` publication as follows:
 
 > **The nf-core framework for community-curated bioinformatics pipelines.**
 >

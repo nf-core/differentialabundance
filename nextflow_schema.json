@@ -2,7 +2,7 @@
     "$schema": "http://json-schema.org/draft-07/schema",
     "$id": "https://raw.githubusercontent.com/nf-core/differentialabundance/master/nextflow_schema.json",
     "title": "nf-core/differentialabundance pipeline parameters",
-    "description": "Differential expression analysis pipeline",
+    "description": "Differential abundance analysis",
     "type": "object",
     "definitions": {
         "input_output_options": {
