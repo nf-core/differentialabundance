@@ -2,28 +2,22 @@
     "name": "nf-core/differentialabundance",
     "homePage": "https://github.com/nf-core/differentialabundance",
     "repos": {
-        "git@github.com:pinin4fjords/nf-core-modules.git": {
-            "modules": {
-                "pinin4fjords": {
-                    "shinyngs/validatefomcomponents": {
-                        "branch": "shinyngs/validatefomcomponents_installable",
-                        "git_sha": "1c819acf3d54f536599a8ac4051e1922561ac979"
-                    }
-                }
-            }
-        },
         "https://github.com/nf-core/modules.git": {
             "modules": {
                 "nf-core": {
+                    "atlasgeneannotationmanipulation/gtf2featureannotation": {
+                        "branch": "master",
+                        "git_sha": "4192e9051c403708e9e85121ff1666221d9ea624"
+                    },
                     "custom/dumpsoftwareversions": {
                         "branch": "master",
                         "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
                     },
                     "deseq2/differential": {
                         "branch": "master",
-                        "git_sha": "72900e24112957e65c53763f59ade5aca6322ea7"
+                        "git_sha": "0c078028e29d84f75853552af414019fc5496bab"
                     },
-                    "fastqc": {
+                    "gunzip": {
                         "branch": "master",
                         "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
                     },
@@ -34,6 +28,10 @@
                     "shinyngs/staticexploratory": {
                         "branch": "master",
                         "git_sha": "bf69d2f911a8aae8d06a6d3fa7ca8bf462c41e9e"
+                    },
+                    "shinyngs/validatefomcomponents": {
+                        "branch": "shinyngs/validatefomcomponents_installable",
+                        "git_sha": "1c819acf3d54f536599a8ac4051e1922561ac979"
                     }
                 }
             }

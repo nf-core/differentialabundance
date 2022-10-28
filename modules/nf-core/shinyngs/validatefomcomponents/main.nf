@@ -1,5 +1,5 @@
 process SHINYNGS_VALIDATEFOMCOMPONENTS {
-    tag '$sample'
+    tag "$sample"
     label 'process_single'
 
     conda (params.enable_conda ? "bioconda::r-shinyngs=1.4.1" : null)
@@ -13,7 +13,7 @@ process SHINYNGS_VALIDATEFOMCOMPONENTS {
 
     output:
     tuple val(meta), path("*/*.sample_metadata.tsv"), path("*/*.feature_metadata.tsv"), path("*/*.assay.tsv")   , emit: fom
-    path("*/*.contrasts_file.tsv")                                                                              , emit: contrasts
+    tuple val(meta2), path("*/*.contrasts_file.tsv")                                                            , emit: contrasts
     path "versions.yml"                                                                                         , emit: versions
 
     when:
