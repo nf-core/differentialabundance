@@ -27,8 +27,6 @@ process ATLASGENEANNOTATIONMANIPULATION_GTF2FEATUREANNOTATION {
     """
     gtf2featureAnnotation.R \\
         --gtf-file $gtf \\
-        --feature-type "gene" \\
-        --first-field "gene_id" \\
         --output-file ${prefix}.anno.tsv \\
         $reference_cdna \\
         $args
