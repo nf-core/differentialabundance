@@ -157,7 +157,7 @@ workflow DIFFERENTIALABUNDANCE {
     ch_versions = GUNZIP_GTF.out.versions
         .mix(GTF_TO_TABLE.out.versions) 
         .mix(VALIDATOR.out.versions)
-        .mix(DESEQ2_DIFFERENTIAL.out.versions.map{ it[1] })
+        .mix(DESEQ2_DIFFERENTIAL.out.versions)
         .mix(PLOT_EXPLORATORY.out.versions)
         .mix(PLOT_DIFFERENTIAL.out.versions)
 
