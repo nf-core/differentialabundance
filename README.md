@@ -12,7 +12,7 @@
 
 ## Introduction
 
-<!-- TODO nf-core: Write a 1-2 sentence summary of what data the pipeline is for and what it does -->
+**nf-core/differentialabundance** is a bioinformatics pipeline that can be used to analyse data represented as matrices, compararing groups of observations to generate differential statistics and downstream analayses. The initial feature set is built around RNA-seq, but we anticipate rapid expansion to include other platforms.
 
 **nf-core/differentialabundance** is a bioinformatics best-practice analysis pipeline for differential abundance analysis.
 
@@ -25,10 +25,10 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 ## Pipeline summary
 
-<!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
-
-1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
-2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
+1. Generate a list of genomic feature annotations using the input GTF file.
+2. Cross-check matrices, sample annotations, feature set and contrasts to ensure consistency.
+3. Run differential analyis over all contrasts specified.
+4. Generate exploratory and differential analysis plots for interpretation.
 
 ## Quick Start
 
@@ -51,10 +51,8 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 4. Start running your own analysis!
 
-   <!-- TODO nf-core: Update the example "typical command" below used to run the pipeline -->
-
    ```bash
-   nextflow run nf-core/differentialabundance --input samplesheet.csv --outdir <OUTDIR> --genome GRCh37 -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
+   nextflow run nf-core/differentialabundance --input samplesheet.csv --contrasts contrasts.csv --matrix assay_matrix.tsv  --outdir <OUTDIR> --genome GRCh37 -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
    ```
 
 ## Documentation
