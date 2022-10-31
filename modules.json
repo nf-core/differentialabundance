@@ -30,8 +30,8 @@
                         "git_sha": "6d26aab1ab4fdeaabac866924dcfb4370ff5eeac"
                     },
                     "shinyngs/validatefomcomponents": {
-                        "branch": "shinyngs/validatefomcomponents_installable",
-                        "git_sha": "1c819acf3d54f536599a8ac4051e1922561ac979"
+                        "branch": "master",
+                        "git_sha": "72695ee4b283a8f479fe503ee91d19fde160508f"
                     }
                 }
             }
