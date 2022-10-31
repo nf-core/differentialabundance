@@ -9,9 +9,9 @@ reports:
     display: "Exploratory plots (PNG)"
   "**/plots/differential/**/png/*.png":
     display: "Differential plots (PNG)"
-  "**/tables/differential/*.tsv"
+  "**/tables/differential/*.tsv":
     display: "DESeq2 differential table"  
-  "**/tables/processed_counts/*.tsv"
+  "**/tables/processed_counts/*.tsv":
     display: "DESeq2 processed counts table"  
-  "**/plots/qc/*.dispersion.png"
+  "**/plots/qc/*.dispersion.png":
     display: "DESeq2 dispersion plot"  
