@@ -10,8 +10,8 @@ reports:
   "**/plots/differential/**/png/*.png":
     display: "Differential plots (PNG)"
   "**/tables/differential/*.tsv":
-    display: "DESeq2 differential table"  
+    display: "DESeq2 differential table"
   "**/tables/processed_counts/*.tsv":
-    display: "DESeq2 processed counts table"  
+    display: "DESeq2 processed counts table"
   "**/plots/qc/*.dispersion.png":
-    display: "DESeq2 dispersion plot"  
+    display: "DESeq2 dispersion plot"
