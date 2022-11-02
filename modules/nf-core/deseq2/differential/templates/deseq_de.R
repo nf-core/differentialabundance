@@ -331,7 +331,8 @@ write.table(
 )
 
 # Note very limited rounding for consistency of results
-
+capture.output(strsplit(opt\$vs_method, ','), file="/home-link/iivow01/git/differentialabundance/error/meth")
+capture.output(opt\$vst_nsub, file="/home-link/iivow01/git/differentialabundance/error/nsub")
 for (vs_method_name in strsplit(opt\$vs_method, ',')){
     if (vs_method_name == 'vst'){
         vs_mat <- vst(dds, blind = opt\$vs_blind, nsub = opt\$vst_nsub)

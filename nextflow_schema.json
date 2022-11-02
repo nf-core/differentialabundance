@@ -1,8 +1,8 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "https://raw.githubusercontent.com/differentialabundance/differentialabundance/master/nextflow_schema.json",
-    "title": "differentialabundance/differentialabundance pipeline parameters",
-    "description": "Differential expression analysis pipeline",
+    "$id": "https://raw.githubusercontent.com/nf-core/differentialabundance/master/nextflow_schema.json",
+    "title": "nf-core/differentialabundance pipeline parameters",
+    "description": "Differential abundance analysis",
     "type": "object",
     "definitions": {
         "input_output_options": {
@@ -10,17 +10,33 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": [],
+            "required": ["counts_type", "samplesheet", "contrasts", "counts"],
             "properties": {
-                "input": {
+                "counts_type": {
+                    "type": "string",
+                    "pattern": "salmon|rnaseq_featurecounts",
+                    "description": "Which type of counts data is provided in --counts, e.g. 'salmon' or 'rnaseq_featurecounts'",
+                    "help_text": "Which type of counts data is provided in --counts, e.g. 'salmon' or 'rnaseq_featurecounts'."
+                },
+                "samplesheet": {
                     "type": "string",
                     "format": "file-path",
                     "mimetype": "text/csv",
-                    "pattern": "^\\S+\\.csv$",
+                    "pattern": "^\\S+\\.csv$|^\\S+\\.tsv$",
                     "schema": "assets/schema_input.json",
-                    "description": "Path to comma-separated file containing information about the samples in the experiment.",
-                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row.",
+                    "description": "Path to tab- or comma-separated file containing information about the samples in the experiment.",
+                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a tab- or comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/differentialabundance/usage#samplesheet-input).",
                     "fa_icon": "fas fa-file-csv"
+                },
+                "contrasts": {
+                    "type": "string",
+                    "description": "A CSV file describing sample contrasts",
+                    "help_text": "This file is used to define groups of samples from 'samplesheet' to compare.  It must contain at least the columns 'variable', 'reference', 'target' and 'blocking', where 'variable' is a column in the input sample sheet, 'reference' and 'target' are values in that column, and blocking is a colon-separated list of additional 'blocking' variables (can be an empty string)"
+                },
+                "counts": {
+                    "type": "string",
+                    "description": "TSV-format abundance matrix",
+                    "help_text": "For example an expression matrix output from the nf-core RNA-seq workflow. There must be a column in this matrix for every row in the input sample sheet."
                 },
                 "outdir": {
                     "type": "string",
@@ -54,14 +70,13 @@
                     "fa_icon": "fas fa-book",
                     "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details."
                 },
-                "fasta": {
+                "gtf": {
                     "type": "string",
+                    "description": "Genome annotation file in GTF format",
+                    "pattern": "^\\S+\\.gtf(\\.gz)",
                     "format": "file-path",
                     "mimetype": "text/plain",
-                    "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
-                    "description": "Path to FASTA genome file.",
-                    "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
-                    "fa_icon": "far fa-file-code"
+                    "help_text": "\"This parameter is *mandatory* if `--genome` is not specified.\""
                 },
                 "igenomes_base": {
                     "type": "string",

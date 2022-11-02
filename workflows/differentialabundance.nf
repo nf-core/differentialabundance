@@ -47,6 +47,7 @@ include { INPUT_CHECK } from '../subworkflows/local/input_check'
 // MODULE: Installed directly from nf-core/modules
 //
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
+include { SHINYNGS_STATICEXPLORATORY } from '../modules/nf-core/shinyngs/staticexploratory/main'
 include { DESEQ2_DIFFERENTIAL } from '../modules/nf-core/deseq2/differential/main'
 
 /*
@@ -78,7 +79,7 @@ workflow DIFFERENTIALABUNDANCE {
     */
 
 
-    switch (params.input_type) {
+    switch (params.counts_type) {
         case 'salmon':
             ch_processed_counts = ch_counts
             ch_processed_samplesheet = ch_samplesheet

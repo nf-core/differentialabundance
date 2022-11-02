@@ -1,5 +1,5 @@
 //
-// This file holds several functions specific to the workflow/differentialabundance.nf in the differentialabundance/differentialabundance pipeline
+// This file holds several functions specific to the workflow/differentialabundance.nf in the nf-core/differentialabundance pipeline
 //
 
 import groovy.text.SimpleTemplateEngine

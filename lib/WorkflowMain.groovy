@@ -1,5 +1,5 @@
 //
-// This file holds several functions specific to the main.nf workflow in the differentialabundance/differentialabundance pipeline
+// This file holds several functions specific to the main.nf workflow in the nf-core/differentialabundance pipeline
 //
 
 class WorkflowMain {
