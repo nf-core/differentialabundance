@@ -36,6 +36,7 @@ if (params.contrasts) { ch_contrasts = Channel.fromPath(params.contrasts) } else
 //
 include { IMPORTRNASEQCOUNTS } from '../modules/local/importrnaseqcounts/main'
 include { INPUT_CHECK } from '../subworkflows/local/input_check'
+//include { IMPORTMERGEDCOUNTS } from '../modules/local/importmergedcounts/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

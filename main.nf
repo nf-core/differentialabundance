@@ -4,7 +4,6 @@
     nf-core/differentialabundance
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Github : https://github.com/nf-core/differentialabundance
-
     Website: https://nf-co.re/differentialabundance
     Slack  : https://nfcore.slack.com/channels/differentialabundance
 ----------------------------------------------------------------------------------------
@@ -18,7 +17,7 @@ nextflow.enable.dsl = 2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-params.fasta = WorkflowMain.getGenomeAttribute(params, 'fasta')
+//TODO params.fasta = WorkflowMain.getGenomeAttribute(params, 'fasta')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
