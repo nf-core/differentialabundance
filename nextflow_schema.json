@@ -10,7 +10,7 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["counts_type", "samplesheet", "contrasts", "counts"],
+            "required": ["counts_type", "input", "contrasts", "counts"],
             "properties": {
                 "counts_type": {
                     "type": "string",
@@ -18,7 +18,7 @@
                     "description": "Which type of counts data is provided in --counts, e.g. 'salmon' or 'rnaseq_featurecounts'",
                     "help_text": "Which type of counts data is provided in --counts, e.g. 'salmon' or 'rnaseq_featurecounts'."
                 },
-                "samplesheet": {
+                "input": {
                     "type": "string",
                     "format": "file-path",
                     "mimetype": "text/csv",
@@ -31,7 +31,7 @@
                 "contrasts": {
                     "type": "string",
                     "description": "A CSV file describing sample contrasts",
-                    "help_text": "This file is used to define groups of samples from 'samplesheet' to compare.  It must contain at least the columns 'variable', 'reference', 'target' and 'blocking', where 'variable' is a column in the input sample sheet, 'reference' and 'target' are values in that column, and blocking is a colon-separated list of additional 'blocking' variables (can be an empty string)"
+                    "help_text": "This file is used to define groups of samples from 'input' to compare.  It must contain at least the columns 'variable', 'reference', 'target' and 'blocking', where 'variable' is a column in the input sample sheet, 'reference' and 'target' are values in that column, and blocking is a colon-separated list of additional 'blocking' variables (can be an empty string)"
                 },
                 "counts": {
                     "type": "string",
@@ -50,11 +50,6 @@
                     "fa_icon": "fas fa-envelope",
                     "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
                     "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
-                },
-                "multiqc_title": {
-                    "type": "string",
-                    "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
-                    "fa_icon": "fas fa-file-signature"
                 }
             }
         },

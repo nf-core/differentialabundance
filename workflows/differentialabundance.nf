@@ -11,12 +11,12 @@ WorkflowDifferentialabundance.initialise(params, log)
 
 // TODO nf-core: Add all file path parameters for the pipeline to the list below
 // Check input path parameters to see if they exist
-def checkPathParamList = [ params.counts, params.samplesheet, params.contrast ]
+def checkPathParamList = [ params.counts, params.input, params.contrast ]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
 // Check mandatory parameters
 if (params.counts) { ch_counts = Channel.fromPath(params.counts) } else { exit 1, 'Gene counts not specified!' }
-if (params.samplesheet) { ch_samplesheet = Channel.fromPath(params.samplesheet) } else { exit 1, 'Samplesheet not specified!' }
+if (params.input) { ch_samplesheet = Channel.fromPath(params.input) } else { exit 1, 'Samplesheet not specified!' }
 if (params.contrasts) { ch_contrasts = Channel.fromPath(params.contrasts) } else { exit 1, 'Contrasts not specified!' }
 
 /*
