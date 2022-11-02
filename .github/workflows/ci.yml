@@ -54,11 +54,7 @@ jobs:
       # This tells github to continue running other profile tests if some tests fail (default cancels all tests upon failure)
       fail-fast: false
       matrix:
-        config:
-          [
-            "test",
-            "test_rnaseq_featurecounts"
-          ]
+        config: ["test", "test_rnaseq_featurecounts"]
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v2
