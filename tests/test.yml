@@ -1,0 +1,34 @@
+- name: Run test profile with salmon input
+  command: nextflow run main.nf -profile test,docker
+  tags:
+    - test
+    - salmon
+  files:
+    - path: results/deseq2/treatment-mCherry-hND6.dds.rld.rds
+      md5sum: 9716c55bb53f82ce17e34f3e848bd4b7
+    - path: results/deseq2/treatment-mCherry-hND6.deseq2.dispersion.png
+      md5sum: 0933c063056071b700b3fa03e1b3ec7f
+    - path: results/deseq2/treatment-mCherry-hND6.deseq2.results.tsv
+      md5sum: 269cdbe2b9c18393b448dd435e7f5c9a
+    - path: results/deseq2/treatment-mCherry-hND6.deseq2.sizefactors.tsv
+      md5sum: 6332f21889ecac387bb12eeb04f23849
+    - path: results/deseq2/treatment-mCherry-hND6.normalised_counts.tsv
+      md5sum: 827cdf01f366d72d6e4b500e9862ba74
+    - path: results/deseq2/treatment-mCherry-hND6.R_sessionInfo.log
+      md5sum: b60cdc573f2b7b2b8b9f3cb8d0c18f03
+    - path: results/deseq2/treatment-mCherry-hND6-sample_number.dds.rld.rds
+      md5sum: 029bd0829f0a515655d04bd7110ee02a
+    - path: results/deseq2/treatment-mCherry-hND6-sample_number.deseq2.dispersion.png
+      md5sum: 9d0af71aa8a1f871ff9f728d72663052
+    - path: results/deseq2/treatment-mCherry-hND6-sample_number.deseq2.results.tsv
+      md5sum: 2402bf409e0497674374528728591059
+    - path: results/deseq2/treatment-mCherry-hND6-sample_number.deseq2.sizefactors.tsv
+      md5sum: 6332f21889ecac387bb12eeb04f23849
+    - path: results/deseq2/treatment-mCherry-hND6-sample_number.normalised_counts.tsv
+      md5sum: 827cdf01f366d72d6e4b500e9862ba74
+    - path: results/deseq2/treatment-mCherry-hND6-sample_number.R_sessionInfo.log
+      md5sum: b60cdc573f2b7b2b8b9f3cb8d0c18f03
+    - path: results/deseq2/treatment-mCherry-hND6-sample_number.vst.tsv
+      md5sum: 79e2d854e9652ea66e33f923bd6dcc59
+    - path: results/deseq2/treatment-mCherry-hND6.vst.tsv
+      md5sum: 79e2d854e9652ea66e33f923bd6dcc59

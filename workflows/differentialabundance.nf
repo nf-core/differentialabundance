@@ -34,7 +34,7 @@ if (params.contrasts) { ch_contrasts = Channel.fromPath(params.contrasts) } else
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
-include { IMPORTMERGEDCOUNTS } from '../modules/local/importmergedcounts/main'
+include { IMPORTRNASEQCOUNTS } from '../modules/local/importrnaseqcounts/main'
 include { INPUT_CHECK } from '../subworkflows/local/input_check'
 
 /*
@@ -83,14 +83,14 @@ workflow DIFFERENTIALABUNDANCE {
             ch_processed_counts = ch_counts
             ch_processed_samplesheet = ch_samplesheet
             break
-        case 'featurecounts':
-            IMPORTMERGEDCOUNTS (
+        case 'rnaseq_featurecounts':
+            IMPORTRNASEQCOUNTS (
                 ch_counts,
                 ch_samplesheet
             )
-            ch_processed_counts = IMPORTMERGEDCOUNTS.out.ch_processed_counts
-            ch_processed_samplesheet = IMPORTMERGEDCOUNTS.out.ch_processed_samplesheet
-            ch_versions = ch_versions.mix(IMPORTMERGEDCOUNTS.out.versions)
+            ch_processed_counts = IMPORTRNASEQCOUNTS.out.ch_processed_counts
+            ch_processed_samplesheet = IMPORTRNASEQCOUNTS.out.ch_processed_samplesheet
+            ch_versions = ch_versions.mix(IMPORTRNASEQCOUNTS.out.versions)
             break
     }
 
