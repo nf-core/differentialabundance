@@ -66,7 +66,8 @@ workflow DIFFERENTIALABUNDANCE {
    
     // Get feature annotations from a GTF file, gunzip if necessary
  
-    file_gtf = [ [ "id": file_gtf_in.simpleName ], file(params.gtf) ] 
+    file_gtf_in = file(params.gtf)
+    file_gtf = [ [ "id": file_gtf_in.simpleName ], file_gtf_in ] 
 
     if ( params.gtf.endsWith('.gz') ){
         GUNZIP_GTF(file_gtf)
