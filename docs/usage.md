@@ -10,54 +10,98 @@
 
 ## Samplesheet input
 
-You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row as shown in the examples below.
+You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-/tab-separated file with a header row as shown in the example below.
 
 ```bash
 --input '[path to samplesheet file]'
 ```
 
-### Multiple runs of the same sample
-
-The `sample` identifiers have to be the same when you have re-sequenced the same sample more than once e.g. to increase sequencing depth. The pipeline will concatenate the raw reads before performing any downstream analysis. Below is an example for the same sample sequenced across 3 lanes:
+The samplesheet has to contain one sample ID column (the column name can be variable, default is experiment_accession) with the values corresponding to the sample column names in the counts table. Also, the names of the contrast (and batch) columns have to correspond to those of the contrast file. Example:
 
 ```console
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz
+experiment_accession,condition_treatment,batch
+sample1,treated,b1
+sample2,treated,b1
+sample3,treated,b2
+sample4,control,b2
 ```
 
-### Full samplesheet
+## Counts table
 
-The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The samplesheet can have as many columns as you desire, however, there is a strict requirement for the first 3 columns to match those defined in the table below.
+The gene counts table has to be a comma-/tab-separated file with a header row as shown in the example below.
 
-A final samplesheet file consisting of both single- and paired-end data may look something like the one below. This is for 6 samples, where `TREATMENT_REP3` has been sequenced twice.
+```bash
+--counts '[path to counts table]'
+```
+
+The counts table has to contain one gene ID column (the column name can be variable, default is gene_id) and sample columns with the names corresponding to the rows of the ID column in the samplesheet. Example:
 
 ```console
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-CONTROL_REP2,AEG588A2_S2_L002_R1_001.fastq.gz,AEG588A2_S2_L002_R2_001.fastq.gz
-CONTROL_REP3,AEG588A3_S3_L002_R1_001.fastq.gz,AEG588A3_S3_L002_R2_001.fastq.gz
-TREATMENT_REP1,AEG588A4_S4_L003_R1_001.fastq.gz,
-TREATMENT_REP2,AEG588A5_S5_L003_R1_001.fastq.gz,
-TREATMENT_REP3,AEG588A6_S6_L003_R1_001.fastq.gz,
-TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,
+gene_id 	sample1 	sample2 	sample3 	sample4
+ENSMUSG00000023978 	10 	2 	4 	27
+ENSMUSG00000030324 	181 	14 	12 	143
+ENSMUSG00000031450 	20 	3 	1 	242
 ```
 
-| Column    | Description                                                                                                                                                                            |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`  | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `fastq_1` | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
-| `fastq_2` | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
+## Contrast file
 
-An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
+The contrast matrix has to be a comma-separated file with a header row as shown in the example below.
+
+```bash
+--contrasts '[path to contrast file]'
+```
+
+It has to contain one column called 'variable' containing the name of the contrast, e.g. treatment or genotype. These values need to be column names in the samplesheet. Additionally, the contrast file has to contain the columns 'reference', 'target' and 'blocking'. The values of reference and target need to be the contrast states that are to be compared, e.g. treated and control, or KO and WT, and have to correspond to the respective values of the samplesheet contrast columns. The blocking column can contain the name of a samplesheet column which e.g. groups batches of samples together so that these can be corrected for batcheffects; this column can also be empty if no such correction is necessary.
+
+```console
+variable,reference,target,blocking
+treatment,control,treated,
+genotype,WT,KO,batch
+```
+
+## Input type
+
+This is a parameter describing which input the pipeline is provided with; for some inputs, additional reformating is necessary. Set this parameter like e.g.:
+
+```bash
+--input_type rnaseq_featurecounts -c custom.config
+```
+
+Current possibilities for this parameter are:
+
+1. salmon: The input is a merged counts table produced with salmon and the samplesheet is already in the correct format; this will allow the pipeline to directly start with the DE analysis
+2. rnaseq_featurecounts: The input is a merged counts table produced with the rnaseq pipeline and the samplesheet column names contain file names, meaning that the data has to be rewritten. This will first do a reformating step, then run DE analysis. In this case, you will need to provide the names of the gene ID column in the counts table (default: gene_id) and of the sample ID column in the samplesheet (default: experiment_accession) in a config file with the -c option (1 dash!) as shown above unless they are the mentioned defaults. The config should look like this:
+
+```console
+process {
+    withName: 'NFCORE_DIFFERENTIALABUNDANCE:DIFFERENTIALABUNDANCE:IMPORTRNASEQCOUNTS' {
+        ext.args = "--gene_id_col Geneid --sample_id_col Secondary.Name"
+    }
+}
+```
+
+## DESeq2 ext args
+
+The DESeq2 module also needs the names of the gene ID column counts table (default: gene_id) and of the sample ID column in the samplesheet (default: experiment_accession). If your datasets do not use the default names, you will have to provide these values in a config file which should look like this:
+
+```console
+process {
+    withName: 'NFCORE_DIFFERENTIALABUNDANCE:DIFFERENTIALABUNDANCE:DESEQ2_DIFFERENTIAL' {
+        ext.args = "--gene_id_col Geneid \
+        --sample_id_col Secondary.Name"
+    }
+}
+```
+
+The config can contain further DESeq2 parameters. It has to be provided to the pipeline with the -c parameter (1 dash!) as shown in the next paragraph.
+
 
 ## Running the pipeline
 
 The typical command for running the pipeline is as follows:
 
 ```bash
-nextflow run nf-core/differentialabundance --input samplesheet.csv --outdir <OUTDIR> --genome GRCh37 -profile docker
+nextflow run nf-core/differentialabundance --input samplesheet.csv --contrast contrast.csv --counts counts.csv --input_type salmon --outdir <OUTDIR> -profile docker -c custom.config
 ```
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.

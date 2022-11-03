@@ -33,8 +33,9 @@ parse_args <- function(x){
 
 opt <- list(
     count_file = '$counts',
+    gene_id_col = 'gene_id',
     sample_file = '$samplesheet',
-    sample_id_col = 'Secondary.Name'
+    sample_id_col = 'experiment_accession'
 )
 opt_types <- lapply(opt, class)
 
@@ -67,7 +68,6 @@ for (file_input in c('count_file', 'sample_file')){
 ################################################
 ################################################
 sample.sheet <- read.table(file = opt\$sample_file, sep="\t", header=T)
-
 count.table <- read.table(file = opt\$count_file, sep="\t", header=T)
 
 # Rewrite input tables to a standard differential abundance input; columns in sample sheet need to be renamed from file names to sample names
@@ -91,10 +91,10 @@ for (c in c(1:length(col_names))) {
 }
 
 # Remove non-sample columns, then check if all samples were renamed
-remaining_names <- remaining_names[remaining_names != "Geneid"]
+remaining_names <- remaining_names[remaining_names != opt\$gene_id_col]
 remaining_names <- remaining_names[remaining_names != "gene_name"]
 if (length(remaining_names > 0)) {
-    stop(paste0("Could not rename the following columns:\n", toString(remaining_names)))
+    print(paste0("Warning: Could not rename the following columns:\n", toString(remaining_names)))
 }
 
 # Write modified count table
