@@ -62,15 +62,20 @@ def multiqc_report = []
 
 workflow DIFFERENTIALABUNDANCE {
 
-    file_gtf = file(params.gtf) 
-    GUNZIP_GTF([["id": file_gtf.simpleName], file_gtf])
+    if ( params.gtf.endsWith('.gz') ){
+        file_gtf_in = file(params.gtf)
+        GUNZIP_GTF([["id": file_gtf_in.simpleName], file_gtf_in])
+        file_gtf = GUNZIP_GTF.out.gunzip
+    } else{
+        file_gtf = file(params.gtf) 
+    }
 
     exp_meta = [ "id": params.study_name  ]
 
     // Get a features table from the GTF and combine with the matrix and sample
     // annotation (fom = features/ observations/ matrix)
 
-    GTF_TO_TABLE( GUNZIP_GTF.out.gunzip, [[ "id":""], []])
+    GTF_TO_TABLE( file_gtf, [[ "id":""], []])
     
     // Combine features with the observations and matrices to create a FOM
     // where these things can travel together

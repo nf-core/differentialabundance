@@ -92,7 +92,7 @@
                 "gtf": {
                     "type": "string",
                     "description": "Genome annotation file in GTF format",
-                    "pattern": "^\\S+\\.gtf(\\.gz)",
+                    "pattern": "^\\S+\\.gtf(\\.gz)?",
                     "format": "file-path",
                     "mimetype": "text/plain",
                     "help_text": "\"This parameter is *mandatory* if `--genome` is not specified.\""
