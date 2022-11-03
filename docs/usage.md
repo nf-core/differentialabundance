@@ -95,7 +95,6 @@ process {
 
 The config can contain further DESeq2 parameters. It has to be provided to the pipeline with the -c parameter (1 dash!) as shown in the next paragraph.
 
-
 ## Running the pipeline
 
 The typical command for running the pipeline is as follows:
