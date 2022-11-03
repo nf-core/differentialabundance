@@ -155,13 +155,15 @@ workflow DIFFERENTIALABUNDANCE {
 
     // Gather software versions
 
-    ch_versions = GUNZIP_GTF.out.versions
-        .mix(GTF_TO_TABLE.out.versions) 
+    ch_versions = GTF_TO_TABLE.out.versions
         .mix(VALIDATOR.out.versions)
         .mix(DESEQ2_DIFFERENTIAL.out.versions)
         .mix(PLOT_EXPLORATORY.out.versions)
         .mix(PLOT_DIFFERENTIAL.out.versions)
 
+    if ( params.gtf.endsWith('.gz') ){
+        ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
+    }
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
