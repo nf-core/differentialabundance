@@ -62,13 +62,17 @@ def multiqc_report = []
 
 workflow DIFFERENTIALABUNDANCE {
 
+    ch_versions = Channel.empty()
+   
+    // Get feature annotations from a GTF file, gunzip if necessary
+ 
+    file_gtf = [ [ "id": file_gtf_in.simpleName ], file(params.gtf) ] 
+
     if ( params.gtf.endsWith('.gz') ){
-        file_gtf_in = file(params.gtf)
-        GUNZIP_GTF([["id": file_gtf_in.simpleName], file_gtf_in])
+        GUNZIP_GTF(file_gtf)
         file_gtf = GUNZIP_GTF.out.gunzip
-    } else{
-        file_gtf = file(params.gtf) 
-    }
+        ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
+    } 
 
     exp_meta = [ "id": params.study_name  ]
 
@@ -155,15 +159,12 @@ workflow DIFFERENTIALABUNDANCE {
 
     // Gather software versions
 
-    ch_versions = GTF_TO_TABLE.out.versions
+    ch_versions = ch_versions
+        .mix(GTF_TO_TABLE.out.versions)
         .mix(VALIDATOR.out.versions)
         .mix(DESEQ2_DIFFERENTIAL.out.versions)
         .mix(PLOT_EXPLORATORY.out.versions)
         .mix(PLOT_DIFFERENTIAL.out.versions)
-
-    if ( params.gtf.endsWith('.gz') ){
-        ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
-    }
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
