@@ -102,11 +102,16 @@ workflow DIFFERENTIALABUNDANCE {
     )
  
     // Split the contrasts up so we can run differential analyses and
-    // downstream plots separately
+    // downstream plots separately. 
+    // Replace NA strings that might have snuck into the blocking column
 
     ch_contrasts = VALIDATOR.out.contrasts
         .map{it[1]}
         .splitCsv ( header:true, sep:'\t' )
+        .map{
+            it.blocking = it.blocking.replace('NA', '')
+            it
+        }
 
     // Run the DESeq differential module, which doesn't take the feature
     // annotations 
