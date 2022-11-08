@@ -15,7 +15,7 @@
                     },
                     "deseq2/differential": {
                         "branch": "master",
-                        "git_sha": "f077ff64fc8822f101479e6e04052e2ab36efebf"
+                        "git_sha": "46e4580ae2e6d361c2c026bb7466e807093a4e18"
                     },
                     "gunzip": {
                         "branch": "master",
