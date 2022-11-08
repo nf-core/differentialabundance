@@ -4,6 +4,7 @@ keywords:
   - rnaseq
   - plot
   - differential
+  - shinyngs
 tools:
   - "shinyngs":
       description: "Provides Shiny applications for various array and NGS applications. Currently very RNA-seq centric, with plans for expansion."
@@ -15,7 +16,9 @@ input:
   - meta:
       type: map
       description: |
-        Groovy Map containing contrast information
+        Groovy Map containing contrast information, to be passed as reference
+        and target levels, like '--reference_level $meta.reference
+        --treatment_level $meta.target'
         e.g. [ variable:'treatment', reference:'treated', control:'saline', blocking:'' ]
   - meta2:
       type: map
@@ -51,7 +54,7 @@ output:
       type: tuple
       description: |
         Meta-keyed tuple containing a PNG, HTML, and HTML files directory for
-        a volcano plot built from the differential result table..
+        a volcano plot built from the differential result table.
   - versions:
       type: file
       description: File containing software versions
