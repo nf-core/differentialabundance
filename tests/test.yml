@@ -5,7 +5,7 @@
     - salmon
   files:
     - path: results/deseq2/treatment-mCherry-hND6.dds.rld.rds
-      md5sum: 9716c55bb53f82ce17e34f3e848bd4b7
+      md5sum: 112364cfedb0c5b9970ac0d28ab8b956
     - path: results/deseq2/treatment-mCherry-hND6.deseq2.dispersion.png
       md5sum: 0933c063056071b700b3fa03e1b3ec7f
     - path: results/deseq2/treatment-mCherry-hND6.deseq2.results.tsv
@@ -17,7 +17,7 @@
     - path: results/deseq2/treatment-mCherry-hND6.R_sessionInfo.log
       md5sum: b60cdc573f2b7b2b8b9f3cb8d0c18f03
     - path: results/deseq2/treatment-mCherry-hND6-sample_number.dds.rld.rds
-      md5sum: 029bd0829f0a515655d04bd7110ee02a
+      md5sum: 3038994f9b048c9128c9ddd205d01513
     - path: results/deseq2/treatment-mCherry-hND6-sample_number.deseq2.dispersion.png
       md5sum: 9d0af71aa8a1f871ff9f728d72663052
     - path: results/deseq2/treatment-mCherry-hND6-sample_number.deseq2.results.tsv
