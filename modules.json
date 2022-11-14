@@ -5,15 +5,19 @@
         "https://github.com/nf-core/modules.git": {
             "modules": {
                 "nf-core": {
+                    "atlasgeneannotationmanipulation/gtf2featureannotation": {
+                        "branch": "master",
+                        "git_sha": "b5f51344caec9cbb7c0b650623069d5a254897a4"
+                    },
                     "custom/dumpsoftwareversions": {
                         "branch": "master",
                         "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
                     },
                     "deseq2/differential": {
                         "branch": "master",
-                        "git_sha": "72900e24112957e65c53763f59ade5aca6322ea7"
+                        "git_sha": "46e4580ae2e6d361c2c026bb7466e807093a4e18"
                     },
-                    "fastqc": {
+                    "gunzip": {
                         "branch": "master",
                         "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
                     },
@@ -21,9 +25,17 @@
                         "branch": "master",
                         "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
                     },
+                    "shinyngs/staticdifferential": {
+                        "branch": "master",
+                        "git_sha": "054655beef8703579ac938444ae3915c768f46d9"
+                    },
                     "shinyngs/staticexploratory": {
                         "branch": "master",
-                        "git_sha": "bf69d2f911a8aae8d06a6d3fa7ca8bf462c41e9e"
+                        "git_sha": "054655beef8703579ac938444ae3915c768f46d9"
+                    },
+                    "shinyngs/validatefomcomponents": {
+                        "branch": "master",
+                        "git_sha": "72695ee4b283a8f479fe503ee91d19fde160508f"
                     }
                 }
             }
