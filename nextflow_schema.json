@@ -10,7 +10,7 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["counts_type", "samplesheet", "contrasts", "counts"],
+            "required": ["input", "contrasts", "matrix", "outdir", "study_name", "study_type"],
             "properties": {
                 "counts_type": {
                     "type": "string",
@@ -31,18 +31,36 @@
                 "contrasts": {
                     "type": "string",
                     "description": "A CSV file describing sample contrasts",
-                    "help_text": "This file is used to define groups of samples from 'samplesheet' to compare.  It must contain at least the columns 'variable', 'reference', 'target' and 'blocking', where 'variable' is a column in the input sample sheet, 'reference' and 'target' are values in that column, and blocking is a colon-separated list of additional 'blocking' variables (can be an empty string)"
+                    "help_text": "This file is used to define groups of samples from 'input' to compare.  It must contain at least the columns 'variable', 'reference', 'target' and 'blocking', where 'variable' is a column in the input sample sheet, 'reference' and 'target' are values in that column, and blocking is a colon-separated list of additional 'blocking' variables (can be an empty string)",
+                    "pattern": "^\\S+\\.csv$",
+                    "format": "file-path",
+                    "mimetype": "text/csv"
                 },
                 "counts": {
                     "type": "string",
                     "description": "TSV-format abundance matrix",
-                    "help_text": "For example an expression matrix output from the nf-core RNA-seq workflow. There must be a column in this matrix for every row in the input sample sheet."
+                    "help_text": "For example an expression matrix output from the nf-core RNA-seq workflow. There must be a column in this matrix for every row in the input sample sheet.",
+                    "format": "file-path",
+                    "mimetype": "text/tab-separated-values",
+                    "pattern": "^\\S+\\.tsv$"
                 },
                 "outdir": {
                     "type": "string",
                     "format": "directory-path",
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
                     "fa_icon": "fas fa-folder-open"
+                },
+                "study_name": {
+                    "type": "string",
+                    "default": "study",
+                    "description": "A string to identify results in the output directory",
+                    "help_text": "Also used as an identifier in some processes"
+                },
+                "study_type": {
+                    "type": "string",
+                    "default": "rnaseq",
+                    "description": "A string identifying the technology used to produce the data",
+                    "help_text": "Currently only 'rnaseq' may be specified. In future options like 'affy_array' are possible."
                 },
                 "email": {
                     "type": "string",
@@ -68,7 +86,7 @@
                 "gtf": {
                     "type": "string",
                     "description": "Genome annotation file in GTF format",
-                    "pattern": "^\\S+\\.gtf(\\.gz)",
+                    "pattern": "^\\S+\\.gtf(\\.gz)?",
                     "format": "file-path",
                     "mimetype": "text/plain",
                     "help_text": "\"This parameter is *mandatory* if `--genome` is not specified.\""
