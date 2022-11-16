@@ -12,8 +12,8 @@ process IMPORTRNASEQCOUNTS {
     path samplesheet
 
     output:
-    path "*.tsv"                  , emit: ch_processed_counts
-    path "*.csv"                  , emit: ch_processed_samplesheet
+    path "*.tsv"                  , emit: ch_counts
+    path "*.csv"                  , emit: ch_input
     path "versions.yml"           , emit: versions
 
     when:

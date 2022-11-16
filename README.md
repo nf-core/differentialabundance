@@ -52,7 +52,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 4. Start running your own analysis!
 
    ```bash
-   nextflow run nf-core/differentialabundance --input samplesheet.csv --contrasts contrasts.csv --matrix assay_matrix.tsv  --outdir <OUTDIR> --genome GRCh37 -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
+   nextflow run nf-core/differentialabundance --input samplesheet.csv --contrasts contrasts.csv --counts assay_matrix.tsv  --outdir <OUTDIR> --genome GRCh37 -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
    ```
 
 ## Documentation

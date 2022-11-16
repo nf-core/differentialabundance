@@ -10,7 +10,7 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["input", "contrasts", "matrix", "outdir", "study_name", "study_type"],
+            "required": ["input", "contrasts", "counts", "outdir", "study_name", "study_type"],
             "properties": {
                 "counts_type": {
                     "type": "string",
@@ -38,11 +38,11 @@
                 },
                 "counts": {
                     "type": "string",
-                    "description": "TSV-format abundance matrix",
+                    "description": "TSV-format abundance counts",
                     "help_text": "For example an expression matrix output from the nf-core RNA-seq workflow. There must be a column in this matrix for every row in the input sample sheet.",
                     "format": "file-path",
                     "mimetype": "text/tab-separated-values",
-                    "pattern": "^\\S+\\.tsv$"
+                    "pattern": "^\\S+\\.tsv$|^\\S+\\.txt$"
                 },
                 "outdir": {
                     "type": "string",

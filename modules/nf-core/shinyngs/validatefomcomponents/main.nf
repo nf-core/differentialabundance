@@ -24,15 +24,21 @@ process SHINYNGS_VALIDATEFOMCOMPONENTS {
     // https://github.com/pinin4fjords/shinyngs/blob/develop/exec/validate_fom_components.R
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: meta.id
-
+    def feature = !feature_meta.endsWith("FALSE") ? "--feature_metadata $feature_meta" : ''
     """
+    echo $feature_meta > /home-link/iivow01/git/differentialabundance/error/fm
     validate_fom_components.R \\
         --sample_metadata $sample \\
-        --feature_metadata $feature_meta \\
+        $feature \\
         --assay_files ${assay_files.join(',')} \\
         --contrasts_file $contrasts \\
         --output_directory $prefix \\
         $args
+    if [ -z $feature ]
+    then
+        touch study/dummy.feature_metadata.tsv
+        ls > /home-link/iivow01/git/differentialabundance/error/blä
+    fi
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
