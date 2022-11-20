@@ -12,7 +12,7 @@
 
 ## Introduction
 
-**nf-core/differentialabundance** is a bioinformatics pipeline that can be used to analyse data represented as matrices, compararing groups of observations to generate differential statistics and downstream analayses. The initial feature set is built around RNA-seq, but we anticipate rapid expansion to include other platforms.
+**nf-core/differentialabundance** is a bioinformatics pipeline that can be used to analyse data represented as matrices, comparing groups of observations to generate differential statistics and downstream analyses. The initial feature set is built around RNA-seq, but we anticipate rapid expansion to include other platforms.
 
 **nf-core/differentialabundance** is a bioinformatics best-practice analysis pipeline for differential abundance analysis.
 
@@ -27,7 +27,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 1. Generate a list of genomic feature annotations using the input GTF file.
 2. Cross-check matrices, sample annotations, feature set and contrasts to ensure consistency.
-3. Run differential analyis over all contrasts specified.
+3. Run differential analysis over all contrasts specified.
 4. Generate exploratory and differential analysis plots for interpretation.
 
 ## Quick Start
