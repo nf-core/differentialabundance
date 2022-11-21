@@ -40,6 +40,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) is a package for differential expression analysis.
 
 <!-- TODO -->
+
 ### Pipeline information
 
 <details markdown="1">
