@@ -146,7 +146,7 @@ workflow DIFFERENTIALABUNDANCE {
     ch_samples_and_counts = VALIDATOR.out.fom.map{
         tuple(it[1], it[3])
     }
-
+    ch_samples_and_counts.dump(tag:'sac')
     DESEQ2_DIFFERENTIAL (
         ch_contrasts.combine(ch_samples_and_counts)
     )

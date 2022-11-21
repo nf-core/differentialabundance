@@ -118,6 +118,7 @@ write.table(sample.sheet,
 ## R SESSION INFO                             ##
 ################################################
 ################################################
+# TODO
 output_prefix <- "dummy_prefix"
 sink(paste(output_prefix, "R_sessionInfo.log", sep = '.'))
 print(sessionInfo())

@@ -26,7 +26,6 @@ process SHINYNGS_VALIDATEFOMCOMPONENTS {
     def prefix = task.ext.prefix ?: meta.id
     def feature = !feature_meta.endsWith("FALSE") ? "--feature_metadata $feature_meta" : ''
     """
-    echo $feature_meta > /home-link/iivow01/git/differentialabundance/error/fm
     validate_fom_components.R \\
         --sample_metadata $sample \\
         $feature \\
@@ -37,7 +36,6 @@ process SHINYNGS_VALIDATEFOMCOMPONENTS {
     if [ -z $feature ]
     then
         touch study/dummy.feature_metadata.tsv
-        ls > /home-link/iivow01/git/differentialabundance/error/blä
     fi
 
     cat <<-END_VERSIONS > versions.yml
