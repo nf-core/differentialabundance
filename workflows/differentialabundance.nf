@@ -15,6 +15,9 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
 
+// Check optinal parameters
+if (params.control_features) { ch_control_features = file(params.control_features) } else { ch_control_features = [[],[]] } 
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     CONFIG FILES
@@ -116,7 +119,8 @@ workflow DIFFERENTIALABUNDANCE {
     }
 
     DESEQ2_DIFFERENTIAL (
-        ch_contrasts.combine(ch_samples_and_matrix)
+        ch_contrasts.combine(ch_samples_and_matrix),
+        ch_control_features
     )
 
     // Let's make the simplifying assumption that the processed matrices from
