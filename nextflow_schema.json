@@ -77,6 +77,13 @@
                     "type": "boolean",
                     "help_text": "Use supplied control features in normalistion/ scaling operations?",
                     "description": "When set, use the control features in scaling/ normalisation"
+                },
+                "report_file": {
+                    "type": "string",
+                    "description": "Rmd report template from which to create the pipeline report",
+                    "help_text": "Rmd report template from which to create the pipeline report",
+                    "format": "file-path",
+                    "pattern": "^\\S+\\.Rmd$"
                 }
             }
         },
