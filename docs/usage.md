@@ -31,7 +31,7 @@ sample4,control,b2
 The gene counts table has to be a comma-/tab-separated file with a header row as shown in the example below.
 
 ```bash
---counts '[path to counts table]'
+--matrix '[path to counts table]'
 ```
 
 The counts table has to contain one gene ID column (the column name can be variable, default is gene_id) and sample columns with the names corresponding to the rows of the ID column in the samplesheet. Example:
@@ -100,7 +100,7 @@ The config can contain further DESeq2 parameters. It has to be provided to the p
 The typical command for running the pipeline is as follows:
 
 ```bash
-nextflow run nf-core/differentialabundance --input samplesheet.csv --contrast contrast.csv --counts counts.csv --input_type salmon --outdir <OUTDIR> -profile docker -c custom.config
+nextflow run nf-core/differentialabundance --input samplesheet.csv --contrast contrast.csv --matrix counts.csv --input_type salmon --outdir <OUTDIR> -profile docker -c custom.config
 ```
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.

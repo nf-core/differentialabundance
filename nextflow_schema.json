@@ -10,13 +10,13 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["input", "contrasts", "counts", "outdir", "study_name", "study_type"],
+            "required": ["input", "contrasts", "matrix", "outdir", "study_name", "study_type"],
             "properties": {
                 "counts_type": {
                     "type": "string",
                     "pattern": "salmon|rnaseq_featurecounts",
-                    "description": "Which type of counts data is provided in --counts, e.g. 'salmon' or 'rnaseq_featurecounts'",
-                    "help_text": "Which type of counts data is provided in --counts, e.g. 'salmon' or 'rnaseq_featurecounts'."
+                    "description": "Which type of counts data is provided in --matrix, e.g. 'salmon' or 'rnaseq_featurecounts'",
+                    "help_text": "Which type of counts data is provided in --matrix, e.g. 'salmon' or 'rnaseq_featurecounts'."
                 },
                 "samplesheet": {
                     "type": "string",
@@ -36,9 +36,9 @@
                     "format": "file-path",
                     "mimetype": "text/csv"
                 },
-                "counts": {
+                "matrix": {
                     "type": "string",
-                    "description": "TSV-format abundance counts",
+                    "description": "TSV-format abundance counts matrix",
                     "help_text": "For example an expression matrix output from the nf-core RNA-seq workflow. There must be a column in this matrix for every row in the input sample sheet.",
                     "format": "file-path",
                     "mimetype": "text/tab-separated-values",
@@ -68,6 +68,21 @@
                     "fa_icon": "fas fa-envelope",
                     "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
                     "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
+                },
+                "multiqc_title": {
+                    "type": "string",
+                    "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
+                    "fa_icon": "fas fa-file-signature"
+                },
+                "control_features": {
+                    "type": "string",
+                    "description": "A text file listing technical features (e.g. spikes)",
+                    "help_text": "One feature per row. Note that by default these features will just be stripped from matrices prior to internal processing. To actually use them in e.g. normalisation, set --sizefactors_from_controls"
+                },
+                "sizefactors_from_controls": {
+                    "type": "boolean",
+                    "help_text": "Use supplied control features in normalistion/ scaling operations?",
+                    "description": "When set, use the control features in scaling/ normalisation"
                 }
             }
         },
@@ -201,8 +216,7 @@
                 "help": {
                     "type": "boolean",
                     "description": "Display help text.",
-                    "fa_icon": "fas fa-question-circle",
-                    "hidden": true
+                    "fa_icon": "fas fa-question-circle"
                 },
                 "publish_dir_mode": {
                     "type": "string",
@@ -210,55 +224,47 @@
                     "description": "Method used to save pipeline results to output directory.",
                     "help_text": "The Nextflow `publishDir` option specifies which intermediate files should be saved to the output directory. This option tells the pipeline what method should be used to move these files. See [Nextflow docs](https://www.nextflow.io/docs/latest/process.html#publishdir) for details.",
                     "fa_icon": "fas fa-copy",
-                    "enum": ["symlink", "rellink", "link", "copy", "copyNoFollow", "move"],
-                    "hidden": true
+                    "enum": ["symlink", "rellink", "link", "copy", "copyNoFollow", "move"]
                 },
                 "email_on_fail": {
                     "type": "string",
                     "description": "Email address for completion summary, only when pipeline fails.",
                     "fa_icon": "fas fa-exclamation-triangle",
                     "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
-                    "help_text": "An email address to send a summary email to when the pipeline is completed - ONLY sent if the pipeline does not exit successfully.",
-                    "hidden": true
+                    "help_text": "An email address to send a summary email to when the pipeline is completed - ONLY sent if the pipeline does not exit successfully."
                 },
                 "plaintext_email": {
                     "type": "boolean",
                     "description": "Send plain-text email instead of HTML.",
-                    "fa_icon": "fas fa-remove-format",
-                    "hidden": true
+                    "fa_icon": "fas fa-remove-format"
                 },
                 "max_multiqc_email_size": {
                     "type": "string",
                     "description": "File size limit when attaching MultiQC reports to summary emails.",
                     "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
                     "default": "25.MB",
-                    "fa_icon": "fas fa-file-upload",
-                    "hidden": true
+                    "fa_icon": "fas fa-file-upload"
                 },
                 "monochrome_logs": {
                     "type": "boolean",
                     "description": "Do not use coloured log outputs.",
-                    "fa_icon": "fas fa-palette",
-                    "hidden": true
+                    "fa_icon": "fas fa-palette"
                 },
                 "hook_url": {
                     "type": "string",
                     "description": "Incoming hook URL for messaging service",
                     "fa_icon": "fas fa-people-group",
-                    "help_text": "Incoming hook URL for messaging service. Currently, only MS Teams is supported.",
-                    "hidden": true
+                    "help_text": "Incoming hook URL for messaging service. Currently, only MS Teams is supported."
                 },
                 "multiqc_config": {
                     "type": "string",
                     "description": "Custom config file to supply to MultiQC.",
-                    "fa_icon": "fas fa-cog",
-                    "hidden": true
+                    "fa_icon": "fas fa-cog"
                 },
                 "multiqc_logo": {
                     "type": "string",
                     "description": "Custom logo file to supply to MultiQC. File name must also be set in the MultiQC config file",
-                    "fa_icon": "fas fa-image",
-                    "hidden": true
+                    "fa_icon": "fas fa-image"
                 },
                 "multiqc_methods_description": {
                     "type": "string",
@@ -269,27 +275,23 @@
                     "type": "string",
                     "description": "Directory to keep pipeline Nextflow logs and reports.",
                     "default": "${params.outdir}/pipeline_info",
-                    "fa_icon": "fas fa-cogs",
-                    "hidden": true
+                    "fa_icon": "fas fa-cogs"
                 },
                 "validate_params": {
                     "type": "boolean",
                     "description": "Boolean whether to validate parameters against the schema at runtime",
                     "default": true,
-                    "fa_icon": "fas fa-check-square",
-                    "hidden": true
+                    "fa_icon": "fas fa-check-square"
                 },
                 "show_hidden_params": {
                     "type": "boolean",
                     "fa_icon": "far fa-eye-slash",
                     "description": "Show all params when using `--help`",
-                    "hidden": true,
                     "help_text": "By default, parameters set as _hidden_ in the schema are not shown on the command line when a user runs with `--help`. Specifying this option will tell the pipeline to show all parameters."
                 },
                 "enable_conda": {
                     "type": "boolean",
                     "description": "Run this workflow with Conda. You can also use '-profile conda' instead of providing this parameter.",
-                    "hidden": true,
                     "fa_icon": "fas fa-bacon"
                 }
             }

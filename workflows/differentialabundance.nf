@@ -9,13 +9,16 @@ def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 // Validate input parameters
 WorkflowDifferentialabundance.initialise(params, log)
 
-def checkPathParamList = [ params.counts, params.input ]
+def checkPathParamList = [ params.matrix, params.input ]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
 // Check mandatory parameters
-if (params.counts) { ch_counts = Channel.fromPath(params.counts) } else { exit 1, 'Gene counts not specified!' }
+if (params.matrix) { ch_counts = Channel.fromPath(params.matrix) } else { exit 1, 'Gene counts not specified!' }
 if (params.input) { ch_input = Channel.fromPath(params.input) } else { exit 1, 'Samplesheet not specified!' }
 if (params.contrasts) { ch_contrasts = Channel.fromPath(params.contrasts) } else { exit 1, 'Contrasts not specified!' }
+
+// Check optinal parameters
+if (params.control_features) { ch_control_features = file(params.control_features) } else { ch_control_features = [[],[]] }
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -104,7 +107,7 @@ workflow DIFFERENTIALABUNDANCE {
             .dump(tag:'out')
             .map{
                 print it[1]
-                tuple([ "id": params.study_name  ], file(params.input), it[1], file(params.counts))               // exp_meta.combine(ch_input).combine(Channel.from(it[1])).combine(ch_counts)
+                tuple([ "id": params.study_name  ], file(params.input), it[1], file(params.matrix))               // exp_meta.combine(ch_input).combine(Channel.from(it[1])).combine(ch_counts)
             }
 
     } else {
@@ -143,12 +146,14 @@ workflow DIFFERENTIALABUNDANCE {
     // Run the DESeq differential module, which doesn't take the feature
     // annotations
 
-    ch_samples_and_counts = VALIDATOR.out.fom.map{
+    ch_samples_and_matrix = VALIDATOR.out.fom.map{
         tuple(it[1], it[3])
     }
-    ch_samples_and_counts.dump(tag:'sac')
+    ch_contrasts.combine(ch_samples_and_matrix).dump(tag:'diffin1')
+  //  ch_control_features.dump(tag:'diffin2')
     DESEQ2_DIFFERENTIAL (
-        ch_contrasts.combine(ch_samples_and_counts)
+        ch_contrasts.combine(ch_samples_and_matrix),
+        ch_control_features
     )
 
     // Let's make the simplifying assumption that the processed matrices from
