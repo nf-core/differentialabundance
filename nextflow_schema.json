@@ -12,14 +12,20 @@
             "description": "Define where the pipeline should find input data and save output data.",
             "required": ["input", "contrasts", "matrix", "outdir", "study_name", "study_type"],
             "properties": {
-                "input": {
+                "counts_type": {
+                    "type": "string",
+                    "pattern": "salmon|rnaseq_featurecounts",
+                    "description": "Which type of counts data is provided in --matrix, e.g. 'salmon' or 'rnaseq_featurecounts'",
+                    "help_text": "Which type of counts data is provided in --matrix, e.g. 'salmon' or 'rnaseq_featurecounts'."
+                },
+                "samplesheet": {
                     "type": "string",
                     "format": "file-path",
                     "mimetype": "text/csv",
-                    "pattern": "^\\S+\\.csv$",
+                    "pattern": "^\\S+\\.csv$|^\\S+\\.tsv$",
                     "schema": "assets/schema_input.json",
-                    "description": "Path to comma-separated file containing information about the samples in the experiment.",
-                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/differentialabundance/usage#samplesheet-input).",
+                    "description": "Path to tab- or comma-separated file containing information about the samples in the experiment.",
+                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a tab- or comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/differentialabundance/usage#samplesheet-input).",
                     "fa_icon": "fas fa-file-csv"
                 },
                 "contrasts": {
@@ -32,11 +38,11 @@
                 },
                 "matrix": {
                     "type": "string",
-                    "description": "TSV-format abundance matrix",
+                    "description": "TSV-format abundance counts matrix",
                     "help_text": "For example an expression matrix output from the nf-core RNA-seq workflow. There must be a column in this matrix for every row in the input sample sheet.",
                     "format": "file-path",
                     "mimetype": "text/tab-separated-values",
-                    "pattern": "^\\S+\\.tsv$"
+                    "pattern": "^\\S+\\.tsv$|^\\S+\\.txt$"
                 },
                 "outdir": {
                     "type": "string",
