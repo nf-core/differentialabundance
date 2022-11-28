@@ -1,7 +1,4 @@
 ---
-params:
-    args: ""
-
 output:
   html_document:
     toc: true                               # table of contents
@@ -13,81 +10,287 @@ output:
     css: ./nf-core_style.css
     highlight: pygments
     pdf_document: true
-  html_notebook:
+  pdf_document:
     toc: yes
+date: "`r Sys.Date()`"
+params:
+  workflow_version: v0.0.0
+  workflow_commit: 0
+  feature_type: gene
+  observation_type: sample
+  raw_matrix: null                                            # e.g. 0_salmon.merged.gene_counts.tsv
+  normalised_matrix: null
+  variance_stabilised_matrix: null                            # e.g. test_files/3_treatment-WT-P23H.vst.tsv
+  contrasts_file: null                                        # e.g. GSE156533.contrasts.csv
+  samples_file: null                                          # GSE156533.samplesheet.csv
+  differential_table: file.csv
+  n_features: 500
+  clustering_method: "ward.D2"
+  cor_method: "spearman"
+  versions_file: null                                         # e.g 17_software_versions.yml
+  logo: "assets/nf-core-differentialabundance_logo_light.png"
 ---
 
+<!-- Load libraries -->
+
+```{r, include=FALSE}
+library(knitr)
+library(yaml)
+library(shinyngs)
+library(plotly)
+```
+
+```{r, include=FALSE}
+versions <- unlist(yaml.load_file(params$versions_file), recursive = FALSE)
+```
 
 ---
-title: "Differential abundance analysis"
-subtitle: "Clonal abundance, diversity and V-family gene usage"
-date: '`r format(Sys.Date(), "%B %d, %Y")`'
-output: html_document
+title:  "<img src=\"nf-core-differentialabundance_logo_light.png\" style=\"float: left;\"/>Differential `r params$feature_type` abundance report"
+subtitle: differentialabundance workflow version `r versions[["Workflow.nf-core/differentialabundance"]]`
 ---
 
+<!-- set notebook defaults -->
 
 ```{r setup, include=FALSE}
-library(ggplot2)
-
-theme_set(theme_bw(base_family = "ArialMT") +
-            theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), text = element_text(family="ArialMT")))
-knitr::opts_chunk$set(echo = FALSE)
-```
-***
-
-
-
-```{r include = FALSE}
-p_ca <- ggplot(mpg, aes(displ, hwy, colour = class)) +
-  geom_point()
-
-ggsave(plot=p_ca, filename = "bla.pdf", device="pdf", width = 25, height = 10, units="cm")
-ggsave(plot=p_ca, filename = "bla.png", device="png", width = 25, height = 10, units="cm")
-write("AAAAAAAAAAAA", file = "lalalala.txt")
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
+<!-- Load input data -->
+
+
+# Abstract
+
+This report summarises differential `r params$feature_type` analysis as performed by the nf-core differential abundance pipeline.  
+
+# Data
+
+A summary of sample metadata is below:
+
+```{r, echo=FALSE, results='asis'}
+samples <- read_metadata(params$samples_file)
+rownames(samples) <- samples[,1]
+sample_name_col <- colnames(samples)[1]
+
+contrasts <- read_metadata(params$contrasts_file)
+
+# Pick the first variable used in contrasts for coloring purposes
+main_grouping_variable <- contrasts$variable[1]
+groupColorScale <- makeColorScale(length(unique(samples[[main_grouping_variable]])), palette = "Set1")
+
+display_columns <- c(colnames(samples)[1], unique(contrasts$variable))
+minimal_fetchngs_cols <- c('sample', 'sample_title', 'strandedness', 'library_strategy', 'scientific_name')
+
+# If the data came via fetchngs then we can infer a couple of things about the most useful columns
+
+if (all(minimal_fetchngs_cols %in% colnames(samples))){
+  display_columns <- c(display_columns, minimal_fetchngs_cols)
+  sample_name_col <- 'sample_title'
+}else{
+  not_wide_columns <- colnames(samples)[which(apply(samples, 2, function(x) max(nchar(x))) <= 20)]
+  display_columns <- c(display_columns, minimal_fetchngs_cols[1:min(c(5,ncol(samples)))])
+}
+samples_to_print <- samples[,unique(display_columns)]
+colnames(samples_to_print) <- prettifyVariablename(colnames(samples_to_print))
+kable(samples_to_print)
+
+```
+
+Comparisons were made between sample groups defined using using this metadata, as described in the following table of contrasts:
+
+```{r, echo=FALSE, results='asis'}
+contrasts_to_print <- contrasts
+colnames(contrasts_to_print) <- prettifyVariablename(colnames(contrasts_to_print))
+kable(contrasts_to_print, caption = paste0("Table of contrasts. Positive log fold changes will come from ", params$feature_type, "s with higher values in the 'treatment' group."))
+```
+
+# Results
+
+## Counts
+
+## Preprocessing
+
+## Exploratory
+
+### Abundance value distributions
+
+The following plots show the abundance value distributions of input matrices. A log(2) transform is applied where required.
+
+```{r, include=FALSE}
+assay_files <- list(
+  raw = params$raw_matrix,
+  normalised = params$normalised_matrix,
+  variance_stabilised = params$variance_stabilised_matrix
+)
+assay_files <- Filter(Negate(is.null), assay_files)
+assay_data <- lapply(assay_files, function(x) {
+  mat <- read_matrix(
+    x,
+    sample_metadata = samples,
+    row.names = 1
+  )
+  colnames(mat) <- samples[[sample_name_col]][match(colnames(mat), rownames(samples))]
+  mat
+})
+
+# Now we can rename the samples rows using the title field
+rownames(samples) <- samples[[sample_name_col]]
+```
+#### Box plots
+
+```{r, echo=FALSE, results='asis'}
+
+ggplot_boxplot(
+  assay_data, 
+  experiment = samples, 
+  colorby = main_grouping_variable, 
+  expressiontype = paste("count per", params$feature_type), 
+  palette = groupColorScale
+)
+```
+
+#### Density plots
+
+```{r, echo=FALSE, results='asis'}
+plotly_densityplot(
+  assay_data, 
+  experiment = samples, 
+  colorby = main_grouping_variable, 
+  expressiontype = paste("count per", params$feature_type), 
+  palette = groupColorScale
+)
+```
+
+### Sample relationships
+
+#### Principal components plots
+
+```{r, echo=FALSE, results='asis'}
+# This is due to a bug in shinyngs, will be corrected
+opt <- list(ntop = params$n_features)
+pca_data <- compilePCAData(assay_data$variance_stabilised)
+
+for (contrast_variable in unique(contrasts$variable)){
+  plotdata <- pca_data$coords
+  plotdata$colorby <- factor(
+    samples[[contrast_variable]], 
+    levels = unique(samples[[contrast_variable]])
+  )
+
+  # Make plotting data combining PCA coords with coloring groups etc
+
+  plotdata$name <- rownames(plotdata)
+  percentVar <- pca_data$percentVar
+  labels <- paste0(colnames(plotdata), " (", sprintf("%.1f", percentVar), "%)")
+  ncats <- length(unique(plotdata$colorby))
+
+  plot_types <- list("2" = "scatter", "3" = "scatter3d")
+
+  for (d in names(plot_types)) {
+  
+    # Default plot args whatever we're doing
+
+    plot_args <- list(
+      x = pca_data$coords[, 1],
+      y = pca_data$coords[, 2],
+      xlab = labels[1],
+      ylab = labels[2],
+      colorby = plotdata$colorby,
+      plot_type = plot_types[[d]],
+      palette = groupColorScale,
+      legend_title = prettifyVariablename(opt$contrast_variable),
+      labels = plotdata$name,
+      show_labels = TRUE
+    )
+    
+    if (d == "3") {
+      plot_args$z <- pca_data$coords[, 3]
+      plot_args$zlab <- labels[3]
+    }
+
+    print(htmltools::tagList(do.call("plotly_scatterplot", plot_args)))
+  }
+}
+```
+
+#### Clustering dendrograms
+
+```{r, echo=FALSE, results='asis'}
+variable_genes <- selectVariableGenes(matrix = assay_data$variance_stabilised, ntop = params$n_features)
+
+p <- clusteringDendrogram(
+  2^assay_data$variance_stabilised[variable_genes, ],
+  samples[, main_grouping_variable, drop = FALSE],
+  colorby = main_grouping_variable,
+  cor_method = params$cor_method,
+  plot_title = paste0(
+    "Sample clustering dendrogram, ", 
+    params$n_features, 
+    " most variable ", 
+    params$feature_type, 
+    "s\n(", params$clustering_method, " clustering, ", params$cor_method, " correlation)"),
+  cluster_method = params$clustering_method,
+  palette = groupColorScale,
+  labelspace = 0.25
+)
+
+# Defaults in shinyngs make the text in this plot a bit big for the report, so
+# scale it down a bit
+print(p, vp=grid::viewport(gp=grid::gpar(cex=0.7)))
+
+```
+
+## Differential
+
+# Methods
+
+
+
+## Exploratory 
+
+
+
+
+
+## Differential
+
+# Appendices
+
+## Software versions
+
+```{r, echo=FALSE, results='asis'}
+versions_table <- data.frame(do.call(rbind, strsplit(names(versions), split = '\\.')), unlist(versions))
+colnames(versions_table) <- c('Component', 'Software', 'Version')
+kable(versions_table, row.names = FALSE)
+```
 
 # Citations
 
  <!-- TODO: Check citations-->
 
-If you use nf-core/airrflow for your analysis, please cite it using the following DOI: [10.5281/zenodo.3607408](https://doi.org/10.5281/zenodo.3607408)
+If you use nf-core/differentialabundance for your analysis, please cite it using the following DOI: TODO
 
 Please also cite the `nf-core` and `Nextflow` publications:
 
 - [nf-core](https://pubmed.ncbi.nlm.nih.gov/32055031/)
 
   > Ewels PA, Peltzer A, Fillinger S, Patel H, Alneberg J, Wilm A, Garcia MU, Di Tommaso P, Nahnsen S. The nf-core framework for community-curated bioinformatics pipelines. Nat Biotechnol. 2020 Mar;38(3):276-278. doi: 10.1038/s41587-020-0439-x. PubMed PMID: 32055031.
-
 - [Nextflow](https://pubmed.ncbi.nlm.nih.gov/28398311/)
 
   > Di Tommaso P, Chatzou M, Floden EW, Barja PP, Palumbo E, Notredame C. Nextflow enables reproducible computational workflows. Nat Biotechnol. 2017 Apr 11;35(4):316-319. doi: 10.1038/nbt.3820. PubMed PMID: 28398311.
-
 In addition, citations for the tools and data used in this pipeline are as follows:
-
-- [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
-
-- [MultiQC](https://pubmed.ncbi.nlm.nih.gov/27312411/)
-
-  > Ewels P, Magnusson M, Lundin S, Käller M. MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics. 2016 Oct 1;32(19):3047-8. doi: 10.1093/bioinformatics/btw354. Epub 2016 Jun 16. PubMed PMID: 27312411; PubMed Central PMCID: PMC5039924.
-
-## Software packaging/containerisation tools
 
 - [Anaconda](https://anaconda.com)
 
   > Anaconda Software Distribution. Computer software. Vers. 2-2.4.0. Anaconda, Nov. 2016. Web.
-
 - [Bioconda](https://pubmed.ncbi.nlm.nih.gov/29967506/)
 
   > Grüning B, Dale R, Sjödin A, Chapman BA, Rowe J, Tomkins-Tinch CH, Valieris R, Köster J; Bioconda Team. Bioconda: sustainable and comprehensive software distribution for the life sciences. Nat Methods. 2018 Jul;15(7):475-476. doi: 10.1038/s41592-018-0046-7. PubMed PMID: 29967506.
-
 - [BioContainers](https://pubmed.ncbi.nlm.nih.gov/28379341/)
 
   > da Veiga Leprevost F, Grüning B, Aflitos SA, Röst HL, Uszkoreit J, Barsnes H, Vaudel M, Moreno P, Gatto L, Weber J, Bai M, Jimenez RC, Sachsenberg T, Pfeuffer J, Alvarez RV, Griss J, Nesvizhskii AI, Perez-Riverol Y. BioContainers: an open-source and community-driven framework for software standardization. Bioinformatics. 2017 Aug 15;33(16):2580-2582. doi: 10.1093/bioinformatics/btx192. PubMed PMID: 28379341; PubMed Central PMCID: PMC5870671.
-
 - [Docker](https://dl.acm.org/doi/10.5555/2600239.2600241)
 
 - [Singularity](https://pubmed.ncbi.nlm.nih.gov/28494014/)
 
   > Kurtzer GM, Sochat V, Bauer MW. Singularity: Scientific containers for mobility of compute. PLoS One. 2017 May 11;12(5):e0177459. doi: 10.1371/journal.pone.0177459. eCollection 2017. PubMed PMID: 28494014; PubMed Central PMCID: PMC5426675.
-
