@@ -14,10 +14,13 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-if (params.report_file) { ch_report_file = file(params.report_file) } else { ch_report_file = [] }
 
-// Check optinal parameters
-if (params.control_features) { ch_control_features = file(params.control_features) } else { ch_control_features = [[],[]] } 
+// Check optional parameters
+if (params.control_features) { ch_control_features = file(params.control_features, checkIfExists: true) } else { ch_control_features = [[],[]] } 
+
+report_file = file(params.report_file, checkIfExists: true)
+logo_file = file(params.logo_file, checkIfExists: true)
+css_file = file(params.css_file, checkIfExists: true)
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -32,7 +35,7 @@ if (params.control_features) { ch_control_features = file(params.control_feature
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { EXECUTE_REPORT                                    } from '../modules/local/executereport/main'
+include { RMARKDOWNNOTEBOOK } from '../modules/nf-core/rmarkdownnotebook/main' 
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -146,32 +149,24 @@ workflow DIFFERENTIALABUNDANCE {
         }
         .unique()
 
-    ch_fom_plot_inputs = VALIDATOR.out.fom
+    ch_all_matrices = VALIDATOR.out.fom
         .combine(ch_processed_matrices)                         // Add processed marices to what we have in the FOM
         .map{
             tuple(it[0], it[1], it[2], [ it[3], it[4], it[5] ]) // Remove the experiment meta and group the matrices
         }
+        .first()
  
     PLOT_EXPLORATORY(
         ch_contrast_variables
-            .combine(ch_fom_plot_inputs.map{ it.tail() })
+            .combine(ch_all_matrices.map{ it.tail() })
     )
 
     // Differential analysis using the results of DESeq2
 
     PLOT_DIFFERENTIAL(
         DESEQ2_DIFFERENTIAL.out.results, 
-        ch_fom_plot_inputs.first()
+        ch_all_matrices
     )
-
-    // Output report
-
-    if (params.report_file) {
-        EXECUTE_REPORT(
-            ch_report_file,
-            params
-        )
-    }
 
     // Gather software versions
 
@@ -185,6 +180,48 @@ workflow DIFFERENTIALABUNDANCE {
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
     )
+    
+    // Generate a list of files that will be used by the markdown report
+
+    ch_report_file = Channel.from(report_file)
+        .map{ tuple(exp_meta, it) }
+
+    ch_logo_file = Channel.from(logo_file)
+    ch_css_file = Channel.from(css_file)
+
+    ch_report_input_files = ch_all_matrices
+        .tail()
+        .map{it.flatten()}
+        .combine(ch_contrasts_file.map{it.tail()})
+        .combine(CUSTOM_DUMPSOFTWAREVERSIONS.out.yml)
+        .combine(ch_logo_file)
+        .combine(ch_css_file)
+        .view()   
+ 
+    // Make a params list - starting with the input matrices
+
+    ch_report_params = ch_report_input_files
+        .map{[
+            samples_file: it[0].name,
+            features_file: it[1].name, 
+            raw_matrix: it[2].name, 
+            normalised_matrix: it[3].name, 
+            variance_stabilised_matrix: it[4].name, 
+            contrasts_file: it[5].name,
+            versions_file: it[6].name,
+            logo: it[7].name, 
+            css: it[8].name 
+        ]}
+
+    // TO DO: add further params - e.g. for custom logo etc, and for analysis
+    // params 
+
+    RMARKDOWNNOTEBOOK(
+        ch_report_file,
+        ch_report_params,
+        ch_report_input_files
+    )
+
 }
 
 /*

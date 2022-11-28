@@ -7,13 +7,16 @@ output:
     theme: default
     number_sections: false                  # add section numbering to headers
     df_print: paged                         # tables are printed as an html table with support for pagination over rows and columns
-    css: ./nf-core_style.css
     highlight: pygments
     pdf_document: true
   pdf_document:
     toc: yes
 date: "`r Sys.Date()`"
 params:
+  meta: NULL
+  input_dir: NULL
+  artifact_dir: NULL
+  cpus: 1 
   workflow_version: v0.0.0
   workflow_commit: 0
   feature_type: gene
@@ -23,12 +26,14 @@ params:
   variance_stabilised_matrix: null                            # e.g. test_files/3_treatment-WT-P23H.vst.tsv
   contrasts_file: null                                        # e.g. GSE156533.contrasts.csv
   samples_file: null                                          # GSE156533.samplesheet.csv
+  features_file: null
   differential_table: file.csv
   n_features: 500
   clustering_method: "ward.D2"
   cor_method: "spearman"
   versions_file: null                                         # e.g 17_software_versions.yml
-  logo: "assets/nf-core-differentialabundance_logo_light.png"
+  logo: null
+  css: null 
 ---
 
 <!-- Load libraries -->
@@ -41,12 +46,15 @@ library(plotly)
 ```
 
 ```{r, include=FALSE}
-versions <- unlist(yaml.load_file(params$versions_file), recursive = FALSE)
+save.image()
+versions <- unlist(yaml.load_file(file.path(params$input_dir, params$versions_file)), recursive = FALSE)
 ```
 
 ---
-title:  "<img src=\"nf-core-differentialabundance_logo_light.png\" style=\"float: left;\"/>Differential `r params$feature_type` abundance report"
+title:  "<img src=\"`r file.path(params$input_dir, params$logo)`\" style=\"float: left;\"/>Differential `r params$feature_type` abundance report"
 subtitle: differentialabundance workflow version `r versions[["Workflow.nf-core/differentialabundance"]]`
+html_document:
+    css_file: "`r file.path(params$input_dir, params$css)`"
 ---
 
 <!-- set notebook defaults -->
@@ -167,7 +175,7 @@ plotly_densityplot(
 
 ```{r, echo=FALSE, results='asis'}
 # This is due to a bug in shinyngs, will be corrected
-opt <- list(ntop = params$n_features)
+opt <<- list(ntop = params$n_features)
 pca_data <- compilePCAData(assay_data$variance_stabilised)
 
 for (contrast_variable in unique(contrasts$variable)){
@@ -198,7 +206,7 @@ for (contrast_variable in unique(contrasts$variable)){
       colorby = plotdata$colorby,
       plot_type = plot_types[[d]],
       palette = groupColorScale,
-      legend_title = prettifyVariablename(opt$contrast_variable),
+      legend_title = prettifyVariablename(params$contrast_variable),
       labels = plotdata$name,
       show_labels = TRUE
     )
