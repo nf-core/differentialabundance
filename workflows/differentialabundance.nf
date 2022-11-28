@@ -118,7 +118,8 @@ workflow DIFFERENTIALABUNDANCE {
     }
 
     DESEQ2_DIFFERENTIAL (
-        ch_contrasts.combine(ch_samples_and_matrix)
+        ch_contrasts.combine(ch_samples_and_matrix),
+        ch_control_features
     )
 
     // Let's make the simplifying assumption that the processed matrices from
