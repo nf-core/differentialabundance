@@ -16,6 +16,9 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
 if (params.report_file) { ch_report_file = file(params.report_file) } else { ch_report_file = [] }
 
+// Check optinal parameters
+if (params.control_features) { ch_control_features = file(params.control_features) } else { ch_control_features = [[],[]] } 
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     CONFIG FILES
