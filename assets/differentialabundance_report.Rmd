@@ -46,15 +46,12 @@ library(plotly)
 ```
 
 ```{r, include=FALSE}
-save.image()
 versions <- unlist(yaml.load_file(file.path(params$input_dir, params$versions_file)), recursive = FALSE)
 ```
 
 ---
 title:  "<img src=\"`r file.path(params$input_dir, params$logo)`\" style=\"float: left;\"/>Differential `r params$feature_type` abundance report"
 subtitle: differentialabundance workflow version `r versions[["Workflow.nf-core/differentialabundance"]]`
-html_document:
-    css_file: "`r file.path(params$input_dir, params$css)`"
 ---
 
 <!-- set notebook defaults -->
@@ -63,6 +60,11 @@ html_document:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+<!-- Include the CSS -->
+
+```{r, echo=FALSE}
+htmltools::includeCSS(params$css)
+```
 
 <!-- Load input data -->
 
