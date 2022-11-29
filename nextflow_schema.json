@@ -77,6 +77,23 @@
                     "type": "boolean",
                     "help_text": "Use supplied control features in normalistion/ scaling operations?",
                     "description": "When set, use the control features in scaling/ normalisation"
+                },
+                "report_file": {
+                    "type": "string",
+                    "description": "Rmd report template from which to create the pipeline report",
+                    "help_text": "Rmd report template from which to create the pipeline report",
+                    "format": "file-path",
+                    "pattern": "^\\S+\\.Rmd$"
+                },
+                "logo_file": {
+                    "type": "string",
+                    "default": "docs/images/nf-core-differentialabundance_logo_light.png",
+                    "description": "A logo to display in the report instead of the generic pipeline logo"
+                },
+                "css_file": {
+                    "type": "string",
+                    "default": "assets/nf-core_style.css",
+                    "description": "CSS to use to style the output, in lieu of the default nf-core styling"
                 }
             }
         },
