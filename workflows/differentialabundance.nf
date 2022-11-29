@@ -196,7 +196,6 @@ workflow DIFFERENTIALABUNDANCE {
         .combine(CUSTOM_DUMPSOFTWAREVERSIONS.out.yml)
         .combine(ch_logo_file)
         .combine(ch_css_file)
-        .view()   
  
     // Make a params list - starting with the input matrices
 
