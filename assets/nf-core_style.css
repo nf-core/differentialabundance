@@ -52,9 +52,8 @@ h4 {
 }
 
 #TOC {
-  background: url("nf-core-differentialabundance_logo_light.png");
   background-size: contain;
-  padding-top: 120px !important;
+  padding-top: 60px !important;
   background-repeat: no-repeat;
 }
 
