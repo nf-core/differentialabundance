@@ -52,6 +52,7 @@ include { SHINYNGS_STATICEXPLORATORY as PLOT_EXPLORATORY    } from '../modules/n
 include { SHINYNGS_STATICDIFFERENTIAL as PLOT_DIFFERENTIAL  } from '../modules/nf-core/shinyngs/staticdifferential/main'  
 include { SHINYNGS_VALIDATEFOMCOMPONENTS as VALIDATOR       } from '../modules/nf-core/shinyngs/validatefomcomponents/main'  
 include { DESEQ2_DIFFERENTIAL                               } from '../modules/nf-core/deseq2/differential/main'    
+include { CUSTOM_MATRIXFILTER                               } from '../modules/nf-core/custom/matrixfilter/main' 
 include { ATLASGENEANNOTATIONMANIPULATION_GTF2FEATUREANNOTATION as GTF_TO_TABLE } from '../modules/nf-core/atlasgeneannotationmanipulation/gtf2featureannotation/main' 
 
 /*
@@ -103,7 +104,7 @@ workflow DIFFERENTIALABUNDANCE {
         ch_fom,
         ch_contrasts_file
     )
- 
+
     // Split the contrasts up so we can run differential analyses and
     // downstream plots separately. 
     // Replace NA strings that might have snuck into the blocking column
@@ -116,15 +117,25 @@ workflow DIFFERENTIALABUNDANCE {
             it
         }
 
+    // Firstly Filter the input matrix
+
+    CUSTOM_MATRIXFILTER(
+        VALIDATOR.out.fom.map{ tuple(it[0], it[3]) },
+        VALIDATOR.out.fom.map{ tuple(it[0], it[1]) },
+    )
+    
     // Run the DESeq differential module, which doesn't take the feature
     // annotations 
 
-    ch_samples_and_matrix = VALIDATOR.out.fom.map{
-        tuple(it[1], it[3])
-    }
+    ch_samples_and_filtered_matrix = VALIDATOR.out.fom
+        .map{
+            tuple(it[0], it[1])                     // meta, samplesheet
+        }
+        .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
+        .map{ it.tail() } 
 
     DESEQ2_DIFFERENTIAL (
-        ch_contrasts.combine(ch_samples_and_matrix),
+        ch_contrasts.combine(ch_samples_and_filtered_matrix),
         ch_control_features
     )
 
