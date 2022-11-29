@@ -60,10 +60,20 @@ subtitle: differentialabundance workflow version `r versions[["Workflow.nf-core/
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-<!-- Include the CSS -->
+<!-- Include the CSS and set the logo -->
 
 ```{r, echo=FALSE}
 htmltools::includeCSS(params$css)
+```
+
+```{r results="asis", echo=FALSE}
+cat(paste0("
+<style>
+#TOC {
+   background-image: url(\"", knitr::image_uri(params$logo), "\");
+}
+</style>
+"))
 ```
 
 <!-- Load input data -->
