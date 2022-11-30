@@ -13,6 +13,10 @@
                         "branch": "master",
                         "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
                     },
+                    "custom/matrixfilter": {
+                        "branch": "master",
+                        "git_sha": "9e84d08cf865301e0dd73825123db417dc9abc18"
+                    },
                     "deseq2/differential": {
                         "branch": "master",
                         "git_sha": "d8c3dab05190b57ed38f787e678d15662c575abf"

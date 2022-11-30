@@ -97,6 +97,32 @@
                 }
             }
         },
+        "filtering": {
+            "title": "Filtering",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "filtering_min_abundance": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "Minimum abundance value"
+                },
+                "filtering_min_samples": {
+                    "type": "number",
+                    "default": 1,
+                    "description": "Minimum observations that must pass the threshold to retain the row/ feature (e.g. gene)."
+                },
+                "filtering_min_proportion": {
+                    "type": "number",
+                    "description": "A minimum proportion of observations that must pass the threshold. Overrides  minimum_samples"
+                },
+                "filtering_grouping_var": {
+                    "type": "string",
+                    "help_text": "The variable can be used to define groups and derive a minimum group size upon which to base minimum observation numbers. The rationale for this is to allow retention of features that might be present in only one group. Note that this is consciously NOT filtering with an explicit awareness of groups (\"feature must be present in all samples of group A\"), since this is know to create biases towards discovery of differential features."
+                }
+            }
+        },
         "reference_genome_options": {
             "title": "Reference genome options",
             "type": "object",
@@ -311,6 +337,9 @@
     "allOf": [
         {
             "$ref": "#/definitions/input_output_options"
+        },
+        {
+            "$ref": "#/definitions/filtering"
         },
         {
             "$ref": "#/definitions/reference_genome_options"
