@@ -99,32 +99,21 @@ workflow DIFFERENTIALABUNDANCE {
 
         // Combine features with the observations and matrices to create a FOM
         // where these things can travel together
-
-        ch_input.dump(tag:'input')
-        ch_counts.dump(tag:'counts')
-        exp_meta.dump(tag:'meta')
         ch_fom = GTF_TO_TABLE.out.feature_annotation
-            .dump(tag:'out')
             .map{
-                print it[1]
-                tuple([ "id": params.study_name  ], file(params.input), it[1], file(params.matrix))               // exp_meta.combine(ch_input).combine(Channel.from(it[1])).combine(ch_counts)
+                tuple([ "id": params.study_name  ], file(params.input), it[1])               // exp_meta.combine(ch_input).combine(Channel.from(it[1])).combine(ch_counts)
             }
+            .combine(ch_counts)
+
 
     } else {
-     //  ch_fom = Channel.fromPath("FALSE")
-     //       .map{
-     //           tuple( exp_meta, ch_input, it, ch_counts)
-     //       }
-        ch_fom = exp_meta.combine(ch_input).combine(Channel.fromPath("FALSE")).combine(ch_counts)
+        ch_fom = Channel.of([ [ "id": params.study_name  ], file(params.input), file("FALSE")]).merge(ch_counts)
     }
-        ch_input.dump(tag:'input')
-        ch_counts.dump(tag:'counts')
-    // Channel for the contrasts file
 
+    // Channel for the contrasts file
     ch_contrasts_file = Channel.from([[exp_meta, file(params.contrasts)]])
 
     // Check compatibility of FOM elements and contrasts
-    ch_fom.dump(tag:'fom')
     VALIDATOR(
         ch_fom,
         ch_contrasts_file
@@ -141,7 +130,6 @@ workflow DIFFERENTIALABUNDANCE {
             it.blocking = it.blocking.replace('NA', '')
             it
         }
-        .dump(tag:'contrasts')
 
     // Run the DESeq differential module, which doesn't take the feature
     // annotations
@@ -149,8 +137,7 @@ workflow DIFFERENTIALABUNDANCE {
     ch_samples_and_matrix = VALIDATOR.out.fom.map{
         tuple(it[1], it[3])
     }
-    ch_contrasts.combine(ch_samples_and_matrix).dump(tag:'diffin1')
-  //  ch_control_features.dump(tag:'diffin2')
+    ch_contrasts.combine(ch_samples_and_matrix)
     DESEQ2_DIFFERENTIAL (
         ch_contrasts.combine(ch_samples_and_matrix),
         ch_control_features
