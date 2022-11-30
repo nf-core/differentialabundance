@@ -9,13 +9,13 @@ def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 // Validate input parameters
 WorkflowDifferentialabundance.initialise(params, log)
 
-def checkPathParamList = [ params.matrix, params.input ]
+def checkPathParamList = [ params.input, params.gtf ]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
 // Check mandatory parameters
 if (params.matrix) { ch_counts = Channel.fromPath(params.matrix) } else { exit 1, 'Gene counts not specified!' }
-if (params.input) { ch_input = Channel.fromPath(params.input) } else { exit 1, 'Samplesheet not specified!' }
 if (params.contrasts) { ch_contrasts = Channel.fromPath(params.contrasts) } else { exit 1, 'Contrasts not specified!' }
+if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
 
 // Check optional parameters
 if (params.control_features) { ch_control_features = file(params.control_features, checkIfExists: true) } else { ch_control_features = [[],[]] }
@@ -167,7 +167,7 @@ workflow DIFFERENTIALABUNDANCE {
     // blocking factors included differ. But the normalised and
     // variance-stabilised matrices are not (IIUC) impacted by the model.
 
-    ch_matrices = DESEQ2_DIFFERENTIAL.out.normalised_counts
+    ch_processed_matrices = DESEQ2_DIFFERENTIAL.out.normalised_counts
         .join(DESEQ2_DIFFERENTIAL.out.vst_counts)
         .map{ it.tail() }
         .first()
