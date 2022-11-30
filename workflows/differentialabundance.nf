@@ -121,7 +121,7 @@ workflow DIFFERENTIALABUNDANCE {
 
     CUSTOM_MATRIXFILTER(
         VALIDATOR.out.fom.map{ tuple(it[0], it[3]) },
-        VALIDATOR.out.fom.map{ tuple(it[0], it[1]) },
+        VALIDATOR.out.fom.map{ tuple(it[0], it[1]) }
     )
     
     // Run the DESeq differential module, which doesn't take the feature
