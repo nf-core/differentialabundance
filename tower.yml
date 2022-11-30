@@ -15,3 +15,5 @@ reports:
     display: "DESeq2 processed counts table"
   "**/plots/qc/*.dispersion.png":
     display: "DESeq2 dispersion plot"
+  "**/study.html":
+    display: "Final differential abundance report"
