@@ -207,8 +207,12 @@ workflow DIFFERENTIALABUNDANCE {
         .combine(CUSTOM_DUMPSOFTWAREVERSIONS.out.yml)
         .combine(ch_logo_file)
         .combine(ch_css_file)
+        .combine(DESEQ2_DIFFERENTIAL.out.results.map{it[1]}.toList())
  
-    // Make a params list - starting with the input matrices
+    // Make a params list - starting with the input matrices and the relevant
+    // params to use in reporting
+
+    params_to_pass = [ 'study_type', 'filtering_min_samples', 'filtering_min_abundance', 'filtering_min_proportion', 'filtering_grouping_var', 'exploratory_clustering_method', 'exploratory_cor_method', 'exploratory_n_features', 'differential_file_suffix', 'differential_feature_id_column', 'differential_fc_column', 'differential_fc_column', 'differential_pval_column', 'differential_qval_column', 'differential_min_fold_change', 'differential_max_qval' ]
 
     ch_report_params = ch_report_input_files
         .map{[
@@ -221,7 +225,8 @@ workflow DIFFERENTIALABUNDANCE {
             versions_file: it[6].name,
             logo: it[7].name, 
             css: it[8].name 
-        ]}
+        ] + params.subMap(params_to_pass)}
+    
 
     // TO DO: add further params - e.g. for custom logo etc, and for analysis
     // params 

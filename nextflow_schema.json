@@ -10,7 +10,17 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["input", "contrasts", "matrix", "outdir", "study_name", "study_type"],
+            "required": [
+                "input",
+                "contrasts",
+                "matrix",
+                "outdir",
+                "study_name",
+                "study_type",
+                "logo_file",
+                "css_file",
+                "report_file"
+            ],
             "properties": {
                 "input": {
                     "type": "string",
@@ -100,7 +110,7 @@
         "filtering": {
             "title": "Filtering",
             "type": "object",
-            "description": "",
+            "description": "Options related to filtering upstream of differential analysis",
             "default": "",
             "properties": {
                 "filtering_min_abundance": {
@@ -119,9 +129,88 @@
                 },
                 "filtering_grouping_var": {
                     "type": "string",
-                    "help_text": "The variable can be used to define groups and derive a minimum group size upon which to base minimum observation numbers. The rationale for this is to allow retention of features that might be present in only one group. Note that this is consciously NOT filtering with an explicit awareness of groups (\"feature must be present in all samples of group A\"), since this is know to create biases towards discovery of differential features."
+                    "help_text": "The variable can be used to define groups and derive a minimum group size upon which to base minimum observation numbers. The rationale for this is to allow retention of features that might be present in only one group. Note that this is consciously NOT filtering with an explicit awareness of groups (\"feature must be present in all samples of group A\"), since this is know to create biases towards discovery of differential features.",
+                    "description": "An optional grouping variable to be used to calculate a min_samples value"
                 }
-            }
+            },
+            "fa_icon": "fas fa-filter",
+            "required": ["filtering_min_abundance"]
+        },
+        "exploratory_analysis": {
+            "title": "Exploratory analysis",
+            "type": "object",
+            "description": "Options related to data exploration",
+            "default": "",
+            "properties": {
+                "exploratory_clustering_method": {
+                    "type": "string",
+                    "default": "ward.D2",
+                    "description": "Clustering method used in dendrogram creation"
+                },
+                "exploratory_cor_method": {
+                    "type": "string",
+                    "default": "spearman",
+                    "description": "Correlation method used in dendrogram creation"
+                },
+                "exploratory_n_features": {
+                    "type": "integer",
+                    "default": 500,
+                    "description": "Number of features selected before certain exploratory analyses"
+                }
+            },
+            "fa_icon": "fas fa-chart-area",
+            "required": ["exploratory_clustering_method", "exploratory_cor_method", "exploratory_n_features"]
+        },
+        "differential_analysis": {
+            "title": "Differential analysis",
+            "type": "object",
+            "description": "Options related to differential operations",
+            "default": "",
+            "properties": {
+                "differential_file_suffix": {
+                    "type": "string",
+                    "default": ".deseq2.results.tsv",
+                    "description": "The suffix associated tabular differential results tables"
+                },
+                "differential_feature_id_column": {
+                    "type": "string",
+                    "default": "gene_id",
+                    "description": "The feature identifier column in differential results tables"
+                },
+                "differential_fc_column": {
+                    "type": "string",
+                    "default": "log2FoldChange",
+                    "description": "The fold change column in differential results tables"
+                },
+                "differential_pval_column": {
+                    "type": "string",
+                    "default": "pvalue",
+                    "description": "The p value column in differential results tables"
+                },
+                "differential_qval_column": {
+                    "type": "string",
+                    "default": "padj",
+                    "description": "The q value column in differential results tables."
+                },
+                "differential_min_fold_change": {
+                    "type": "integer",
+                    "default": 2,
+                    "description": "Minimum fold change used to calculate differential feature numbers"
+                },
+                "differential_max_qval": {
+                    "type": "number",
+                    "default": 0.05,
+                    "description": "Maximum q value used to calculate differential feature numbrers"
+                }
+            },
+            "required": [
+                "differential_file_suffix",
+                "differential_max_qval",
+                "differential_min_fold_change",
+                "differential_qval_column",
+                "differential_fc_column",
+                "differential_feature_id_column"
+            ]
         },
         "reference_genome_options": {
             "title": "Reference genome options",
@@ -343,10 +432,16 @@
     },
     "allOf": [
         {
+            "$ref": "#/definitions/differential_analysis"
+        },
+        {
             "$ref": "#/definitions/input_output_options"
         },
         {
             "$ref": "#/definitions/filtering"
+        },
+        {
+            "$ref": "#/definitions/exploratory_analysis"
         },
         {
             "$ref": "#/definitions/reference_genome_options"
