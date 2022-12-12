@@ -1,10 +1,18 @@
+----------------------------------------------------
+                                        ,--./,-.
+        ___     __   __   __   ___     /,-._.--~\\
+  |\\ | |__  __ /  ` /  \\ |__) |__         }  {
+  | \\| |       \\__, \\__/ |  \\ |___     \\`-._,-`-,
+                                        `._,._,'
+  nf-core/differentialabundance v${version}
+----------------------------------------------------
 Run Name: $runName
 
 <% if (success){
-    out << "## differentialabundance/differentialabundance execution completed successfully! ##"
+    out << "## nf-core/differentialabundance execution completed successfully! ##"
 } else {
     out << """####################################################
-## differentialabundance/differentialabundance execution completed unsuccessfully! ##
+## nf-core/differentialabundance execution completed unsuccessfully! ##
 ####################################################
 The exit status of the task that caused the workflow execution to fail was: $exitStatus.
 The full error message was:
@@ -27,5 +35,5 @@ Pipeline Configuration:
 <% out << summary.collect{ k,v -> " - $k: $v" }.join("\n") %>
 
 --
-differentialabundance/differentialabundance
-https://github.com/differentialabundance/differentialabundance
+nf-core/differentialabundance
+https://github.com/nf-core/differentialabundance

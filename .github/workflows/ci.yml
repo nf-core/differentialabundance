@@ -11,20 +11,24 @@ on:
 env:
   NXF_ANSI_LOG: false
 
+concurrency:
+  group: "${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}"
+  cancel-in-progress: true
+
 jobs:
   test:
     name: Run pipeline with test data
     # Only run on push if this is the nf-core dev branch (merged PRs)
-    if: "${{ github.event_name != 'push' || (github.event_name == 'push' && github.repository == 'differentialabundance/differentialabundance') }}"
+    if: "${{ github.event_name != 'push' || (github.event_name == 'push' && github.repository == 'nf-core/differentialabundance') }}"
     runs-on: ubuntu-latest
     strategy:
       matrix:
         NXF_VER:
-          - "21.10.3"
+          - "22.10.1"
           - "latest-everything"
     steps:
       - name: Check out pipeline code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Nextflow
         uses: nf-core/setup-nextflow@v1
