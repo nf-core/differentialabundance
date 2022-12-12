@@ -189,7 +189,7 @@ workflow DIFFERENTIALABUNDANCE {
         .mix(PLOT_DIFFERENTIAL.out.versions)
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
-        ch_versions.unique().collectFile(name: 'collated_versions.yml')
+        ch_versions.unique{ it.text }.collectFile(name: 'collated_versions.yml')
     )
     
     // Generate a list of files that will be used by the markdown report
@@ -231,7 +231,6 @@ workflow DIFFERENTIALABUNDANCE {
         ch_report_params,
         ch_report_input_files
     )
-
 }
 
 /*
@@ -246,7 +245,7 @@ workflow.onComplete {
     }
     NfcoreTemplate.summary(workflow, params, log)
     if (params.hook_url) {
-        NfcoreTemplate.adaptivecard(workflow, params, summary_params, projectDir, log)
+        NfcoreTemplate.IM_notification(workflow, params, summary_params, projectDir, log)
     }
 }
 
