@@ -13,27 +13,47 @@ output:
     toc: yes
 date: "`r Sys.Date()`"
 params:
-  meta: NULL
-  input_dir: NULL
-  artifact_dir: NULL
+  #meta:
+  #  id: "study"
+  #meta: NULL
+  input_dir: "/Users/jonathanmanning/projects/nf-core-differentialabundance/work/62/2d2b7d76e5e2392e95db81ce4bf782"
+  #input_dir: NULL
+  artifact_dir: "artifacts"
+  #artifact_dir: NULL
   cpus: 1 
   workflow_version: v0.0.0
   workflow_commit: 0
   feature_type: gene
   observation_type: sample
-  raw_matrix: null                                            # e.g. 0_salmon.merged.gene_counts.tsv
-  normalised_matrix: null
-  variance_stabilised_matrix: null                            # e.g. test_files/3_treatment-WT-P23H.vst.tsv
-  contrasts_file: null                                        # e.g. GSE156533.contrasts.csv
-  samples_file: null                                          # GSE156533.samplesheet.csv
-  features_file: null
+  raw_matrix: "SRP254919.salmon.merged.gene_counts.top1000cov.assay.tsv"
+  #raw_matrix: null                                            # e.g. 0_salmon.merged.gene_counts.tsv
+  normalised_matrix: "treatment-mCherry-hND6-sample_number.normalised_counts.tsv"
+  #normalised_matrix: null
+  #variance_stabilised_matrix: null                            # e.g. test_files/3_treatment-WT-P23H.vst.tsv
+  variance_stabilised_matrix: "treatment-mCherry-hND6-sample_number.vst.tsv"
+  contrasts_file: "SRP254919.contrasts.csv"
+  #contrasts_file: null                                        # e.g. GSE156533.contrasts.csv
+  samples_file: "SRP254919.samplesheet.sample_metadata.tsv"
+  #samples_file: null                                          # GSE156533.samplesheet.csv
+  #features_file: null
+  features_file: "Mus_musculus.anno.feature_metadata.tsv"
   differential_table: file.csv
   n_features: 500
   clustering_method: "ward.D2"
   cor_method: "spearman"
-  versions_file: null                                         # e.g 17_software_versions.yml
-  logo: null
-  css: null 
+  #versions_file: null                                         # e.g 17_software_versions.yml
+  versions_file: "software_versions.yml"
+  #logo: null
+  #css: null
+  logo: "nf-core-differentialabundance_logo_light.png"
+  css: "nf-core_style.css" 
+  differential_file_suffix: ".deseq2.results.tsv" # This will be varialble once we get beyond RNA-seq
+  differential_feature_id_column: "gene_id"
+  differential_fc_column: "log2FoldChange"
+  differential_pval_column: "pvalue"
+  differential_qval_column: "padj"
+  min_fold_change: 2
+  max_qval: 0.05
 ---
 
 <!-- Load libraries -->
@@ -78,26 +98,133 @@ cat(paste0("
 
 <!-- Load input data -->
 
+```{r, echo=FALSE}
+samples <- read_metadata(file.path(params$input_dir, params$samples_file))
+rownames(samples) <- samples[,1]
+sample_name_col <- colnames(samples)[1]
+
+contrasts <- read_metadata(file.path(params$input_dir, params$contrasts_file))
+
+# Pick the first variable used in contrasts for coloring purposes
+main_grouping_variable <- contrasts$variable[1]
+groupColorScale <- makeColorScale(length(unique(samples[[main_grouping_variable]])), palette = "Set1")
+
+assay_files <- list(
+  raw = file.path(params$input_dir, params$raw_matrix),
+  normalised = file.path(params$input_dir,params$normalised_matrix),
+  variance_stabilised = file.path(params$input_dir, params$variance_stabilised_matrix)
+)
+assay_files <- Filter(Negate(is.null), assay_files)
+assay_data <- lapply(assay_files, function(x) {
+  mat <- read_matrix(
+    x,
+    sample_metadata = samples,
+    row.names = 1
+  )
+  colnames(mat) <- samples[[sample_name_col]][match(colnames(mat), rownames(samples))]
+  mat
+})
+
+# Now we can rename the samples rows using the title field
+rownames(samples) <- samples[[sample_name_col]]
+```
+
+<!-- Read the differential results.
+NOTE: differential results files are expected to have the pattern:
+
+<variable>-<reference>-<target>-<blocking><differential_file_suffix>
+
+... where variable, reference, target and blocking come from the contrasts file
+and the suffix is defined in parameters.
+-->
+
+```{r, echo=FALSE}
+
+prefix_part_names <- c('variable', 'reference', 'target', 'blocking')
+diff_prefixes <- sub('-$', '', apply(contrasts[,prefix_part_names], 1, function(x) paste(x, collapse = '-')))
+
+differential_results <- lapply(diff_prefixes, function(d){
+  diff_file <- file.path(params$input_dir, paste0(d, params$differential_file_suffix))
+  if (! file.exists(diff_file)){
+    stop(paste("Differential file", diff_file, "does not exist"))
+  }
+  read_differential(
+    diff_file, 
+    feature_id_column = params$differential_feature_id_column,
+    fc_column = params$differential_fc_column,
+    pval_column = params$differential_pval_column,
+    qval_column = params$differential_qval_column
+  )
+})
+names(differential_results) <- diff_prefixes
+```
+
+<!-- Calculate some summary statistics -->
+
+```{r, echo=FALSE}
+
+contrast_descriptions <- paste(contrasts$target, 'versus', contrasts$reference, 'in', contrasts$variable) 
+with_blocking <- which(contrasts$blocking != '')
+contrast_descriptions[with_blocking] <- paste0(contrast_descriptions[with_blocking], " (blocking on ", contrasts$blocking[with_blocking],")")
+
+```
+
+<!-- Write the report -->
+
 
 # Abstract
 
-This report summarises differential `r params$feature_type` analysis as performed by the nf-core differential abundance pipeline.  
+This report summarises differential `r params$feature_type` analysis as performed by the nf-core differential abundance pipeline. 
+
+```{r, echo=FALSE}
+#REMOVE THIS
+assay_data$normalised <- assay_data$normalised[1:900,]
+```
+
+Input was a matrix of `r nrow(assay_data$raw)` `r params$feature_type`s for `r ncol(assay_data$raw)` samples`r ifelse(nrow(assay_data$normalised) < nrow(assay_data$raw), paste0(', reduced to ', nrow(assay_data$normalised), ' ', params$feature_type, 's after filtering for low abundance'), '')`.
+
+```{r, echo=FALSE, results='asis'}
+
+differential_summary_string <- paste(
+  paste0(nrow(contrasts), ' contrasts were examined for differential expression. '),
+  paste0('Differential expression was assessed against a minimum fold change of ', params$min_fold_change, ' and a maximum adjusted p value of ', params$max_qval, '.'),
+  paste(
+  lapply(
+    1:nrow(contrasts),
+    function(x){
+      signif <- differential_results[[x]][,params$differential_qval_column ] < params$max_qval  
+      n_de_up <- length(
+        which(
+            differential_results[[x]][,params$differential_fc_column ] > log2(params$min_fold_change) &
+            signif
+        )
+      )
+      n_de_down <- length(
+        which(
+            differential_results[[x]][,params$differential_fc_column ] < log2(1/params$min_fold_change) &
+            signif 
+        )
+      )
+      
+      paste0(
+        "Contrast ", x, ' (', contrast_descriptions[x], ') ', "had ", n_de_up, ' ', paste0(params$feature_type, 's'), ' expressed significantly more highly in ', contrasts[x, 'target',], ' than ', contrasts[x, 'reference',], ' and ', n_de_down, ' expressed at sifnificantly lower levels.'
+        
+      )
+    }
+  ),
+  collapse = ' '
+  )
+)
+cat(differential_summary_string)
+```
+
+
 
 # Data
 
 A summary of sample metadata is below:
 
 ```{r, echo=FALSE, results='asis'}
-samples <- read_metadata(params$samples_file)
-rownames(samples) <- samples[,1]
-sample_name_col <- colnames(samples)[1]
-
-contrasts <- read_metadata(params$contrasts_file)
-
-# Pick the first variable used in contrasts for coloring purposes
-main_grouping_variable <- contrasts$variable[1]
-groupColorScale <- makeColorScale(length(unique(samples[[main_grouping_variable]])), palette = "Set1")
-
 display_columns <- c(colnames(samples)[1], unique(contrasts$variable))
 minimal_fetchngs_cols <- c('sample', 'sample_title', 'strandedness', 'library_strategy', 'scientific_name')
 
@@ -137,24 +264,7 @@ kable(contrasts_to_print, caption = paste0("Table of contrasts. Positive log fol
 The following plots show the abundance value distributions of input matrices. A log(2) transform is applied where required.
 
 ```{r, include=FALSE}
-assay_files <- list(
-  raw = params$raw_matrix,
-  normalised = params$normalised_matrix,
-  variance_stabilised = params$variance_stabilised_matrix
-)
-assay_files <- Filter(Negate(is.null), assay_files)
-assay_data <- lapply(assay_files, function(x) {
-  mat <- read_matrix(
-    x,
-    sample_metadata = samples,
-    row.names = 1
-  )
-  colnames(mat) <- samples[[sample_name_col]][match(colnames(mat), rownames(samples))]
-  mat
-})
 
-# Now we can rename the samples rows using the title field
-rownames(samples) <- samples[[sample_name_col]]
 ```
 #### Box plots
 
@@ -261,6 +371,10 @@ print(p, vp=grid::viewport(gp=grid::gpar(cex=0.7)))
 ```
 
 ## Differential
+
+```{r, echo=FALSE, results='asis'}
+cat(differential_summary_string)
+```
 
 # Methods
 
