@@ -212,8 +212,6 @@ workflow DIFFERENTIALABUNDANCE {
     // Make a params list - starting with the input matrices and the relevant
     // params to use in reporting
 
-    params_to_pass = [ 'study_type', 'filtering_min_samples', 'filtering_min_abundance', 'filtering_min_proportion', 'filtering_grouping_var', 'exploratory_clustering_method', 'exploratory_cor_method', 'exploratory_n_features', 'differential_file_suffix', 'differential_feature_id_column', 'differential_fc_column', 'differential_fc_column', 'differential_pval_column', 'differential_qval_column', 'differential_min_fold_change', 'differential_max_qval' ]
-
     ch_report_params = ch_report_input_files
         .map{[
             samples_file: it[0].name,
@@ -224,9 +222,8 @@ workflow DIFFERENTIALABUNDANCE {
             contrasts_file: it[5].name,
             versions_file: it[6].name,
             logo: it[7].name, 
-            css: it[8].name 
-        ] + params.subMap(params_to_pass)}
-    
+            css: it[8].name
+        ] + params.findAll{ k,v -> k.matches(~/^(study|filtering|exploratory|differential|deseq2).*/) }}
 
     // TO DO: add further params - e.g. for custom logo etc, and for analysis
     // params 
