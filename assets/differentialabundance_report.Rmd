@@ -300,7 +300,6 @@ This report summarises differential `r params$feature_type` analysis as performe
 assay_data$normalised <- assay_data$normalised[1:900,]
 ```
 
-
 # Data
 
 ## Samples
