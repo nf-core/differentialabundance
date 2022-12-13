@@ -156,6 +156,11 @@
                     "type": "integer",
                     "default": 500,
                     "description": "Number of features selected before certain exploratory analyses"
+                },
+                "exploratory_whisker_distance": {
+                    "type": "number",
+                    "default": 1.5,
+                    "description": "Length of the whiskers in boxplots as multiple of IQR. Defaults to 1.5."
                 }
             },
             "fa_icon": "fas fa-chart-area",
