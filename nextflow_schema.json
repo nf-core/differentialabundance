@@ -17,9 +17,9 @@
                 "outdir",
                 "study_name",
                 "study_type",
+                "report_file",
                 "logo_file",
-                "css_file",
-                "report_file"
+                "css_file"
             ],
             "properties": {
                 "input": {
@@ -205,12 +205,115 @@
             },
             "required": [
                 "differential_file_suffix",
-                "differential_max_qval",
-                "differential_min_fold_change",
-                "differential_qval_column",
+                "differential_feature_id_column",
                 "differential_fc_column",
-                "differential_feature_id_column"
+                "differential_qval_column",
+                "differential_min_fold_change",
+                "differential_max_qval"
             ]
+        },
+        "deseq2_specific_options_rna_seq_only": {
+            "title": "DESeq2 specific options (RNA-seq only)",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "deseq2_test": {
+                    "type": "string",
+                    "default": "Wald",
+                    "description": "'test' param passed to DESeq()",
+                    "help_text": "either \"Wald\" or \"LRT\", which will then use either Wald significance tests (defined by nbinomWaldTest), or the likelihood ratio test on the difference in deviance between a full and reduced model formula (defined by nbinomLRT)"
+                },
+                "deseq2_fit_type": {
+                    "type": "string",
+                    "default": "parametric",
+                    "description": "'fitType' param passed to DESeq()",
+                    "help_text": "either \"parametric\", \"local\", \"mean\", or \"glmGamPoi\" for the type of fitting of dispersions to the mean intensity. See estimateDispersions for description."
+                },
+                "deseq2_sf_type": {
+                    "type": "string",
+                    "default": "ratio",
+                    "description": "'sfType' param passed to DESeq()",
+                    "help_text": "either \"ratio\", \"poscounts\", or \"iterate\" for the type of size factor estimation. See estimateSizeFactors for description."
+                },
+                "deseq2_min_replicates_for_replace": {
+                    "type": "integer",
+                    "default": 7,
+                    "help_text": "the minimum number of replicates required in order to use replaceOutliers on a sample. If there are samples with so many replicates, the model will be refit after these replacing outliers, flagged by Cook's distance. Set to Inf in order to never replace outliers. It set to Inf for fitType=\"glmGamPoi\".",
+                    "description": "'minReplicatesForReplace' param passed to DESeq()"
+                },
+                "deseq2_use_t": {
+                    "type": "boolean",
+                    "description": "'useT' param passed to DESeq2",
+                    "help_text": "logical, passed to nbinomWaldTest, default is FALSE, where Wald statistics are assumed to follow a standard Normal"
+                },
+                "deseq2_independent_filtering": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "'independentFiltering' param passed to results()",
+                    "help_text": "logical, whether independent filtering should be applied automatically"
+                },
+                "deseq2_lfc_threshold": {
+                    "type": "integer",
+                    "default": 0,
+                    "description": "'lfcThreshold' param passed to results()",
+                    "help_text": "a non-negative value which specifies a log2 fold change threshold. The default value is 0, corresponding to a test that the log2 fold changes are equal to zero. The user can specify the alternative hypothesis using the altHypothesis argument, which defaults to testing for log2 fold changes greater in absolute value than a given threshold. If lfcThreshold is specified, the results are for Wald tests, and LRT p-values will be overwritten."
+                },
+                "deseq2_alt_hypothesis": {
+                    "type": "string",
+                    "default": "greaterAbs",
+                    "description": "'altHypothesis' param passed to results()",
+                    "help_text": "character which specifies the alternative hypothesis, i.e. those values of log2 fold change which the user is interested in finding. The complement of this set of values is the null hypothesis which will be tested. See ?results() for more details."
+                },
+                "deseq2_p_adjust_method": {
+                    "type": "string",
+                    "default": "BH",
+                    "description": "' pAdjustMethod' param passed to results()",
+                    "help_text": "the method to use for adjusting p-values, see ?p.adjust"
+                },
+                "deseq2_alpha": {
+                    "type": "number",
+                    "default": 0.1,
+                    "description": "'alpha' param passed to results()",
+                    "help_text": "the significance cutoff used for optimizing the independent filtering (by default 0.1). If the adjusted p-value cutoff (FDR) will be a value other than 0.1, alpha should be set to that value."
+                },
+                "deseq2_minmu": {
+                    "type": "number",
+                    "default": 0.5,
+                    "description": "'minmu' param passed to results()",
+                    "help_text": "lower bound on the estimated count (used when calculating contrasts)"
+                },
+                "deseq2_vs_method": {
+                    "type": "string",
+                    "default": "vst",
+                    "description": "variance stabilisation method to use when making a variance stabilised matrix",
+                    "help_text": "'rlog', 'vst' or 'rlog,vst'"
+                },
+                "deseq2_shrink_lfc": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Shink fold changes in results?",
+                    "help_text": "'ashr' method is the only method currently implemented"
+                },
+                "deseq2_cores": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "Number of cores",
+                    "help_text": "Number of cores to use with DESeq()"
+                },
+                "deseq2_vs_blind": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "blind param for rlog() and/ or vst()",
+                    "help_text": "logical, whether to blind the transformation to the experimental design "
+                },
+                "deseq2_vst_nsub": {
+                    "type": "integer",
+                    "default": 1000,
+                    "description": "'nsub' param passed to vst()",
+                    "help_text": "the number of genes to subset to (default 1000)"
+                }
+            }
         },
         "reference_genome_options": {
             "title": "Reference genome options",
@@ -432,9 +535,6 @@
     },
     "allOf": [
         {
-            "$ref": "#/definitions/differential_analysis"
-        },
-        {
             "$ref": "#/definitions/input_output_options"
         },
         {
@@ -442,6 +542,12 @@
         },
         {
             "$ref": "#/definitions/exploratory_analysis"
+        },
+        {
+            "$ref": "#/definitions/differential_analysis"
+        },
+        {
+            "$ref": "#/definitions/deseq2_specific_options_rna_seq_only"
         },
         {
             "$ref": "#/definitions/reference_genome_options"
