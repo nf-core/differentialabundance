@@ -47,10 +47,12 @@ params:
   filtering_grouping_var: NULL
   differential_file_suffix: NULL
   differential_feature_id_column: NULL
+  differential_feature_name_column: NULL
   differential_fc_column: NULL
   differential_pval_column: NULL
   differential_qval_column: NULL
   differential_min_fold_change: NULL
+  differential_foldchanges_logged: NULL
   differential_max_qval: NULL
   deseq2_test: NULL
   deseq2_fit_type: NULL
@@ -248,13 +250,27 @@ differential_results <- lapply(differential_files, function(diff_file){
   if (! file.exists(diff_file)){
     stop(paste("Differential file", diff_file, "does not exist"))
   }
-  read_differential(
+  diff <- read_differential(
     diff_file, 
     feature_id_column = params$differential_feature_id_column,
     fc_column = params$differential_fc_column,
     pval_column = params$differential_pval_column,
     qval_column = params$differential_qval_column
   )
+  
+  # If fold changes are not logged already, log them (we assume they're logged
+  # later on)
+  
+  if (! params$differential_foldchanges_logged){
+    diff[[params$differential_fc_column]] <- log2(diff[[params$differential_fc_column]])
+  }
+  
+  # Annotate differential tables if possible
+  
+  if (! is.null(params$features_file)){
+    diff <- merge(features, diff, by = params$differential_feature_id_column)
+  }
+  diff
 })
 names(differential_results) <- diff_prefixes
 ```
@@ -507,16 +523,62 @@ cat(differential_summary_string)
 ```{r, echo=FALSE, results='asis'}
 for (i in 1:nrow(contrasts)){
   cat("\n#### ", contrast_descriptions[i], "\n")
+  
+  ## Make a volcano plot for the contrast first
+  
+  # Label features with symbol as well as identifier
+  if (! is.null(params$features_file) && (! is.null(params$differential_feature_name_column)) ){
+    label_col <- params$differential_feature_name_column
+  }else{
+    label_col <- params$differential_feature_id_column
+  }
 
+  # Get the full set of differential stats for this contrast, removing rows with
+  # NAs in the fields we need.
+  full_de <- differential_results[[i]]
+  full_de <- subset(full_de, (! is.na(full_de[[params$differential_fc_column]])) & (! is.na(full_de[[params$differential_qval_colum]])) )
+  
+  # We'll color by whether features are differential according to supplied thresholds
+
+  full_de$differential_status <- FALSE
+  full_de$differential_status[abs(full_de[[params$differential_fc_column]]) > log2(params$differential_min_fold_change) & full_de[params$differential_qval_column] < params$differential_max_qval] <- TRUE
+
+  # Define the thresholds we'll draw
+
+  hline_thresholds = vline_thresholds = list()
+  hline_thresholds[[paste(params$differential_qval_column, '=', params$differential_max_qval)]] = -log10(params$differential_max_qval)
+  vline_thresholds[[paste(params$differential_fc_column, '<-', log2(params$differential_min_fold_change))]] = -log2(params$differential_min_fold_change)
+  vline_thresholds[[paste(params$differential_fc_column, '>', log2(params$differential_min_fold_change))]] = log2(params$differential_min_fold_change)
+
+  plot_args <- list(
+    x = full_de[[params$differential_fc_column]],
+    y = -log10(full_de[[params$differential_qval_column]]),
+    colorby = full_de$differential_status,
+    ylab = paste("-log(10)", params$differential_qval_column),
+    xlab = xlabel <- paste("higher in", contrasts$reference[i], "          <<", params$differential_fc_column, ">>           higher in", contrasts$target[i]) ,
+    labels = full_de[[label_col]],
+    hline_thresholds = hline_thresholds,
+    vline_thresholds = vline_thresholds,
+    show_labels = FALSE,
+    legend_title = "Differential status",
+    palette = makeColorScale(2, 'Set1')
+  )
+  
+  # Let's equalize the axes
+  max_fc <- max(abs(full_de[[params$differential_fc_column]])) * 1.1
+  p <- do.call(plotly_scatterplot, plot_args) %>%
+    layout(xaxis = list(range=list(-max_fc, max_fc)))
+ 
+  print(htmltools::tagList(p))
+  
+  ## ... then show tables of the up/ down genes
+  
   for (dir in c('up', 'down')){
     contrast_de <- sig_differential[[i]][[dir]]
-    if (nrow(contrast_de) > 0){
-      
-      if (! is.null(params$features_file)){
-        contrast_de <- merge(features, contrast_de, by = params$differential_feature_id_column)
-      }
+    colnames(contrast_de) <- prettifyVariablename(colnames(contrast_de))
     
-      print( htmltools::tagList(datatable(contrast_de, caption = paste('Differential genes', dir, 'in', contrast_descriptions[i], "check", differential_files[[i]], "for more detail"), rownames = FALSE) ))
+    if (nrow(contrast_de) > 0){
+      print( htmltools::tagList(datatable(contrast_de, caption = paste('Differential genes', dir, 'in', contrast_descriptions[i], " (check", differential_files[[i]], "for more detail)"), rownames = FALSE) ))
     }else{
       cat(paste0("No signficantly differential '", dir, "' genes\n"))
     }

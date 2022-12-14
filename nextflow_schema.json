@@ -206,6 +206,16 @@
                     "type": "number",
                     "default": 0.05,
                     "description": "Maximum q value used to calculate differential feature numbrers"
+                },
+                "differential_feature_name_column": {
+                    "type": "string",
+                    "default": "gene_name",
+                    "description": "Where a features file (GTF) has been provided, what attributed to use to name features"
+                },
+                "differential_foldchanges_logged": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Indicate whether or not fold changes are on the log scale (default is to assume they are)"
                 }
             },
             "required": [
@@ -215,7 +225,8 @@
                 "differential_qval_column",
                 "differential_min_fold_change",
                 "differential_max_qval"
-            ]
+            ],
+            "fa_icon": "fas fa-adjust"
         },
         "deseq2_specific_options_rna_seq_only": {
             "title": "DESeq2 specific options (RNA-seq only)",
