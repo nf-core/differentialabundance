@@ -679,6 +679,8 @@ print( htmltools::tagList(datatable(params_table, caption = "All parameters", ro
 
 ## Software versions
 
+**Note:** For a more detailed accounting of the software and commands used (including containers), consult the, execution report produced as part of the 'pipeline info' for this workflow.
+
 ```{r, echo=FALSE, results='asis'}
 versions_table <- data.frame(do.call(rbind, strsplit(names(versions), split = '\\.')), unlist(versions))
 colnames(versions_table) <- c('Component', 'Software', 'Version')
