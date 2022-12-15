@@ -204,6 +204,12 @@ sample_name_col <- colnames(samples)[1]
 
 contrasts <- read_metadata(file.path(params$input_dir, params$contrasts_file))
 
+# Identify informative variables- those with a number of values greater than 1
+# but less than N, with N being the number of samples. Make sure contrast
+# variables are first in the list
+
+informative_variables <- unique(c(contrasts$variable, chooseGroupingVariables(samples)))
+
 # Pick the first variable used in contrasts for coloring purposes
 main_grouping_variable <- contrasts$variable[1]
 groupColorScale <- makeColorScale(length(unique(samples[[main_grouping_variable]])), palette = "Set1")
@@ -335,6 +341,10 @@ if (all(minimal_fetchngs_cols %in% colnames(samples))){
   not_wide_columns <- colnames(samples)[which(apply(samples, 2, function(x) max(nchar(x))) <= 20)]
   display_columns <- c(display_columns, minimal_fetchngs_cols[1:min(c(5,ncol(samples)))])
 }
+
+# Also add informative columns
+display_columns <- unique(c(display_columns, informative_variables))
+
 samples_to_print <- samples[,unique(display_columns)]
 colnames(samples_to_print) <- prettifyVariablename(colnames(samples_to_print))
 print( htmltools::tagList(datatable(samples_to_print, caption = 'Sample metadata', rownames = FALSE, options = list(dom = 't')) ))
@@ -405,11 +415,14 @@ Principal components analysis was conducted based on the `r params$exploratory_n
 opt <<- list(ntop = params$exploratory_n_features)
 pca_data <- compilePCAData(assay_data$variance_stabilised)
 
-for (contrast_variable in unique(contrasts$variable)){
+for (iv in informative_variables){
+  
+  cat("\n##### Coloring by ", iv, "\n")
+  
   plotdata <- pca_data$coords
   plotdata$colorby <- factor(
-    samples[[contrast_variable]], 
-    levels = unique(samples[[contrast_variable]])
+    samples[[iv]], 
+    levels = unique(samples[[iv]])
   )
 
   # Make plotting data combining PCA coords with coloring groups etc
@@ -433,7 +446,7 @@ for (contrast_variable in unique(contrasts$variable)){
       colorby = plotdata$colorby,
       plot_type = plot_types[[d]],
       palette = groupColorScale,
-      legend_title = prettifyVariablename(params$contrast_variable),
+      legend_title = prettifyVariablename(iv),
       labels = plotdata$name,
       show_labels = TRUE
     )
