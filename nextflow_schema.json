@@ -284,8 +284,8 @@
                 "deseq2_p_adjust_method": {
                     "type": "string",
                     "default": "BH",
-                    "description": "' pAdjustMethod' param passed to results()",
-                    "help_text": "the method to use for adjusting p-values, see ?p.adjust"
+                    "description": "'pAdjustMethod' param passed to results()",
+                    "help_text": "the method to use for adjusting p-values, see help in R for the p.adjust() function (via ?p.adjust). At time of writing available values were \"holm\", \"hochberg\", \"hommel\", \"bonferroni\", \"BH\", \"BY\", \"fdr\", \"none\"."
                 },
                 "deseq2_alpha": {
                     "type": "number",
