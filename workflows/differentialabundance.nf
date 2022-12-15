@@ -197,7 +197,7 @@ workflow DIFFERENTIALABUNDANCE {
         .mix(PLOT_DIFFERENTIAL.out.versions)
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
-        ch_versions.unique().collectFile(name: 'collated_versions.yml')
+        ch_versions.unique{ it.text }.collectFile(name: 'collated_versions.yml')
     )
 
     if (params.report_file) {
@@ -254,7 +254,7 @@ workflow.onComplete {
     }
     NfcoreTemplate.summary(workflow, params, log)
     if (params.hook_url) {
-        NfcoreTemplate.adaptivecard(workflow, params, summary_params, projectDir, log)
+        NfcoreTemplate.IM_notification(workflow, params, summary_params, projectDir, log)
     }
 }
 
