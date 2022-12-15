@@ -448,8 +448,28 @@ for (contrast_variable in unique(contrasts$variable)){
 }
 ```
 
+#### Principal components/ metadata associations
+
+An ANOVA test was used to determine assocations between continuous principal components and categorical covariates (including the variable of interest)
+
+The results are illustrated below.
+
 ```{r, echo=FALSE, results='asis'}
 pca_vs_meta <- anova_pca_metadata(pca_data$coords, samples, pca_data$percentVar)
+
+d3heatmap::d3heatmap(
+  -log10(pca_vs_meta),
+  dendrogram = 'none',
+  cellnote = pca_vs_meta,
+  cexCol = 0.8, 
+  cexRow = 0.8,
+  height = (100 + (15 * nrow(pca_vs_meta))),
+  colors = colorRampPalette(
+    rev(
+      RColorBrewer::brewer.pal(n = 7, name = "RdYlBu")
+    )
+  )(100)
+)
 
 for (variable in rownames(pca_vs_meta)){
   sig_comps <- pca_vs_meta[variable,] < 0.1
