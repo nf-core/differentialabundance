@@ -8,13 +8,13 @@ process IMPORTRNASEQCOUNTS {
         'quay.io/biocontainers/r-base:4.2.1' }"
 
     input:
-    path counts
-    path samplesheet
+    path(counts)
+    path(samplesheet)
 
     output:
-    path "*.tsv"                  , emit: ch_counts
-    path "*.csv"                  , emit: ch_input
-    path "versions.yml"           , emit: versions
+    path("*.tsv")                           , emit: ch_counts
+    path("*.csv")                           , emit: ch_input
+    path "versions.yml"                     , emit: versions
 
     when:
     task.ext.when == null || task.ext.when

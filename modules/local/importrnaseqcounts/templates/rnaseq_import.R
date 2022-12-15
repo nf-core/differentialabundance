@@ -67,8 +67,12 @@ for (file_input in c('count_file', 'sample_file')){
 ## READ IN COUNTS FILE AND SAMPLE METADATA    ##
 ################################################
 ################################################
-sample.sheet <- read.table(file = opt\$sample_file, sep="\t", header=T)
-count.table <- read.table(file = opt\$count_file, sep="\t", header=T)
+sample.sheet <- read.table(file = opt\$sample_file, sep="\t", header=T, check.names=F)
+count.table <- read.table(file = opt\$count_file, sep="\t", header=T, check.names=F)
+
+# Replace spaces in column names with dots
+names(sample.sheet) <- gsub(" ", ".", names(sample.sheet))
+names(count.table) <- gsub(" ", ".", names(count.table))
 
 # Rewrite input tables to a standard differential abundance input; columns in sample sheet need to be renamed from file names to sample names
 col_names <- list(colnames(count.table))[[1]]
@@ -97,7 +101,11 @@ if (length(remaining_names > 0)) {
     print(paste0("Warning: Could not rename the following columns:\n", toString(remaining_names)))
 }
 
-# Write modified count table
+# Rename ID columns to the defaults of the validator module
+colnames(count.table)[which(names(count.table) == opt\$gene_id_col)] <- "gene_id"
+colnames(sample.sheet)[which(names(sample.sheet) == opt\$sample_id_col)] <- "sample"
+
+# Write modified count table as TSV
 write.table(count.table,
     file = 'modified_counts.tsv',
     col.names = TRUE,
@@ -105,7 +113,7 @@ write.table(count.table,
     sep = '\t',
     quote = FALSE)
 
-# Write samplesheet as CSV
+# Write modified samplesheet as CSV
 write.table(sample.sheet,
     file = 'modified_samplesheet.csv',
     col.names = TRUE,
@@ -118,9 +126,8 @@ write.table(sample.sheet,
 ## R SESSION INFO                             ##
 ################################################
 ################################################
-# TODO
-output_prefix <- "dummy_prefix"
-sink(paste(output_prefix, "R_sessionInfo.log", sep = '.'))
+
+sink("R_sessionInfo.log")
 print(sessionInfo())
 sink()
 

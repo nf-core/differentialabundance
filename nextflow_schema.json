@@ -44,6 +44,16 @@
                     "mimetype": "text/tab-separated-values",
                     "pattern": "^\\S+\\.tsv$|^\\S+\\.txt$"
                 },
+                "gene_id_col": {
+                    "type": "string",
+                    "description": "Name of gene ID column in abundance counts matrix; if this contains spaces or colons, please replace them with dots (e.g. Gene ID -> Gene.ID).",
+                    "help_text": "Name of gene ID column in abundance counts matrix; if this contains spaces or colons, please replace them with dots (e.g. Gene ID -> Gene.ID)."
+                },
+                "sample_id_col": {
+                    "type": "string",
+                    "description": "Name of sample ID column in input samplesheet; if this contains spaces or colons, please replace them with dots (e.g. Sample ID -> Sample.ID).",
+                    "help_text": "Name of sample ID column in input samplesheet; if this contains spaces or colons, please replace them with dots (e.g. Sample ID -> Sample.ID)."
+                },
                 "outdir": {
                     "type": "string",
                     "format": "directory-path",
@@ -83,6 +93,12 @@
                     "type": "boolean",
                     "help_text": "Use supplied control features in normalistion/ scaling operations?",
                     "description": "When set, use the control features in scaling/ normalisation"
+                },
+                "vs_method": {
+                    "type": "string",
+                    "description": "Which transformation to use in DESeq2, either rlog (default), vst or rlog,vst.",
+                    "help_text": "Which transformation to use in DESeq2, either rlog (default) or vst.",
+                    "pattern": "rlog|vst|rlog,vst"
                 },
                 "report_file": {
                     "type": "string",
@@ -140,14 +156,6 @@
                     "description": "Name of iGenomes reference.",
                     "fa_icon": "fas fa-book",
                     "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details."
-                },
-                "gtf": {
-                    "type": "string",
-                    "description": "Genome annotation file in GTF format",
-                    "pattern": "^\\S+\\.gtf(\\.gz)?",
-                    "format": "file-path",
-                    "mimetype": "text/plain",
-                    "help_text": "\"This parameter is *mandatory* if `--genome` is not specified.\""
                 },
                 "igenomes_base": {
                     "type": "string",
