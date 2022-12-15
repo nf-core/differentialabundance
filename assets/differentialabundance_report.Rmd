@@ -3,7 +3,7 @@ output:
   html_document:
     toc: true                               # table of contents
     toc_float: true                         # float the table of contents to the left of the main document content
-    toc_depth: 3                            # header levels 1,2,3
+    toc_depth: 4                            # header levels 1,2,3
     theme: default
     number_sections: false                  # add section numbering to headers
     df_print: paged                         # tables are printed as an html table with support for pagination over rows and columns
@@ -573,36 +573,43 @@ for (i in 1:nrow(contrasts)){
   
   # We'll color by whether features are differential according to supplied thresholds
 
-  full_de$differential_status <- FALSE
-  full_de$differential_status[abs(full_de[[params$differential_fc_column]]) > log2(params$differential_min_fold_change) & full_de[params$differential_qval_column] < params$differential_max_qval] <- TRUE
-
-  # Define the thresholds we'll draw
-
-  hline_thresholds = vline_thresholds = list()
-  hline_thresholds[[paste(params$differential_qval_column, '=', params$differential_max_qval)]] = -log10(params$differential_max_qval)
-  vline_thresholds[[paste(params$differential_fc_column, '<-', log2(params$differential_min_fold_change))]] = -log2(params$differential_min_fold_change)
-  vline_thresholds[[paste(params$differential_fc_column, '>', log2(params$differential_min_fold_change))]] = log2(params$differential_min_fold_change)
-
-  plot_args <- list(
-    x = full_de[[params$differential_fc_column]],
-    y = -log10(full_de[[params$differential_qval_column]]),
-    colorby = full_de$differential_status,
-    ylab = paste("-log(10)", params$differential_qval_column),
-    xlab = xlabel <- paste("higher in", contrasts$reference[i], "          <<", params$differential_fc_column, ">>           higher in", contrasts$target[i]) ,
-    labels = full_de[[label_col]],
-    hline_thresholds = hline_thresholds,
-    vline_thresholds = vline_thresholds,
-    show_labels = FALSE,
-    legend_title = "Differential status",
-    palette = makeColorScale(2, 'Set1')
-  )
+  p_value_types <- list(Adjusted = params$differential_qval_column, Unadjusted = params$differential_pval_column)
   
-  # Let's equalize the axes
-  max_fc <- max(abs(full_de[[params$differential_fc_column]])) * 1.1
-  p <- do.call(plotly_scatterplot, plot_args) %>%
-    layout(xaxis = list(range=list(-max_fc, max_fc)))
+  for (pvt in names(p_value_types)){
+    cat("\n##### ", pvt, " p values\n")
+    pval_column <- p_value_types[[pvt]]
+  
+    full_de$differential_status <- FALSE
+    full_de$differential_status[abs(full_de[[params$differential_fc_column]]) > log2(params$differential_min_fold_change) & full_de[[pval_column]] < params$differential_max_qval] <- TRUE
+
+    # Define the thresholds we'll draw
+
+    hline_thresholds = vline_thresholds = list()
+    hline_thresholds[[paste(pval_column, '=', params$differential_max_qval)]] = -log10(params$differential_max_qval)
+    vline_thresholds[[paste(params$differential_fc_column, '<-', log2(params$differential_min_fold_change))]] = -log2(params$differential_min_fold_change)
+    vline_thresholds[[paste(params$differential_fc_column, '>', log2(params$differential_min_fold_change))]] = log2(params$differential_min_fold_change)
+
+    plot_args <- list(
+      x = full_de[[params$differential_fc_column]],
+      y = -log10(full_de[[pval_column]]),
+      colorby = full_de$differential_status,
+      ylab = paste("-log(10)", pval_column),
+      xlab = xlabel <- paste("higher in", contrasts$reference[i], "          <<", params$differential_fc_column, ">>           higher in", contrasts$target[i]) ,
+      labels = full_de[[label_col]],
+      hline_thresholds = hline_thresholds,
+      vline_thresholds = vline_thresholds,
+      show_labels = FALSE,
+      legend_title = "Differential status",
+      palette = makeColorScale(2, 'Set1')
+    )
+  
+    # Let's equalize the axes
+    max_fc <- max(abs(full_de[[params$differential_fc_column]])) * 1.1
+    p <- do.call(plotly_scatterplot, plot_args) %>%
+      layout(xaxis = list(range=list(-max_fc, max_fc)))
  
-  print(htmltools::tagList(p))
+    print(htmltools::tagList(p))
+  }
   
   ## ... then show tables of the up/ down genes
   
