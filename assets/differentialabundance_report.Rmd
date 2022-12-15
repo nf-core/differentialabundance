@@ -406,69 +406,80 @@ plotly_densityplot(
 
 ### Sample relationships
 
-#### Principal components plots
+#### Principal components plots {.tabset}
 
 Principal components analysis was conducted based on the `r params$exploratory_n_features` most variable `r params$feature_type`s. Each component was annotated with its percent contribution to variance. 
 
 ```{r, echo=FALSE, results='asis'}
-# This is due to a bug in shinyngs, will be corrected
-opt <<- list(ntop = params$exploratory_n_features)
-pca_data <- compilePCAData(assay_data$variance_stabilised)
 
-for (iv in informative_variables){
+pca_datas <- lapply(names(assay_data), function(assay_type){
+  if (assay_type == 'variance_stabilised'){
+    compilePCAData(assay_data[[assay_type]])
+  }else{
+    compilePCAData(log2(assay_data[[assay_type]]))
+  }
+})
+names(pca_datas) <- names(assay_data)
+
+for (assay_type in rev(names(assay_data))){
   
-  cat("\n##### Coloring by ", iv, "\n")
+  pca_data <- pca_datas[[assay_type]]
+
+  for (iv in informative_variables){
   
-  plotdata <- pca_data$coords
-  plotdata$colorby <- factor(
-    samples[[iv]], 
-    levels = unique(samples[[iv]])
-  )
-
-  # Make plotting data combining PCA coords with coloring groups etc
-
-  plotdata$name <- rownames(plotdata)
-  percentVar <- pca_data$percentVar
-  labels <- paste0(colnames(plotdata), " (", sprintf("%.1f", percentVar), "%)")
-  ncats <- length(unique(plotdata$colorby))
-
-  plot_types <- list("2" = "scatter", "3" = "scatter3d")
-
-  for (d in names(plot_types)) {
+    cat(paste0("\n##### ", prettifyVariablename(assay_type), " (", iv, ")\n"))
   
-    # Default plot args whatever we're doing
-
-    plot_args <- list(
-      x = pca_data$coords[, 1],
-      y = pca_data$coords[, 2],
-      xlab = labels[1],
-      ylab = labels[2],
-      colorby = plotdata$colorby,
-      plot_type = plot_types[[d]],
-      palette = groupColorScale,
-      legend_title = prettifyVariablename(iv),
-      labels = plotdata$name,
-      show_labels = TRUE
+    plotdata <- pca_data$coords
+    plotdata$colorby <- factor(
+      samples[[iv]], 
+      levels = unique(samples[[iv]])
     )
-    
-    if (d == "3") {
-      plot_args$z <- pca_data$coords[, 3]
-      plot_args$zlab <- labels[3]
-    }
 
-    print(htmltools::tagList(do.call("plotly_scatterplot", plot_args)))
+    # Make plotting data combining PCA coords with coloring groups etc
+
+    plotdata$name <- rownames(plotdata)
+    percentVar <- pca_data$percentVar
+    labels <- paste0(colnames(plotdata), " (", sprintf("%.1f", percentVar), "%)")
+    ncats <- length(unique(plotdata$colorby))
+
+    plot_types <- list("2" = "scatter", "3" = "scatter3d")
+
+    for (d in names(plot_types)) {
+  
+      # Default plot args whatever we're doing
+
+      plot_args <- list(
+        x = pca_data$coords[, 1],
+        y = pca_data$coords[, 2],
+        xlab = labels[1],
+        ylab = labels[2],
+        colorby = plotdata$colorby,
+        plot_type = plot_types[[d]],
+        palette = groupColorScale,
+        legend_title = prettifyVariablename(iv),
+        labels = plotdata$name,
+        show_labels = TRUE
+      )
+    
+      if (d == "3") {
+        plot_args$z <- pca_data$coords[, 3]
+        plot_args$zlab <- labels[3]
+      }
+
+      print(htmltools::tagList(do.call("plotly_scatterplot", plot_args)))
+    }
   }
 }
 ```
 
 #### Principal components/ metadata associations
 
-An ANOVA test was used to determine assocations between continuous principal components and categorical covariates (including the variable of interest)
+For the variance stabilised matrix, an ANOVA test was used to determine assocations between continuous principal components and categorical covariates (including the variable of interest).
 
-The results are illustrated below.
+The resulting p values are illustrated below.
 
 ```{r, echo=FALSE, results='asis'}
-pca_vs_meta <- anova_pca_metadata(pca_data$coords, samples, pca_data$percentVar)
+pca_vs_meta <- anova_pca_metadata(pca_datas[['variance_stabilised']]$coords, samples, pca_datas[['variance_stabilised']]$percentVar)
 
 d3heatmap::d3heatmap(
   -log10(pca_vs_meta),
@@ -486,10 +497,10 @@ d3heatmap::d3heatmap(
 
 for (variable in rownames(pca_vs_meta)){
   sig_comps <- pca_vs_meta[variable,] < 0.1
-  
+
   if (any(sig_comps)){
     min_sig_comp <- min(which(sig_comps))
-    
+  
     min_sig_comp_p <- sprintf("%.2f", pca_vs_meta[variable, min_sig_comp])
     cat(paste0('The variable \'', variable, '\' shows an association with ', colnames(pca_vs_meta)[min_sig_comp], ' (p = ', min_sig_comp_p,'). '))
   }
@@ -551,11 +562,11 @@ differential_summary_string <- paste(
 cat(differential_summary_string)
 ```
 
-### Differential gene details
+### Differential `r params$feature_type` details
 
 ```{r, echo=FALSE, results='asis'}
 for (i in 1:nrow(contrasts)){
-  cat("\n#### ", contrast_descriptions[i], "\n")
+  cat("\n#### ", contrast_descriptions[i], "  {.tabset}\n")
   
   ## Make a volcano plot for the contrast first
   
