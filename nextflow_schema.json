@@ -10,7 +10,17 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["input", "contrasts", "matrix", "outdir", "study_name", "study_type"],
+            "required": [
+                "input",
+                "contrasts",
+                "matrix",
+                "outdir",
+                "study_name",
+                "study_type",
+                "report_file",
+                "logo_file",
+                "css_file"
+            ],
             "properties": {
                 "input": {
                     "type": "string",
@@ -100,7 +110,7 @@
         "filtering": {
             "title": "Filtering",
             "type": "object",
-            "description": "",
+            "description": "Options related to filtering upstream of differential analysis",
             "default": "",
             "properties": {
                 "filtering_min_abundance": {
@@ -119,7 +129,205 @@
                 },
                 "filtering_grouping_var": {
                     "type": "string",
-                    "help_text": "The variable can be used to define groups and derive a minimum group size upon which to base minimum observation numbers. The rationale for this is to allow retention of features that might be present in only one group. Note that this is consciously NOT filtering with an explicit awareness of groups (\"feature must be present in all samples of group A\"), since this is know to create biases towards discovery of differential features."
+                    "help_text": "The variable can be used to define groups and derive a minimum group size upon which to base minimum observation numbers. The rationale for this is to allow retention of features that might be present in only one group. Note that this is consciously NOT filtering with an explicit awareness of groups (\"feature must be present in all samples of group A\"), since this is know to create biases towards discovery of differential features.",
+                    "description": "An optional grouping variable to be used to calculate a min_samples value"
+                }
+            },
+            "fa_icon": "fas fa-filter",
+            "required": ["filtering_min_abundance"]
+        },
+        "exploratory_analysis": {
+            "title": "Exploratory analysis",
+            "type": "object",
+            "description": "Options related to data exploration",
+            "default": "",
+            "properties": {
+                "exploratory_clustering_method": {
+                    "type": "string",
+                    "default": "ward.D2",
+                    "description": "Clustering method used in dendrogram creation"
+                },
+                "exploratory_cor_method": {
+                    "type": "string",
+                    "default": "spearman",
+                    "description": "Correlation method used in dendrogram creation"
+                },
+                "exploratory_n_features": {
+                    "type": "integer",
+                    "default": 500,
+                    "description": "Number of features selected before certain exploratory analyses"
+                },
+                "exploratory_whisker_distance": {
+                    "type": "number",
+                    "default": 1.5,
+                    "description": "Length of the whiskers in boxplots as multiple of IQR. Defaults to 1.5."
+                }
+            },
+            "fa_icon": "fas fa-chart-area",
+            "required": ["exploratory_clustering_method", "exploratory_cor_method", "exploratory_n_features"]
+        },
+        "differential_analysis": {
+            "title": "Differential analysis",
+            "type": "object",
+            "description": "Options related to differential operations",
+            "default": "",
+            "properties": {
+                "differential_file_suffix": {
+                    "type": "string",
+                    "default": ".deseq2.results.tsv",
+                    "description": "The suffix associated tabular differential results tables"
+                },
+                "differential_feature_id_column": {
+                    "type": "string",
+                    "default": "gene_id",
+                    "description": "The feature identifier column in differential results tables"
+                },
+                "differential_fc_column": {
+                    "type": "string",
+                    "default": "log2FoldChange",
+                    "description": "The fold change column in differential results tables"
+                },
+                "differential_pval_column": {
+                    "type": "string",
+                    "default": "pvalue",
+                    "description": "The p value column in differential results tables"
+                },
+                "differential_qval_column": {
+                    "type": "string",
+                    "default": "padj",
+                    "description": "The q value column in differential results tables."
+                },
+                "differential_min_fold_change": {
+                    "type": "integer",
+                    "default": 2,
+                    "description": "Minimum fold change used to calculate differential feature numbers"
+                },
+                "differential_max_qval": {
+                    "type": "number",
+                    "default": 0.05,
+                    "description": "Maximum q value used to calculate differential feature numbrers"
+                },
+                "differential_feature_name_column": {
+                    "type": "string",
+                    "default": "gene_name",
+                    "description": "Where a features file (GTF) has been provided, what attributed to use to name features"
+                },
+                "differential_foldchanges_logged": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Indicate whether or not fold changes are on the log scale (default is to assume they are)"
+                }
+            },
+            "required": [
+                "differential_file_suffix",
+                "differential_feature_id_column",
+                "differential_fc_column",
+                "differential_qval_column",
+                "differential_min_fold_change",
+                "differential_max_qval"
+            ],
+            "fa_icon": "fas fa-adjust"
+        },
+        "deseq2_specific_options_rna_seq_only": {
+            "title": "DESeq2 specific options (RNA-seq only)",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "deseq2_test": {
+                    "type": "string",
+                    "default": "Wald",
+                    "description": "'test' param passed to DESeq()",
+                    "help_text": "either \"Wald\" or \"LRT\", which will then use either Wald significance tests (defined by nbinomWaldTest), or the likelihood ratio test on the difference in deviance between a full and reduced model formula (defined by nbinomLRT)"
+                },
+                "deseq2_fit_type": {
+                    "type": "string",
+                    "default": "parametric",
+                    "description": "'fitType' param passed to DESeq()",
+                    "help_text": "either \"parametric\", \"local\", \"mean\", or \"glmGamPoi\" for the type of fitting of dispersions to the mean intensity. See estimateDispersions for description."
+                },
+                "deseq2_sf_type": {
+                    "type": "string",
+                    "default": "ratio",
+                    "description": "'sfType' param passed to DESeq()",
+                    "help_text": "either \"ratio\", \"poscounts\", or \"iterate\" for the type of size factor estimation. See estimateSizeFactors for description."
+                },
+                "deseq2_min_replicates_for_replace": {
+                    "type": "integer",
+                    "default": 7,
+                    "help_text": "the minimum number of replicates required in order to use replaceOutliers on a sample. If there are samples with so many replicates, the model will be refit after these replacing outliers, flagged by Cook's distance. Set to Inf in order to never replace outliers. It set to Inf for fitType=\"glmGamPoi\".",
+                    "description": "'minReplicatesForReplace' param passed to DESeq()"
+                },
+                "deseq2_use_t": {
+                    "type": "boolean",
+                    "description": "'useT' param passed to DESeq2",
+                    "help_text": "logical, passed to nbinomWaldTest, default is FALSE, where Wald statistics are assumed to follow a standard Normal"
+                },
+                "deseq2_independent_filtering": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "'independentFiltering' param passed to results()",
+                    "help_text": "logical, whether independent filtering should be applied automatically"
+                },
+                "deseq2_lfc_threshold": {
+                    "type": "integer",
+                    "default": 0,
+                    "description": "'lfcThreshold' param passed to results()",
+                    "help_text": "a non-negative value which specifies a log2 fold change threshold. The default value is 0, corresponding to a test that the log2 fold changes are equal to zero. The user can specify the alternative hypothesis using the altHypothesis argument, which defaults to testing for log2 fold changes greater in absolute value than a given threshold. If lfcThreshold is specified, the results are for Wald tests, and LRT p-values will be overwritten."
+                },
+                "deseq2_alt_hypothesis": {
+                    "type": "string",
+                    "default": "greaterAbs",
+                    "description": "'altHypothesis' param passed to results()",
+                    "help_text": "character which specifies the alternative hypothesis, i.e. those values of log2 fold change which the user is interested in finding. The complement of this set of values is the null hypothesis which will be tested. If the log2 fold change specified by 'name' or by contrast' is written as beta , then the possible values for 'altHypothesis' represent the following alternate hypotheses: 1) greaterAbs: |beta| > lfcThreshold , and p-values are two-tailed 2) lessAbs: |beta| < lfcThreshold , p-values are the maximum of the upper and lower tests. The Wald statistic given is positive, an SE-scaled distance from the closest boundary 3) greater: beta > lfcThreshold 4) less: beta < -lfcThreshold"
+                },
+                "deseq2_p_adjust_method": {
+                    "type": "string",
+                    "default": "BH",
+                    "description": "'pAdjustMethod' param passed to results()",
+                    "help_text": "the method to use for adjusting p-values, see help in R for the p.adjust() function (via ?p.adjust). At time of writing available values were \"holm\", \"hochberg\", \"hommel\", \"bonferroni\", \"BH\", \"BY\", \"fdr\", \"none\"."
+                },
+                "deseq2_alpha": {
+                    "type": "number",
+                    "default": 0.1,
+                    "description": "'alpha' param passed to results()",
+                    "help_text": "the significance cutoff used for optimizing the independent filtering (by default 0.1). If the adjusted p-value cutoff (FDR) will be a value other than 0.1, alpha should be set to that value."
+                },
+                "deseq2_minmu": {
+                    "type": "number",
+                    "default": 0.5,
+                    "description": "'minmu' param passed to results()",
+                    "help_text": "lower bound on the estimated count (used when calculating contrasts)"
+                },
+                "deseq2_vs_method": {
+                    "type": "string",
+                    "default": "vst",
+                    "description": "variance stabilisation method to use when making a variance stabilised matrix",
+                    "help_text": "'rlog', 'vst' or 'rlog,vst'"
+                },
+                "deseq2_shrink_lfc": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Shink fold changes in results?",
+                    "help_text": "'ashr' method is the only method currently implemented"
+                },
+                "deseq2_cores": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "Number of cores",
+                    "help_text": "Number of cores to use with DESeq()"
+                },
+                "deseq2_vs_blind": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "blind param for rlog() and/ or vst()",
+                    "help_text": "logical, whether to blind the transformation to the experimental design "
+                },
+                "deseq2_vst_nsub": {
+                    "type": "integer",
+                    "default": 1000,
+                    "description": "'nsub' param passed to vst()",
+                    "help_text": "the number of genes to subset to (default 1000)"
                 }
             }
         },
@@ -347,6 +555,15 @@
         },
         {
             "$ref": "#/definitions/filtering"
+        },
+        {
+            "$ref": "#/definitions/exploratory_analysis"
+        },
+        {
+            "$ref": "#/definitions/differential_analysis"
+        },
+        {
+            "$ref": "#/definitions/deseq2_specific_options_rna_seq_only"
         },
         {
             "$ref": "#/definitions/reference_genome_options"

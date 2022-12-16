@@ -207,8 +207,10 @@ workflow DIFFERENTIALABUNDANCE {
         .combine(CUSTOM_DUMPSOFTWAREVERSIONS.out.yml)
         .combine(ch_logo_file)
         .combine(ch_css_file)
+        .combine(DESEQ2_DIFFERENTIAL.out.results.map{it[1]}.toList())
  
-    // Make a params list - starting with the input matrices
+    // Make a params list - starting with the input matrices and the relevant
+    // params to use in reporting
 
     ch_report_params = ch_report_input_files
         .map{[
@@ -220,8 +222,8 @@ workflow DIFFERENTIALABUNDANCE {
             contrasts_file: it[5].name,
             versions_file: it[6].name,
             logo: it[7].name, 
-            css: it[8].name 
-        ]}
+            css: it[8].name
+        ] + params.findAll{ k,v -> k.matches(~/^(study|filtering|exploratory|differential|deseq2).*/) }}
 
     // TO DO: add further params - e.g. for custom logo etc, and for analysis
     // params 
