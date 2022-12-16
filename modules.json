@@ -20,6 +20,16 @@
                         "git_sha": "9e84d08cf865301e0dd73825123db417dc9abc18",
                         "installed_by": ["modules"]
                     },
+                    "custom/tabulartogseacls": {
+                        "branch": "master",
+                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "installed_by": ["modules"]
+                    },
+                    "custom/tabulartogseagct": {
+                        "branch": "master",
+                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "installed_by": ["modules"]
+                    },
                     "deseq2/differential": {
                         "branch": "master",
                         "git_sha": "d8c3dab05190b57ed38f787e678d15662c575abf",
