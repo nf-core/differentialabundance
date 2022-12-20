@@ -2,32 +2,33 @@
   command: nextflow run main.nf -profile test_rnaseq_featurecounts,docker
   tags:
     - test_rnaseq_featurecounts
+    - featurecounts
   files:
-    - path: results/deseq2/Condition_genotype-WT-KO-batch.dds.rld.rds
-      md5sum: 499c6e8442c2925072e96cec115102c2
-    - path: results/deseq2/Condition_genotype-WT-KO-batch.deseq2.dispersion.png
-      md5sum: f41b141ed6176bce06358faf451e2cfb
-    - path: results/deseq2/Condition_genotype-WT-KO-batch.deseq2.results.tsv
+    - path: results/study/deseq2/Condition_genotype-WT-KO-batch.dds.rld.rds
+      md5sum: d6389999ca5314c8d8eb60f682ac8ecc
+    - path: results/study/deseq2/Condition_genotype-WT-KO-batch.deseq2.dispersion.png
+      md5sum: dfc03ca392c5c350d27e8354decd7265
+    - path: results/study/deseq2/Condition_genotype-WT-KO-batch.deseq2.results.tsv
       md5sum: 2d8642d854ded9d4460bd653bfbad89f
-    - path: results/deseq2/Condition_genotype-WT-KO-batch.deseq2.sizefactors.tsv
+    - path: results/study/deseq2/Condition_genotype-WT-KO-batch.deseq2.sizefactors.tsv
       md5sum: 0367d1ef76c5b9f01fc1f89647809b5d
-    - path: results/deseq2/Condition_genotype-WT-KO-batch.normalised_counts.tsv
+    - path: results/study/deseq2/Condition_genotype-WT-KO-batch.normalised_counts.tsv
       md5sum: 46e58021457f86ab6aa3b4ac14b3550c
-    - path: results/deseq2/Condition_genotype-WT-KO-batch.rlog.tsv
+    - path: results/study/deseq2/Condition_genotype-WT-KO-batch.rlog.tsv
       md5sum: 69d5789e0793f318d00dffccef5721f6
-    - path: results/deseq2/Condition_genotype-WT-KO-batch.R_sessionInfo.log
+    - path: results/study/deseq2/Condition_genotype-WT-KO-batch.R_sessionInfo.log
       md5sum: b60cdc573f2b7b2b8b9f3cb8d0c18f03
-    - path: results/deseq2/Condition_treatment-Control-Treated.dds.rld.rds
+    - path: results/study/deseq2/Condition_treatment-Control-Treated.dds.rld.rds
       md5sum: 435bbfbd5f5ee1146aed7bdf56e1e3e6
-    - path: results/deseq2/Condition_treatment-Control-Treated.deseq2.dispersion.png
+    - path: results/study/deseq2/Condition_treatment-Control-Treated.deseq2.dispersion.png
       md5sum: 0b9bde1d694a1197aa584e06007fa3b2
-    - path: results/deseq2/Condition_treatment-Control-Treated.deseq2.results.tsv
+    - path: results/study/deseq2/Condition_treatment-Control-Treated.deseq2.results.tsv
       md5sum: d01d6c96a0c280fee7d0b9250812bb4c
-    - path: results/deseq2/Condition_treatment-Control-Treated.deseq2.sizefactors.tsv
+    - path: results/study/deseq2/Condition_treatment-Control-Treated.deseq2.sizefactors.tsv
       md5sum: 0367d1ef76c5b9f01fc1f89647809b5d
-    - path: results/deseq2/Condition_treatment-Control-Treated.normalised_counts.tsv
+    - path: results/study/deseq2/Condition_treatment-Control-Treated.normalised_counts.tsv
       md5sum: 46e58021457f86ab6aa3b4ac14b3550c
-    - path: results/deseq2/Condition_treatment-Control-Treated.rlog.tsv
+    - path: results/study/deseq2/Condition_treatment-Control-Treated.rlog.tsv
       md5sum: 69d5789e0793f318d00dffccef5721f6
-    - path: results/deseq2/Condition_treatment-Control-Treated.R_sessionInfo.log
+    - path: results/study/deseq2/Condition_treatment-Control-Treated.R_sessionInfo.log
       md5sum: b60cdc573f2b7b2b8b9f3cb8d0c18f03

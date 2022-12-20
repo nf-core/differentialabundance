@@ -229,9 +229,8 @@ workflow DIFFERENTIALABUNDANCE {
                 logo: it[7].name,
                 css: it[8].name
             ]}
-
-        // TO DO: add further params - e.g. for custom logo etc, and for analysis
-        // params
+            // TO DO: add further params - e.g. for custom logo etc, and for analysis
+            // params
 
         RMARKDOWNNOTEBOOK(
             ch_report_file,
@@ -239,7 +238,6 @@ workflow DIFFERENTIALABUNDANCE {
             ch_report_input_files
         )
     }
-
 }
 
 /*
