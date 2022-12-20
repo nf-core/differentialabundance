@@ -192,7 +192,7 @@ workflow DIFFERENTIALABUNDANCE {
         .mix(PLOT_DIFFERENTIAL.out.versions)
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
-        ch_versions.unique{ it.text }.collectFile(name: 'collated_versions.yml')
+        ch_versions.unique().collectFile(name: 'collated_versions.yml')
     )
     
     // Generate a list of files that will be used by the markdown report
