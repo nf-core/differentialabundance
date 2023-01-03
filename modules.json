@@ -37,7 +37,7 @@
                     },
                     "gsea/gsea": {
                         "branch": "master",
-                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "git_sha": "773cdb0adf36bf6706c56b92265e424fce382e84",
                         "installed_by": ["modules"]
                     },
                     "gunzip": {
