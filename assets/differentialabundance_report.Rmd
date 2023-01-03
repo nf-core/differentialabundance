@@ -657,9 +657,9 @@ if (is.null(params$filtering_grouping_var)){
   }
 }else{
   if (is.null(params$filtering_min_proportion)){
-    filtering_string <- paste0(filtering_string, ' in at least the number of samples corresponding to the smallest group size defined by the grouping variable "', contrasts$variable[1], '".')
+    filtering_string <- paste0(filtering_string, ' in at least the number of samples corresponding to the smallest group size defined by the grouping variable "', params$filtering_grouping_var, '".')
   }else{
-    filtering_string <- paste0(filtering_string, ' in at least a proportion of ', params$filtering_min_proportion, ' of the number of samples corresponding to the smallest group size defined by the grouping variable"', contrasts$variable[1], '".')
+    filtering_string <- paste0(filtering_string, ' in at least a proportion of ', params$filtering_min_proportion, ' of the number of samples corresponding to the smallest group size defined by the grouping variable"', params$filtering_grouping_var, '".')
   }
 }
 cat(filtering_string)
