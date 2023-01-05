@@ -223,6 +223,10 @@ rownames(samples) <- samples[,1]
 sample_name_col <- colnames(samples)[1]
 
 contrasts <- read_metadata(file.path(params$input_dir, params$contrasts_file))
+contrasts$blocking <- na.replace(contrasts$blocking, '')
+if (! 'id' %in% colnames(contrasts)){
+  contrasts$id <- apply(contrasts, 1, paste, collapse='_')
+}
 
 # Identify informative variables- those with a number of values greater than 1
 # but less than N, with N being the number of samples. Make sure contrast
@@ -431,12 +435,11 @@ plotly_densityplot(
 Principal components analysis was conducted based on the `r params$exploratory_n_features` most variable `r params$feature_type`s. Each component was annotated with its percent contribution to variance. 
 
 ```{r, echo=FALSE, results='asis'}
-
 pca_datas <- lapply(names(assay_data), function(assay_type){
   if (assay_type == 'variance_stabilised'){
     compilePCAData(assay_data[[assay_type]])
   }else{
-    compilePCAData(log2(assay_data[[assay_type]]))
+    compilePCAData(log2(assay_data[[assay_type]]+1))
   }
 })
 names(pca_datas) <- names(assay_data)
@@ -501,13 +504,22 @@ The resulting p values are illustrated below.
 ```{r, echo=FALSE, results='asis'}
 pca_vs_meta <- anova_pca_metadata(pca_datas[['variance_stabilised']]$coords, samples, pca_datas[['variance_stabilised']]$percentVar)
 
+# This is a little hack to work around a bug in d3heatmap with single-row data
+# frames.
+if (nrow(pca_vs_meta) == 1){
+  plot_pca_meta <- rbind(pca_vs_meta, pca_vs_meta)
+}else{
+  plot_pca_meta <- pca_vs_meta
+}
+
 d3heatmap::d3heatmap(
-  -log10(pca_vs_meta),
+  -log10(plot_pca_meta),
+  Rowv = FALSE,
   dendrogram = 'none',
-  cellnote = pca_vs_meta,
+  cellnote = plot_pca_meta,
   cexCol = 0.8, 
   cexRow = 0.8,
-  height = (100 + (15 * nrow(pca_vs_meta))),
+  height = (100 + (15 * nrow(plot_pca_meta))),
   colors = colorRampPalette(
     rev(
       RColorBrewer::brewer.pal(n = 7, name = "RdYlBu")
