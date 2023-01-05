@@ -449,11 +449,6 @@
                 "gsea_gene_sets": {
                     "type": "string",
                     "default": null
-                },
-                "gsea_chip_file": {
-                    "type": "string",
-                    "default": null,
-                    "help_text": "If the gene identifiers used in expression matrices are not of the same type as the identifiers in the the gene sets file, provide a mapping file between them in Broad's .chip format. This is common for RNA-seq, where identifiers are routinely Ensembl, and identifiers in gene sets are symbols. .chip files can be download from https://data.broadinstitute.org/gsea-msigdb/msigdb/annotations/."
                 }
             },
             "fa_icon": "fas fa-layer-group"

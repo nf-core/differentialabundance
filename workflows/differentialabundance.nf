@@ -18,7 +18,6 @@ if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input sample
 // Check optional parameters
 if (params.control_features) { ch_control_features = file(params.control_features, checkIfExists: true) } else { ch_control_features = [[],[]] } 
 if (params.gsea_run) { gene_sets_file = file(params.gsea_gene_sets, checkIfExists: true) } else { gene_sets_file = [] } 
-if (params.gsea_chip_file) { ch_gsea_chip_file = file(params.gsea_chip_file, checkIfExists: true) } else { ch_gsea_chip_file = [] } 
 
 report_file = file(params.report_file, checkIfExists: true)
 logo_file = file(params.logo_file, checkIfExists: true)
@@ -37,6 +36,7 @@ css_file = file(params.css_file, checkIfExists: true)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
+include { TABULAR_TO_GSEA_CHIP } from '../modules/local/tabular_to_gsea_chip'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -163,6 +163,11 @@ workflow DIFFERENTIALABUNDANCE {
         ch_contrasts_and_samples = ch_contrasts.combine( VALIDATOR.out.fom.map { it[1] } )
         CUSTOM_TABULARTOGSEACLS(ch_contrasts_and_samples) 
 
+        TABULAR_TO_GSEA_CHIP(
+            VALIDATOR.out.fom.map{ it[2] },
+            ['gene_id', 'gene_name']    
+        )
+
         ch_gsea_inputs = CUSTOM_TABULARTOGSEAGCT.out.gct
             .join(CUSTOM_TABULARTOGSEACLS.out.cls)
             .combine(ch_gene_sets)                        
@@ -170,7 +175,7 @@ workflow DIFFERENTIALABUNDANCE {
         GSEA_GSEA( 
             ch_gsea_inputs,
             ch_gsea_inputs.map{ tuple(it[0].reference, it[0].target) }, // * 
-            ch_gsea_chip_file 
+            TABULAR_TO_GSEA_CHIP.out 
         )
         
         // * Note: GSEA module currently uses a value channel for the mandatory
