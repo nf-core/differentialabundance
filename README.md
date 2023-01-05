@@ -28,7 +28,9 @@ On release, automated continuous integration tests run the pipeline on a full-si
 1. Generate a list of genomic feature annotations using the input GTF file.
 2. Cross-check matrices, sample annotations, feature set and contrasts to ensure consistency.
 3. Run differential analysis over all contrasts specified.
-4. Generate exploratory and differential analysis plots for interpretation.
+4. Optionally run a differential gene set analysis.
+5. Generate exploratory and differential analysis plots for interpretation.
+6. Build an HTML report based on R markdown, with dynamic plots (based on Plotly where possible) and tables.
 
 ## Quick Start
 
