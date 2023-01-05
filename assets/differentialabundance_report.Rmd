@@ -671,18 +671,13 @@ for (i in 1:nrow(contrasts)){
 
 <!-- Gene set analysis results -->
 
-```{r}
-list.files()
-```
-
 ```{r, echo=FALSE, results='asis'}
 possible_gene_set_methods <- c('gsea')
-
-if (any(paste0(possible_gene_set_methods, '_run') %in% names(params))){  
+if (any(unlist(params[paste0(possible_gene_set_methods, '_run')]))){
   cat("\n### Gene set analysis\n")
 
   for (gene_set_method in possible_gene_set_methods){
-    if ( paste0(gene_set_method, '_run') %in% names(params) ){
+    if (unlist(params[paste0(gene_set_method, '_run')])){
       cat("\n### ", toupper(gene_set_method) ," {.tabset}\n")
       
       reference_gsea_tables <- paste0(contrasts$id, '.gsea_report_for_', contrasts$reference, '.tsv')
@@ -749,11 +744,11 @@ make_params_table('downstream differential analysis', 'differential_', remove_pa
 ```{r, echo=FALSE, results='asis'}
 possible_gene_set_methods <- c('gsea')
 
-if (any(paste0(possible_gene_set_methods, '_run') %in% names(params))){  
+if (any(unlist(params[paste0(possible_gene_set_methods, '_run')]))){
   cat("\n### Gene set analysis\n")
 
   for (gene_set_method in possible_gene_set_methods){
-    if ( paste0(gene_set_method, '_run') %in% names(params) ){
+    if (unlist(params[paste0(gene_set_method, '_run')])){
       cat("\n### ", toupper(gene_set_method) ,"  {.tabset}\n")
       make_params_table(toupper(gene_set_method), paste0(gene_set_method, '_'), remove_pattern = TRUE)
     }
