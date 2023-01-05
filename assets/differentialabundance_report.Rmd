@@ -671,6 +671,10 @@ for (i in 1:nrow(contrasts)){
 
 <!-- Gene set analysis results -->
 
+```{r}
+list.files()
+```
+
 ```{r, echo=FALSE, results='asis'}
 possible_gene_set_methods <- c('gsea')
 
