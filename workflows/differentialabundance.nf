@@ -178,14 +178,6 @@ workflow DIFFERENTIALABUNDANCE {
         // usage of map to perform that transformation. An active subject of
         // debate
 
-        // Rename the GSEA outputs we need incorporating the meta ID, so that
-        // we can pass them to the reporting later without name clashes. The
-        // GSEA module does put things in named directories, but the list we
-        // pass to the R markdown report loses that and we get clashes. Maybe
-        // we should alter GSEA/GSEA to have the files themselves named
-        // uniquely, but it's a bit fiddly because of the way GSEA writes file
-        // and the large number of them        
-
         ch_gsea_results = GSEA_GSEA.out.report_tsvs_ref
             .join(GSEA_GSEA.out.report_tsvs_target)
     }
