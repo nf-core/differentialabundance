@@ -178,7 +178,7 @@ workflow DIFFERENTIALABUNDANCE {
         GSEA_GSEA( 
             ch_gsea_inputs,
             ch_gsea_inputs.map{ tuple(it[0].reference, it[0].target) }, // * 
-            TABULAR_TO_GSEA_CHIP.out 
+            TABULAR_TO_GSEA_CHIP.out.first()
         )
         
         // * Note: GSEA module currently uses a value channel for the mandatory
