@@ -70,6 +70,26 @@ params:
   deseq2_cores: NULL
   deseq2_vs_blind: NULL
   deseq2_vst_nsub: NULL
+  gsea_run: false
+  gsea_nperm: NULL
+  gsea_permute: NULL
+  gsea_scoring_scheme: NULL    
+  gsea_metric: NULL 
+  gsea_sort: NULL
+  gsea_order: NULL
+  gsea_set_max: NULL
+  gsea_set_min: NULL
+  gsea_norm: NULL
+  gsea_rnd_type: NULL
+  gsea_make_sets: NULL
+  gsea_median: NULL
+  gsea_num: NULL
+  gsea_plot_top_x: NULL
+  gsea_rnd_seed: NULL
+  gsea_save_rnd_lists: NULL
+  gsea_zip_report: NULL
+  gsea_chip_file: NULL 
+  gsea_gene_sets: NULL
 ---
 
 <!-- Load libraries -->
@@ -637,6 +657,34 @@ for (i in 1:nrow(contrasts)){
 }
 ```
 
+<!-- Gene set analysis results -->
+
+```{r, echo=FALSE, results='asis'}
+possible_gene_set_methods <- c('gsea')
+
+if (any(paste0(possible_gene_set_methods, '_run') %in% names(params))){  
+  cat("\n### Gene set analysis\n")
+
+  for (gene_set_method in possible_gene_set_methods){
+    if ( paste0(gene_set_method, '_run') %in% names(params) ){
+      cat("\n### ", toupper(gene_set_method) ," {.tabset}\n")
+      
+      reference_gsea_tables <- paste0(contrasts$id, '.gsea_report_for_', contrasts$reference, '.tsv')
+      target_gsea_tables <- paste0(contrasts$id, '.gsea_report_for_', contrasts$target, '.tsv')
+
+      for (i in 1:nrow(contrasts)){
+        cat("\n#### ", contrast_descriptions[i], "\n")
+        
+        target_gsea_results <- read_metadata(target_gsea_tables[i])[,c(-2,-3)]
+        print( htmltools::tagList(datatable(target_gsea_results, caption = paste0("\nTarget (", contrasts$target[i], ")\n"), rownames = FALSE) ))
+        
+        ref_gsea_results <- read_metadata(reference_gsea_tables[i])[,c(-2,-3)]
+        print( htmltools::tagList(datatable(ref_gsea_results, caption = paste0("\nReference (", contrasts$reference[i], ")\n"), rownames = FALSE) ))
+      }
+    }
+  }
+}
+```
 
 # Methods
 
@@ -678,6 +726,24 @@ if (params$study_type == 'rnaseq'){
   make_params_table('DESeq2', 'deseq2_', remove_pattern = TRUE)
 }
 make_params_table('downstream differential analysis', 'differential_', remove_pattern = TRUE)
+```
+
+<!-- If any gene set methods have been activated show their params -->
+
+```{r, echo=FALSE, results='asis'}
+possible_gene_set_methods <- c('gsea')
+
+if (any(paste0(possible_gene_set_methods, '_run') %in% names(params))){  
+  cat("\n### Gene set analysis\n")
+
+  for (gene_set_method in possible_gene_set_methods){
+    if ( paste0(gene_set_method, '_run') %in% names(params) ){
+      cat("\n### ", toupper(gene_set_method) ,"  {.tabset}\n")
+      make_params_table(toupper(gene_set_method), paste0(gene_set_method, '_'), remove_pattern = TRUE)
+    }
+  }
+
+}
 ```
 
 # Appendices

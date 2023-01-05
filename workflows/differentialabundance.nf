@@ -146,6 +146,10 @@ workflow DIFFERENTIALABUNDANCE {
 
     // Run a gene set analysis where directed
 
+    // Currently, we're letting GSEA work on the expression data. In future we
+    // will allow use of GSEA preranked instead, which will work with the fold
+    // changes/ p values from DESeq2
+    
     if (params.gsea_run){    
     
         ch_gene_sets = Channel.from(gene_sets_file)
@@ -174,6 +178,16 @@ workflow DIFFERENTIALABUNDANCE {
         // usage of map to perform that transformation. An active subject of
         // debate
 
+        // Rename the GSEA outputs we need incorporating the meta ID, so that
+        // we can pass them to the reporting later without name clashes. The
+        // GSEA module does put things in named directories, but the list we
+        // pass to the R markdown report loses that and we get clashes. Maybe
+        // we should alter GSEA/GSEA to have the files themselves named
+        // uniquely, but it's a bit fiddly because of the way GSEA writes file
+        // and the large number of them        
+
+        ch_gsea_results = GSEA_GSEA.out.report_tsvs_ref
+            .join(GSEA_GSEA.out.report_tsvs_target)
     }
 
     // Let's make the simplifying assumption that the processed matrices from
@@ -246,6 +260,13 @@ workflow DIFFERENTIALABUNDANCE {
         .combine(ch_css_file)
         .combine(DESEQ2_DIFFERENTIAL.out.results.map{it[1]}.toList())
  
+    if (params.gsea_run){ 
+        ch_report_input_files = ch_report_input_files
+            .combine(ch_gsea_results
+                .map{it.tail()}.flatMap().toList()
+            )
+    }
+
     // Make a params list - starting with the input matrices and the relevant
     // params to use in reporting
 
@@ -260,7 +281,7 @@ workflow DIFFERENTIALABUNDANCE {
             versions_file: it[6].name,
             logo: it[7].name, 
             css: it[8].name
-        ] + params.findAll{ k,v -> k.matches(~/^(study|filtering|exploratory|differential|deseq2).*/) }}
+        ] + params.findAll{ k,v -> k.matches(~/^(study|filtering|exploratory|differential|deseq2|gsea).*/) }}
 
     // TO DO: add further params - e.g. for custom logo etc, and for analysis
     // params 
