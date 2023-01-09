@@ -32,6 +32,7 @@ params:
   variance_stabilised_matrix: null                            # e.g. test_files/3_treatment-WT-P23H.vst.tsv
   contrasts_file: null                                        # e.g. GSE156533.contrasts.csv
   samples_file: null                                          # GSE156533.samplesheet.csv
+  samples_id_col: null
   features_file: null
   differential_table: file.csv
   exploratory_n_features: null
@@ -273,7 +274,7 @@ prefix_part_names <- c('variable', 'reference', 'target', 'blocking')
 diff_prefixes <- sub('-$', '', apply(contrasts[,prefix_part_names], 1, function(x) paste(x, collapse = '-')))
 
 differential_files <- lapply(diff_prefixes, function(d){
- file.path(params$input_dir, paste0(d, params$differential_file_suffix)) 
+ file.path(params$input_dir, paste0(gsub(' ', '_', d), params$differential_file_suffix)) 
 })
 
 differential_results <- lapply(differential_files, function(diff_file){
@@ -353,22 +354,21 @@ assay_data$normalised <- assay_data$normalised[1:900,]
 A summary of sample metadata is below:
 
 ```{r, echo=FALSE, results='asis'}
-display_columns <- c(colnames(samples)[1], unique(contrasts$variable))
+display_columns <- union(c(params$samples_id_col, unique(contrasts$variable)), informative_variables)
 minimal_fetchngs_cols <- c('sample', 'sample_title', 'strandedness', 'library_strategy', 'scientific_name')
 
 # If the data came via fetchngs then we can infer a couple of things about the most useful columns
 
 if (all(minimal_fetchngs_cols %in% colnames(samples))){
-  display_columns <- c(display_columns, minimal_fetchngs_cols)
-  sample_name_col <- 'sample_title'
+  additional_useful_cols <- minimal_fetchngs_cols
 }else{
-  not_wide_columns <- colnames(samples)[which(apply(samples, 2, function(x) max(nchar(x))) <= 20)]
-  display_columns <- c(display_columns, minimal_fetchngs_cols[1:min(c(5,ncol(samples)))])
+  additional_useful_cols <- colnames(samples)[which(apply(samples, 2, function(x) max(nchar(x))) <= 20)] 
 }
+
+display_columns <- head(union(display_columns, additional_useful_cols), 5)
 
 # Also add informative columns
 display_columns <- unique(c(display_columns, informative_variables))
-
 samples_to_print <- samples[,unique(display_columns)]
 colnames(samples_to_print) <- prettifyVariablename(colnames(samples_to_print))
 print( htmltools::tagList(datatable(samples_to_print, caption = 'Sample metadata', rownames = FALSE, options = list(dom = 't')) ))
