@@ -281,7 +281,7 @@ workflow DIFFERENTIALABUNDANCE {
             versions_file: it[6].name,
             logo: it[7].name, 
             css: it[8].name
-        ] + params.findAll{ k,v -> k.matches(~/^(study|filtering|exploratory|differential|deseq2|gsea).*/) }}
+        ] + params.findAll{ k,v -> k.matches(~/^(study|samples|filtering|exploratory|differential|deseq2|gsea).*/) }}
 
     // TO DO: add further params - e.g. for custom logo etc, and for analysis
     // params 
