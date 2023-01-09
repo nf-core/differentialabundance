@@ -235,6 +235,9 @@ if (! 'id' %in% colnames(contrasts)){
 
 informative_variables <- unique(c(contrasts$variable, chooseGroupingVariables(samples)))
 
+# Remove any informative variables that group samples the same way
+informative_variables <- informative_variables[ ! duplicated(lapply(structure(informative_variables, names= informative_variables), function(x) as.numeric(factor(samples[[x]], levels=unique(samples[[x]])))))]
+
 # Pick the first variable used in contrasts for coloring purposes
 main_grouping_variable <- contrasts$variable[1]
 groupColorScale <- makeColorScale(length(unique(samples[[main_grouping_variable]])), palette = "Set1")
@@ -444,6 +447,11 @@ pca_datas <- lapply(names(assay_data), function(assay_type){
 })
 names(pca_datas) <- names(assay_data)
 
+pca_vs_meta <- anova_pca_metadata(pca_datas[['variance_stabilised']]$coords, samples[,informative_variables], pca_datas[['variance_stabilised']]$percentVar)
+
+# Show the variable with the tightest PC associations first
+informative_variables <- rownames(pca_vs_meta)[order(pca_vs_meta[,1])]
+
 for (assay_type in rev(names(assay_data))){
   
   pca_data <- pca_datas[[assay_type]]
@@ -502,7 +510,6 @@ For the variance stabilised matrix, an ANOVA test was used to determine assocati
 The resulting p values are illustrated below.
 
 ```{r, echo=FALSE, results='asis'}
-pca_vs_meta <- anova_pca_metadata(pca_datas[['variance_stabilised']]$coords, samples, pca_datas[['variance_stabilised']]$percentVar)
 
 # This is a little hack to work around a bug in d3heatmap with single-row data
 # frames.
