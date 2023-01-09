@@ -107,6 +107,20 @@
                 }
             }
         },
+        "samples_options": {
+            "title": "Samples options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "samples_id_col": {
+                    "type": "string",
+                    "default": "sample",
+                    "description": "Column in the samples sheet to be used as the primary sample identifier"
+                }
+            },
+            "required": ["samples_id_col"]
+        },
         "filtering": {
             "title": "Filtering",
             "type": "object",
@@ -448,7 +462,7 @@
                 },
                 "gsea_gene_sets": {
                     "type": "string",
-                    "default": null
+                    "default": "None"
                 }
             },
             "fa_icon": "fas fa-layer-group"
@@ -669,6 +683,9 @@
     "allOf": [
         {
             "$ref": "#/definitions/input_output_options"
+        },
+        {
+            "$ref": "#/definitions/samples_options"
         },
         {
             "$ref": "#/definitions/filtering"
