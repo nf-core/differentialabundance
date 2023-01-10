@@ -188,6 +188,9 @@ workflow DIFFERENTIALABUNDANCE {
 
         ch_gsea_results = GSEA_GSEA.out.report_tsvs_ref
             .join(GSEA_GSEA.out.report_tsvs_target)
+
+        // Record GSEA versions
+        ch_versions = ch_versions.mix(GSEA_GSEA.out.versions)
     }
 
     // Let's make the simplifying assumption that the processed matrices from
