@@ -178,7 +178,7 @@ workflow DIFFERENTIALABUNDANCE {
         GSEA_GSEA( 
             ch_gsea_inputs,
             ch_gsea_inputs.map{ tuple(it[0].reference, it[0].target) }, // * 
-            TABULAR_TO_GSEA_CHIP.out.first()
+            TABULAR_TO_GSEA_CHIP.out.chip.first()
         )
         
         // * Note: GSEA module currently uses a value channel for the mandatory
@@ -190,7 +190,9 @@ workflow DIFFERENTIALABUNDANCE {
             .join(GSEA_GSEA.out.report_tsvs_target)
 
         // Record GSEA versions
-        ch_versions = ch_versions.mix(GSEA_GSEA.out.versions)
+        ch_versions = ch_versions
+            .mix(TABULAR_TO_GSEA_CHIP.out.versions)
+            .mix(GSEA_GSEA.out.versions)
     }
 
     // Let's make the simplifying assumption that the processed matrices from
