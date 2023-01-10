@@ -1,4 +1,6 @@
 reports:
+  "**/report/*.html":
+    display: "Final differential abundance report"
   pipeline_info/**:
     display: "Pipeline run info"
   "**/plots/exploratory/**/html/*.html":
@@ -15,5 +17,3 @@ reports:
     display: "DESeq2 processed counts table"
   "**/plots/qc/*.dispersion.png":
     display: "DESeq2 dispersion plot"
-  "**/study.html":
-    display: "Final differential abundance report"

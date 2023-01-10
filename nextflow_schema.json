@@ -331,6 +331,128 @@
                 }
             }
         },
+        "gsea": {
+            "title": "GSEA",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "gsea_run": {
+                    "type": "boolean",
+                    "description": "Set to run GSEA to infer differential gene sets in contrasts"
+                },
+                "gsea_permute": {
+                    "type": "string",
+                    "default": "phenotype",
+                    "description": "Permutation type",
+                    "help_text": "Select the type of permutation to perform in assessing the statistical significance of the enrichment score. (See 'required fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page for more info)",
+                    "enum": ["phenotype", "gene_set"]
+                },
+                "gsea_nperm": {
+                    "type": "integer",
+                    "default": 1000,
+                    "description": "Number of permutations",
+                    "help_text": "Specify the number of permutations to perform in assessing the statistical significance of the enrichment score. (See 'required fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page)"
+                },
+                "gsea_scoring_scheme": {
+                    "type": "string",
+                    "default": "weighted",
+                    "description": "Enrichment statistic",
+                    "enum": ["weighted", "weighted_p2", "weighted_p1.5", "classic"],
+                    "help_text": "See 'basic fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page for a detailed explanation."
+                },
+                "gsea_metric": {
+                    "type": "string",
+                    "default": "Signal2Noise",
+                    "enum": ["Signal2Noise", "tTest", "Ratio_of_Classes", "Diff_of_Classes", "log2_Ratio_of_Classes"],
+                    "description": "Metric for ranking genes",
+                    "help_text": "See https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideTEXT.htm#_Metrics_for_Ranking for a detailed explanation."
+                },
+                "gsea_sort": {
+                    "type": "string",
+                    "default": "real",
+                    "description": "Gene list sorting mode",
+                    "help_text": "GSEA ranks the genes in the expression dataset and then analyzes that ranked list of genes. Use this parameter to determine whether to sort the genes using the real (default) or absolute value of the ranking metric.\n\nSee 'basic fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page",
+                    "enum": ["real", "absolute"]
+                },
+                "gsea_order": {
+                    "type": "string",
+                    "default": "descending",
+                    "description": "Gene list ordering mode",
+                    "help_text": "GSEA ranks the genes in the expression dataset and then analyzes that ranked list of genes. Use this parameter to determine whether to sort the genes in descending (default) or ascending order. Ascending order is usually applicable when the ranking metric is a measure of nearness (how close the genes are to one another) rather than distance.\n\nSee 'basic fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page",
+                    "enum": ["descending", "ascending"]
+                },
+                "gsea_set_max": {
+                    "type": "integer",
+                    "default": 500,
+                    "description": "Max size: exclude larger sets",
+                    "help_text": "After filtering from the gene sets any gene not in the expression dataset, gene sets larger than this are excluded from the analysis.\n\nSee 'basic fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page"
+                },
+                "gsea_set_min": {
+                    "type": "integer",
+                    "default": 15,
+                    "description": "Min size: exclude smaller sets",
+                    "help_text": "After filtering from the gene sets any gene not in the expression dataset, gene sets smaller than this are excluded from the analysis.\n\nSee 'basic fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page"
+                },
+                "gsea_norm": {
+                    "type": "string",
+                    "default": "meandiv",
+                    "description": "Normalisation mode",
+                    "enum": ["meandiv", "none"],
+                    "help_text": "Normalization mode. Method used to normalize the enrichment scores across analyzed gene sets: 'meandiv' (default, GSEA normalizes the enrichment scores as described in Normalized Enrichment Score (NES)) OR 'none' (GSEA does not normalize the enrichment scores).\n\nSee 'advanced fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page"
+                },
+                "gsea_rnd_type": {
+                    "type": "string",
+                    "default": "no_balance",
+                    "help_text": "Method used to randomly assign phenotype labels to samples for phenotype permutations. Not used for gene_set  permutations.\n\nSee 'advanced fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page",
+                    "enum": ["no_balance", "equalize_and_balance"],
+                    "description": "Randomization mode"
+                },
+                "gsea_make_sets": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Make detailed geneset report?"
+                },
+                "gsea_median": {
+                    "type": "boolean",
+                    "help_text": "Set to true (default=false) to use the median of each class, instead of the mean, in the metrics for ranking for genes\n\nSee 'advanced fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page. ",
+                    "description": "Use median for class metrics"
+                },
+                "gsea_num": {
+                    "type": "integer",
+                    "default": 100,
+                    "description": "Number of markers",
+                    "help_text": "Number of features (gene or probes) to include in the butterfly plot in the Gene Markers section of the gene set enrichment report.\n\nSee 'advanced fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page. "
+                },
+                "gsea_plot_top_x": {
+                    "type": "integer",
+                    "default": 20,
+                    "description": "Plot graphs for the top sets of each phenotype",
+                    "help_text": "Generates summary plots and detailed analysis results for the top x genes in each phenotype, where x is 20 by default. The top genes are those with the largest normalized enrichment scores.\n\nSee 'advanced fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page. "
+                },
+                "gsea_rnd_seed": {
+                    "type": "string",
+                    "default": "timestamp",
+                    "description": "Seed for permutation",
+                    "help_text": "Seed used to generate a random number for phenotype and gene_set  permutations: timestamp (default), 149, or user input. The specific seed value (149) generates consistent results, which is useful when testing software."
+                },
+                "gsea_save_rnd_lists": {
+                    "type": "boolean",
+                    "description": "Save random ranked lists",
+                    "help_text": "Set to 'true' (default=false) to save the random ranked lists of genes created by phenotype permutations. When you save random ranked lists, for each permutation, GSEA saves the rank metric score for each gene (the score used to position the gene in the ranked list). Saving random ranked lists is memory intensive; therefore, this parameter is set to false by default."
+                },
+                "gsea_zip_report": {
+                    "type": "boolean",
+                    "description": "Make a zipped file with all reports",
+                    "help_text": "Set to True (default=false) to create a zip file of the analysis results. The zip file is saved to the output folder with all of the other files generated by the analysis. This is useful for sharing analysis results"
+                },
+                "gsea_gene_sets": {
+                    "type": "string",
+                    "default": null
+                }
+            },
+            "fa_icon": "fas fa-layer-group"
+        },
         "reference_genome_options": {
             "title": "Reference genome options",
             "type": "object",
@@ -559,6 +681,9 @@
         },
         {
             "$ref": "#/definitions/deseq2_specific_options_rna_seq_only"
+        },
+        {
+            "$ref": "#/definitions/gsea"
         },
         {
             "$ref": "#/definitions/reference_genome_options"

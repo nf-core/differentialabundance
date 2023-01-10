@@ -17,6 +17,7 @@ if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input sample
 
 // Check optional parameters
 if (params.control_features) { ch_control_features = file(params.control_features, checkIfExists: true) } else { ch_control_features = [[],[]] } 
+if (params.gsea_run) { gene_sets_file = file(params.gsea_gene_sets, checkIfExists: true) } else { gene_sets_file = [] } 
 
 report_file = file(params.report_file, checkIfExists: true)
 logo_file = file(params.logo_file, checkIfExists: true)
@@ -35,7 +36,7 @@ css_file = file(params.css_file, checkIfExists: true)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { RMARKDOWNNOTEBOOK } from '../modules/nf-core/rmarkdownnotebook/main' 
+include { TABULAR_TO_GSEA_CHIP } from '../modules/local/tabular_to_gsea_chip'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -54,6 +55,10 @@ include { SHINYNGS_VALIDATEFOMCOMPONENTS as VALIDATOR       } from '../modules/n
 include { DESEQ2_DIFFERENTIAL                               } from '../modules/nf-core/deseq2/differential/main'    
 include { CUSTOM_MATRIXFILTER                               } from '../modules/nf-core/custom/matrixfilter/main' 
 include { ATLASGENEANNOTATIONMANIPULATION_GTF2FEATUREANNOTATION as GTF_TO_TABLE } from '../modules/nf-core/atlasgeneannotationmanipulation/gtf2featureannotation/main' 
+include { GSEA_GSEA                                         } from '../modules/nf-core/gsea/gsea/main' 
+include { CUSTOM_TABULARTOGSEAGCT                           } from '../modules/nf-core/custom/tabulartogseagct/main'
+include { CUSTOM_TABULARTOGSEACLS                           } from '../modules/nf-core/custom/tabulartogseacls/main' 
+include { RMARKDOWNNOTEBOOK                                 } from '../modules/nf-core/rmarkdownnotebook/main' 
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -114,6 +119,9 @@ workflow DIFFERENTIALABUNDANCE {
         .splitCsv ( header:true, sep:'\t' )
         .map{
             it.blocking = it.blocking.replace('NA', '')
+            if (!it.id){
+                it.id = it.values().join('_')
+            }
             it
         }
 
@@ -138,6 +146,52 @@ workflow DIFFERENTIALABUNDANCE {
         ch_contrasts.combine(ch_samples_and_filtered_matrix),
         ch_control_features
     )
+
+    // Run a gene set analysis where directed
+
+    // Currently, we're letting GSEA work on the expression data. In future we
+    // will allow use of GSEA preranked instead, which will work with the fold
+    // changes/ p values from DESeq2
+    
+    if (params.gsea_run){    
+    
+        ch_gene_sets = Channel.from(gene_sets_file)
+
+        // For GSEA, we need to convert normalised counts to a GCT format for
+        // input, and process the sample sheet to generate class definitions
+        // (CLS) for the variable used in each contrast        
+
+        CUSTOM_TABULARTOGSEAGCT ( DESEQ2_DIFFERENTIAL.out.normalised_counts )
+
+        ch_contrasts_and_samples = ch_contrasts.combine( VALIDATOR.out.fom.map { it[1] } )
+        CUSTOM_TABULARTOGSEACLS(ch_contrasts_and_samples) 
+
+        TABULAR_TO_GSEA_CHIP(
+            VALIDATOR.out.fom.map{ it[2] },
+            ['gene_id', 'gene_name']    
+        )
+
+        ch_gsea_inputs = CUSTOM_TABULARTOGSEAGCT.out.gct
+            .join(CUSTOM_TABULARTOGSEACLS.out.cls)
+            .combine(ch_gene_sets)                        
+
+        GSEA_GSEA( 
+            ch_gsea_inputs,
+            ch_gsea_inputs.map{ tuple(it[0].reference, it[0].target) }, // * 
+            TABULAR_TO_GSEA_CHIP.out.first()
+        )
+        
+        // * Note: GSEA module currently uses a value channel for the mandatory
+        // non-file arguments used to define contrasts, hence the indicated
+        // usage of map to perform that transformation. An active subject of
+        // debate
+
+        ch_gsea_results = GSEA_GSEA.out.report_tsvs_ref
+            .join(GSEA_GSEA.out.report_tsvs_target)
+
+        // Record GSEA versions
+        ch_versions = ch_versions.mix(GSEA_GSEA.out.versions)
+    }
 
     // Let's make the simplifying assumption that the processed matrices from
     // the DESeq runs are the same across contrasts. We run the DESeq process
@@ -209,6 +263,13 @@ workflow DIFFERENTIALABUNDANCE {
         .combine(ch_css_file)
         .combine(DESEQ2_DIFFERENTIAL.out.results.map{it[1]}.toList())
  
+    if (params.gsea_run){ 
+        ch_report_input_files = ch_report_input_files
+            .combine(ch_gsea_results
+                .map{it.tail()}.flatMap().toList()
+            )
+    }
+
     // Make a params list - starting with the input matrices and the relevant
     // params to use in reporting
 
@@ -223,7 +284,7 @@ workflow DIFFERENTIALABUNDANCE {
             versions_file: it[6].name,
             logo: it[7].name, 
             css: it[8].name
-        ] + params.findAll{ k,v -> k.matches(~/^(study|filtering|exploratory|differential|deseq2).*/) }}
+        ] + params.findAll{ k,v -> k.matches(~/^(study|filtering|exploratory|differential|deseq2|gsea).*/) }}
 
     // TO DO: add further params - e.g. for custom logo etc, and for analysis
     // params 
