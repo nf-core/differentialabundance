@@ -119,7 +119,7 @@ workflow DIFFERENTIALABUNDANCE {
         .splitCsv ( header:true, sep:'\t' )
         .map{
             it.blocking = it.blocking.replace('NA', '')
-            if ( ! it.id){
+            if (!it.id){
                 it.id = it.values().join('_')
             }
             it
