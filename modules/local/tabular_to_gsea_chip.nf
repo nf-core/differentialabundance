@@ -12,12 +12,14 @@ process TABULAR_TO_GSEA_CHIP {
     tuple val(id), val(symbol)
 
     output:
-    path "*.chip"
+    path "*.chip"       , emit: chip
+    path "versions.yml" , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
+    def VERSION = '9.1' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
     """
     function find_column_number {
         file=\$1
@@ -33,5 +35,10 @@ process TABULAR_TO_GSEA_CHIP {
     echo -e "Probe Set ID\\tGene Symbol\\tGene Title" > \${outfile}.tmp
     tail -n +2 $tsv | awk -F'\\t' -v id=\$id_col -v symbol=\$symbol_col '{print \$id"\\t"\$symbol"\\tNA"}' >> \${outfile}.tmp
     mv \${outfile}.tmp \${outfile}
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        bash: \$(echo \$(bash --version | grep -Eo 'version [[:alnum:].]+' | sed 's/version //'))
+    END_VERSIONS
     """
 }
