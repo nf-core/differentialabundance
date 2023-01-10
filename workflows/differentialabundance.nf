@@ -168,7 +168,7 @@ workflow DIFFERENTIALABUNDANCE {
 
         TABULAR_TO_GSEA_CHIP(
             VALIDATOR.out.fom.map{ it[2] },
-            ['gene_id', 'gene_name']    
+            [params.features_id_col, params.features_name_col]    
         )
 
         ch_gsea_inputs = CUSTOM_TABULARTOGSEAGCT.out.gct

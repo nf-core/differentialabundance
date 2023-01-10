@@ -121,6 +121,25 @@
             },
             "required": ["samples_id_col"]
         },
+        "features_options": {
+            "title": "Features options",
+            "type": "object",
+            "description": "Options related to features",
+            "default": "",
+            "help_text": "",
+            "properties": {
+                "features_id_col": {
+                    "type": "string",
+                    "default": "gene_id",
+                    "description": "Feature ID attribute in the GTF file (e.g. the gene_id field)"
+                },
+                "features_name_col": {
+                    "type": "string",
+                    "default": "gene_name",
+                    "description": "Feature name attribute in the GTF file (e.g. the gene symbol field)"
+                }
+            }
+        },
         "filtering": {
             "title": "Filtering",
             "type": "object",
@@ -134,7 +153,7 @@
                 },
                 "filtering_min_samples": {
                     "type": "number",
-                    "default": 1,
+                    "default": 1.0,
                     "description": "Minimum observations that must pass the threshold to retain the row/ feature (e.g. gene)."
                 },
                 "filtering_min_proportion": {
@@ -683,6 +702,9 @@
     "allOf": [
         {
             "$ref": "#/definitions/input_output_options"
+        },
+        {
+            "$ref": "#/definitions/features_options"
         },
         {
             "$ref": "#/definitions/samples_options"
