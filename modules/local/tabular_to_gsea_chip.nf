@@ -35,7 +35,7 @@ process TABULAR_TO_GSEA_CHIP {
     echo -e "Probe Set ID\\tGene Symbol\\tGene Title" > \${outfile}.tmp
     tail -n +2 $tsv | awk -F'\\t' -v id=\$id_col -v symbol=\$symbol_col '{print \$id"\\t"\$symbol"\\tNA"}' >> \${outfile}.tmp
     mv \${outfile}.tmp \${outfile}
-    
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         bash: \$(echo \$(bash --version | grep -Eo 'version [[:alnum:].]+' | sed 's/version //'))
