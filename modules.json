@@ -32,7 +32,7 @@
                     },
                     "deseq2/differential": {
                         "branch": "master",
-                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "git_sha": "3eb41d9f08a68bc728aacc31f2079f5115616e1a",
                         "installed_by": ["modules"]
                     },
                     "gsea/gsea": {
