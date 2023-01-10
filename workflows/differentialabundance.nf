@@ -119,7 +119,7 @@ workflow DIFFERENTIALABUNDANCE {
         .splitCsv ( header:true, sep:'\t' )
         .map{
             it.blocking = it.blocking.replace('NA', '')
-            if ( ! it.id){
+            if (!it.id){
                 it.id = it.values().join('_')
             }
             it
@@ -188,6 +188,9 @@ workflow DIFFERENTIALABUNDANCE {
 
         ch_gsea_results = GSEA_GSEA.out.report_tsvs_ref
             .join(GSEA_GSEA.out.report_tsvs_target)
+
+        // Record GSEA versions
+        ch_versions = ch_versions.mix(GSEA_GSEA.out.versions)
     }
 
     // Let's make the simplifying assumption that the processed matrices from
