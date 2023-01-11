@@ -107,19 +107,24 @@
                 }
             }
         },
-        "samples_options": {
-            "title": "Samples options",
+        "observations_options": {
+            "title": "Observations (e.g. samples) options",
             "type": "object",
             "description": "",
             "default": "",
             "properties": {
-                "samples_id_col": {
+                "observations_id_col": {
                     "type": "string",
                     "default": "sample",
                     "description": "Column in the samples sheet to be used as the primary sample identifier"
+                },
+                "observations_type": {
+                    "type": "string",
+                    "default": "sample",
+                    "description": "Type of observation we have- often 'sample'"
                 }
             },
-            "required": ["samples_id_col"]
+            "required": ["observations_id_col", "observations_type"]
         },
         "features_options": {
             "title": "Features options",
@@ -137,8 +142,14 @@
                     "type": "string",
                     "default": "gene_name",
                     "description": "Feature name attribute in the GTF file (e.g. the gene symbol field)"
+                },
+                "features_type": {
+                    "type": "string",
+                    "default": "gene",
+                    "description": "Type of feature we have, often 'gene'"
                 }
-            }
+            },
+            "required": ["features_id_col", "features_type", "features_name_col"]
         },
         "filtering": {
             "title": "Filtering",
@@ -153,7 +164,7 @@
                 },
                 "filtering_min_samples": {
                     "type": "number",
-                    "default": 1.0,
+                    "default": 1,
                     "description": "Minimum observations that must pass the threshold to retain the row/ feature (e.g. gene)."
                 },
                 "filtering_min_proportion": {
@@ -704,10 +715,10 @@
             "$ref": "#/definitions/input_output_options"
         },
         {
-            "$ref": "#/definitions/features_options"
+            "$ref": "#/definitions/observations_options"
         },
         {
-            "$ref": "#/definitions/samples_options"
+            "$ref": "#/definitions/features_options"
         },
         {
             "$ref": "#/definitions/filtering"

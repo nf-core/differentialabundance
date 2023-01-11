@@ -277,7 +277,7 @@ workflow DIFFERENTIALABUNDANCE {
 
     ch_report_params = ch_report_input_files
         .map{[
-            samples_file: it[0].name,
+            observations_file: it[0].name,
             features_file: it[1].name, 
             raw_matrix: it[2].name, 
             normalised_matrix: it[3].name, 
@@ -286,7 +286,7 @@ workflow DIFFERENTIALABUNDANCE {
             versions_file: it[6].name,
             logo: it[7].name, 
             css: it[8].name
-        ] + params.findAll{ k,v -> k.matches(~/^(study|samples|filtering|exploratory|differential|deseq2|gsea).*/) }}
+        ] + params.findAll{ k,v -> k.matches(~/^(study|observations|features|filtering|exploratory|differential|deseq2|gsea).*/) }}
 
     // TO DO: add further params - e.g. for custom logo etc, and for analysis
     // params 
