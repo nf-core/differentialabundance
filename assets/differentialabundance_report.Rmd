@@ -347,11 +347,6 @@ differential_table <- do.call(rbind, lapply(sig_differential, function(x) lapply
 
 This report summarises differential `r params$features_type` analysis as performed by the nf-core differential abundance pipeline. 
 
-```{r, echo=FALSE}
-#REMOVE THIS
-assay_data$normalised <- assay_data$normalised[1:900,]
-```
-
 # Data
 
 ```{r, echo=FALSE, results='asis'}
