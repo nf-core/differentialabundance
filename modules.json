@@ -52,29 +52,23 @@
                     },
                     "shinyngs/staticdifferential": {
                         "branch": "master",
-                        "git_sha": "4f66dc79213ca411a5b1d355c9b2c7d0a39e2cbc",
+                        "git_sha": "dc67268f96f9d6e47a6f0c1c631ae54f42b6716c",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/staticexploratory": {
                         "branch": "master",
-                        "git_sha": "4f66dc79213ca411a5b1d355c9b2c7d0a39e2cbc",
+                        "git_sha": "dc67268f96f9d6e47a6f0c1c631ae54f42b6716c",
+                        "installed_by": ["modules"]
+                    },
+                    "shinyngs/validatefomcomponents": {
+                        "branch": "master",
+                        "git_sha": "dc67268f96f9d6e47a6f0c1c631ae54f42b6716c",
                         "installed_by": ["modules"]
                     }
                 }
             },
             "subworkflows": {
                 "nf-core": {}
-            }
-        },
-        "pinin4fjords/nf-core-modules": {
-            "modules": {
-                "nf-core": {
-                    "shinyngs/validatefomcomponents": {
-                        "branch": "bump_shinyngs",
-                        "git_sha": "443e0b389d684b07df5f23adc4d738f8997308ac",
-                        "installed_by": ["modules"]
-                    }
-                }
             }
         }
     }
