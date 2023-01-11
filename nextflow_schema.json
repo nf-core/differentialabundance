@@ -26,7 +26,7 @@
                     "type": "string",
                     "format": "file-path",
                     "mimetype": "text/csv",
-                    "pattern": "^\\S+\\.csv$",
+                    "pattern": "^\\S+\\.(csv|tsv|txt)$",
                     "schema": "assets/schema_input.json",
                     "description": "Path to comma-separated file containing information about the samples in the experiment.",
                     "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/differentialabundance/usage#samplesheet-input).",
@@ -46,7 +46,7 @@
                     "help_text": "For example an expression matrix output from the nf-core RNA-seq workflow. There must be a column in this matrix for every row in the input sample sheet.",
                     "format": "file-path",
                     "mimetype": "text/tab-separated-values",
-                    "pattern": "^\\S+\\.tsv$"
+                    "pattern": "^\\S+\\.(tsv|csv|txt)$"
                 },
                 "outdir": {
                     "type": "string",
@@ -106,6 +106,50 @@
                     "description": "CSS to use to style the output, in lieu of the default nf-core styling"
                 }
             }
+        },
+        "observations_options": {
+            "title": "Observations (e.g. samples) options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "observations_id_col": {
+                    "type": "string",
+                    "default": "sample",
+                    "description": "Column in the samples sheet to be used as the primary sample identifier"
+                },
+                "observations_type": {
+                    "type": "string",
+                    "default": "sample",
+                    "description": "Type of observation we have- often 'sample'"
+                }
+            },
+            "required": ["observations_id_col", "observations_type"]
+        },
+        "features_options": {
+            "title": "Features options",
+            "type": "object",
+            "description": "Options related to features",
+            "default": "",
+            "help_text": "",
+            "properties": {
+                "features_id_col": {
+                    "type": "string",
+                    "default": "gene_id",
+                    "description": "Feature ID attribute in the GTF file (e.g. the gene_id field)"
+                },
+                "features_name_col": {
+                    "type": "string",
+                    "default": "gene_name",
+                    "description": "Feature name attribute in the GTF file (e.g. the gene symbol field)"
+                },
+                "features_type": {
+                    "type": "string",
+                    "default": "gene",
+                    "description": "Type of feature we have, often 'gene'"
+                }
+            },
+            "required": ["features_id_col", "features_type", "features_name_col"]
         },
         "filtering": {
             "title": "Filtering",
@@ -448,7 +492,7 @@
                 },
                 "gsea_gene_sets": {
                     "type": "string",
-                    "default": null
+                    "default": "None"
                 }
             },
             "fa_icon": "fas fa-layer-group"
@@ -669,6 +713,12 @@
     "allOf": [
         {
             "$ref": "#/definitions/input_output_options"
+        },
+        {
+            "$ref": "#/definitions/observations_options"
+        },
+        {
+            "$ref": "#/definitions/features_options"
         },
         {
             "$ref": "#/definitions/filtering"

@@ -168,7 +168,7 @@ workflow DIFFERENTIALABUNDANCE {
 
         TABULAR_TO_GSEA_CHIP(
             VALIDATOR.out.fom.map{ it[2] },
-            ['gene_id', 'gene_name']    
+            [params.features_id_col, params.features_name_col]    
         )
 
         ch_gsea_inputs = CUSTOM_TABULARTOGSEAGCT.out.gct
@@ -178,7 +178,7 @@ workflow DIFFERENTIALABUNDANCE {
         GSEA_GSEA( 
             ch_gsea_inputs,
             ch_gsea_inputs.map{ tuple(it[0].reference, it[0].target) }, // * 
-            TABULAR_TO_GSEA_CHIP.out.first()
+            TABULAR_TO_GSEA_CHIP.out.chip.first()
         )
         
         // * Note: GSEA module currently uses a value channel for the mandatory
@@ -190,7 +190,9 @@ workflow DIFFERENTIALABUNDANCE {
             .join(GSEA_GSEA.out.report_tsvs_target)
 
         // Record GSEA versions
-        ch_versions = ch_versions.mix(GSEA_GSEA.out.versions)
+        ch_versions = ch_versions
+            .mix(TABULAR_TO_GSEA_CHIP.out.versions)
+            .mix(GSEA_GSEA.out.versions)
     }
 
     // Let's make the simplifying assumption that the processed matrices from
@@ -275,7 +277,7 @@ workflow DIFFERENTIALABUNDANCE {
 
     ch_report_params = ch_report_input_files
         .map{[
-            samples_file: it[0].name,
+            observations_file: it[0].name,
             features_file: it[1].name, 
             raw_matrix: it[2].name, 
             normalised_matrix: it[3].name, 
@@ -284,7 +286,7 @@ workflow DIFFERENTIALABUNDANCE {
             versions_file: it[6].name,
             logo: it[7].name, 
             css: it[8].name
-        ] + params.findAll{ k,v -> k.matches(~/^(study|filtering|exploratory|differential|deseq2|gsea).*/) }}
+        ] + params.findAll{ k,v -> k.matches(~/^(study|observations|features|filtering|exploratory|differential|deseq2|gsea).*/) }}
 
     // TO DO: add further params - e.g. for custom logo etc, and for analysis
     // params 

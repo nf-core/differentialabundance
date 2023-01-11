@@ -32,7 +32,7 @@
                     },
                     "deseq2/differential": {
                         "branch": "master",
-                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "git_sha": "3eb41d9f08a68bc728aacc31f2079f5115616e1a",
                         "installed_by": ["modules"]
                     },
                     "gsea/gsea": {
@@ -52,20 +52,23 @@
                     },
                     "shinyngs/staticdifferential": {
                         "branch": "master",
-                        "git_sha": "aab82090875080a3a5254a6af04ef1004ea47af6",
+                        "git_sha": "dc67268f96f9d6e47a6f0c1c631ae54f42b6716c",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/staticexploratory": {
                         "branch": "master",
-                        "git_sha": "aab82090875080a3a5254a6af04ef1004ea47af6",
+                        "git_sha": "dc67268f96f9d6e47a6f0c1c631ae54f42b6716c",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/validatefomcomponents": {
                         "branch": "master",
-                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "git_sha": "dc67268f96f9d6e47a6f0c1c631ae54f42b6716c",
                         "installed_by": ["modules"]
                     }
                 }
+            },
+            "subworkflows": {
+                "nf-core": {}
             }
         }
     }

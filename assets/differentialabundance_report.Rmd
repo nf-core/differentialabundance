@@ -21,18 +21,21 @@ params:
   workflow_commit: 0
   study_type: NULL
   study_name: NULL
-  feature_type: gene
-  feature_metadata_cols: 
+  observations_type: NULL
+  observations_file: NULL                                          # GSE156533.samplesheet.csv
+  observations_id_col: NULL
+  features_file: NULL
+  features_type: NULL
+  features_id_col: NULL
+  features_name_col: NULL
+  features_metadata_cols: 
     - gene_id
     - gene_name
     - gene_biotype
-  observation_type: sample
   raw_matrix: null                                            # e.g. 0_salmon.merged.gene_counts.tsv
   normalised_matrix: null
   variance_stabilised_matrix: null                            # e.g. test_files/3_treatment-WT-P23H.vst.tsv
   contrasts_file: null                                        # e.g. GSE156533.contrasts.csv
-  samples_file: null                                          # GSE156533.samplesheet.csv
-  features_file: null
   differential_table: file.csv
   exploratory_n_features: null
   exploratory_clustering_method: null
@@ -184,7 +187,7 @@ make_params_table <- function(name, pattern = NULL, remove_pattern = FALSE){
 ```
 
 ---
-title:  "<img src=\"`r file.path(params$input_dir, params$logo)`\" style=\"float: left;\"/>Differential `r params$feature_type` abundance report"
+title:  "<img src=\"`r file.path(params$input_dir, params$logo)`\" style=\"float: left;\"/>Differential `r params$features_type` abundance report"
 subtitle: differentialabundance workflow version `r versions[["Workflow.nf-core/differentialabundance"]]`
 ---
 
@@ -213,14 +216,14 @@ cat(paste0("
 <!-- Load input data -->
 
 ```{r, echo=FALSE}
-samples <- read_metadata(file.path(params$input_dir, params$samples_file))
+observations <- read_metadata(file.path(params$input_dir, params$observations_file))
 if (! is.null(params$features_file)){
   features <- read_metadata(file.path(params$input_dir, params$features_file))
-  features <- features[,colnames(features) %in% params$feature_metadata_cols, drop = FALSE]
+  features <- features[,colnames(features) %in% params$features_metadata_cols, drop = FALSE]
 }
 
-rownames(samples) <- samples[,1]
-sample_name_col <- colnames(samples)[1]
+rownames(observations) <- observations[,1]
+observations_name_col <- colnames(observations)[1]
 
 contrasts <- read_metadata(file.path(params$input_dir, params$contrasts_file))
 contrasts$blocking <- na.replace(contrasts$blocking, '')
@@ -229,14 +232,17 @@ if (! 'id' %in% colnames(contrasts)){
 }
 
 # Identify informative variables- those with a number of values greater than 1
-# but less than N, with N being the number of samples. Make sure contrast
+# but less than N, with N being the number of observations. Make sure contrast
 # variables are first in the list
 
-informative_variables <- unique(c(contrasts$variable, chooseGroupingVariables(samples)))
+informative_variables <- unique(c(contrasts$variable, chooseGroupingVariables(observations)))
+
+# Remove any informative variables that group observations the same way
+informative_variables <- informative_variables[ ! duplicated(lapply(structure(informative_variables, names= informative_variables), function(x) as.numeric(factor(observations[[x]], levels=unique(observations[[x]])))))]
 
 # Pick the first variable used in contrasts for coloring purposes
 main_grouping_variable <- contrasts$variable[1]
-groupColorScale <- makeColorScale(length(unique(samples[[main_grouping_variable]])), palette = "Set1")
+groupColorScale <- makeColorScale(length(unique(observations[[main_grouping_variable]])), palette = "Set1")
 
 assay_files <- list(
   raw = file.path(params$input_dir, params$raw_matrix),
@@ -247,15 +253,15 @@ assay_files <- Filter(Negate(is.null), assay_files)
 assay_data <- lapply(assay_files, function(x) {
   mat <- read_matrix(
     x,
-    sample_metadata = samples,
+    sample_metadata = observations,
     row.names = 1
   )
-  colnames(mat) <- samples[[sample_name_col]][match(colnames(mat), rownames(samples))]
+  colnames(mat) <- observations[[observations_name_col]][match(colnames(mat), rownames(observations))]
   mat
 })
 
-# Now we can rename the samples rows using the title field
-rownames(samples) <- samples[[sample_name_col]]
+# Now we can rename the observations rows using the title field
+rownames(observations) <- observations[[observations_name_col]]
 ```
 
 <!-- Read the differential results.
@@ -273,7 +279,7 @@ prefix_part_names <- c('variable', 'reference', 'target', 'blocking')
 diff_prefixes <- sub('-$', '', apply(contrasts[,prefix_part_names], 1, function(x) paste(x, collapse = '-')))
 
 differential_files <- lapply(diff_prefixes, function(d){
- file.path(params$input_dir, paste0(d, params$differential_file_suffix)) 
+ file.path(params$input_dir, paste0(gsub(' ', '_', d), params$differential_file_suffix)) 
 })
 
 differential_results <- lapply(differential_files, function(diff_file){
@@ -339,45 +345,42 @@ differential_table <- do.call(rbind, lapply(sig_differential, function(x) lapply
 
 # Abstract
 
-This report summarises differential `r params$feature_type` analysis as performed by the nf-core differential abundance pipeline. 
-
-```{r, echo=FALSE}
-#REMOVE THIS
-assay_data$normalised <- assay_data$normalised[1:900,]
-```
+This report summarises differential `r params$features_type` analysis as performed by the nf-core differential abundance pipeline. 
 
 # Data
 
-## Samples
+```{r, echo=FALSE, results='asis'}
+cat(paste0("\n## ", ucfirst(params$observations_type), "s\n"))
+```
 
-A summary of sample metadata is below:
+
+A summary of `r params$observations_type` metadata is below:
 
 ```{r, echo=FALSE, results='asis'}
-display_columns <- c(colnames(samples)[1], unique(contrasts$variable))
+display_columns <- union(c(params$observations_id_col, unique(contrasts$variable)), informative_variables)
 minimal_fetchngs_cols <- c('sample', 'sample_title', 'strandedness', 'library_strategy', 'scientific_name')
 
 # If the data came via fetchngs then we can infer a couple of things about the most useful columns
 
-if (all(minimal_fetchngs_cols %in% colnames(samples))){
-  display_columns <- c(display_columns, minimal_fetchngs_cols)
-  sample_name_col <- 'sample_title'
+if (all(minimal_fetchngs_cols %in% colnames(observations))){
+  additional_useful_cols <- minimal_fetchngs_cols
 }else{
-  not_wide_columns <- colnames(samples)[which(apply(samples, 2, function(x) max(nchar(x))) <= 20)]
-  display_columns <- c(display_columns, minimal_fetchngs_cols[1:min(c(5,ncol(samples)))])
+  additional_useful_cols <- colnames(observations)[which(apply(observations, 2, function(x) max(nchar(x))) <= 20)] 
 }
+
+display_columns <- head(union(display_columns, additional_useful_cols), 5)
 
 # Also add informative columns
 display_columns <- unique(c(display_columns, informative_variables))
-
-samples_to_print <- samples[,unique(display_columns)]
-colnames(samples_to_print) <- prettifyVariablename(colnames(samples_to_print))
-print( htmltools::tagList(datatable(samples_to_print, caption = 'Sample metadata', rownames = FALSE, options = list(dom = 't')) ))
+observations_to_print <- observations[,unique(display_columns)]
+colnames(observations_to_print) <- prettifyVariablename(colnames(observations_to_print))
+print( htmltools::tagList(datatable(observations_to_print, caption = paste(ucfirst(params$observations_type), 'metadata'), rownames = FALSE, options = list(dom = 't')) ))
 
 ```
 
 ## Contrasts
 
-Comparisons were made between sample groups defined using using sample metadata columns, as described in the following table of contrasts:
+Comparisons were made between `r params$observations_type` groups defined using using `r params$observation_type` metadata columns, as described in the following table of contrasts:
 
 ```{r, echo=FALSE, results='asis'}
 contrasts_to_print <- contrasts
@@ -389,7 +392,7 @@ print( htmltools::tagList(datatable(contrasts_to_print, caption = paste0("Table 
 
 ## Counts
 
-Input was a matrix of `r nrow(assay_data$raw)` `r params$feature_type`s for `r ncol(assay_data$raw)` samples`r ifelse(nrow(assay_data$normalised) < nrow(assay_data$raw), paste0(', reduced to ', nrow(assay_data$normalised), ' ', params$feature_type, 's after filtering for low abundance'), '')`.
+Input was a matrix of `r nrow(assay_data$raw)` `r params$features_type`s for `r ncol(assay_data$raw)` `r params$observations_type`s`r ifelse(nrow(assay_data$normalised) < nrow(assay_data$raw), paste0(', reduced to ', nrow(assay_data$normalised), ' ', params$features_type, 's after filtering for low abundance'), '')`.
 
 ## Exploratory
 
@@ -406,9 +409,9 @@ The following plots show the abundance value distributions of input matrices. A 
 
 ggplot_boxplot(
   assay_data, 
-  experiment = samples, 
+  experiment = observations, 
   colorby = main_grouping_variable, 
-  expressiontype = paste("count per", params$feature_type), 
+  expressiontype = paste("count per", params$features_type), 
   palette = groupColorScale,
   whisker_distance = params$exploratory_whisker_distance
 )
@@ -421,18 +424,20 @@ Whiskers in the above boxplots show `r params$exploratory_whisker_distance` time
 ```{r, echo=FALSE, results='asis'}
 plotly_densityplot(
   assay_data, 
-  experiment = samples, 
+  experiment = observations, 
   colorby = main_grouping_variable, 
-  expressiontype = paste("count per", params$feature_type), 
+  expressiontype = paste("count per", params$features_type), 
   palette = groupColorScale
 )
 ```
 
-### Sample relationships
+```{r, echo=FALSE, results='asis'}
+cat(paste0("\n### ", params$observations_type, " relationships\n"))
+```
 
 #### Principal components plots {.tabset}
 
-Principal components analysis was conducted based on the `r params$exploratory_n_features` most variable `r params$feature_type`s. Each component was annotated with its percent contribution to variance. 
+Principal components analysis was conducted based on the `r params$exploratory_n_features` most variable `r params$features_type`s. Each component was annotated with its percent contribution to variance. 
 
 ```{r, echo=FALSE, results='asis'}
 pca_datas <- lapply(names(assay_data), function(assay_type){
@@ -444,6 +449,11 @@ pca_datas <- lapply(names(assay_data), function(assay_type){
 })
 names(pca_datas) <- names(assay_data)
 
+pca_vs_meta <- anova_pca_metadata(pca_datas[['variance_stabilised']]$coords, observations[,informative_variables], pca_datas[['variance_stabilised']]$percentVar)
+
+# Show the variable with the tightest PC associations first
+informative_variables <- rownames(pca_vs_meta)[order(pca_vs_meta[,1])]
+
 for (assay_type in rev(names(assay_data))){
   
   pca_data <- pca_datas[[assay_type]]
@@ -454,8 +464,8 @@ for (assay_type in rev(names(assay_data))){
   
     plotdata <- pca_data$coords
     plotdata$colorby <- factor(
-      samples[[iv]], 
-      levels = unique(samples[[iv]])
+      observations[[iv]], 
+      levels = unique(observations[[iv]])
     )
 
     # Make plotting data combining PCA coords with coloring groups etc
@@ -502,7 +512,6 @@ For the variance stabilised matrix, an ANOVA test was used to determine assocati
 The resulting p values are illustrated below.
 
 ```{r, echo=FALSE, results='asis'}
-pca_vs_meta <- anova_pca_metadata(pca_datas[['variance_stabilised']]$coords, samples, pca_datas[['variance_stabilised']]$percentVar)
 
 # This is a little hack to work around a bug in d3heatmap with single-row data
 # frames.
@@ -541,21 +550,21 @@ for (variable in rownames(pca_vs_meta)){
 
 #### Clustering dendrograms
 
-A hierarchical clustering of samples was undertaken based on the top  `r params$exploratory_n_features` most variable `r params$feature_type`s. Distances between samples were estimated based on `r params$exploratory_cor_method` correlation, which were then used to produce a clustering via the `r params$exploratory_clustering_method` method with `hclust()` in R. 
+A hierarchical clustering of `r params$features_type`s was undertaken based on the top  `r params$exploratory_n_features` most variable `r params$features_type`s. Distances between `r params$features_type`s were estimated based on `r params$exploratory_cor_method` correlation, which were then used to produce a clustering via the `r params$exploratory_clustering_method` method with `hclust()` in R. 
 
 ```{r, echo=FALSE, results='asis'}
 variable_genes <- selectVariableGenes(matrix = assay_data$variance_stabilised, ntop = params$exploratory_n_features)
 
 p <- clusteringDendrogram(
   2^assay_data$variance_stabilised[variable_genes, ],
-  samples[, main_grouping_variable, drop = FALSE],
+  observations[, main_grouping_variable, drop = FALSE],
   colorby = main_grouping_variable,
   cor_method = params$exploratory_cor_method,
   plot_title = paste0(
-    "Sample clustering dendrogram, ", 
+    paste0(params$observations_type," clustering dendrogram, "), 
     params$exploratory_n_features, 
     " most variable ", 
-    params$feature_type, 
+    params$features_type, 
     "s\n(", params$exploratory_clustering_method, " clustering, ", params$exploratory_cor_method, " correlation)"),
   cluster_method = params$exploratory_clustering_method,
   palette = groupColorScale,
@@ -570,10 +579,10 @@ print(p, vp=grid::viewport(gp=grid::gpar(cex=0.7)))
 
 ## Differential
 
-### Differential `r params$feature_type` counts
+### Differential `r params$features_type` counts
 
 ```{r, echo=FALSE, results='asis'}
-kable(differential_table, caption = paste0('Differential ',  params$feature_type, ' counts (target relative to reference)'))
+kable(differential_table, caption = paste0('Differential ',  params$features_type, ' counts (target relative to reference)'))
 ```
 
 ```{r, echo=FALSE, results='asis', eval = FALSE}
@@ -584,7 +593,7 @@ differential_summary_string <- paste(
     1:nrow(contrasts),
     function(x){
       paste0(
-        "Contrast ", x, ' (', contrast_descriptions[x], ') ', "had ", differential_table[x,'up'], ' ', paste0(params$feature_type, 's'), ' expressed significantly more highly in ', contrasts[x, 'target',], ' than ', contrasts[x, 'reference',], ' and ', differential_table[x,'down'], ' expressed at sifnificantly lower levels.'
+        "Contrast ", x, ' (', contrast_descriptions[x], ') ', "had ", differential_table[x,'up'], ' ', paste0(params$features_type, 's'), ' expressed significantly more highly in ', contrasts[x, 'target',], ' than ', contrasts[x, 'reference',], ' and ', differential_table[x,'down'], ' expressed at sifnificantly lower levels.'
       )
     }
   ),
@@ -594,7 +603,7 @@ differential_summary_string <- paste(
 cat(differential_summary_string)
 ```
 
-### Differential `r params$feature_type` details
+### Differential `r params$features_type` details
 
 ```{r, echo=FALSE, results='asis'}
 for (i in 1:nrow(contrasts)){
@@ -706,19 +715,19 @@ make_params_table('feature-wise filtering', 'filtering_', remove_pattern = TRUE)
 ```
 
 ```{r, echo=FALSE, results='asis'}
-filtering_string <- paste0('Filtering was carried out by selecting ', params$feature_type, 's with an abundance of at least ', params$filtering_min_abundance)
+filtering_string <- paste0('Filtering was carried out by selecting ', params$features_type, 's with an abundance of at least ', params$filtering_min_abundance)
 
 if (is.null(params$filtering_grouping_var)){
   if (is.null(params$filtering_min_proportion)){
-    filtering_string <- paste0(filtering_string, ' in at least ', params$filtering_min_samples, ' samples.')
+    filtering_string <- paste0(filtering_string, ' in at least ', params$filtering_min_samples, ' ', params$observations_type, 's.')
   }else{
-    filtering_string <- paste0(filtering_string, ' in at least a proportion of ', params$filtering_min_proportion, ' of samples.')
+    filtering_string <- paste0(filtering_string, ' in at least a proportion of ', params$filtering_min_proportion, ' of ', params$observations_type,'s.')
   }
 }else{
   if (is.null(params$filtering_min_proportion)){
-    filtering_string <- paste0(filtering_string, ' in at least the number of samples corresponding to the smallest group size defined by the grouping variable "', params$filtering_grouping_var, '".')
+    filtering_string <- paste0(filtering_string, ' in at least the number of ', params$observations_type, 's corresponding to the smallest group size defined by the grouping variable "', params$filtering_grouping_var, '".')
   }else{
-    filtering_string <- paste0(filtering_string, ' in at least a proportion of ', params$filtering_min_proportion, ' of the number of samples corresponding to the smallest group size defined by the grouping variable"', params$filtering_grouping_var, '".')
+    filtering_string <- paste0(filtering_string, ' in at least a proportion of ', params$filtering_min_proportion, ' of the number of ', params$observations_type,'s corresponding to the smallest group size defined by the grouping variable"', params$filtering_grouping_var, '".')
   }
 }
 cat(filtering_string)
