@@ -39,9 +39,17 @@ The file can be tab or comma separated.
 
 ## Matrix file
 
+```bash
+--matrix '[path to matrix file]'
+```
+
 This is a numeric square matrix file, comma or tab-separated, with a column for every observation, and features corresponding to the supplied feature set. The parameters `--observations_id_col` and `--features_id_col` define which of the associated fields should be matched in those inputs.
 
 ## Contrasts file
+
+```bash
+--contrasts '[path to contrasts file]'
+```
 
 The contrasts file references the observations file to define groups of samples to compare. For example, based on the sample sheet above we could define contrasts like:
 
@@ -62,6 +70,10 @@ The necessary fields in order are:
 The file can be tab or comma separated.
 
 ## GTF file
+
+```bash
+--gtf '[path to gtf file]'
+```
 
 This is the format currently used to supply feature metdata. In the RNA-seq case it should match the GTF used in that workflow. 
 
