@@ -405,23 +405,25 @@ The following plots show the abundance value distributions of input matrices. A 
 ```
 #### Box plots
 
-```{r, echo=FALSE, results='asis'}
+```{r, echo=FALSE, results='asis', fig.height=8}
 
-ggplot_boxplot(
+p <- ggplot_boxplot(
   assay_data, 
   experiment = observations, 
   colorby = main_grouping_variable, 
   expressiontype = paste("count per", params$features_type), 
   palette = groupColorScale,
-  whisker_distance = params$exploratory_whisker_distance
+  whisker_distance = params$exploratory_whisker_distance,
+  base_size=8
 )
+p
 ```
 
 Whiskers in the above boxplots show `r params$exploratory_whisker_distance` times the inter-quartile range.
 
 #### Density plots
 
-```{r, echo=FALSE, results='asis'}
+```{r, echo=FALSE, results='asis', fig.height=8}
 plotly_densityplot(
   assay_data, 
   experiment = observations, 
