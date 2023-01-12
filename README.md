@@ -70,12 +70,11 @@ nf-core/differentialabundance was originally written by Jonathan Manning and Osk
 
 We thank the many members of the nf-core community who assisted with this pipeline, often by reviewing module pull requests including but not limited to:
 
- - [@ggabernet](https://github.com/ggabernet),
- - [@SPPearce](https://github.com/SPPearce),
- - [@nvnieuwk](https://github.com/nvnieuwk),
- - [@jfy133](https://github.com/jfy133),
- - [@mahesh-panchal](https://github.com/mahesh-panchal)
-
+- [@ggabernet](https://github.com/ggabernet),
+- [@SPPearce](https://github.com/SPPearce),
+- [@nvnieuwk](https://github.com/nvnieuwk),
+- [@jfy133](https://github.com/jfy133),
+- [@mahesh-panchal](https://github.com/mahesh-panchal)
 
 ## Contributions and Support
 

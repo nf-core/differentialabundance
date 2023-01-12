@@ -10,10 +10,10 @@ Differential analysis is a common task in a variety of use cases. In essence, al
 
 With the above in mind, running this workflow requires:
 
- - a matrix of quantifications with observations by column and features by row
- - a description of the observations such as a sample sheet from RNA-seq analysis
- - a description of the features, for our initial RNA-seq applicaiton this is simply the GTF file from which gene annotations can be derived
- - a specification of how the matrix should be split, and how the resulting groups should be compared
+- a matrix of quantifications with observations by column and features by row
+- a description of the observations such as a sample sheet from RNA-seq analysis
+- a description of the features, for our initial RNA-seq applicaiton this is simply the GTF file from which gene annotations can be derived
+- a specification of how the matrix should be split, and how the resulting groups should be compared
 
 ## Observations (samplesheet) input
 
@@ -21,7 +21,7 @@ With the above in mind, running this workflow requires:
 --input '[path to samplesheet file]'
 ```
 
-This may well be the same sample sheet used to generate the input matrix. For example, in RNA-seq this might be the same sample sheet, perhaps derived from [fetchngs](https://github.com/nf-core/fetchngs), that was input to the [RNA-seq workflow](https://github.com/nf-core/rnaseq). It may be necessary to add columns that describe the groups you want to compare.  
+This may well be the same sample sheet used to generate the input matrix. For example, in RNA-seq this might be the same sample sheet, perhaps derived from [fetchngs](https://github.com/nf-core/fetchngs), that was input to the [RNA-seq workflow](https://github.com/nf-core/rnaseq). It may be necessary to add columns that describe the groups you want to compare.
 
 For example:
 
@@ -61,11 +61,11 @@ condition_control_treated_blockrep,condition,control,treated,replicate
 
 The necessary fields in order are:
 
- - id - an arbitrary identifier, will be used to name contrast-wise output files
- - variable - which column from the observations information will be used to define groups
- - reference - the base/ reference level for the comparison. If features have higer values in this group than target they will generate negative fold changes
- - target - the target/ non-reference level for the comparison. If features have higher values in this group than the reference they will generate positive fold changes
- - blocking - semicolon-delimited, any additional variables (also observation columns) that should be modelled alongside the contrast variable 
+- id - an arbitrary identifier, will be used to name contrast-wise output files
+- variable - which column from the observations information will be used to define groups
+- reference - the base/ reference level for the comparison. If features have higer values in this group than target they will generate negative fold changes
+- target - the target/ non-reference level for the comparison. If features have higher values in this group than the reference they will generate positive fold changes
+- blocking - semicolon-delimited, any additional variables (also observation columns) that should be modelled alongside the contrast variable
 
 The file can be tab or comma separated.
 
@@ -75,7 +75,7 @@ The file can be tab or comma separated.
 --gtf '[path to gtf file]'
 ```
 
-This is the format currently used to supply feature metdata. In the RNA-seq case it should match the GTF used in that workflow. 
+This is the format currently used to supply feature metdata. In the RNA-seq case it should match the GTF used in that workflow.
 
 ## Running the pipeline
 
