@@ -20,14 +20,14 @@ This directory contains the main reporting output of the workflow.
 
 ## Plots
 
-Stand-alone graphical outputs are placed in this directory. They may be useful in external reporting, publication preparation etc. 
+Stand-alone graphical outputs are placed in this directory. They may be useful in external reporting, publication preparation etc.
 
 <details markdown="1">
 <summary>Output files</summary>
 
 - `plots/`
-  - `qc/`: Directory containing quality control plots from initial processinge.g. DESeq2 
-  - `exploratory/`: Directory containing standalone plots from exploratory analysis    
+  - `qc/`: Directory containing quality control plots from initial processinge.g. DESeq2
+  - `exploratory/`: Directory containing standalone plots from exploratory analysis
   - `differential/`: Directory containing standalone plots from differential analysis
   - `gsea/`: Directory containing graphical outputs from GSEA (where enabled)
 
@@ -39,8 +39,8 @@ Stand-alone graphical outputs are placed in this directory. They may be useful i
 <summary>Output files</summary>
 
 - `tables/`
-  - `processed_counts/`: Directory containing processed counts from initial processing from e.g. DESeq2 
-  - `differential/`: Directory containing tables of differential statistics reported by differential modules such as DESeq2.   
+  - `processed_counts/`: Directory containing processed counts from initial processing from e.g. DESeq2
+  - `differential/`: Directory containing tables of differential statistics reported by differential modules such as DESeq2.
   - `gsea/`: Directory containing tables of differential gene set analyis from GSEA (where enabled)
 
 </details>
