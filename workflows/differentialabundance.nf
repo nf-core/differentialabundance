@@ -22,6 +22,7 @@ if (params.gsea_run) { gene_sets_file = file(params.gsea_gene_sets, checkIfExist
 report_file = file(params.report_file, checkIfExists: true)
 logo_file = file(params.logo_file, checkIfExists: true)
 css_file = file(params.css_file, checkIfExists: true)
+citations_file = file(params.citations_file, checkIfExists: true)
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -255,6 +256,7 @@ workflow DIFFERENTIALABUNDANCE {
 
     ch_logo_file = Channel.from(logo_file)
     ch_css_file = Channel.from(css_file)
+    ch_citations_file = Channel.from(citations_file)
 
     ch_report_input_files = ch_all_matrices
         .tail()
@@ -263,6 +265,7 @@ workflow DIFFERENTIALABUNDANCE {
         .combine(CUSTOM_DUMPSOFTWAREVERSIONS.out.yml)
         .combine(ch_logo_file)
         .combine(ch_css_file)
+        .combine(ch_citations_file)
         .combine(DESEQ2_DIFFERENTIAL.out.results.map{it[1]}.toList())
  
     if (params.gsea_run){ 
@@ -285,7 +288,8 @@ workflow DIFFERENTIALABUNDANCE {
             contrasts_file: it[5].name,
             versions_file: it[6].name,
             logo: it[7].name, 
-            css: it[8].name
+            css: it[8].name,
+            citations: it[9].name
         ] + params.findAll{ k,v -> k.matches(~/^(study|observations|features|filtering|exploratory|differential|deseq2|gsea).*/) }}
 
     // TO DO: add further params - e.g. for custom logo etc, and for analysis

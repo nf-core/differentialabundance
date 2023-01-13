@@ -99,6 +99,11 @@
                     "type": "string",
                     "default": "assets/nf-core_style.css",
                     "description": "CSS to use to style the output, in lieu of the default nf-core styling"
+                },
+                "citations_file": {
+                    "type": "string",
+                    "default": "CITATIONS.md",
+                    "description": "A markdown file containing citations to include in the fiinal report"
                 }
             }
         },
@@ -144,7 +149,7 @@
                     "description": "Type of feature we have, often 'gene'"
                 }
             },
-            "required": ["features_id_col", "features_type", "features_name_col"]
+            "required": ["features_id_col", "features_name_col", "features_type"]
         },
         "filtering": {
             "title": "Filtering",
