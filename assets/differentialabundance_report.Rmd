@@ -41,6 +41,8 @@ params:
   exploratory_clustering_method: null
   exploratory_cor_method: null
   exploratory_whisker_distance: null
+  exploratory_mad_threshold: null
+  exploratory_main_variable: null
   versions_file: null                                         # e.g 17_software_versions.yml
   logo: null
   css: null
@@ -240,10 +242,6 @@ informative_variables <- unique(c(contrasts$variable, chooseGroupingVariables(ob
 # Remove any informative variables that group observations the same way
 informative_variables <- informative_variables[ ! duplicated(lapply(structure(informative_variables, names= informative_variables), function(x) as.numeric(factor(observations[[x]], levels=unique(observations[[x]])))))]
 
-# Pick the first variable used in contrasts for coloring purposes
-main_grouping_variable <- contrasts$variable[1]
-groupColorScale <- makeColorScale(length(unique(observations[[main_grouping_variable]])), palette = "Set1")
-
 assay_files <- list(
   raw = file.path(params$input_dir, params$raw_matrix),
   normalised = file.path(params$input_dir,params$normalised_matrix),
@@ -262,6 +260,36 @@ assay_data <- lapply(assay_files, function(x) {
 
 # Now we can rename the observations rows using the title field
 rownames(observations) <- observations[[observations_name_col]]
+
+# Run PCA early so we can understand how important each variable is
+
+pca_datas <- lapply(names(assay_data), function(assay_type){
+  if (assay_type == 'variance_stabilised'){
+    compilePCAData(assay_data[[assay_type]])
+  }else{
+    compilePCAData(log2(assay_data[[assay_type]]+1))
+  }
+})
+names(pca_datas) <- names(assay_data)
+
+pca_vs_meta <- anova_pca_metadata(pca_datas[['variance_stabilised']]$coords, observations[,informative_variables], pca_datas[['variance_stabilised']]$percentVar)
+
+# Show the variable with the tightest PC associations first
+informative_variables <- rownames(pca_vs_meta)[order(pca_vs_meta[,1])]
+
+# Pick the variable used for coloring purposes etc
+if (params$exploratory_main_variable == 'contrasts'){
+  main_grouping_variable <- contrasts$variable[1]
+}else if (params$exploratory_main_variable == 'auto_pca'){
+  main_grouping_variable <- informative_variables[1]
+}else{
+  if (! params$exploratory_main_variable %in% colnames(observations)){
+    stop(paste('Invalid main variable specified: ', params$exploratory_main_variable))
+  }
+  main_grouping_variable <- params$exploratory_main_variable
+}
+
+groupColorScale <- makeColorScale(length(unique(observations[[main_grouping_variable]])), palette = "Set1")
 ```
 
 <!-- Read the differential results.
@@ -434,7 +462,7 @@ plotly_densityplot(
 ```
 
 ```{r, echo=FALSE, results='asis'}
-cat(paste0("\n### ", params$observations_type, " relationships\n"))
+cat(paste0("\n### ", ucfirst(params$observations_type), " relationships\n"))
 ```
 
 #### Principal components plots {.tabset}
@@ -442,20 +470,6 @@ cat(paste0("\n### ", params$observations_type, " relationships\n"))
 Principal components analysis was conducted based on the `r params$exploratory_n_features` most variable `r params$features_type`s. Each component was annotated with its percent contribution to variance. 
 
 ```{r, echo=FALSE, results='asis'}
-pca_datas <- lapply(names(assay_data), function(assay_type){
-  if (assay_type == 'variance_stabilised'){
-    compilePCAData(assay_data[[assay_type]])
-  }else{
-    compilePCAData(log2(assay_data[[assay_type]]+1))
-  }
-})
-names(pca_datas) <- names(assay_data)
-
-pca_vs_meta <- anova_pca_metadata(pca_datas[['variance_stabilised']]$coords, observations[,informative_variables], pca_datas[['variance_stabilised']]$percentVar)
-
-# Show the variable with the tightest PC associations first
-informative_variables <- rownames(pca_vs_meta)[order(pca_vs_meta[,1])]
-
 for (assay_type in rev(names(assay_data))){
   
   pca_data <- pca_datas[[assay_type]]
@@ -576,6 +590,48 @@ p <- clusteringDendrogram(
 # Defaults in shinyngs make the text in this plot a bit big for the report, so
 # scale it down a bit
 print(p, vp=grid::viewport(gp=grid::gpar(cex=0.7)))
+
+```
+
+### Outlier detection {.tabset}
+
+Outlier detection based on [median absolute deviation](https://wiki.arrayserver.com/wiki/index.php?title=CorrelationQC.pdf) was undertaken, the outlier scoring is plotted below.
+
+```{r, echo=FALSE, results='asis', warning=FALSE}
+
+for (iv in informative_variables){
+  cat(paste("\n####", iv, "\n"))
+  
+  plotdata <-
+  madScore(
+    matrix = assay_data[['variance_stabilised']],
+    sample_sheet = observations,
+    groupby = iv
+  )
+
+  mad_plot_args <- list(
+    x = plotdata$group,
+    y = plotdata$mad,
+    color = plotdata$outlier,
+    hline_thresholds = c("Outlier threshold" = params$exploratory_mad_threshold),
+    palette = makeColorScale(2, palette = "Set1"),
+    legend_title = "Outlier status",
+    labels = rownames(plotdata),
+    show_labels = TRUE,
+    xlab = "Sample group",
+    ylab = "MAD score"
+  )
+
+  print(htmltools::tagList(do.call("plotly_scatterplot", mad_plot_args)))
+
+  outliers <- rownames(plotdata)[plotdata$outlier]
+
+  if (length(outliers) == 0){
+    cat(paste0("No outlying samples were detected in groups defined by ", iv,".\n"))
+  }else{
+    cat(paste0(length(outliers), ' possible outliers were detected in groups defined by ', iv ,': ', paste(outliers, collapse=', '), "\n"))
+  }
+}
 
 ```
 
