@@ -492,7 +492,8 @@
                 },
                 "gsea_gene_sets": {
                     "type": "string",
-                    "default": "None"
+                    "default": "None",
+                    "description": "Gene sets in GMT or GMX-format"
                 }
             },
             "fa_icon": "fas fa-layer-group"
