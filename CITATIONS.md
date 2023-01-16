@@ -20,9 +20,9 @@
 
   > R Core Team (2017). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria.
 
-- [shinyngs](https://github.com/pinin4fjords/shinyngs) - This R Package is used to provide many of the wrapper functions used for generating statistics and plots.
+- [shinyngs](https://github.com/pinin4fjords/shinyngs)
 
-  > shinyngs. Computer software. Vers. 1.4.2. Jonathan Manning, Dec. 2022. Web.
+  > Jonathan R Manning. Shiny apps for NGS etc based on reusable components created using Shiny modules. Computer software. Vers. 1.5.3. Jonathan Manning, Dec. 2022. Web.
 
 - [DESeq2](https://pubmed.ncbi.nlm.nih.gov/25516281/)
 
