@@ -205,10 +205,27 @@
                     "type": "number",
                     "default": 1.5,
                     "description": "Length of the whiskers in boxplots as multiple of IQR. Defaults to 1.5."
+                },
+                "exploratory_mad_threshold": {
+                    "type": "integer",
+                    "default": -5,
+                    "help_text": "MAD = median absolute deviation. A threshold on this value is used to define observations (samples) as outliers, or not, in exploratory plots. Based on the definition at https://wiki.arrayserver.com/wiki/index.php?title=CorrelationQC.pdf. ",
+                    "description": "Threshold on MAD score for outlier identification"
+                },
+                "exploratory_main_variable": {
+                    "type": "string",
+                    "default": "auto_pca",
+                    "description": "How should the main grouping variable be selected? 'auto_pca', 'contrasts', or a valid column name from the observations table.",
+                    "help_text": "Some plots are only generated once, with a single sample grouping, this option defines how that sample grouping is selected. It should be 'auto_pca' (variable selected from the sample sheet with the most association with the first principal component), 'contrasts' (pick the variable associated with the first contrast), or a value specifying a specific column in the observations."
                 }
             },
             "fa_icon": "fas fa-chart-area",
-            "required": ["exploratory_clustering_method", "exploratory_cor_method", "exploratory_n_features"]
+            "required": [
+                "exploratory_clustering_method",
+                "exploratory_cor_method",
+                "exploratory_n_features",
+                "exploratory_main_variable"
+            ]
         },
         "differential_analysis": {
             "title": "Differential analysis",
