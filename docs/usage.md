@@ -12,7 +12,7 @@ With the above in mind, running this workflow requires:
 
 - a matrix of quantifications with observations by column and features by row
 - a description of the observations such as a sample sheet from RNA-seq analysis
-- a description of the features, for our initial RNA-seq applicaiton this is simply the GTF file from which gene annotations can be derived
+- a description of the features, for our initial RNA-seq application this is simply the GTF file from which gene annotations can be derived
 - a specification of how the matrix should be split, and how the resulting groups should be compared
 
 ## Observations (samplesheet) input
