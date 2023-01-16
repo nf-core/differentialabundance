@@ -2,11 +2,9 @@
 
 ## Introduction
 
-This document describes the output produced by the pipeline. Most of the plots are taken from a report produced using RMarkdown, which summarises results at the end of the pipeline.
+This document describes the output produced by the pipeline. The directories listed below will be created in the results directory after the pipeline has finished. All paths are relative to the top-level results directory.
 
-The directories listed below will be created in the results directory after the pipeline has finished. All paths are relative to the top-level results directory.
-
-## report
+## Report
 
 This directory contains the main reporting output of the workflow.
 
