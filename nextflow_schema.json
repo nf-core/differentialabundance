@@ -73,11 +73,6 @@
                     "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
                     "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
                 },
-                "multiqc_title": {
-                    "type": "string",
-                    "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
-                    "fa_icon": "fas fa-file-signature"
-                },
                 "control_features": {
                     "type": "string",
                     "description": "A text file listing technical features (e.g. spikes)",
@@ -104,6 +99,11 @@
                     "type": "string",
                     "default": "assets/nf-core_style.css",
                     "description": "CSS to use to style the output, in lieu of the default nf-core styling"
+                },
+                "citations_file": {
+                    "type": "string",
+                    "default": "CITATIONS.md",
+                    "description": "A markdown file containing citations to include in the fiinal report"
                 }
             }
         },
@@ -149,7 +149,7 @@
                     "description": "Type of feature we have, often 'gene'"
                 }
             },
-            "required": ["features_id_col", "features_type", "features_name_col"]
+            "required": ["features_id_col", "features_name_col", "features_type"]
         },
         "filtering": {
             "title": "Filtering",
@@ -492,7 +492,8 @@
                 },
                 "gsea_gene_sets": {
                     "type": "string",
-                    "default": "None"
+                    "default": "None",
+                    "description": "Gene sets in GMT or GMX-format"
                 }
             },
             "fa_icon": "fas fa-layer-group"
@@ -655,13 +656,6 @@
                     "description": "Send plain-text email instead of HTML.",
                     "fa_icon": "fas fa-remove-format"
                 },
-                "max_multiqc_email_size": {
-                    "type": "string",
-                    "description": "File size limit when attaching MultiQC reports to summary emails.",
-                    "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
-                    "default": "25.MB",
-                    "fa_icon": "fas fa-file-upload"
-                },
                 "monochrome_logs": {
                     "type": "boolean",
                     "description": "Do not use coloured log outputs.",
@@ -673,21 +667,6 @@
                     "fa_icon": "fas fa-people-group",
                     "help_text": "Incoming hook URL for messaging service. Currently, MS Teams and Slack are supported.",
                     "hidden": true
-                },
-                "multiqc_config": {
-                    "type": "string",
-                    "description": "Custom config file to supply to MultiQC.",
-                    "fa_icon": "fas fa-cog"
-                },
-                "multiqc_logo": {
-                    "type": "string",
-                    "description": "Custom logo file to supply to MultiQC. File name must also be set in the MultiQC config file",
-                    "fa_icon": "fas fa-image"
-                },
-                "multiqc_methods_description": {
-                    "type": "string",
-                    "description": "Custom MultiQC yaml file containing HTML including a methods description.",
-                    "fa_icon": "fas fa-cog"
                 },
                 "tracedir": {
                     "type": "string",

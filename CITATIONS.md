@@ -10,10 +10,47 @@
 
 ## Pipeline tools
 
-- [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+- [GSEA](https://www.gsea-msigdb.org/gsea/index.jsp)
 
-- [MultiQC](https://pubmed.ncbi.nlm.nih.gov/27312411/)
-  > Ewels P, Magnusson M, Lundin S, Käller M. MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics. 2016 Oct 1;32(19):3047-8. doi: 10.1093/bioinformatics/btw354. Epub 2016 Jun 16. PubMed PMID: 27312411; PubMed Central PMCID: PMC5039924.
+  > Subramanian A, Tamayo P, Mootha VK, et al. Gene set enrichment analysis: a knowledge-based approach for interpreting genome-wide expression profiles. Proc Natl Acad Sci U S A. 2005;102(43):15545-15550.
+
+## R packages
+
+- [R](https://www.R-project.org/)
+
+  > R Core Team (2017). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria.
+
+- [shinyngs](https://github.com/pinin4fjords/shinyngs)
+
+  > Jonathan R Manning. Shiny apps for NGS etc based on reusable components created using Shiny modules. Computer software. Vers. 1.5.3. Jonathan Manning, Dec. 2022. Web.
+
+- [DESeq2](https://pubmed.ncbi.nlm.nih.gov/25516281/)
+
+  > Love MI, Huber W, Anders S. Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. Genome Biol. 2014;15(12):550. PubMed PMID: 25516281; PubMed Central PMCID: PMC4302049.
+
+- [ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html)
+
+  > H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016.
+
+- [plotly](https://plotly.com/r/)
+
+  > C. Sievert. Interactive Web-Based Data Visualization with R, plotly, and shiny. Chapman and Hall/CRC Florida, 2020.
+
+- [optparse](https://CRAN.R-project.org/package=optparse)
+
+  > Trevor L Davis (2018). optparse: Command Line Option Parser.
+
+- [RColorBrewer](https://CRAN.R-project.org/package=RColorBrewer)
+
+  > Erich Neuwirth (2014). RColorBrewer: ColorBrewer Palettes.
+
+- [SummarizedExperiment](https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html)
+
+  > Morgan M, Obenchain V, Hester J and Pagès H (2020). SummarizedExperiment: SummarizedExperiment container.
+
+- [RMarkdown](https://rmarkdown.rstudio.com)
+
+  > JJ Allaire and Yihui Xie and Jonathan McPherson and Javier Luraschi and Kevin Ushey and Aron Atkins and Hadley Wickham and Joe Cheng and Winston Chang and Richard Iannone (2022). rmarkdown: Dynamic Documents for R.
 
 ## Software packaging/containerisation tools
 
