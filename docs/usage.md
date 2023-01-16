@@ -75,7 +75,7 @@ The file can be tab or comma separated.
 --gtf '[path to gtf file]'
 ```
 
-This is the format currently used to supply feature metdata. In the RNA-seq case it should match the GTF used in that workflow.
+This is the format currently used to supply feature metadata. In the RNA-seq case it should match the GTF used in that workflow.
 
 ## Running the pipeline
 
