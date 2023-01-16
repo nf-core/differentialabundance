@@ -435,7 +435,7 @@ The following plots show the abundance value distributions of input matrices. A 
 
 ```{r, echo=FALSE, results='asis', fig.height=8}
 
-p <- ggplot_boxplot(
+ggplot_boxplot(
   assay_data, 
   experiment = observations, 
   colorby = main_grouping_variable, 
@@ -444,7 +444,6 @@ p <- ggplot_boxplot(
   whisker_distance = params$exploratory_whisker_distance,
   base_size=8
 )
-p
 ```
 
 Whiskers in the above boxplots show `r params$exploratory_whisker_distance` times the inter-quartile range.
@@ -599,7 +598,7 @@ Outlier detection based on [median absolute deviation](https://wiki.arrayserver.
 
 ```{r, echo=FALSE, results='asis', warning=FALSE}
 
-for (iv in informative_variables){
+lapply(informative_variables, function(iv){
   cat(paste("\n####", iv, "\n"))
   
   plotdata <-
@@ -631,7 +630,7 @@ for (iv in informative_variables){
   }else{
     cat(paste0(length(outliers), ' possible outliers were detected in groups defined by ', iv ,': ', paste(outliers, collapse=', '), "\n"))
   }
-}
+})
 
 ```
 

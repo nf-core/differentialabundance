@@ -215,7 +215,7 @@
                 "exploratory_main_variable": {
                     "type": "string",
                     "default": "auto_pca",
-                    "description": "How should the main grouping variable be selected?",
+                    "description": "How should the main grouping variable be selected? 'auto_pca', 'contrasts', or a valid column from observations",
                     "help_text": "Some plots are only generated once, with a single sample grouping, this option defines how that happens. It should be 'auto_pca' (variable selected from the sample sheet with most association with the first principal component), 'contrasts' (pick the variable associated with the first contrast), or a value specifying a specific column in the observations."
                 }
             },
