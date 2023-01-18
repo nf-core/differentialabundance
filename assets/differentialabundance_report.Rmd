@@ -115,7 +115,7 @@ datatable(NULL)
 
 ```{r, echo=FALSE}
 
-# this function will be available via shinyngs in a release soonm but we can use it here for now
+# this function will be available via shinyngs in a release soon but we can use it here for now
 anova_pca_metadata <- function(pca_coords, pcameta, fraction_explained){
   # Use 10 components or however many fewer is produced by the PCA
   
@@ -296,10 +296,11 @@ groupColorScale <- makeColorScale(length(unique(observations[[main_grouping_vari
 <!-- Read the differential results.
 NOTE: differential results files are expected to have the pattern:
 
-<variable>-<reference>-<target>-<blocking><differential_file_suffix>
+<variable>-<reference>-<target>-<blocking><differential_file_suffix>, e.g.
+treatment-mCherry-hND6-batcheffect.deseq2.results.tsv
 
 ... where variable, reference, target and blocking come from the contrasts file
-and the suffix is defined in parameters.
+(with blocking being optional) and the suffix is defined in parameters.
 -->
 
 ```{r, echo=FALSE}
@@ -834,7 +835,7 @@ print( htmltools::tagList(datatable(params_table, caption = "All parameters", ro
 
 ## Software versions
 
-**Note:** For a more detailed accounting of the software and commands used (including containers), consult the, execution report produced as part of the 'pipeline info' for this workflow.
+**Note:** For a more detailed accounting of the software and commands used (including containers), consult the execution report produced as part of the 'pipeline info' for this workflow.
 
 ```{r, echo=FALSE, results='asis'}
 versions_table <- data.frame(do.call(rbind, strsplit(names(versions), split = '\\.')), unlist(versions))
