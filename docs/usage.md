@@ -15,6 +15,8 @@ With the above in mind, running this workflow requires:
 - a description of the features, for our initial RNA-seq application this is simply the GTF file from which gene annotations can be derived
 - a specification of how the matrix should be split, and how the resulting groups should be compared
 
+Currently, this limits the usage of differentialabundance to genomics applications where a GTF annotation file is available. Future developments of the pipeline will encompass changes that enable users to use the pipeline on more generic cases.
+
 ## Observations (samplesheet) input
 
 ```bash
