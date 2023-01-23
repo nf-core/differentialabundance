@@ -301,20 +301,20 @@
                 "deseq2_test": {
                     "type": "string",
                     "default": "Wald",
-                    "description": "'test' parameter passed to DESeq()",
+                    "description": "`test` parameter passed to DESeq()",
                     "help_text": "either \"Wald\" or \"LRT\", which will then use either Wald significance tests (defined by nbinomWaldTest), or the likelihood ratio test on the difference in deviance between a full and reduced model formula (defined by nbinomLRT)",
                     "enum": ["Wald", "LRT"]
                 },
                 "deseq2_fit_type": {
                     "type": "string",
                     "default": "parametric",
-                    "description": "'fitType' parameter passed to DESeq()",
+                    "description": "`fitType` parameter passed to DESeq()",
                     "help_text": "either \"parametric\", \"local\", \"mean\", or \"glmGamPoi\" for the type of fitting of dispersions to the mean intensity. See estimateDispersions for description."
                 },
                 "deseq2_sf_type": {
                     "type": "string",
                     "default": "ratio",
-                    "description": "'sfType' parameter passed to DESeq()",
+                    "description": "`sfType` parameter passed to DESeq()",
                     "help_text": "either \"ratio\", \"poscounts\", or \"iterate\" for the type of size factor estimation. See estimateSizeFactors for description.",
                     "enum": ["ratio", "poscounts", "iterate"]
                 },
@@ -326,14 +326,14 @@
                 },
                 "deseq2_use_t": {
                     "type": "boolean",
-                    "description": "'useT' parameter passed to DESeq2",
+                    "description": "`useT` parameter passed to DESeq2",
                     "help_text": "logical, passed to nbinomWaldTest, default is FALSE, where Wald statistics are assumed to follow a standard Normal",
                     "default": false
                 },
                 "deseq2_independent_filtering": {
                     "type": "boolean",
                     "default": true,
-                    "description": "'independentFiltering' parameter passed to results()",
+                    "description": "`independentFiltering` parameter passed to results()",
                     "help_text": "logical, whether independent filtering should be applied automatically"
                 },
                 "deseq2_lfc_threshold": {
@@ -351,19 +351,19 @@
                 "deseq2_p_adjust_method": {
                     "type": "string",
                     "default": "BH",
-                    "description": "'pAdjustMethod' parameter passed to results()",
+                    "description": "`pAdjustMethod` parameter passed to results()",
                     "help_text": "the method to use for adjusting p-values, see help in R for the p.adjust() function (via ?p.adjust). At time of writing available values were \"holm\", \"hochberg\", \"hommel\", \"bonferroni\", \"BH\", \"BY\", \"fdr\", \"none\"."
                 },
                 "deseq2_alpha": {
                     "type": "number",
                     "default": 0.1,
-                    "description": "'alpha' parameter passed to results()",
+                    "description": "`alpha` parameter passed to results()",
                     "help_text": "the significance cutoff used for optimizing the independent filtering (by default 0.1). If the adjusted p-value cutoff (FDR) will be a value other than 0.1, alpha should be set to that value."
                 },
                 "deseq2_minmu": {
                     "type": "number",
                     "default": 0.5,
-                    "description": "'minmu' parameter passed to results()",
+                    "description": "`minmu` parameter passed to results()",
                     "help_text": "lower bound on the estimated count (used when calculating contrasts)"
                 },
                 "deseq2_vs_method": {
@@ -394,7 +394,7 @@
                 "deseq2_vst_nsub": {
                     "type": "integer",
                     "default": 1000,
-                    "description": "'nsub' parameter passed to vst()",
+                    "description": "`nsub` parameter passed to vst()",
                     "help_text": "the number of genes to subset to (default 1000)"
                 }
             }
