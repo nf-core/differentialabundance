@@ -9,7 +9,7 @@ Initial release of nf-core/differentialabundance, created with the [nf-core](htt
 
 ### `Added
 
-- [[#1](https://github.com/nf-core/differentialabundance/issues/3)] - Set up in initial modules, define and validate workflow inputs
+- [[#1](https://github.com/nf-core/differentialabundance/issues/3)] - Set up initial modules, define and validate workflow inputs
 - [[#4](https://github.com/nf-core/differentialabundance/issues/4)] - Add input checking
 - [[#5](https://github.com/nf-core/differentialabundance/issues/5)] - Add differential analysis
 - [[#6](https://github.com/nf-core/differentialabundance/issues/6)] - Add exploratory plotting

@@ -172,7 +172,7 @@
                 },
                 "filtering_min_proportion": {
                     "type": "number",
-                    "description": "A minimum (between 0 and 1) of observations that must pass the threshold. Overrides  minimum_samples"
+                    "description": "A minimum proportion of observations, given as a number between 0 and 1, that must pass the threshold. Overrides  minimum_samples"
                 },
                 "filtering_grouping_var": {
                     "type": "string",
@@ -388,7 +388,7 @@
                 "deseq2_vs_blind": {
                     "type": "boolean",
                     "default": true,
-                    "description": "blind parameter for rlog() and/ or vst()",
+                    "description": "`blind` parameter for rlog() and/ or vst()",
                     "help_text": "logical, whether to blind the transformation to the experimental design "
                 },
                 "deseq2_vst_nsub": {
