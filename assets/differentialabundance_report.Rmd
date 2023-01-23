@@ -375,7 +375,7 @@ differential_table <- do.call(rbind, lapply(sig_differential, function(x) lapply
 
 # Abstract
 
-This report summarises differential `r params$features_type` analysis as performed by the nf-core differential abundance pipeline. 
+This report summarises differential `r params$features_type` analysis as performed by the nf-core/differentialabundance pipeline. 
 
 # Data
 
@@ -424,11 +424,11 @@ print( htmltools::tagList(datatable(contrasts_to_print, caption = paste0("Table 
 
 Input was a matrix of `r nrow(assay_data$raw)` `r params$features_type`s for `r ncol(assay_data$raw)` `r params$observations_type`s`r ifelse(nrow(assay_data$normalised) < nrow(assay_data$raw), paste0(', reduced to ', nrow(assay_data$normalised), ' ', params$features_type, 's after filtering for low abundance'), '')`.
 
-## Exploratory
+## Exploratory analysis
 
 ### Abundance value distributions
 
-The following plots show the abundance value distributions of input matrices. A log(2) transform is applied where not already performed.
+The following plots show the abundance value distributions of input matrices. A log2 transformation is applied where not already performed.
 
 ```{r, include=FALSE}
 
@@ -636,7 +636,7 @@ lapply(informative_variables, function(iv){
 
 ```
 
-## Differential
+## Differential analysis
 
 ### Differential `r params$features_type` counts
 
@@ -792,13 +792,13 @@ if (is.null(params$filtering_grouping_var)){
 cat(filtering_string)
 ```
 
-## Exploratory 
+## Exploratory analysis
 
 ```{r, echo=FALSE, results='asis'}
 make_params_table('exploratory analysis', 'exploratory_', remove_pattern = TRUE)
 ```
 
-## Differential
+## Differential analysis
 
 ```{r, echo=FALSE, results='asis'}
 if (params$study_type == 'rnaseq'){
