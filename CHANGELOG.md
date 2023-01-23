@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Initial release of nf-core/differentialabundance, created with the [nf-core](https://nf-co.re/) template.
 
-### `Added
+### `Added`
 
 - [[#1](https://github.com/nf-core/differentialabundance/issues/3)] - Set up initial modules, define and validate workflow inputs ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#4](https://github.com/nf-core/differentialabundance/issues/4)] - Add input checking ([@pinin4fjords](https://github.com/pinin4fjords), , review by [@WackerO](https://github.com/WackerO))
