@@ -23,7 +23,6 @@ Initial release of nf-core/differentialabundance, created with the [nf-core](htt
 - [[#38](https://github.com/nf-core/differentialabundance/issues/38)] - Complete full-size test data setup ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#41](https://github.com/nf-core/differentialabundance/issues/41)] - update citations ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 
-
 ### `Fixed`
 
 ### `Dependencies`
