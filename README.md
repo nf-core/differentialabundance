@@ -72,8 +72,8 @@ We thank the many members of the nf-core community who assisted with this pipeli
 - [@SPPearce](https://github.com/SPPearce),
 - [@nvnieuwk](https://github.com/nvnieuwk),
 - [@jfy133](https://github.com/jfy133),
-- [@mahesh-panchal](https://github.com/mahesh-panchal)
-- [@mashehu](https://github.com/mashehu)
+- [@mahesh-panchal](https://github.com/mahesh-panchal),
+- [@mashehu](https://github.com/mashehu),
 - [@apeltzer](https://github.com/apeltzer)
 
 ## Contributions and Support
