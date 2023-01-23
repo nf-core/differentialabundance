@@ -43,7 +43,7 @@
                 "matrix": {
                     "type": "string",
                     "description": "TSV-format abundance matrix",
-                    "help_text": "For example an expression matrix output from the nf-core RNA-seq workflow. There must be a column in this matrix for every row in the input sample sheet.",
+                    "help_text": "For example an expression matrix output from the nf-core/rnaseq workflow. There must be a column in this matrix for every row in the input sample sheet.",
                     "format": "file-path",
                     "mimetype": "text/tab-separated-values",
                     "pattern": "^\\S+\\.(tsv|csv|txt)$"
@@ -64,7 +64,8 @@
                     "type": "string",
                     "default": "rnaseq",
                     "description": "A string identifying the technology used to produce the data",
-                    "help_text": "Currently only 'rnaseq' may be specified. In future options like 'affy_array' are possible."
+                    "help_text": "Currently only 'rnaseq' may be specified. In future options like 'affy_array' are possible.",
+                    "enum": ["rnaseq"]
                 },
                 "email": {
                     "type": "string",
@@ -76,7 +77,9 @@
                 "control_features": {
                     "type": "string",
                     "description": "A text file listing technical features (e.g. spikes)",
-                    "help_text": "One feature per row. Note that by default these features will just be stripped from matrices prior to internal processing. To actually use them in e.g. normalisation, set --sizefactors_from_controls"
+                    "help_text": "One feature per row. Note that by default these features will just be stripped from matrices prior to internal processing. To actually use them in e.g. normalisation, set `--sizefactors_from_controls`",
+                    "format": "file-path",
+                    "mimetype": "text/plain"
                 },
                 "sizefactors_from_controls": {
                     "type": "boolean",
@@ -86,7 +89,6 @@
                 "report_file": {
                     "type": "string",
                     "description": "Rmd report template from which to create the pipeline report",
-                    "help_text": "Rmd report template from which to create the pipeline report",
                     "format": "file-path",
                     "pattern": "^\\S+\\.Rmd$"
                 },
@@ -121,7 +123,8 @@
                 "observations_type": {
                     "type": "string",
                     "default": "sample",
-                    "description": "Type of observation we have- often 'sample'"
+                    "description": "Type of observation",
+                    "help_text": "This is used in reporting to refer to the observations. Frequently this is 'sample' (e.g. in RNA-seq experiments), but it may also be desirable to refer to 'pool', or 'individual'."
                 }
             },
             "required": ["observations_id_col", "observations_type"]
@@ -169,11 +172,11 @@
                 },
                 "filtering_min_proportion": {
                     "type": "number",
-                    "description": "A minimum proportion of observations that must pass the threshold. Overrides  minimum_samples"
+                    "description": "A minimum proportion of observations, given as a number between 0 and 1, that must pass the threshold. Overrides  minimum_samples"
                 },
                 "filtering_grouping_var": {
                     "type": "string",
-                    "help_text": "The variable can be used to define groups and derive a minimum group size upon which to base minimum observation numbers. The rationale for this is to allow retention of features that might be present in only one group. Note that this is consciously NOT filtering with an explicit awareness of groups (\"feature must be present in all samples of group A\"), since this is know to create biases towards discovery of differential features.",
+                    "help_text": "The variable can be used to define groups and derive a minimum group size upon which to base minimum observation numbers. The rationale for this is to allow retention of features that might be present in only one group. Note that this is consciously NOT filtering with an explicit awareness of groups (\"feature must be present in all samples of group A\"), since this is known to create biases towards discovery of differential features.",
                     "description": "An optional grouping variable to be used to calculate a min_samples value"
                 }
             },
@@ -298,73 +301,77 @@
                 "deseq2_test": {
                     "type": "string",
                     "default": "Wald",
-                    "description": "'test' param passed to DESeq()",
-                    "help_text": "either \"Wald\" or \"LRT\", which will then use either Wald significance tests (defined by nbinomWaldTest), or the likelihood ratio test on the difference in deviance between a full and reduced model formula (defined by nbinomLRT)"
+                    "description": "`test` parameter passed to DESeq()",
+                    "help_text": "either \"Wald\" or \"LRT\", which will then use either Wald significance tests (defined by nbinomWaldTest), or the likelihood ratio test on the difference in deviance between a full and reduced model formula (defined by nbinomLRT)",
+                    "enum": ["Wald", "LRT"]
                 },
                 "deseq2_fit_type": {
                     "type": "string",
                     "default": "parametric",
-                    "description": "'fitType' param passed to DESeq()",
-                    "help_text": "either \"parametric\", \"local\", \"mean\", or \"glmGamPoi\" for the type of fitting of dispersions to the mean intensity. See estimateDispersions for description."
+                    "description": "`fitType` parameter passed to DESeq()",
+                    "help_text": "either \"parametric\", \"local\", \"mean\", or \"glmGamPoi\" for the type of fitting of dispersions to the mean intensity. See estimateDispersions for description.",
+                    "enum": ["parametric", "local", "mean", "glmGamPoi"]
                 },
                 "deseq2_sf_type": {
                     "type": "string",
                     "default": "ratio",
-                    "description": "'sfType' param passed to DESeq()",
-                    "help_text": "either \"ratio\", \"poscounts\", or \"iterate\" for the type of size factor estimation. See estimateSizeFactors for description."
+                    "description": "`sfType` parameter passed to DESeq()",
+                    "help_text": "either \"ratio\", \"poscounts\", or \"iterate\" for the type of size factor estimation. See estimateSizeFactors for description.",
+                    "enum": ["ratio", "poscounts", "iterate"]
                 },
                 "deseq2_min_replicates_for_replace": {
                     "type": "integer",
                     "default": 7,
                     "help_text": "the minimum number of replicates required in order to use replaceOutliers on a sample. If there are samples with so many replicates, the model will be refit after these replacing outliers, flagged by Cook's distance. Set to Inf in order to never replace outliers. It set to Inf for fitType=\"glmGamPoi\".",
-                    "description": "'minReplicatesForReplace' param passed to DESeq()"
+                    "description": "'minReplicatesForReplace' parameter passed to DESeq()"
                 },
                 "deseq2_use_t": {
                     "type": "boolean",
-                    "description": "'useT' param passed to DESeq2",
+                    "description": "`useT` parameter passed to DESeq2",
                     "help_text": "logical, passed to nbinomWaldTest, default is FALSE, where Wald statistics are assumed to follow a standard Normal"
                 },
                 "deseq2_independent_filtering": {
                     "type": "boolean",
                     "default": true,
-                    "description": "'independentFiltering' param passed to results()",
+                    "description": "`independentFiltering` parameter passed to results()",
                     "help_text": "logical, whether independent filtering should be applied automatically"
                 },
                 "deseq2_lfc_threshold": {
                     "type": "integer",
                     "default": 0,
-                    "description": "'lfcThreshold' param passed to results()",
+                    "description": "`lfcThreshold` parameter passed to results()",
                     "help_text": "a non-negative value which specifies a log2 fold change threshold. The default value is 0, corresponding to a test that the log2 fold changes are equal to zero. The user can specify the alternative hypothesis using the altHypothesis argument, which defaults to testing for log2 fold changes greater in absolute value than a given threshold. If lfcThreshold is specified, the results are for Wald tests, and LRT p-values will be overwritten."
                 },
                 "deseq2_alt_hypothesis": {
                     "type": "string",
                     "default": "greaterAbs",
-                    "description": "'altHypothesis' param passed to results()",
+                    "description": "`altHypothesis` parameter passed to results()",
                     "help_text": "character which specifies the alternative hypothesis, i.e. those values of log2 fold change which the user is interested in finding. The complement of this set of values is the null hypothesis which will be tested. If the log2 fold change specified by 'name' or by contrast' is written as beta , then the possible values for 'altHypothesis' represent the following alternate hypotheses: 1) greaterAbs: |beta| > lfcThreshold , and p-values are two-tailed 2) lessAbs: |beta| < lfcThreshold , p-values are the maximum of the upper and lower tests. The Wald statistic given is positive, an SE-scaled distance from the closest boundary 3) greater: beta > lfcThreshold 4) less: beta < -lfcThreshold"
                 },
                 "deseq2_p_adjust_method": {
                     "type": "string",
                     "default": "BH",
-                    "description": "'pAdjustMethod' param passed to results()",
+                    "description": "`pAdjustMethod` parameter passed to results()",
                     "help_text": "the method to use for adjusting p-values, see help in R for the p.adjust() function (via ?p.adjust). At time of writing available values were \"holm\", \"hochberg\", \"hommel\", \"bonferroni\", \"BH\", \"BY\", \"fdr\", \"none\"."
                 },
                 "deseq2_alpha": {
                     "type": "number",
                     "default": 0.1,
-                    "description": "'alpha' param passed to results()",
+                    "description": "`alpha` parameter passed to results()",
                     "help_text": "the significance cutoff used for optimizing the independent filtering (by default 0.1). If the adjusted p-value cutoff (FDR) will be a value other than 0.1, alpha should be set to that value."
                 },
                 "deseq2_minmu": {
                     "type": "number",
                     "default": 0.5,
-                    "description": "'minmu' param passed to results()",
+                    "description": "`minmu` parameter passed to results()",
                     "help_text": "lower bound on the estimated count (used when calculating contrasts)"
                 },
                 "deseq2_vs_method": {
                     "type": "string",
                     "default": "vst",
                     "description": "variance stabilisation method to use when making a variance stabilised matrix",
-                    "help_text": "'rlog', 'vst' or 'rlog,vst'"
+                    "help_text": "'rlog', 'vst' or 'rlog,vst'",
+                    "enum": ["rlog", "vst", "rlog,vst"]
                 },
                 "deseq2_shrink_lfc": {
                     "type": "boolean",
@@ -381,13 +388,13 @@
                 "deseq2_vs_blind": {
                     "type": "boolean",
                     "default": true,
-                    "description": "blind param for rlog() and/ or vst()",
+                    "description": "`blind` parameter for rlog() and/ or vst()",
                     "help_text": "logical, whether to blind the transformation to the experimental design "
                 },
                 "deseq2_vst_nsub": {
                     "type": "integer",
                     "default": 1000,
-                    "description": "'nsub' param passed to vst()",
+                    "description": "`nsub` parameter passed to vst()",
                     "help_text": "the number of genes to subset to (default 1000)"
                 }
             }

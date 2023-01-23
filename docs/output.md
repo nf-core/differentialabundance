@@ -24,10 +24,19 @@ Stand-alone graphical outputs are placed in this directory. They may be useful i
 <summary>Output files</summary>
 
 - `plots/`
-  - `qc/`: Directory containing quality control plots from initial processinge.g. DESeq2
-  - `exploratory/`: Directory containing standalone plots from exploratory analysis
-  - `differential/`: Directory containing standalone plots from differential analysis
-  - `gsea/`: Directory containing graphical outputs from GSEA (where enabled)
+  - `qc/`: Directory containing quality control plots from initial processing e.g. DESeq2
+    - `*.png`
+  - `exploratory/`: Directory containing standalone plots from exploratory analysis. Plots are stored in directories named for the main coloring variable used.
+    - `[coloring variable]/png/boxplot.png`: Boxplot visualisation of abundance distributions
+    - `[coloring variable]/png/density.png`: Density visualisation of abundance distributions
+    - `[coloring variable]/png/pca2d.png`: 2-dimensional PCA plot
+    - `[coloring variable]/png/pca3d.png`: 3-dimensional PCA plot
+    - `[coloring variable]/png/sample_dendrogram.png`: A sample clustering dendrogram
+    - `[coloring variable]/png/mad_correlation.png`: Outlier prediction plots using median absolute deviation (MAD)
+  - `differential/`: Directory containing standalone plots from differential analysis. Plots are stored in directories named for the associated contrast.
+    - `[contrast]/png/volcano.png`: Volcano plots of -log(10) p value agains log(2) fold changes
+  - `gsea/`: Directory containing graphical outputs from GSEA (where enabled). Plots are stored in directories named for the associated contrast.
+    - `[contrast]/png/[gsea_plot_type].png`
 
 </details>
 
@@ -38,8 +47,12 @@ Stand-alone graphical outputs are placed in this directory. They may be useful i
 
 - `tables/`
   - `processed_counts/`: Directory containing processed counts from initial processing from e.g. DESeq2
-  - `differential/`: Directory containing tables of differential statistics reported by differential modules such as DESeq2.
+    - `[contrast_name].normalised_counts.tsv`: Normalised counts table
+    - `[contrast_name].vst.tsv`: Normalised counts table with a variance-stabilising transform
+  - `differential/`: Directory containing tables of differential statistics reported by differential modules such as DESeq2
+    - `[contrast_name].deseq2.results.tsv`: Results of DESeq2 differential analyis (RNA-seq)
   - `gsea/`: Directory containing tables of differential gene set analyis from GSEA (where enabled)
+    - `[contrast]/[contrast].gsea_report_for_[condition].tsv`: A GSEA report table for each side of each contrast
 
 </details>
 

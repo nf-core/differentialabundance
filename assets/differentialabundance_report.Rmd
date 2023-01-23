@@ -17,8 +17,6 @@ params:
   input_dir: NULL
   artifact_dir: NULL
   cpus: 1 
-  workflow_version: v0.0.0
-  workflow_commit: 0
   study_type: NULL
   study_name: NULL
   observations_type: NULL
@@ -129,35 +127,37 @@ anova_pca_metadata <- function(pca_coords, pcameta, fraction_explained){
   
   pcameta <- pcameta[, chooseGroupingVariables(pcameta), drop = FALSE]
   
-  # Make a blank matrix to hold the p values
-  
-  pvals <-
-    matrix(
-      data = NA,
-      nrow = ncol(pcameta),
-      ncol = last_pc,
-      dimnames = list(
-        colnames(pcameta),
-        paste(
-          paste("PC", 1:last_pc, sep = ""),
-          " (",
-          fraction_explained[1:last_pc],
-          "%)",
-          sep = ""
-        )
-      )
-    )
-  
-  # Fill the matrix with anova p values
-  
-  for (i in 1:ncol(pcameta)) {
-    for (j in 1:last_pc) {
-      fit <- aov(pca_coords[, j] ~ factor(pcameta[, i]))
-      if ("Pr(>F)" %in% names(summary(fit)[[1]])) {
-        pvals[i, j] <- summary(fit)[[1]][["Pr(>F)"]][[1]]
-      }
+  # Run anova for all PCA against the selected meta vars
+
+  run_anova <- function(meta_col, pc){
+    fit <- aov(pca_coords[, pc] ~ factor(pcameta[, meta_col]))
+    smry <- summary(fit)[[1]]
+
+    if ("Pr(>F)" %in% names(smry)) {
+      smry[["Pr(>F)"]][[1]]
+    }else{
+      NA
     }
   }
+  
+  pvals <- outer(
+    1:ncol(pcameta), 
+    1:last_pc,
+    Vectorize(run_anova)  
+  )
+  
+  # Name dimensions
+  
+  dimnames(pvals) <- list(
+    colnames(pcameta),
+    paste(
+      paste("PC", 1:last_pc, sep = ""),
+      " (",
+      fraction_explained[1:last_pc],
+      "%)",
+      sep = ""
+    )
+  )
   
   pvals
 }
@@ -375,7 +375,7 @@ differential_table <- do.call(rbind, lapply(sig_differential, function(x) lapply
 
 # Abstract
 
-This report summarises differential `r params$features_type` analysis as performed by the nf-core differential abundance pipeline. 
+This report summarises differential `r params$features_type` analysis as performed by the nf-core/differentialabundance pipeline. 
 
 # Data
 
@@ -424,11 +424,11 @@ print( htmltools::tagList(datatable(contrasts_to_print, caption = paste0("Table 
 
 Input was a matrix of `r nrow(assay_data$raw)` `r params$features_type`s for `r ncol(assay_data$raw)` `r params$observations_type`s`r ifelse(nrow(assay_data$normalised) < nrow(assay_data$raw), paste0(', reduced to ', nrow(assay_data$normalised), ' ', params$features_type, 's after filtering for low abundance'), '')`.
 
-## Exploratory
+## Exploratory analysis
 
 ### Abundance value distributions
 
-The following plots show the abundance value distributions of input matrices. A log(2) transform is applied where not already performed.
+The following plots show the abundance value distributions of input matrices. A log2 transformation is applied where not already performed.
 
 ```{r, include=FALSE}
 
@@ -600,7 +600,12 @@ Outlier detection based on [median absolute deviation](https://wiki.arrayserver.
 
 ```{r, echo=FALSE, results='asis', warning=FALSE}
 
-lapply(informative_variables, function(iv){
+# We can't look for ouliers in sets of less than 3 samples, so exclude variables
+# unless the minimum group size is larger than that
+iv_min_group_sizes <- unlist(lapply(informative_variables, function(x) min(table(observations[[x]]))))
+
+foo <- lapply(informative_variables[iv_min_group_sizes > 2], function(iv){
+  
   cat(paste("\n####", iv, "\n"))
   
   plotdata <-
@@ -636,7 +641,7 @@ lapply(informative_variables, function(iv){
 
 ```
 
-## Differential
+## Differential analysis
 
 ### Differential `r params$features_type` counts
 
@@ -792,13 +797,13 @@ if (is.null(params$filtering_grouping_var)){
 cat(filtering_string)
 ```
 
-## Exploratory 
+## Exploratory analysis
 
 ```{r, echo=FALSE, results='asis'}
 make_params_table('exploratory analysis', 'exploratory_', remove_pattern = TRUE)
 ```
 
-## Differential
+## Differential analysis
 
 ```{r, echo=FALSE, results='asis'}
 if (params$study_type == 'rnaseq'){

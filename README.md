@@ -64,7 +64,7 @@ The nf-core/differentialabundance pipeline comes with documentation about the pi
 
 ## Credits
 
-nf-core/differentialabundance was originally written by Jonathan Manning and Oskar Wacker.
+nf-core/differentialabundance was originally written by Jonathan Manning ([@pinin4fjords](https://github.com/pinin4fjords)) and Oskar Wacker ([@WackerO](https://github.com/WackerO)).
 
 We thank the many members of the nf-core community who assisted with this pipeline, often by reviewing module pull requests including but not limited to:
 
@@ -72,7 +72,9 @@ We thank the many members of the nf-core community who assisted with this pipeli
 - [@SPPearce](https://github.com/SPPearce),
 - [@nvnieuwk](https://github.com/nvnieuwk),
 - [@jfy133](https://github.com/jfy133),
-- [@mahesh-panchal](https://github.com/mahesh-panchal)
+- [@mahesh-panchal](https://github.com/mahesh-panchal),
+- [@mashehu](https://github.com/mashehu),
+- [@apeltzer](https://github.com/apeltzer)
 
 ## Contributions and Support
 

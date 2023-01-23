@@ -2,10 +2,10 @@ process TABULAR_TO_GSEA_CHIP {
 
     label 'process_single'
 
-    conda "conda-forge::coreutils=9.1"
+    conda "conda-forge::gawk=5.1.0"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/ubuntu:20.04' :
-        'ubuntu:20.04' }"
+        'https://depot.galaxyproject.org/singularity/gawk:5.1.0' :
+        'quay.io/biocontainers/gawk:5.1.0' }"
 
     input:
     path tsv
