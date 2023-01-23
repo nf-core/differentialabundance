@@ -28,13 +28,13 @@ This may well be the same sample sheet used to generate the input matrix. For ex
 For example:
 
 ```console
-sample,fastq_1,fastq_2,condition,replicate
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,control,1
-CONTROL_REP2,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz,control,2
-CONTROL_REP3,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz,control,3
-TREATED_REP1,AEG588A2_S1_L002_R1_001.fastq.gz,AEG588A2_S1_L002_R2_001.fastq.gz,treated,1
-TREATED_REP2,AEG588A2_S1_L003_R1_001.fastq.gz,AEG588A2_S1_L003_R2_001.fastq.gz,treated,2
-TREATED_REP3,AEG588A2_S1_L004_R1_001.fastq.gz,AEG588A2_S1_L004_R2_001.fastq.gz,treated,3
+sample,fastq_1,fastq_2,condition,replicate,batch
+CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,control,1,A
+CONTROL_REP2,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz,control,2,B
+CONTROL_REP3,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz,control,3,A
+TREATED_REP1,AEG588A2_S1_L002_R1_001.fastq.gz,AEG588A2_S1_L002_R2_001.fastq.gz,treated,1,B
+TREATED_REP2,AEG588A2_S1_L003_R1_001.fastq.gz,AEG588A2_S1_L003_R2_001.fastq.gz,treated,2,A
+TREATED_REP3,AEG588A2_S1_L004_R1_001.fastq.gz,AEG588A2_S1_L004_R2_001.fastq.gz,treated,3,B
 ```
 
 The file can be tab or comma separated.
@@ -58,16 +58,16 @@ The contrasts file references the observations file to define groups of samples 
 ```console
 id,variable,reference,target,blocking
 condition_control_treated,condition,control,treated,
-condition_control_treated_blockrep,condition,control,treated,replicate
+condition_control_treated_blockrep,condition,control,treated,replicate;batch
 ```
 
 The necessary fields in order are:
 
-- id - an arbitrary identifier, will be used to name contrast-wise output files
-- variable - which column from the observations information will be used to define groups
-- reference - the base/ reference level for the comparison. If features have higer values in this group than target they will generate negative fold changes
-- target - the target/ non-reference level for the comparison. If features have higher values in this group than the reference they will generate positive fold changes
-- blocking - semicolon-delimited, any additional variables (also observation columns) that should be modelled alongside the contrast variable
+- `id` - an arbitrary identifier, will be used to name contrast-wise output files
+- `variable` - which column from the observations information will be used to define groups
+- `reference` - the base/ reference level for the comparison. If features have higher values in this group than target they will generate negative fold changes
+- `target` - the target/ non-reference level for the comparison. If features have higher values in this group than the reference they will generate positive fold changes
+- `blocking` - semicolon-delimited, any additional variables (also observation columns) that should be modelled alongside the contrast variable
 
 The file can be tab or comma separated.
 
