@@ -1,5 +1,5 @@
 name: Feature request
-description: Suggest an idea for the differentialabundance/differentialabundance pipeline
+description: Suggest an idea for the nf-core/differentialabundance pipeline
 labels: enhancement
 body:
   - type: textarea

@@ -1,23 +1,74 @@
 {
-    "name": "differentialabundance/differentialabundance",
-    "homePage": "https://github.com/differentialabundance/differentialabundance",
+    "name": "nf-core/differentialabundance",
+    "homePage": "https://github.com/nf-core/differentialabundance",
     "repos": {
         "https://github.com/nf-core/modules.git": {
             "modules": {
                 "nf-core": {
+                    "atlasgeneannotationmanipulation/gtf2featureannotation": {
+                        "branch": "master",
+                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "installed_by": ["modules"]
+                    },
                     "custom/dumpsoftwareversions": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "installed_by": ["modules"]
                     },
-                    "fastqc": {
+                    "custom/matrixfilter": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "installed_by": ["modules"]
                     },
-                    "multiqc": {
+                    "custom/tabulartogseacls": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "installed_by": ["modules"]
+                    },
+                    "custom/tabulartogseagct": {
+                        "branch": "master",
+                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "installed_by": ["modules"]
+                    },
+                    "deseq2/differential": {
+                        "branch": "master",
+                        "git_sha": "3eb41d9f08a68bc728aacc31f2079f5115616e1a",
+                        "installed_by": ["modules"]
+                    },
+                    "gsea/gsea": {
+                        "branch": "master",
+                        "git_sha": "595f49842df5f8791b1dac9f5feabb56813facc5",
+                        "installed_by": ["modules"]
+                    },
+                    "gunzip": {
+                        "branch": "master",
+                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "installed_by": ["modules"]
+                    },
+                    "rmarkdownnotebook": {
+                        "branch": "master",
+                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "installed_by": ["modules"]
+                    },
+                    "shinyngs/staticdifferential": {
+                        "branch": "master",
+                        "git_sha": "dc67268f96f9d6e47a6f0c1c631ae54f42b6716c",
+                        "installed_by": ["modules"]
+                    },
+                    "shinyngs/staticexploratory": {
+                        "branch": "master",
+                        "git_sha": "dc67268f96f9d6e47a6f0c1c631ae54f42b6716c",
+                        "installed_by": ["modules"]
+                    },
+                    "shinyngs/validatefomcomponents": {
+                        "branch": "master",
+                        "git_sha": "dc67268f96f9d6e47a6f0c1c631ae54f42b6716c",
+                        "installed_by": ["modules"]
                     }
                 }
+            },
+            "subworkflows": {
+                "nf-core": {}
             }
         }
     }

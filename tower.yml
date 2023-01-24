@@ -1,0 +1,19 @@
+reports:
+  "**/report/*.html":
+    display: "Final differential abundance report"
+  pipeline_info/**:
+    display: "Pipeline run info"
+  "**/plots/exploratory/**/html/*.html":
+    display: "Exploratory plots (HTML)"
+  "**/plots/differential/**/html/*.html":
+    display: "Differential plots (HTML)"
+  "**/plots/exploratory/**/png/*.png":
+    display: "Exploratory plots (PNG)"
+  "**/plots/differential/**/png/*.png":
+    display: "Differential plots (PNG)"
+  "**/tables/differential/*.tsv":
+    display: "DESeq2 differential table"
+  "**/tables/processed_counts/*.tsv":
+    display: "DESeq2 processed counts table"
+  "**/plots/qc/*.dispersion.png":
+    display: "DESeq2 dispersion plot"
