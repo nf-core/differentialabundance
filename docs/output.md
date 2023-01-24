@@ -40,6 +40,8 @@ Stand-alone graphical outputs are placed in this directory. They may be useful i
 
 </details>
 
+Most plots are included in the HTML report (see above), but are included in static files in this folder to facilitate use in external reporting.
+
 ## Tables
 
 <details markdown="1">
@@ -55,6 +57,8 @@ Stand-alone graphical outputs are placed in this directory. They may be useful i
     - `[contrast]/[contrast].gsea_report_for_[condition].tsv`: A GSEA report table for each side of each contrast
 
 </details>
+
+The `differential` folder is likely to be the core result set for most users, containing the main tables of differential statistics.
 
 ### Pipeline information
 
