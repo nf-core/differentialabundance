@@ -5,12 +5,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## v1.0.0 - 2022-01-23
 
+- [[#49](https://github.com/nf-core/differentialabundance/pull/49) - Add citation fixes, missing logos, output detail, and trigger Zenodo ([@pinin4fjords](https://github.com/pinin4fjords), review by [@apeltzer](https://github.com/apeltzer), [@jfy133](https://github.com/jfy133))
+
+## v1.0.0 - 2022-01-23
+
 Initial release of nf-core/differentialabundance, created with the [nf-core](https://nf-co.re/) template.
 
 ### `Added`
 
 - [[#1](https://github.com/nf-core/differentialabundance/issues/3)] - Set up initial modules, define and validate workflow inputs ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
-- [[#4](https://github.com/nf-core/differentialabundance/issues/4)] - Add input checking ([@pinin4fjords](https://github.com/pinin4fjords), , review by [@WackerO](https://github.com/WackerO))
+- [[#4](https://github.com/nf-core/differentialabundance/issues/4)] - Add input checking ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#5](https://github.com/nf-core/differentialabundance/issues/5)] - Add differential analysis ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#6](https://github.com/nf-core/differentialabundance/issues/6)] - Add exploratory plotting ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#7](https://github.com/nf-core/differentialabundance/issues/7)] - Add differential plotting ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
