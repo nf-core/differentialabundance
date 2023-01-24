@@ -26,7 +26,7 @@
 
 - [DESeq2](https://pubmed.ncbi.nlm.nih.gov/25516281/)
 
-  > Love MI, Huber W, Anders S. Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. Genome Biol. 2014;15(12):550. PubMed PMID: 25516281; PubMed Central PMCID: PMC4302049.
+  > Love MI, Huber W, Anders S (2014). Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. Genome Biol. 15(12):550. PubMed PMID: 25516281; PubMed Central PMCID: PMC4302049.
 
 - [ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html)
 
