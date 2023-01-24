@@ -22,19 +22,19 @@
 
 - [shinyngs](https://github.com/pinin4fjords/shinyngs)
 
-  > Jonathan R Manning. Shiny apps for NGS etc based on reusable components created using Shiny modules. Computer software. Vers. 1.5.3. Jonathan Manning, Dec. 2022. Web.
+  > Jonathan R Manning (2022). Shiny apps for NGS etc based on reusable components created using Shiny modules. Computer software. Vers. 1.5.3. Jonathan Manning, Dec. 2022. Web.
 
 - [DESeq2](https://pubmed.ncbi.nlm.nih.gov/25516281/)
 
-  > Love MI, Huber W, Anders S. Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. Genome Biol. 2014;15(12):550. PubMed PMID: 25516281; PubMed Central PMCID: PMC4302049.
+  > Love MI, Huber W, Anders S (2014). Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. Genome Biol. 15(12):550. PubMed PMID: 25516281; PubMed Central PMCID: PMC4302049.
 
 - [ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html)
 
-  > H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016.
+  > H. Wickham (2016). ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York.
 
 - [plotly](https://plotly.com/r/)
 
-  > C. Sievert. Interactive Web-Based Data Visualization with R, plotly, and shiny. Chapman and Hall/CRC Florida, 2020.
+  > C. Sievert (2020). Interactive Web-Based Data Visualization with R, plotly, and shiny. Chapman and Hall/CRC Florida.
 
 - [optparse](https://CRAN.R-project.org/package=optparse)
 

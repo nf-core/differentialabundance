@@ -38,7 +38,8 @@
                     "help_text": "This file is used to define groups of samples from 'input' to compare.  It must contain at least the columns 'variable', 'reference', 'target' and 'blocking', where 'variable' is a column in the input sample sheet, 'reference' and 'target' are values in that column, and blocking is a colon-separated list of additional 'blocking' variables (can be an empty string)",
                     "pattern": "^\\S+\\.csv$",
                     "format": "file-path",
-                    "mimetype": "text/csv"
+                    "mimetype": "text/csv",
+                    "fa_icon": "fas fa-adjust"
                 },
                 "matrix": {
                     "type": "string",
@@ -46,7 +47,8 @@
                     "help_text": "For example an expression matrix output from the nf-core/rnaseq workflow. There must be a column in this matrix for every row in the input sample sheet.",
                     "format": "file-path",
                     "mimetype": "text/tab-separated-values",
-                    "pattern": "^\\S+\\.(tsv|csv|txt)$"
+                    "pattern": "^\\S+\\.(tsv|csv|txt)$",
+                    "fa_icon": "fas fa-border-all"
                 },
                 "outdir": {
                     "type": "string",
@@ -58,14 +60,16 @@
                     "type": "string",
                     "default": "study",
                     "description": "A string to identify results in the output directory",
-                    "help_text": "Also used as an identifier in some processes"
+                    "help_text": "Also used as an identifier in some processes",
+                    "fa_icon": "fas fa-signature"
                 },
                 "study_type": {
                     "type": "string",
                     "default": "rnaseq",
                     "description": "A string identifying the technology used to produce the data",
                     "help_text": "Currently only 'rnaseq' may be specified. In future options like 'affy_array' are possible.",
-                    "enum": ["rnaseq"]
+                    "enum": ["rnaseq"],
+                    "fa_icon": "far fa-keyboard"
                 },
                 "email": {
                     "type": "string",
@@ -79,33 +83,39 @@
                     "description": "A text file listing technical features (e.g. spikes)",
                     "help_text": "One feature per row. Note that by default these features will just be stripped from matrices prior to internal processing. To actually use them in e.g. normalisation, set `--sizefactors_from_controls`",
                     "format": "file-path",
-                    "mimetype": "text/plain"
+                    "mimetype": "text/plain",
+                    "fa_icon": "fas fa-gamepad"
                 },
                 "sizefactors_from_controls": {
                     "type": "boolean",
                     "help_text": "Use supplied control features in normalistion/ scaling operations?",
-                    "description": "When set, use the control features in scaling/ normalisation"
+                    "description": "When set, use the control features in scaling/ normalisation",
+                    "fa_icon": "fas fa-expand-arrows-alt"
                 },
                 "report_file": {
                     "type": "string",
                     "description": "Rmd report template from which to create the pipeline report",
                     "format": "file-path",
-                    "pattern": "^\\S+\\.Rmd$"
+                    "pattern": "^\\S+\\.Rmd$",
+                    "fa_icon": "fas fa-book"
                 },
                 "logo_file": {
                     "type": "string",
                     "default": "docs/images/nf-core-differentialabundance_logo_light.png",
-                    "description": "A logo to display in the report instead of the generic pipeline logo"
+                    "description": "A logo to display in the report instead of the generic pipeline logo",
+                    "fa_icon": "far fa-font-awesome-logo-full"
                 },
                 "css_file": {
                     "type": "string",
                     "default": "assets/nf-core_style.css",
-                    "description": "CSS to use to style the output, in lieu of the default nf-core styling"
+                    "description": "CSS to use to style the output, in lieu of the default nf-core styling",
+                    "fa_icon": "far fa-file-code"
                 },
                 "citations_file": {
                     "type": "string",
                     "default": "CITATIONS.md",
-                    "description": "A markdown file containing citations to include in the fiinal report"
+                    "description": "A markdown file containing citations to include in the fiinal report",
+                    "fa_icon": "fas fa-ad"
                 }
             }
         },
@@ -118,16 +128,19 @@
                 "observations_id_col": {
                     "type": "string",
                     "default": "sample",
-                    "description": "Column in the samples sheet to be used as the primary sample identifier"
+                    "description": "Column in the samples sheet to be used as the primary sample identifier",
+                    "fa_icon": "fas fa-address-card"
                 },
                 "observations_type": {
                     "type": "string",
                     "default": "sample",
                     "description": "Type of observation",
-                    "help_text": "This is used in reporting to refer to the observations. Frequently this is 'sample' (e.g. in RNA-seq experiments), but it may also be desirable to refer to 'pool', or 'individual'."
+                    "help_text": "This is used in reporting to refer to the observations. Frequently this is 'sample' (e.g. in RNA-seq experiments), but it may also be desirable to refer to 'pool', or 'individual'.",
+                    "fa_icon": "fas fa-keyboard"
                 }
             },
-            "required": ["observations_id_col", "observations_type"]
+            "required": ["observations_id_col", "observations_type"],
+            "fa_icon": "fas fa-eye"
         },
         "features_options": {
             "title": "Features options",
@@ -139,20 +152,24 @@
                 "features_id_col": {
                     "type": "string",
                     "default": "gene_id",
-                    "description": "Feature ID attribute in the GTF file (e.g. the gene_id field)"
+                    "description": "Feature ID attribute in the GTF file (e.g. the gene_id field)",
+                    "fa_icon": "fas fa-address-card"
                 },
                 "features_name_col": {
                     "type": "string",
                     "default": "gene_name",
-                    "description": "Feature name attribute in the GTF file (e.g. the gene symbol field)"
+                    "description": "Feature name attribute in the GTF file (e.g. the gene symbol field)",
+                    "fa_icon": "fas fa-signature"
                 },
                 "features_type": {
                     "type": "string",
                     "default": "gene",
-                    "description": "Type of feature we have, often 'gene'"
+                    "description": "Type of feature we have, often 'gene'",
+                    "fa_icon": "fas fa-keyboard"
                 }
             },
-            "required": ["features_id_col", "features_name_col", "features_type"]
+            "required": ["features_id_col", "features_name_col", "features_type"],
+            "fa_icon": "fas fa-sitemap"
         },
         "filtering": {
             "title": "Filtering",
@@ -163,21 +180,25 @@
                 "filtering_min_abundance": {
                     "type": "integer",
                     "default": 1,
-                    "description": "Minimum abundance value"
+                    "description": "Minimum abundance value",
+                    "fa_icon": "fas fa-compress-alt"
                 },
                 "filtering_min_samples": {
                     "type": "number",
                     "default": 1,
-                    "description": "Minimum observations that must pass the threshold to retain the row/ feature (e.g. gene)."
+                    "description": "Minimum observations that must pass the threshold to retain the row/ feature (e.g. gene).",
+                    "fa_icon": "fas fa-compress-alt"
                 },
                 "filtering_min_proportion": {
                     "type": "number",
-                    "description": "A minimum proportion of observations, given as a number between 0 and 1, that must pass the threshold. Overrides  minimum_samples"
+                    "description": "A minimum proportion of observations, given as a number between 0 and 1, that must pass the threshold. Overrides  minimum_samples",
+                    "fa_icon": "fas fa-percent"
                 },
                 "filtering_grouping_var": {
                     "type": "string",
                     "help_text": "The variable can be used to define groups and derive a minimum group size upon which to base minimum observation numbers. The rationale for this is to allow retention of features that might be present in only one group. Note that this is consciously NOT filtering with an explicit awareness of groups (\"feature must be present in all samples of group A\"), since this is known to create biases towards discovery of differential features.",
-                    "description": "An optional grouping variable to be used to calculate a min_samples value"
+                    "description": "An optional grouping variable to be used to calculate a min_samples value",
+                    "fa_icon": "fas fa-users"
                 }
             },
             "fa_icon": "fas fa-filter",
@@ -192,34 +213,40 @@
                 "exploratory_clustering_method": {
                     "type": "string",
                     "default": "ward.D2",
-                    "description": "Clustering method used in dendrogram creation"
+                    "description": "Clustering method used in dendrogram creation",
+                    "fa_icon": "fab fa-blackberry"
                 },
                 "exploratory_cor_method": {
                     "type": "string",
                     "default": "spearman",
-                    "description": "Correlation method used in dendrogram creation"
+                    "description": "Correlation method used in dendrogram creation",
+                    "fa_icon": "fas fa-chart-line"
                 },
                 "exploratory_n_features": {
                     "type": "integer",
                     "default": 500,
-                    "description": "Number of features selected before certain exploratory analyses"
+                    "description": "Number of features selected before certain exploratory analyses",
+                    "fa_icon": "fas fa-list-ol"
                 },
                 "exploratory_whisker_distance": {
                     "type": "number",
                     "default": 1.5,
-                    "description": "Length of the whiskers in boxplots as multiple of IQR. Defaults to 1.5."
+                    "description": "Length of the whiskers in boxplots as multiple of IQR. Defaults to 1.5.",
+                    "fa_icon": "fas fa-chart-area"
                 },
                 "exploratory_mad_threshold": {
                     "type": "integer",
                     "default": -5,
                     "help_text": "MAD = median absolute deviation. A threshold on this value is used to define observations (samples) as outliers, or not, in exploratory plots. Based on the definition at https://wiki.arrayserver.com/wiki/index.php?title=CorrelationQC.pdf. ",
-                    "description": "Threshold on MAD score for outlier identification"
+                    "description": "Threshold on MAD score for outlier identification",
+                    "fa_icon": "fas fa-angry"
                 },
                 "exploratory_main_variable": {
                     "type": "string",
                     "default": "auto_pca",
                     "description": "How should the main grouping variable be selected? 'auto_pca', 'contrasts', or a valid column name from the observations table.",
-                    "help_text": "Some plots are only generated once, with a single sample grouping, this option defines how that sample grouping is selected. It should be 'auto_pca' (variable selected from the sample sheet with the most association with the first principal component), 'contrasts' (pick the variable associated with the first contrast), or a value specifying a specific column in the observations."
+                    "help_text": "Some plots are only generated once, with a single sample grouping, this option defines how that sample grouping is selected. It should be 'auto_pca' (variable selected from the sample sheet with the most association with the first principal component), 'contrasts' (pick the variable associated with the first contrast), or a value specifying a specific column in the observations.",
+                    "fa_icon": "fas fa-home"
                 }
             },
             "fa_icon": "fas fa-chart-area",
@@ -239,47 +266,56 @@
                 "differential_file_suffix": {
                     "type": "string",
                     "default": ".deseq2.results.tsv",
-                    "description": "The suffix associated tabular differential results tables"
+                    "description": "The suffix associated tabular differential results tables",
+                    "fa_icon": "fas fa-signature"
                 },
                 "differential_feature_id_column": {
                     "type": "string",
                     "default": "gene_id",
-                    "description": "The feature identifier column in differential results tables"
+                    "description": "The feature identifier column in differential results tables",
+                    "fa_icon": "fas fa-address-card"
                 },
                 "differential_fc_column": {
                     "type": "string",
                     "default": "log2FoldChange",
-                    "description": "The fold change column in differential results tables"
+                    "description": "The fold change column in differential results tables",
+                    "fa_icon": "fas fa-adjust"
                 },
                 "differential_pval_column": {
                     "type": "string",
                     "default": "pvalue",
-                    "description": "The p value column in differential results tables"
+                    "description": "The p value column in differential results tables",
+                    "fa_icon": "fas fa-columns"
                 },
                 "differential_qval_column": {
                     "type": "string",
                     "default": "padj",
-                    "description": "The q value column in differential results tables."
+                    "description": "The q value column in differential results tables.",
+                    "fa_icon": "fas fa-columns"
                 },
                 "differential_min_fold_change": {
                     "type": "integer",
                     "default": 2,
-                    "description": "Minimum fold change used to calculate differential feature numbers"
+                    "description": "Minimum fold change used to calculate differential feature numbers",
+                    "fa_icon": "fas fa-angle-double-down"
                 },
                 "differential_max_qval": {
                     "type": "number",
                     "default": 0.05,
-                    "description": "Maximum q value used to calculate differential feature numbrers"
+                    "description": "Maximum q value used to calculate differential feature numbrers",
+                    "fa_icon": "fas fa-angle-double-up"
                 },
                 "differential_feature_name_column": {
                     "type": "string",
                     "default": "gene_name",
-                    "description": "Where a features file (GTF) has been provided, what attributed to use to name features"
+                    "description": "Where a features file (GTF) has been provided, what attributed to use to name features",
+                    "fa_icon": "fas fa-signature"
                 },
                 "differential_foldchanges_logged": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Indicate whether or not fold changes are on the log scale (default is to assume they are)"
+                    "description": "Indicate whether or not fold changes are on the log scale (default is to assume they are)",
+                    "fa_icon": "fas fa-calculator"
                 }
             },
             "required": [
@@ -303,101 +339,118 @@
                     "default": "Wald",
                     "description": "`test` parameter passed to DESeq()",
                     "help_text": "either \"Wald\" or \"LRT\", which will then use either Wald significance tests (defined by nbinomWaldTest), or the likelihood ratio test on the difference in deviance between a full and reduced model formula (defined by nbinomLRT)",
-                    "enum": ["Wald", "LRT"]
+                    "enum": ["Wald", "LRT"],
+                    "fa_icon": "fas fa-vial"
                 },
                 "deseq2_fit_type": {
                     "type": "string",
                     "default": "parametric",
                     "description": "`fitType` parameter passed to DESeq()",
                     "help_text": "either \"parametric\", \"local\", \"mean\", or \"glmGamPoi\" for the type of fitting of dispersions to the mean intensity. See estimateDispersions for description.",
-                    "enum": ["parametric", "local", "mean", "glmGamPoi"]
+                    "enum": ["parametric", "local", "mean", "glmGamPoi"],
+                    "fa_icon": "fas fa-keyboard"
                 },
                 "deseq2_sf_type": {
                     "type": "string",
                     "default": "ratio",
                     "description": "`sfType` parameter passed to DESeq()",
                     "help_text": "either \"ratio\", \"poscounts\", or \"iterate\" for the type of size factor estimation. See estimateSizeFactors for description.",
-                    "enum": ["ratio", "poscounts", "iterate"]
+                    "enum": ["ratio", "poscounts", "iterate"],
+                    "fa_icon": "fas fa-keyboard"
                 },
                 "deseq2_min_replicates_for_replace": {
                     "type": "integer",
                     "default": 7,
                     "help_text": "the minimum number of replicates required in order to use replaceOutliers on a sample. If there are samples with so many replicates, the model will be refit after these replacing outliers, flagged by Cook's distance. Set to Inf in order to never replace outliers. It set to Inf for fitType=\"glmGamPoi\".",
-                    "description": "'minReplicatesForReplace' parameter passed to DESeq()"
+                    "description": "'minReplicatesForReplace' parameter passed to DESeq()",
+                    "fa_icon": "fas fa-angle-double-down"
                 },
                 "deseq2_use_t": {
                     "type": "boolean",
                     "description": "`useT` parameter passed to DESeq2",
-                    "help_text": "logical, passed to nbinomWaldTest, default is FALSE, where Wald statistics are assumed to follow a standard Normal"
+                    "help_text": "logical, passed to nbinomWaldTest, default is FALSE, where Wald statistics are assumed to follow a standard Normal",
+                    "fa_icon": "fas fa-mug-hot"
                 },
                 "deseq2_independent_filtering": {
                     "type": "boolean",
                     "default": true,
                     "description": "`independentFiltering` parameter passed to results()",
-                    "help_text": "logical, whether independent filtering should be applied automatically"
+                    "help_text": "logical, whether independent filtering should be applied automatically",
+                    "fa_icon": "fas fa-filter"
                 },
                 "deseq2_lfc_threshold": {
                     "type": "integer",
                     "default": 0,
                     "description": "`lfcThreshold` parameter passed to results()",
-                    "help_text": "a non-negative value which specifies a log2 fold change threshold. The default value is 0, corresponding to a test that the log2 fold changes are equal to zero. The user can specify the alternative hypothesis using the altHypothesis argument, which defaults to testing for log2 fold changes greater in absolute value than a given threshold. If lfcThreshold is specified, the results are for Wald tests, and LRT p-values will be overwritten."
+                    "help_text": "a non-negative value which specifies a log2 fold change threshold. The default value is 0, corresponding to a test that the log2 fold changes are equal to zero. The user can specify the alternative hypothesis using the altHypothesis argument, which defaults to testing for log2 fold changes greater in absolute value than a given threshold. If lfcThreshold is specified, the results are for Wald tests, and LRT p-values will be overwritten.",
+                    "fa_icon": "fas fa-adjust"
                 },
                 "deseq2_alt_hypothesis": {
                     "type": "string",
                     "default": "greaterAbs",
                     "description": "`altHypothesis` parameter passed to results()",
-                    "help_text": "character which specifies the alternative hypothesis, i.e. those values of log2 fold change which the user is interested in finding. The complement of this set of values is the null hypothesis which will be tested. If the log2 fold change specified by 'name' or by contrast' is written as beta , then the possible values for 'altHypothesis' represent the following alternate hypotheses: 1) greaterAbs: |beta| > lfcThreshold , and p-values are two-tailed 2) lessAbs: |beta| < lfcThreshold , p-values are the maximum of the upper and lower tests. The Wald statistic given is positive, an SE-scaled distance from the closest boundary 3) greater: beta > lfcThreshold 4) less: beta < -lfcThreshold"
+                    "help_text": "character which specifies the alternative hypothesis, i.e. those values of log2 fold change which the user is interested in finding. The complement of this set of values is the null hypothesis which will be tested. If the log2 fold change specified by 'name' or by contrast' is written as beta , then the possible values for 'altHypothesis' represent the following alternate hypotheses: 1) greaterAbs: |beta| > lfcThreshold , and p-values are two-tailed 2) lessAbs: |beta| < lfcThreshold , p-values are the maximum of the upper and lower tests. The Wald statistic given is positive, an SE-scaled distance from the closest boundary 3) greater: beta > lfcThreshold 4) less: beta < -lfcThreshold",
+                    "fa_icon": "fas fa-atom"
                 },
                 "deseq2_p_adjust_method": {
                     "type": "string",
                     "default": "BH",
                     "description": "`pAdjustMethod` parameter passed to results()",
-                    "help_text": "the method to use for adjusting p-values, see help in R for the p.adjust() function (via ?p.adjust). At time of writing available values were \"holm\", \"hochberg\", \"hommel\", \"bonferroni\", \"BH\", \"BY\", \"fdr\", \"none\"."
+                    "help_text": "the method to use for adjusting p-values, see help in R for the p.adjust() function (via ?p.adjust). At time of writing available values were \"holm\", \"hochberg\", \"hommel\", \"bonferroni\", \"BH\", \"BY\", \"fdr\", \"none\".",
+                    "fa_icon": "fas fa-sliders-h"
                 },
                 "deseq2_alpha": {
                     "type": "number",
                     "default": 0.1,
                     "description": "`alpha` parameter passed to results()",
-                    "help_text": "the significance cutoff used for optimizing the independent filtering (by default 0.1). If the adjusted p-value cutoff (FDR) will be a value other than 0.1, alpha should be set to that value."
+                    "help_text": "the significance cutoff used for optimizing the independent filtering (by default 0.1). If the adjusted p-value cutoff (FDR) will be a value other than 0.1, alpha should be set to that value.",
+                    "fa_icon": "fas fa-font"
                 },
                 "deseq2_minmu": {
                     "type": "number",
                     "default": 0.5,
                     "description": "`minmu` parameter passed to results()",
-                    "help_text": "lower bound on the estimated count (used when calculating contrasts)"
+                    "help_text": "lower bound on the estimated count (used when calculating contrasts)",
+                    "fa_icon": "fas fa-cat"
                 },
                 "deseq2_vs_method": {
                     "type": "string",
                     "default": "vst",
                     "description": "variance stabilisation method to use when making a variance stabilised matrix",
                     "help_text": "'rlog', 'vst' or 'rlog,vst'",
-                    "enum": ["rlog", "vst", "rlog,vst"]
+                    "enum": ["rlog", "vst", "rlog,vst"],
+                    "fa_icon": "fas fa-viruses"
                 },
                 "deseq2_shrink_lfc": {
                     "type": "boolean",
                     "default": true,
                     "description": "Shink fold changes in results?",
-                    "help_text": "'ashr' method is the only method currently implemented"
+                    "help_text": "'ashr' method is the only method currently implemented",
+                    "fa_icon": "fas fa-microscope"
                 },
                 "deseq2_cores": {
                     "type": "integer",
                     "default": 1,
                     "description": "Number of cores",
-                    "help_text": "Number of cores to use with DESeq()"
+                    "help_text": "Number of cores to use with DESeq()",
+                    "fa_icon": "fab fa-centercode"
                 },
                 "deseq2_vs_blind": {
                     "type": "boolean",
                     "default": true,
                     "description": "`blind` parameter for rlog() and/ or vst()",
-                    "help_text": "logical, whether to blind the transformation to the experimental design "
+                    "help_text": "logical, whether to blind the transformation to the experimental design ",
+                    "fa_icon": "fas fa-eye-slash"
                 },
                 "deseq2_vst_nsub": {
                     "type": "integer",
                     "default": 1000,
                     "description": "`nsub` parameter passed to vst()",
-                    "help_text": "the number of genes to subset to (default 1000)"
+                    "help_text": "the number of genes to subset to (default 1000)",
+                    "fa_icon": "fas fa-train"
                 }
-            }
+            },
+            "fa_icon": "fas fa-adjust"
         },
         "gsea": {
             "title": "GSEA",
@@ -407,117 +460,136 @@
             "properties": {
                 "gsea_run": {
                     "type": "boolean",
-                    "description": "Set to run GSEA to infer differential gene sets in contrasts"
+                    "description": "Set to run GSEA to infer differential gene sets in contrasts",
+                    "fa_icon": "fas fa-running"
                 },
                 "gsea_permute": {
                     "type": "string",
                     "default": "phenotype",
                     "description": "Permutation type",
                     "help_text": "Select the type of permutation to perform in assessing the statistical significance of the enrichment score. (See 'required fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page for more info)",
-                    "enum": ["phenotype", "gene_set"]
+                    "enum": ["phenotype", "gene_set"],
+                    "fa_icon": "fas fa-exchange-alt"
                 },
                 "gsea_nperm": {
                     "type": "integer",
                     "default": 1000,
                     "description": "Number of permutations",
-                    "help_text": "Specify the number of permutations to perform in assessing the statistical significance of the enrichment score. (See 'required fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page)"
+                    "help_text": "Specify the number of permutations to perform in assessing the statistical significance of the enrichment score. (See 'required fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page)",
+                    "fa_icon": "fas fa-exchange-alt"
                 },
                 "gsea_scoring_scheme": {
                     "type": "string",
                     "default": "weighted",
                     "description": "Enrichment statistic",
                     "enum": ["weighted", "weighted_p2", "weighted_p1.5", "classic"],
-                    "help_text": "See 'basic fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page for a detailed explanation."
+                    "help_text": "See 'basic fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page for a detailed explanation.",
+                    "fa_icon": "fas fa-star"
                 },
                 "gsea_metric": {
                     "type": "string",
                     "default": "Signal2Noise",
                     "enum": ["Signal2Noise", "tTest", "Ratio_of_Classes", "Diff_of_Classes", "log2_Ratio_of_Classes"],
                     "description": "Metric for ranking genes",
-                    "help_text": "See https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideTEXT.htm#_Metrics_for_Ranking for a detailed explanation."
+                    "help_text": "See https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideTEXT.htm#_Metrics_for_Ranking for a detailed explanation.",
+                    "fa_icon": "fas fa-temperature-high"
                 },
                 "gsea_sort": {
                     "type": "string",
                     "default": "real",
                     "description": "Gene list sorting mode",
                     "help_text": "GSEA ranks the genes in the expression dataset and then analyzes that ranked list of genes. Use this parameter to determine whether to sort the genes using the real (default) or absolute value of the ranking metric.\n\nSee 'basic fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page",
-                    "enum": ["real", "absolute"]
+                    "enum": ["real", "absolute"],
+                    "fa_icon": "fas fa-bars"
                 },
                 "gsea_order": {
                     "type": "string",
                     "default": "descending",
                     "description": "Gene list ordering mode",
                     "help_text": "GSEA ranks the genes in the expression dataset and then analyzes that ranked list of genes. Use this parameter to determine whether to sort the genes in descending (default) or ascending order. Ascending order is usually applicable when the ranking metric is a measure of nearness (how close the genes are to one another) rather than distance.\n\nSee 'basic fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page",
-                    "enum": ["descending", "ascending"]
+                    "enum": ["descending", "ascending"],
+                    "fa_icon": "fas fa-sort-alpha-down"
                 },
                 "gsea_set_max": {
                     "type": "integer",
                     "default": 500,
                     "description": "Max size: exclude larger sets",
-                    "help_text": "After filtering from the gene sets any gene not in the expression dataset, gene sets larger than this are excluded from the analysis.\n\nSee 'basic fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page"
+                    "help_text": "After filtering from the gene sets any gene not in the expression dataset, gene sets larger than this are excluded from the analysis.\n\nSee 'basic fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page",
+                    "fa_icon": "fas fa-angle-double-up"
                 },
                 "gsea_set_min": {
                     "type": "integer",
                     "default": 15,
                     "description": "Min size: exclude smaller sets",
-                    "help_text": "After filtering from the gene sets any gene not in the expression dataset, gene sets smaller than this are excluded from the analysis.\n\nSee 'basic fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page"
+                    "help_text": "After filtering from the gene sets any gene not in the expression dataset, gene sets smaller than this are excluded from the analysis.\n\nSee 'basic fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page",
+                    "fa_icon": "fas fa-angle-double-down"
                 },
                 "gsea_norm": {
                     "type": "string",
                     "default": "meandiv",
                     "description": "Normalisation mode",
                     "enum": ["meandiv", "none"],
-                    "help_text": "Normalization mode. Method used to normalize the enrichment scores across analyzed gene sets: 'meandiv' (default, GSEA normalizes the enrichment scores as described in Normalized Enrichment Score (NES)) OR 'none' (GSEA does not normalize the enrichment scores).\n\nSee 'advanced fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page"
+                    "help_text": "Normalization mode. Method used to normalize the enrichment scores across analyzed gene sets: 'meandiv' (default, GSEA normalizes the enrichment scores as described in Normalized Enrichment Score (NES)) OR 'none' (GSEA does not normalize the enrichment scores).\n\nSee 'advanced fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page",
+                    "fa_icon": "fas fa-align-justify"
                 },
                 "gsea_rnd_type": {
                     "type": "string",
                     "default": "no_balance",
                     "help_text": "Method used to randomly assign phenotype labels to samples for phenotype permutations. Not used for gene_set  permutations.\n\nSee 'advanced fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page",
                     "enum": ["no_balance", "equalize_and_balance"],
-                    "description": "Randomization mode"
+                    "description": "Randomization mode",
+                    "fa_icon": "fas fa-random"
                 },
                 "gsea_make_sets": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Make detailed geneset report?"
+                    "description": "Make detailed geneset report?",
+                    "fa_icon": "fas fa-object-ungroup"
                 },
                 "gsea_median": {
                     "type": "boolean",
                     "help_text": "Set to true (default=false) to use the median of each class, instead of the mean, in the metrics for ranking for genes\n\nSee 'advanced fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page. ",
-                    "description": "Use median for class metrics"
+                    "description": "Use median for class metrics",
+                    "fa_icon": "fas fa-align-center"
                 },
                 "gsea_num": {
                     "type": "integer",
                     "default": 100,
                     "description": "Number of markers",
-                    "help_text": "Number of features (gene or probes) to include in the butterfly plot in the Gene Markers section of the gene set enrichment report.\n\nSee 'advanced fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page. "
+                    "help_text": "Number of features (gene or probes) to include in the butterfly plot in the Gene Markers section of the gene set enrichment report.\n\nSee 'advanced fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page. ",
+                    "fa_icon": "fas fa-list-ol"
                 },
                 "gsea_plot_top_x": {
                     "type": "integer",
                     "default": 20,
                     "description": "Plot graphs for the top sets of each phenotype",
-                    "help_text": "Generates summary plots and detailed analysis results for the top x genes in each phenotype, where x is 20 by default. The top genes are those with the largest normalized enrichment scores.\n\nSee 'advanced fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page. "
+                    "help_text": "Generates summary plots and detailed analysis results for the top x genes in each phenotype, where x is 20 by default. The top genes are those with the largest normalized enrichment scores.\n\nSee 'advanced fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page. ",
+                    "fa_icon": "fas fa-angle-up"
                 },
                 "gsea_rnd_seed": {
                     "type": "string",
                     "default": "timestamp",
                     "description": "Seed for permutation",
-                    "help_text": "Seed used to generate a random number for phenotype and gene_set  permutations: timestamp (default), 149, or user input. The specific seed value (149) generates consistent results, which is useful when testing software."
+                    "help_text": "Seed used to generate a random number for phenotype and gene_set  permutations: timestamp (default), 149, or user input. The specific seed value (149) generates consistent results, which is useful when testing software.",
+                    "fa_icon": "fas fa-random"
                 },
                 "gsea_save_rnd_lists": {
                     "type": "boolean",
                     "description": "Save random ranked lists",
-                    "help_text": "Set to 'true' (default=false) to save the random ranked lists of genes created by phenotype permutations. When you save random ranked lists, for each permutation, GSEA saves the rank metric score for each gene (the score used to position the gene in the ranked list). Saving random ranked lists is memory intensive; therefore, this parameter is set to false by default."
+                    "help_text": "Set to 'true' (default=false) to save the random ranked lists of genes created by phenotype permutations. When you save random ranked lists, for each permutation, GSEA saves the rank metric score for each gene (the score used to position the gene in the ranked list). Saving random ranked lists is memory intensive; therefore, this parameter is set to false by default.",
+                    "fa_icon": "fas fa-random"
                 },
                 "gsea_zip_report": {
                     "type": "boolean",
                     "description": "Make a zipped file with all reports",
-                    "help_text": "Set to True (default=false) to create a zip file of the analysis results. The zip file is saved to the output folder with all of the other files generated by the analysis. This is useful for sharing analysis results"
+                    "help_text": "Set to True (default=false) to create a zip file of the analysis results. The zip file is saved to the output folder with all of the other files generated by the analysis. This is useful for sharing analysis results",
+                    "fa_icon": "fas fa-file-archive"
                 },
                 "gsea_gene_sets": {
                     "type": "string",
                     "default": "None",
-                    "description": "Gene sets in GMT or GMX-format"
+                    "description": "Gene sets in GMT or GMX-format",
+                    "fa_icon": "fas fa-bars"
                 }
             },
             "fa_icon": "fas fa-layer-group"
@@ -540,7 +612,8 @@
                     "pattern": "^\\S+\\.gtf(\\.gz)?",
                     "format": "file-path",
                     "mimetype": "text/plain",
-                    "help_text": "\"This parameter is *mandatory* if `--genome` is not specified.\""
+                    "help_text": "\"This parameter is *mandatory* if `--genome` is not specified.\"",
+                    "fa_icon": "fas fa-book"
                 },
                 "igenomes_base": {
                     "type": "string",
