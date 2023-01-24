@@ -40,7 +40,7 @@ Stand-alone graphical outputs are placed in this directory. They may be useful i
 
 </details>
 
-Most plots are included in the HTML report (see above), but are included in static files in this folder to facilitate use in external reporting.
+Most plots are included in the HTML report (see above), but are also included in static files in this folder to facilitate use in external reporting.
 
 ## Tables
 
