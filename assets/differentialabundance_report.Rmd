@@ -273,7 +273,7 @@ pca_datas <- lapply(names(assay_data), function(assay_type){
 })
 names(pca_datas) <- names(assay_data)
 
-pca_vs_meta <- anova_pca_metadata(pca_datas[['variance_stabilised']]$coords, observations[,informative_variables], pca_datas[['variance_stabilised']]$percentVar)
+pca_vs_meta <- anova_pca_metadata(pca_datas[['variance_stabilised']]$coords, observations[,informative_variables, drop = FALSE], pca_datas[['variance_stabilised']]$percentVar)
 
 # Show the variable with the tightest PC associations first
 informative_variables <- rownames(pca_vs_meta)[order(pca_vs_meta[,1])]
