@@ -94,24 +94,21 @@ workflow DIFFERENTIALABUNDANCE {
     ch_feature_anno = GTF_TO_TABLE.out.feature_annotation.map{
         tuple( exp_meta, it[1])
     }
-
+    .dump(tag:'ch_feature_anno_after')
     // Combine observations and matrices
 
-    ch_sample_and_assays = Channel.from([exp_meta, file(params.input), file(params.matrix)])
-
+    ch_sample_and_assays = Channel.from([[exp_meta, file(params.input), file(params.matrix)]])
+    .dump(tag:'ch_sample_and_assays_after')
     // Channel for the contrasts file
 
     ch_contrasts_file = Channel.from([[exp_meta, file(params.contrasts)]])
-        .map{
-            tuple( exp_meta, file(params.input), it[1], file(params.matrix))
-        }
-
+    .dump(tag:'ch_contrasts_file_after')
 
     // Check compatibility of FOM elements and contrasts
 
     VALIDATOR(
-        ch_feature_anno,
         ch_sample_and_assays,
+        ch_feature_anno,
         ch_contrasts_file
     )
 
@@ -133,14 +130,14 @@ workflow DIFFERENTIALABUNDANCE {
     // Firstly Filter the input matrix
 
     CUSTOM_MATRIXFILTER(
-        VALIDATOR.out.fom.assays,
-        VALIDATOR.out.fom.sample_meta
+        VALIDATOR.out.assays,
+        VALIDATOR.out.sample_meta
     )
 
     // Run the DESeq differential module, which doesn't take the feature
     // annotations
 
-    ch_samples_and_filtered_matrix = VALIDATOR.out.fom.sample_meta
+    ch_samples_and_filtered_matrix = VALIDATOR.out.sample_meta
         .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
         .map{ it.tail() }
 
@@ -165,11 +162,11 @@ workflow DIFFERENTIALABUNDANCE {
 
         CUSTOM_TABULARTOGSEAGCT ( DESEQ2_DIFFERENTIAL.out.normalised_counts )
 
-        ch_contrasts_and_samples = ch_contrasts.combine( VALIDATOR.out.fom.sample_meta.map { it[1] } )
+        ch_contrasts_and_samples = ch_contrasts.combine( VALIDATOR.out.sample_meta.map { it[1] } )
         CUSTOM_TABULARTOGSEACLS(ch_contrasts_and_samples)
 
         TABULAR_TO_GSEA_CHIP(
-            VALIDATOR.out.fom.feature_meta.map{ it[1] },
+            VALIDATOR.out.feature_meta.map{ it[1] },
             [params.features_id_col, params.features_name_col]
         )
 
@@ -218,12 +215,59 @@ workflow DIFFERENTIALABUNDANCE {
         }
         .unique()
 
-    ch_all_matrices = VALIDATOR.out.fom
+  /*  ch_all_matrices_BEFOOOORE = VALIDATOR.out
         .combine(ch_processed_matrices)                         // Add processed matrices to what we have in the FOM
         .map{
             tuple(it[0], it[1], it[2], [ it[3], it[4], it[5] ]) // Remove the experiment meta and group the matrices
         }
         .first()
+*/
+    ch_all_matrices = VALIDATOR.out.sample_meta
+        .combine(VALIDATOR.out.feature_meta.map{ it[1] })
+        .combine(VALIDATOR.out.assays.map{ it[1] })
+        .combine(ch_processed_matrices)
+        .dump(tag:'häääasdasd')
+        .map{
+            tuple(it[0], it[1], it[2], [ it[3], it[4], it[5] ])
+        }
+        .dump(tag:'häää232323')
+//[DUMP: hääääää1] [['id':'study'], /home/iivow01/git/differentialabundance/work/52/bb183da3be657f955b2bbcd2a1ca0d/study/SRP254919.samplesheet.sample_metadata.tsv, /home/iivow01/git/differentialabundance/work/52/bb183da3be657f955b2bbcd2a1ca0d/study/Mus_musculus.anno.feature_metadata.tsv, /home/iivow01/git/differentialabundance/work/52/bb183da3be657f955b2bbcd2a1ca0d/study/SRP254919.salmon.merged.gene_counts.top1000cov.assay.tsv, /home/iivow01/git/differentialabundance/work/97/eeb0b5c46d0f196db9f35bdcbcb5fd/treatment-mCherry-hND6-sample_number.normalised_counts.tsv, /home/iivow01/git/differentialabundance/work/97/eeb0b5c46d0f196db9f35bdcbcb5fd/treatment-mCherry-hND6-sample_number.vst.tsv]
+/*    ch_all_matrices = VALIDATOR.out.sample_meta
+        .map{
+            tuple(it,
+            VALIDATOR.out.feature_meta.map{ it[1] },
+            VALIDATOR.out.assays.map{ it[1] },
+            ch_processed_matrices)
+        }
+        .dump(tag:'hääääää2')*/
+//[DUMP: hääääää2] [[['id':'study'], /home/iivow01/git/differentialabundance/work/ef/50bdcfffc7a8a6336f9a9d7ada593b/study/SRP254919.samplesheet.sample_metadata.tsv], DataflowBroadcast around DataflowStream[?], DataflowBroadcast around DataflowStream[?], DataflowVariable(value=null)]
+
+//[DUMP: allmat_before] [['id':'study'], /home/iivow01/git/differentialabundance/work/7e/0c1dadd22408ace4ad49cd6e34eeeb/study/SRP254919.samplesheet.sample_metadata.tsv, /home/iivow01/git/differentialabundance/work/7e/0c1dadd22408ace4ad49cd6e34eeeb/study/Mus_musculus.anno.feature_metadata.tsv, [/home/iivow01/git/differentialabundance/work/7e/0c1dadd22408ace4ad49cd6e34eeeb/study/SRP254919.salmon.merged.gene_counts.top1000cov.assay.tsv, /home/iivow01/git/differentialabundance/work/34/c4b84b1aabe40d825a344ad7092cfb/treatment-mCherry-hND6-sample_number.normalised_counts.tsv, /home/iivow01/git/differentialabundance/work/34/c4b84b1aabe40d825a344ad7092cfb/treatment-mCherry-hND6-sample_number.vst.tsv]]
+//[DUMP: häää232323] [['id':'study'], /home/iivow01/git/differentialabundance/work/7f/e72f9296562e08a4d1bd66357ae70b/study/SRP254919.samplesheet.sample_metadata.tsv, /home/iivow01/git/differentialabundance/work/7f/e72f9296562e08a4d1bd66357ae70b/study/Mus_musculus.anno.feature_metadata.tsv, [/home/iivow01/git/differentialabundance/work/7f/e72f9296562e08a4d1bd66357ae70b/study/SRP254919.salmon.merged.gene_counts.top1000cov.assay.tsv, /home/iivow01/git/differentialabundance/work/00/0f17459c7d18d351679d1bf0d59f26/treatment-mCherry-hND6-sample_number.normalised_counts.tsv, /home/iivow01/git/differentialabundance/work/00/0f17459c7d18d351679d1bf0d59f26/treatment-mCherry-hND6-sample_number.vst.tsv]]
+
+//    VALIDATOR.out.fom.dump(tag:'fom')
+/*[DUMP: fom] [['id':'study'],
+study/SRP254919.samplesheet.sample_metadata.tsv,
+study/Mus_musculus.anno.feature_metadata.tsv,
+study/SRP254919.salmon.merged.gene_counts.top1000cov.assay.tsv]*/
+
+//    ch_processed_matrices.dump(tag:'pro')
+/*[DUMP: pro] [treatment-mCherry-hND6.normalised_counts.tsv, treatment-mCherry-hND6.vst.tsv]*/
+
+/*    ch_all_matrices = VALIDATOR.out
+        .combine(ch_processed_matrices)                         // Add processed marices to what we have in the FOM
+        .map{
+            tuple(it[0], it[1], it[2], [ it[3], it[4], it[5] ]) // Remove the experiment meta and group the matrices
+        }
+        .first()
+    ch_all_matrices.dump(tag:'all')
+[DUMP: all] [['id':'study'],
+study/SRP254919.samplesheet.sample_metadata.tsv,
+study/Mus_musculus.anno.feature_metadata.tsv,
+study/SRP254919.salmon.merged.gene_counts.top1000cov.assay.tsv,
+treatment-mCherry-hND6.normalised_counts.tsv,
+treatment-mCherry-hND6.vst.tsv]]*/
+
 
     PLOT_EXPLORATORY(
         ch_contrast_variables
@@ -259,8 +303,16 @@ workflow DIFFERENTIALABUNDANCE {
     ch_css_file = Channel.from(css_file)
     ch_citations_file = Channel.from(citations_file)
 
+
+
+    babbel = ch_all_matrices.dump(tag:'noflatten')
+    babbel2 = babbel.map{tuple(it[1], it[2], it[3])}.dump(tag:'tail')
+//[DUMP: tail_before] [['id':'study'], /home/iivow01/git/differentialabundance/work/5d/78c74f0241ac1b5fbd8a1b2e437877/study/SRP254919.samplesheet.sample_metadata.tsv, /home/iivow01/git/differentialabundance/work/5d/78c74f0241ac1b5fbd8a1b2e437877/study/Mus_musculus.anno.feature_metadata.tsv, [/home/iivow01/git/differentialabundance/work/5d/78c74f0241ac1b5fbd8a1b2e437877/study/SRP254919.salmon.merged.gene_counts.top1000cov.assay.tsv, /home/iivow01/git/differentialabundance/work/28/0853e79a760fcd017e1f66391172ed/treatment-mCherry-hND6.normalised_counts.tsv, /home/iivow01/git/differentialabundance/work/28/0853e79a760fcd017e1f66391172ed/treatment-mCherry-hND6.vst.tsv]]
+
+//[DUMP: tail_after]  [['id':'study'], /home/iivow01/git/differentialabundance/work/26/181def5956248c35341b6db7af21ac/study/SRP254919.samplesheet.sample_metadata.tsv, /home/iivow01/git/differentialabundance/work/26/181def5956248c35341b6db7af21ac/study/Mus_musculus.anno.feature_metadata.tsv, [/home/iivow01/git/differentialabundance/work/26/181def5956248c35341b6db7af21ac/study/SRP254919.salmon.merged.gene_counts.top1000cov.assay.tsv, /home/iivow01/git/differentialabundance/work/c2/5c55c228893f4e0e34b85538f4cdbc/treatment-mCherry-hND6-sample_number.normalised_counts.tsv, /home/iivow01/git/differentialabundance/work/c2/5c55c228893f4e0e34b85538f4cdbc/treatment-mCherry-hND6-sample_number.vst.tsv]]
     ch_report_input_files = ch_all_matrices
-        .tail()
+        .map{tuple(it[1], it[2], it[3])}
+        .dump(tag:'allmat_report')
         .map{it.flatten()}
         .combine(ch_contrasts_file.map{it.tail()})
         .combine(CUSTOM_DUMPSOFTWAREVERSIONS.out.yml)
@@ -268,6 +320,8 @@ workflow DIFFERENTIALABUNDANCE {
         .combine(ch_css_file)
         .combine(ch_citations_file)
         .combine(DESEQ2_DIFFERENTIAL.out.results.map{it[1]}.toList())
+//[DUMP: allmat_report]                  [[['id':'study'], /home/iivow01/git/differentialabundance/work/c2/6054c0749ef248950c99d339bac69b/study/SRP254919.samplesheet.sample_metadata.tsv], DataflowBroadcast around DataflowStream[?], DataflowBroadcast around DataflowStream[?], DataflowVariable(value=null)]
+//[DUMP: allmat_report].map{it.flatten()} [['id':'study'], /home/iivow01/git/differentialabundance/work/91/d971d2898114bff0d9de0bba518ddb/study/SRP254919.samplesheet.sample_metadata.tsv, DataflowBroadcast around DataflowStream[?], DataflowBroadcast around DataflowStream[?], DataflowVariable(value=null)]
 
     if (params.gsea_run){
         ch_report_input_files = ch_report_input_files
@@ -301,6 +355,7 @@ workflow DIFFERENTIALABUNDANCE {
         ch_report_params,
         ch_report_input_files
     )
+
 }
 
 /*

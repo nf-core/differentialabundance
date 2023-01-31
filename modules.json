@@ -45,6 +45,11 @@
                         "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
                         "installed_by": ["modules"]
                     },
+                    "multiqc": {
+                        "branch": "master",
+                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905",
+                        "installed_by": ["modules"]
+                    },
                     "rmarkdownnotebook": {
                         "branch": "master",
                         "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
@@ -62,7 +67,7 @@
                     },
                     "shinyngs/validatefomcomponents": {
                         "branch": "master",
-                        "git_sha": "dc67268f96f9d6e47a6f0c1c631ae54f42b6716c",
+                        "git_sha": "a281c4456f021b23b1192b853ff3c7cb8400b018",
                         "installed_by": ["modules"]
                     }
                 }
