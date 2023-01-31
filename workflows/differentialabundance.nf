@@ -214,6 +214,14 @@ workflow DIFFERENTIALABUNDANCE {
         }
         .unique()
 
+/*save    ch_all_matrices = VALIDATOR.out.sample_meta
+        .combine(VALIDATOR.out.feature_meta.map{ it[1] })
+        .combine(VALIDATOR.out.assays.map{ it[1] })
+        .combine(ch_processed_matrices)
+        .map{
+            tuple(it[0], it[1], it[2], [ it[3], it[4], it[5] ])
+        }
+*/
     ch_all_matrices = VALIDATOR.out.sample_meta
         .combine(VALIDATOR.out.feature_meta.map{ it[1] })
         .combine(VALIDATOR.out.assays.map{ it[1] })
@@ -221,6 +229,11 @@ workflow DIFFERENTIALABUNDANCE {
         .map{
             tuple(it[0], it[1], it[2], [ it[3], it[4], it[5] ])
         }
+        .dump(tag:'before_first')
+        .first()
+// Is first necessary? It doesn't seem to change anything here according to dump:
+//[DUMP: before_first] [['id':'study'], /home/iivow01/git/differentialabundance/work/48/ebf3dcecce21ae19e2e6a836f429fa/study/SRP254919.samplesheet.sample_metadata.tsv, /home/iivow01/git/differentialabundance/work/48/ebf3dcecce21ae19e2e6a836f429fa/study/Mus_musculus.anno.feature_metadata.tsv, [/home/iivow01/git/differentialabundance/work/48/ebf3dcecce21ae19e2e6a836f429fa/study/SRP254919.salmon.merged.gene_counts.top1000cov.assay.tsv, /home/iivow01/git/differentialabundance/work/d0/70159575a6d4d9d99233841d378d84/treatment-mCherry-hND6.normalised_counts.tsv, /home/iivow01/git/differentialabundance/work/d0/70159575a6d4d9d99233841d378d84/treatment-mCherry-hND6.vst.tsv]]
+//[DUMP: after_first] [['id':'study'], /home/iivow01/git/differentialabundance/work/48/ebf3dcecce21ae19e2e6a836f429fa/study/SRP254919.samplesheet.sample_metadata.tsv, /home/iivow01/git/differentialabundance/work/48/ebf3dcecce21ae19e2e6a836f429fa/study/Mus_musculus.anno.feature_metadata.tsv, [/home/iivow01/git/differentialabundance/work/48/ebf3dcecce21ae19e2e6a836f429fa/study/SRP254919.salmon.merged.gene_counts.top1000cov.assay.tsv, /home/iivow01/git/differentialabundance/work/d0/70159575a6d4d9d99233841d378d84/treatment-mCherry-hND6.normalised_counts.tsv, /home/iivow01/git/differentialabundance/work/d0/70159575a6d4d9d99233841d378d84/treatment-mCherry-hND6.vst.tsv]]
 
     PLOT_EXPLORATORY(
         ch_contrast_variables
