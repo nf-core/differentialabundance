@@ -215,10 +215,10 @@ workflow DIFFERENTIALABUNDANCE {
         }
         .unique()
 
-    ch_all_matrices = VALIDATOR.out.sample_meta
-        .combine(VALIDATOR.out.feature_meta.map{ it[1] })
-        .combine(VALIDATOR.out.assays.map{ it[1] })
-        .combine(ch_processed_matrices)
+    ch_all_matrices = VALIDATOR.out.sample_meta              // meta, samples
+        .join(VALIDATOR.out.feature_meta)                                // meta, samples, features
+        .join(VALIDATOR.out.assays)                                           // meta, samples, features, raw matrix
+        .combine(ch_processed_matrices)                                // meta, samples, features, raw, norm, vst
         .map{
             tuple(it[0], it[1], it[2], [ it[3], it[4], it[5] ])
         }
