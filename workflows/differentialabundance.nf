@@ -91,7 +91,8 @@ workflow DIFFERENTIALABUNDANCE {
     // annotation (fom = features/ observations/ matrix)
 
     GTF_TO_TABLE( file_gtf, [[ "id":""], []])
-    ch_feature_anno = GTF_TO_TABLE.out.feature_annotation.map{
+    ch_feature_anno = GTF_TO_TABLE.out.feature_annotation
+    .map{
         tuple( exp_meta, it[1])
     }
 
