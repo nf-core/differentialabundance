@@ -150,9 +150,9 @@ workflow DIFFERENTIALABUNDANCE {
     // Currently, we're letting GSEA work on the expression data. In future we
     // will allow use of GSEA preranked instead, which will work with the fold
     // changes/ p values from DESeq2
-
-    if (params.gsea_run){
-
+    
+    if (params.gsea_run){    
+    
         ch_gene_sets = Channel.from(gene_sets_file)
 
         // For GSEA, we need to convert normalised counts to a GCT format for
