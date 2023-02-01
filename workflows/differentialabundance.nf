@@ -259,7 +259,7 @@ workflow DIFFERENTIALABUNDANCE {
     ch_citations_file = Channel.from(citations_file)
 
     ch_report_input_files = ch_all_matrices
-        .map{tuple(it[1], it[2], it[3])}
+        .map{ it.tail() }
         .map{it.flatten()}
         .combine(ch_contrasts_file.map{it.tail()})
         .combine(CUSTOM_DUMPSOFTWAREVERSIONS.out.yml)
