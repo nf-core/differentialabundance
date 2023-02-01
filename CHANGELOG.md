@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
-- [[#58](https://github.com/nf-core/differentialabundance/issues/58)] - Update module shinyngs/validatefomcomponents ([@WackerO](https://github.com/WackerO), review by
+- [[#58](https://github.com/nf-core/differentialabundance/issues/58)] - Update module shinyngs/validatefomcomponents ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 
 ## v1.0.1 - 2022-01-25
 
