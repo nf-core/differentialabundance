@@ -91,7 +91,8 @@ workflow DIFFERENTIALABUNDANCE {
     // annotation (fom = features/ observations/ matrix)
 
     GTF_TO_TABLE( file_gtf, [[ "id":""], []])
-    ch_feature_anno = GTF_TO_TABLE.out.feature_annotation.map{
+    ch_feature_anno = GTF_TO_TABLE.out.feature_annotation
+    .map{
         tuple( exp_meta, it[1])
     }
 
@@ -214,10 +215,10 @@ workflow DIFFERENTIALABUNDANCE {
         }
         .unique()
 
-    ch_all_matrices = VALIDATOR.out.sample_meta
-        .combine(VALIDATOR.out.feature_meta.map{ it[1] })
-        .combine(VALIDATOR.out.assays.map{ it[1] })
-        .combine(ch_processed_matrices)
+    ch_all_matrices = VALIDATOR.out.sample_meta              // meta, samples
+        .join(VALIDATOR.out.feature_meta)                                // meta, samples, features
+        .join(VALIDATOR.out.assays)                                           // meta, samples, features, raw matrix
+        .combine(ch_processed_matrices)                                // meta, samples, features, raw, norm, vst
         .map{
             tuple(it[0], it[1], it[2], [ it[3], it[4], it[5] ])
         }
@@ -258,7 +259,7 @@ workflow DIFFERENTIALABUNDANCE {
     ch_citations_file = Channel.from(citations_file)
 
     ch_report_input_files = ch_all_matrices
-        .map{tuple(it[1], it[2], it[3])}
+        .map{ it.tail() }
         .map{it.flatten()}
         .combine(ch_contrasts_file.map{it.tail()})
         .combine(CUSTOM_DUMPSOFTWAREVERSIONS.out.yml)
