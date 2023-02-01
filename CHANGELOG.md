@@ -26,6 +26,7 @@ Initial release of nf-core/differentialabundance, created with the [nf-core](htt
 ### `Changed`
 
 - [[#58](https://github.com/nf-core/differentialabundance/issues/58)] - Update module shinyngs/validatefomcomponents ([@WackerO](https://github.com/WackerO), review by
+
 ### `Fixed`
 
 ### `Dependencies`
