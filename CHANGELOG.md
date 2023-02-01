@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## v1.1.0dev - xxxx-xx-xx
 
+### `Changed`
+
+- [[#58](https://github.com/nf-core/differentialabundance/issues/58)] - Update module shinyngs/validatefomcomponents ([@WackerO](https://github.com/WackerO), review by
+
 ## v1.0.1 - 2022-01-25
 
 - [[#49](https://github.com/nf-core/differentialabundance/pull/49) - Add citation fixes, missing logos, output detail, and trigger Zenodo ([@pinin4fjords](https://github.com/pinin4fjords), review by [@apeltzer](https://github.com/apeltzer), [@jfy133](https://github.com/jfy133))
@@ -28,10 +32,6 @@ Initial release of nf-core/differentialabundance, created with the [nf-core](htt
 - [[#23](https://github.com/nf-core/differentialabundance/issues/23)] - Complete minimal report content ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#38](https://github.com/nf-core/differentialabundance/issues/38)] - Complete full-size test data setup ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#41](https://github.com/nf-core/differentialabundance/issues/41)] - Update citations ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
-
-### `Changed`
-
-- [[#58](https://github.com/nf-core/differentialabundance/issues/58)] - Update module shinyngs/validatefomcomponents ([@WackerO](https://github.com/WackerO), review by
 
 ### `Fixed`
 
