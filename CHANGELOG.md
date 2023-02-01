@@ -21,8 +21,11 @@ Initial release of nf-core/differentialabundance, created with the [nf-core](htt
 - [[#22](https://github.com/nf-core/differentialabundance/issues/22)] - Complete docs- README etc ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#23](https://github.com/nf-core/differentialabundance/issues/23)] - Complete minimal report content ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#38](https://github.com/nf-core/differentialabundance/issues/38)] - Complete full-size test data setup ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
-- [[#41](https://github.com/nf-core/differentialabundance/issues/41)] - update citations ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
+- [[#41](https://github.com/nf-core/differentialabundance/issues/41)] - Update citations ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 
+### `Changed`
+
+- [[#58](https://github.com/nf-core/differentialabundance/issues/58)] - Update module shinyngs/validatefomcomponents ([@WackerO](https://github.com/WackerO), review by
 ### `Fixed`
 
 ### `Dependencies`
