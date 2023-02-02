@@ -9,11 +9,12 @@ def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 // Validate input parameters
 WorkflowDifferentialabundance.initialise(params, log)
 
-def checkPathParamList = [ params.input, params.gtf ]
+def checkPathParamList = [ params.input, params.matrix, params.gtf ]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
+if (params.matrix) { ch_matrix = Channel.fromPath(params.matrix) } else { exit 1, 'Counts matrix not specified!' }
 
 // Check optional parameters
 if (params.control_features) { ch_control_features = file(params.control_features, checkIfExists: true) } else { ch_control_features = [[],[]] } 
@@ -37,6 +38,7 @@ citations_file = file(params.citations_file, checkIfExists: true)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
+include { IMPORT_FEATURECOUNTS } from '../modules/local/import_featurecounts'
 include { TABULAR_TO_GSEA_CHIP } from '../modules/local/tabular_to_gsea_chip'
 
 /*
@@ -73,6 +75,23 @@ def multiqc_report = []
 workflow DIFFERENTIALABUNDANCE {
 
     ch_versions = Channel.empty()
+    
+    
+    switch (params.input_type) {
+        case 'salmon':
+            break
+        case 'featurecounts':
+            IMPORT_FEATURECOUNTS (
+                ch_matrix,
+                ch_input
+            )
+            ch_matrix = IMPORT_FEATURECOUNTS.out.ch_matrix
+            ch_input = IMPORT_FEATURECOUNTS.out.ch_input
+            ch_versions = ch_versions.mix(IMPORT_FEATURECOUNTS.out.versions)
+            params.observations_id_col = params.observations_id_col.replace(' ', '.')
+            params.features_id_col = params.features_id_col.replace(' ', '.')
+            break
+    }
    
     // Get feature annotations from a GTF file, gunzip if necessary
  
@@ -98,7 +117,7 @@ workflow DIFFERENTIALABUNDANCE {
 
     // Combine observations and matrices
 
-    ch_sample_and_assays = Channel.from([[exp_meta, file(params.input), file(params.matrix)]])
+    ch_sample_and_assays = Channel.from([[exp_meta, file(params.input)]]).combine(ch_matrix)
 
     // Channel for the contrasts file
     
