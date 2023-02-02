@@ -5,6 +5,11 @@
         "https://github.com/nf-core/modules.git": {
             "modules": {
                 "nf-core": {
+                    "affy/justrma": {
+                        "branch": "master",
+                        "git_sha": "25049ae89bffcce78ff12d7ab34a28b896e4ec41",
+                        "installed_by": ["modules"]
+                    },
                     "atlasgeneannotationmanipulation/gtf2featureannotation": {
                         "branch": "master",
                         "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
@@ -43,6 +48,11 @@
                     "gunzip": {
                         "branch": "master",
                         "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "installed_by": ["modules"]
+                    },
+                    "limma/differential": {
+                        "branch": "master",
+                        "git_sha": "70ac5eb3037b7a79368d868500036da9833c3728",
                         "installed_by": ["modules"]
                     },
                     "rmarkdownnotebook": {
