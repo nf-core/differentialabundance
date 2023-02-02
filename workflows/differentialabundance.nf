@@ -91,23 +91,24 @@ workflow DIFFERENTIALABUNDANCE {
     // annotation (fom = features/ observations/ matrix)
 
     GTF_TO_TABLE( file_gtf, [[ "id":""], []])
-    
-    // Combine features with the observations and matrices to create a FOM
-    // where these things can travel together
+    ch_feature_anno = GTF_TO_TABLE.out.feature_annotation
+    .map{
+        tuple( exp_meta, it[1])
+    }
 
-    ch_fom = GTF_TO_TABLE.out.feature_annotation
-        .map{
-            tuple( exp_meta, file(params.input), it[1], file(params.matrix))
-        }
-   
+    // Combine observations and matrices
+
+    ch_sample_and_assays = Channel.from([[exp_meta, file(params.input), file(params.matrix)]])
+
     // Channel for the contrasts file
     
     ch_contrasts_file = Channel.from([[exp_meta, file(params.contrasts)]])
 
     // Check compatibility of FOM elements and contrasts
 
-    VALIDATOR(  
-        ch_fom,
+    VALIDATOR(
+        ch_sample_and_assays,
+        ch_feature_anno,
         ch_contrasts_file
     )
 
@@ -129,17 +130,14 @@ workflow DIFFERENTIALABUNDANCE {
     // Firstly Filter the input matrix
 
     CUSTOM_MATRIXFILTER(
-        VALIDATOR.out.fom.map{ tuple(it[0], it[3]) },
-        VALIDATOR.out.fom.map{ tuple(it[0], it[1]) }
+        VALIDATOR.out.assays,
+        VALIDATOR.out.sample_meta
     )
     
     // Run the DESeq differential module, which doesn't take the feature
     // annotations 
 
-    ch_samples_and_filtered_matrix = VALIDATOR.out.fom
-        .map{
-            tuple(it[0], it[1])                     // meta, samplesheet
-        }
+    ch_samples_and_filtered_matrix = VALIDATOR.out.sample_meta
         .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
         .map{ it.tail() } 
 
@@ -164,11 +162,11 @@ workflow DIFFERENTIALABUNDANCE {
 
         CUSTOM_TABULARTOGSEAGCT ( DESEQ2_DIFFERENTIAL.out.normalised_counts )
 
-        ch_contrasts_and_samples = ch_contrasts.combine( VALIDATOR.out.fom.map { it[1] } )
+        ch_contrasts_and_samples = ch_contrasts.combine( VALIDATOR.out.sample_meta.map { it[1] } )
         CUSTOM_TABULARTOGSEACLS(ch_contrasts_and_samples) 
 
         TABULAR_TO_GSEA_CHIP(
-            VALIDATOR.out.fom.map{ it[2] },
+            VALIDATOR.out.feature_meta.map{ it[1] },
             [params.features_id_col, params.features_name_col]    
         )
 
@@ -217,10 +215,12 @@ workflow DIFFERENTIALABUNDANCE {
         }
         .unique()
 
-    ch_all_matrices = VALIDATOR.out.fom
-        .combine(ch_processed_matrices)                         // Add processed marices to what we have in the FOM
+    ch_all_matrices = VALIDATOR.out.sample_meta                 // meta, samples
+        .join(VALIDATOR.out.feature_meta)                       // meta, samples, features
+        .join(VALIDATOR.out.assays)                             // meta, samples, features, raw matrix
+        .combine(ch_processed_matrices)                         // meta, samples, features, raw, norm, vst
         .map{
-            tuple(it[0], it[1], it[2], [ it[3], it[4], it[5] ]) // Remove the experiment meta and group the matrices
+            tuple(it[0], it[1], it[2], [ it[3], it[4], it[5] ])
         }
         .first()
  
@@ -259,7 +259,7 @@ workflow DIFFERENTIALABUNDANCE {
     ch_citations_file = Channel.from(citations_file)
 
     ch_report_input_files = ch_all_matrices
-        .tail()
+        .map{ it.tail() }
         .map{it.flatten()}
         .combine(ch_contrasts_file.map{it.tail()})
         .combine(CUSTOM_DUMPSOFTWAREVERSIONS.out.yml)
@@ -300,6 +300,7 @@ workflow DIFFERENTIALABUNDANCE {
         ch_report_params,
         ch_report_input_files
     )
+
 }
 
 /*
