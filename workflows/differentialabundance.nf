@@ -85,11 +85,9 @@ workflow DIFFERENTIALABUNDANCE {
                 ch_matrix,
                 ch_input
             )
-            ch_matrix = IMPORT_FEATURECOUNTS.out.ch_matrix
-            ch_input = IMPORT_FEATURECOUNTS.out.ch_input
+            ch_matrix = IMPORT_FEATURECOUNTS.out.counts
+            ch_input = IMPORT_FEATURECOUNTS.out.samplesheet
             ch_versions = ch_versions.mix(IMPORT_FEATURECOUNTS.out.versions)
-            params.observations_id_col = params.observations_id_col.replace(' ', '.')
-            params.features_id_col = params.features_id_col.replace(' ', '.')
             break
     }
    
@@ -124,7 +122,6 @@ workflow DIFFERENTIALABUNDANCE {
     ch_contrasts_file = Channel.from([[exp_meta, file(params.contrasts)]])
 
     // Check compatibility of FOM elements and contrasts
-
     VALIDATOR(
         ch_sample_and_assays,
         ch_feature_anno,

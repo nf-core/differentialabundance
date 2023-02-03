@@ -149,6 +149,19 @@
             "required": ["observations_id_col", "observations_type"],
             "fa_icon": "fas fa-eye"
         },
+        "matrix_options": {
+            "title": "Counts matrix options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "matrix_id_col": {
+                    "type": "string",
+                    "default": "Geneid",
+                    "description": "Column in the counts matrix to be used as the gene identifier, this is used by import modules if the counts table has to be reformatted"
+                }
+            }
+        },
         "features_options": {
             "title": "Features options",
             "type": "object",
