@@ -814,6 +814,9 @@
             "$ref": "#/definitions/observations_options"
         },
         {
+            "$ref": "#/definitions/matrix_options"
+        },
+        {
             "$ref": "#/definitions/features_options"
         },
         {
