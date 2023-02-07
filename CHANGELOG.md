@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## v1.1.0dev - xxxx-xx-xx
 
+### `Added`
+
+- [[#63](https://github.com/nf-core/differentialabundance/issues/63)] - Add git CI matrix for different test profiles to run ([@WackerO](https://github.com/WackerO)
+
 ### `Changed`
 
 - [[#57](https://github.com/nf-core/differentialabundance/issues/57)] - Update module shinyngs/validatefomcomponents and bump other shinyngs modules to resolve [[#56](https://github.com/nf-core/differentialabundance/issues/56)] ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
