@@ -13,7 +13,7 @@ config_profile_description: "Full test dataset to check pipeline function"
 
 # Restrict resources or run will fail on github
 max_cpus: 2
-max_memory: "6.8 GB"
+max_memory: "6.8GB"
 max_time: "6.h"
 
 # Input data
