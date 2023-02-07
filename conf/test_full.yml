@@ -1,0 +1,27 @@
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#    Nextflow config file for running full-size tests
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#    Defines input files and everything required to run a full size pipeline test.
+#
+#    Use as follows:
+#        nextflow run nf-core/differentialabundance -profile <docker/singularity> -params-file conf/test_full.yml --outdir <OUTDIR>
+#
+#----------------------------------------------------------------------------------------
+
+config_profile_name: 'Full test profile'
+config_profile_description: 'Full test dataset to check pipeline function'
+
+# Input data
+input: 'https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/rnaseq_featurecounts_sample_preparations.tsv'
+input_type: 'featurecounts'
+contrasts: 'https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/rnaseq_featurecounts_contrast_file.csv'
+matrix: 'https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/rnaseq_featurecounts_merged_gene_counts.txt'
+gtf: 'https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz'
+
+# Configure inputs
+observations_id_col: "Secondary Name"
+matrix_id_col: 'Geneid'
+
+# Activate GSEA
+gsea_run: true
+gsea_gene_sets: 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt'

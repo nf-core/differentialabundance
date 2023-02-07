@@ -1,0 +1,35 @@
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#    Nextflow config file for running minimal tests
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#    Defines input files and everything required to run a fast and simple pipeline test.
+#
+#    Use as follows:
+#        nextflow run nf-core/differentialabundance -profile <docker/singularity> -params-file conf/test.yml --outdir <OUTDIR>
+#
+#----------------------------------------------------------------------------------------
+
+config_profile_name: 'Test profile'
+config_profile_description: 'Minimal test dataset to check pipeline function'
+
+# Limit resources so that this can run on GitHub Actions
+max_cpus: 2
+max_memory: '6.GB'
+max_time: '6.h'
+
+# Input data
+input: 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.samplesheet.csv'
+matrix: 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.salmon.merged.gene_counts.top1000cov.tsv'
+contrasts: 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.contrasts.csv'
+
+# To do: replace this with a cut-down mouse GTF matching the matrix for testing
+gtf: 'https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz'
+
+# Apply a higher filter to check that the filtering works
+filtering_min_abundance: 10
+
+# Test dataset is too small for the nsub default value
+deseq2_vst_nsub: 500
+
+# Activate GSEA
+gsea_run: true
+gsea_gene_sets: 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt'
