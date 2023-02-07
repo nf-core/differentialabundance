@@ -66,4 +66,4 @@ jobs:
         # For example: adding multiple test runs with different parameters
         # Remember that you can parallelise this by using strategy.matrix
         run: |
-          nextflow run ${GITHUB_WORKSPACE} -profile docker -params-file conf/${{ matrix.yml_file }} --outdir ./results
+          nextflow run ${GITHUB_WORKSPACE} -profile docker -params-file conf/${{ matrix.yml_file }}.yml --outdir ./results
