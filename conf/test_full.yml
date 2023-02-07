@@ -11,8 +11,10 @@
 config_profile_name: "Full test profile"
 config_profile_description: "Full test dataset to check pipeline function"
 
-# Restrict to 2 CPUs or run will fail on github
+# Restrict resources or run will fail on github
 max_cpus: 2
+max_memory: "6.8 GB"
+max_time: "6.h"
 
 # Input data
 input: "https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/rnaseq_featurecounts_sample_preparations.tsv"
