@@ -10,52 +10,8 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": [
-                "input",
-                "contrasts",
-                "matrix",
-                "outdir",
-                "study_name",
-                "study_type",
-                "report_file",
-                "logo_file",
-                "css_file"
-            ],
+            "required": ["study_name", "study_type", "outdir", "input", "contrasts"],
             "properties": {
-                "input": {
-                    "type": "string",
-                    "format": "file-path",
-                    "mimetype": "text/csv",
-                    "pattern": "^\\S+\\.(csv|tsv|txt)$",
-                    "schema": "assets/schema_input.json",
-                    "description": "Path to comma-separated file containing information about the samples in the experiment.",
-                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/differentialabundance/usage#samplesheet-input).",
-                    "fa_icon": "fas fa-file-csv"
-                },
-                "contrasts": {
-                    "type": "string",
-                    "description": "A CSV file describing sample contrasts",
-                    "help_text": "This file is used to define groups of samples from 'input' to compare.  It must contain at least the columns 'variable', 'reference', 'target' and 'blocking', where 'variable' is a column in the input sample sheet, 'reference' and 'target' are values in that column, and blocking is a colon-separated list of additional 'blocking' variables (can be an empty string)",
-                    "pattern": "^\\S+\\.csv$",
-                    "format": "file-path",
-                    "mimetype": "text/csv",
-                    "fa_icon": "fas fa-adjust"
-                },
-                "matrix": {
-                    "type": "string",
-                    "description": "TSV-format abundance matrix",
-                    "help_text": "For example an expression matrix output from the nf-core/rnaseq workflow. There must be a column in this matrix for every row in the input sample sheet.",
-                    "format": "file-path",
-                    "mimetype": "text/tab-separated-values",
-                    "pattern": "^\\S+\\.(tsv|csv|txt)$",
-                    "fa_icon": "fas fa-border-all"
-                },
-                "outdir": {
-                    "type": "string",
-                    "format": "directory-path",
-                    "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
-                    "fa_icon": "fas fa-folder-open"
-                },
                 "study_name": {
                     "type": "string",
                     "default": "study",
@@ -71,12 +27,50 @@
                     "enum": ["rnaseq"],
                     "fa_icon": "far fa-keyboard"
                 },
-                "email": {
+                "outdir": {
                     "type": "string",
-                    "description": "Email address for completion summary.",
-                    "fa_icon": "fas fa-envelope",
-                    "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
-                    "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
+                    "format": "directory-path",
+                    "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
+                    "fa_icon": "fas fa-folder-open"
+                },
+                "input": {
+                    "type": "string",
+                    "format": "file-path",
+                    "mimetype": "text/csv",
+                    "pattern": "^\\S+\\.(csv|tsv|txt)$",
+                    "schema": "assets/schema_input.json",
+                    "description": "Path to comma-separated file containing information about the samples in the experiment.",
+                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/differentialabundance/usage#samplesheet-input).",
+                    "fa_icon": "fas fa-file-csv"
+                },
+                "matrix": {
+                    "type": "string",
+                    "description": "TSV-format abundance matrix",
+                    "help_text": "For example an expression matrix output from the nf-core/rnaseq workflow. There must be a column in this matrix for every row in the input sample sheet.\n\nNot a required input if providing CEL files for affymetrix preprocessing.",
+                    "format": "file-path",
+                    "mimetype": "text/tab-separated-values",
+                    "pattern": "^\\S+\\.(tsv|csv|txt)$",
+                    "fa_icon": "fas fa-border-all"
+                },
+                "affy_cel_files_archive": {
+                    "type": "string",
+                    "default": "None",
+                    "description": "A compressed CEL files archive such as often found in GEO"
+                },
+                "contrasts": {
+                    "type": "string",
+                    "description": "A CSV file describing sample contrasts",
+                    "help_text": "This file is used to define groups of samples from 'input' to compare.  It must contain at least the columns 'variable', 'reference', 'target' and 'blocking', where 'variable' is a column in the input sample sheet, 'reference' and 'target' are values in that column, and blocking is a colon-separated list of additional 'blocking' variables (can be an empty string)",
+                    "pattern": "^\\S+\\.csv$",
+                    "format": "file-path",
+                    "mimetype": "text/csv",
+                    "fa_icon": "fas fa-adjust"
+                },
+                "sizefactors_from_controls": {
+                    "type": "boolean",
+                    "help_text": "Use supplied control features in normalistion/ scaling operations?",
+                    "description": "When set, use the control features in scaling/ normalisation",
+                    "fa_icon": "fas fa-expand-arrows-alt"
                 },
                 "control_features": {
                     "type": "string",
@@ -85,37 +79,46 @@
                     "format": "file-path",
                     "mimetype": "text/plain",
                     "fa_icon": "fas fa-gamepad"
-                },
-                "sizefactors_from_controls": {
-                    "type": "boolean",
-                    "help_text": "Use supplied control features in normalistion/ scaling operations?",
-                    "description": "When set, use the control features in scaling/ normalisation",
-                    "fa_icon": "fas fa-expand-arrows-alt"
-                },
-                "report_file": {
+                }
+            }
+        },
+        "affy_input_options": {
+            "title": "Affy input options",
+            "type": "object",
+            "description": "Options for processing of affy arrays with justRMA()",
+            "default": "",
+            "properties": {
+                "affy_file_name_col": {
                     "type": "string",
-                    "description": "Rmd report template from which to create the pipeline report",
-                    "format": "file-path",
-                    "pattern": "^\\S+\\.Rmd$",
-                    "fa_icon": "fas fa-book"
+                    "default": "file"
                 },
-                "logo_file": {
+                "affy_sample_name_col": {
                     "type": "string",
-                    "default": "docs/images/nf-core-differentialabundance_logo_light.png",
-                    "description": "A logo to display in the report instead of the generic pipeline logo",
-                    "fa_icon": "far fa-font-awesome-logo-full"
+                    "default": "file"
                 },
-                "css_file": {
+                "affy_background": {
                     "type": "string",
-                    "default": "assets/nf-core_style.css",
-                    "description": "CSS to use to style the output, in lieu of the default nf-core styling",
-                    "fa_icon": "far fa-file-code"
+                    "default": "true"
                 },
-                "citations_file": {
+                "affy_normalize": {
                     "type": "string",
-                    "default": "CITATIONS.md",
-                    "description": "A markdown file containing citations to include in the fiinal report",
-                    "fa_icon": "fas fa-ad"
+                    "default": "true"
+                },
+                "affy_bg_version": {
+                    "type": "integer",
+                    "default": 2
+                },
+                "affy_destructive": {
+                    "type": "string",
+                    "default": "false"
+                },
+                "affy_cdfname": {
+                    "type": "string",
+                    "default": "None"
+                },
+                "affy_build_annotation": {
+                    "type": "string",
+                    "default": "false"
                 }
             }
         },
@@ -452,6 +455,54 @@
             },
             "fa_icon": "fas fa-adjust"
         },
+        "limma_specific_options_microarray_only": {
+            "title": "Limma specific options (microarray only)",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "limma_ndups": {
+                    "type": "string",
+                    "default": "None"
+                },
+                "limma_spacing": {
+                    "type": "string",
+                    "default": "None"
+                },
+                "limma_block": {
+                    "type": "string",
+                    "default": "None"
+                },
+                "limma_correlation": {
+                    "type": "string",
+                    "default": "None"
+                },
+                "limma_method": {
+                    "type": "string",
+                    "default": "ls"
+                },
+                "limma_proportion": {
+                    "type": "number",
+                    "default": 0.01
+                },
+                "limma_trend": {
+                    "type": "string",
+                    "default": "false"
+                },
+                "limma_robust": {
+                    "type": "string",
+                    "default": "false"
+                },
+                "limma_lfc": {
+                    "type": "integer",
+                    "default": 0
+                },
+                "limma_confint": {
+                    "type": "string",
+                    "default": "false"
+                }
+            }
+        },
         "gsea": {
             "title": "GSEA",
             "type": "object",
@@ -593,6 +644,47 @@
                 }
             },
             "fa_icon": "fas fa-layer-group"
+        },
+        "reporting_options": {
+            "title": "Reporting options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "report_file": {
+                    "type": "string",
+                    "description": "Rmd report template from which to create the pipeline report",
+                    "format": "file-path",
+                    "pattern": "^\\S+\\.Rmd$",
+                    "fa_icon": "fas fa-book"
+                },
+                "email": {
+                    "type": "string",
+                    "description": "Email address for completion summary.",
+                    "fa_icon": "fas fa-envelope",
+                    "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
+                    "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
+                },
+                "logo_file": {
+                    "type": "string",
+                    "default": "docs/images/nf-core-differentialabundance_logo_light.png",
+                    "description": "A logo to display in the report instead of the generic pipeline logo",
+                    "fa_icon": "far fa-font-awesome-logo-full"
+                },
+                "css_file": {
+                    "type": "string",
+                    "default": "assets/nf-core_style.css",
+                    "description": "CSS to use to style the output, in lieu of the default nf-core styling",
+                    "fa_icon": "far fa-file-code"
+                },
+                "citations_file": {
+                    "type": "string",
+                    "default": "CITATIONS.md",
+                    "description": "A markdown file containing citations to include in the fiinal report",
+                    "fa_icon": "fas fa-ad"
+                }
+            },
+            "required": ["report_file", "logo_file", "css_file"]
         },
         "reference_genome_options": {
             "title": "Reference genome options",
@@ -791,6 +883,9 @@
             "$ref": "#/definitions/input_output_options"
         },
         {
+            "$ref": "#/definitions/affy_input_options"
+        },
+        {
             "$ref": "#/definitions/observations_options"
         },
         {
@@ -809,7 +904,13 @@
             "$ref": "#/definitions/deseq2_specific_options_rna_seq_only"
         },
         {
+            "$ref": "#/definitions/limma_specific_options_microarray_only"
+        },
+        {
             "$ref": "#/definitions/gsea"
+        },
+        {
+            "$ref": "#/definitions/reporting_options"
         },
         {
             "$ref": "#/definitions/reference_genome_options"
