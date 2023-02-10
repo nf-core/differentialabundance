@@ -52,17 +52,17 @@
                     },
                     "shinyngs/staticdifferential": {
                         "branch": "master",
-                        "git_sha": "5e38ee9d04cece63186d67ba9a05a40382c17295",
+                        "git_sha": "28c61abb47655627dfcdaffc8a31452dbeb9deba",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/staticexploratory": {
                         "branch": "master",
-                        "git_sha": "5e38ee9d04cece63186d67ba9a05a40382c17295",
+                        "git_sha": "28c61abb47655627dfcdaffc8a31452dbeb9deba",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/validatefomcomponents": {
                         "branch": "master",
-                        "git_sha": "5e38ee9d04cece63186d67ba9a05a40382c17295",
+                        "git_sha": "28c61abb47655627dfcdaffc8a31452dbeb9deba",
                         "installed_by": ["modules"]
                     }
                 }
