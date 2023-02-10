@@ -10,7 +10,7 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["study_name", "study_type", "outdir", "input", "contrasts"],
+            "required": ["study_name", "study_type", "input", "contrasts", "outdir"],
             "properties": {
                 "study_name": {
                     "type": "string",
@@ -24,14 +24,8 @@
                     "default": "rnaseq",
                     "description": "A string identifying the technology used to produce the data",
                     "help_text": "Currently only 'rnaseq' may be specified. In future options like 'affy_array' are possible.",
-                    "enum": ["rnaseq"],
+                    "enum": ["rnaseq", "affy_array"],
                     "fa_icon": "far fa-keyboard"
-                },
-                "outdir": {
-                    "type": "string",
-                    "format": "directory-path",
-                    "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
-                    "fa_icon": "fas fa-folder-open"
                 },
                 "input": {
                     "type": "string",
@@ -43,6 +37,29 @@
                     "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/differentialabundance/usage#samplesheet-input).",
                     "fa_icon": "fas fa-file-csv"
                 },
+                "contrasts": {
+                    "type": "string",
+                    "description": "A CSV file describing sample contrasts",
+                    "help_text": "This file is used to define groups of samples from 'input' to compare.  It must contain at least the columns 'variable', 'reference', 'target' and 'blocking', where 'variable' is a column in the input sample sheet, 'reference' and 'target' are values in that column, and blocking is a colon-separated list of additional 'blocking' variables (can be an empty string)",
+                    "pattern": "^\\S+\\.csv$",
+                    "format": "file-path",
+                    "mimetype": "text/csv",
+                    "fa_icon": "fas fa-adjust"
+                },
+                "outdir": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
+                    "fa_icon": "fas fa-folder-open"
+                }
+            }
+        },
+        "abundance_values": {
+            "title": "Abundance values",
+            "type": "object",
+            "description": "Ways of providing your abundance values",
+            "default": "",
+            "properties": {
                 "matrix": {
                     "type": "string",
                     "description": "TSV-format abundance matrix",
@@ -55,70 +72,9 @@
                 "affy_cel_files_archive": {
                     "type": "string",
                     "default": "None",
-                    "description": "A compressed CEL files archive such as often found in GEO"
-                },
-                "contrasts": {
-                    "type": "string",
-                    "description": "A CSV file describing sample contrasts",
-                    "help_text": "This file is used to define groups of samples from 'input' to compare.  It must contain at least the columns 'variable', 'reference', 'target' and 'blocking', where 'variable' is a column in the input sample sheet, 'reference' and 'target' are values in that column, and blocking is a colon-separated list of additional 'blocking' variables (can be an empty string)",
-                    "pattern": "^\\S+\\.csv$",
-                    "format": "file-path",
-                    "mimetype": "text/csv",
-                    "fa_icon": "fas fa-adjust"
-                },
-                "sizefactors_from_controls": {
-                    "type": "boolean",
-                    "help_text": "Use supplied control features in normalistion/ scaling operations?",
-                    "description": "When set, use the control features in scaling/ normalisation",
-                    "fa_icon": "fas fa-expand-arrows-alt"
-                },
-                "control_features": {
-                    "type": "string",
-                    "description": "A text file listing technical features (e.g. spikes)",
-                    "help_text": "One feature per row. Note that by default these features will just be stripped from matrices prior to internal processing. To actually use them in e.g. normalisation, set `--sizefactors_from_controls`",
-                    "format": "file-path",
-                    "mimetype": "text/plain",
-                    "fa_icon": "fas fa-gamepad"
-                }
-            }
-        },
-        "affy_input_options": {
-            "title": "Affy input options",
-            "type": "object",
-            "description": "Options for processing of affy arrays with justRMA()",
-            "default": "",
-            "properties": {
-                "affy_file_name_col": {
-                    "type": "string",
-                    "default": "file"
-                },
-                "affy_sample_name_col": {
-                    "type": "string",
-                    "default": "file"
-                },
-                "affy_background": {
-                    "type": "string",
-                    "default": "true"
-                },
-                "affy_normalize": {
-                    "type": "string",
-                    "default": "true"
-                },
-                "affy_bg_version": {
-                    "type": "integer",
-                    "default": 2
-                },
-                "affy_destructive": {
-                    "type": "string",
-                    "default": "false"
-                },
-                "affy_cdfname": {
-                    "type": "string",
-                    "default": "None"
-                },
-                "affy_build_annotation": {
-                    "type": "string",
-                    "default": "false"
+                    "description": "Alternative to matrix: a compressed CEL files archive such as often found in GEO",
+                    "fa_icon": "fas fa-file-archive",
+                    "help_text": "Use this option to provide a raw archive of CEL files from Affymetrix arrays. Will be ignored if a matrix is specified."
                 }
             }
         },
@@ -140,6 +96,12 @@
                     "description": "Type of observation",
                     "help_text": "This is used in reporting to refer to the observations. Frequently this is 'sample' (e.g. in RNA-seq experiments), but it may also be desirable to refer to 'pool', or 'individual'.",
                     "fa_icon": "fas fa-keyboard"
+                },
+                "observations_name_col": {
+                    "type": "string",
+                    "default": "sample",
+                    "description": "Column in the sample sheet to be used as the display identifier for observations",
+                    "fa_icon": "fas fa-file-signature"
                 }
             },
             "required": ["observations_id_col", "observations_type"],
@@ -169,10 +131,69 @@
                     "default": "gene",
                     "description": "Type of feature we have, often 'gene'",
                     "fa_icon": "fas fa-keyboard"
+                },
+                "sizefactors_from_controls": {
+                    "type": "boolean",
+                    "help_text": "Use supplied control features in normalistion/ scaling operations?",
+                    "description": "When set, use the control features in scaling/ normalisation",
+                    "fa_icon": "fas fa-expand-arrows-alt"
+                },
+                "control_features": {
+                    "type": "string",
+                    "description": "A text file listing technical features (e.g. spikes)",
+                    "help_text": "One feature per row. Note that by default these features will just be stripped from matrices prior to internal processing. To actually use them in e.g. normalisation, set `--sizefactors_from_controls`",
+                    "format": "file-path",
+                    "mimetype": "text/plain",
+                    "fa_icon": "fas fa-gamepad"
                 }
             },
             "required": ["features_id_col", "features_name_col", "features_type"],
             "fa_icon": "fas fa-sitemap"
+        },
+        "affy_input_options": {
+            "title": "Affy input options",
+            "type": "object",
+            "description": "Options for processing of affy arrays with justRMA()",
+            "default": "",
+            "properties": {
+                "affy_file_name_col": {
+                    "type": "string",
+                    "default": "file",
+                    "description": "Column of the sample sheet containing the Affymetrix CEL file name",
+                    "fa_icon": "fas fa-columns"
+                },
+                "affy_background": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "logical value. If TRUE, then background correct using RMA background correction.",
+                    "fa_icon": "fas fa-image"
+                },
+                "affy_bg_version": {
+                    "type": "integer",
+                    "default": 2,
+                    "description": "integer value indicating which RMA background to use",
+                    "help_text": "1: use background similar to pure R rma background given in affy version 1.0 - 1.0.2\n2: use background similar to pure R rma background given in affy version 1.1 and above",
+                    "fa_icon": "fas fa-code-branch"
+                },
+                "affy_destructive": {
+                    "type": "boolean",
+                    "description": "logical value. If TRUE, then works on the PM matrix in place as much as possible, good for large datasets.",
+                    "fa_icon": "fas fa-bomb"
+                },
+                "affy_cdfname": {
+                    "type": "string",
+                    "default": "None",
+                    "description": "Used to specify the name of an alternative cdf package. If set to NULL, then the usual cdf package based on Affymetrix' mappings will be used.",
+                    "fa_icon": "fas fa-signature"
+                },
+                "affy_build_annotation": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "logical value. If TRUE, a matrix of probe annotations will be derived.",
+                    "fa_icon": "fas fa-asterisk"
+                }
+            },
+            "fa_icon": "fas fa-table"
         },
         "filtering": {
             "title": "Filtering",
@@ -188,7 +209,7 @@
                 },
                 "filtering_min_samples": {
                     "type": "number",
-                    "default": 1,
+                    "default": 1.0,
                     "description": "Minimum observations that must pass the threshold to retain the row/ feature (e.g. gene).",
                     "fa_icon": "fas fa-compress-alt"
                 },
@@ -462,46 +483,67 @@
             "default": "",
             "properties": {
                 "limma_ndups": {
-                    "type": "string",
-                    "default": "None"
+                    "type": "number",
+                    "fa_icon": "fas fa-clone",
+                    "description": "passed to lmFit(), positive integer giving the number of times each distinct probe is printed on each array."
                 },
                 "limma_spacing": {
                     "type": "string",
-                    "default": "None"
+                    "default": "None",
+                    "fa_icon": "fas fa-people-arrows",
+                    "description": "passed to lmFit(), positive integer giving the spacing between duplicate occurrences of the same probe, spacing=1 for consecutive rows."
                 },
                 "limma_block": {
                     "type": "string",
-                    "default": "None"
+                    "default": "None",
+                    "fa_icon": "fas fa-cube",
+                    "description": "Sample sheet column to be used to derive a vector or factor specifying a blocking variable on the arrays"
                 },
                 "limma_correlation": {
                     "type": "string",
-                    "default": "None"
+                    "default": "None",
+                    "fa_icon": "fas fa-chart-line",
+                    "description": "passed to lmFit(), the inter-duplicate or inter-technical replicate correlation"
                 },
                 "limma_method": {
                     "type": "string",
-                    "default": "ls"
+                    "default": "ls",
+                    "fa_icon": "fas fa-hammer",
+                    "description": "passed to lmFit(), the fitting method",
+                    "enum": ["ls", "robust"],
+                    "help_text": " \"ls\" for least squares or \"robust\" for robust regression"
                 },
                 "limma_proportion": {
                     "type": "number",
-                    "default": 0.01
+                    "default": 0.01,
+                    "fa_icon": "fas fa-percent",
+                    "description": "passed to eBayes(), a numeric value between 0 and 1, assumed proportion of genes which are differentially expressed"
                 },
                 "limma_trend": {
-                    "type": "string",
-                    "default": "false"
+                    "type": "boolean",
+                    "fa_icon": "fas fa-chart-line",
+                    "description": "passed to eBayes(), logical, should an intensity-dependent trend be allowed for the prior variance?",
+                    "help_text": "If FALSE then the prior variance is constant. Alternatively, trend can be a row-wise numeric vector, which will be used as the covariate for the prior variance."
                 },
                 "limma_robust": {
-                    "type": "string",
-                    "default": "false"
+                    "type": "boolean",
+                    "fa_icon": "fab fa-android",
+                    "description": "passed to eBayes(), logical, should the estimation of df.prior and var.prior be robustified against outlier sample variances?"
                 },
                 "limma_lfc": {
                     "type": "integer",
-                    "default": 0
+                    "default": 0,
+                    "fa_icon": "fas fa-exchange-alt",
+                    "description": "passed to topTable(), minimum absolute log2-fold-change required",
+                    "help_text": "topTable and topTableF include only genes with (at least one) absolute log-fold-change greater than lfc. topTreat does not remove genes but ranks genes by evidence that their log-fold-change exceeds lfc."
                 },
                 "limma_confint": {
-                    "type": "string",
-                    "default": "false"
+                    "type": "boolean",
+                    "fa_icon": "fas fa-temperature-low",
+                    "description": "passed to topTable(), logical, should confidence 95% intervals be output for logFC? Alternatively, can take a numeric value between zero and one specifying the confidence level required."
                 }
-            }
+            },
+            "fa_icon": "fas fa-border-all"
         },
         "gsea": {
             "title": "GSEA",
@@ -883,13 +925,16 @@
             "$ref": "#/definitions/input_output_options"
         },
         {
-            "$ref": "#/definitions/affy_input_options"
+            "$ref": "#/definitions/abundance_values"
         },
         {
             "$ref": "#/definitions/observations_options"
         },
         {
             "$ref": "#/definitions/features_options"
+        },
+        {
+            "$ref": "#/definitions/affy_input_options"
         },
         {
             "$ref": "#/definitions/filtering"

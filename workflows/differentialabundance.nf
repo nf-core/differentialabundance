@@ -9,11 +9,12 @@ def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 // Validate input parameters
 WorkflowDifferentialabundance.initialise(params, log)
 
-def checkPathParamList = [ params.input, params.gtf ]
+def checkPathParamList = [ params.input ]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
 // Check mandatory parameters
-if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
+def exp_meta = [ "id": params.study_name  ]
+if (params.input) { ch_input = Channel.of([ exp_meta, params.input ]) } else { exit 1, 'Input samplesheet not specified!' }
 
 // Check optional parameters
 if (params.control_features) { ch_control_features = file(params.control_features, checkIfExists: true) } else { ch_control_features = [[],[]] } 
@@ -49,17 +50,21 @@ include { TABULAR_TO_GSEA_CHIP } from '../modules/local/tabular_to_gsea_chip'
 // MODULE: Installed directly from nf-core/modules
 //
 include { GUNZIP as GUNZIP_GTF                              } from '../modules/nf-core/gunzip/main'
+include { UNTAR                                             } from '../../../../../modules/nf-core/untar/main.nf'
 include { CUSTOM_DUMPSOFTWAREVERSIONS                       } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 include { SHINYNGS_STATICEXPLORATORY as PLOT_EXPLORATORY    } from '../modules/nf-core/shinyngs/staticexploratory/main'  
 include { SHINYNGS_STATICDIFFERENTIAL as PLOT_DIFFERENTIAL  } from '../modules/nf-core/shinyngs/staticdifferential/main'  
 include { SHINYNGS_VALIDATEFOMCOMPONENTS as VALIDATOR       } from '../modules/nf-core/shinyngs/validatefomcomponents/main'  
 include { DESEQ2_DIFFERENTIAL                               } from '../modules/nf-core/deseq2/differential/main'    
+include { LIMMA_DIFFERENTIAL                                } from '../modules/nf-core/limma/differential/main'    
 include { CUSTOM_MATRIXFILTER                               } from '../modules/nf-core/custom/matrixfilter/main' 
 include { ATLASGENEANNOTATIONMANIPULATION_GTF2FEATUREANNOTATION as GTF_TO_TABLE } from '../modules/nf-core/atlasgeneannotationmanipulation/gtf2featureannotation/main' 
 include { GSEA_GSEA                                         } from '../modules/nf-core/gsea/gsea/main' 
 include { CUSTOM_TABULARTOGSEAGCT                           } from '../modules/nf-core/custom/tabulartogseagct/main'
 include { CUSTOM_TABULARTOGSEACLS                           } from '../modules/nf-core/custom/tabulartogseacls/main' 
 include { RMARKDOWNNOTEBOOK                                 } from '../modules/nf-core/rmarkdownnotebook/main' 
+include { AFFY_JUSTRMA as AFFY_JUSTRMA_RAW                  } from '../modules/nf-core/affy/justrma/main' 
+include { AFFY_JUSTRMA as AFFY_JUSTRMA_NORM                 } from '../modules/nf-core/affy/justrma/main' 
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -72,33 +77,80 @@ def multiqc_report = []
 
 workflow DIFFERENTIALABUNDANCE {
 
+    // Set up some basic variables
     ch_versions = Channel.empty()
-   
-    // Get feature annotations from a GTF file, gunzip if necessary
- 
-    file_gtf_in = file(params.gtf)
-    file_gtf = [ [ "id": file_gtf_in.simpleName ], file_gtf_in ] 
-
-    if ( params.gtf.endsWith('.gz') ){
-        GUNZIP_GTF(file_gtf)
-        file_gtf = GUNZIP_GTF.out.gunzip
-        ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
-    } 
-
     exp_meta = [ "id": params.study_name  ]
+   
+    // If we have affy array data in the form of CEL files we'll be deriving
+    // matrix and annotation from them 
+    
+    if (params.study_type == 'affy_array'){
 
-    // Get a features table from the GTF and combine with the matrix and sample
-    // annotation (fom = features/ observations/ matrix)
+        // Uncompress the CEL files archive
 
-    GTF_TO_TABLE( file_gtf, [[ "id":""], []])
-    ch_feature_anno = GTF_TO_TABLE.out.feature_annotation
-    .map{
-        tuple( exp_meta, it[1])
+        ch_celfiles_archive = Channel.of([ exp_meta, cel_archive ])
+        UNTAR ( ch_celfiles_archive )
+
+        ch_affy_input = ch_input
+            .join(UNTAR.out.untar)
+
+        // Run affy to derive the matrix
+
+        AFFY_JUSTRMA_RAW ( 
+            ch_affy_input,
+            [[],[]] 
+        )
+        AFFY_JUSTRMA_NORM ( 
+            ch_affy_input,
+            [[],[]] 
+        )
+
+        // Fetch affy outputs. 
+
+        ch_raw = AFFY_JUSTRMA_RAW.out.tsv        
+        ch_normalised = AFFY_JUSTRMA_NORM.out.tsv        
+        ch_features = AFFY_JUSTRMA_RAW.out.annotation
     }
+    
+    else{
 
-    // Combine observations and matrices
+        // If this is not an affy array, assume we're reading from a matrix
 
-    ch_sample_and_assays = Channel.from([[exp_meta, file(params.input), file(params.matrix)]])
+        ch_raw = Channel.of([ exp_meta, file(params.matrix)])
+
+        // If user has provided a feature annotaiton table, use that
+
+        if (params.features){
+           ch_features = Channel.of([ exp_meta, file(params.features, checkIfExists: true)]) 
+        }
+        else{
+            if (params.gtf){
+                // Get feature annotations from a GTF file, gunzip if necessary
+             
+                file_gtf_in = file(params.gtf)
+                file_gtf = [ [ "id": file_gtf_in.simpleName ], file_gtf_in ] 
+
+                if ( params.gtf.endsWith('.gz') ){
+                    GUNZIP_GTF(file_gtf)
+                    file_gtf = GUNZIP_GTF.out.gunzip
+                    ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
+                } 
+
+                // Get a features table from the GTF and combine with the matrix and sample
+                // annotation (fom = features/ observations/ matrix)
+
+                GTF_TO_TABLE( file_gtf, [[ "id":""], []])
+                ch_features = GTF_TO_TABLE.out.feature_annotation
+                .map{
+                    tuple( exp_meta, it[1])
+                }
+            }
+            //else{
+                // Use local module to copy matrix ids to make a dummy feature
+                // annotation table
+            //}
+        }
+    }
 
     // Channel for the contrasts file
     
@@ -106,9 +158,16 @@ workflow DIFFERENTIALABUNDANCE {
 
     // Check compatibility of FOM elements and contrasts
 
+    if (params.study_type == 'affy_array'){
+        ch_matrix_for_differential = ch_norm
+    }
+    else{
+        ch_matrix_for_differential = ch_raw
+    }
+
     VALIDATOR(
-        ch_sample_and_assays,
-        ch_feature_anno,
+        ch_input.join(ch_matrix_for_differential),
+        ch_features,
         ch_contrasts_file
     )
 
@@ -133,18 +192,58 @@ workflow DIFFERENTIALABUNDANCE {
         VALIDATOR.out.assays,
         VALIDATOR.out.sample_meta
     )
-    
-    // Run the DESeq differential module, which doesn't take the feature
-    // annotations 
 
-    ch_samples_and_filtered_matrix = VALIDATOR.out.sample_meta
-        .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
-        .map{ it.tail() } 
+    // Prepare inputs for differential processes
 
-    DESEQ2_DIFFERENTIAL (
-        ch_contrasts.combine(ch_samples_and_filtered_matrix),
-        ch_control_features
+    ch_differential_inputs = ch_contrasts.combine(
+        VALIDATOR.out.sample_meta
+            .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
+            .map{ it.tail() } 
     )
+
+    if (params.study_type == 'affy_array'){
+
+        LIMMA_DIFFERENTIAL (
+            ch_differential_inputs
+        )
+        ch_differential = LIMMA_DIFFERENTIAL.out.results, 
+        
+        ch_versions = ch_versions
+            .mix(LIMMA_DIFFERENTIAL.out.versions)
+    
+        ch_processed_matrices = ch_norm
+            .map{ it.tail() }
+            .first()
+    }
+    else{
+
+        // Run the DESeq differential module, which doesn't take the feature
+        // annotations 
+
+        DESEQ2_DIFFERENTIAL (
+            ch_differential_inputs,
+            ch_control_features
+        )
+
+        ch_norm = DESEQ2_DIFFERENTIAL.out.normalised_counts
+        ch_vst = DESEQ2_DIFFERENTIAL.out.normalised_counts
+        ch_differential = DESEQ2_DIFFERENTIAL.out.results, 
+    
+        ch_versions = ch_versions
+            .mix(DESEQ2_DIFFERENTIAL.out.versions)
+        
+        // Let's make the simplifying assumption that the processed matrices from
+        // the DESeq runs are the same across contrasts. We run the DESeq process
+        // with matrices once for each contrast because DESeqDataSetFromMatrix()
+        // takes the model, and the model can vary between contrasts if the
+        // blocking factors included differ. But the normalised and
+        // variance-stabilised matrices are not (IIUC) impacted by the model.
+
+        ch_processed_matrices = ch_norm
+            .join(ch_vst)
+            .map{ it.tail() }
+            .first()
+    }
 
     // Run a gene set analysis where directed
 
@@ -160,7 +259,7 @@ workflow DIFFERENTIALABUNDANCE {
         // input, and process the sample sheet to generate class definitions
         // (CLS) for the variable used in each contrast        
 
-        CUSTOM_TABULARTOGSEAGCT ( DESEQ2_DIFFERENTIAL.out.normalised_counts )
+        CUSTOM_TABULARTOGSEAGCT ( ch_norm )
 
         ch_contrasts_and_samples = ch_contrasts.combine( VALIDATOR.out.sample_meta.map { it[1] } )
         CUSTOM_TABULARTOGSEACLS(ch_contrasts_and_samples) 
@@ -194,18 +293,6 @@ workflow DIFFERENTIALABUNDANCE {
             .mix(GSEA_GSEA.out.versions)
     }
 
-    // Let's make the simplifying assumption that the processed matrices from
-    // the DESeq runs are the same across contrasts. We run the DESeq process
-    // with matrices once for each contrast because DESeqDataSetFromMatrix()
-    // takes the model, and the model can vary between contrasts if the
-    // blocking factors included differ. But the normalised and
-    // variance-stabilised matrices are not (IIUC) impacted by the model.
-
-    ch_processed_matrices = DESEQ2_DIFFERENTIAL.out.normalised_counts
-        .join(DESEQ2_DIFFERENTIAL.out.vst_counts)
-        .map{ it.tail() }
-        .first()
-   
     // The exploratory plots are made by coloring by every unique variable used
     // to define contrasts
 
@@ -232,7 +319,7 @@ workflow DIFFERENTIALABUNDANCE {
     // Differential analysis using the results of DESeq2
 
     PLOT_DIFFERENTIAL(
-        DESEQ2_DIFFERENTIAL.out.results, 
+        ch_differential, 
         ch_all_matrices
     )
 
@@ -241,7 +328,6 @@ workflow DIFFERENTIALABUNDANCE {
     ch_versions = ch_versions
         .mix(GTF_TO_TABLE.out.versions)
         .mix(VALIDATOR.out.versions)
-        .mix(DESEQ2_DIFFERENTIAL.out.versions)
         .mix(PLOT_EXPLORATORY.out.versions)
         .mix(PLOT_DIFFERENTIAL.out.versions)
 
@@ -266,7 +352,7 @@ workflow DIFFERENTIALABUNDANCE {
         .combine(ch_logo_file)
         .combine(ch_css_file)
         .combine(ch_citations_file)
-        .combine(DESEQ2_DIFFERENTIAL.out.results.map{it[1]}.toList())
+        .combine(ch_differential.map{it[1]}.toList())
  
     if (params.gsea_run){ 
         ch_report_input_files = ch_report_input_files
