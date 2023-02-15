@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#55](https://github.com/nf-core/differentialabundance/pull/55)] - Don't drop dimensions in report with single informative variable ([@pinin4fjords](https://github.com/pinin4fjords), reviewed by [@mashehu](https://github.com/mashehu))
 - [[#57](https://github.com/nf-core/differentialabundance/issues/57)] - Update module shinyngs/validatefomcomponents and bump other shinyngs modules to resolve [[#56](https://github.com/nf-core/differentialabundance/issues/56)] ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#65](https://github.com/nf-core/differentialabundance/pull/65)] - Update shinyngs modules to latest to resolve palette issues reported by [@Shellfishgene](https://github.com/Shellfishgene) ([@pinin4fjords](https://github.com/pinin4fjords), reviewed by [@mashehu](https://github.com/mashehu))
-- [[#67](https://github.com/nf-core/differentialabundance/issues/67)] - Error when contrast is blocking by multiple variables ([@pinin4fjords](https://github.com/pinin4fjords), reported by [@clstacy](https://github.com/clstacy), review by [@jfy133](https://github.com/jfy133)) 
+- [[#67](https://github.com/nf-core/differentialabundance/issues/67)] - Error when contrast is blocking by multiple variables ([@pinin4fjords](https://github.com/pinin4fjords), reported by [@clstacy](https://github.com/clstacy), review by [@jfy133](https://github.com/jfy133))
 
 ## v1.0.1 - 2022-01-25
 
