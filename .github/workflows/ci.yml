@@ -43,4 +43,3 @@ jobs:
         # Remember that you can parallelise this by using strategy.matrix
         run: |
           nextflow run ${GITHUB_WORKSPACE} -profile docker,${{ matrix.yml_file }} --outdir ./results
-
