@@ -22,14 +22,12 @@ params:
   observations_type: NULL
   observations_file: NULL                                          # GSE156533.samplesheet.csv
   observations_id_col: NULL
+  observations_name_col: NULL
   features_file: NULL
   features_type: NULL
   features_id_col: NULL
   features_name_col: NULL
-  features_metadata_cols: 
-    - gene_id
-    - gene_name
-    - gene_biotype
+  features_metadata_cols: NULL 
   raw_matrix: null                                            # e.g. 0_salmon.merged.gene_counts.tsv
   normalised_matrix: null
   variance_stabilised_matrix: null                            # e.g. test_files/3_treatment-WT-P23H.vst.tsv
@@ -41,6 +39,8 @@ params:
   exploratory_whisker_distance: null
   exploratory_mad_threshold: null
   exploratory_main_variable: null
+  exploratory_assay_names: NULL
+  exploratory_final_assay: NULL
   versions_file: null                                         # e.g 17_software_versions.yml
   logo: null
   css: null
@@ -57,6 +57,7 @@ params:
   differential_qval_column: NULL
   differential_min_fold_change: NULL
   differential_foldchanges_logged: NULL
+  differential_max_pval: NULL
   differential_max_qval: NULL
   deseq2_test: NULL
   deseq2_fit_type: NULL
@@ -219,14 +220,11 @@ cat(paste0("
 <!-- Load input data -->
 
 ```{r, echo=FALSE}
-observations <- read_metadata(file.path(params$input_dir, params$observations_file))
+observations <- read_metadata(file.path(params$input_dir, params$observations_file), id_col = params$observations_id_col)
 if (! is.null(params$features_file)){
   features <- read_metadata(file.path(params$input_dir, params$features_file))
-  features <- features[,colnames(features) %in% params$features_metadata_cols, drop = FALSE]
+  features <- features[,colnames(features) %in% simpleSplit(params$features_metadata_cols), drop = FALSE]
 }
-
-rownames(observations) <- observations[,1]
-observations_name_col <- colnames(observations)[1]
 
 contrasts <- read_metadata(file.path(params$input_dir, params$contrasts_file))
 contrasts$blocking <- na.replace(contrasts$blocking, '')
@@ -243,29 +241,27 @@ informative_variables <- unique(c(contrasts$variable, chooseGroupingVariables(ob
 # Remove any informative variables that group observations the same way
 informative_variables <- informative_variables[ ! duplicated(lapply(structure(informative_variables, names= informative_variables), function(x) as.numeric(factor(observations[[x]], levels=unique(observations[[x]])))))]
 
-assay_files <- list(
-  raw = file.path(params$input_dir, params$raw_matrix),
-  normalised = file.path(params$input_dir,params$normalised_matrix),
-  variance_stabilised = file.path(params$input_dir, params$variance_stabilised_matrix)
-)
-assay_files <- Filter(Negate(is.null), assay_files)
+assay_names <- simpleSplit(params$exploratory_assay_names)
+names(assay_names) = assay_names
+assay_files <- lapply(assay_names, function(x) params[[paste0(x, '_matrix')]])
+
 assay_data <- lapply(assay_files, function(x) {
   mat <- read_matrix(
     x,
     sample_metadata = observations,
     row.names = 1
   )
-  colnames(mat) <- observations[[observations_name_col]][match(colnames(mat), rownames(observations))]
+  colnames(mat) <- observations[[params$observations_name_col]][match(colnames(mat), rownames(observations))]
   mat
 })
 
 # Now we can rename the observations rows using the title field
-rownames(observations) <- observations[[observations_name_col]]
+rownames(observations) <- observations[[params$observations_name_col]]
 
 # Run PCA early so we can understand how important each variable is
 
 pca_datas <- lapply(names(assay_data), function(assay_type){
-  if (assay_type == 'variance_stabilised'){
+  if (assay_type == params$exploratory_final_assay){
     compilePCAData(assay_data[[assay_type]])
   }else{
     compilePCAData(log2(assay_data[[assay_type]]+1))
@@ -273,7 +269,7 @@ pca_datas <- lapply(names(assay_data), function(assay_type){
 })
 names(pca_datas) <- names(assay_data)
 
-pca_vs_meta <- anova_pca_metadata(pca_datas[['variance_stabilised']]$coords, observations[,informative_variables, drop = FALSE], pca_datas[['variance_stabilised']]$percentVar)
+pca_vs_meta <- anova_pca_metadata(pca_datas[[params$exploratory_final_assay]]$coords, observations[,informative_variables, drop = FALSE], pca_datas[[params$exploratory_final_assay]]$percentVar)
 
 # Show the variable with the tightest PC associations first
 informative_variables <- rownames(pca_vs_meta)[order(pca_vs_meta[,1])]
@@ -289,6 +285,11 @@ if (params$exploratory_main_variable == 'contrasts'){
   }
   main_grouping_variable <- params$exploratory_main_variable
 }
+
+# Make sure the main variable is shown first, with remaining shown in order of
+# informativeness
+
+informative_variables <- unique(c(main_grouping_variable, informative_variables))
 
 groupColorScale <- makeColorScale(length(unique(observations[[main_grouping_variable]])), palette = "Set1")
 ```
@@ -334,7 +335,7 @@ differential_results <- lapply(differential_files, function(diff_file){
   # Annotate differential tables if possible
   
   if (! is.null(params$features_file)){
-    diff <- merge(features, diff, by = params$differential_feature_id_column)
+    diff <- merge(features, diff, by.x = params$features_id_col, by.y = params$differential_feature_id_column)
   }
   diff
 })
@@ -349,26 +350,37 @@ contrast_descriptions <- paste(contrasts$target, 'versus', contrasts$reference, 
 with_blocking <- which(contrasts$blocking != '')
 contrast_descriptions[with_blocking] <- paste0(contrast_descriptions[with_blocking], " (blocking on ", contrasts$blocking[with_blocking],")")
 
+# Check both adjusted and unadjusted p values
+
+p_value_types <- list(Adjusted = params$differential_qval_column, Unadjusted = params$differential_pval_column)
+p_value_thresholds <- list(Adjusted = params$differential_max_qval, Unadjusted = params$differential_max_pval)
+
 sig_differential <- 
-  lapply(
-    1:nrow(contrasts),
-    function(x){
-      signif <- differential_results[[x]][,params$differential_qval_column ] < params$differential_max_qval
-      list(
-        up = differential_results[[x]][which(
-          differential_results[[x]][,params$differential_fc_column ] > log2(params$differential_min_fold_change) &
-          signif
-        ),],
-        down = differential_results[[x]][which(
-          differential_results[[x]][,params$differential_fc_column ] < log2(1/params$differential_min_fold_change) &
-          signif 
-        ),]
-      ) 
-    })
-names(sig_differential) <- contrast_descriptions
+  lapply(names(p_value_types), function(pvt){
+    diff <- lapply(
+      1:nrow(contrasts),
+      function(x){
+        signif <- differential_results[[x]][,p_value_types[[pvt]] ] < p_value_thresholds[[pvt]]
+        list(
+          up = differential_results[[x]][which(
+            differential_results[[x]][,params$differential_fc_column ] > log2(params$differential_min_fold_change) &
+            signif
+          ),],
+          down = differential_results[[x]][which(
+            differential_results[[x]][,params$differential_fc_column ] < log2(1/params$differential_min_fold_change) &
+            signif 
+          ),]
+        ) 
+      }
+    )
+    names(diff) <- contrast_descriptions
+    diff
+  })
+names(sig_differential) <- names(p_value_types)
 
 # Count the differential genes
-differential_table <- do.call(rbind, lapply(sig_differential, function(x) lapply(x, function(y) nrow(y))))
+differential_tables <- lapply(names(sig_differential), function(sd) do.call(rbind, lapply(sig_differential[[sd]], function(x) lapply(x, function(y) nrow(y)))))
+names(differential_tables) <- names(sig_differential)
 ```
 
 <!-- Write the report -->
@@ -437,7 +449,7 @@ The following plots show the abundance value distributions of input matrices. A 
 
 ```{r, echo=FALSE, results='asis', fig.height=8}
 
-ggplot_boxplot(
+p <- ggplot_boxplot(
   assay_data, 
   experiment = observations, 
   colorby = main_grouping_variable, 
@@ -446,6 +458,7 @@ ggplot_boxplot(
   whisker_distance = params$exploratory_whisker_distance,
   base_size=8
 )
+print(p)
 ```
 
 Whiskers in the above boxplots show `r params$exploratory_whisker_distance` times the inter-quartile range.
@@ -565,33 +578,37 @@ for (variable in rownames(pca_vs_meta)){
 }
 ```
 
-#### Clustering dendrograms
+#### Clustering dendrograms {.tabset}
 
 A hierarchical clustering of `r params$features_type`s was undertaken based on the top  `r params$exploratory_n_features` most variable `r params$features_type`s. Distances between `r params$features_type`s were estimated based on `r params$exploratory_cor_method` correlation, which were then used to produce a clustering via the `r params$exploratory_clustering_method` method with `hclust()` in R. 
 
 ```{r, echo=FALSE, results='asis'}
-variable_genes <- selectVariableGenes(matrix = assay_data$variance_stabilised, ntop = params$exploratory_n_features)
+for (assay_type in rev(names(assay_data))){
+  for (iv in informative_variables){
+    cat(paste0("\n##### ", prettifyVariablename(assay_type), " (", iv, ")\n"))
+    variable_genes <- selectVariableGenes(matrix = assay_data[[assay_type]], ntop = params$exploratory_n_features)
 
-p <- clusteringDendrogram(
-  2^assay_data$variance_stabilised[variable_genes, ],
-  observations[, main_grouping_variable, drop = FALSE],
-  colorby = main_grouping_variable,
-  cor_method = params$exploratory_cor_method,
-  plot_title = paste0(
-    paste0(params$observations_type," clustering dendrogram, "), 
-    params$exploratory_n_features, 
-    " most variable ", 
-    params$features_type, 
-    "s\n(", params$exploratory_clustering_method, " clustering, ", params$exploratory_cor_method, " correlation)"),
-  cluster_method = params$exploratory_clustering_method,
-  palette = groupColorScale,
-  labelspace = 0.25
-)
-
-# Defaults in shinyngs make the text in this plot a bit big for the report, so
-# scale it down a bit
-print(p, vp=grid::viewport(gp=grid::gpar(cex=0.7)))
-
+    p <- clusteringDendrogram(
+      2^assay_data[[assay_type]][variable_genes, ],
+      observations[, iv, drop = FALSE],
+      colorby = iv,
+      cor_method = params$exploratory_cor_method,
+      plot_title = paste0(
+        paste0(params$observations_type," clustering dendrogram, "), 
+        params$exploratory_n_features, 
+        " most variable ", 
+        params$features_type, 
+        "s\n(", params$exploratory_clustering_method, " clustering, ", params$exploratory_cor_method, " correlation)"),
+      cluster_method = params$exploratory_clustering_method,
+      palette = groupColorScale,
+      labelspace = 0.25
+    )
+    # Defaults in shinyngs make the text in this plot a bit big for the report, so
+    # scale it down a bit
+    print(p, vp=grid::viewport(gp=grid::gpar(cex=0.7)))
+    cat("\n")
+  }
+}
 ```
 
 ### Outlier detection {.tabset}
@@ -610,7 +627,7 @@ foo <- lapply(informative_variables[iv_min_group_sizes > 2], function(iv){
   
   plotdata <-
   madScore(
-    matrix = assay_data[['variance_stabilised']],
+    matrix = assay_data[[params$exploratory_final_assay]],
     sample_sheet = observations,
     groupby = iv
   )
@@ -643,10 +660,14 @@ foo <- lapply(informative_variables[iv_min_group_sizes > 2], function(iv){
 
 ## Differential analysis
 
-### Differential `r params$features_type` counts
+### Differential `r params$features_type` counts {.tabset}
 
 ```{r, echo=FALSE, results='asis'}
-kable(differential_table, caption = paste0('Differential ',  params$features_type, ' counts (target relative to reference)'))
+foo <- lapply(names(p_value_types), function(pvt){
+  cat("\n#### ", pvt, "\n")
+  print( htmltools::tagList(datatable(differential_tables[[pvt]], caption = paste0('Differential ',  params$features_type, ' counts (target relative to reference)'), options = list(dom = 't'), rownames = TRUE) ))
+  cat("\n")
+})
 ```
 
 ```{r, echo=FALSE, results='asis', eval = FALSE}
@@ -690,18 +711,19 @@ for (i in 1:nrow(contrasts)){
   # We'll color by whether features are differential according to supplied thresholds
 
   p_value_types <- list(Adjusted = params$differential_qval_column, Unadjusted = params$differential_pval_column)
+  p_value_thresholds <- list(Adjusted = params$differential_max_qval, Unadjusted = params$differential_max_pval)
   
   for (pvt in names(p_value_types)){
     cat("\n##### ", pvt, " p values\n")
     pval_column <- p_value_types[[pvt]]
   
     full_de$differential_status <- FALSE
-    full_de$differential_status[abs(full_de[[params$differential_fc_column]]) > log2(params$differential_min_fold_change) & full_de[[pval_column]] < params$differential_max_qval] <- TRUE
+    full_de$differential_status[abs(full_de[[params$differential_fc_column]]) > log2(params$differential_min_fold_change) & full_de[[pval_column]] < p_value_thresholds[[pvt]]] <- TRUE
 
     # Define the thresholds we'll draw
 
     hline_thresholds = vline_thresholds = list()
-    hline_thresholds[[paste(pval_column, '=', params$differential_max_qval)]] = -log10(params$differential_max_qval)
+    hline_thresholds[[paste(pval_column, '=', p_value_thresholds[[pvt]])]] = -log10(p_value_thresholds[[pvt]])
     vline_thresholds[[paste(params$differential_fc_column, '<-', log2(params$differential_min_fold_change))]] = -log2(params$differential_min_fold_change)
     vline_thresholds[[paste(params$differential_fc_column, '>', log2(params$differential_min_fold_change))]] = log2(params$differential_min_fold_change)
 
@@ -725,20 +747,24 @@ for (i in 1:nrow(contrasts)){
       layout(xaxis = list(range=list(-max_fc, max_fc)))
  
     print(htmltools::tagList(p))
-  }
   
-  ## ... then show tables of the up/ down genes
-  
-  for (dir in c('up', 'down')){
-    contrast_de <- sig_differential[[i]][[dir]]
-    colnames(contrast_de) <- prettifyVariablename(colnames(contrast_de))
-    
-    if (nrow(contrast_de) > 0){
-      print( htmltools::tagList(datatable(contrast_de, caption = paste('Differential genes', dir, 'in', contrast_descriptions[i], " (check", differential_files[[i]], "for more detail)"), rownames = FALSE) ))
-    }else{
-      cat(paste0("No signficantly differential '", dir, "' genes\n"))
+    ## ... then show tables of the up/ down genes
+      
+    for (dir in c('up', 'down')){
+      contrast_de <- sig_differential[[pvt]][[i]][[dir]]
+      cols_to_round <- c(params$differential_fc_column, params$differential_pval_column, params$differential_qval_column) 
+      contrast_de[, cols_to_round] <- signif(contrast_de[, cols_to_round], 8)
+
+      colnames(contrast_de) <- prettifyVariablename(colnames(contrast_de))
+        
+      if (nrow(contrast_de) > 0){
+        print( htmltools::tagList(datatable(contrast_de, caption = paste('Differential genes', dir, 'in', contrast_descriptions[i], " (check", differential_files[[i]], "for more detail)"), rownames = FALSE) ))
+      }else{
+        cat(paste0("No significantly differential '", dir, "' genes.\n\n"))
+      }
     }
   }
+  
 }
 ```
 
