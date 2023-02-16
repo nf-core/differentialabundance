@@ -145,6 +145,11 @@
                     "format": "file-path",
                     "mimetype": "text/plain",
                     "fa_icon": "fas fa-gamepad"
+                },
+                "features_metadata_cols": {
+                    "type": "string",
+                    "default": "gene_id,gene_name,gene_biotype",
+                    "description": "Comma-separated string, specifies feature metadata columns to be used for exploratory analysis, platform-specific"
                 }
             },
             "required": ["features_id_col", "features_name_col", "features_type"],
@@ -191,6 +196,18 @@
                     "default": true,
                     "description": "logical value. If TRUE, a matrix of probe annotations will be derived.",
                     "fa_icon": "fas fa-asterisk"
+                },
+                "affy_rm_mask": {
+                    "type": "boolean",
+                    "description": "should the spots marked as 'MASKS' set to NA?"
+                },
+                "affy_rm_outliers": {
+                    "type": "boolean",
+                    "description": "should the spots marked as 'OUTLIERS' set to NA?"
+                },
+                "affy_rm_extra": {
+                    "type": "boolean",
+                    "description": "if TRUE, then overrides what is in rm.mask and rm.oultiers."
                 }
             },
             "fa_icon": "fas fa-table"
@@ -202,14 +219,14 @@
             "default": "",
             "properties": {
                 "filtering_min_abundance": {
-                    "type": "integer",
+                    "type": "number",
                     "default": 1,
                     "description": "Minimum abundance value",
                     "fa_icon": "fas fa-compress-alt"
                 },
                 "filtering_min_samples": {
                     "type": "number",
-                    "default": 1.0,
+                    "default": 1,
                     "description": "Minimum observations that must pass the threshold to retain the row/ feature (e.g. gene).",
                     "fa_icon": "fas fa-compress-alt"
                 },
@@ -271,6 +288,18 @@
                     "description": "How should the main grouping variable be selected? 'auto_pca', 'contrasts', or a valid column name from the observations table.",
                     "help_text": "Some plots are only generated once, with a single sample grouping, this option defines how that sample grouping is selected. It should be 'auto_pca' (variable selected from the sample sheet with the most association with the first principal component), 'contrasts' (pick the variable associated with the first contrast), or a value specifying a specific column in the observations.",
                     "fa_icon": "fas fa-home"
+                },
+                "exploratory_assay_names": {
+                    "type": "string",
+                    "default": "raw,normalised,variance_stabilised",
+                    "hidden": true,
+                    "description": "Specifies assay names to be used for matrices, platform-specific"
+                },
+                "exploratory_final_assay": {
+                    "type": "string",
+                    "default": "variance_stabilised",
+                    "hidden": true,
+                    "description": "Specifies final assay to be used for exploratory analysis, platform-specific"
                 }
             },
             "fa_icon": "fas fa-chart-area",
@@ -318,15 +347,20 @@
                     "fa_icon": "fas fa-columns"
                 },
                 "differential_min_fold_change": {
-                    "type": "integer",
+                    "type": "number",
                     "default": 2,
                     "description": "Minimum fold change used to calculate differential feature numbers",
                     "fa_icon": "fas fa-angle-double-down"
                 },
+                "differential_max_pval": {
+                    "type": "number",
+                    "default": 1,
+                    "description": "Maximum p value used to calculate differential feature numbers"
+                },
                 "differential_max_qval": {
                     "type": "number",
                     "default": 0.05,
-                    "description": "Maximum q value used to calculate differential feature numbrers",
+                    "description": "Maximum q value used to calculate differential feature numbers",
                     "fa_icon": "fas fa-angle-double-up"
                 },
                 "differential_feature_name_column": {
@@ -348,7 +382,8 @@
                 "differential_fc_column",
                 "differential_qval_column",
                 "differential_min_fold_change",
-                "differential_max_qval"
+                "differential_max_qval",
+                "differential_max_pval"
             ],
             "fa_icon": "fas fa-adjust"
         },
@@ -530,6 +565,16 @@
                     "fa_icon": "fab fa-android",
                     "description": "passed to eBayes(), logical, should the estimation of df.prior and var.prior be robustified against outlier sample variances?"
                 },
+                "limma_stdev_coef_lim": {
+                    "type": "string",
+                    "default": "0.1,4",
+                    "description": "passed to eBayes, comma separated string of two values, assumed lower and upper limits for the standard deviation of log2-fold-changes for differentially expressed genes"
+                },
+                "limma_winsor_tail_p": {
+                    "type": "string",
+                    "default": "0.05,0.1",
+                    "description": "passed to eBayes, comma separated string of length 1 or 2, giving left and right tail proportions of x to Winsorize. Used only when robust=TRUE."
+                },
                 "limma_lfc": {
                     "type": "integer",
                     "default": 0,
@@ -541,6 +586,17 @@
                     "type": "boolean",
                     "fa_icon": "fas fa-temperature-low",
                     "description": "passed to topTable(), logical, should confidence 95% intervals be output for logFC? Alternatively, can take a numeric value between zero and one specifying the confidence level required."
+                },
+                "limma_adjust_method": {
+                    "type": "string",
+                    "default": "BH",
+                    "description": "passed to topTable(), method used to adjust the p-values for multiple testing.",
+                    "enum": ["holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none"]
+                },
+                "limma_p_value": {
+                    "type": "number",
+                    "default": 1,
+                    "description": "cutoff value for adjusted p-values. Only genes with lower p-values are listed."
                 }
             },
             "fa_icon": "fas fa-border-all"
