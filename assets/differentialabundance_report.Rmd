@@ -33,6 +33,30 @@ params:
   variance_stabilised_matrix: null                            # e.g. test_files/3_treatment-WT-P23H.vst.tsv
   contrasts_file: null                                        # e.g. GSE156533.contrasts.csv
   differential_table: file.csv
+  affy_cel_files_archive: NULL
+  affy_file_name_col: NULL
+  affy_background: NULL
+  affy_bg_version: NULL
+  affy_destructive: NULL
+  affy_cdfname: NULL
+  affy_rm_mask: NULL
+  affy_rm_outliers: NULL
+  affy_rm_extra: NULL
+  affy_build_annotation: NULL
+  limma_ndups: NULL
+  limma_spacing: NULL
+  limma_block: NULL
+  limma_correlation: NULL
+  limma_method: NULL
+  limma_proportion: NULL
+  limma_stdev_coef_lim: NULL
+  limma_trend: NULL
+  limma_robust: NULL
+  limma_winsor_tail_p: NULL
+  limma_adjust_method: NULL
+  limma_p_value: NULL
+  limma_lfc: NULL
+  limma_confint: NULL
   exploratory_n_features: null
   exploratory_clustering_method: null
   exploratory_cor_method: null

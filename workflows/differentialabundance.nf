@@ -407,10 +407,17 @@ workflow DIFFERENTIALABUNDANCE {
         params.exploratory_assay_names.split(',').collect { "${it}_matrix".toString() } +
         [ 'contrasts_file', 'versions_file', 'logo', 'css', 'citations' ]
 
+    // Condition params reported on study type
+
+    def params_pattern = ~/^(study|observations|features|filtering|exploratory|differential|deseq2|gsea).*/
+    if (params.study_type == 'affy_array'){
+        params_pattern = ~/^(study|observations|features|filtering|exploratory|differential|affy|limma|gsea).*/
+    } 
+
     ch_report_params = ch_report_input_files
         .map{
             [report_file_names, it.collect{ f -> f.name}].transpose().collectEntries() + 
-            params.findAll{ k,v -> k.matches(~/^(study|observations|features|filtering|exploratory|differential|deseq2|gsea).*/) }
+            params.findAll{ k,v -> k.matches(params_pattern) }
         }
 
     // Render the final report
