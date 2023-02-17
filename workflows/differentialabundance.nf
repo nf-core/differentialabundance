@@ -305,10 +305,15 @@ workflow DIFFERENTIALABUNDANCE {
             VALIDATOR.out.feature_meta.map{ it[1] },
             [params.features_id_col, params.features_name_col]    
         )
+    
+        // The normalised matrix does not always have a contrast meta, so we
+        // need a combine rather than a join here
 
         ch_gsea_inputs = CUSTOM_TABULARTOGSEAGCT.out.gct
-            .join(CUSTOM_TABULARTOGSEACLS.out.cls)
-            .combine(ch_gene_sets)                        
+            .map{ it.tail() }
+            .combine(CUSTOM_TABULARTOGSEACLS.out.cls)
+            .map{ tuple(it[1], it[0], it[2]) }
+            .combine(ch_gene_sets)
 
         GSEA_GSEA( 
             ch_gsea_inputs,
