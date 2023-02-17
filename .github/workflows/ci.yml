@@ -26,7 +26,7 @@ jobs:
         NXF_VER:
           - "22.10.1"
           - "latest-everything"
-        yml_file:
+        profile:
           - "test"
     steps:
       - name: Check out pipeline code
