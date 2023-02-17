@@ -28,7 +28,7 @@ jobs:
           - "latest-everything"
         profile:
           - "test"
-          - "test_affy,affy"
+          - "test_affy"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v3

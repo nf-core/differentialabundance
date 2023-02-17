@@ -52,20 +52,18 @@ RNA-seq:
 
 ```bash
  nextflow run nf-core/differentialabundance \
-     --study_type rnaseq \
      --input samplesheet.csv \
      --contrasts contrasts.csv \
      --matrix assay_matrix.tsv \
      --gtf mouse.gtf \
      --outdir <OUTDIR>  \
-     -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
+     -profile rnaseq,<docker/singularity/podman/shifter/charliecloud/conda/institute>
 ```
 
 Affymetrix microarray::
 
 ```bash
  nextflow run nf-core/differentialabundance \
-     --study_type affy_array \
      --input samplesheet.csv \
      --contrasts contrasts.csv \
      --affy_cel_files_archive cel_files.tar \

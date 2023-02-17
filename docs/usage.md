@@ -93,7 +93,7 @@ This is usually the easiest way to supply annotations for RNA-seq features. It s
 
 ### annotation package identifiers for Affymetrix arrays
 
-For `study_type == 'affy_aray'`, default behaviour is to derve an annotation table while running the affy/justrma module based on the CDF name discovered there.
+For `-profile affy`, default behaviour is to derive an annotation table while running the affy/justrma module based on the CDF name discovered there.
 
 ### Your own features, or no features
 
@@ -117,7 +117,7 @@ The typical command for running the pipeline is as follows:
 
 ```bash
 nextflow run nf-core/differentialabundance \
-    [--study_type rnaseq OR --study_type affy_array] \
+    [--profile rnaseq OR -profile affy] \
     --input samplesheet.csv \
     --contrasts contrasts.csv \
     [--matrix assay_matrix.tsv OR --affy_cel_files_archive cel_files.tar] \
