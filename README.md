@@ -48,6 +48,8 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 4. Start running your own analysis!
 
+RNA-seq:
+
    ```bash
     nextflow run nf-core/differentialabundance \
         --input samplesheet.csv \
@@ -56,6 +58,17 @@ On release, automated continuous integration tests run the pipeline on a full-si
         --gtf mouse.gtf \
         --outdir <OUTDIR>  \
         -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
+   ```
+
+Affymetrix microarray::
+
+   ```bash
+    nextflow run nf-core/differentialabundance \
+        --input samplesheet.csv \
+        --contrasts contrasts.csv \
+        --affy_cel_files_archive cel_files.tar \
+        --outdir <OUTDIR>  \
+        -profile affy,<docker/singularity/podman/shifter/charliecloud/conda/institute>
    ```
 
 ## Documentation

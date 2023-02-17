@@ -10,12 +10,12 @@ Differential analysis is a common task in a variety of use cases. In essence, al
 
 With the above in mind, running this workflow requires:
 
-- a matrix of quantifications with observations by column and features by row
+- a set of abundance values. This can be:
+  - (for RNA-seq): a matrix of quantifications with observations by column and features by row
+  - (for Affymetrix microarrays): a tar'd archive of CEL files 
 - a description of the observations such as a sample sheet from RNA-seq analysis
-- a description of the features, for our initial RNA-seq application this is simply the GTF file from which gene annotations can be derived
+- a description of the features, for our initial RNA-seq application this can be simply the GTF file from which gene annotations can be derived. For Affymetrix arrays this can be derived from the array platform annotation package automatically. You can also supply your own table.
 - a specification of how the matrix should be split, and how the resulting groups should be compared
-
-Currently, this limits the usage of differentialabundance to genomics applications where a GTF annotation file is available. Future developments of the pipeline will encompass changes that enable users to use the pipeline on more generic cases.
 
 ## Observations (samplesheet) input
 
@@ -39,13 +39,23 @@ TREATED_REP3,AEG588A2_S1_L004_R1_001.fastq.gz,AEG588A2_S1_L004_R2_001.fastq.gz,t
 
 The file can be tab or comma separated.
 
-## Matrix file
+## Abundance values
+
+### RNA-seq and similar
 
 ```bash
 --matrix '[path to matrix file]'
 ```
 
 This is a numeric square matrix file, comma or tab-separated, with a column for every observation, and features corresponding to the supplied feature set. The parameters `--observations_id_col` and `--features_id_col` define which of the associated fields should be matched in those inputs.
+
+### Affymetrix microarrays
+
+```bash
+--affy_cel_files_archive '[path to an archive of CEL files]'
+```
+
+This is an archive of CEL files as frequently found in GEO.
 
 ## Contrasts file
 
@@ -71,13 +81,35 @@ The necessary fields in order are:
 
 The file can be tab or comma separated.
 
-## GTF file
+## Feature annotations
+
+### GTF file
 
 ```bash
 --gtf '[path to gtf file]'
 ```
 
-This is the format currently used to supply feature metadata. In the RNA-seq case it should match the GTF used in that workflow.
+This is usually the easiest way to supply annotations for RNA-seq features. It should match the GTF used in nf-core/rnaseq if that workflow was used to produce the input expression matrix.
+
+### annotation package identifiers for Affymetrix arrays
+
+For `study_type == 'affy_aray'`, default behaviour is to derve an annotation table while running the affy/justrma module based on the CDF name discovered there.
+
+### Your own features, or no features
+
+To override the above options, you may also supply your own features table as a TSV:
+
+```bash
+--features '[path to features TSV]'
+```
+
+This mechanism can also be used to override the need for an additional features table altogether, by specifying the abundance matrix as the the features table and setting the correct features options. For example on an RNA-seq experiment with 'gene_id' as the identifier column in the matrix:
+
+```bash
+--features '[path to abundance matrix]' --features_id_col gene_id features_name_col gene_id 
+```
+
+This will cause the gene ID to be used everywhere rather than more accessible gene symbols (as can be derived from the GTF), but the workflow should run.
 
 ## Running the pipeline
 
@@ -87,8 +119,8 @@ The typical command for running the pipeline is as follows:
 nextflow run nf-core/differentialabundance \
     --input samplesheet.csv \
     --contrasts contrasts.csv \
-    --matrix assay_matrix.tsv \
-    --gtf mouse.gtf \
+    [--matrix assay_matrix.tsv OR --affy_cel_files_archive cel_files.tar] \
+    [--gtf mouse.gtf OR --features features.tsv] \
     --outdir <OUTDIR>  \
     -profile docker
 ```
