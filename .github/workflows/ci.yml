@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   test:
-    name: Run pipeline with test data
+    name: Run pipeline with different nextflow versions and different test profiles
     # Only run on push if this is the nf-core dev branch (merged PRs)
     if: "${{ github.event_name != 'push' || (github.event_name == 'push' && github.repository == 'nf-core/differentialabundance') }}"
     runs-on: ubuntu-latest
@@ -26,6 +26,9 @@ jobs:
         NXF_VER:
           - "22.10.1"
           - "latest-everything"
+        profile:
+          - "test"
+          - "test_affy,affy"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v3
@@ -35,16 +38,9 @@ jobs:
         with:
           version: "${{ matrix.NXF_VER }}"
 
-      - name: Run pipeline with RNA-seq test data
+      - name: Run pipeline with test data
         # You can customise CI pipeline run tests as required
         # For example: adding multiple test runs with different parameters
         # Remember that you can parallelise this by using strategy.matrix
         run: |
-          nextflow run ${GITHUB_WORKSPACE} -profile test,docker --outdir ./results
-
-      - name: Run pipeline with Affymetrix array test data
-        # You can customise CI pipeline run tests as required
-        # For example: adding multiple test runs with different parameters
-        # Remember that you can parallelise this by using strategy.matrix
-        run: |
-          nextflow run ${GITHUB_WORKSPACE} -profile test_affy,affy,docker --outdir ./results
+          nextflow run ${GITHUB_WORKSPACE} -profile docker,${{ matrix.profile }} --outdir ./results

@@ -335,7 +335,7 @@ prefix_part_names <- c('variable', 'reference', 'target', 'blocking')
 diff_prefixes <- sub('-$', '', apply(contrasts[,prefix_part_names], 1, function(x) paste(x, collapse = '-')))
 
 differential_files <- lapply(diff_prefixes, function(d){
- file.path(params$input_dir, paste0(gsub(' ', '_', d), params$differential_file_suffix)) 
+ file.path(params$input_dir, paste0(gsub(' |;', '_', d), params$differential_file_suffix)) 
 })
 
 differential_results <- lapply(differential_files, function(diff_file){
