@@ -7,7 +7,7 @@
                 "nf-core": {
                     "affy/justrma": {
                         "branch": "master",
-                        "git_sha": "25049ae89bffcce78ff12d7ab34a28b896e4ec41",
+                        "git_sha": "280ce2b27bb94eb2ae7632e3ed20519ec814721e",
                         "installed_by": ["modules"]
                     },
                     "atlasgeneannotationmanipulation/gtf2featureannotation": {
@@ -22,7 +22,7 @@
                     },
                     "custom/matrixfilter": {
                         "branch": "master",
-                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "git_sha": "091496fc34f36df69ca037ed965af262384b5db4",
                         "installed_by": ["modules"]
                     },
                     "custom/tabulartogseacls": {
@@ -52,7 +52,7 @@
                     },
                     "limma/differential": {
                         "branch": "master",
-                        "git_sha": "70ac5eb3037b7a79368d868500036da9833c3728",
+                        "git_sha": "5bdcd149addc7802d3af4231c253efbb539462c1",
                         "installed_by": ["modules"]
                     },
                     "rmarkdownnotebook": {
