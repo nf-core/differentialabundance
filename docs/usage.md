@@ -12,7 +12,7 @@ With the above in mind, running this workflow requires:
 
 - a set of abundance values. This can be:
   - (for RNA-seq): a matrix of quantifications with observations by column and features by row
-  - (for Affymetrix microarrays): a tar'd archive of CEL files 
+  - (for Affymetrix microarrays): a tar'd archive of CEL files
 - a description of the observations such as a sample sheet from RNA-seq analysis
 - a description of the features, for our initial RNA-seq application this can be simply the GTF file from which gene annotations can be derived. For Affymetrix arrays this can be derived from the array platform annotation package automatically. You can also supply your own table.
 - a specification of how the matrix should be split, and how the resulting groups should be compared
@@ -106,7 +106,7 @@ To override the above options, you may also supply your own features table as a 
 This mechanism can also be used to override the need for an additional features table altogether, by specifying the abundance matrix as the the features table and setting the correct features options. For example on an RNA-seq experiment with 'gene_id' as the identifier column in the matrix:
 
 ```bash
---features '[path to abundance matrix]' --features_id_col gene_id features_name_col gene_id 
+--features '[path to abundance matrix]' --features_id_col gene_id features_name_col gene_id
 ```
 
 This will cause the gene ID to be used everywhere rather than more accessible gene symbols (as can be derived from the GTF), but the workflow should run.
