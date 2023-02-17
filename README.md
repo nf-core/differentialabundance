@@ -60,7 +60,7 @@ RNA-seq:
      -profile rnaseq,<docker/singularity/podman/shifter/charliecloud/conda/institute>
 ```
 
-Affymetrix microarray::
+Affymetrix microarray:
 
 ```bash
  nextflow run nf-core/differentialabundance \
