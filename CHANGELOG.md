@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## v1.1.0dev - xxxx-xx-xx
 
+### `Added`
+
+- [[#63](https://github.com/nf-core/differentialabundance/issues/63)] - Add git CI matrix for different test profiles to run ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+
 ### `Changed`
 
 - [[#55](https://github.com/nf-core/differentialabundance/pull/55)] - Don't drop dimensions in report with single informative variable ([@pinin4fjords](https://github.com/pinin4fjords), reviewed by [@mashehu](https://github.com/mashehu))
