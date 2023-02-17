@@ -117,6 +117,7 @@ The typical command for running the pipeline is as follows:
 
 ```bash
 nextflow run nf-core/differentialabundance \
+    [--study_type rnaseq OR --study_type affy_array] \
     --input samplesheet.csv \
     --contrasts contrasts.csv \
     [--matrix assay_matrix.tsv OR --affy_cel_files_archive cel_files.tar] \
