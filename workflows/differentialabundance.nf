@@ -27,7 +27,7 @@ if (params.study_type == 'affy_array'){
     // If this is not an affy array, assume we're reading from a matrix
     
     if (params.matrix) { 
-        ch_in = Channel.of([ exp_meta, file(params.matrix, checkIfExists: true)])
+        ch_in_raw = Channel.of([ exp_meta, file(params.matrix, checkIfExists: true)])
     } else { 
         exit 1, 'Input matrix not specified!' 
     }
@@ -125,48 +125,48 @@ workflow DIFFERENTIALABUNDANCE {
 
         ch_in_raw = AFFY_JUSTRMA_RAW.out.expression     
         ch_in_norm = AFFY_JUSTRMA_NORM.out.expression
-        ch_features = AFFY_JUSTRMA_RAW.out.annotation
+        
+        ch_affy_platform_features = AFFY_JUSTRMA_RAW.out.annotation
     }
-    
+
+    //// Fetch or derive a feature annotation table
+
+    // If user has provided a feature annotation table, use that
+
+    if (params.features){
+        ch_features = Channel.of([ exp_meta, file(params.features, checkIfExists: true)]) 
+    } else if (params.study_type == 'affy_array'){
+        ch_features = ch_affy_platform_features
+    } else if (params.gtf){
+        // Get feature annotations from a GTF file, gunzip if necessary
+     
+        file_gtf_in = file(params.gtf)
+        file_gtf = [ [ "id": file_gtf_in.simpleName ], file_gtf_in ] 
+
+        if ( params.gtf.endsWith('.gz') ){
+            GUNZIP_GTF(file_gtf)
+            file_gtf = GUNZIP_GTF.out.gunzip
+            ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
+        } 
+
+        // Get a features table from the GTF and combine with the matrix and sample
+        // annotation (fom = features/ observations/ matrix)
+
+        GTF_TO_TABLE( file_gtf, [[ "id":""], []])
+        ch_features = GTF_TO_TABLE.out.feature_annotation
+            .map{
+                tuple( exp_meta, it[1])
+            }
+
+        // Record the version of the GTF -> table tool
+
+        ch_versions = ch_versions
+            .mix(GTF_TO_TABLE.out.versions)
+    }
     else{
 
-        // If user has provided a feature annotaiton table, use that
-
-        if (params.features){
-           ch_features = Channel.of([ exp_meta, file(params.features, checkIfExists: true)]) 
-        }
-        else{
-            if (params.gtf){
-                // Get feature annotations from a GTF file, gunzip if necessary
-             
-                file_gtf_in = file(params.gtf)
-                file_gtf = [ [ "id": file_gtf_in.simpleName ], file_gtf_in ] 
-
-                if ( params.gtf.endsWith('.gz') ){
-                    GUNZIP_GTF(file_gtf)
-                    file_gtf = GUNZIP_GTF.out.gunzip
-                    ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
-                } 
-
-                // Get a features table from the GTF and combine with the matrix and sample
-                // annotation (fom = features/ observations/ matrix)
-
-                GTF_TO_TABLE( file_gtf, [[ "id":""], []])
-                ch_features = GTF_TO_TABLE.out.feature_annotation
-                    .map{
-                        tuple( exp_meta, it[1])
-                    }
-
-                // Record the version of the GTF -> table tool
-
-                ch_versions = ch_versions
-                    .mix(GTF_TO_TABLE.out.versions)
-            }
-            //else{
-                // Use local module to copy matrix ids to make a dummy feature
-                // annotation table
-            //}
-        }
+        // Otherwise we can just use the matrix input 
+        ch_features = ch_in_raw
     }
 
     // Channel for the contrasts file
@@ -262,13 +262,6 @@ workflow DIFFERENTIALABUNDANCE {
             ch_control_features
         )
 
-        ch_norm = DESEQ2_DIFFERENTIAL.out.normalised_counts
-        ch_vst = DESEQ2_DIFFERENTIAL.out.normalised_counts
-        ch_differential = DESEQ2_DIFFERENTIAL.out.results 
-    
-        ch_versions = ch_versions
-            .mix(DESEQ2_DIFFERENTIAL.out.versions)
-        
         // Let's make the simplifying assumption that the processed matrices from
         // the DESeq runs are the same across contrasts. We run the DESeq process
         // with matrices once for each contrast because DESeqDataSetFromMatrix()
@@ -276,10 +269,16 @@ workflow DIFFERENTIALABUNDANCE {
         // blocking factors included differ. But the normalised and
         // variance-stabilised matrices are not (IIUC) impacted by the model.
 
+        ch_norm = DESEQ2_DIFFERENTIAL.out.normalised_counts.first()
+        ch_vst = DESEQ2_DIFFERENTIAL.out.vst_counts.first()
+        ch_differential = DESEQ2_DIFFERENTIAL.out.results 
+    
+        ch_versions = ch_versions
+            .mix(DESEQ2_DIFFERENTIAL.out.versions)
+        
         ch_processed_matrices = ch_norm
             .join(ch_vst)
             .map{ it.tail() }
-            .first()
     }
 
     // Run a gene set analysis where directed
@@ -295,7 +294,7 @@ workflow DIFFERENTIALABUNDANCE {
         // For GSEA, we need to convert normalised counts to a GCT format for
         // input, and process the sample sheet to generate class definitions
         // (CLS) for the variable used in each contrast        
-
+        
         CUSTOM_TABULARTOGSEAGCT ( ch_norm )
 
         ch_contrasts_and_samples = ch_contrasts.combine( VALIDATOR.out.sample_meta.map { it[1] } )
@@ -356,6 +355,9 @@ workflow DIFFERENTIALABUNDANCE {
     ch_contrast_variables
         .combine(ch_all_matrices.map{ it.tail() })
 
+        ch_contrast_variables
+            .combine(ch_all_matrices.map{ it.tail() })
+    
     PLOT_EXPLORATORY(
         ch_contrast_variables
             .combine(ch_all_matrices.map{ it.tail() })
@@ -408,7 +410,7 @@ workflow DIFFERENTIALABUNDANCE {
     // Make a params list - starting with the input matrices and the relevant
     // params to use in reporting
 
-    def report_file_names = [ 'observations_file', 'features_file' ] + 
+    def report_file_names = [ 'observations', 'features' ] + 
         params.exploratory_assay_names.split(',').collect { "${it}_matrix".toString() } +
         [ 'contrasts_file', 'versions_file', 'logo', 'css', 'citations' ]
 

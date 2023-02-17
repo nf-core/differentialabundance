@@ -55,7 +55,8 @@
                 "study_abundance_type": {
                     "type": "string",
                     "default": "counts",
-                    "description": "Type of abundance measure used, platform-dependent"
+                    "description": "Type of abundance measure used, platform-dependent",
+                    "fa_icon": "fas fa-keyboard"
                 }
             }
         },
@@ -154,7 +155,14 @@
                 "features_metadata_cols": {
                     "type": "string",
                     "default": "gene_id,gene_name,gene_biotype",
-                    "description": "Comma-separated string, specifies feature metadata columns to be used for exploratory analysis, platform-specific"
+                    "description": "Comma-separated string, specifies feature metadata columns to be used for exploratory analysis, platform-specific",
+                    "fa_icon": "fas fa-columns"
+                },
+                "features": {
+                    "type": "string",
+                    "default": null,
+                    "help_text": "This parameter allows you to supply your own feature annotations. These can often be automatically derived from the GTF used upstream for RNA-seq, or from the Bioconductor annotation package (for affy arrays). ",
+                    "fa_icon": "fas fa-align-justify"
                 }
             },
             "required": ["features_id_col", "features_name_col", "features_type"],
@@ -204,15 +212,18 @@
                 },
                 "affy_rm_mask": {
                     "type": "boolean",
-                    "description": "should the spots marked as 'MASKS' set to NA?"
+                    "description": "should the spots marked as 'MASKS' set to NA?",
+                    "fa_icon": "fas fa-mask"
                 },
                 "affy_rm_outliers": {
                     "type": "boolean",
-                    "description": "should the spots marked as 'OUTLIERS' set to NA?"
+                    "description": "should the spots marked as 'OUTLIERS' set to NA?",
+                    "fa_icon": "fas fa-project-diagram"
                 },
                 "affy_rm_extra": {
                     "type": "boolean",
-                    "description": "if TRUE, then overrides what is in rm.mask and rm.oultiers."
+                    "description": "if TRUE, then overrides what is in rm.mask and rm.oultiers.",
+                    "fa_icon": "fas fa-external-link-alt"
                 }
             },
             "fa_icon": "fas fa-table"
@@ -298,13 +309,15 @@
                     "type": "string",
                     "default": "raw,normalised,variance_stabilised",
                     "hidden": true,
-                    "description": "Specifies assay names to be used for matrices, platform-specific"
+                    "description": "Specifies assay names to be used for matrices, platform-specific",
+                    "fa_icon": "fas fa-file-signature"
                 },
                 "exploratory_final_assay": {
                     "type": "string",
                     "default": "variance_stabilised",
                     "hidden": true,
-                    "description": "Specifies final assay to be used for exploratory analysis, platform-specific"
+                    "description": "Specifies final assay to be used for exploratory analysis, platform-specific",
+                    "fa_icon": "fas fa-sort-down"
                 }
             },
             "fa_icon": "fas fa-chart-area",
@@ -360,7 +373,8 @@
                 "differential_max_pval": {
                     "type": "number",
                     "default": 1,
-                    "description": "Maximum p value used to calculate differential feature numbers"
+                    "description": "Maximum p value used to calculate differential feature numbers",
+                    "fa_icon": "fas fa-angle-double-up"
                 },
                 "differential_max_qval": {
                     "type": "number",
@@ -573,12 +587,14 @@
                 "limma_stdev_coef_lim": {
                     "type": "string",
                     "default": "0.1,4",
-                    "description": "passed to eBayes, comma separated string of two values, assumed lower and upper limits for the standard deviation of log2-fold-changes for differentially expressed genes"
+                    "description": "passed to eBayes, comma separated string of two values, assumed lower and upper limits for the standard deviation of log2-fold-changes for differentially expressed genes",
+                    "fa_icon": "fas fa-angle-double-up"
                 },
                 "limma_winsor_tail_p": {
                     "type": "string",
                     "default": "0.05,0.1",
-                    "description": "passed to eBayes, comma separated string of length 1 or 2, giving left and right tail proportions of x to Winsorize. Used only when robust=TRUE."
+                    "description": "passed to eBayes, comma separated string of length 1 or 2, giving left and right tail proportions of x to Winsorize. Used only when robust=TRUE.",
+                    "fa_icon": "fas fa-angle-double-up"
                 },
                 "limma_lfc": {
                     "type": "integer",
@@ -596,12 +612,14 @@
                     "type": "string",
                     "default": "BH",
                     "description": "passed to topTable(), method used to adjust the p-values for multiple testing.",
-                    "enum": ["holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none"]
+                    "enum": ["holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none"],
+                    "fa_icon": "fas fa-hammer"
                 },
                 "limma_p_value": {
                     "type": "number",
                     "default": 1,
-                    "description": "cutoff value for adjusted p-values. Only genes with lower p-values are listed."
+                    "description": "cutoff value for adjusted p-values. Only genes with lower p-values are listed.",
+                    "fa_icon": "fas fa-angle-double-up"
                 }
             },
             "fa_icon": "fas fa-border-all"

@@ -21,10 +21,10 @@ params:
   study_name: NULL
   study_abundance_type: NULL
   observations_type: NULL
-  observations_file: NULL                                          # GSE156533.samplesheet.csv
+  observations: NULL                                          # GSE156533.samplesheet.csv
   observations_id_col: NULL
   observations_name_col: NULL
-  features_file: NULL
+  features: NULL
   features_type: NULL
   features_id_col: NULL
   features_name_col: NULL
@@ -245,9 +245,9 @@ cat(paste0("
 <!-- Load input data -->
 
 ```{r, echo=FALSE}
-observations <- read_metadata(file.path(params$input_dir, params$observations_file), id_col = params$observations_id_col)
-if (! is.null(params$features_file)){
-  features <- read_metadata(file.path(params$input_dir, params$features_file))
+observations <- read_metadata(file.path(params$input_dir, params$observations), id_col = params$observations_id_col)
+if (! is.null(params$features)){
+  features <- read_metadata(file.path(params$input_dir, params$features))
   features <- features[,colnames(features) %in% simpleSplit(params$features_metadata_cols), drop = FALSE]
 }
 
@@ -359,7 +359,7 @@ differential_results <- lapply(differential_files, function(diff_file){
   
   # Annotate differential tables if possible
   
-  if (! is.null(params$features_file)){
+  if (! is.null(params$features)){
     diff <- merge(features, diff, by.x = params$features_id_col, by.y = params$differential_feature_id_column)
   }
   diff
@@ -722,7 +722,7 @@ for (i in 1:nrow(contrasts)){
   ## Make a volcano plot for the contrast first
   
   # Label features with symbol as well as identifier
-  if (! is.null(params$features_file) && (! is.null(params$differential_feature_name_column)) ){
+  if (! is.null(params$features) && (! is.null(params$differential_feature_name_column)) ){
     label_col <- params$differential_feature_name_column
   }else{
     label_col <- params$differential_feature_id_column
