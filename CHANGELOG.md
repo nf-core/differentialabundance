@@ -8,8 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - [[#63](https://github.com/nf-core/differentialabundance/issues/63)] - Add git CI matrix for different test profiles to run ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#60](https://github.com/nf-core/differentialabundance/pull/60)] - Add Affymetrix analysis modules, observation_name_col, make GTF optional, closing [[#47](https://github.com/nf-core/differentialabundance/issues/47)], [[#46](https://github.com/nf-core/differentialabundance/issues/46)], [[#66](https://github.com/nf-core/differentialabundance/issues/66)] ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 
-### `Changed`
+### `Fixed`
 
 - [[#55](https://github.com/nf-core/differentialabundance/pull/55)] - Don't drop dimensions in report with single informative variable ([@pinin4fjords](https://github.com/pinin4fjords), reviewed by [@mashehu](https://github.com/mashehu))
 - [[#57](https://github.com/nf-core/differentialabundance/issues/57)] - Update module shinyngs/validatefomcomponents and bump other shinyngs modules to resolve [[#56](https://github.com/nf-core/differentialabundance/issues/56)] ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
