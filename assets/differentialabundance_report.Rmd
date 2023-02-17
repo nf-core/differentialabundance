@@ -19,6 +19,7 @@ params:
   cpus: 1 
   study_type: NULL
   study_name: NULL
+  study_abundance_type: NULL
   observations_type: NULL
   observations_file: NULL                                          # GSE156533.samplesheet.csv
   observations_id_col: NULL
@@ -36,7 +37,7 @@ params:
   affy_cel_files_archive: NULL
   affy_file_name_col: NULL
   affy_background: NULL
-  affy_bg_version: NULL
+  affy_bgversion: NULL
   affy_destructive: NULL
   affy_cdfname: NULL
   affy_rm_mask: NULL
@@ -684,12 +685,12 @@ foo <- lapply(informative_variables[iv_min_group_sizes > 2], function(iv){
 
 ## Differential analysis
 
-### Differential `r params$features_type` counts {.tabset}
+### Differential `r params$features_type` `r params$study_abundance_type` {.tabset}
 
 ```{r, echo=FALSE, results='asis'}
 foo <- lapply(names(p_value_types), function(pvt){
   cat("\n#### ", pvt, "\n")
-  print( htmltools::tagList(datatable(differential_tables[[pvt]], caption = paste0('Differential ',  params$features_type, ' counts (target relative to reference)'), options = list(dom = 't'), rownames = TRUE) ))
+  print( htmltools::tagList(datatable(differential_tables[[pvt]], caption = paste0('Differential ',  params$features_type, " ", params$abundance_type, ' (target relative to reference)'), options = list(dom = 't'), rownames = TRUE) ))
   cat("\n")
 })
 ```

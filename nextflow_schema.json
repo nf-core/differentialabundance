@@ -10,7 +10,7 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["study_name", "study_type", "input", "contrasts", "outdir"],
+            "required": ["study_name", "study_type", "input", "contrasts", "outdir", "study_abundance_type"],
             "properties": {
                 "study_name": {
                     "type": "string",
@@ -51,6 +51,11 @@
                     "format": "directory-path",
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
                     "fa_icon": "fas fa-folder-open"
+                },
+                "study_abundance_type": {
+                    "type": "string",
+                    "default": "counts",
+                    "description": "Type of abundance measure used, platform-dependent"
                 }
             }
         },
@@ -173,7 +178,7 @@
                     "description": "logical value. If TRUE, then background correct using RMA background correction.",
                     "fa_icon": "fas fa-image"
                 },
-                "affy_bg_version": {
+                "affy_bgversion": {
                     "type": "integer",
                     "default": 2,
                     "description": "integer value indicating which RMA background to use",
@@ -382,8 +387,8 @@
                 "differential_fc_column",
                 "differential_qval_column",
                 "differential_min_fold_change",
-                "differential_max_qval",
-                "differential_max_pval"
+                "differential_max_pval",
+                "differential_max_qval"
             ],
             "fa_icon": "fas fa-adjust"
         },
