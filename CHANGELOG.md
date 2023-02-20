@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [[#63](https://github.com/nf-core/differentialabundance/issues/63)] - Add git CI matrix for different test profiles to run ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#60](https://github.com/nf-core/differentialabundance/pull/60)] - Add Affymetrix analysis modules, observation_name_col, make GTF optional, closing [[#47](https://github.com/nf-core/differentialabundance/issues/47)], [[#46](https://github.com/nf-core/differentialabundance/issues/46)], [[#66](https://github.com/nf-core/differentialabundance/issues/66)] ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
+- [[#70](https://github.com/nf-core/differentialabundance/pull/70)] - Array integration final bits: density plot improvement, output paths ([@pinin4fjords](https://github.com/pinin4fjords), review by ) 
 
 ### `Fixed`
 
