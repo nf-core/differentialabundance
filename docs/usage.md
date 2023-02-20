@@ -139,7 +139,7 @@ work                # Directory containing the nextflow working files
 
 ## Hints and tips
 
- - If you don't like the colors used in the report, try a different `RColorBrewer` palette by changing the `exploratory_palette_name` and/or `differential_palette_name` parameters.
+- If you don't like the colors used in the report, try a different `RColorBrewer` palette by changing the `exploratory_palette_name` and/or `differential_palette_name` parameters.
 
 ### Updating the pipeline
 
