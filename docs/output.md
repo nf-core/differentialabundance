@@ -53,6 +53,7 @@ Most plots are included in the HTML report (see above), but are also included in
     - `[contrast_name].vst.tsv`: Normalised counts table with a variance-stabilising transform
   - `differential/`: Directory containing tables of differential statistics reported by differential modules such as DESeq2
     - `[contrast_name].deseq2.results.tsv`: Results of DESeq2 differential analyis (RNA-seq)
+    - `OR [contrast_name].limma.results.tsv`: Results of Limma differential analyis (Affymetrix arrays)
   - `gsea/`: Directory containing tables of differential gene set analyis from GSEA (where enabled)
     - `[contrast]/[contrast].gsea_report_for_[condition].tsv`: A GSEA report table for each side of each contrast
 

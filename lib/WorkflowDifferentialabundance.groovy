@@ -11,11 +11,6 @@ class WorkflowDifferentialabundance {
     //
     public static void initialise(params, log) {
         genomeExistsError(params, log)
-
-        if (!params.gtf) {
-            log.error "Genome GTF file not specified with e.g. '--gtf genome.gtf' or via a detectable config file."
-            System.exit(1)
-        }
     }
 
     //
