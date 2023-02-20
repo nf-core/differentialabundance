@@ -246,6 +246,10 @@ cat(paste0("
 
 ```{r, echo=FALSE}
 observations <- read_metadata(file.path(params$input_dir, params$observations), id_col = params$observations_id_col)
+if (! params$observations_name_col %in% colnames(observations)){
+    stop(paste('Invalid observation name column specified: ', params$observations_name_col, paste0('(Valid values are: ', paste(colnames(observations), collapse=', '),')')))
+}
+
 if (! is.null(params$features)){
   features <- read_metadata(file.path(params$input_dir, params$features))
   features <- features[,colnames(features) %in% simpleSplit(params$features_metadata_cols), drop = FALSE]
@@ -277,7 +281,13 @@ assay_data <- lapply(assay_files, function(x) {
     row.names = 1
   )
   colnames(mat) <- observations[[params$observations_name_col]][match(colnames(mat), rownames(observations))]
-  mat
+
+  # Bit hacky, but ensure log
+  if (max(mat) > 20){
+    log2(mat+1)
+  }else{
+    mat 
+  }
 })
 
 # Now we can rename the observations rows using the title field
@@ -286,11 +296,7 @@ rownames(observations) <- observations[[params$observations_name_col]]
 # Run PCA early so we can understand how important each variable is
 
 pca_datas <- lapply(names(assay_data), function(assay_type){
-  if (assay_type == params$exploratory_final_assay){
-    compilePCAData(assay_data[[assay_type]])
-  }else{
-    compilePCAData(log2(assay_data[[assay_type]]+1))
-  }
+  compilePCAData(assay_data[[assay_type]])
 })
 names(pca_datas) <- names(assay_data)
 
