@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - [[#63](https://github.com/nf-core/differentialabundance/issues/63)] - Add git CI matrix for different test profiles to run ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
-- [[#60](https://github.com/nf-core/differentialabundance/pull/60)] - Add Affymetrix analysis modules, observation_name_col, make GTF optional, closing [[#47](https://github.com/nf-core/differentialabundance/issues/47)], [[#46](https://github.com/nf-core/differentialabundance/issues/46)], [[#66](https://github.com/nf-core/differentialabundance/issues/66)] ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
+- [[#60](https://github.com/nf-core/differentialabundance/pull/60)] - Add Affymetrix analysis modules, observation_name_col, make GTF optional, closing [[#47](https://github.com/nf-core/differentialabundance/issues/47)], [[#46](https://github.com/nf-core/differentialabundance/issues/46)], [[#66](https://github.com/nf-core/differentialabundance/issues/66)] ([@pinin4fjords](https://github.com/pinin4fjords), review by [@apeltzer](https://github.com/apeltzer))
 
 ### `Fixed`
 
@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#57](https://github.com/nf-core/differentialabundance/issues/57)] - Update module shinyngs/validatefomcomponents and bump other shinyngs modules to resolve [[#56](https://github.com/nf-core/differentialabundance/issues/56)] ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#65](https://github.com/nf-core/differentialabundance/pull/65)] - Update shinyngs modules to latest to resolve palette issues reported by [@Shellfishgene](https://github.com/Shellfishgene) ([@pinin4fjords](https://github.com/pinin4fjords), reviewed by [@mashehu](https://github.com/mashehu))
 - [[#67](https://github.com/nf-core/differentialabundance/issues/67)] - Error when contrast is blocking by multiple variables ([@pinin4fjords](https://github.com/pinin4fjords), reported by [@clstacy](https://github.com/clstacy), review by [@jfy133](https://github.com/jfy133))
+- [[#71](https://github.com/nf-core/differentialabundance/pull/71)] - Add palette options, bring full check.names fixes from upstream, closing [[#68](https://github.com/nf-core/differentialabundance/issues/68)] reported by [@Shellfishgene](https://github.com/Shellfishgene), [[#69](https://github.com/nf-core/differentialabundance/issues/69)] reported by [@clstacy](https://github.com/clstacy). ([@pinin4fjords](https://github.com/pinin4fjords), reported by [@clstacy](https://github.com/clstacy), review by 
 
 ## v1.0.1 - 2022-01-25
 
