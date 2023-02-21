@@ -20,7 +20,9 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 ## Pipeline summary
 
-1. Generate a list of genomic feature annotations using the input GTF file.
+![nf-core/differentialabundance metro map](docs/images/workflow.png)
+
+1. Optionally generate a list of genomic feature annotations using the input GTF file (if a table is not explicitly supplied).
 2. Cross-check matrices, sample annotations, feature set and contrasts to ensure consistency.
 3. Run differential analysis over all contrasts specified.
 4. Optionally run a differential gene set analysis.
