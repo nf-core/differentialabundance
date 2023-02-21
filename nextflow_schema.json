@@ -160,7 +160,7 @@
                 },
                 "features": {
                     "type": "string",
-                    "default": null,
+                    "default": "None",
                     "help_text": "This parameter allows you to supply your own feature annotations. These can often be automatically derived from the GTF used upstream for RNA-seq, or from the Bioconductor annotation package (for affy arrays). ",
                     "fa_icon": "fas fa-align-justify"
                 }
@@ -318,6 +318,13 @@
                     "hidden": true,
                     "description": "Specifies final assay to be used for exploratory analysis, platform-specific",
                     "fa_icon": "fas fa-sort-down"
+                },
+                "exploratory_palette_name": {
+                    "type": "string",
+                    "default": "Set1",
+                    "fa_icon": "fas fa-palette",
+                    "description": "Valid R palette name",
+                    "help_text": "Check the content of `RColorBrewer::brewer.pal.info` from an R terminal for valid palette names."
                 }
             },
             "fa_icon": "fas fa-chart-area",
@@ -325,7 +332,8 @@
                 "exploratory_clustering_method",
                 "exploratory_cor_method",
                 "exploratory_n_features",
-                "exploratory_main_variable"
+                "exploratory_main_variable",
+                "exploratory_palette_name"
             ]
         },
         "differential_analysis": {
@@ -393,6 +401,13 @@
                     "default": true,
                     "description": "Indicate whether or not fold changes are on the log scale (default is to assume they are)",
                     "fa_icon": "fas fa-calculator"
+                },
+                "differential_palette_name": {
+                    "type": "string",
+                    "default": "Set1",
+                    "help_text": "Check the content of `RColorBrewer::brewer.pal.info` from an R terminal for valid palette names.",
+                    "description": "Valid R palette name",
+                    "fa_icon": "fas fa-palette"
                 }
             },
             "required": [
@@ -402,7 +417,8 @@
                 "differential_qval_column",
                 "differential_min_fold_change",
                 "differential_max_pval",
-                "differential_max_qval"
+                "differential_max_qval",
+                "differential_palette_name"
             ],
             "fa_icon": "fas fa-adjust"
         },

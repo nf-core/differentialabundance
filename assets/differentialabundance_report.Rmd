@@ -66,6 +66,7 @@ params:
   exploratory_main_variable: null
   exploratory_assay_names: NULL
   exploratory_final_assay: NULL
+  exploratory_palette_name: NULL
   versions_file: null                                         # e.g 17_software_versions.yml
   logo: null
   css: null
@@ -84,6 +85,7 @@ params:
   differential_foldchanges_logged: NULL
   differential_max_pval: NULL
   differential_max_qval: NULL
+  differential_palette_name: NULL
   deseq2_test: NULL
   deseq2_fit_type: NULL
   deseq2_sf_type: NULL
@@ -322,7 +324,7 @@ if (params$exploratory_main_variable == 'contrasts'){
 
 informative_variables <- unique(c(main_grouping_variable, informative_variables))
 
-groupColorScale <- makeColorScale(length(unique(observations[[main_grouping_variable]])), palette = "Set1")
+groupColorScale <- makeColorScale(length(unique(observations[[main_grouping_variable]])), palette = params$exploratory_palette_name)
 ```
 
 <!-- Read the differential results.
@@ -668,7 +670,7 @@ foo <- lapply(informative_variables[iv_min_group_sizes > 2], function(iv){
     y = plotdata$mad,
     color = plotdata$outlier,
     hline_thresholds = c("Outlier threshold" = params$exploratory_mad_threshold),
-    palette = makeColorScale(2, palette = "Set1"),
+    palette = makeColorScale(2, palette = params$differential_palette_name),
     legend_title = "Outlier status",
     labels = rownames(plotdata),
     show_labels = TRUE,
@@ -769,7 +771,7 @@ for (i in 1:nrow(contrasts)){
       vline_thresholds = vline_thresholds,
       show_labels = FALSE,
       legend_title = "Differential status",
-      palette = makeColorScale(2, 'Set1')
+      palette = makeColorScale(2, params$differential_palette_name)
     )
   
     # Let's equalize the axes
