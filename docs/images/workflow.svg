@@ -28,14 +28,15 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="0.66245342"
-     inkscape:cx="1027.9968"
+     inkscape:cx="197.74975"
      inkscape:cy="288.32216"
      inkscape:window-width="1309"
      inkscape:window-height="612"
      inkscape:window-x="0"
      inkscape:window-y="38"
      inkscape:window-maximized="0"
-     inkscape:current-layer="g9121" />
+     inkscape:current-layer="g9121"
+     showguides="false" />
   <defs
      id="defs333">
     <rect
@@ -689,10 +690,10 @@
          y="0"><tspan
            x="211.5332"
            y="226.88177"
-           id="tspan46285">Observation (sample) </tspan><tspan
+           id="tspan690">Observation (sample) </tspan><tspan
            x="341.1543"
            y="256.88177"
-           id="tspan46287">annotations</tspan></text>
+           id="tspan692">annotations</tspan></text>
       <g
          id="g9404-0-1-9-1-1-3"
          transform="matrix(0.20995105,0,0,0.20995105,113.1585,170.27073)"
@@ -740,7 +741,7 @@
          y="0"><tspan
            x="192.26562"
            y="226.88177"
-           id="tspan46289">Contrast definitions</tspan></text>
+           id="tspan694">Contrast definitions</tspan></text>
       <g
          id="g9404-0-1-9-1-1-3-5"
          transform="matrix(0.20995105,0,0,0.20995105,113.1585,185.79302)"
@@ -786,9 +787,9 @@
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;font-family:monospace;-inkscape-font-specification:monospace;text-align:end;white-space:pre;shape-inside:url(#rect11806-1);display:inline;fill:#000000;stroke:none;stroke-opacity:1"
          x="196.54688"
          y="0"><tspan
-           x="208.83398"
+           x="194.43164"
            y="226.88177"
-           id="tspan46291">Raw intensties</tspan></text>
+           id="tspan696">Raw intensities</tspan></text>
       <path
          inkscape:connector-curvature="0"
          style="fill:none;stroke:#000000;stroke-width:2.64583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -992,7 +993,7 @@
          y="0"><tspan
            x="251.27344"
            y="226.88177"
-           id="tspan46293">Raw abundance Matrix</tspan></text>
+           id="tspan698">Raw abundance Matrix</tspan></text>
       <g
          id="g9404-0-1-9-1"
          transform="matrix(0.20995105,0,0,0.20995105,113.1585,106.62157)"
@@ -1078,7 +1079,7 @@
          y="0"><tspan
            x="240.38672"
            y="226.88177"
-           id="tspan46295">Feature annotations</tspan></text>
+           id="tspan700">Feature annotations</tspan></text>
       <text
          transform="matrix(0.70711376,-0.7070998,0.70711376,0.7070998,0,0)"
          inkscape:export-ydpi="90"
