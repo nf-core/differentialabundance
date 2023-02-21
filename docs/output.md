@@ -48,9 +48,14 @@ Most plots are included in the HTML report (see above), but are also included in
 <summary>Output files</summary>
 
 - `tables/`
-  - `processed_counts/`: Directory containing processed counts from initial processing from e.g. DESeq2
-    - `[contrast_name].normalised_counts.tsv`: Normalised counts table
-    - `[contrast_name].vst.tsv`: Normalised counts table with a variance-stabilising transform
+  - `annotation1/`: Directory containing annotation matrices generated in the course of analysis
+    - `[array platform].annotation.tsv`: Annotations derived from an array platform
+    - `[GTF name].anno.tsv`: Species wise annotations derived from a GTF in RNA-seq analysis
+  - `processed_abundance/`: Directory containing processed abundance values from initial processing from e.g. DESeq2 or Affy:
+    - `[contrast_name].normalised_counts.tsv`: Normalised counts table (DESeq2)
+    - `[contrast_name].vst.tsv`: Normalised counts table with a variance-stabilising transform (DESeq2)
+    - `raw.matrix.tsv`: RMA background corrected matrix (Affy)
+    - `normalised.matrix.tsv`: RMA background corrected and normalised intensities matrix (Affy)
   - `differential/`: Directory containing tables of differential statistics reported by differential modules such as DESeq2
     - `[contrast_name].deseq2.results.tsv`: Results of DESeq2 differential analyis (RNA-seq)
     - `OR [contrast_name].limma.results.tsv`: Results of Limma differential analyis (Affymetrix arrays)

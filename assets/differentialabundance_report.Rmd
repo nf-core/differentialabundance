@@ -500,9 +500,9 @@ Whiskers in the above boxplots show `r params$exploratory_whisker_distance` time
 plotly_densityplot(
   assay_data, 
   experiment = observations, 
-  colorby = main_grouping_variable, 
-  expressiontype = paste("count per", params$features_type), 
-  palette = groupColorScale
+  colorby = params$observations_name_col, 
+  expressiontype = paste("count per", params$features_type),
+  makeColorScale(length(unique(observations[[params$observations_id_col]])), palette = "Set1")
 )
 ```
 
