@@ -41,7 +41,7 @@
                     "type": "string",
                     "description": "A CSV file describing sample contrasts",
                     "help_text": "This file is used to define groups of samples from 'input' to compare.  It must contain at least the columns 'variable', 'reference', 'target' and 'blocking', where 'variable' is a column in the input sample sheet, 'reference' and 'target' are values in that column, and blocking is a colon-separated list of additional 'blocking' variables (can be an empty string)",
-                    "pattern": "^\\S+\\.csv$",
+                    "pattern": "^\\S+\\.(csv|tsv|txt)$",
                     "format": "file-path",
                     "mimetype": "text/csv",
                     "fa_icon": "fas fa-adjust"
@@ -160,7 +160,9 @@
                 },
                 "features": {
                     "type": "string",
-                    "default": "None",
+                    "mimetype": "text/csv",
+                    "pattern": "^\\S+\\.(csv|tsv|txt)$",
+                    "description": "This parameter allows you to supply your own feature annotations. These can often be automatically derived from the GTF used upstream for RNA-seq, or from the Bioconductor annotation package (for affy arrays). ",
                     "help_text": "This parameter allows you to supply your own feature annotations. These can often be automatically derived from the GTF used upstream for RNA-seq, or from the Bioconductor annotation package (for affy arrays). ",
                     "fa_icon": "fas fa-align-justify"
                 }
