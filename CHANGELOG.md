@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v1.1.0dev - xxxx-xx-xx
+## v1.1.0 - 2023-02-22
 
 ### `Added`
 
@@ -22,11 +22,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#75](https://github.com/nf-core/differentialabundance/pull/75)] - Bump deseq2/differential for check.names fix ([@pinin4fjords](https://github.com/pinin4fjords), reviewed by [@apeltzer](https://github.com/apeltzer))
 - [[#76](https://github.com/nf-core/differentialabundance/pull/76)] - Fix up non-gtf operation using matrix as annotation source ([@pinin4fjords](https://github.com/pinin4fjords), reported by [@apeltzer](https://github.com/apeltzer), review by [@apeltzer](https://github.com/apeltzer))
 
-## v1.0.1 - 2022-01-25
+## v1.0.1 - 2023-01-25
 
 - [[#49](https://github.com/nf-core/differentialabundance/pull/49) - Add citation fixes, missing logos, output detail, and trigger Zenodo ([@pinin4fjords](https://github.com/pinin4fjords), review by [@apeltzer](https://github.com/apeltzer), [@jfy133](https://github.com/jfy133))
 
-## v1.0.0 - 2022-01-23
+## v1.0.0 - 2023-01-23
 
 Initial release of nf-core/differentialabundance, created with the [nf-core](https://nf-co.re/) template.
 
