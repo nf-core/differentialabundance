@@ -27,7 +27,8 @@ if (params.study_type == 'affy_array'){
     // If this is not an affy array, assume we're reading from a matrix
     
     if (params.matrix) { 
-        ch_in_raw = Channel.of([ exp_meta, file(params.matrix, checkIfExists: true)])
+        matrix_file = file(params.matrix, checkIfExists: true)
+        ch_in_raw = Channel.of([ exp_meta, matrix_file])
     } else { 
         exit 1, 'Input matrix not specified!' 
     }
@@ -166,7 +167,9 @@ workflow DIFFERENTIALABUNDANCE {
     else{
 
         // Otherwise we can just use the matrix input 
-        ch_features = ch_in_raw
+        matrix_as_anno_filename = "matrix_as_anno.${matrix_file.getExtension()}"
+        matrix_file.copyTo(matrix_as_anno_filename)
+        ch_features = Channel.of([ exp_meta, file(matrix_as_anno_filename)])
     }
 
     // Channel for the contrasts file
@@ -423,8 +426,8 @@ workflow DIFFERENTIALABUNDANCE {
 
     ch_report_params = ch_report_input_files
         .map{
-            [report_file_names, it.collect{ f -> f.name}].transpose().collectEntries() + 
-            params.findAll{ k,v -> k.matches(params_pattern) }
+            params.findAll{ k,v -> k.matches(params_pattern) } +
+            [report_file_names, it.collect{ f -> f.name}].transpose().collectEntries() 
         }
 
     // Render the final report
