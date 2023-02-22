@@ -28,6 +28,7 @@ jobs:
           - "latest-everything"
         profile:
           - "test"
+          - "test_nogtf"
           - "test_affy"
     steps:
       - name: Check out pipeline code
