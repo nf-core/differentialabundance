@@ -99,7 +99,6 @@ For further information or help, don't hesitate to get in touch on the [Slack `#
 
 ## Citations
 
-
 If you use nf-core/differentialabundance for your analysis, please cite it using the following doi: [10.5281/zenodo.7568000](https://doi.org/10.5281/zenodo.7568000).
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
