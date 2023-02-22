@@ -103,13 +103,7 @@ To override the above options, you may also supply your own features table as a 
 --features '[path to features TSV]'
 ```
 
-This mechanism can also be used to override the need for an additional features table altogether, by specifying the abundance matrix as the the features table and setting the correct features options. For example on an RNA-seq experiment with 'gene_id' as the identifier column in the matrix:
-
-```bash
---features '[path to abundance matrix]' --features_id_col gene_id features_name_col gene_id
-```
-
-This will cause the gene ID to be used everywhere rather than more accessible gene symbols (as can be derived from the GTF), but the workflow should run.
+By default, if you don't provide features, for non-array data the workflow will fall back to attempting to use the matrix itself as a source of feature annotations. For this to work you must make sure to set the `features_id_col`, `features_name_col` and `features_metadata_cols` parameters to the appropriate values, for example by setting them to 'gene_id' if that is the identifier column on the matrix. This will cause the gene ID to be used everywhere rather than more accessible gene symbols (as can be derived from the GTF), but the workflow should run.
 
 ## Running the pipeline
 
