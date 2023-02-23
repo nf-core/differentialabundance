@@ -20,7 +20,7 @@ parse_args <- function(x){
     args_vals <- lapply(args_vals, function(z){ length(z) <- 2; z})
 
     parsed_args <- structure(lapply(args_vals, function(x) x[2]), names = lapply(args_vals, function(x) x[1]))
-    parsed_args[! is.na(parsed_args)]
+    parsed_args[ ( ! parsed_args %in%  c('', 'null')) & ! is.na(parsed_args)]
 }
 
 #' Flexibly read CSV or TSV files
@@ -52,34 +52,6 @@ read_delim_flexible <- function(file, header = TRUE, row.names = NULL){
     )
 }
 
-#' Round numeric dataframe columns to fixed decimal places by applying
-#' formatting and converting back to numerics
-#'
-#' @param dataframe A data frame
-#' @param columns Which columns to round (assumes all of them by default)
-#' @param digits How many decimal places to round to?
-#'
-#' @return output Data frame
-
-round_dataframe_columns <- function(df, columns = NULL, digits = 8){
-    if (is.null(columns)){
-        columns <- colnames(df)
-    }
-
-    df[,columns] <- format(
-        data.frame(df[, columns], check.names = FALSE),
-        nsmall = digits
-    )
-
-    # Convert columns back to numeric
-
-    for (c in columns) {
-        df[[c]][grep("^ *NA\$", df[[c]])] <- NA
-        df[[c]] <- as.numeric(df[[c]])
-    }
-    df
-}
-
 ################################################
 ################################################
 ## PARSE PARAMETERS FROM NEXTFLOW             ##
@@ -93,32 +65,28 @@ round_dataframe_columns <- function(df, columns = NULL, digits = 8){
 # Set defaults and classes
 
 opt <- list(
-    count_file = '$counts',
+    count_file = '$intensities',
     sample_file = '$samplesheet',
     contrast_variable = NULL,
     reference_level = NULL,
     treatment_level = NULL,
     blocking_variables = NULL,
-    control_genes_file = '$control_genes_file',
-    sizefactors_from_controls = FALSE,
-    gene_id_col = "gene_id",
+    probe_id_col = "probe_id",
     sample_id_col = "experiment_accession",
-    test = "Wald",
-    fit_type = "parametric",
-    sf_type = 'ratio',
-    min_replicates_for_replace = 7,
-    use_t = FALSE,
-    lfc_threshold = 0,
-    alt_hypothesis = 'greaterAbs',
-    independent_filtering = TRUE,
-    p_adjust_method = 'BH',
-    alpha = 0.1,
-    minmu = 0.5,
-    vs_method = 'vst', # 'rlog', 'vst', or 'rlog,vst'
-    shrink_lfc = TRUE,
-    cores = 1,
-    vs_blind = TRUE,
-    vst_nsub = 1000
+    ndups = NULL,                # lmFit
+    spacing = NULL,              # lmFit
+    block = NULL,                # lmFit
+    correlation = NULL,          # lmFit
+    method = 'ls',               # lmFit
+    proportion = 0.01,           # eBayes
+    stdev.coef.lim = '0.1,4',    # eBayes
+    trend = FALSE,               # eBayes
+    robust = FALSE,              # eBayes
+    winsor.tail.p = '0.05,0.1',  # eBayes
+    adjust.method = "BH",        # topTable
+    p.value = 1,                 # topTable
+    lfc = 0,                     # topTable
+    confint = FALSE              # topTable
 )
 opt_types <- lapply(opt, class)
 
@@ -159,14 +127,17 @@ for (file_input in c('count_file', 'sample_file')){
     }
 }
 
+# Convert things to vectors where needed
+vector_opt <- c('stdev.coef.lim', 'winsor.tail.p')
+opt[vector_opt] = lapply(strsplit(unlist(opt[vector_opt]), ','), as.numeric)
+
 ################################################
 ################################################
 ## Finish loading libraries                   ##
 ################################################
 ################################################
 
-library(DESeq2)
-library(BiocParallel)
+library(limma)
 
 ################################################
 ################################################
@@ -174,11 +145,11 @@ library(BiocParallel)
 ################################################
 ################################################
 
-count.table <-
+intensities.table <-
     read_delim_flexible(
         file = opt\$count_file,
         header = TRUE,
-        row.names = opt\$gene_id_col
+        row.names = opt\$probe_id_col
     )
 sample.sheet <- read_delim_flexible(file = opt\$sample_file)
 
@@ -195,12 +166,12 @@ if (! opt\$sample_id_col %in% colnames(sample.sheet)){
 sample.sheet <- sample.sheet[! duplicated(sample.sheet[[opt\$sample_id_col]]), ]
 rownames(sample.sheet) <- sample.sheet[[opt\$sample_id_col]]
 
-# Check that all samples specified in the input sheet are present in the counts
-# table. Assuming they are, subset and sort the count table to match the sample
-# sheet
+# Check that all samples specified in the input sheet are present in the
+# intensities table. Assuming they are, subset and sort the count table to
+# match the sample sheet
 
 missing_samples <-
-    sample.sheet[!rownames(sample.sheet) %in% colnames(count.table), opt\$sample_id_col]
+    sample.sheet[!rownames(sample.sheet) %in% colnames(intensities.table), opt\$sample_id_col]
 
 if (length(missing_samples) > 0) {
     stop(paste(
@@ -211,8 +182,8 @@ if (length(missing_samples) > 0) {
 } else{
     # Save any non-count data, will gene metadata etc we might need later
     noncount.table <-
-        count.table[, !colnames(count.table) %in% rownames(sample.sheet), drop = FALSE]
-    count.table <- count.table[, rownames(sample.sheet)]
+        intensities.table[, !colnames(intensities.table) %in% rownames(sample.sheet), drop = FALSE]
+    intensities.table <- intensities.table[, rownames(sample.sheet)]
 }
 
 ################################################
@@ -256,10 +227,10 @@ if (!contrast_variable %in% colnames(sample.sheet)) {
 # Now specify the model. Use cell-means style so we can be explicit with the
 # contrasts
 
-model <- '~ 0 +'
+model <- paste('~ 0 +', contrast_variable)
 
 if (!is.null(opt\$blocking_variables)) {
-    model <- paste(model, paste(blocking.vars, collapse = '+'))
+    model <- paste(model, paste(blocking.vars, collapse = '+'), sep = '+')
 }
 
 # Make sure all the appropriate variables are factors
@@ -268,68 +239,70 @@ for (v in c(blocking.vars, contrast_variable)) {
     sample.sheet[[v]] <- as.factor(sample.sheet[[v]])
 }
 
-# Variable of interest goes last, see https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#multi-factor-designs
-
-model <- paste(model, contrast_variable, sep = ' + ')
-
 ################################################
 ################################################
-## Run DESeq2 processes                       ##
+## Run Limma processes                       ##
 ################################################
 ################################################
 
-if (opt\$control_genes_file != ''){
-    control_genes <- readLines(opt\$control_genes_file)
-    if (! opt\$sizefactors_from_controls){
-        count.table <- count.table[setdiff(rownames(count.table), control_genes),]
-    }
-}
+# Generate the design
 
-dds <- DESeqDataSetFromMatrix(
-    countData = round(count.table),
-    colData = sample.sheet,
-    design = as.formula(model)
+design <- model.matrix(
+    as.formula(model),
+    data=sample.sheet
+)
+colnames(design) <- sub(
+    contrast_variable,
+    paste0(contrast_variable, '.'), colnames(design)
 )
 
-if (opt\$control_genes_file != '' && opt\$sizefactors_from_controls){
-    print(paste('Estimating size factors using', length(control_genes), 'control genes'))
-    dds <- estimateSizeFactors(dds, controlGenes=rownames(count.table) %in% control_genes)
-}
+# Prepare for and run lmFit()
 
-dds <- DESeq(
-    dds,
-    test = opt\$test,
-    fitType = opt\$fit_type,
-    minReplicatesForReplace = opt\$min_replicates_for_replace,
-    useT = opt\$use_t,
-    sfType = opt\$sf_type,
-    parallel=TRUE, BPPARAM=MulticoreParam(opt\$cores)
+lmfit_args = c(
+    list(
+        object = as.matrix(intensities.table),
+        design = design
+    ),
+    opt[c('ndups', 'spacing', 'block', 'method')]
 )
 
-comp.results <-
-    results(
-        dds,
-        lfcThreshold = opt\$lfc_threshold,
-        altHypothesis = opt\$alt_hypothesis,
-        independentFiltering = opt\$independent_filtering,
-        alpha = opt\$alpha,
-        pAdjustMethod = opt\$p_adjust_method,
-        minmu = opt\$minmu,
-        contrast = c(
-            contrast_variable,
-            c(opt\$treatment_level, opt\$reference_level)
-        )
-    )
-
-if (opt\$shrink_lfc){
-    comp.results <- lfcShrink(dds,
-        type = 'ashr',
-        contrast = c(
-            contrast_variable,
-            c(opt\$treatment_level, opt\$reference_level)
-        )
-    )
+if (! is.null(opt\$block)){
+    lmfit_args[['block']] = sample.sheet[[opt\$block]]
 }
+if (! is.null(opt\$correlation)){
+    lmfit_args[['correlation']] = opt\$correlation
+}
+
+fit <- do.call(lmFit, lmfit_args)
+
+# Contrasts bit
+contrast <- paste(paste(contrast_variable, c(opt\$treatment_level, opt\$reference_level), sep='.'), collapse='-')
+contrast.matrix <- makeContrasts(contrasts=contrast, levels=design)
+fit2 <- contrasts.fit(fit, contrast.matrix)
+
+# Prepare for and run ebayes
+
+ebayes_args = c(
+    list(
+        fit = fit2
+    ),
+    opt[c('proportion', 'stdev.coef.lim', 'trend', 'robust', 'winsor.tail.p')]
+)
+
+fit2 <- do.call(eBayes, ebayes_args)
+
+# Run topTable() to generate a results data frame
+
+toptable_args = c(
+    list(
+        fit = fit2,
+        sort.by = 'none',
+        number = nrow(intensities.table)
+    ),
+    opt[c('adjust.method', 'p.value', 'lfc', 'confint')]
+)
+
+comp.results <- do.call(topTable, toptable_args)[rownames(intensities.table),]
 
 ################################################
 ################################################
@@ -350,11 +323,10 @@ cat("Saving results for ", contrast.name, " ...\n", sep = "")
 
 write.table(
     data.frame(
-        gene_id = rownames(comp.results),
-        round_dataframe_columns(data.frame(comp.results, check.names = FALSE)),
-        check.names = FALSE
+        probe_id = rownames(comp.results),
+        comp.results
     ),
-    file = paste(output_prefix, 'deseq2.results.tsv', sep = '.'),
+    file = paste(output_prefix, 'limma.results.tsv', sep = '.'),
     col.names = TRUE,
     row.names = FALSE,
     sep = '\t',
@@ -364,75 +336,16 @@ write.table(
 # Dispersion plot
 
 png(
-    file = paste(output_prefix, 'deseq2.dispersion.png', sep = '.'),
+    file = paste(output_prefix, 'limma.mean_difference.png', sep = '.'),
     width = 600,
     height = 600
 )
-plotDispEsts(dds)
+plotMD(intensities.table)
 dev.off()
 
 # R object for other processes to use
 
-saveRDS(dds, file = paste(output_prefix, 'dds.rld.rds', sep = '.'))
-
-# Size factors
-
-sf_df = data.frame(
-    sample = names(sizeFactors(dds)),
-    data.frame(sizeFactors(dds), check.names = FALSE),
-    check.names = FALSE
-)
-colnames(sf_df) <- c('sample', 'sizeFactor')
-write.table(
-    sf_df,
-    file = paste(output_prefix, 'deseq2.sizefactors.tsv', sep = '.'),
-    col.names = TRUE,
-    row.names = FALSE,
-    sep = '\t',
-    quote = FALSE
-)
-
-# Write specified matrices
-
-write.table(
-    data.frame(
-        gene_id=rownames(counts(dds)),
-        counts(dds, normalized = TRUE),
-        check.names = FALSE
-    ),
-    file = paste(output_prefix, 'normalised_counts.tsv', sep = '.'),
-    col.names = TRUE,
-    row.names = FALSE,
-    sep = '\t',
-    quote = FALSE
-)
-
-# Note very limited rounding for consistency of results
-
-for (vs_method_name in strsplit(opt\$vs_method, ',')){
-    if (vs_method_name == 'vst'){
-        vs_mat <- vst(dds, blind = opt\$vs_blind, nsub = opt\$vst_nsub)
-    }else if (vs_method_name == 'rlog'){
-        vs_mat <- rlog(dds, blind = opt\$vs_blind, fitType = opt\$fit_type)
-    }
-
-    # Again apply the slight rounding and then restore numeric
-
-    write.table(
-        data.frame(
-            gene_id=rownames(counts(dds)),
-            round_dataframe_columns(
-                data.frame(assay(vs_mat), check.names = FALSE)
-            ),
-            check.names = FALSE
-        ),
-        file = paste(output_prefix, vs_method_name,'tsv', sep = '.'),
-        col.names = TRUE,
-        row.names = FALSE,
-        sep = '\t',
-        quote = FALSE
-    )
-}
+saveRDS(fit2, file = paste(output_prefix, 'MArrayLM.limma.rds', sep = '.'))
 
 ################################################
 ################################################
@@ -451,13 +364,13 @@ sink()
 ################################################
 
 r.version <- strsplit(version[['version.string']], ' ')[[1]][3]
-deseq2.version <- as.character(packageVersion('DESeq2'))
+limma.version <- as.character(packageVersion('limma'))
 
 writeLines(
     c(
         '"${task.process}":',
         paste('    r-base:', r.version),
-        paste('    bioconductor-deseq2:', deseq2.version)
+        paste('    bioconductor-limma:', limma.version)
     ),
 'versions.yml')
 

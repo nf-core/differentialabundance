@@ -20,7 +20,9 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 ## Pipeline summary
 
-1. Generate a list of genomic feature annotations using the input GTF file.
+![nf-core/differentialabundance metro map](docs/images/workflow.png)
+
+1. Optionally generate a list of genomic feature annotations using the input GTF file (if a table is not explicitly supplied).
 2. Cross-check matrices, sample annotations, feature set and contrasts to ensure consistency.
 3. Run differential analysis over all contrasts specified.
 4. Optionally run a differential gene set analysis.
@@ -48,15 +50,28 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 4. Start running your own analysis!
 
-   ```bash
-    nextflow run nf-core/differentialabundance \
-        --input samplesheet.csv \
-        --contrasts contrasts.csv \
-        --matrix assay_matrix.tsv \
-        --gtf mouse.gtf \
-        --outdir <OUTDIR>  \
-        -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
-   ```
+RNA-seq:
+
+```bash
+ nextflow run nf-core/differentialabundance \
+     --input samplesheet.csv \
+     --contrasts contrasts.csv \
+     --matrix assay_matrix.tsv \
+     --gtf mouse.gtf \
+     --outdir <OUTDIR>  \
+     -profile rnaseq,<docker/singularity/podman/shifter/charliecloud/conda/institute>
+```
+
+Affymetrix microarray:
+
+```bash
+ nextflow run nf-core/differentialabundance \
+     --input samplesheet.csv \
+     --contrasts contrasts.csv \
+     --affy_cel_files_archive cel_files.tar \
+     --outdir <OUTDIR>  \
+     -profile affy,<docker/singularity/podman/shifter/charliecloud/conda/institute>
+```
 
 ## Documentation
 
@@ -84,8 +99,7 @@ For further information or help, don't hesitate to get in touch on the [Slack `#
 
 ## Citations
 
-<!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
-<!-- If you use  nf-core/differentialabundance for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
+If you use nf-core/differentialabundance for your analysis, please cite it using the following doi: [10.5281/zenodo.7568000](https://doi.org/10.5281/zenodo.7568000).
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 

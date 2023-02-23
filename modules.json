@@ -5,6 +5,11 @@
         "https://github.com/nf-core/modules.git": {
             "modules": {
                 "nf-core": {
+                    "affy/justrma": {
+                        "branch": "master",
+                        "git_sha": "960cc23c7bb97ff718e162efeefdd842fa8f5c70",
+                        "installed_by": ["modules"]
+                    },
                     "atlasgeneannotationmanipulation/gtf2featureannotation": {
                         "branch": "master",
                         "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
@@ -17,7 +22,7 @@
                     },
                     "custom/matrixfilter": {
                         "branch": "master",
-                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "git_sha": "091496fc34f36df69ca037ed965af262384b5db4",
                         "installed_by": ["modules"]
                     },
                     "custom/tabulartogseacls": {
@@ -32,7 +37,7 @@
                     },
                     "deseq2/differential": {
                         "branch": "master",
-                        "git_sha": "3eb41d9f08a68bc728aacc31f2079f5115616e1a",
+                        "git_sha": "2d2e936e5a0bdb2888112e2d2220eb0895d486e1",
                         "installed_by": ["modules"]
                     },
                     "gsea/gsea": {
@@ -45,6 +50,11 @@
                         "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
                         "installed_by": ["modules"]
                     },
+                    "limma/differential": {
+                        "branch": "master",
+                        "git_sha": "960cc23c7bb97ff718e162efeefdd842fa8f5c70",
+                        "installed_by": ["modules"]
+                    },
                     "rmarkdownnotebook": {
                         "branch": "master",
                         "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
@@ -52,17 +62,22 @@
                     },
                     "shinyngs/staticdifferential": {
                         "branch": "master",
-                        "git_sha": "dc67268f96f9d6e47a6f0c1c631ae54f42b6716c",
+                        "git_sha": "c2f6d050ce2f4db1436a3616cd0dad0929e6ffcd",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/staticexploratory": {
                         "branch": "master",
-                        "git_sha": "dc67268f96f9d6e47a6f0c1c631ae54f42b6716c",
+                        "git_sha": "c2f6d050ce2f4db1436a3616cd0dad0929e6ffcd",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/validatefomcomponents": {
                         "branch": "master",
-                        "git_sha": "dc67268f96f9d6e47a6f0c1c631ae54f42b6716c",
+                        "git_sha": "c2f6d050ce2f4db1436a3616cd0dad0929e6ffcd",
+                        "installed_by": ["modules"]
+                    },
+                    "untar": {
+                        "branch": "master",
+                        "git_sha": "cc1f997fab6d8fde5dc0e6e2a310814df5b53ce7",
                         "installed_by": ["modules"]
                     }
                 }
