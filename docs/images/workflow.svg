@@ -27,9 +27,9 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="1.0074671"
-     inkscape:cx="140.94754"
-     inkscape:cy="131.02165"
+     inkscape:zoom="0.66245342"
+     inkscape:cx="1684.6467"
+     inkscape:cy="301.90802"
      inkscape:window-width="1309"
      inkscape:window-height="612"
      inkscape:window-x="0"
@@ -477,40 +477,40 @@
          inkscape:export-xdpi="90"
          inkscape:export-filename="./polygon4618.png"
          id="text3362-9-4"
-         y="276.93008"
-         x="127.60313"
+         y="276.47839"
+         x="129.59431"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;line-height:1.35;font-family:'Maven Pro';-inkscape-font-specification:'Maven Pro';display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
          xml:space="preserve"><tspan
            id="tspan3360-8-2"
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;font-family:monospace;-inkscape-font-specification:monospace;text-align:center;text-anchor:middle;stroke-width:0.264583"
-           y="276.93008"
-           x="127.60313"
+           y="276.47839"
+           x="129.59431"
            sodipodi:role="line">justRMA</tspan><tspan
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;font-family:monospace;-inkscape-font-specification:monospace;text-align:center;text-anchor:middle;stroke-width:0.264583"
-           y="285.56781"
-           x="127.60313"
+           y="285.11612"
+           x="129.59431"
            sodipodi:role="line"
-           id="tspan21175">(Raw)</tspan></text>
+           id="tspan21175">(raw)</tspan></text>
       <text
          transform="matrix(0.70711376,-0.7070998,0.70711376,0.7070998,0,0)"
          inkscape:export-ydpi="90"
          inkscape:export-xdpi="90"
          inkscape:export-filename="./polygon4618.png"
          id="text3362-9-4-0"
-         y="332.67828"
-         x="150.33894"
+         y="331.83093"
+         x="155.16862"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;line-height:1.35;font-family:'Maven Pro';-inkscape-font-specification:'Maven Pro';display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
          xml:space="preserve"><tspan
            id="tspan3360-8-2-4"
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;font-family:monospace;-inkscape-font-specification:monospace;text-align:center;text-anchor:middle;stroke-width:0.264583"
-           y="332.67828"
-           x="150.33894"
+           y="331.83093"
+           x="155.16862"
            sodipodi:role="line">justRMA</tspan><tspan
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;font-family:monospace;-inkscape-font-specification:monospace;text-align:center;text-anchor:middle;stroke-width:0.264583"
-           y="341.31601"
-           x="150.33894"
+           y="340.46866"
+           x="155.16862"
            sodipodi:role="line"
-           id="tspan21175-5">(Norm)</tspan></text>
+           id="tspan21175-5">(normalised)</tspan></text>
       <text
          transform="matrix(0.70711376,-0.7070998,0.70711376,0.7070998,0,0)"
          inkscape:export-ydpi="90"
@@ -547,14 +547,14 @@
          inkscape:export-xdpi="90"
          inkscape:export-filename="./polygon4618.png"
          id="text3362-5-1-7"
-         y="332.14758"
-         x="252.14386"
+         y="334.01846"
+         x="254.01474"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;line-height:1.35;font-family:'Maven Pro';-inkscape-font-specification:'Maven Pro';display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
          xml:space="preserve"><tspan
            id="tspan3360-0-0-9"
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;font-family:monospace;-inkscape-font-specification:monospace;text-align:center;text-anchor:middle;stroke-width:0.264583"
-           y="332.14758"
-           x="252.14386"
+           y="334.01846"
+           x="254.01474"
            sodipodi:role="line">Filter matrix</tspan></text>
       <text
          transform="matrix(0.70711376,-0.7070998,0.70711376,0.7070998,0,0)"
@@ -659,7 +659,7 @@
              style="stroke-width:1.42254" />
           <text
              xml:space="preserve"
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0.01%;font-family:'Maven Pro';-inkscape-font-specification:'Maven Pro';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.42254px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24.9533px;line-height:0.01%;font-family:'Maven Pro';-inkscape-font-specification:'Maven Pro';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.42254px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
              x="528.13556"
              y="-1580.5352"
              id="text9244"
@@ -668,11 +668,11 @@
                x="528.13556"
                y="-1580.5352"
                id="tspan9242"
-               style="stroke-width:1.42254px"><tspan
+               style="font-size:24.9533px;stroke-width:1.42254px"><tspan
                  x="528.13556"
                  y="-1580.5352"
-                 style="font-weight:bold;font-size:32px;line-height:1.25;-inkscape-font-specification:'Maven Pro Bold';stroke-width:1.42254px"
-                 id="tspan9240">CEL</tspan></tspan></text>
+                 style="font-weight:bold;font-size:24.9533px;line-height:1.25;-inkscape-font-specification:'Maven Pro Bold';stroke-width:1.42254px"
+                 id="tspan9240"> CEL</tspan></tspan></text>
           <path
              id="path9227"
              d="m 524.39681,1644.6326 h 47.5386 v -20.9983 c 0,-1.1338 0.91983,-2.0521 2.05208,-2.0521 h 18.12807 v -10.2809 h -67.71875 z m 67.71894,-95.336 h -67.71894 v 19.7705 h 67.71875 v -19.7705 z"
@@ -690,10 +690,10 @@
          y="0"><tspan
            x="211.5332"
            y="226.88177"
-           id="tspan587">Observation (sample) </tspan><tspan
+           id="tspan935">Observation (sample) </tspan><tspan
            x="341.1543"
            y="256.88177"
-           id="tspan589">annotations</tspan></text>
+           id="tspan937">annotations</tspan></text>
       <g
          id="g9404-0-1-9-1-1-3"
          transform="matrix(0.20995105,0,0,0.20995105,113.1585,170.27073)"
@@ -741,7 +741,7 @@
          y="0"><tspan
            x="192.26562"
            y="226.88177"
-           id="tspan591">Contrast definitions</tspan></text>
+           id="tspan939">Contrast definitions</tspan></text>
       <g
          id="g9404-0-1-9-1-1-3-5"
          transform="matrix(0.20995105,0,0,0.20995105,113.1585,185.79302)"
@@ -789,7 +789,7 @@
          y="0"><tspan
            x="194.43164"
            y="226.88177"
-           id="tspan593">Raw intensities</tspan></text>
+           id="tspan941">Raw intensities</tspan></text>
       <path
          inkscape:connector-curvature="0"
          style="fill:none;stroke:#000000;stroke-width:2.64583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -931,14 +931,14 @@
       <path
          inkscape:connector-curvature="0"
          style="fill:none;stroke:#01862e;stroke-width:2.64583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m 274.13047,48.247043 h 7.63674 c 3.79472,0 7.50565,-3.792548 10.18233,-8.040868 l 2.48035,-3.936723 2.61083,-4.104175 c 2.68328,-4.237903 6.38759,-7.236772 10.18233,-7.236772 h 8.14589"
-         id="path1232-7-2-7-6-16-2-3-4-0"
-         sodipodi:nodetypes="csscssc" />
-      <path
-         inkscape:connector-curvature="0"
-         style="fill:none;stroke:#01862e;stroke-width:2.64583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          d="m 274.26241,24.928505 h 48.83777"
          id="path2500-5-22-5-4-4-8-3-6-5-9"
+         sodipodi:nodetypes="cc" />
+      <path
+         inkscape:connector-curvature="0"
+         style="fill:none;stroke:#01862e;stroke-width:2.64584;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 274.26233,48.315522 h 73.60052"
+         id="path2500-5-22-5-4-4-8-3-6-5-9-0"
          sodipodi:nodetypes="cc" />
       <g
          id="g9404-0-1-9"
@@ -987,7 +987,7 @@
          y="0"><tspan
            x="251.27344"
            y="226.88177"
-           id="tspan595">Raw abundance Matrix</tspan></text>
+           id="tspan943">Raw abundance matrix</tspan></text>
       <g
          id="g9404-0-1-9-1"
          transform="matrix(0.20995105,0,0,0.20995105,113.02873,107.81977)"
@@ -1066,14 +1066,14 @@
       </g>
       <text
          xml:space="preserve"
-         transform="matrix(0.26458333,0,0,0.26458333,115.91149,-48.019351)"
+         transform="matrix(0.26458333,0,0,0.26458333,115.91149,-41.14018)"
          id="text11804-36"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;font-family:monospace;-inkscape-font-specification:monospace;text-align:end;white-space:pre;shape-inside:url(#rect11806-3);display:inline;fill:#000000;stroke:none;stroke-opacity:1"
          x="268.00781"
          y="0"><tspan
            x="240.38672"
            y="226.88177"
-           id="tspan597">Feature annotations</tspan></text>
+           id="tspan945">Feature annotations</tspan></text>
       <text
          transform="matrix(0.70711376,-0.7070998,0.70711376,0.7070998,0,0)"
          inkscape:export-ydpi="90"
@@ -1093,7 +1093,7 @@
            y="223.61835"
            x="214.3054"
            sodipodi:role="line"
-           id="tspan28827">Table</tspan></text>
+           id="tspan28827">table</tspan></text>
       <path
          style="fill:none;stroke:#01862e;stroke-width:2.64582;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          d="m 377.17284,76.8535 h -7.94075 c -3.9458,0 -7.79758,-4.465574 -10.58769,-9.441829 l -2.64693,-4.720955"
