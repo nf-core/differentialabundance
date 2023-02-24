@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#73](https://github.com/nf-core/differentialabundance/pull/73)] - Make `--matrix`, `--input`, `--features` accept either CSV,TXT or TSV files as input ([@apeltzer](https://github.com/apeltzer), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#75](https://github.com/nf-core/differentialabundance/pull/75)] - Bump deseq2/differential for check.names fix ([@pinin4fjords](https://github.com/pinin4fjords), reviewed by [@apeltzer](https://github.com/apeltzer))
 - [[#76](https://github.com/nf-core/differentialabundance/pull/76)] - Fix up non-gtf operation using matrix as annotation source ([@pinin4fjords](https://github.com/pinin4fjords), reported by [@apeltzer](https://github.com/apeltzer), review by [@apeltzer](https://github.com/apeltzer))
+- [[#82](https://github.com/nf-core/differentialabundance/pull/82)] - Address v1.1.0 pre-release feedback (subway map fixes) ([@pinin4fjords](https://github.com/pinin4fjords), reported by [@mashehu](https://github.com/mashehu))
 
 ## v1.0.1 - 2023-01-25
 
