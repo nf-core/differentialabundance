@@ -3,11 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v1.2.0dev - xxxx-xx-xx
+## v1.1.1dev - xxxx-xx-xx
 
 ### `Added`
 
 ### `Fixed`
+
+- [[#89](https://github.com/nf-core/differentialabundance/pull/89)] - Sanitise for differential ([@pinin4fjords](https://github.com/pinin4fjords), reviewed by )
 
 ## v1.1.0 - 2023-02-22
 
