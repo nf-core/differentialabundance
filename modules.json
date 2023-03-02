@@ -37,7 +37,7 @@
                     },
                     "deseq2/differential": {
                         "branch": "master",
-                        "git_sha": "2d2e936e5a0bdb2888112e2d2220eb0895d486e1",
+                        "git_sha": "dbffa8da6e9f065a5b7240255c51cbd839f5df43",
                         "installed_by": ["modules"]
                     },
                     "gsea/gsea": {
@@ -52,7 +52,7 @@
                     },
                     "limma/differential": {
                         "branch": "master",
-                        "git_sha": "960cc23c7bb97ff718e162efeefdd842fa8f5c70",
+                        "git_sha": "dbffa8da6e9f065a5b7240255c51cbd839f5df43",
                         "installed_by": ["modules"]
                     },
                     "rmarkdownnotebook": {
