@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
-- [[#89](https://github.com/nf-core/differentialabundance/pull/89)] - Sanitise for differential ([@pinin4fjords](https://github.com/pinin4fjords), reviewed by )
+- [[#89](https://github.com/nf-core/differentialabundance/pull/89)] - Sanitise for differential ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 
 ## v1.1.0 - 2023-02-22
 
