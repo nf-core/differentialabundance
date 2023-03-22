@@ -636,7 +636,7 @@ for (assay_type in rev(names(assay_data))){
         params$features_type, 
         "s\n(", params$exploratory_clustering_method, " clustering, ", params$exploratory_cor_method, " correlation)"),
       cluster_method = params$exploratory_clustering_method,
-      palette = groupColorScale,
+      palette = dendroColorScale,
       labelspace = 0.25
     )
     # Defaults in shinyngs make the text in this plot a bit big for the report, so
