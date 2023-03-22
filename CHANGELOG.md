@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
-- [[#95](https://github.com/nf-core/differentialabundance/issues/95) - Pipeline doesn't check for gene sets file specification when GSEA is activated ([@pinin4fjords](https://github.com/pinin4fjords), reported by [danhalligan-hx](https://github.com/danhalligan-hx), review by )
+- [[#95](https://github.com/nf-core/differentialabundance/issues/95) - Pipeline doesn't check for gene sets file specification when GSEA is activated ([@pinin4fjords](https://github.com/pinin4fjords), reported by [danhalligan-hx](https://github.com/danhalligan-hx), review by [FriederikeHanssen](https://github.com/FriederikeHanssen))
 
 ## v1.1.1 - 2023-03-02
 
