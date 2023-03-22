@@ -36,7 +36,13 @@ if (params.study_type == 'affy_array'){
 
 // Check optional parameters
 if (params.control_features) { ch_control_features = file(params.control_features, checkIfExists: true) } else { ch_control_features = [[],[]] } 
-if (params.gsea_run) { gene_sets_file = file(params.gsea_gene_sets, checkIfExists: true) } else { gene_sets_file = [] } 
+if (params.gsea_run) { 
+    if (params.gsea_gene_sets){
+        gene_sets_file = file(params.gsea_gene_sets, checkIfExists: true)
+    } else {
+        exit 1, 'GSEA activated but gene set file not specified!' 
+    }
+} else { gene_sets_file = [] } 
 
 report_file = file(params.report_file, checkIfExists: true)
 logo_file = file(params.logo_file, checkIfExists: true)
