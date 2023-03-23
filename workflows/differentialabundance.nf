@@ -19,8 +19,8 @@ if (params.input) { ch_input = Channel.of([ exp_meta, params.input ]) } else { e
 if (params.study_type == 'affy_array'){
     if (params.affy_cel_files_archive) { 
         ch_celfiles = Channel.of([ exp_meta, file(params.affy_cel_files_archive, checkIfExists: true) ]) 
-    } else { 
-        throw new Exception("CEL files archive not specified!")
+    } else {
+        error("CEL files archive not specified!") 
     }
 } else{
     
@@ -30,7 +30,7 @@ if (params.study_type == 'affy_array'){
         matrix_file = file(params.matrix, checkIfExists: true)
         ch_in_raw = Channel.of([ exp_meta, matrix_file])
     } else { 
-        throw new Exception("Input matrix not specified!")
+        error("Input matrix not specified!")
     }
 }
 
@@ -40,7 +40,7 @@ if (params.gsea_run) {
     if (params.gsea_gene_sets){
         gene_sets_file = file(params.gsea_gene_sets, checkIfExists: true)
     } else {
-        throw new Exception("GSEA activated but gene set file not specified!")
+        error("GSEA activated but gene set file not specified!")
     }
 } else { gene_sets_file = [] } 
 
