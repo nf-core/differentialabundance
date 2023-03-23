@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
- - [[#93](https://github.com/nf-core/differentialabundance/issues/93) - Shouldn't be re-using the single exploratory palette across multiple informative variables  ([@pinin4fjords](https://github.com/pinin4fjords), review by )
+- [[#93](https://github.com/nf-core/differentialabundance/issues/93) - Shouldn't be re-using the single exploratory palette across multiple informative variables ([@pinin4fjords](https://github.com/pinin4fjords), review by )
 
 ## v1.1.1 - 2023-03-02
 
