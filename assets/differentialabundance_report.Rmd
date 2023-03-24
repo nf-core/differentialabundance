@@ -530,6 +530,7 @@ for (assay_type in rev(names(assay_data))){
       observations[[iv]], 
       levels = unique(observations[[iv]])
     )
+    pcaColorScale <- makeColorScale(length(unique(observations[[iv]])), palette = params$exploratory_palette_name)
 
     # Make plotting data combining PCA coords with coloring groups etc
 
@@ -551,7 +552,7 @@ for (assay_type in rev(names(assay_data))){
         ylab = labels[2],
         colorby = plotdata$colorby,
         plot_type = plot_types[[d]],
-        palette = groupColorScale,
+        palette = pcaColorScale,
         legend_title = prettifyVariablename(iv),
         labels = plotdata$name,
         show_labels = TRUE
@@ -621,6 +622,8 @@ for (assay_type in rev(names(assay_data))){
     cat(paste0("\n##### ", prettifyVariablename(assay_type), " (", iv, ")\n"))
     variable_genes <- selectVariableGenes(matrix = assay_data[[assay_type]], ntop = params$exploratory_n_features)
 
+    dendroColorScale <- makeColorScale(length(unique(observations[[iv]])), palette = params$exploratory_palette_name)
+    
     p <- clusteringDendrogram(
       2^assay_data[[assay_type]][variable_genes, ],
       observations[, iv, drop = FALSE],
@@ -633,7 +636,7 @@ for (assay_type in rev(names(assay_data))){
         params$features_type, 
         "s\n(", params$exploratory_clustering_method, " clustering, ", params$exploratory_cor_method, " correlation)"),
       cluster_method = params$exploratory_clustering_method,
-      palette = groupColorScale,
+      palette = dendroColorScale,
       labelspace = 0.25
     )
     # Defaults in shinyngs make the text in this plot a bit big for the report, so
