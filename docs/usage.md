@@ -77,7 +77,11 @@ The necessary fields in order are:
 - `variable` - which column from the observations information will be used to define groups
 - `reference` - the base/ reference level for the comparison. If features have higher values in this group than target they will generate negative fold changes
 - `target` - the target/ non-reference level for the comparison. If features have higher values in this group than the reference they will generate positive fold changes
+
+You can optionally supply:
+
 - `blocking` - semicolon-delimited, any additional variables (also observation columns) that should be modelled alongside the contrast variable
+- `exclude_samples_col` and `exclude_samples_values` - the former being a valid column in the samples sheet, the latter a semicolon-delimited list of values in that column which should be used to select samples prior to differential modelling. This is helpful where certain samples need to be exluded prior to analysis of a given contrast.
 
 The file can be tab or comma separated.
 
