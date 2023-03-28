@@ -29,6 +29,7 @@ params:
   features_id_col: NULL
   features_name_col: NULL
   features_metadata_cols: NULL 
+  features_biotype_col: NULL
   raw_matrix: null                                            # e.g. 0_salmon.merged.gene_counts.tsv
   normalised_matrix: null
   variance_stabilised_matrix: null                            # e.g. test_files/3_treatment-WT-P23H.vst.tsv
@@ -132,6 +133,7 @@ library(yaml)
 library(shinyngs)
 library(plotly)
 library(DT)
+library(dplyr)
 ```
 
 ```{r include = FALSE}
@@ -467,16 +469,46 @@ print( htmltools::tagList(datatable(contrasts_to_print, caption = paste0("Table 
 
 ## Counts
 
-Input was a matrix of `r nrow(assay_data$raw)` `r params$features_type`s for `r ncol(assay_data$raw)` `r params$observations_type`s`r ifelse(nrow(assay_data$normalised) < nrow(assay_data$raw), paste0(', reduced to ', nrow(assay_data$normalised), ' ', params$features_type, 's after filtering for low abundance'), '')`.
+Input was a matrix of `r nrow(assay_data$raw)` `r params$features_type`s for `r ncol(assay_data$raw)` `r params$observations_type`s`r ifelse(nrow(assay_data$normalised) < nrow(assay_data$raw), paste0(', reduced to ', nrow(assay_data$normalised), ' ', params$features_type, 's after filtering for low abundance. The matrix contains '), '')`.
+
+
 
 ## Exploratory analysis
+
+
+```{r, echo=FALSE, results='asis', fig.height=8, eval=!is.null(params$features_biotype_col)}
+cat("### Number of differentially expressed genes by gene type")
+assay_data_normalised = as.data.frame(assay_data$normalised)
+assay_data_normalised  <- cbind(gene_id = rownames(assay_data_normalised), assay_data_normalised)
+rownames(assay_data_normalised) <- 1:nrow(assay_data_normalised)
+
+features_df  <- read.csv(params$features, sep = "\t")
+
+assay_data_normalised = assay_data_normalised %>% left_join(select(features_df, gene_id, gene_biotype), by=c("gene_id"="gene_id"))
+biotype_counts = assay_data_normalised %>% group_by(gene_biotype) %>% count()
+
+
+p = biotype_counts %>%
+  ggplot(aes(x=gene_biotype, y=n)) + geom_bar(stat='identity') + theme_bw() + coord_flip()
+print(p)
+```
 
 ### Abundance value distributions
 
 The following plots show the abundance value distributions of input matrices. A log2 transformation is applied where not already performed.
 
-```{r, include=FALSE}
+```{r, echo=FALSE, results='asis', fig.height=8}
 
+p <- ggplot_boxplot(
+  assay_data, 
+  experiment = observations, 
+  colorby = main_grouping_variable, 
+  expressiontype = paste("count per", params$features_type), 
+  palette = groupColorScale,
+  whisker_distance = params$exploratory_whisker_distance,
+  base_size=8
+)
+print(p)
 ```
 #### Box plots
 
