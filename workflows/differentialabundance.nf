@@ -38,11 +38,12 @@ if (params.study_type == 'affy_array'){
 if (params.control_features) { ch_control_features = file(params.control_features, checkIfExists: true) } else { ch_control_features = [[],[]] } 
 if (params.gsea_run) { 
     if (params.gsea_gene_sets){
-        gene_sets_file = file(params.gsea_gene_sets, checkIfExists: true)
+        gene_sets_files = params.gsea_gene_sets.split(" ")
+        gene_sets_files = gene_sets_files.collect { file(it, checkIfExists: true) }
     } else {
         error("GSEA activated but gene set file not specified!")
     }
-} else { gene_sets_file = [] } 
+} else { gene_sets_files = [] }
 
 report_file = file(params.report_file, checkIfExists: true)
 logo_file = file(params.logo_file, checkIfExists: true)
@@ -297,8 +298,6 @@ workflow DIFFERENTIALABUNDANCE {
     // changes/ p values from DESeq2
     
     if (params.gsea_run){    
-    
-        ch_gene_sets = Channel.from(gene_sets_file)
 
         // For GSEA, we need to convert normalised counts to a GCT format for
         // input, and process the sample sheet to generate class definitions
@@ -313,15 +312,25 @@ workflow DIFFERENTIALABUNDANCE {
             VALIDATOR.out.feature_meta.map{ it[1] },
             [params.features_id_col, params.features_name_col]    
         )
-    
+
+        // Make channel from current file and get it's name for correct saving of output
+
+        ch_gene_sets = Channel.fromList(gene_sets_files)
+
         // The normalised matrix does not always have a contrast meta, so we
         // need a combine rather than a join here
+        // Also add file name to metamap for easy access from modules.config
 
         ch_gsea_inputs = CUSTOM_TABULARTOGSEAGCT.out.gct
             .map{ it.tail() }
             .combine(CUSTOM_TABULARTOGSEACLS.out.cls)
             .map{ tuple(it[1], it[0], it[2]) }
             .combine(ch_gene_sets)
+            .map{ tuple( ["gmt_name": it[3].getName().split("\\.")[0..-2].join("."),
+                            "reference": it[0].reference,
+                            "target": it[0].target,
+                            "id": it[0].id],
+                        it[1], it[2], it[3]) }
 
         GSEA_GSEA( 
             ch_gsea_inputs,
