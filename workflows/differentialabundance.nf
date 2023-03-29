@@ -313,10 +313,6 @@ workflow DIFFERENTIALABUNDANCE {
             [params.features_id_col, params.features_name_col]    
         )
 
-        // Make channel from current file and get it's name for correct saving of output
-
-        ch_gene_sets = Channel.fromList(gene_sets_files)
-
         // The normalised matrix does not always have a contrast meta, so we
         // need a combine rather than a join here
         // Also add file name to metamap for easy access from modules.config
