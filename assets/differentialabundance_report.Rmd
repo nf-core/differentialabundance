@@ -815,7 +815,7 @@ if (any(unlist(params[paste0(possible_gene_set_methods, '_run')]))){
     if (unlist(params[paste0(gene_set_method, '_run')])){
       cat("\n### ", toupper(gene_set_method) ," {.tabset}\n")
       
-      for (gmt_file in strsplit(params$gsea_gene_sets, " ")[[1]]) {
+      for (gmt_file in simpleSplit(params$gsea_gene_sets)) {
         gmt_name <- strsplit(basename(gmt_file), '.', fixed=T)[[1]]
         gmt_name <- paste0(head(gmt_name, -1), collapse=".")
         
