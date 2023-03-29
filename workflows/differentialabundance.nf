@@ -322,11 +322,6 @@ workflow DIFFERENTIALABUNDANCE {
             .combine(CUSTOM_TABULARTOGSEACLS.out.cls)
             .map{ tuple(it[1], it[0], it[2]) }
             .combine(ch_gene_sets)
-            .map{ tuple( ["gmt_name": it[3].getName().split("\\.")[0..-2].join("."),
-                            "reference": it[0].reference,
-                            "target": it[0].target,
-                            "id": it[0].id],
-                        it[1], it[2], it[3]) }
 
         GSEA_GSEA( 
             ch_gsea_inputs,
