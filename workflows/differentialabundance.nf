@@ -43,7 +43,7 @@ if (params.gsea_run) {
     } else {
         error("GSEA activated but gene set file not specified!")
     }
-} else { gene_sets_files = [] }
+} 
 
 report_file = file(params.report_file, checkIfExists: true)
 logo_file = file(params.logo_file, checkIfExists: true)
