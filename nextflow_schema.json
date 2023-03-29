@@ -778,7 +778,7 @@
                 "gsea_gene_sets": {
                     "type": "string",
                     "default": "None",
-                    "description": "Gene sets in GMT or GMX-format (multiple input files are possible)",
+                    "description": "Gene sets in GMT or GMX-format (multiple comma-separated input files are possible)",
                     "fa_icon": "fas fa-bars"
                 }
             },
