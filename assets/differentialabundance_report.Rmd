@@ -817,8 +817,8 @@ if (any(unlist(params[paste0(possible_gene_set_methods, '_run')]))){
       cat("\n### ", toupper(gene_set_method) ," {.tabset}\n")
       
       for (gmt_file in simpleSplit(params$gsea_gene_sets)) {
-        gmt_name <- basename(gmt_file)
-        
+        gmt_name <- basename(tools::file_path_sans_ext(gmt_file))
+
         cat("\n#### ", gmt_name ," {.tabset}\n")
         reference_gsea_tables <- paste0(contrasts$id, ".", gmt_name, '.gsea_report_for_', contrasts$reference, '.tsv')
         target_gsea_tables <- paste0(contrasts$id, ".", gmt_name, '.gsea_report_for_', contrasts$target, '.tsv')

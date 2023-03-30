@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
-- [[#97](https://github.com/nf-core/differentialabundance/issues/97)] - Allow for subsetting of samples for specific contrasts ([@pinin4fjords](https://github.com/pinin4fjords), reported by [@danhalligan-hx](https://github.com/danhalligan-hx), review by )
+- [[#105](https://github.com/nf-core/differentialabundance/pull/105)] - Enabled multiple GMT/GMX files for GSEA ([@WackerO](https://github.com/WackerO), reported by [@grst](https://github.com/grst), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#97](https://github.com/nf-core/differentialabundance/issues/97)] - Allow for subsetting of samples for specific contrasts ([@pinin4fjords](https://github.com/pinin4fjords), reported by [@danhalligan-hx](https://github.com/danhalligan-hx), review by [@WackerO](https://github.com/WackerO))
 
 ### `Fixed`
 
