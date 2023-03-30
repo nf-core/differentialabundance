@@ -86,6 +86,7 @@ params:
   differential_max_pval: NULL
   differential_max_qval: NULL
   differential_palette_name: NULL
+  differential_subset_to_contrast_samples: NULL
   deseq2_test: NULL
   deseq2_fit_type: NULL
   deseq2_sf_type: NULL

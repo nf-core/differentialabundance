@@ -230,7 +230,7 @@ workflow DIFFERENTIALABUNDANCE {
             if (!it.id){
                 it.id = it.values().join('_')
             }
-            it
+            tuple(it, it.variable, it.reference, it.target)
         }
 
     // Firstly Filter the input matrix
@@ -242,16 +242,15 @@ workflow DIFFERENTIALABUNDANCE {
 
     // Prepare inputs for differential processes
 
-    ch_differential_inputs = ch_contrasts.combine(
-        VALIDATOR.out.sample_meta
-            .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
-            .map{ it.tail() } 
-    )
+    ch_samples_and_matrix = VALIDATOR.out.sample_meta
+        .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
+        .first()
 
     if (params.study_type == 'affy_array'){
 
         LIMMA_DIFFERENTIAL (
-            ch_differential_inputs
+            ch_contrasts,
+            ch_samples_and_matrix
         )
         ch_differential = LIMMA_DIFFERENTIAL.out.results 
         
@@ -268,7 +267,8 @@ workflow DIFFERENTIALABUNDANCE {
         // annotations 
 
         DESEQ2_DIFFERENTIAL (
-            ch_differential_inputs,
+            ch_contrasts,
+            ch_samples_and_matrix,
             ch_control_features
         )
 
@@ -305,7 +305,13 @@ workflow DIFFERENTIALABUNDANCE {
         
         CUSTOM_TABULARTOGSEAGCT ( ch_norm )
 
-        ch_contrasts_and_samples = ch_contrasts.combine( VALIDATOR.out.sample_meta.map { it[1] } )
+        // TODO: update CUSTOM_TABULARTOGSEACLS for value channel input per new
+        // guidlines (rather than meta usage employed here)
+        
+        ch_contrasts_and_samples = ch_contrasts
+            .map{it[0]} // revert back to contrasts meta map
+            .combine( VALIDATOR.out.sample_meta.map { it[1] } )
+        
         CUSTOM_TABULARTOGSEACLS(ch_contrasts_and_samples) 
 
         TABULAR_TO_GSEA_CHIP(
@@ -348,7 +354,7 @@ workflow DIFFERENTIALABUNDANCE {
 
     ch_contrast_variables = ch_contrasts
         .map{
-            [ "id": it.variable ]
+            [ "id": it[1] ]
         }
         .unique()
 

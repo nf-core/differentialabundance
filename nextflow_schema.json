@@ -410,6 +410,11 @@
                     "help_text": "Check the content of `RColorBrewer::brewer.pal.info` from an R terminal for valid palette names.",
                     "description": "Valid R palette name",
                     "fa_icon": "fas fa-palette"
+                },
+                "differential_subset_to_contrast_samples": {
+                    "type": "boolean",
+                    "fa_icon": "far fa-object-group",
+                    "description": "In differential analysis (DEseq2 or Limma), subset to the contrast samples before modelling variance?"
                 }
             },
             "required": [
