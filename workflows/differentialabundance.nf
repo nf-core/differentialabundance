@@ -38,12 +38,12 @@ if (params.study_type == 'affy_array'){
 if (params.control_features) { ch_control_features = file(params.control_features, checkIfExists: true) } else { ch_control_features = [[],[]] } 
 if (params.gsea_run) { 
     if (params.gsea_gene_sets){
-        gene_sets_files = params.gsea_gene_sets.split(" ")
-        gene_sets_files = gene_sets_files.collect { file(it, checkIfExists: true) }
+        gene_sets_files = params.gsea_gene_sets.split(",")
+        ch_gene_sets = Channel.of(gene_sets_files).map { file(it, checkIfExists: true) }
     } else {
         error("GSEA activated but gene set file not specified!")
     }
-} else { gene_sets_files = [] }
+} 
 
 report_file = file(params.report_file, checkIfExists: true)
 logo_file = file(params.logo_file, checkIfExists: true)
@@ -230,7 +230,7 @@ workflow DIFFERENTIALABUNDANCE {
             if (!it.id){
                 it.id = it.values().join('_')
             }
-            it
+            tuple(it, it.variable, it.reference, it.target)
         }
 
     // Firstly Filter the input matrix
@@ -242,16 +242,15 @@ workflow DIFFERENTIALABUNDANCE {
 
     // Prepare inputs for differential processes
 
-    ch_differential_inputs = ch_contrasts.combine(
-        VALIDATOR.out.sample_meta
-            .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
-            .map{ it.tail() } 
-    )
+    ch_samples_and_matrix = VALIDATOR.out.sample_meta
+        .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
+        .first()
 
     if (params.study_type == 'affy_array'){
 
         LIMMA_DIFFERENTIAL (
-            ch_differential_inputs
+            ch_contrasts,
+            ch_samples_and_matrix
         )
         ch_differential = LIMMA_DIFFERENTIAL.out.results 
         
@@ -268,7 +267,8 @@ workflow DIFFERENTIALABUNDANCE {
         // annotations 
 
         DESEQ2_DIFFERENTIAL (
-            ch_differential_inputs,
+            ch_contrasts,
+            ch_samples_and_matrix,
             ch_control_features
         )
 
@@ -305,17 +305,19 @@ workflow DIFFERENTIALABUNDANCE {
         
         CUSTOM_TABULARTOGSEAGCT ( ch_norm )
 
-        ch_contrasts_and_samples = ch_contrasts.combine( VALIDATOR.out.sample_meta.map { it[1] } )
+        // TODO: update CUSTOM_TABULARTOGSEACLS for value channel input per new
+        // guidlines (rather than meta usage employed here)
+        
+        ch_contrasts_and_samples = ch_contrasts
+            .map{it[0]} // revert back to contrasts meta map
+            .combine( VALIDATOR.out.sample_meta.map { it[1] } )
+        
         CUSTOM_TABULARTOGSEACLS(ch_contrasts_and_samples) 
 
         TABULAR_TO_GSEA_CHIP(
             VALIDATOR.out.feature_meta.map{ it[1] },
             [params.features_id_col, params.features_name_col]    
         )
-
-        // Make channel from current file and get it's name for correct saving of output
-
-        ch_gene_sets = Channel.fromList(gene_sets_files)
 
         // The normalised matrix does not always have a contrast meta, so we
         // need a combine rather than a join here
@@ -326,11 +328,6 @@ workflow DIFFERENTIALABUNDANCE {
             .combine(CUSTOM_TABULARTOGSEACLS.out.cls)
             .map{ tuple(it[1], it[0], it[2]) }
             .combine(ch_gene_sets)
-            .map{ tuple( ["gmt_name": it[3].getName().split("\\.")[0..-2].join("."),
-                            "reference": it[0].reference,
-                            "target": it[0].target,
-                            "id": it[0].id],
-                        it[1], it[2], it[3]) }
 
         GSEA_GSEA( 
             ch_gsea_inputs,
@@ -357,7 +354,7 @@ workflow DIFFERENTIALABUNDANCE {
 
     ch_contrast_variables = ch_contrasts
         .map{
-            [ "id": it.variable ]
+            [ "id": it[1] ]
         }
         .unique()
 

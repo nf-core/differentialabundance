@@ -7,10 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- [[#105](https://github.com/nf-core/differentialabundance/pull/105)] - Enabled multiple GMT/GMX files for GSEA ([@WackerO](https://github.com/WackerO), reported by [@grst](https://github.com/grst), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#97](https://github.com/nf-core/differentialabundance/issues/97)] - Allow for subsetting of samples for specific contrasts ([@pinin4fjords](https://github.com/pinin4fjords), reported by [@danhalligan-hx](https://github.com/danhalligan-hx), review by [@WackerO](https://github.com/WackerO))
+
 ### `Fixed`
 
 - [[#95](https://github.com/nf-core/differentialabundance/issues/95)] - Pipeline doesn't check for gene sets file specification when GSEA is activated ([@pinin4fjords](https://github.com/pinin4fjords), reported by [@danhalligan-hx](https://github.com/danhalligan-hx), review by [@FriederikeHanssen](https://github.com/FriederikeHanssen))
-- [[#93](https://github.com/nf-core/differentialabundance/issues/93) - Shouldn't be re-using the single exploratory palette across multiple informative variables ([@pinin4fjords](https://github.com/pinin4fjords), review by )
+- [[#93](https://github.com/nf-core/differentialabundance/issues/93) - Shouldn't be re-using the single exploratory palette across multiple informative variables ([@pinin4fjords](https://github.com/pinin4fjords), review by [@matthdsm](https://github.com/matthdsm))
 
 ## v1.1.1 - 2023-03-02
 

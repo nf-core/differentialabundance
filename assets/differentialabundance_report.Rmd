@@ -86,6 +86,7 @@ params:
   differential_max_pval: NULL
   differential_max_qval: NULL
   differential_palette_name: NULL
+  differential_subset_to_contrast_samples: NULL
   deseq2_test: NULL
   deseq2_fit_type: NULL
   deseq2_sf_type: NULL
@@ -815,9 +816,9 @@ if (any(unlist(params[paste0(possible_gene_set_methods, '_run')]))){
     if (unlist(params[paste0(gene_set_method, '_run')])){
       cat("\n### ", toupper(gene_set_method) ," {.tabset}\n")
       
-      for (gmt_file in strsplit(params$gsea_gene_sets, " ")[[1]]) {
+      for (gmt_file in simpleSplit(params$gsea_gene_sets)) {
         gmt_name <- basename(tools::file_path_sans_ext(gmt_file))
-        
+
         cat("\n#### ", gmt_name ," {.tabset}\n")
         reference_gsea_tables <- paste0(contrasts$id, ".", gmt_name, '.gsea_report_for_', contrasts$reference, '.tsv')
         target_gsea_tables <- paste0(contrasts$id, ".", gmt_name, '.gsea_report_for_', contrasts$target, '.tsv')
