@@ -822,9 +822,7 @@ if (any(unlist(params[paste0(possible_gene_set_methods, '_run')]))){
         cat("\n#### ", gmt_name ," {.tabset}\n")
         reference_gsea_tables <- paste0(contrasts$id, ".", gmt_name, '.gsea_report_for_', contrasts$reference, '.tsv')
         target_gsea_tables <- paste0(contrasts$id, ".", gmt_name, '.gsea_report_for_', contrasts$target, '.tsv')
-        print(reference_gsea_tables)
-        print(target_gsea_tables)
-        print(list.files())
+
         for (i in 1:nrow(contrasts)){
           cat("\n##### ", contrast_descriptions[i], "\n")
 
