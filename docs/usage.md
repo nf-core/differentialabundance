@@ -95,7 +95,7 @@ The file can be tab or comma separated.
 
 This is usually the easiest way to supply annotations for RNA-seq features. It should match the GTF used in nf-core/rnaseq if that workflow was used to produce the input expression matrix.
 
-### annotation package identifiers for Affymetrix arrays
+### Annotation package identifiers for Affymetrix arrays
 
 For `-profile affy`, default behaviour is to derive an annotation table while running the affy/justrma module based on the CDF name discovered there.
 
@@ -108,6 +108,31 @@ To override the above options, you may also supply your own features table as a 
 ```
 
 By default, if you don't provide features, for non-array data the workflow will fall back to attempting to use the matrix itself as a source of feature annotations. For this to work you must make sure to set the `features_id_col`, `features_name_col` and `features_metadata_cols` parameters to the appropriate values, for example by setting them to 'gene_id' if that is the identifier column on the matrix. This will cause the gene ID to be used everywhere rather than more accessible gene symbols (as can be derived from the GTF), but the workflow should run.
+
+## Shiny app generation: deploy to shinyapps.io
+
+The pipeline is capable of building, and even deploying (to [shinyapps.io](https://www.shinyapps.io/)) for you a Shiny app built with [ShinyNGS](https://github.com/pinin4fjords/shinyngs). By default the app is not deployed and to enable deployment to shinyapps.io a few things need to happen:
+
+### Account and app setup
+
+At https://www.shinyapps.io/, create an account, add a token (via Account -> Tokens) and note your secret and token.
+
+You let Nextflow know about these via secrets:
+
+```bash
+nextflow secrets set SHINYAPPS_TOKEN [token]
+nextflow secrets set SHINYAPPS_SECRET [secret]
+```
+
+### Configuration
+
+You then need to activate the deployment in your parameters, and supply both your account name and an app name:
+
+```bash
+--shinyngs_deploy_to_shinyapps_io \
+--shinyngs_shinyapps_account '[account name]' \
+--shinyngs_shinyapps_app_name '[app name]'
+```
 
 ## Running the pipeline
 
