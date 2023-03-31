@@ -423,30 +423,33 @@ workflow DIFFERENTIALABUNDANCE {
             )
     }
 
-    // Make (and optionally deploy) the shinyngs app
+    if (params.shinyngs_build_app){
+    
+        // Make (and optionally deploy) the shinyngs app
 
-    // Make a new contrasts file from the differential metas to guarantee the
-    // same order as the differential results
+        // Make a new contrasts file from the differential metas to guarantee the
+        // same order as the differential results
 
-    ch_app_differential = ch_differential.first().map{it[0].keySet().join(',')}
-        .concat(
-            ch_differential.map{
-                it[0].variable = it[0].variable.replaceAll(" ", ".") // need to add a check.names = FALSE upstream to not need to do this
-                it[0].blocking = it[0].blocking.replaceAll(" ", ".")
-                it[0].values().join(',')
+        ch_app_differential = ch_differential.first().map{it[0].keySet().join(',')}
+            .concat(
+                ch_differential.map{
+                    it[0].variable = it[0].variable.replaceAll(" ", ".") // need to add a check.names = FALSE upstream to not need to do this
+                    it[0].blocking = it[0].blocking.replaceAll(" ", ".")
+                    it[0].values().join(',')
+                }
+            )
+            .collectFile(name: 'contrasts.csv', newLine: true, sort: false)
+            .map{
+                tuple(exp_meta, it)
             }
-        )
-        .collectFile(name: 'contrasts.csv', newLine: true, sort: false)
-        .map{
-            tuple(exp_meta, it)
-        }
-        .combine(ch_differential.map{it[1]}.collect().map{[it]})
+            .combine(ch_differential.map{it[1]}.collect().map{[it]})
 
-    SHINYNGS_APP(
-        ch_all_matrices,     // meta, samples, features, [  matrices ]                                                    
-        ch_app_differential, // meta, contrasts, [differential results]    
-        2                                                    
-    ) 
+        SHINYNGS_APP(
+            ch_all_matrices,     // meta, samples, features, [  matrices ]                                                    
+            ch_app_differential, // meta, contrasts, [differential results]    
+            2                                                    
+        ) 
+    }
 
     // Make a params list - starting with the input matrices and the relevant
     // params to use in reporting
