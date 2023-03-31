@@ -863,17 +863,20 @@
                 "report_title": {
                     "type": "string",
                     "default": "None",
-                    "fa_icon": "fas fa-heading"
+                    "fa_icon": "fas fa-heading",
+                    "description": "A title for reporting outputs"
                 },
                 "report_author": {
                     "type": "string",
                     "default": "None",
-                    "fa_icon": "fas fa-user-edit"
+                    "fa_icon": "fas fa-user-edit",
+                    "description": "An author for reporting outputs"
                 },
                 "report_description": {
                     "type": "string",
                     "default": "None",
-                    "fa_icon": "fas fa-feather"
+                    "fa_icon": "fas fa-feather",
+                    "description": "A description for reporting outputs"
                 }
             },
             "required": ["report_file", "logo_file", "css_file"]
