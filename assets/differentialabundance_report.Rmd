@@ -816,17 +816,22 @@ if (any(unlist(params[paste0(possible_gene_set_methods, '_run')]))){
     if (unlist(params[paste0(gene_set_method, '_run')])){
       cat("\n### ", toupper(gene_set_method) ," {.tabset}\n")
       
-      reference_gsea_tables <- paste0(contrasts$id, '.gsea_report_for_', contrasts$reference, '.tsv')
-      target_gsea_tables <- paste0(contrasts$id, '.gsea_report_for_', contrasts$target, '.tsv')
+      for (gmt_file in simpleSplit(params$gsea_gene_sets)) {
+        gmt_name <- basename(tools::file_path_sans_ext(gmt_file))
 
-      for (i in 1:nrow(contrasts)){
-        cat("\n#### ", contrast_descriptions[i], "\n")
-        
-        target_gsea_results <- read_metadata(target_gsea_tables[i])[,c(-2,-3)]
-        print( htmltools::tagList(datatable(target_gsea_results, caption = paste0("\nTarget (", contrasts$target[i], ")\n"), rownames = FALSE) ))
-        
-        ref_gsea_results <- read_metadata(reference_gsea_tables[i])[,c(-2,-3)]
-        print( htmltools::tagList(datatable(ref_gsea_results, caption = paste0("\nReference (", contrasts$reference[i], ")\n"), rownames = FALSE) ))
+        cat("\n#### ", gmt_name ," {.tabset}\n")
+        reference_gsea_tables <- paste0(contrasts$id, ".", gmt_name, '.gsea_report_for_', contrasts$reference, '.tsv')
+        target_gsea_tables <- paste0(contrasts$id, ".", gmt_name, '.gsea_report_for_', contrasts$target, '.tsv')
+
+        for (i in 1:nrow(contrasts)){
+          cat("\n##### ", contrast_descriptions[i], "\n")
+
+          target_gsea_results <- read_metadata(target_gsea_tables[i])[,c(-2,-3)]
+          print( htmltools::tagList(datatable(target_gsea_results, caption = paste0("\nTarget (", contrasts$target[i], ")\n"), rownames = FALSE) ))
+
+          ref_gsea_results <- read_metadata(reference_gsea_tables[i])[,c(-2,-3)]
+          print( htmltools::tagList(datatable(ref_gsea_results, caption = paste0("\nReference (", contrasts$reference[i], ")\n"), rownames = FALSE) ))
+        }
       }
     }
   }
