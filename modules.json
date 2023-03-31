@@ -60,6 +60,11 @@
                         "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
                         "installed_by": ["modules"]
                     },
+                    "shinyngs/app": {
+                        "branch": "master",
+                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "installed_by": ["modules"]
+                    },
                     "shinyngs/staticdifferential": {
                         "branch": "master",
                         "git_sha": "1b97cf15709524fbc0679ca14a7ad3262eba979b",

@@ -76,6 +76,7 @@ include { TABULAR_TO_GSEA_CHIP } from '../modules/local/tabular_to_gsea_chip'
 include { GUNZIP as GUNZIP_GTF                              } from '../modules/nf-core/gunzip/main'
 include { UNTAR                                             } from '../modules/nf-core/untar/main.nf'
 include { CUSTOM_DUMPSOFTWAREVERSIONS                       } from '../modules/nf-core/custom/dumpsoftwareversions/main'
+include { SHINYNGS_APP                                      } from '../modules/nf-core/shinyngs/app/main'  
 include { SHINYNGS_STATICEXPLORATORY as PLOT_EXPLORATORY    } from '../modules/nf-core/shinyngs/staticexploratory/main'  
 include { SHINYNGS_STATICDIFFERENTIAL as PLOT_DIFFERENTIAL  } from '../modules/nf-core/shinyngs/staticdifferential/main'  
 include { SHINYNGS_VALIDATEFOMCOMPONENTS as VALIDATOR       } from '../modules/nf-core/shinyngs/validatefomcomponents/main'  
@@ -422,6 +423,31 @@ workflow DIFFERENTIALABUNDANCE {
             )
     }
 
+    // Make (and optionally deploy) the shinyngs app
+
+    // Make a new contrasts file from the differential metas to guarantee the
+    // same order as the differential results
+
+    ch_app_differential = ch_differential.first().map{it[0].keySet().join(',')}
+        .concat(
+            ch_differential.map{
+                it[0].variable = it[0].variable.replaceAll(" ", ".") // need to add a check.names = FALSE upstream to not need to do this
+                it[0].blocking = it[0].blocking.replaceAll(" ", ".")
+                it[0].values().join(',')
+            }
+        )
+        .collectFile(name: 'contrasts.csv', newLine: true, sort: false)
+        .map{
+            tuple(exp_meta, it)
+        }
+        .combine(ch_differential.map{it[1]}.collect().map{[it]})
+
+    SHINYNGS_APP(
+        ch_all_matrices,     // meta, samples, features, [  matrices ]                                                    
+        ch_app_differential, // meta, contrasts, [differential results]    
+        2                                                    
+    ) 
+
     // Make a params list - starting with the input matrices and the relevant
     // params to use in reporting
 
@@ -431,9 +457,9 @@ workflow DIFFERENTIALABUNDANCE {
 
     // Condition params reported on study type
 
-    def params_pattern = ~/^(study|observations|features|filtering|exploratory|differential|deseq2|gsea).*/
+    def params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|deseq2|gsea).*/
     if (params.study_type == 'affy_array'){
-        params_pattern = ~/^(study|observations|features|filtering|exploratory|differential|affy|limma|gsea).*/
+        params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|affy|limma|gsea).*/
     } 
 
     ch_report_params = ch_report_input_files
