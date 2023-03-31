@@ -449,6 +449,7 @@ workflow DIFFERENTIALABUNDANCE {
             ch_app_differential, // meta, contrasts, [differential results]    
             2                                                    
         ) 
+        ch_versions = ch_versions.mix(SHINYNGS_APP.out.versions)
     }
 
     // Make a params list - starting with the input matrices and the relevant
