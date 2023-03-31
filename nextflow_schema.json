@@ -826,6 +826,21 @@
                     "default": "CITATIONS.md",
                     "description": "A markdown file containing citations to include in the fiinal report",
                     "fa_icon": "fas fa-ad"
+                },
+                "report_title": {
+                    "type": "string",
+                    "default": null,
+                    "fa_icon": "fas fa-heading"
+                },
+                "report_author": {
+                    "type": "string",
+                    "default": null,
+                    "fa_icon": "fas fa-user-edit"
+                },
+                "report_description": {
+                    "type": "string",
+                    "default": null,
+                    "fa_icon": "fas fa-feather"
                 }
             },
             "required": ["report_file", "logo_file", "css_file"]

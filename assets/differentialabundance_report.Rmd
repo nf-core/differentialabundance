@@ -20,6 +20,10 @@ params:
   study_type: NULL
   study_name: NULL
   study_abundance_type: NULL
+  report_file: NULL,
+  report_title: NULL,
+  report_author: NULL,
+  report_description: NULL,
   observations_type: NULL
   observations: NULL                                          # GSE156533.samplesheet.csv
   observations_id_col: NULL
@@ -216,11 +220,13 @@ make_params_table <- function(name, pattern = NULL, remove_pattern = FALSE){
   print( htmltools::tagList(datatable(subparams, caption = paste("Parameters used for", name), rownames = FALSE, options = list(dom = dom)) ))
 }
 
+report_title <- paste0('Differential ',  params$features_type, ' abundance report', ifelse(is.null(params$report_title), '', paste0(': ', params$report_title)))
+report_subtitle <- paste0(ifelse(is.null(params$report_author), '', paste0('By ', params$report_author, ', ')), 'differentialabundance workflow version', versions[["Workflow.nf-core/differentialabundance"]])
 ```
 
 ---
-title:  "<img src=\"`r file.path(params$input_dir, params$logo)`\" style=\"float: left;\"/>Differential `r params$features_type` abundance report"
-subtitle: differentialabundance workflow version `r versions[["Workflow.nf-core/differentialabundance"]]`
+title:  "<img src=\"`r file.path(params$input_dir, params$logo)`\" style=\"float: left;\"/>`r report_title`"
+subtitle: `r report_subtitle`
 ---
 
 <!-- set notebook defaults -->
