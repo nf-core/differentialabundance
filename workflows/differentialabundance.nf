@@ -447,7 +447,7 @@ workflow DIFFERENTIALABUNDANCE {
         SHINYNGS_APP(
             ch_all_matrices,     // meta, samples, features, [  matrices ]                                                    
             ch_app_differential, // meta, contrasts, [differential results]    
-            2                                                    
+            params.exploratory_assay_names.split(',').findIndexOf { it == params.exploratory_final_assay } + 1    
         ) 
         ch_versions = ch_versions.mix(SHINYNGS_APP.out.versions)
     }
