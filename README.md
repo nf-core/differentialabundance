@@ -27,7 +27,8 @@ On release, automated continuous integration tests run the pipeline on a full-si
 3. Run differential analysis over all contrasts specified.
 4. Optionally run a differential gene set analysis.
 5. Generate exploratory and differential analysis plots for interpretation.
-6. Build an HTML report based on R markdown, with interactive plots (where possible) and tables.
+6. Optionally build and (if specified) deploy a Shiny app for fully interactive mining of results.
+7. Build an HTML report based on R markdown, with interactive plots (where possible) and tables.
 
 ## Quick Start
 
@@ -72,6 +73,17 @@ Affymetrix microarray:
      --outdir <OUTDIR>  \
      -profile affy,<docker/singularity/podman/shifter/charliecloud/conda/institute>
 ```
+
+### Reporting
+
+The pipeline reports its outcomes in two forms: a static report built from an R markdown document, and optionally a Shiny app:
+
+![screenshot of the markdown report](docs/images/markdown_report.png "Markdown report") 
+
+![screenshot of the ShinyNGS contrast table](docs/images/shinyngs_contrast_table.png "ShinyNGS contrast table") 
+
+![screenshot of the ShinyNGS gene plot](docs/images/shinyngs_gene_plot.png "ShinyNGS gene plot") 
+
 
 ## Documentation
 
