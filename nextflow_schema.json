@@ -818,6 +818,12 @@
                     "default": "None",
                     "description": "The name of the app you crated in your shinyapps.io account",
                     "fa_icon": "fas fa-file-signature"
+                },
+                "shinyngs_guess_unlog_matrices": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Should we guess the log status of matrices and unlog for the app?",
+                    "help_text": "In the app context, it's usually helpful if things are not in log scale, so that e.g. fold changes make some sense with respect to observed values. This flag will cause the shinyngs app-building script to make a guess based on observed values as to the log status of input matrices, and adjust the loading accordingly."
                 }
             },
             "fa_icon": "fab fa-app-store-ios"
@@ -1075,9 +1081,6 @@
     },
     "allOf": [
         {
-            "$ref": "#/definitions/shiny_app_settings"
-        },
-        {
             "$ref": "#/definitions/input_output_options"
         },
         {
@@ -1109,6 +1112,9 @@
         },
         {
             "$ref": "#/definitions/gsea"
+        },
+        {
+            "$ref": "#/definitions/shiny_app_settings"
         },
         {
             "$ref": "#/definitions/reporting_options"
