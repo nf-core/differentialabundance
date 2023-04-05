@@ -109,11 +109,46 @@ To override the above options, you may also supply your own features table as a 
 
 By default, if you don't provide features, for non-array data the workflow will fall back to attempting to use the matrix itself as a source of feature annotations. For this to work you must make sure to set the `features_id_col`, `features_name_col` and `features_metadata_cols` parameters to the appropriate values, for example by setting them to 'gene_id' if that is the identifier column on the matrix. This will cause the gene ID to be used everywhere rather than more accessible gene symbols (as can be derived from the GTF), but the workflow should run.
 
-## Shiny app generation: deploy to shinyapps.io
+## Shiny app generation
 
-The pipeline is capable of building, and even deploying (to [shinyapps.io](https://www.shinyapps.io/)) for you a Shiny app built with [ShinyNGS](https://github.com/pinin4fjords/shinyngs). By default the app is not deployed and to enable deployment to shinyapps.io a few things need to happen:
+The pipeline is capable of building, and even deploying (to [shinyapps.io](https://www.shinyapps.io/)) for you a Shiny app built with [ShinyNGS](https://github.com/pinin4fjords/shinyngs). 
 
-### Account and app setup
+This is enabled with:
+
+```bash
+--shinyngs_build_app true
+```
+
+... which is the default. By default the app is not deployed, but just output to the output folder under `shinyngs_app/[study_name]`. 
+
+You have 3 choices in running that application:
+
+1. Run locally
+2. Have shinyapps.io host it for you  
+3. Host on a Shiny server
+
+### 1. Run locally
+
+You can start the application locally (in an environment where [ShinyNGS](https://github.com/pinin4fjords/shinyngs) is installed) like:
+
+```bash
+cd [output directory]/[study id]
+Rscript app.R
+```
+
+This will give you a local URI to access in your browser:
+
+```
+Listening on http://127.0.0.1:3326
+```
+
+### 2. Shinyapps.io deployment
+
+shinyapps.io is a hosting solution supplied by Posit (formerly RStudio) which gives you quick and easy access to hosting for Shiny applications. There is a free tier, though you'll have to pay for features such as authentication and improved resources.
+
+You can upload your app to shinyapps.io youself, or deploy directly to shinyapps.io with this workflow, for which  a few things need to happen:
+
+#### Account and app setup
 
 At https://www.shinyapps.io/, create an account, add a token (via Account -> Tokens) and note your secret and token.
 
@@ -124,7 +159,7 @@ nextflow secrets set SHINYAPPS_TOKEN [token]
 nextflow secrets set SHINYAPPS_SECRET [secret]
 ```
 
-### Configuration
+#### Configuration
 
 You then need to activate the deployment in your parameters, and supply both your account name and an app name:
 
@@ -133,6 +168,12 @@ You then need to activate the deployment in your parameters, and supply both you
 --shinyngs_shinyapps_account '[account name]' \
 --shinyngs_shinyapps_app_name '[app name]'
 ```
+
+With this configuration in place deployment should happen automatically every time you run your workflow.
+
+### 3. Run your own Shiny server
+
+There is also a [Shiny server application](https://posit.co/download/shiny-server/), which you can install on your own infrastruture and use to host applications yourself. 
 
 ## Running the pipeline
 
