@@ -111,7 +111,7 @@ By default, if you don't provide features, for non-array data the workflow will 
 
 ## Shiny app generation
 
-The pipeline is capable of building, and even deploying (to [shinyapps.io](https://www.shinyapps.io/)) for you a Shiny app built with [ShinyNGS](https://github.com/pinin4fjords/shinyngs). 
+The pipeline is capable of building, and even deploying (to [shinyapps.io](https://www.shinyapps.io/)) for you a Shiny app built with [ShinyNGS](https://github.com/pinin4fjords/shinyngs).
 
 This is enabled with:
 
@@ -119,12 +119,12 @@ This is enabled with:
 --shinyngs_build_app true
 ```
 
-... which is the default. By default the app is not deployed, but just output to the output folder under `shinyngs_app/[study_name]`. 
+... which is the default. By default the app is not deployed, but just output to the output folder under `shinyngs_app/[study_name]`.
 
 You have 3 choices in running that application:
 
 1. Run locally
-2. Have shinyapps.io host it for you  
+2. Have shinyapps.io host it for you
 3. Host on a Shiny server
 
 ### 1. Run locally
@@ -146,7 +146,7 @@ Listening on http://127.0.0.1:3326
 
 shinyapps.io is a hosting solution supplied by Posit (formerly RStudio) which gives you quick and easy access to hosting for Shiny applications. There is a free tier, though you'll have to pay for features such as authentication and improved resources.
 
-You can upload your app to shinyapps.io youself, or deploy directly to shinyapps.io with this workflow, for which  a few things need to happen:
+You can upload your app to shinyapps.io youself, or deploy directly to shinyapps.io with this workflow, for which a few things need to happen:
 
 #### Account and app setup
 
@@ -173,7 +173,7 @@ With this configuration in place deployment should happen automatically every ti
 
 ### 3. Run your own Shiny server
 
-There is also a [Shiny server application](https://posit.co/download/shiny-server/), which you can install on your own infrastruture and use to host applications yourself. 
+There is also a [Shiny server application](https://posit.co/download/shiny-server/), which you can install on your own infrastruture and use to host applications yourself.
 
 ## Running the pipeline
 
