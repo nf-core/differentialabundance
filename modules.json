@@ -17,22 +17,22 @@
                     },
                     "custom/dumpsoftwareversions": {
                         "branch": "master",
-                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "git_sha": "7101db4432d3268b7fcb5b8f75fa0a022dc5561b",
                         "installed_by": ["modules"]
                     },
                     "custom/matrixfilter": {
                         "branch": "master",
-                        "git_sha": "091496fc34f36df69ca037ed965af262384b5db4",
+                        "git_sha": "0f8a77ff00e65eaeebc509b8156eaa983192474b",
                         "installed_by": ["modules"]
                     },
                     "custom/tabulartogseacls": {
                         "branch": "master",
-                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "git_sha": "0f8a77ff00e65eaeebc509b8156eaa983192474b",
                         "installed_by": ["modules"]
                     },
                     "custom/tabulartogseagct": {
                         "branch": "master",
-                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "git_sha": "0f8a77ff00e65eaeebc509b8156eaa983192474b",
                         "installed_by": ["modules"]
                     },
                     "deseq2/differential": {
@@ -47,7 +47,7 @@
                     },
                     "gunzip": {
                         "branch": "master",
-                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "git_sha": "0f8a77ff00e65eaeebc509b8156eaa983192474b",
                         "installed_by": ["modules"]
                     },
                     "limma/differential": {
@@ -57,7 +57,7 @@
                     },
                     "rmarkdownnotebook": {
                         "branch": "master",
-                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "git_sha": "0f8a77ff00e65eaeebc509b8156eaa983192474b",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/app": {
