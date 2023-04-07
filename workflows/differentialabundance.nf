@@ -432,11 +432,7 @@ workflow DIFFERENTIALABUNDANCE {
 
         ch_app_differential = ch_differential.first().map{it[0].keySet().join(',')}
             .concat(
-                ch_differential.map{
-                    it[0].variable = it[0].variable.replaceAll(" ", ".") // need to add a check.names = FALSE upstream to not need to do this
-                    it[0].blocking = it[0].blocking.replaceAll(" ", ".")
-                    it[0].values().join(',')
-                }
+                ch_differential.map{it[0].values().join(',')}
             )
             .collectFile(name: 'contrasts.csv', newLine: true, sort: false)
             .map{
