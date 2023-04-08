@@ -63,7 +63,8 @@
                     "shinyngs/app": {
                         "branch": "master",
                         "git_sha": "880d634b0d5aead9447ae29e3e02e0e31ca7ae7f",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/shinyngs/app/shinyngs-app.diff"
                     },
                     "shinyngs/staticdifferential": {
                         "branch": "master",

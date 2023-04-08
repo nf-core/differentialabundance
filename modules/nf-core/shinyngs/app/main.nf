@@ -37,9 +37,12 @@ process SHINYNGS_APP {
     def prefix = task.ext.prefix ?: meta.id
 
     """
+    cp $feature_meta fixed_$feature_meta
+    sed -i.bak s/${params.features_name_col}/gene_name/ fixed_$feature_meta
+
     make_app_from_files.R \\
         --sample_metadata $sample \\
-        --feature_metadata $feature_meta \\
+        --feature_metadata fixed_$feature_meta \\
         --assay_files ${assay_files.join(',')} \\
         --contrast_file $contrasts \\
         --contrast_stats_assay $contrast_stats_assay \\
