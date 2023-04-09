@@ -823,15 +823,7 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Should we guess the log status of matrices and unlog for the app?",
-                    "help_text": "In the app context, it's usually helpful if things are not in log scale, so that e.g. fold changes make some sense with respect to observed values. This flag will cause the shinyngs app-building script to make a guess based on observed values as to the log status of input matrices, and adjust the loading accordingly.",
-                    "fa_icon": "fas fa-calculator"
-                },
-                "shinyngs_report_markdown_file": {
-                    "type": "string",
-                    "default": "None",
-                    "description": "Path to a file in markdown format, to be added to the app front page",
-                    "help_text": "The content of the report_description parameter is used if this is not set.",
-                    "fa_icon": "fab fa-markdown"
+                    "help_text": "In the app context, it's usually helpful if things are not in log scale, so that e.g. fold changes make some sense with respect to observed values. This flag will cause the shinyngs app-building script to make a guess based on observed values as to the log status of input matrices, and adjust the loading accordingly."
                 }
             },
             "fa_icon": "fab fa-app-store-ios"
