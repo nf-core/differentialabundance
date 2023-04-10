@@ -27,7 +27,8 @@ On release, automated continuous integration tests run the pipeline on a full-si
 3. Run differential analysis over all contrasts specified.
 4. Optionally run a differential gene set analysis.
 5. Generate exploratory and differential analysis plots for interpretation.
-6. Build an HTML report based on R markdown, with interactive plots (where possible) and tables.
+6. Optionally build and (if specified) deploy a Shiny app for fully interactive mining of results.
+7. Build an HTML report based on R markdown, with interactive plots (where possible) and tables.
 
 ## Quick Start
 
@@ -72,6 +73,26 @@ Affymetrix microarray:
      --outdir <OUTDIR>  \
      -profile affy,<docker/singularity/podman/shifter/charliecloud/conda/institute>
 ```
+
+### Reporting
+
+The pipeline reports its outcomes in two forms.
+
+#### Markdown-derived HTML report
+
+![screenshot of the markdown report](docs/images/markdown_report.png "Markdown report")
+
+The primary workflow output is an HTML-format report produced from an [R markdown template](assets/differentialabundance_report.Rmd). This leverages helper functions from [shinyngs](https://github.com/pinin4fjords/shinyngs) to produce rich plots and tables, but does not provide significant interactivity.
+
+#### Shiny-based data mining app
+
+A second optional output is produced by leveraging [shinyngs](https://github.com/pinin4fjords/shinyngs) to build an interactive Shiny application. This allows more interaction with the data, setting of thresholds etc.
+
+![screenshot of the ShinyNGS contrast table](docs/images/shinyngs_contrast_table.png "ShinyNGS contrast table")
+
+![screenshot of the ShinyNGS gene plot](docs/images/shinyngs_gene_plot.png "ShinyNGS gene plot")
+
+By default the application is provided as an R script and associated serialised data structure, which you can use to quickly start an the application locally. With proper configuration the app can also be deployed to [shinyapps.io](https://www.shinyapps.io/) - though this requires you to have an account on that service (free tier available).
 
 ## Documentation
 
