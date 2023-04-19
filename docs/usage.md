@@ -77,7 +77,11 @@ The necessary fields in order are:
 - `variable` - which column from the observations information will be used to define groups
 - `reference` - the base/ reference level for the comparison. If features have higher values in this group than target they will generate negative fold changes
 - `target` - the target/ non-reference level for the comparison. If features have higher values in this group than the reference they will generate positive fold changes
+
+You can optionally supply:
+
 - `blocking` - semicolon-delimited, any additional variables (also observation columns) that should be modelled alongside the contrast variable
+- `exclude_samples_col` and `exclude_samples_values` - the former being a valid column in the samples sheet, the latter a semicolon-delimited list of values in that column which should be used to select samples prior to differential modelling. This is helpful where certain samples need to be exluded prior to analysis of a given contrast.
 
 The file can be tab or comma separated.
 
@@ -91,7 +95,7 @@ The file can be tab or comma separated.
 
 This is usually the easiest way to supply annotations for RNA-seq features. It should match the GTF used in nf-core/rnaseq if that workflow was used to produce the input expression matrix.
 
-### annotation package identifiers for Affymetrix arrays
+### Annotation package identifiers for Affymetrix arrays
 
 For `-profile affy`, default behaviour is to derive an annotation table while running the affy/justrma module based on the CDF name discovered there.
 
@@ -104,6 +108,72 @@ To override the above options, you may also supply your own features table as a 
 ```
 
 By default, if you don't provide features, for non-array data the workflow will fall back to attempting to use the matrix itself as a source of feature annotations. For this to work you must make sure to set the `features_id_col`, `features_name_col` and `features_metadata_cols` parameters to the appropriate values, for example by setting them to 'gene_id' if that is the identifier column on the matrix. This will cause the gene ID to be used everywhere rather than more accessible gene symbols (as can be derived from the GTF), but the workflow should run.
+
+## Shiny app generation
+
+The pipeline is capable of building, and even deploying (to [shinyapps.io](https://www.shinyapps.io/)) for you a Shiny app built with [ShinyNGS](https://github.com/pinin4fjords/shinyngs).
+
+This is enabled with:
+
+```bash
+--shinyngs_build_app true
+```
+
+... which is the default. By default the app is not deployed, but just output to the output folder under `shinyngs_app/[study_name]`.
+
+You have 3 choices in running that application:
+
+1. Run locally
+2. Have shinyapps.io host it for you
+3. Host on a Shiny server
+
+### 1. Run locally
+
+You can start the application locally (in an environment where [ShinyNGS](https://github.com/pinin4fjords/shinyngs) is installed) like:
+
+```bash
+cd [output directory]/[study id]
+Rscript app.R
+```
+
+This will give you a local URI to access in your browser:
+
+```
+Listening on http://127.0.0.1:3326
+```
+
+### 2. Shinyapps.io deployment
+
+shinyapps.io is a hosting solution supplied by Posit (formerly RStudio) which gives you quick and easy access to hosting for Shiny applications. There is a free tier, though you'll have to pay for features such as authentication and improved resources.
+
+You can upload your app to shinyapps.io youself, or deploy directly to shinyapps.io with this workflow, for which a few things need to happen:
+
+#### Account and app setup
+
+At https://www.shinyapps.io/, create an account, add a token (via Account -> Tokens) and note your secret and token.
+
+You let Nextflow know about these via secrets:
+
+```bash
+nextflow secrets set SHINYAPPS_TOKEN [token]
+nextflow secrets set SHINYAPPS_SECRET [secret]
+```
+
+#### Configuration
+
+You then need to activate the deployment in your parameters, and supply both your account name and an app name:
+
+```bash
+--shinyngs_deploy_to_shinyapps_io \
+--shinyngs_shinyapps_account '[account name]' \
+--shinyngs_shinyapps_app_name '[app name]'
+```
+
+With this configuration in place deployment should happen automatically every time you run your workflow.
+
+### 3. Run your own Shiny server
+
+There is also a [Shiny server application](https://posit.co/download/shiny-server/), which you can install on your own infrastruture and use to host applications yourself.
 
 ## Running the pipeline
 

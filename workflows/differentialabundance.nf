@@ -19,8 +19,8 @@ if (params.input) { ch_input = Channel.of([ exp_meta, params.input ]) } else { e
 if (params.study_type == 'affy_array'){
     if (params.affy_cel_files_archive) { 
         ch_celfiles = Channel.of([ exp_meta, file(params.affy_cel_files_archive, checkIfExists: true) ]) 
-    } else { 
-        exit 1, 'CEL files archive not specified!' 
+    } else {
+        error("CEL files archive not specified!") 
     }
 } else{
     
@@ -30,13 +30,20 @@ if (params.study_type == 'affy_array'){
         matrix_file = file(params.matrix, checkIfExists: true)
         ch_in_raw = Channel.of([ exp_meta, matrix_file])
     } else { 
-        exit 1, 'Input matrix not specified!' 
+        error("Input matrix not specified!")
     }
 }
 
 // Check optional parameters
 if (params.control_features) { ch_control_features = file(params.control_features, checkIfExists: true) } else { ch_control_features = [[],[]] } 
-if (params.gsea_run) { gene_sets_file = file(params.gsea_gene_sets, checkIfExists: true) } else { gene_sets_file = [] } 
+if (params.gsea_run) { 
+    if (params.gsea_gene_sets){
+        gene_sets_files = params.gsea_gene_sets.split(",")
+        ch_gene_sets = Channel.of(gene_sets_files).map { file(it, checkIfExists: true) }
+    } else {
+        error("GSEA activated but gene set file not specified!")
+    }
+} 
 
 report_file = file(params.report_file, checkIfExists: true)
 logo_file = file(params.logo_file, checkIfExists: true)
@@ -70,6 +77,7 @@ include { TABULAR_TO_GSEA_CHIP } from '../modules/local/tabular_to_gsea_chip'
 include { GUNZIP as GUNZIP_GTF                              } from '../modules/nf-core/gunzip/main'
 include { UNTAR                                             } from '../modules/nf-core/untar/main.nf'
 include { CUSTOM_DUMPSOFTWAREVERSIONS                       } from '../modules/nf-core/custom/dumpsoftwareversions/main'
+include { SHINYNGS_APP                                      } from '../modules/nf-core/shinyngs/app/main'  
 include { SHINYNGS_STATICEXPLORATORY as PLOT_EXPLORATORY    } from '../modules/nf-core/shinyngs/staticexploratory/main'  
 include { SHINYNGS_STATICDIFFERENTIAL as PLOT_DIFFERENTIAL  } from '../modules/nf-core/shinyngs/staticdifferential/main'  
 include { SHINYNGS_VALIDATEFOMCOMPONENTS as VALIDATOR       } from '../modules/nf-core/shinyngs/validatefomcomponents/main'  
@@ -223,7 +231,7 @@ workflow DIFFERENTIALABUNDANCE {
             if (!it.id){
                 it.id = it.values().join('_')
             }
-            it
+            tuple(it, it.variable, it.reference, it.target)
         }
 
     // Firstly Filter the input matrix
@@ -235,16 +243,15 @@ workflow DIFFERENTIALABUNDANCE {
 
     // Prepare inputs for differential processes
 
-    ch_differential_inputs = ch_contrasts.combine(
-        VALIDATOR.out.sample_meta
-            .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
-            .map{ it.tail() } 
-    )
+    ch_samples_and_matrix = VALIDATOR.out.sample_meta
+        .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
+        .first()
 
     if (params.study_type == 'affy_array'){
 
         LIMMA_DIFFERENTIAL (
-            ch_differential_inputs
+            ch_contrasts,
+            ch_samples_and_matrix
         )
         ch_differential = LIMMA_DIFFERENTIAL.out.results 
         
@@ -261,7 +268,8 @@ workflow DIFFERENTIALABUNDANCE {
         // annotations 
 
         DESEQ2_DIFFERENTIAL (
-            ch_differential_inputs,
+            ch_contrasts,
+            ch_samples_and_matrix,
             ch_control_features
         )
 
@@ -291,8 +299,6 @@ workflow DIFFERENTIALABUNDANCE {
     // changes/ p values from DESeq2
     
     if (params.gsea_run){    
-    
-        ch_gene_sets = Channel.from(gene_sets_file)
 
         // For GSEA, we need to convert normalised counts to a GCT format for
         // input, and process the sample sheet to generate class definitions
@@ -300,16 +306,23 @@ workflow DIFFERENTIALABUNDANCE {
         
         CUSTOM_TABULARTOGSEAGCT ( ch_norm )
 
-        ch_contrasts_and_samples = ch_contrasts.combine( VALIDATOR.out.sample_meta.map { it[1] } )
+        // TODO: update CUSTOM_TABULARTOGSEACLS for value channel input per new
+        // guidlines (rather than meta usage employed here)
+        
+        ch_contrasts_and_samples = ch_contrasts
+            .map{it[0]} // revert back to contrasts meta map
+            .combine( VALIDATOR.out.sample_meta.map { it[1] } )
+        
         CUSTOM_TABULARTOGSEACLS(ch_contrasts_and_samples) 
 
         TABULAR_TO_GSEA_CHIP(
             VALIDATOR.out.feature_meta.map{ it[1] },
             [params.features_id_col, params.features_name_col]    
         )
-    
+
         // The normalised matrix does not always have a contrast meta, so we
         // need a combine rather than a join here
+        // Also add file name to metamap for easy access from modules.config
 
         ch_gsea_inputs = CUSTOM_TABULARTOGSEAGCT.out.gct
             .map{ it.tail() }
@@ -342,7 +355,7 @@ workflow DIFFERENTIALABUNDANCE {
 
     ch_contrast_variables = ch_contrasts
         .map{
-            [ "id": it.variable ]
+            [ "id": it[1] ]
         }
         .unique()
 
@@ -410,6 +423,31 @@ workflow DIFFERENTIALABUNDANCE {
             )
     }
 
+    if (params.shinyngs_build_app){
+    
+        // Make (and optionally deploy) the shinyngs app
+
+        // Make a new contrasts file from the differential metas to guarantee the
+        // same order as the differential results
+
+        ch_app_differential = ch_differential.first().map{it[0].keySet().join(',')}
+            .concat(
+                ch_differential.map{it[0].values().join(',')}
+            )
+            .collectFile(name: 'contrasts.csv', newLine: true, sort: false)
+            .map{
+                tuple(exp_meta, it)
+            }
+            .combine(ch_differential.map{it[1]}.collect().map{[it]})
+
+        SHINYNGS_APP(
+            ch_all_matrices,     // meta, samples, features, [  matrices ]                                                    
+            ch_app_differential, // meta, contrasts, [differential results]    
+            params.exploratory_assay_names.split(',').findIndexOf { it == params.exploratory_final_assay } + 1    
+        ) 
+        ch_versions = ch_versions.mix(SHINYNGS_APP.out.versions)
+    }
+
     // Make a params list - starting with the input matrices and the relevant
     // params to use in reporting
 
@@ -419,9 +457,9 @@ workflow DIFFERENTIALABUNDANCE {
 
     // Condition params reported on study type
 
-    def params_pattern = ~/^(study|observations|features|filtering|exploratory|differential|deseq2|gsea).*/
+    def params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|deseq2|gsea).*/
     if (params.study_type == 'affy_array'){
-        params_pattern = ~/^(study|observations|features|filtering|exploratory|differential|affy|limma|gsea).*/
+        params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|affy|limma|gsea).*/
     } 
 
     ch_report_params = ch_report_input_files

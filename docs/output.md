@@ -66,6 +66,18 @@ Most plots are included in the HTML report (see above), but are also included in
 
 The `differential` folder is likely to be the core result set for most users, containing the main tables of differential statistics.
 
+## Shiny app
+
+- `shinyngs_app/`
+  - `[study name]`:
+    - `data.rds`: serialized R object which can be used to generate a Shiny application
+    - `app.R`: minimal R script that will source the data object and generate the app
+
+The app must be run in an environment with [ShinyNGS](https://github.com/pinin4fjords/shinyngs) installed, or you can see the workflow parameters to deploy to shinyapps.io (see usage documentation).
+
+<details markdown="1">
+<summary>Output files</summary>
+
 ### Pipeline information
 
 <details markdown="1">

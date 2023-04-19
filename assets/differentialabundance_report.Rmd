@@ -20,6 +20,10 @@ params:
   study_type: NULL
   study_name: NULL
   study_abundance_type: NULL
+  report_file: NULL,
+  report_title: NULL,
+  report_author: NULL,
+  report_description: NULL,
   observations_type: NULL
   observations: NULL                                          # GSE156533.samplesheet.csv
   observations_id_col: NULL
@@ -86,6 +90,7 @@ params:
   differential_max_pval: NULL
   differential_max_qval: NULL
   differential_palette_name: NULL
+  differential_subset_to_contrast_samples: NULL
   deseq2_test: NULL
   deseq2_fit_type: NULL
   deseq2_sf_type: NULL
@@ -139,59 +144,6 @@ library(DT)
 datatable(NULL)
 ```
 
-```{r, echo=FALSE}
-
-# this function will be available via shinyngs in a release soon but we can use it here for now
-anova_pca_metadata <- function(pca_coords, pcameta, fraction_explained){
-  # Use 10 components or however many fewer is produced by the PCA
-  
-  last_pc <- 10
-  if (ncol(pca_coords) < last_pc) {
-    last_pc <- ncol(pca_coords)
-  }
-  
-  # Remove non-useful variables (those with 1 value, or N values where N is the
-  # number of samples)
-  
-  pcameta <- pcameta[, chooseGroupingVariables(pcameta), drop = FALSE]
-  
-  # Run anova for all PCA against the selected meta vars
-
-  run_anova <- function(meta_col, pc){
-    fit <- aov(pca_coords[, pc] ~ factor(pcameta[, meta_col]))
-    smry <- summary(fit)[[1]]
-
-    if ("Pr(>F)" %in% names(smry)) {
-      smry[["Pr(>F)"]][[1]]
-    }else{
-      NA
-    }
-  }
-  
-  pvals <- outer(
-    1:ncol(pcameta), 
-    1:last_pc,
-    Vectorize(run_anova)  
-  )
-  
-  # Name dimensions
-  
-  dimnames(pvals) <- list(
-    colnames(pcameta),
-    paste(
-      paste("PC", 1:last_pc, sep = ""),
-      " (",
-      fraction_explained[1:last_pc],
-      "%)",
-      sep = ""
-    )
-  )
-  
-  pvals
-}
-```
-
-
 ```{r, include=FALSE}
 versions <- unlist(yaml.load_file(file.path(params$input_dir, params$versions_file)), recursive = FALSE)
 params_table <- data.frame(Parameter = names(unlist(params)), Value = unlist(params), row.names = NULL)
@@ -215,11 +167,13 @@ make_params_table <- function(name, pattern = NULL, remove_pattern = FALSE){
   print( htmltools::tagList(datatable(subparams, caption = paste("Parameters used for", name), rownames = FALSE, options = list(dom = dom)) ))
 }
 
+report_title <- paste0('Differential ',  params$features_type, ' abundance report', ifelse(is.null(params$report_title), '', paste0(': ', params$report_title)))
+report_subtitle <- paste0(ifelse(is.null(params$report_author), '', paste0('By ', params$report_author, ', ')), 'differentialabundance workflow version', versions[["Workflow.nf-core/differentialabundance"]])
 ```
 
 ---
-title:  "<img src=\"`r file.path(params$input_dir, params$logo)`\" style=\"float: left;\"/>Differential `r params$features_type` abundance report"
-subtitle: differentialabundance workflow version `r versions[["Workflow.nf-core/differentialabundance"]]`
+title:  "<img src=\"`r file.path(params$input_dir, params$logo)`\" style=\"float: left;\"/>`r report_title`"
+subtitle: `r report_subtitle`
 ---
 
 <!-- set notebook defaults -->
@@ -530,6 +484,7 @@ for (assay_type in rev(names(assay_data))){
       observations[[iv]], 
       levels = unique(observations[[iv]])
     )
+    pcaColorScale <- makeColorScale(length(unique(observations[[iv]])), palette = params$exploratory_palette_name)
 
     # Make plotting data combining PCA coords with coloring groups etc
 
@@ -551,7 +506,7 @@ for (assay_type in rev(names(assay_data))){
         ylab = labels[2],
         colorby = plotdata$colorby,
         plot_type = plot_types[[d]],
-        palette = groupColorScale,
+        palette = pcaColorScale,
         legend_title = prettifyVariablename(iv),
         labels = plotdata$name,
         show_labels = TRUE
@@ -621,6 +576,8 @@ for (assay_type in rev(names(assay_data))){
     cat(paste0("\n##### ", prettifyVariablename(assay_type), " (", iv, ")\n"))
     variable_genes <- selectVariableGenes(matrix = assay_data[[assay_type]], ntop = params$exploratory_n_features)
 
+    dendroColorScale <- makeColorScale(length(unique(observations[[iv]])), palette = params$exploratory_palette_name)
+    
     p <- clusteringDendrogram(
       2^assay_data[[assay_type]][variable_genes, ],
       observations[, iv, drop = FALSE],
@@ -633,7 +590,7 @@ for (assay_type in rev(names(assay_data))){
         params$features_type, 
         "s\n(", params$exploratory_clustering_method, " clustering, ", params$exploratory_cor_method, " correlation)"),
       cluster_method = params$exploratory_clustering_method,
-      palette = groupColorScale,
+      palette = dendroColorScale,
       labelspace = 0.25
     )
     # Defaults in shinyngs make the text in this plot a bit big for the report, so
@@ -812,17 +769,22 @@ if (any(unlist(params[paste0(possible_gene_set_methods, '_run')]))){
     if (unlist(params[paste0(gene_set_method, '_run')])){
       cat("\n### ", toupper(gene_set_method) ," {.tabset}\n")
       
-      reference_gsea_tables <- paste0(contrasts$id, '.gsea_report_for_', contrasts$reference, '.tsv')
-      target_gsea_tables <- paste0(contrasts$id, '.gsea_report_for_', contrasts$target, '.tsv')
+      for (gmt_file in simpleSplit(params$gsea_gene_sets)) {
+        gmt_name <- basename(tools::file_path_sans_ext(gmt_file))
 
-      for (i in 1:nrow(contrasts)){
-        cat("\n#### ", contrast_descriptions[i], "\n")
-        
-        target_gsea_results <- read_metadata(target_gsea_tables[i])[,c(-2,-3)]
-        print( htmltools::tagList(datatable(target_gsea_results, caption = paste0("\nTarget (", contrasts$target[i], ")\n"), rownames = FALSE) ))
-        
-        ref_gsea_results <- read_metadata(reference_gsea_tables[i])[,c(-2,-3)]
-        print( htmltools::tagList(datatable(ref_gsea_results, caption = paste0("\nReference (", contrasts$reference[i], ")\n"), rownames = FALSE) ))
+        cat("\n#### ", gmt_name ," {.tabset}\n")
+        reference_gsea_tables <- paste0(contrasts$id, ".", gmt_name, '.gsea_report_for_', contrasts$reference, '.tsv')
+        target_gsea_tables <- paste0(contrasts$id, ".", gmt_name, '.gsea_report_for_', contrasts$target, '.tsv')
+
+        for (i in 1:nrow(contrasts)){
+          cat("\n##### ", contrast_descriptions[i], "\n")
+
+          target_gsea_results <- read_metadata(target_gsea_tables[i])[,c(-2,-3)]
+          print( htmltools::tagList(datatable(target_gsea_results, caption = paste0("\nTarget (", contrasts$target[i], ")\n"), rownames = FALSE) ))
+
+          ref_gsea_results <- read_metadata(reference_gsea_tables[i])[,c(-2,-3)]
+          print( htmltools::tagList(datatable(ref_gsea_results, caption = paste0("\nReference (", contrasts$reference[i], ")\n"), rownames = FALSE) ))
+        }
       }
     }
   }
