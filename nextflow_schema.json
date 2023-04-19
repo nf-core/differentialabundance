@@ -816,7 +816,7 @@
                 "shinyngs_shinyapps_app_name": {
                     "type": "string",
                     "default": "None",
-                    "description": "The name of the app you created in your shinyapps.io account",
+                    "description": "The name of the app to push to in your shinyapps.io account",
                     "fa_icon": "fas fa-file-signature"
                 },
                 "shinyngs_guess_unlog_matrices": {
