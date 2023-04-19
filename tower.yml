@@ -17,3 +17,7 @@ reports:
     display: "DESeq2 processed counts table"
   "**/plots/qc/*.dispersion.png":
     display: "DESeq2 dispersion plot"
+  "**/shinyngs_app/data.rds":
+    display: "Data for Shiny app"
+  "**/shinyngs_app/app.R":
+    display: "Launch script for Shiny app"

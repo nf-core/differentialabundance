@@ -9,12 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [[#97](https://github.com/nf-core/differentialabundance/issues/97)] - Allow for subsetting of samples for specific contrasts ([@pinin4fjords](https://github.com/pinin4fjords), reported by [@danhalligan-hx](https://github.com/danhalligan-hx), review by [@WackerO](https://github.com/WackerO))
 - [[#105](https://github.com/nf-core/differentialabundance/pull/105)] - Enabled multiple GMT/GMX files for GSEA ([@WackerO](https://github.com/WackerO), reported by [@grst](https://github.com/grst), review by [@pinin4fjords](https://github.com/pinin4fjords))
-- [[#108](https://github.com/nf-core/differentialabundance/issues/108) - Add shiny app generation (starting feature set) ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
+- [[#108](https://github.com/nf-core/differentialabundance/issues/108)] - Add shiny app generation (starting feature set) ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
+- [[#110](https://github.com/nf-core/differentialabundance/pull/110)] - Add shiny app outputs to Tower reports ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO), [@maxulysse](https://github.com/maxulysse))
 
 ### `Fixed`
 
 - [[#95](https://github.com/nf-core/differentialabundance/issues/95)] - Pipeline doesn't check for gene sets file specification when GSEA is activated ([@pinin4fjords](https://github.com/pinin4fjords), reported by [@danhalligan-hx](https://github.com/danhalligan-hx), review by [@FriederikeHanssen](https://github.com/FriederikeHanssen))
-- [[#93](https://github.com/nf-core/differentialabundance/issues/93) - Shouldn't be re-using the single exploratory palette across multiple informative variables ([@pinin4fjords](https://github.com/pinin4fjords), review by [@matthdsm](https://github.com/matthdsm))
+- [[#93](https://github.com/nf-core/differentialabundance/issues/93)] - Shouldn't be re-using the single exploratory palette across multiple informative variables ([@pinin4fjords](https://github.com/pinin4fjords), review by [@matthdsm](https://github.com/matthdsm))
 
 ## v1.1.1 - 2023-03-02
 
