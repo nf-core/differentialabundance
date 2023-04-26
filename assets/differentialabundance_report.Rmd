@@ -622,27 +622,29 @@ foo <- lapply(informative_variables[iv_min_group_sizes > 2], function(iv){
     groupby = iv
   )
 
-  mad_plot_args <- list(
-    x = plotdata$group,
-    y = plotdata$mad,
-    color = plotdata$outlier,
-    hline_thresholds = c("Outlier threshold" = params$exploratory_mad_threshold),
-    palette = makeColorScale(2, palette = params$differential_palette_name),
-    legend_title = "Outlier status",
-    labels = rownames(plotdata),
-    show_labels = TRUE,
-    xlab = "Sample group",
-    ylab = "MAD score"
-  )
+  if (! is.null(plotdata)){
+    mad_plot_args <- list(
+        x = plotdata$group,
+        y = plotdata$mad,
+        color = plotdata$outlier,
+        hline_thresholds = c("Outlier threshold" = params$exploratory_mad_threshold),
+        palette = makeColorScale(2, palette = params$differential_palette_name),
+        legend_title = "Outlier status",
+        labels = rownames(plotdata),
+        show_labels = TRUE,
+        xlab = "Sample group",
+        ylab = "MAD score"
+    )
 
-  print(htmltools::tagList(do.call("plotly_scatterplot", mad_plot_args)))
+    print(htmltools::tagList(do.call("plotly_scatterplot", mad_plot_args)))
 
-  outliers <- rownames(plotdata)[plotdata$outlier]
+    outliers <- rownames(plotdata)[plotdata$outlier]
 
-  if (length(outliers) == 0){
-    cat(paste0("No outlying samples were detected in groups defined by ", iv,".\n"))
-  }else{
-    cat(paste0(length(outliers), ' possible outliers were detected in groups defined by ', iv ,': ', paste(outliers, collapse=', '), "\n"))
+    if (length(outliers) == 0){
+        cat(paste0("No outlying samples were detected in groups defined by ", iv,".\n"))
+    }else{
+        cat(paste0(length(outliers), ' possible outliers were detected in groups defined by ', iv ,': ', paste(outliers, collapse=', '), "\n"))
+    }
   }
 })
 
