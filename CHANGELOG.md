@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- [[#116](https://github.com/nf-core/differentialabundance/issues/116)] - Skip outlier detection with low replication ([@pinin4fjords](https://github.com/pinin4fjords), review by )
+
 ## v1.2.0 - 2023-04-19
 
 ### `Added`
