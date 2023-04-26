@@ -62,23 +62,22 @@
                     },
                     "shinyngs/app": {
                         "branch": "master",
-                        "git_sha": "880d634b0d5aead9447ae29e3e02e0e31ca7ae7f",
-                        "installed_by": ["modules"],
-                        "patch": "modules/nf-core/shinyngs/app/shinyngs-app.diff"
+                        "git_sha": "443d681b050358f4dbc70ddd3700b60565311c48",
+                        "installed_by": ["modules"]
                     },
                     "shinyngs/staticdifferential": {
                         "branch": "master",
-                        "git_sha": "880d634b0d5aead9447ae29e3e02e0e31ca7ae7f",
+                        "git_sha": "443d681b050358f4dbc70ddd3700b60565311c48",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/staticexploratory": {
                         "branch": "master",
-                        "git_sha": "880d634b0d5aead9447ae29e3e02e0e31ca7ae7f",
+                        "git_sha": "443d681b050358f4dbc70ddd3700b60565311c48",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/validatefomcomponents": {
                         "branch": "master",
-                        "git_sha": "880d634b0d5aead9447ae29e3e02e0e31ca7ae7f",
+                        "git_sha": "443d681b050358f4dbc70ddd3700b60565311c48",
                         "installed_by": ["modules"]
                     },
                     "untar": {
