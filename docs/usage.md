@@ -314,6 +314,13 @@ Caused by:
 
 Command executed:
     template 'deseq_de.R'
+
+Command exit status:
+    137
+
+Command output:
+    (empty)
+
 Command error:
     .command.sh: line 9:  30 Killed    template 'deseq_de.R'
 Work dir:
