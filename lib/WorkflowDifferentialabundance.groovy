@@ -2,6 +2,7 @@
 // This file holds several functions specific to the workflow/differentialabundance.nf in the nf-core/differentialabundance pipeline
 //
 
+import nextflow.Nextflow
 import groovy.text.SimpleTemplateEngine
 
 class WorkflowDifferentialabundance {
@@ -55,17 +56,19 @@ class WorkflowDifferentialabundance {
         def description_html = engine.createTemplate(methods_text).make(meta)
 
         return description_html
-    }//
+    }
+
+    //
     // Exit pipeline if incorrect --genome key provided
     //
     private static void genomeExistsError(params, log) {
         if (params.genomes && params.genome && !params.genomes.containsKey(params.genome)) {
-            log.error "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+            def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
                 "  Genome '${params.genome}' not found in any config files provided to the pipeline.\n" +
                 "  Currently, the available genome keys are:\n" +
                 "  ${params.genomes.keySet().join(", ")}\n" +
                 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-            System.exit(1)
+            Nextflow.error(error_string)
         }
     }
 }
