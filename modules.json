@@ -17,7 +17,7 @@
                     },
                     "custom/dumpsoftwareversions": {
                         "branch": "master",
-                        "git_sha": "7101db4432d3268b7fcb5b8f75fa0a022dc5561b",
+                        "git_sha": "76cc4938c1f6ea5c7d83fed1eeffc146787f9543",
                         "installed_by": ["modules"]
                     },
                     "custom/matrixfilter": {

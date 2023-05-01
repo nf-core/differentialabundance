@@ -3,13 +3,15 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v1.3.0 - xxxx-xx-xx
+## v1.3.0dev - [date]
 
 ### `Added`
 
+- [[#124](https://github.com/nf-core/differentialabundance/pull/124)] - Template update for nf-core/tools v2.8 ([@pinin4fjords](https://github.com/pinin4fjords), review by )
+
 ### `Fixed`
 
-- [[#116](https://github.com/nf-core/differentialabundance/issues/116)] - Skip outlier detection with low replication ([@pinin4fjords](https://github.com/pinin4fjords), review by )
+- [[#116](https://github.com/nf-core/differentialabundance/issues/116)] - Skip outlier detection with low replication ([@pinin4fjords](https://github.com/pinin4fjords), review by [@nvnieuwk](https://github.com/nvnieuwk))
 
 ## v1.2.0 - 2023-04-19
 
