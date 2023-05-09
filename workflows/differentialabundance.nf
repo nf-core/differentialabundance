@@ -469,7 +469,6 @@ workflow DIFFERENTIALABUNDANCE {
         }
 
     // Render the final report
-
     
     RMARKDOWNNOTEBOOK(
         ch_report_file,
