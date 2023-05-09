@@ -8,7 +8,7 @@
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
 [![Launch on Nextflow Tower](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Nextflow%20Tower-%234256e7)](https://tower.nf/launch?pipeline=https://github.com/nf-core/differentialabundance)
 
-[![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23differentialabundance-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/differentialabundance)[![Follow on Twitter](http://img.shields.io/badge/twitter-%40nf__core-1DA1F2?labelColor=000000&logo=twitter)](https://twitter.com/nf_core)[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)
+[![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23differentialabundance-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/differentialabundance)[![Follow on Twitter](http://img.shields.io/badge/twitter-%40nf__core-1DA1F2?labelColor=000000&logo=twitter)](https://twitter.com/nf_core)[![Follow on Mastodon](https://img.shields.io/badge/mastodon-nf__core-6364ff?labelColor=FFFFFF&logo=mastodon)](https://mstdn.science/@nf_core)[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)
 
 ## Introduction
 
@@ -27,28 +27,15 @@ On release, automated continuous integration tests run the pipeline on a full-si
 3. Run differential analysis over all contrasts specified.
 4. Optionally run a differential gene set analysis.
 5. Generate exploratory and differential analysis plots for interpretation.
-6. Build an HTML report based on R markdown, with interactive plots (where possible) and tables.
+6. Optionally build and (if specified) deploy a Shiny app for fully interactive mining of results.
+7. Build an HTML report based on R markdown, with interactive plots (where possible) and tables.
 
-## Quick Start
+## Usage
 
-1. Install [`Nextflow`](https://www.nextflow.io/docs/latest/getstarted.html#installation) (`>=22.10.1`)
-
-2. Install any of [`Docker`](https://docs.docker.com/engine/installation/), [`Singularity`](https://www.sylabs.io/guides/3.0/user-guide/) (you can follow [this tutorial](https://singularity-tutorial.github.io/01-installation/)), [`Podman`](https://podman.io/), [`Shifter`](https://nersc.gitlab.io/development/shifter/how-to-use/) or [`Charliecloud`](https://hpc.github.io/charliecloud/) for full pipeline reproducibility _(you can use [`Conda`](https://conda.io/miniconda.html) both to install Nextflow itself and also to manage software within pipelines. Please only use it within pipelines as a last resort; see [docs](https://nf-co.re/usage/configuration#basic-configuration-profiles))_.
-
-3. Download the pipeline and test it on a minimal dataset with a single command:
-
-   ```bash
-   nextflow run nf-core/differentialabundance -profile test,YOURPROFILE --outdir <OUTDIR>
-   ```
-
-   Note that some form of configuration will be needed so that Nextflow knows how to fetch the required software. This is usually done in the form of a config profile (`YOURPROFILE` in the example command above). You can chain multiple config profiles in a comma-separated string.
-
-   > - The pipeline comes with config profiles called `docker`, `singularity`, `podman`, `shifter`, `charliecloud` and `conda` which instruct the pipeline to use the named tool for software management. For example, `-profile test,docker`.
-   > - Please check [nf-core/configs](https://github.com/nf-core/configs#documentation) to see if a custom config file to run nf-core pipelines already exists for your Institute. If so, you can simply use `-profile <institute>` in your command. This will enable either `docker` or `singularity` and set the appropriate execution settings for your local compute environment.
-   > - If you are using `singularity`, please use the [`nf-core download`](https://nf-co.re/tools/#downloading-pipelines-for-offline-use) command to download images first, before running the pipeline. Setting the [`NXF_SINGULARITY_CACHEDIR` or `singularity.cacheDir`](https://www.nextflow.io/docs/latest/singularity.html?#singularity-docker-hub) Nextflow options enables you to store and re-use the images from a central location for future pipeline runs.
-   > - If you are using `conda`, it is highly recommended to use the [`NXF_CONDA_CACHEDIR` or `conda.cacheDir`](https://www.nextflow.io/docs/latest/conda.html) settings to store the environments in a central location for future pipeline runs.
-
-4. Start running your own analysis!
+> **Note**
+> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how
+> to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline)
+> with `-profile test` before running the workflow on actual data.
 
 RNA-seq:
 
@@ -73,9 +60,38 @@ Affymetrix microarray:
      -profile affy,<docker/singularity/podman/shifter/charliecloud/conda/institute>
 ```
 
-## Documentation
+> **Warning:**
+> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those
+> provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_;
+> see [docs](https://nf-co.re/usage/configuration#custom-configuration-files).
 
-The nf-core/differentialabundance pipeline comes with documentation about the pipeline [usage](https://nf-co.re/differentialabundance/usage), [parameters](https://nf-co.re/differentialabundance/parameters) and [output](https://nf-co.re/differentialabundance/output).
+For more details, please refer to the [usage documentation](https://nf-co.re/differentialabundance/usage) and the [parameter documentation](https://nf-co.re/differentialabundance/parameters).
+
+### Reporting
+
+The pipeline reports its outcomes in two forms.
+
+#### Markdown-derived HTML report
+
+![screenshot of the markdown report](docs/images/markdown_report.png "Markdown report")
+
+The primary workflow output is an HTML-format report produced from an [R markdown template](assets/differentialabundance_report.Rmd). This leverages helper functions from [shinyngs](https://github.com/pinin4fjords/shinyngs) to produce rich plots and tables, but does not provide significant interactivity.
+
+#### Shiny-based data mining app
+
+A second optional output is produced by leveraging [shinyngs](https://github.com/pinin4fjords/shinyngs) to build an interactive Shiny application. This allows more interaction with the data, setting of thresholds etc.
+
+![screenshot of the ShinyNGS contrast table](docs/images/shinyngs_contrast_table.png "ShinyNGS contrast table")
+
+![screenshot of the ShinyNGS gene plot](docs/images/shinyngs_gene_plot.png "ShinyNGS gene plot")
+
+By default the application is provided as an R script and associated serialised data structure, which you can use to quickly start the application locally. With proper configuration the app can also be deployed to [shinyapps.io](https://www.shinyapps.io/) - though this requires you to have an account on that service (free tier available).
+
+## Pipeline output
+
+To see the the results of a test run with a full size dataset refer to the [results](https://nf-co.re/differentialabundance/results) tab on the nf-core website pipeline page.
+For more details about the output files and reports, please refer to the
+[output documentation](https://nf-co.re/differentialabundance/output).
 
 ## Credits
 

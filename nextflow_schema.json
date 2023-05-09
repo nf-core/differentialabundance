@@ -416,6 +416,11 @@
                     "help_text": "Check the content of `RColorBrewer::brewer.pal.info` from an R terminal for valid palette names.",
                     "description": "Valid R palette name",
                     "fa_icon": "fas fa-palette"
+                },
+                "differential_subset_to_contrast_samples": {
+                    "type": "boolean",
+                    "fa_icon": "far fa-object-group",
+                    "description": "In differential analysis (DEseq2 or Limma), subset to the contrast samples before modelling variance?"
                 }
             },
             "required": [
@@ -784,11 +789,50 @@
                 "gsea_gene_sets": {
                     "type": "string",
                     "default": "None",
-                    "description": "Gene sets in GMT or GMX-format",
+                    "description": "Gene sets in GMT or GMX-format (multiple comma-separated input files are possible)",
                     "fa_icon": "fas fa-bars"
                 }
             },
             "fa_icon": "fas fa-layer-group"
+        },
+        "shiny_app_settings": {
+            "title": "Shiny app settings",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "shinyngs_build_app": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Should a Shiny app be built?",
+                    "help_text": "At a minimum this will trigger generation of files you can quickly use to spin up a shiny app locally. But you can also use the 'shinyapps' settings to deploy an app straight to shinyapps.io.",
+                    "fa_icon": "fas fa-wrench"
+                },
+                "shinyngs_deploy_to_shinyapps_io": {
+                    "type": "boolean",
+                    "description": "Should the app be deployed to shinyapps.io?",
+                    "fa_icon": "fas fa-file-import"
+                },
+                "shinyngs_shinyapps_account": {
+                    "type": "string",
+                    "default": "None",
+                    "description": "Your shinyapps.io account name",
+                    "fa_icon": "fas fa-user"
+                },
+                "shinyngs_shinyapps_app_name": {
+                    "type": "string",
+                    "default": "None",
+                    "description": "The name of the app to push to in your shinyapps.io account",
+                    "fa_icon": "fas fa-file-signature"
+                },
+                "shinyngs_guess_unlog_matrices": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Should we guess the log status of matrices and unlog for the app?",
+                    "help_text": "In the app context, it's usually helpful if things are not in log scale, so that e.g. fold changes make some sense with respect to observed values. This flag will cause the shinyngs app-building script to make a guess based on observed values as to the log status of input matrices, and adjust the loading accordingly."
+                }
+            },
+            "fa_icon": "fab fa-app-store-ios"
         },
         "reporting_options": {
             "title": "Reporting options",
@@ -827,6 +871,24 @@
                     "default": "CITATIONS.md",
                     "description": "A markdown file containing citations to include in the fiinal report",
                     "fa_icon": "fas fa-ad"
+                },
+                "report_title": {
+                    "type": "string",
+                    "default": "None",
+                    "fa_icon": "fas fa-heading",
+                    "description": "A title for reporting outputs"
+                },
+                "report_author": {
+                    "type": "string",
+                    "default": "None",
+                    "fa_icon": "fas fa-user-edit",
+                    "description": "An author for reporting outputs"
+                },
+                "report_description": {
+                    "type": "string",
+                    "default": "None",
+                    "fa_icon": "fas fa-feather",
+                    "description": "A description for reporting outputs"
                 }
             },
             "required": ["report_file", "logo_file", "css_file"]
@@ -1056,6 +1118,9 @@
         },
         {
             "$ref": "#/definitions/gsea"
+        },
+        {
+            "$ref": "#/definitions/shiny_app_settings"
         },
         {
             "$ref": "#/definitions/reporting_options"

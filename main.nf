@@ -4,7 +4,6 @@
     nf-core/differentialabundance
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Github : https://github.com/nf-core/differentialabundance
-
     Website: https://nf-co.re/differentialabundance
     Slack  : https://nfcore.slack.com/channels/differentialabundance
 ----------------------------------------------------------------------------------------
