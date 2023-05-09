@@ -427,7 +427,8 @@ Input was a matrix of `r nrow(assay_data$raw)` `r params$features_type`s for `r 
 
 ## Exploratory analysis
 
-```{r, echo=FALSE, results='asis', fig.height=8, eval=(!is.null(params$features_biotype_col) & !is.null(params$features))}cat("### Number of differentially expressed genes by gene type")
+```{r, echo=FALSE, results='asis', fig.height=8, eval=(!is.null(params$features_biotype_col) & !is.null(params$features))}
+cat("### Number of differentially expressed genes by gene type")
 assay_data_normalised = as.data.frame(assay_data$normalised)
 assay_data_normalised  <- cbind(gene_id = rownames(assay_data_normalised), assay_data_normalised)
 rownames(assay_data_normalised) <- 1:nrow(assay_data_normalised)
