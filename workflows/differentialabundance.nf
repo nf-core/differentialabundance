@@ -14,7 +14,7 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 
 // Check mandatory parameters
 def exp_meta = [ "id": params.study_name  ]
-if (params.input) { ch_input = Channel.of([ exp_meta, params.input ]) } else { exit 1, 'Input samplesheet not specified!' }
+if (params.input) { ch_input = Channel.of([ exp_meta, file(params.input) ]) } else { exit 1, 'Input samplesheet not specified!' }
 
 if (params.study_type == 'affy_array'){
     if (params.affy_cel_files_archive) {
