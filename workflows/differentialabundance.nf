@@ -27,7 +27,7 @@ if (params.study_type == 'affy_array'){
     // If this is not an affy array, assume we're reading from a matrix
 
     if (params.matrix) {
-        matrix_file = path(params.matrix, checkIfExists: true)
+        matrix_file = file(params.matrix, checkIfExists: true)
         ch_in_raw = Channel.of([ exp_meta, matrix_file])
     } else {
         error("Input matrix not specified!")
