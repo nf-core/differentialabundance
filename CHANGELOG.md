@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - [[#124](https://github.com/nf-core/differentialabundance/pull/124)] - Template update for nf-core/tools v2.8 ([@pinin4fjords](https://github.com/pinin4fjords), review by [@jasmezz](https://github.com/jasmezz))
-- [[#129](https://github.com/nf-core/differentialabundance/pull/129)] - Module updates to fit with recent registry changes ([@pinin4fjords](https://github.com/pinin4fjords), review by)
+- [[#129](https://github.com/nf-core/differentialabundance/pull/129)] - Module updates to fit with recent registry changes ([@pinin4fjords](https://github.com/pinin4fjords), review by [@maxulysse](https://github.com/maxulysse), [@adamrtalbot](https://github.com/adamrtalbot))
 
 ### `Fixed`
 
