@@ -154,7 +154,6 @@
                 },
                 "features_metadata_cols": {
                     "type": "string",
-                    "default": "gene_id,gene_name,gene_biotype",
                     "description": "Comma-separated string, specifies feature metadata columns to be used for exploratory analysis, platform-specific",
                     "fa_icon": "fas fa-columns"
                 },

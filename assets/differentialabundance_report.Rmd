@@ -432,13 +432,22 @@ cat("### Number of differentially expressed genes by gene type")
 cat("\nFrom the provided features annotation, the following plot was generated, showing the number of differentially expressed genes per gene type.")
 assay_data_normalised <- as.data.frame(assay_data$normalised)
 assay_data_normalised  <- cbind(gene_id = rownames(assay_data_normalised), assay_data_normalised)
-rownames(assay_data_normalised) <- 1:nrow(assay_data_normalised)
 features_df  <- read.csv(params$features, sep = "\t", header=T)
-features_df <- rename(features_df, any_of(c(gene_id="PROBEID", gene_biotype="GENETYPE")))
-assay_data_normalised <- assay_data_normalised %>% left_join(select(features_df, gene_id, gene_biotype), by="gene_id")
-biotype_counts <- assay_data_normalised %>% group_by(gene_biotype) %>% count()
+
+# Add additional columns called gene_id and gene_biotype to be able to join
+
+if (! params$features_id_col %in% colnames(features_df)) {
+  stop(paste0("Could not find ", params$features_id_col, " column in features file columns ", paste(colnames(features_df), collapse=", "), ", exiting..."))
+}
+if (! params$features_biotype_col %in% colnames(features_df)) {
+  stop(paste0("Could not find ", params$features_biotype_col, " column in features file columns ", paste(colnames(features_df), collapse=", "), ", exiting..."))
+} else {
+  features_df$genetype <- features_df[[params$features_biotype_col]]
+}
+assay_data_normalised <- assay_data_normalised %>% left_join(select(features_df, params$features_id_col, genetype), by=c("gene_id"=params$features_id_col))
+biotype_counts <- count(assay_data_normalised, genetype)
 p <- biotype_counts %>%
-  ggplot(aes(x=gene_biotype, y=n)) + geom_bar(stat='identity') + theme_bw() + coord_flip()
+  ggplot(aes(x=n, y=genetype)) + geom_bar(stat='identity') + theme_bw()
 print(p)
 ```
 
