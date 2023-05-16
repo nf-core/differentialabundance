@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - [[#124](https://github.com/nf-core/differentialabundance/pull/124)] - Template update for nf-core/tools v2.8 ([@pinin4fjords](https://github.com/pinin4fjords), review by [@jasmezz](https://github.com/jasmezz))
+- [[#130](https://github.com/nf-core/differentialabundance/pull/130)] - Document reasons for lack of differential expression ([@pinin4fjords](https://github.com/pinin4fjords), review by )
 
 ### `Fixed`
 
