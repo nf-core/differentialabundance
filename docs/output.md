@@ -139,3 +139,9 @@ The app must be run in an environment with [ShinyNGS](https://github.com/pinin4f
 **Problem:** It is possible that the experimental intervention has not significantly impacted gene expression, resulting in the absence of differentially expressed genes.
 
 **Suggested course of action:** Evaluate the experimental design and the perturbation itself. If the intervention is expected to induce changes in gene expression but no differential expression is observed, revisit the experimental design, biological perturbation, or underlying hypothesis. Consider reassessing the experimental conditions or exploring alternative approaches to investigate other aspects of the biological system.
+
+#### 8. Workflow issues or bugs:
+
+**Problem:** Potential issues or bugs in the nf-core differential abundance workflow can affect the detection of differential expression or data analysis.
+
+**Suggested course of action:** Report any issues or suspected bugs by opening an issue on the [nf-core differential abundance workflow repository](https://github.com/nf-core/differentialabundance). Provide specific details, such as software versions, error messages, and relevant data or code snippets. Your feedback is valuable for improving the workflow's reliability. If you have the technical expertise, consider contributing to the workflow by submitting pull requests to address issues, fix bugs, or propose enhancements.
