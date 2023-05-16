@@ -126,7 +126,7 @@ The app must be run in an environment with [ShinyNGS](https://github.com/pinin4f
 
 **Problem:** The nf-core differential abundance workflow currently offers a limited set of normalization methods, which may not fully address the specific normalization requirements of your experiment.
 
-**Suggested course of action:**  If the existing options do not adequately address your experiment's normalization challenges, consider developing custom normalization modules tailored to your needs. By contributing these modules to the nf-core community, you can expand the range of normalization options available to researchers. Your contributions will help researchers in similar situations and contribute to the continuous improvement and customization of the workflow. 
+**Suggested course of action:** If the existing options do not adequately address your experiment's normalization challenges, consider developing custom normalization modules tailored to your needs. By contributing these modules to the nf-core community, you can expand the range of normalization options available to researchers. Your contributions will help researchers in similar situations and contribute to the continuous improvement and customization of the workflow.
 
 #### 6. Technical variability and batch effects:
 
@@ -138,4 +138,4 @@ The app must be run in an environment with [ShinyNGS](https://github.com/pinin4f
 
 **Problem:** It is possible that the experimental intervention has not significantly impacted gene expression, resulting in the absence of differentially expressed genes.
 
-**Suggested course of action:** Evaluate the experimental design and the perturbation itself. If the intervention is expected to induce changes in gene expression but no differential expression is observed, revisit the experimental design, biological perturbation, or underlying hypothesis. Consider reassessing the experimental conditions or exploring alternative approaches to investigate other aspects of the biological system. 
+**Suggested course of action:** Evaluate the experimental design and the perturbation itself. If the intervention is expected to induce changes in gene expression but no differential expression is observed, revisit the experimental design, biological perturbation, or underlying hypothesis. Consider reassessing the experimental conditions or exploring alternative approaches to investigate other aspects of the biological system.
