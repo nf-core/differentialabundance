@@ -68,15 +68,17 @@ The `differential` folder is likely to be the core result set for most users, co
 
 ## Shiny app
 
+<details markdown="1">
+<summary>Output files</summary>
+
 - `shinyngs_app/`
   - `[study name]`:
     - `data.rds`: serialized R object which can be used to generate a Shiny application
     - `app.R`: minimal R script that will source the data object and generate the app
 
-The app must be run in an environment with [ShinyNGS](https://github.com/pinin4fjords/shinyngs) installed, or you can see the workflow parameters to deploy to shinyapps.io (see usage documentation).
+</details>
 
-<details markdown="1">
-<summary>Output files</summary>
+The app must be run in an environment with [ShinyNGS](https://github.com/pinin4fjords/shinyngs) installed, or you can see the workflow parameters to deploy to shinyapps.io (see usage documentation).
 
 ### Pipeline information
 
