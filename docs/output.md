@@ -134,3 +134,8 @@ The app must be run in an environment with [ShinyNGS](https://github.com/pinin4f
 
 **Suggested course of action:** Address technical variability and batch effects in the experimental design and data analysis. Randomize sample collection, incorporate control samples, and balance samples across different experimental batches. These measures minimize technical variation, enhance the robustness of the analysis, and increase the chances of detecting true differential expression.
 
+#### 7. Genuinely no differential expression:
+
+**Problem:** It is possible that the experimental intervention has not significantly impacted gene expression, resulting in the absence of differentially expressed genes.
+
+**Suggested course of action:** Evaluate the experimental design and the perturbation itself. If the intervention is expected to induce changes in gene expression but no differential expression is observed, revisit the experimental design, biological perturbation, or underlying hypothesis. Consider reassessing the experimental conditions or exploring alternative approaches to investigate other aspects of the biological system. 
