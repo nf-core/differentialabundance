@@ -166,13 +166,13 @@
                     "help_text": "This parameter allows you to supply your own feature annotations. These can often be automatically derived from the GTF used upstream for RNA-seq, or from the Bioconductor annotation package (for affy arrays). ",
                     "fa_icon": "fas fa-align-justify"
                 },
-                "gtf_feature_type": {
+                "features_gtf_feature_type": {
                     "type": "string",
                     "default": "transcript",
                     "description": "Where a GTF file is supplied, which feature type to use",
                     "fa_icon": "fas fa-keyboard"
                 },
-                "gtf_table_first_field": {
+                "features_gtf_table_first_field": {
                     "type": "string",
                     "default": "gene_id",
                     "description": "Where a GTF file is supplied, which field should go first in the converted output table",
