@@ -24,7 +24,7 @@
                     "default": "rnaseq",
                     "description": "A string identifying the technology used to produce the data",
                     "help_text": "Currently 'rnaseq' or 'affy_array' may be specified.",
-                    "enum": ["rnaseq", "affy_array"],
+                    "enum": ["rnaseq", "affy_array", "non_affy_array"],
                     "fa_icon": "far fa-keyboard"
                 },
                 "input": {
