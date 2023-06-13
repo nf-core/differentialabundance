@@ -22,16 +22,24 @@ if (params.study_type == 'affy_array'){
     } else {
         error("CEL files archive not specified!")
     }
-} else{
-
-    // If this is not an affy array, assume we're reading from a matrix
-
-    if (params.matrix) {
+  // If this is another array platform and user wish to read from SOFT files
+  // then a GSE study identifier must be provided
+} else if (params.study_type == 'non_affy_array'){
+    if (params.querygse) {
+        ch_querygse = Channel.of([exp_meta, value(params.querygse, checkIfExists: true)])
+    } else {
+        error("Query GSE not specified!")
+    }
+} else {
+    // If this is not microarray data, and this an RNA-seq dataset,
+    // then assume we're reading from a matrix
+    if (params.study_type == "rnaseq" && params.matrix) {
         matrix_file = file(params.matrix, checkIfExists: true)
         ch_in_raw = Channel.of([ exp_meta, matrix_file])
     } else {
         error("Input matrix not specified!")
     }
+
 }
 
 // Check optional parameters
@@ -64,6 +72,8 @@ citations_file = file(params.citations_file, checkIfExists: true)
 */
 
 include { TABULAR_TO_GSEA_CHIP } from '../modules/local/tabular_to_gsea_chip'
+include { READ_FROM_SOFT } from '../modules/local/read_from_soft'
+
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -172,6 +182,15 @@ workflow DIFFERENTIALABUNDANCE {
         ch_versions = ch_versions
             .mix(GTF_TO_TABLE.out.versions)
     }
+    else if(params.study_type == "non_affy_array"){
+
+        ch_generic_array_input = ch_input
+            .join(ch_querygse)
+
+        READ_FROM_SOFT(ch_generic_array_input)
+        ch_in_raw = READ_FROM_SOFT.out.expression
+        ch_features = READ_FROM_SOFT.out.annotation
+    }
     else{
 
         // Otherwise we can just use the matrix input
@@ -214,7 +233,13 @@ workflow DIFFERENTIALABUNDANCE {
         ch_raw = ch_validated_assays.raw
         ch_norm = ch_validated_assays.normalised
         ch_matrix_for_differential = ch_norm
-    } else{
+    }
+    else if (params.study_type == 'non_affy_array') {
+        ch_raw = VALIDATOR.out.assays
+        ch_norm = VALIDATOR.out.assays
+        ch_matrix_for_differential = ch_norm
+    }
+    else{
         ch_raw = VALIDATOR.out.assays
         ch_matrix_for_differential = ch_raw
     }
@@ -247,7 +272,7 @@ workflow DIFFERENTIALABUNDANCE {
         .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
         .first()
 
-    if (params.study_type == 'affy_array'){
+    if (params.study_type == 'affy_array' || 'non_affy_array'){
 
         LIMMA_DIFFERENTIAL (
             ch_contrasts,

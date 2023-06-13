@@ -12,8 +12,8 @@ process READ_FROM_SOFT {
 
     output:
     tuple val(meta), path("*.rds")             , emit: rds
-    tuple val(meta), path("*.matrix.tsv")       , emit: expression
-    tuple val(meta), path("*.annotation.tsv")  , emit: annotation, optional: true
+    tuple val(meta), path("*.matrix.tsv")      , emit: expression
+    tuple val(meta), path("*.annotation.tsv")  , emit: annotation
     path "versions.yml"                        , emit: versions
 
     when:
