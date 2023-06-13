@@ -81,6 +81,13 @@
                     "description": "Alternative to matrix: a compressed CEL files archive such as often found in GEO",
                     "fa_icon": "fas fa-file-archive",
                     "help_text": "Use this option to provide a raw archive of CEL files from Affymetrix arrays. Will be ignored if a matrix is specified."
+                },
+                "querygse": {
+                    "type": "string",
+                    "default": "None",
+                    "description": "Alternative to CEL archive: the GSE identifier as found in GEO",
+                    "fa_icon": "fas fa-keyboard",
+                    "help_text": "Use this option to provide a GSE study identifier."
                 }
             }
         },
