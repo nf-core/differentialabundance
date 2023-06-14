@@ -156,7 +156,6 @@ workflow DIFFERENTIALABUNDANCE {
         ch_in_raw = READ_FROM_SOFT.out.expression
         ch_features = READ_FROM_SOFT.out.annotation
     }
-
     //// Fetch or derive a feature annotation table
 
     // If user has provided a feature annotation table, use that
@@ -257,8 +256,6 @@ workflow DIFFERENTIALABUNDANCE {
             }
             tuple(it, it.variable, it.reference, it.target)
         }
-    println "contrasts ----------------"
-    ch_contrasts.view()
 
     // Firstly Filter the input matrix
 
@@ -272,7 +269,6 @@ workflow DIFFERENTIALABUNDANCE {
     ch_samples_and_matrix = VALIDATOR.out.sample_meta
         .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
         .first()
-    println "matrixfilter ----------------"
     ch_samples_and_matrix.view()
 
     if (params.study_type == 'affy_array' || 'non_affy_array'){
@@ -378,7 +374,6 @@ workflow DIFFERENTIALABUNDANCE {
             .mix(GSEA_GSEA.out.versions)
     }
 
-    println "are we even getting here? ----------------"
 
     // The exploratory plots are made by coloring by every unique variable used
     // to define contrasts
@@ -402,9 +397,9 @@ workflow DIFFERENTIALABUNDANCE {
     else {
         ch_all_matrices = VALIDATOR.out.sample_meta                 // meta, samples
             .join(VALIDATOR.out.feature_meta)                       // meta, samples, features
-            .join(ch_processed_matrices)                         // meta, samples, features, norm, ...
+            .combine(ch_processed_matrices)                         // meta, samples, features, norm, ...
             .map{
-                tuple(it[0], it[1], it[2..it.size()-1])
+                tuple(it[0], it[1], it[2], it[3..it.size()-1])
             }
             .first()
     }
