@@ -400,7 +400,6 @@ workflow DIFFERENTIALABUNDANCE {
             .map{
                 tuple(it[0], it[1], it[2])
             }
-            .first()
     }
 
     ch_contrast_variables
