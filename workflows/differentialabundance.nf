@@ -398,15 +398,16 @@ workflow DIFFERENTIALABUNDANCE {
             .join(VALIDATOR.out.feature_meta)                       // meta, samples, features
             .join(ch_processed_matrices)                         // meta, samples, features, norm, ...
             .map{
-                tuple(it[0], it[1], it[2])
+                tuple(it[0], it[1], it[2..it.size()-1])
             }
+            .first()
     }
 
-    ch_contrast_variables
-        .combine(ch_all_matrices.map{ it.tail() })
-
-        ch_contrast_variables
-            .combine(ch_all_matrices.map{ it.tail() })
+//     ch_contrast_variables
+//         .combine(ch_all_matrices.map{ it.tail() })
+//
+//         ch_contrast_variables
+//             .combine(ch_all_matrices.map{ it.tail() })
 
     PLOT_EXPLORATORY(
         ch_contrast_variables
