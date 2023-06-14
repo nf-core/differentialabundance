@@ -384,23 +384,23 @@ workflow DIFFERENTIALABUNDANCE {
         .unique()
 
     if(params.study_type != "non_affy_array") {
-    ch_all_matrices = VALIDATOR.out.sample_meta                 // meta, samples
-        .join(VALIDATOR.out.feature_meta)                       // meta, samples, features
-        .join(ch_raw)                                           // meta, samples, features, raw matrix
-        .combine(ch_processed_matrices)                         // meta, samples, features, raw, norm, ...
-        .map{
-            tuple(it[0], it[1], it[2], it[3..it.size()-1])
-        }
-        .first()
+        ch_all_matrices = VALIDATOR.out.sample_meta                 // meta, samples
+            .join(VALIDATOR.out.feature_meta)                       // meta, samples, features
+            .join(ch_raw)                                           // meta, samples, features, raw matrix
+            .combine(ch_processed_matrices)                         // meta, samples, features, raw, norm, ...
+            .map{
+                tuple(it[0], it[1], it[2], it[3..it.size()-1])
+            }
+            .first()
     }
     else {
-    ch_all_matrices = VALIDATOR.out.sample_meta                 // meta, samples
-        .join(VALIDATOR.out.feature_meta)                       // meta, samples, features
-        .combine(ch_processed_matrices)                         // meta, samples, features, norm, ...
-        .map{
-            tuple(it[0], it[1], it[2..it.size()-1])
-        }
-        .first()
+        ch_all_matrices = VALIDATOR.out.sample_meta                 // meta, samples
+            .join(VALIDATOR.out.feature_meta)                       // meta, samples, features
+            .join(ch_processed_matrices)                         // meta, samples, features, norm, ...
+            .map{
+                tuple(it[0], it[1], it[2])
+            }
+            .first()
     }
 
     ch_contrast_variables
