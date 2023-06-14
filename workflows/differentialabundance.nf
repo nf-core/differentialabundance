@@ -235,7 +235,6 @@ workflow DIFFERENTIALABUNDANCE {
         ch_matrix_for_differential = ch_norm
     }
     else if (params.study_type == 'non_affy_array') {
-        ch_raw = VALIDATOR.out.assays
         ch_norm = VALIDATOR.out.assays
         ch_matrix_for_differential = ch_norm
     }
@@ -384,6 +383,7 @@ workflow DIFFERENTIALABUNDANCE {
         }
         .unique()
 
+    if(params.study_type != "non_affy_array") {
     ch_all_matrices = VALIDATOR.out.sample_meta                 // meta, samples
         .join(VALIDATOR.out.feature_meta)                       // meta, samples, features
         .join(ch_raw)                                           // meta, samples, features, raw matrix
@@ -392,6 +392,16 @@ workflow DIFFERENTIALABUNDANCE {
             tuple(it[0], it[1], it[2], it[3..it.size()-1])
         }
         .first()
+    }
+    else {
+    ch_all_matrices = VALIDATOR.out.sample_meta                 // meta, samples
+        .join(VALIDATOR.out.feature_meta)                       // meta, samples, features
+        .combine(ch_processed_matrices)                         // meta, samples, features, norm, ...
+        .map{
+            tuple(it[0], it[1], it[2..it.size()-1])
+        }
+        .first()
+    }
 
     ch_contrast_variables
         .combine(ch_all_matrices.map{ it.tail() })
@@ -483,7 +493,7 @@ workflow DIFFERENTIALABUNDANCE {
     // Condition params reported on study type
 
     def params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|deseq2|gsea).*/
-    if (params.study_type == 'affy_array'){
+    if (params.study_type == 'affy_array' || 'non_affy_array'){
         params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|affy|limma|gsea).*/
     }
 
