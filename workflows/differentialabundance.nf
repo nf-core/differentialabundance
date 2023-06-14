@@ -257,8 +257,8 @@ workflow DIFFERENTIALABUNDANCE {
             }
             tuple(it, it.variable, it.reference, it.target)
         }
-    println "contrasts"
-    ch.contrast.view()
+    println "contrasts ----------------"
+    ch_contrasts.view()
 
     // Firstly Filter the input matrix
 
@@ -272,7 +272,7 @@ workflow DIFFERENTIALABUNDANCE {
     ch_samples_and_matrix = VALIDATOR.out.sample_meta
         .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
         .first()
-    println "matrixfilter"
+    println "matrixfilter ----------------"
     ch_samples_and_matrix.view()
 
     if (params.study_type == 'affy_array' || 'non_affy_array'){
@@ -377,6 +377,8 @@ workflow DIFFERENTIALABUNDANCE {
             .mix(TABULAR_TO_GSEA_CHIP.out.versions)
             .mix(GSEA_GSEA.out.versions)
     }
+
+    println "are we even getting here? ----------------"
 
     // The exploratory plots are made by coloring by every unique variable used
     // to define contrasts
