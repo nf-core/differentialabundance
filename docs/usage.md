@@ -57,6 +57,10 @@ This is a numeric square matrix file, comma or tab-separated, with a column for 
 
 This is an archive of CEL files as frequently found in GEO.
 
+### Other microarray platforms
+
+Alternatively, user may want to work non-Affymetrix array platforms. In this case, setting `--study_type non_affy_array` and `--querygse [GSE study ID]` enables the pipeline to download normalised SOFT matrices automatically (note that even though Affymetrix arrays are also supported in the SOFT matrix track, it is recommended to work from CEL files in this case).
+
 ## Contrasts file
 
 ```bash
