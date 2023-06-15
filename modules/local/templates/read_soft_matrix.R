@@ -70,6 +70,13 @@ write.table(fData(eset)[,c('ID','Entrez_Gene_ID','Symbol','Definition')],
             paste0(opt\$querygse,'.annotation.tsv'),
             col.names=TRUE, row.names=FALSE, sep="\t", quote=FALSE)
 
+
+# if data is not log scale, transform it as needed for limma downstream
+if(max(exprs(eset)) > 20) { # a bit dirty, needs proper solution later...
+  exprs(eset)[exprs(eset) <= 0] <- .001
+  exprs(eset) <- log2(exprs(eset))
+}
+
 output_prefix <- '$task.ext.prefix'
 saveRDS(eset, file = paste0(output_prefix, 'eset.rds'))
 

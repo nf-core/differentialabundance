@@ -258,21 +258,17 @@ workflow DIFFERENTIALABUNDANCE {
         }
 
     // Firstly Filter the input matrix
-    if(params.study_type != 'non_affy_array'){
-        CUSTOM_MATRIXFILTER(
-            ch_matrix_for_differential,
-            VALIDATOR.out.sample_meta
-        )
-         // Prepare inputs for differential processes
-        ch_samples_and_matrix = VALIDATOR.out.sample_meta
-            .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
-            .first()
-    }
-    else {
-        ch_samples_and_matrix = VALIDATOR.out.sample_meta
-            .join(ch_matrix_for_differential)
-            .first()
-    }
+
+    CUSTOM_MATRIXFILTER(
+        ch_matrix_for_differential,
+        VALIDATOR.out.sample_meta
+    )
+
+    // Prepare inputs for differential processes
+
+    ch_samples_and_matrix = VALIDATOR.out.sample_meta
+        .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
+        .first()
 
     if (params.study_type == 'affy_array' || 'non_affy_array'){
 
