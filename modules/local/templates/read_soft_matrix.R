@@ -46,6 +46,7 @@ round_dataframe_columns <- function(df, columns = NULL, digits = 8){
 
 opt <- list(
   querygse = '$querygse'
+  metacols = '$features_metadata_cols'
 )
 args_opt <- parse_args('$task.ext.args')
 for ( ao in names(args_opt)){
@@ -65,8 +66,12 @@ library(GEOquery)
 # fetch data for GSE number
 eset <- getGEO(opt\$querygse)[[1]]
 
+# parse metadata columns from nextflow parameters
+# to subset on the feature metadata file
+feature_cols = strsplit(opt\$metacols,',')[[1]]
+
 # write probeset annotation
-write.table(fData(eset)[,c('ID','Entrez_Gene_ID','Symbol','Definition')],
+write.table(fData(eset)[,feature_cols],
             paste0(opt\$querygse,'.annotation.tsv'),
             col.names=TRUE, row.names=FALSE, sep="\t", quote=FALSE)
 

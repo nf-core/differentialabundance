@@ -8,7 +8,7 @@ process READ_FROM_SOFT {
         'quay.io/biocontainers/bioconductor-geoquery:2.66.0--r42hdfd78af_0' }"
 
     input:
-    tuple val(meta), path(samplesheet), val(querygse)
+    tuple val(meta), path(samplesheet), val(querygse), val(metacols)
 
     output:
     tuple val(meta), path("*.rds")             , emit: rds

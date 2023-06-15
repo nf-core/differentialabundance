@@ -24,11 +24,11 @@ if (params.study_type == 'affy_array'){
     }
   // If this is another array platform and user wish to read from SOFT files
   // then a GSE study identifier must be provided
-} else if (params.study_type == 'non_affy_array' && params.querygse != ""){
+} else if (params.study_type == 'non_affy_array' && params.querygse != "" && params.features_metadata_cols != ""){
     if (params.querygse) {
-        ch_querygse = Channel.of([exp_meta, params.querygse])
+        ch_querygse = Channel.of([exp_meta, params.querygse, params.features_metadata_cols])
     } else {
-        error("Query GSE not specified!")
+        error("Query GSE not specified or features metadata columns not specified")
     }
 } else {
     // If this is not microarray data, and this an RNA-seq dataset,
