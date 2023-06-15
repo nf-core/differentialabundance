@@ -33,8 +33,6 @@ params:
   features_id_col: NULL
   features_name_col: NULL
   features_metadata_cols: NULL 
-  features_gtf_feature_type: NULL
-  features_gtf_table_first_field: NULL
   raw_matrix: null                                            # e.g. 0_salmon.merged.gene_counts.tsv
   normalised_matrix: null
   variance_stabilised_matrix: null                            # e.g. test_files/3_treatment-WT-P23H.vst.tsv
@@ -241,7 +239,7 @@ assay_data <- lapply(assay_files, function(x) {
   colnames(mat) <- observations[[params$observations_name_col]][match(colnames(mat), rownames(observations))]
 
   # Bit hacky, but ensure log
-  if (max(mat) > 20){
+  if (max(mat, na.rm=T) > 20){
     log2(mat+1)
   }else{
     mat 
@@ -254,6 +252,8 @@ rownames(observations) <- observations[[params$observations_name_col]]
 # Run PCA early so we can understand how important each variable is
 
 pca_datas <- lapply(names(assay_data), function(assay_type){
+  capture.output(assay_data[[assay_type]], file=paste0("/home-link/iivow01/git/differentialabundance/error/test_assaydatatypebla.txt")) #, quote=F, sep="\t"
+
   compilePCAData(assay_data[[assay_type]])
 })
 names(pca_datas) <- names(assay_data)
@@ -579,7 +579,8 @@ for (assay_type in rev(names(assay_data))){
     variable_genes <- selectVariableGenes(matrix = assay_data[[assay_type]], ntop = params$exploratory_n_features)
 
     dendroColorScale <- makeColorScale(length(unique(observations[[iv]])), palette = params$exploratory_palette_name)
-    
+        capture.output(assay_data[[assay_type]][variable_genes, ], file=paste0("/home-link/iivow01/git/differentialabundance/error2/dendrostuff_test_", assay_type, "_", iv))
+
     p <- clusteringDendrogram(
       2^assay_data[[assay_type]][variable_genes, ],
       observations[, iv, drop = FALSE],

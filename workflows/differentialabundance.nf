@@ -22,9 +22,10 @@ if (params.study_type == 'affy_array'){
     } else {
         error("CEL files archive not specified!")
     }
-} else{
-
-    // If this is not an affy array, assume we're reading from a matrix
+} else if (params.study_type == 'Px') {
+        proteus_in = Channel.of([ exp_meta, file(params.input), file(params.matrix) ])
+} else {
+    // If this is not an affy array or maxquant output, assume we're reading from a matrix
 
     if (params.matrix) {
         matrix_file = file(params.matrix, checkIfExists: true)
@@ -91,6 +92,7 @@ include { CUSTOM_TABULARTOGSEACLS                           } from '../modules/n
 include { RMARKDOWNNOTEBOOK                                 } from '../modules/nf-core/rmarkdownnotebook/main'
 include { AFFY_JUSTRMA as AFFY_JUSTRMA_RAW                  } from '../modules/nf-core/affy/justrma/main'
 include { AFFY_JUSTRMA as AFFY_JUSTRMA_NORM                 } from '../modules/nf-core/affy/justrma/main'
+include { PROTEUS                                           } from '../modules/nf-core/proteus/main' 
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -136,7 +138,12 @@ workflow DIFFERENTIALABUNDANCE {
         ch_in_norm = AFFY_JUSTRMA_NORM.out.expression
 
         ch_affy_platform_features = AFFY_JUSTRMA_RAW.out.annotation
+    } else if (params.study_type == 'Px') {
+        PROTEUS(proteus_in)
+        ch_in_raw = PROTEUS.out.tab
+        ch_in_norm = PROTEUS.out.normtab
     }
+
 
     //// Fetch or derive a feature annotation table
 
@@ -173,11 +180,23 @@ workflow DIFFERENTIALABUNDANCE {
             .mix(GTF_TO_TABLE.out.versions)
     }
     else{
-
-        // Otherwise we can just use the matrix input
+        if (params.study_type == 'Px'){
+            ch_features = PROTEUS.out.normtab.map{
+                matrix_as_anno_filename = "matrix_as_anno.${it[1].getExtension()}"
+                it[1].copyTo(matrix_as_anno_filename)
+                it[1] = file(matrix_as_anno_filename)
+                it
+            }.dump(tag:'waaaaa')
+            
+            //ch_features = PROTEUS.out.normtab2 //Channel.of([ exp_meta, file(matrix_as_anno_filename)])
+            
+        }
+        else {
+            // Otherwise we can just use the matrix input
         matrix_as_anno_filename = "matrix_as_anno.${matrix_file.getExtension()}"
         matrix_file.copyTo(matrix_as_anno_filename)
         ch_features = Channel.of([ exp_meta, file(matrix_as_anno_filename)])
+        }
     }
 
     // Channel for the contrasts file
@@ -190,13 +209,19 @@ workflow DIFFERENTIALABUNDANCE {
         ch_matrices_for_validation = ch_in_raw
             .join(ch_in_norm)
             .map{tuple(it[0], [it[1], it[2]])}
+    } else if (params.study_type == 'Px') {
+        ch_matrices_for_validation = ch_in_raw
+            .join(ch_in_norm)
+            .dump(tag:'matval_px1')
+            .map{tuple(it[0], [it[1], it[2]])}
+            .dump(tag:'matval_px')
     }
     else{
         ch_matrices_for_validation = ch_in_raw
     }
 
     VALIDATOR(
-        ch_input.join(ch_matrices_for_validation),
+        ch_input.join(ch_matrices_for_validation).dump(tag:'val_input'),
         ch_features,
         ch_contrasts_file
     )
@@ -204,7 +229,7 @@ workflow DIFFERENTIALABUNDANCE {
     // For Affy, we've validated multiple input matrices for raw and norm,
     // we'll separate them out again here
 
-    if (params.study_type == 'affy_array'){
+    if (params.study_type == 'affy_array' || params.study_type == 'Px'){
         ch_validated_assays = VALIDATOR.out.assays
             .transpose()
             .branch {
@@ -214,6 +239,9 @@ workflow DIFFERENTIALABUNDANCE {
         ch_raw = ch_validated_assays.raw
         ch_norm = ch_validated_assays.normalised
         ch_matrix_for_differential = ch_norm
+        VALIDATOR.out.assays.dump(tag:'valassay')
+        ch_norm.dump(tag:'ch_norm')
+
     } else{
         ch_raw = VALIDATOR.out.assays
         ch_matrix_for_differential = ch_raw
@@ -234,20 +262,28 @@ workflow DIFFERENTIALABUNDANCE {
             tuple(it, it.variable, it.reference, it.target)
         }
 
-    // Firstly Filter the input matrix
+    if (params.study_type == 'Px') {
+        ch_samples_and_matrix = VALIDATOR.out.sample_meta
+            .join(ch_matrix_for_differential)     // -> meta, samplesheet, unfiltered matrix
+            .first()
+    } else {
+        // Firstly Filter the input matrix
+        ch_matrix_for_differential.dump(tag:'differentialmat')
+        VALIDATOR.out.sample_meta.dump(tag:'val_out_samplemeta')
+        CUSTOM_MATRIXFILTER(
+            ch_matrix_for_differential,
+            VALIDATOR.out.sample_meta
+        )
 
-    CUSTOM_MATRIXFILTER(
-        ch_matrix_for_differential,
-        VALIDATOR.out.sample_meta
-    )
 
-    // Prepare inputs for differential processes
+        // Prepare inputs for differential processes
+        ch_samples_and_matrix = VALIDATOR.out.sample_meta
+            .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
+            .first()
+    }
 
-    ch_samples_and_matrix = VALIDATOR.out.sample_meta
-        .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
-        .first()
 
-    if (params.study_type == 'affy_array'){
+    if (params.study_type == 'affy_array' || params.study_type == 'Px'){
 
         LIMMA_DIFFERENTIAL (
             ch_contrasts,
@@ -373,7 +409,7 @@ workflow DIFFERENTIALABUNDANCE {
 
         ch_contrast_variables
             .combine(ch_all_matrices.map{ it.tail() })
-
+/*
     PLOT_EXPLORATORY(
         ch_contrast_variables
             .combine(ch_all_matrices.map{ it.tail() })
@@ -392,7 +428,7 @@ workflow DIFFERENTIALABUNDANCE {
         .mix(VALIDATOR.out.versions)
         .mix(PLOT_EXPLORATORY.out.versions)
         .mix(PLOT_DIFFERENTIAL.out.versions)
-
+*/
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
     )
@@ -441,8 +477,8 @@ workflow DIFFERENTIALABUNDANCE {
             .combine(ch_differential.map{it[1]}.collect().map{[it]})
 
         SHINYNGS_APP(
-            ch_all_matrices,     // meta, samples, features, [  matrices ]
-            ch_app_differential, // meta, contrasts, [differential results]
+            ch_all_matrices.dump(tag:'shiny1'),     // meta, samples, features, [  matrices ]
+            ch_app_differential.dump(tag:'shiny2'), // meta, contrasts, [differential results]
             params.exploratory_assay_names.split(',').findIndexOf { it == params.exploratory_final_assay } + 1
         )
         ch_versions = ch_versions.mix(SHINYNGS_APP.out.versions)
@@ -458,7 +494,7 @@ workflow DIFFERENTIALABUNDANCE {
     // Condition params reported on study type
 
     def params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|deseq2|gsea).*/
-    if (params.study_type == 'affy_array'){
+    if (params.study_type == 'affy_array' || params.study_type == 'Px'){
         params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|affy|limma|gsea).*/
     }
 

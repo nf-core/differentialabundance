@@ -24,7 +24,7 @@
                     "default": "rnaseq",
                     "description": "A string identifying the technology used to produce the data",
                     "help_text": "Currently 'rnaseq' or 'affy_array' may be specified.",
-                    "enum": ["rnaseq", "affy_array"],
+                    "enum": ["rnaseq", "affy_array", "Px"],
                     "fa_icon": "far fa-keyboard"
                 },
                 "input": {
@@ -165,18 +165,6 @@
                     "description": "This parameter allows you to supply your own feature annotations. These can often be automatically derived from the GTF used upstream for RNA-seq, or from the Bioconductor annotation package (for affy arrays). ",
                     "help_text": "This parameter allows you to supply your own feature annotations. These can often be automatically derived from the GTF used upstream for RNA-seq, or from the Bioconductor annotation package (for affy arrays). ",
                     "fa_icon": "fas fa-align-justify"
-                },
-                "features_gtf_feature_type": {
-                    "type": "string",
-                    "default": "transcript",
-                    "description": "Where a GTF file is supplied, which feature type to use",
-                    "fa_icon": "fas fa-keyboard"
-                },
-                "features_gtf_table_first_field": {
-                    "type": "string",
-                    "default": "gene_id",
-                    "description": "Where a GTF file is supplied, which field should go first in the converted output table",
-                    "fa_icon": "fas fa-fast-backward"
                 }
             },
             "required": ["features_id_col", "features_name_col", "features_type"],

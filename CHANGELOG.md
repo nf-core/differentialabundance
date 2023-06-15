@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [[#124](https://github.com/nf-core/differentialabundance/pull/124)] - Template update for nf-core/tools v2.8 ([@pinin4fjords](https://github.com/pinin4fjords), review by [@jasmezz](https://github.com/jasmezz))
 - [[#129](https://github.com/nf-core/differentialabundance/pull/129)] - Module updates to fit with recent registry changes ([@pinin4fjords](https://github.com/pinin4fjords), review by [@maxulysse](https://github.com/maxulysse), [@adamrtalbot](https://github.com/adamrtalbot))
-- [[#130](https://github.com/nf-core/differentialabundance/pull/130)] - Document reasons for lack of differential expression ([@pinin4fjords](https://github.com/pinin4fjords), review by [@jfy133](https://github.com/jfy133))
-- [[#131](https://github.com/nf-core/differentialabundance/pull/131)] - Improve gtf to table configurability ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 
 ### `Fixed`
 

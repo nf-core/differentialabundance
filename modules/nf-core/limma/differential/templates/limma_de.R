@@ -147,7 +147,8 @@ library(limma)
 ## READ IN COUNTS FILE AND SAMPLE METADATA    ##
 ################################################
 ################################################
-
+file.copy(opt\$count_file, "/home-link/iivow01/git/differentialabundance/error2/counts")
+file.copy(opt\$sample_file, "/home-link/iivow01/git/differentialabundance/error2/sample_file")
 intensities.table <-
     read_delim_flexible(
         file = opt\$count_file,
