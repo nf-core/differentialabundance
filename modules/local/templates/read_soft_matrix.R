@@ -78,7 +78,7 @@ write.table(fData(eset)[,feature_cols],
 
 # if data is not log scale, transform it as needed for limma downstream
 if(max(exprs(eset),na.rm=T) > 20) { # a bit dirty, needs proper solution later...
-  exprs(eset)[exprs(eset) <= 0] <- .001
+  exprs(eset)[exprs(eset) <= 0 | is.na(exprs(eset))] <- .001
   exprs(eset) <- log2(exprs(eset))
 }
 
