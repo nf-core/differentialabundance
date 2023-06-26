@@ -152,6 +152,7 @@ opt <- list(
     quant_file = '$quants',
     sample_file = '$samplesheet',
     contrast_variable = NULL,
+    protein_id_col = 'Majority protein IDs',
     sample_id_col = 'sample',
     measure_col_prefix = 'Intensity',
     normfuns = 'normalizeMedian',
@@ -203,81 +204,32 @@ for (file_input in c('quant_file', 'sample_file')){
 ## Finish loading libraries                   ##
 ################################################
 ################################################
-mytmp <- tempdir()
-
-
-# if (!requireNamespace("BiocManager", quietly = TRUE)) {
-#     install.packages("BiocManager",repos = "http://cran.us.r-project.org", lib=mytmp)
-# }
-# library("BiocManager", lib.loc=mytmp)
-# if (!require("rmarkdown")){
-#     BiocManager::install("rmarkdown", lib=mytmp)
-#     library("rmarkdown", lib.loc=mytmp)
-# }
-# if (!require("miniUI")){
-#     BiocManager::install("miniUI", lib=mytmp)
-#     library("miniUI", lib.loc=mytmp)
-# }
-# if (!require("pkgdown")){
-#     BiocManager::install("pkgdown", lib=mytmp)
-#     library("pkgdown", lib.loc=mytmp)
-# }
-# if (!require("devtools")){
-#     BiocManager::install("devtools", lib=mytmp)
-#     library("devtools", lib.loc=mytmp)
-# }
-# if (!require("limma")){
-#   BiocManager::install("limma", lib=mytmp)
-#   library("limma", lib.loc=mytmp)
-# }
-# if (!require("ggplot2")){
-#     BiocManager::install("ggplot2", lib=mytmp)
-#     library("ggplot2", lib.loc=mytmp)
-# }
-# if (!require("ggplot2")) {
-#     install.packages("ggplot2",repos = "http://cran.us.r-project.org", lib=mytmp)
-#     library("ggplot2", lib.loc=mytmp)
-# }
-# devtools::install_github("tidyverse/ggplot2", lib=mytmp)
-# library("ggplot2", lib.loc=mytmp)
-
-
-# if (!require("plotly")){
-#     BiocManager::install("plotly", lib=mytmp)
-#     library("plotly", lib.loc=mytmp)
-# }
-# if (!require("proteus")){
-#     devtools::install_github("bartongroup/Proteus", lib=mytmp, 
-#                             build_opts= c("--no-resave-data", "--no-manual"), build_vignettes=FALSE)
-#     library("proteus", lib.loc=mytmp)
-# }
-
 
 library(limma)
 library(plotly)
 library(proteus)
-assignInNamespace("readEvidenceFile", customreadEvidenceFile, ns = "proteus")
+
 ################################################
 ################################################
 ## READ IN COUNTS FILE AND SAMPLE METADATA    ##
 ################################################
 ################################################
-#opt\$quant_file, 
+
 quant.table <-
     read_delim_flexible(
         file = opt\$quant_file,
-        check.names = FALSE,
-        row.names = 1
+        check.names = FALSE
     )
-write.table(quant.table, file="/home-link/iivow01/git/differentialabundance/error/quanttablllllllllle.tsv", sep="\t")
+
 sample.sheet <-
     read_delim_flexible(
         file = opt\$sample_file,
         check.names=FALSE
     )
 
-# Deal with spaces that may be in sample column
-#opt\$sample_id_col <- make.names(opt\$sample_id_col)
+if (! opt\$protein_id_col %in% colnames(quant.table)){
+    stop(paste0("Specified protein ID column '", opt\$protein_id_col, "' is not in the quant table"))
+}
 
 if (! opt\$sample_id_col %in% colnames(sample.sheet)){
     stop(paste0("Specified sample ID column '", opt\$sample_id_col, "' is not in the sample sheet"))
@@ -286,8 +238,6 @@ if (! opt\$sample_id_col %in% colnames(sample.sheet)){
 # Add metadata columns that are necessary for proteus
 
 sample.sheet\$sample <- sample.sheet[[opt\$sample_id_col]]
-
-
 
 #opt\$contrast_variable <- make.names(opt\$contrast_variable)
 sample.sheet\$condition <- sample.sheet[[opt\$contrast_variable]]
@@ -327,7 +277,7 @@ if (length(missing_columns) > 0) {
         'column in quant table. The following columns are missing:',
         paste(missing_columns, collapse = ', ')
     ))
-} else{
+} else {
     # Save any non-quant data, with gene metadata etc we might need later
     # TODO: Maybe just save the whole quant file? (or not; not sure the rest is ever needed)
     nonquant.table <-
@@ -359,33 +309,20 @@ if (length(invalid_normfuns)>0) {
 ################################################
 ################################################
 
-# TODO
-output_prefix <- "output_prefix"
+output_prefix <- opt\$contrast_variable
 
 # TODO: Add link to https://rdrr.io/github/bartongroup/Proteus/man/readProteinGroups.html to docu and mention the necessary columns!
 write.table(read.table(opt\$quant_file, sep="\t", header=T, check.names=F), file="/home/iivow01/git/differentialabundance/error/wtf.tsv", quote=F, sep="\t")
 
-
-proteinColumns <- proteus::proteinColumns
-capture.output((proteinColumns), file="/home/iivow01/git/differentialabundance/error/protcol")
-#write.table(quant.table, file="/home-link/iivow01/git/differentialabundance/error/progro.tsv", quote=F)
-
-if ("Majority_protein_IDs" %in% colnames(quant.table)) {
-    #proteinColumns <- gsub(" ", ".", (proteinColumns))
-    #proteinColumns <- make.names(proteinColumns)
-    #names(proteinColumns) <- names(proteus::proteinColumns)
-    proteinColumns <- setNames(gsub(" ", "_", proteinColumns), names(proteus::proteinColumns))
-
-    capture.output((proteinColumns), file="/home/iivow01/git/differentialabundance/error/protcol2")
-}
+# Replace proteus default ID column with user param and re-set the names of the resulting object (gsub sets the names to NULL)
+proteinColumns <- setNames(gsub("Majority protein IDs", opt\$protein_id_col, proteus::proteinColumns), names(proteus::proteinColumns))
 
 proteinGroups <- readProteinGroups(
     file=opt\$quant_file,
     meta=sample.sheet,
     measure.cols=measure.cols,
-    data.cols=proteinColumns #c('Majority protein IDs', 'Potential contaminant', 'Reverse')
+    data.cols=proteinColumns
 )
-
 
 capture.output(proteinGroups, file="/home-link/iivow01/git/differentialabundance/error/proteingroups")
 capture.output(str(proteinGroups), file="/home-link/iivow01/git/differentialabundance/error/proteingroupsstr")
@@ -400,18 +337,30 @@ write("2", file="/home-link/iivow01/git/differentialabundance/error/status", app
 for (normfun in normfuns) {
     proteinGroups.normalized <- normalizeData(proteinGroups, norm.fun = eval(parse(text=normfun))) # Proteus also accepts other norm.funs, e.g. from limma
     proteinGroups.normalized\$tab <- na.omit(log2(proteinGroups.normalized\$tab))
-    png(paste0('proteus.', normfun, '_normalised_distributions.png'), width = 5*300, height = 5*300, res = 300, pointsize = 8) 
-    print(plotSampleDistributions(proteinGroups.normalized, title=paste("Sample distributions after applying", normfun), fill="condition", method=opt\$plotSampleDistributions_method) + scale_fill_brewer(palette=opt\$palette_name))
+    
+    png(paste0(output_prefix, '.proteus.', normfun, '_normalised_distributions.png'), width = 5*300, height = 5*300, res = 300, pointsize = 8) 
+    print(
+        plotSampleDistributions(proteinGroups.normalized, title=paste0("Sample distributions after applying\n", normfun), fill="condition", method=opt\$plotSampleDistributions_method)
+         + scale_fill_brewer(palette=opt\$palette_name, name=opt\$contrast_variable)
+         + theme(plot.title = element_text(size = 12)) 
+        )
     dev.off()
-    write("2.3", file="/home-link/iivow01/git/differentialabundance/error/status", append=T)
-
-    png(paste0('proteus.', normfun, '_normalised_mean_variance_relationship.png'), width = 5*300, height = 5*300, res = 300, pointsize = 8) 
-    print(plotMV(proteinGroups.normalized, with.loess=opt\$plotMV_loess) + scale_fill_distiller(palette=opt\$palette_name)) #, title=paste("Sample mean variance relationship after applying", normfun)
+    
+    png(paste0(output_prefix, '.proteus.', normfun, '_normalised_mean_variance_relationship.png'), width = 5*300, height = 5*300, res = 300, pointsize = 8) 
+    print(
+        plotMV(proteinGroups.normalized, with.loess=opt\$plotMV_loess) 
+         + ggtitle(paste0("Sample mean variance relationship after applying\n", normfun))
+         + scale_fill_distiller(palette=opt\$palette_name)
+         + theme(plot.title = element_text(size = 12)) 
+        )
     dev.off()
-    write("2.6", file="/home-link/iivow01/git/differentialabundance/error/status", append=T)
 
-    png(paste0('proteus.', normfun, '_normalised_dendrogram.png'), width = 5*300, height = 5*300, res = 300, pointsize = 8)
-    print(plotClustering(proteinGroups.normalized), title=paste("Sample clustering after applying", normfun))
+    png(paste0(output_prefix, '.proteus.', normfun, '_normalised_dendrogram.png'), width = 5*300, height = 5*300, res = 300, pointsize = 8)
+    print(
+        plotClustering(proteinGroups.normalized)
+         + ggtitle(paste0("Sample clustering after applying\n", normfun))
+         + theme(plot.title = element_text(size = 12))
+        )
     dev.off()
     
     
@@ -419,62 +368,24 @@ for (normfun in normfuns) {
     summary <- summary(proteinGroups.normalized)
     
     # R object for other processes to use
-    saveRDS(proteinGroups.normalized, file = paste0('proteus.', normfun, 'normalised_proteingroups.rds'))
-write("3", file="/home-link/iivow01/git/differentialabundance/error/status", append=T)
-
+    saveRDS(proteinGroups.normalized, file = paste0(output_prefix, '.proteus.', normfun, 'normalised_proteingroups.rds'))
 
     # Write normalized count matrix
+    out_df <- data.frame(
+        proteinGroups.normalized\$tab,
+        check.names = FALSE
+    )
+    out_df[[opt\$protein_id_col]] = rownames(proteinGroups.normalized\$tab)
+    out_df <- out_df[c(opt\$protein_id_col, colnames(out_df)[colnames(out_df) != opt\$protein_id_col])]
+      
     write.table(
-        data.frame(
-            gene_id = rownames(proteinGroups.normalized\$tab),
-            proteinGroups.normalized\$tab,
-            check.names = FALSE
-        ),
+        out_df,
         file = paste(output_prefix, 'proteus', normfun, 'normalised_proteingroups_tab', 'tsv', sep = '.'),
         col.names = TRUE,
         row.names = FALSE,
         sep = '\t',
         quote = FALSE
     )
-    write.table(
-        data.frame(
-            gene_id = rownames(proteinGroups.normalized\$tab),
-            proteinGroups.normalized\$tab,
-            check.names = FALSE
-        ),
-        file = "/home-link/iivow01/git/differentialabundance/error/tabnorm.normaliseMedian.tsv",
-        col.names = TRUE,
-        row.names = FALSE,
-        sep = '\t',
-        quote = FALSE
-    )
-    write.table(
-        data.frame(
-            gene_id = rownames(proteinGroups.normalized\$tab),
-            proteinGroups.normalized\$tab,
-            check.names = FALSE
-        ),
-        file = paste(output_prefix, 'proteus', normfun, 'normalised_proteingroups_tab2', 'tsv', sep = '.'),
-        col.names = TRUE,
-        row.names = FALSE,
-        sep = '\t',
-        quote = FALSE
-    )
-    write.table(
-        data.frame(
-            gene_id = rownames(proteinGroups.normalized\$tab),
-            proteinGroups.normalized\$tab,
-            check.names = FALSE
-        ),
-        file = paste("/home-link/iivow01/git/differentialabundance/error/waaaaas.", normfun, ".tsv", sep = ''),
-        col.names = TRUE,
-        row.names = FALSE,
-        sep = '\t',
-        quote = FALSE
-    )
-    
- write("5", file="/home-link/iivow01/git/differentialabundance/error/status", append=T)
-   
 }
 
 
@@ -484,20 +395,28 @@ write("3", file="/home-link/iivow01/git/differentialabundance/error/status", app
 proteinGroups\$tab <- na.omit(log2(proteinGroups\$tab))
 
 # Generate raw distribution plot
-png('proteus.raw_distributions.png', width = 5*300, height = 5*300, res = 300, pointsize = 8)
-print(plotSampleDistributions(proteinGroups, title="Raw sample distributions", fill="condition", method=opt\$plotSampleDistributions_method) + scale_fill_brewer(palette=opt\$palette_name))
+png(paste0(output_prefix, '.proteus.raw_distributions.png'), width = 5*300, height = 5*300, res = 300, pointsize = 8) 
+print(
+    plotSampleDistributions(proteinGroups, title="Raw sample distributions", fill="condition", method=opt\$plotSampleDistributions_method)
+        + scale_fill_brewer(palette=opt\$palette_name, name=opt\$contrast_variable)
+        + theme(plot.title = element_text(size = 12)) 
+    )
 dev.off()
 
 # R object for other processes to use
-saveRDS(proteinGroups, file = 'proteus.raw_proteingroups.rds')
+saveRDS(proteinGroups, file = paste0(output_prefix, '.proteus.raw_proteingroups.rds'))
 
 # Write raw count matrix
-write.table(
-    data.frame(
-        gene_id = rownames(proteinGroups\$tab),
+out_df <- data.frame(
         proteinGroups\$tab,
         check.names = FALSE
-    ),
+    )
+out_df[[opt\$protein_id_col]] = rownames(proteinGroups\$tab)   
+out_df <- out_df[c(opt\$protein_id_col, colnames(out_df)[colnames(out_df) != opt\$protein_id_col])]
+
+
+write.table(
+    out_df,
     file = paste(output_prefix, 'proteus', 'raw_proteingroups_tab', 'tsv', sep = '.'),
     col.names = TRUE,
     row.names = FALSE,

@@ -30,6 +30,7 @@ process SHINYNGS_VALIDATEFOMCOMPONENTS {
     def feature = feature_meta ? "--feature_metadata '$feature_meta'" : ''
 
     """
+    echo $args > "/home-link/iivow01/git/differentialabundance/error2/val"
     validate_fom_components.R \\
         --sample_metadata "$sample" \\
         $feature \\

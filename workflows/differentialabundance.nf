@@ -148,7 +148,6 @@ workflow DIFFERENTIALABUNDANCE {
     //// Fetch or derive a feature annotation table
 
     // If user has provided a feature annotation table, use that
-
     if (params.features){
         ch_features = Channel.of([ exp_meta, file(params.features, checkIfExists: true)])
     } else if (params.study_type == 'affy_array'){
@@ -219,7 +218,8 @@ workflow DIFFERENTIALABUNDANCE {
     else{
         ch_matrices_for_validation = ch_in_raw
     }
-
+    print("häää")
+    print(params.observations_id_col)
     VALIDATOR(
         ch_input.join(ch_matrices_for_validation).dump(tag:'val_input'),
         ch_features,
@@ -505,7 +505,7 @@ workflow DIFFERENTIALABUNDANCE {
         }
 
     // Render the final report
-
+    ch_report_params.dump(tag:'ch_report_params')
     RMARKDOWNNOTEBOOK(
         ch_report_file,
         ch_report_params,
