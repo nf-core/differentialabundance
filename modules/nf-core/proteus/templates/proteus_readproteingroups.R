@@ -3,53 +3,7 @@
 
 
 
-customreadEvidenceFile <- function(file, measure.cols=measureColumns, data.cols=evidenceColumns, zeroes.are.missing=TRUE) {
-
-  columns <- c(data.cols, measure.cols)
-    #write(columns, file="/home/iivow01/git/differentialabundance/error/columns")
-    write(anyDuplicated(names(columns)), file="/home/iivow01/git/differentialabundance/error/wiebitte", append=F)
-    write(((columns)), file="/home/iivow01/git/differentialabundance/error/wiebitte", append=T)
-    if ("\n" %in% names(columns)) {
-        write("wat", file="/home/iivow01/git/differentialabundance/error/wat")
-    }
-  if(anyDuplicated(names(columns))){
-    dupcols <- names(columns)[duplicated(names(columns))]
-    err <- paste("Column names must be unique. Got the following duplicate columns:", dupcols)
-    write(err, file="/home/iivow01/git/differentialabundance/error/err")
-    write(    names(columns), file="/home/iivow01/git/differentialabundance/error/namescolumns")
-    #stop(err)
-  } 
-
-  # check if all required columns are in the evidence file
-  evi.cols <- read.delim(file, header=TRUE, sep="\t", check.names=FALSE, as.is=TRUE, strip.white=TRUE, nrows = 1)
-  missing <- NULL
-  for(col in columns) {
-    if(!(col %in% colnames(evi.cols))) missing <- c(missing, paste0("'", col, "'"))
-  }
-  if(!is.null(missing))
-    stop(paste0("Column(s) ", paste0(missing, collapse=", "), " not found in file ", file))
-
-  # read and process evidence file
-  evi <- read.delim(file, header=TRUE, sep="\t", check.names=FALSE, as.is=TRUE, strip.white=TRUE)
-  evi <- evi[, as.character(columns)]
-  names(evi) <- names(columns)
-  # replace NaNs and infinites with NAs in measure columns
-  # the same with zeroes if flag is on
-  for(col in names(measure.cols)) {
-    x <- evi[, col]
-    x[is.nan(x) | is.infinite(x)] <- NA
-    if(zeroes.are.missing) x[x == 0] <- NA
-    evi[, col] <- x
-  }
-
-  # remove rows that have only NAs in measure columns
-  not.empty <- which(rowSums(!is.na(evi[,names(measure.cols), drop=FALSE])) > 0)
-  evi <- evi[not.empty,]
-}
-
-
-
-
+# TODO: Add link to https://rdrr.io/github/bartongroup/Proteus/man/readProteinGroups.html to docu and mention the necessary columns!
 
 
 
@@ -211,7 +165,7 @@ library(proteus)
 
 ################################################
 ################################################
-## READ IN COUNTS FILE AND SAMPLE METADATA    ##
+## READ IN QUANTS FILE AND SAMPLE METADATA    ##
 ################################################
 ################################################
 
@@ -238,37 +192,15 @@ if (! opt\$sample_id_col %in% colnames(sample.sheet)){
 # Add metadata columns that are necessary for proteus
 
 sample.sheet\$sample <- sample.sheet[[opt\$sample_id_col]]
-
-#opt\$contrast_variable <- make.names(opt\$contrast_variable)
 sample.sheet\$condition <- sample.sheet[[opt\$contrast_variable]]
 
 # Add prefix for proteinGroups measurement columns to the sample IDs from the sampesheet
 measure.cols <- setNames(paste0(opt\$measure_col_prefix, sample.sheet[[opt\$sample_id_col]]), sample.sheet[[opt\$sample_id_col]])
-#measure.cols <- paste0(opt\$measure_col_prefix, sample.sheet[[opt\$sample_id_col]])
-#names(measure.cols) <- sample.sheet[[opt\$sample_id_col]]
-write(measure.cols, file="/home/iivow01/git/differentialabundance/error/measurecols")
-write(names(measure.cols), file="/home/iivow01/git/differentialabundance/error/measurecolsnames")
-# TODO check if this can happen for proteingroups
-# Sample sheet can have duplicate rows for multiple sequencing runs, so uniqify
-# before assigning row names
 
-#sample.sheet <- sample.sheet[! duplicated(sample.sheet[[opt\$sample_id_col]]), ]
-#rownames(sample.sheet) <- sample.sheet[[opt\$sample_id_col]]
-
-# Check that all samples specified in the input sheet are present in the quants
-# table
+# Check that all samples specified in the input sheet are present in the quants table
 
 missing_columns <- paste0(opt\$measure_col_prefix, sample.sheet[[opt\$sample_id_col]])
 missing_columns <- missing_columns[!missing_columns %in% colnames(quant.table)]
-#missing_samples <-
-#    (sample.sheet[[opt\$sample_id_col]])[!missing_columns %in% colnames(quant.table)]
-
-# TODO: Consider if this auto-filter should be kept or removed (probably removed, otherwise I also have to deal with makenames)
-#sample.sheet <- sample.sheet[!(rownames(sample.sheet) %in% missing_samples),]
-
-write(missing_columns, file="/home-link/iivow01/git/differentialabundance/error2/samplecols")
-#write(missing_samples, file="/home-link/iivow01/git/differentialabundance/error2/missing_samples")
-
 if (length(missing_columns) > 0) {
     stop(paste(
         length(missing_columns),
@@ -277,11 +209,6 @@ if (length(missing_columns) > 0) {
         'column in quant table. The following columns are missing:',
         paste(missing_columns, collapse = ', ')
     ))
-} else {
-    # Save any non-quant data, with gene metadata etc we might need later
-    # TODO: Maybe just save the whole quant file? (or not; not sure the rest is ever needed)
-    nonquant.table <-
-        quant.table[, !colnames(quant.table) %in% paste0(opt\$measure_col_prefix, sample.sheet[[opt\$sample_id_col]]), drop = FALSE]
 }
 
 ################################################
@@ -311,12 +238,9 @@ if (length(invalid_normfuns)>0) {
 
 output_prefix <- opt\$contrast_variable
 
-# TODO: Add link to https://rdrr.io/github/bartongroup/Proteus/man/readProteinGroups.html to docu and mention the necessary columns!
-write.table(read.table(opt\$quant_file, sep="\t", header=T, check.names=F), file="/home/iivow01/git/differentialabundance/error/wtf.tsv", quote=F, sep="\t")
-
 # Replace proteus default ID column with user param and re-set the names of the resulting object (gsub sets the names to NULL)
-proteinColumns <- setNames(gsub("Majority protein IDs", opt\$protein_id_col, proteus::proteinColumns), names(proteus::proteinColumns))
 
+proteinColumns <- setNames(gsub("Majority protein IDs", opt\$protein_id_col, proteus::proteinColumns), names(proteus::proteinColumns))
 proteinGroups <- readProteinGroups(
     file=opt\$quant_file,
     meta=sample.sheet,
@@ -324,18 +248,13 @@ proteinGroups <- readProteinGroups(
     data.cols=proteinColumns
 )
 
-capture.output(proteinGroups, file="/home-link/iivow01/git/differentialabundance/error/proteingroups")
-capture.output(str(proteinGroups), file="/home-link/iivow01/git/differentialabundance/error/proteingroupsstr")
+# Generate plots for all requested normalizations; also, save normalized protein groups for limma
 
-write("1", file="/home-link/iivow01/git/differentialabundance/error/status")
-
-write.table(proteinGroups\$tab, file="/home-link/iivow01/git/differentialabundance/error/tab", quote=F)
-write("2", file="/home-link/iivow01/git/differentialabundance/error/status", append=T)
-
-# Generate plots for all requested normalizations; also, save
-# normalized protein groups for limma
 for (normfun in normfuns) {
     proteinGroups.normalized <- normalizeData(proteinGroups, norm.fun = eval(parse(text=normfun))) # Proteus also accepts other norm.funs, e.g. from limma
+
+    # Apply log2 and remove NAs as these will otherwise mess with some of the following modules
+
     proteinGroups.normalized\$tab <- na.omit(log2(proteinGroups.normalized\$tab))
     
     png(paste0(output_prefix, '.proteus.', normfun, '_normalised_distributions.png'), width = 5*300, height = 5*300, res = 300, pointsize = 8) 
@@ -363,21 +282,18 @@ for (normfun in normfuns) {
         )
     dev.off()
     
-    
-    
-    summary <- summary(proteinGroups.normalized)
-    
     # R object for other processes to use
+    
     saveRDS(proteinGroups.normalized, file = paste0(output_prefix, '.proteus.', normfun, 'normalised_proteingroups.rds'))
 
-    # Write normalized count matrix
+    # Write normalized quant matrix
+    
     out_df <- data.frame(
         proteinGroups.normalized\$tab,
         check.names = FALSE
     )
-    out_df[[opt\$protein_id_col]] = rownames(proteinGroups.normalized\$tab)
-    out_df <- out_df[c(opt\$protein_id_col, colnames(out_df)[colnames(out_df) != opt\$protein_id_col])]
-      
+    out_df[[opt\$protein_id_col]] <- rownames(proteinGroups.normalized\$tab) # proteus saves the IDs as rownames; make column from those
+    out_df <- out_df[c(opt\$protein_id_col, colnames(out_df)[colnames(out_df) != opt\$protein_id_col])] # move ID column to first position
     write.table(
         out_df,
         file = paste(output_prefix, 'proteus', normfun, 'normalised_proteingroups_tab', 'tsv', sep = '.'),
@@ -388,13 +304,12 @@ for (normfun in normfuns) {
     )
 }
 
+# Process and save raw table
 
-# Remove NAs as these will otherwise mess with some of the other modules
-# TODO should I also leave the log2 here (or log10)? If so, I think I have to apply it only after doing the norms as otherwise,
-# every norm table will be logged twice (or I could log the raw table and NOT the norms, but that does not work)
 proteinGroups\$tab <- na.omit(log2(proteinGroups\$tab))
 
 # Generate raw distribution plot
+
 png(paste0(output_prefix, '.proteus.raw_distributions.png'), width = 5*300, height = 5*300, res = 300, pointsize = 8) 
 print(
     plotSampleDistributions(proteinGroups, title="Raw sample distributions", fill="condition", method=opt\$plotSampleDistributions_method)
@@ -404,15 +319,17 @@ print(
 dev.off()
 
 # R object for other processes to use
+
 saveRDS(proteinGroups, file = paste0(output_prefix, '.proteus.raw_proteingroups.rds'))
 
-# Write raw count matrix
+# Write raw quant matrix
+
 out_df <- data.frame(
         proteinGroups\$tab,
         check.names = FALSE
     )
-out_df[[opt\$protein_id_col]] = rownames(proteinGroups\$tab)   
-out_df <- out_df[c(opt\$protein_id_col, colnames(out_df)[colnames(out_df) != opt\$protein_id_col])]
+out_df[[opt\$protein_id_col]] <- rownames(proteinGroups\$tab) # proteus saves the IDs as rownames; make column from those
+out_df <- out_df[c(opt\$protein_id_col, colnames(out_df)[colnames(out_df) != opt\$protein_id_col])] # move ID column to first position
 
 
 write.table(
@@ -439,22 +356,20 @@ sink()
 ## VERSIONS FILE                              ##
 ################################################
 ################################################
-#TODO
+
 r.version <- strsplit(version[['version.string']], ' ')[[1]][3]
 limma.version <- as.character(packageVersion('limma'))
 plotly.version <- as.character(packageVersion('plotly'))
 proteus.version <- as.character(packageVersion('proteus'))
-#TODO: change mparker2
-# writeLines(
-#     c(
-#         '"${task.process}":',
-#         paste('    r-base:', r.version),
-#         paste('    bioconductor-limma:', limma.version),
-#         paste('    r-plotly:', plotly.version),
-#         paste('    mparker2-proteus:', proteus.version),
-#     ),
-# 'versions.yml')
-
+writeLines(
+    c(
+        '"${task.process}":',
+        paste('    r-base:', r.version),
+        paste('    bioconductor-limma:', limma.version),
+        paste('    r-plotly:', plotly.version),
+        paste('    r-proteus-bartongroup:', proteus.version)
+    ),
+'versions.yml')
 ################################################
 ################################################
 ################################################
