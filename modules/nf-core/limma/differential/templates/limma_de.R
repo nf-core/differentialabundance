@@ -366,10 +366,12 @@ write.table(
 
 # also write annotated results (with gene symbols)
 annotation = read_delim_flexible(file = opt\$annot_file)
-comp.results$probe_id = rownames(comp.results)
 write.table(
     merge(
-        comp.results,
+            data.frame(
+                probe_id = rownames(comp.results),
+                comp.results
+         )
         annotation,
         by.x = "probe_id",
         by.y = colnames(annotation)[1],

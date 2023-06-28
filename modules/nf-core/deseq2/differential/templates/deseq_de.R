@@ -397,10 +397,13 @@ write.table(
 
 # Also write annotated results (with gene symbols)
 annotation = read_delim_flexible(file = opt\$annot_file)
-comp.results$gene_id = rownames(comp.results)
 write.table(
     merge(
-        comp.results,
+           data.frame(
+                gene_id = rownames(comp.results),
+                round_dataframe_columns(data.frame(comp.results, check.names = FALSE)),
+                check.names = FALSE
+        ),
         annotation,
         by.x = "gene_id",
         by.y = colnames(annotation)[1],
