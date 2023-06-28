@@ -270,7 +270,7 @@ workflow DIFFERENTIALABUNDANCE {
         .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
         .first()
 
-    if (params.study_type == 'affy_array' || 'non_affy_array'){
+    if (params.study_type == 'affy_array' || params.study_type == 'non_affy_array'){
 
         LIMMA_DIFFERENTIAL (
             ch_contrasts,
