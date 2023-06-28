@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#116](https://github.com/nf-core/differentialabundance/issues/116)] - Skip outlier detection with low replication ([@pinin4fjords](https://github.com/pinin4fjords), review by [@nvnieuwk](https://github.com/nvnieuwk))
 - [[#122](https://github.com/nf-core/differentialabundance/pull/126)] - Add spaces to satisfy nf-core download for singularity ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#127](https://github.com/nf-core/differentialabundance/issues/127)] - [Bug] Can't pass samplesheet with -c file.config , or -params-file params.yml or directly with --input samplesheet.csv ([@ctuni](https://github.com/ctuni), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#144](https://github.com/nf-core/differentialabundance/pull/144)] - Fix bugs with --control_features and --sizefactors_from_controls (see issue #138) ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 
 ## v1.2.0 - 2023-04-19
 
