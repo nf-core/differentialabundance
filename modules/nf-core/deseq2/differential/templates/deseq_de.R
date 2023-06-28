@@ -96,7 +96,7 @@ opt <- list(
     count_file = '$counts',
     sample_file = '$samplesheet',
     annot_file = '$annotation',
-    features_name_col = '$features_name_col',
+    features_name_col = 'gene_name',
     contrast_variable = '$contrast_variable',
     reference_level = '$reference',
     target_level = '$target',
@@ -409,7 +409,7 @@ write.table(
                 annotation[,c(
                        colnames(annotation)[1],
                        opt\$features_name_col
-                       )]
+                )]
         ),
         by.x = "gene_id",
         by.y = colnames(annotation)[1],
