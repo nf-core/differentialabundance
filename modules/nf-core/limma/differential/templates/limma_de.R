@@ -371,7 +371,7 @@ write.table(
             data.frame(
                 probe_id = rownames(comp.results),
                 comp.results
-         )
+         ),
         annotation,
         by.x = "probe_id",
         by.y = colnames(annotation)[1],
