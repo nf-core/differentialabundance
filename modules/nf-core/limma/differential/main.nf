@@ -9,14 +9,15 @@ process LIMMA_DIFFERENTIAL {
 
     input:
     tuple val(meta), val(contrast_variable), val(reference), val(target)
-    tuple val(meta2), path(samplesheet), path(intensities)
+    tuple val(meta2), path(samplesheet), path(intensities), path(annotation)
 
     output:
-    tuple val(meta), path("*.limma.results.tsv")          , emit: results
-    tuple val(meta), path("*.limma.mean_difference.png")  , emit: md_plot
-    tuple val(meta), path("*.MArrayLM.limma.rds")         , emit: rdata
-    tuple val(meta), path("*.R_sessionInfo.log")          , emit: session_info
-    path "versions.yml"                                   , emit: versions
+    tuple val(meta), path("*.limma.results.tsv")           , emit: results
+    tuple val(meta), path("*.limma.results.annotated.tsv") , emit: annotated_results
+    tuple val(meta), path("*.limma.mean_difference.png")   , emit: md_plot
+    tuple val(meta), path("*.MArrayLM.limma.rds")          , emit: rdata
+    tuple val(meta), path("*.R_sessionInfo.log")           , emit: session_info
+    path "versions.yml"                                    , emit: versions
 
     when:
     task.ext.when == null || task.ext.when

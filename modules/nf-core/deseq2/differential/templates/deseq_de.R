@@ -95,6 +95,7 @@ round_dataframe_columns <- function(df, columns = NULL, digits = 8){
 opt <- list(
     count_file = '$counts',
     sample_file = '$samplesheet',
+    annot_file = '$annotation',
     contrast_variable = '$contrast_variable',
     reference_level = '$reference',
     target_level = '$target',
@@ -392,6 +393,26 @@ write.table(
     sep = '\t',
     quote = FALSE
 )
+
+
+# Also write annotated results (with gene symbols)
+annotation = read_delim_flexible(file = opt\$annot_file)
+comp.results$gene_id = rownames(comp.results)
+write.table(
+    merge(
+        comp.results,
+        annotation,
+        by.x = "gene_id",
+        by.y = colnames(annotation)[1],
+        all.x = TRUE
+    ),
+    file = paste(output_prefix, 'deseq2.results.annotated.tsv', sep = '.'),
+    col.names = TRUE,
+    row.names = FALSE,
+    sep = '\t',
+    quote = FALSE
+)
+
 
 # Dispersion plot
 

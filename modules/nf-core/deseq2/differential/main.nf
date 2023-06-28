@@ -9,11 +9,12 @@ process DESEQ2_DIFFERENTIAL {
 
     input:
     tuple val(meta), val(contrast_variable), val(reference), val(target)
-    tuple val(meta2), path(samplesheet), path(counts)
+    tuple val(meta2), path(samplesheet), path(counts), path(annotation)
     tuple val(control_genes_meta), path(control_genes_file)
 
     output:
     tuple val(meta), path("*.deseq2.results.tsv")              , emit: results
+    tuple val(meta), path("*.deseq2.results.annotated.tsv")    , emit: results_annotated
     tuple val(meta), path("*.deseq2.dispersion.png")           , emit: dispersion_plot
     tuple val(meta), path("*.dds.rld.rds")                     , emit: rdata
     tuple val(meta), path("*.deseq2.sizefactors.tsv")          , emit: size_factors

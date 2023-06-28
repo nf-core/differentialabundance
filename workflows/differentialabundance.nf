@@ -281,6 +281,7 @@ workflow DIFFERENTIALABUNDANCE {
 
     ch_samples_and_matrix = VALIDATOR.out.sample_meta
         .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
+        .join(ch_features)                          // -> meta, samplesheet, filtered matrix, annotation
         .first()
 
     if (params.study_type == 'affy_array' || params.study_type == 'geo_soft_file'){

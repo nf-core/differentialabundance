@@ -67,6 +67,7 @@ read_delim_flexible <- function(file, header = TRUE, row.names = NULL, check.nam
 opt <- list(
     count_file = '$intensities',
     sample_file = '$samplesheet',
+    annot_file = '$annotation',
     contrast_variable = '$contrast_variable',
     reference_level = '$reference',
     target_level = '$target',
@@ -362,6 +363,25 @@ write.table(
     sep = '\t',
     quote = FALSE
 )
+
+# also write annotated results (with gene symbols)
+annotation = read_delim_flexible(file = opt\$annot_file)
+comp.results$probe_id = rownames(comp.results)
+write.table(
+    merge(
+        comp.results,
+        annotation,
+        by.x = "probe_id",
+        by.y = colnames(annotation)[1],
+        all.x = TRUE
+    ),
+    file = paste(output_prefix, 'limma.results.annotated.tsv', sep = '.'),
+    col.names = TRUE,
+    row.names = FALSE,
+    sep = '\t',
+    quote = FALSE
+)
+
 
 # Dispersion plot
 
