@@ -147,7 +147,6 @@ library(limma)
 ## READ IN COUNTS FILE AND SAMPLE METADATA    ##
 ################################################
 ################################################
-write("0", file="/home-link/iivow01/git/differentialabundance/error2/aisdliasdlaisd")
 
 intensities.table <-
     read_delim_flexible(
@@ -156,10 +155,8 @@ intensities.table <-
         row.names = opt\$probe_id_col,
         check.names = FALSE
     )
-write("1", file="/home-link/iivow01/git/differentialabundance/error2/aisdliasdlaisd")
 
 sample.sheet <- read_delim_flexible(file = opt\$sample_file)
-write("2", file="/home-link/iivow01/git/differentialabundance/error2/aisdliasdlaisd")
 # Deal with spaces that may be in sample column
 opt\$sample_id_col <- make.names(opt\$sample_id_col)
 

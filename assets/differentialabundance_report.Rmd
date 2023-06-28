@@ -207,7 +207,6 @@ if (! params$observations_name_col %in% colnames(observations)){
 }
 
 if (! is.null(params$features)){
-  write(params$features, file="/home/iivow01/git/differentialabundance/error2/paramfeatures")
   features <- read_metadata(file.path(params$input_dir, params$features))
   features <- features[,colnames(features) %in% simpleSplit(params$features_metadata_cols), drop = FALSE]
 }
@@ -253,8 +252,6 @@ rownames(observations) <- observations[[params$observations_name_col]]
 # Run PCA early so we can understand how important each variable is
 
 pca_datas <- lapply(names(assay_data), function(assay_type){
-  capture.output(assay_data[[assay_type]], file=paste0("/home-link/iivow01/git/differentialabundance/error/test_assaydatatypebla.txt")) #, quote=F, sep="\t"
-
   compilePCAData(assay_data[[assay_type]])
 })
 names(pca_datas) <- names(assay_data)
@@ -323,11 +320,6 @@ differential_results <- lapply(differential_files, function(diff_file){
   }
   
   # Annotate differential tables if possible
-  write(colnames(features), file="/home-link/iivow01/git/differentialabundance/error2/featurescols")
-  write(colnames(params$features_id_col), file="/home-link/iivow01/git/differentialabundance/error2/featuresbla")
-  write(colnames(params$differential_feature_id_column), file="/home-link/iivow01/git/differentialabundance/error2/featuresbla", append=T)
-  write.table((features), file="/home-link/iivow01/git/differentialabundance/error2/featurescols.tsv", sep="\t", quote=F)
-  
   if (! is.null(params$features)){
     diff <- merge(features, diff, by.x = params$features_id_col, by.y = params$differential_feature_id_column)
   }
@@ -584,7 +576,6 @@ for (assay_type in rev(names(assay_data))){
     variable_genes <- selectVariableGenes(matrix = assay_data[[assay_type]], ntop = params$exploratory_n_features)
 
     dendroColorScale <- makeColorScale(length(unique(observations[[iv]])), palette = params$exploratory_palette_name)
-        capture.output(assay_data[[assay_type]][variable_genes, ], file=paste0("/home-link/iivow01/git/differentialabundance/error2/dendrostuff_test_", assay_type, "_", iv))
 
     p <- clusteringDendrogram(
       2^assay_data[[assay_type]][variable_genes, ],

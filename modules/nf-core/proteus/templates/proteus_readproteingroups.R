@@ -103,12 +103,12 @@ round_dataframe_columns <- function(df, columns = NULL, digits = 8){
 # Set defaults and classes
 
 opt <- list(
-    quant_file = '$quants',
+    intensities_file = '$intensities',
     sample_file = '$samplesheet',
     contrast_variable = NULL,
     protein_id_col = 'Majority protein IDs',
     sample_id_col = 'sample',
-    measure_col_prefix = 'Intensity',
+    measure_col_prefix = 'intensities',
     normfuns = 'normalizeMedian',
     plotSampleDistributions_method = 'violin',
     plotMV_loess = T,
@@ -134,7 +134,7 @@ for ( ao in names(args_opt)){
 
 # Check if required parameters have been provided
 
-required_opts <- c('quant_file', 'sample_file', 'contrast_variable')
+required_opts <- c('intensities_file', 'sample_file', 'contrast_variable')
 missing <- required_opts[unlist(lapply(opt[required_opts], is.null)) | ! required_opts %in% names(opt)]
 
 if (length(missing) > 0){
@@ -143,7 +143,7 @@ if (length(missing) > 0){
 
 # Check file inputs are valid
 
-for (file_input in c('quant_file', 'sample_file')){
+for (file_input in c('intensities_file', 'sample_file')){
     if (is.null(opt[[file_input]])) {
         stop(paste("Please provide", file_input), call. = FALSE)
     }
@@ -165,13 +165,13 @@ library(proteus)
 
 ################################################
 ################################################
-## READ IN QUANTS FILE AND SAMPLE METADATA    ##
+# READ IN INTENSITIES FILE AND SAMPLE METADATA #
 ################################################
 ################################################
 
-quant.table <-
+intensities.table <-
     read_delim_flexible(
-        file = opt\$quant_file,
+        file = opt\$intensities_file,
         check.names = FALSE
     )
 
@@ -181,8 +181,8 @@ sample.sheet <-
         check.names=FALSE
     )
 
-if (! opt\$protein_id_col %in% colnames(quant.table)){
-    stop(paste0("Specified protein ID column '", opt\$protein_id_col, "' is not in the quant table"))
+if (! opt\$protein_id_col %in% colnames(intensities.table)){
+    stop(paste0("Specified protein ID column '", opt\$protein_id_col, "' is not in the intensities table"))
 }
 
 if (! opt\$sample_id_col %in% colnames(sample.sheet)){
@@ -197,16 +197,16 @@ sample.sheet\$condition <- sample.sheet[[opt\$contrast_variable]]
 # Add prefix for proteinGroups measurement columns to the sample IDs from the sampesheet
 measure.cols <- setNames(paste0(opt\$measure_col_prefix, sample.sheet[[opt\$sample_id_col]]), sample.sheet[[opt\$sample_id_col]])
 
-# Check that all samples specified in the input sheet are present in the quants table
+# Check that all samples specified in the input sheet are present in the intensities table
 
 missing_columns <- paste0(opt\$measure_col_prefix, sample.sheet[[opt\$sample_id_col]])
-missing_columns <- missing_columns[!missing_columns %in% colnames(quant.table)]
+missing_columns <- missing_columns[!missing_columns %in% colnames(intensities.table)]
 if (length(missing_columns) > 0) {
     stop(paste(
         length(missing_columns),
         'specified samples do not have a(n)',
         opt\$measure_col_prefix,
-        'column in quant table. The following columns are missing:',
+        'column in intensities table. The following columns are missing:',
         paste(missing_columns, collapse = ', ')
     ))
 }
@@ -242,7 +242,7 @@ output_prefix <- opt\$contrast_variable
 
 proteinColumns <- setNames(gsub("Majority protein IDs", opt\$protein_id_col, proteus::proteinColumns), names(proteus::proteinColumns))
 proteinGroups <- readProteinGroups(
-    file=opt\$quant_file,
+    file=opt\$intensities_file,
     meta=sample.sheet,
     measure.cols=measure.cols,
     data.cols=proteinColumns
@@ -286,7 +286,7 @@ for (normfun in normfuns) {
     
     saveRDS(proteinGroups.normalized, file = paste0(output_prefix, '.proteus.', normfun, 'normalised_proteingroups.rds'))
 
-    # Write normalized quant matrix
+    # Write normalized intensities matrix
     
     out_df <- data.frame(
         proteinGroups.normalized\$tab,
@@ -322,7 +322,7 @@ dev.off()
 
 saveRDS(proteinGroups, file = paste0(output_prefix, '.proteus.raw_proteingroups.rds'))
 
-# Write raw quant matrix
+# Write raw intensities matrix
 
 out_df <- data.frame(
         proteinGroups\$tab,

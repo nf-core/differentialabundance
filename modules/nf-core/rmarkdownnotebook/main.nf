@@ -60,7 +60,6 @@ process RMARKDOWNNOTEBOOK {
     }
 
     """
-    echo $parameters > /home/iivow01/git/differentialabundance/error2/parameters
     # Dump .params.yml heredoc (section will be empty if parametrization is disabled)
     ${indent_code_block(params_cmd, 4)}
 

@@ -1,9 +1,8 @@
 name: "limma_differential"
 description: runs a differential expression analysis with Limma
 keywords:
-  - differential
-  - expression
-  - microarray
+  - intensities
+  - proteomics
   - limma
 
 tools:
