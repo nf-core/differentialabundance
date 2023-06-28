@@ -96,6 +96,7 @@ opt <- list(
     count_file = '$counts',
     sample_file = '$samplesheet',
     annot_file = '$annotation',
+    features_name_col = '$features_name_col',
     contrast_variable = '$contrast_variable',
     reference_level = '$reference',
     target_level = '$target',
@@ -399,12 +400,17 @@ write.table(
 annotation = read_delim_flexible(file = opt\$annot_file)
 write.table(
     merge(
-           data.frame(
+        data.frame(
                 gene_id = rownames(comp.results),
                 round_dataframe_columns(data.frame(comp.results, check.names = FALSE)),
                 check.names = FALSE
         ),
-        annotation,
+        unique(
+                annotation[,c(
+                       colnames(annotation)[1],
+                       opt\$features_name_col
+                       )]
+        ),
         by.x = "gene_id",
         by.y = colnames(annotation)[1],
         all.x = TRUE
