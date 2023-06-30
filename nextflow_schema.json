@@ -85,7 +85,7 @@
                 "querygse": {
                     "type": "string",
                     "default": "None",
-                    "description": "Alternative to CEL archive: the GSE identifier as found in GEO",
+                    "description": "Use SOFT files from GEO by providing the GSE study identifier",
                     "fa_icon": "fas fa-keyboard",
                     "help_text": "Use this option to provide a GSE study identifier."
                 }
