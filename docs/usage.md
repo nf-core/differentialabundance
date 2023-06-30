@@ -64,9 +64,11 @@ Alternatively, user may want to work non-Affymetrix array platforms. In this cas
 `--study_type non_affy_array` and `--querygse [GSE study ID]`
 
 enables the pipeline to download normalised SOFT matrices automatically (note that even though Affymetrix arrays are also supported in the SOFT matrix track, it is recommended to work from CEL files in this case). Importantly, user must provide a valid set of fields for the features metadata relevant for the platforms e.g. for GPL570 (Affymetrix Plus 2.0 arrays) this could be done with
+
 ```
 --features_metadata_cols ID,Entrez_Gene_ID,Symbol,Definition
 ```
+
 Full list of features metadata are available on GEO platform pages.
 
 ## Contrasts file
