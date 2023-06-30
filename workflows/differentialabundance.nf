@@ -149,10 +149,10 @@ workflow DIFFERENTIALABUNDANCE {
     }
     else if(params.study_type == 'geo_soft_file'){
 
-        ch_generic_array_input = ch_input
+        ch_soft_file_input = ch_input
             .join(ch_querygse)
 
-        READ_FROM_SOFT(ch_generic_array_input)
+        READ_FROM_SOFT(ch_soft_file_input)
         ch_in_raw = READ_FROM_SOFT.out.expression
         ch_features = READ_FROM_SOFT.out.annotation
     }
