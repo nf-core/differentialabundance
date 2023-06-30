@@ -57,9 +57,9 @@ This is a numeric square matrix file, comma or tab-separated, with a column for 
 
 This is an archive of CEL files as frequently found in GEO.
 
-### Other microarray platforms / SOFT matrices
+### Use SOFT matrices
 
-Alternatively, user may want to work non-Affymetrix array platforms. In this case, setting
+Alternatively, the user may want to work with SOFT matrices. In this case, setting
 
 `--study_type geo_soft_file` and `--querygse [GSE study ID]`
 
