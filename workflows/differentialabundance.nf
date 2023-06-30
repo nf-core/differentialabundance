@@ -154,7 +154,7 @@ workflow DIFFERENTIALABUNDANCE {
 
         READ_FROM_SOFT(ch_soft_file_input)
         ch_in_raw = READ_FROM_SOFT.out.expression
-        ch_features = READ_FROM_SOFT.out.annotation
+        ch_soft_features = READ_FROM_SOFT.out.annotation
     }
     //// Fetch or derive a feature annotation table
 
