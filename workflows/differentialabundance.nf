@@ -146,6 +146,13 @@ workflow DIFFERENTIALABUNDANCE {
         ch_in_norm = AFFY_JUSTRMA_NORM.out.expression
 
         ch_affy_platform_features = AFFY_JUSTRMA_RAW.out.annotation
+
+        ch_versions = ch_versions
+            .mix(AFFY_JUSTRMA_RAW.out.versions)
+
+        ch_versions = ch_versions
+            .mix(AFFY_JUSTRMA_NORM.out.versions)
+
     }
     else if(params.study_type == 'geo_soft_file'){
 
@@ -155,6 +162,9 @@ workflow DIFFERENTIALABUNDANCE {
         READ_FROM_SOFT(ch_soft_file_input)
         ch_in_raw = READ_FROM_SOFT.out.expression
         ch_soft_features = READ_FROM_SOFT.out.annotation
+
+        ch_versions = ch_versions
+            .mix(READ_FROM_SOFT.out.versions)
     }
     //// Fetch or derive a feature annotation table
 
