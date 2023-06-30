@@ -410,26 +410,6 @@ workflow DIFFERENTIALABUNDANCE {
         }
         .first()
 
-//     if(params.study_type != "geo_soft_file") {
-//         ch_all_matrices = VALIDATOR.out.sample_meta                 // meta, samples
-//             .join(VALIDATOR.out.feature_meta)                       // meta, samples, features
-//             .join(ch_raw)                                           // meta, samples, features, raw matrix
-//             .combine(ch_processed_matrices)                         // meta, samples, features, raw, norm, ...
-//             .map{
-//                 tuple(it[0], it[1], it[2], it[3..it.size()-1])
-//             }
-//             .first()
-//     }
-//     else {
-//         ch_all_matrices = VALIDATOR.out.sample_meta                 // meta, samples
-//             .join(VALIDATOR.out.feature_meta)                       // meta, samples, features
-//             .combine(ch_processed_matrices)                         // meta, samples, features, norm, ...
-//             .map{
-//                 tuple(it[0], it[1], it[2], it[3..it.size()-1])
-//             }
-//             .first()
-//     }
-
     PLOT_EXPLORATORY(
         ch_contrast_variables
             .combine(ch_all_matrices.map{ it.tail() })
