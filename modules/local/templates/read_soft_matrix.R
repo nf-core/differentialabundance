@@ -45,8 +45,8 @@ round_dataframe_columns <- function(df, columns = NULL, digits = 8){
 ############################
 
 opt <- list(
-  querygse = '$querygse',
-  metacols = '$metacols'
+  querygse = '',
+  metacols = ''
 )
 args_opt <- parse_args('$task.ext.args')
 for ( ao in names(args_opt)){
