@@ -24,7 +24,7 @@ if (params.study_type == 'affy_array'){
     }
   // If this is another array platform and user wish to read from SOFT files
   // then a GSE study identifier must be provided
-} else if (params.study_type == 'non_affy_array' && params.querygse != "" && params.features_metadata_cols != ""){
+} else if (params.study_type == 'geo_soft_file' && params.querygse != "" && params.features_metadata_cols != ""){
     if (params.querygse) {
         ch_querygse = Channel.of([exp_meta, params.querygse, params.features_metadata_cols])
     } else {
@@ -147,7 +147,7 @@ workflow DIFFERENTIALABUNDANCE {
 
         ch_affy_platform_features = AFFY_JUSTRMA_RAW.out.annotation
     }
-    else if(params.study_type == 'non_affy_array'){
+    else if(params.study_type == 'geo_soft_file'){
 
         ch_generic_array_input = ch_input
             .join(ch_querygse)
@@ -159,7 +159,7 @@ workflow DIFFERENTIALABUNDANCE {
     //// Fetch or derive a feature annotation table
 
     // If user has provided a feature annotation table, use that
-    if(params.study_type != 'non_affy_array') {
+    if(params.study_type != 'geo_soft_file') {
         if (params.features){
             ch_features = Channel.of([ exp_meta, file(params.features, checkIfExists: true)])
         } else if (params.study_type == 'affy_array'){
@@ -233,7 +233,7 @@ workflow DIFFERENTIALABUNDANCE {
         ch_norm = ch_validated_assays.normalised
         ch_matrix_for_differential = ch_norm
     }
-    else if (params.study_type == 'non_affy_array') {
+    else if (params.study_type == 'geo_soft_file') {
         ch_norm = VALIDATOR.out.assays
         ch_matrix_for_differential = ch_norm
     }
@@ -270,7 +270,7 @@ workflow DIFFERENTIALABUNDANCE {
         .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
         .first()
 
-    if (params.study_type == 'affy_array' || params.study_type == 'non_affy_array'){
+    if (params.study_type == 'affy_array' || params.study_type == 'geo_soft_file'){
 
         LIMMA_DIFFERENTIAL (
             ch_contrasts,
@@ -383,7 +383,7 @@ workflow DIFFERENTIALABUNDANCE {
         }
         .unique()
 
-    if(params.study_type != "non_affy_array") {
+    if(params.study_type != "geo_soft_file") {
         ch_all_matrices = VALIDATOR.out.sample_meta                 // meta, samples
             .join(VALIDATOR.out.feature_meta)                       // meta, samples, features
             .join(ch_raw)                                           // meta, samples, features, raw matrix
@@ -493,7 +493,7 @@ workflow DIFFERENTIALABUNDANCE {
     // Condition params reported on study type
 
     def params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|deseq2|gsea).*/
-    if (params.study_type == 'affy_array' || 'non_affy_array'){
+    if (params.study_type == 'affy_array' || 'geo_soft_file'){
         params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|affy|limma|gsea).*/
     }
 
