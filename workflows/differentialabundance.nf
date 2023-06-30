@@ -159,47 +159,46 @@ workflow DIFFERENTIALABUNDANCE {
     //// Fetch or derive a feature annotation table
 
     // If user has provided a feature annotation table, use that
-    if(params.study_type != 'geo_soft_file') {
-        if (params.features){
-            ch_features = Channel.of([ exp_meta, file(params.features, checkIfExists: true)])
-        } else if (params.study_type == 'affy_array'){
-            ch_features = ch_affy_platform_features
-        } else if(params.study_type == 'geo_soft_file') {
-            ch_features = ch_soft_features          
-        } else if (params.gtf){
-            // Get feature annotations from a GTF file, gunzip if necessary
+    if (params.features){
+        ch_features = Channel.of([ exp_meta, file(params.features, checkIfExists: true)])
+    } else if (params.study_type == 'affy_array'){
+        ch_features = ch_affy_platform_features
+    } else if(params.study_type == 'geo_soft_file') {
+        ch_features = ch_soft_features
+    } else if (params.gtf){
+        // Get feature annotations from a GTF file, gunzip if necessary
 
-            file_gtf_in = file(params.gtf)
-            file_gtf = [ [ "id": file_gtf_in.simpleName ], file_gtf_in ]
+        file_gtf_in = file(params.gtf)
+        file_gtf = [ [ "id": file_gtf_in.simpleName ], file_gtf_in ]
 
-            if ( params.gtf.endsWith('.gz') ){
-                GUNZIP_GTF(file_gtf)
-                file_gtf = GUNZIP_GTF.out.gunzip
-                ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
+        if ( params.gtf.endsWith('.gz') ){
+            GUNZIP_GTF(file_gtf)
+            file_gtf = GUNZIP_GTF.out.gunzip
+            ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
+        }
+
+        // Get a features table from the GTF and combine with the matrix and sample
+        // annotation (fom = features/ observations/ matrix)
+
+        GTF_TO_TABLE( file_gtf, [[ "id":""], []])
+        ch_features = GTF_TO_TABLE.out.feature_annotation
+            .map{
+                tuple( exp_meta, it[1])
             }
 
-            // Get a features table from the GTF and combine with the matrix and sample
-            // annotation (fom = features/ observations/ matrix)
+        // Record the version of the GTF -> table tool
 
-            GTF_TO_TABLE( file_gtf, [[ "id":""], []])
-            ch_features = GTF_TO_TABLE.out.feature_annotation
-                .map{
-                    tuple( exp_meta, it[1])
-                }
-
-            // Record the version of the GTF -> table tool
-
-            ch_versions = ch_versions
-                .mix(GTF_TO_TABLE.out.versions)
-        }
-        else{
-
-            // Otherwise we can just use the matrix input
-            matrix_as_anno_filename = "matrix_as_anno.${matrix_file.getExtension()}"
-            matrix_file.copyTo(matrix_as_anno_filename)
-            ch_features = Channel.of([ exp_meta, file(matrix_as_anno_filename)])
-        }
+        ch_versions = ch_versions
+            .mix(GTF_TO_TABLE.out.versions)
     }
+    else{
+
+        // Otherwise we can just use the matrix input
+        matrix_as_anno_filename = "matrix_as_anno.${matrix_file.getExtension()}"
+        matrix_file.copyTo(matrix_as_anno_filename)
+        ch_features = Channel.of([ exp_meta, file(matrix_as_anno_filename)])
+    }
+
     // Channel for the contrasts file
 
     ch_contrasts_file = Channel.from([[exp_meta, file(params.contrasts)]])
