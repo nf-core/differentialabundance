@@ -242,10 +242,12 @@ workflow DIFFERENTIALABUNDANCE {
             }
         ch_raw = ch_validated_assays.raw
         ch_norm = ch_validated_assays.normalised
-        ch_matrix_for_differential = ch_norm
     }
     else if (params.study_type == 'geo_soft_file') {
         ch_norm = VALIDATOR.out.assays
+    }
+
+    if(params.study_type != 'rnaseq') {
         ch_matrix_for_differential = ch_norm
     }
     else{
