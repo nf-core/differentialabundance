@@ -164,6 +164,8 @@ workflow DIFFERENTIALABUNDANCE {
             ch_features = Channel.of([ exp_meta, file(params.features, checkIfExists: true)])
         } else if (params.study_type == 'affy_array'){
             ch_features = ch_affy_platform_features
+        } else if(params.study_type == 'geo_soft_file') {
+            ch_features = ch_soft_features          
         } else if (params.gtf){
             // Get feature annotations from a GTF file, gunzip if necessary
 
