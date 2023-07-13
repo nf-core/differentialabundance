@@ -2,7 +2,7 @@ include { dump_params_yml; indent_code_block } from "./parametrize"
 
 process RMARKDOWNNOTEBOOK {
     tag "$meta.id"
-    label 'process_low'
+    label 'process_single'
 
     //NB: You likely want to override this with a container containing all required
     //dependencies for your analysis. The container at least needs to contain the
