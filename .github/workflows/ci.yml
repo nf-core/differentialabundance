@@ -30,6 +30,7 @@ jobs:
           - "test"
           - "test_nogtf"
           - "test_affy"
+          - "test_maxquant"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v3

@@ -24,7 +24,7 @@
                     "default": "rnaseq",
                     "description": "A string identifying the technology used to produce the data",
                     "help_text": "Currently 'rnaseq' or 'affy_array' may be specified.",
-                    "enum": ["rnaseq", "affy_array", "Px"],
+                    "enum": ["rnaseq", "affy_array", "maxquant"],
                     "fa_icon": "far fa-keyboard"
                 },
                 "input": {
@@ -229,6 +229,49 @@
                 }
             },
             "fa_icon": "fas fa-table"
+        },
+        "proteus_input_options": {
+            "title": "Proteus input options",
+            "type": "object",
+            "description": "Options for processing of proteomics MaxQuant tables with the Proteus R package",
+            "default": "",
+            "properties": {
+                "proteus_measurecol_prefix": {
+                    "type": "string",
+                    "default": "LFQ intensity ",
+                    "description": "Prefix of the column names of the MaxQuant proteingroups table in which the intensity values are saved; the prefix has to be followed by the sample names that are also found in the samplesheet. Default: 'LFQ intensity '; take care to also consider trailing whitespace between prefix and samplenames."
+                },
+                "proteus_norm_functions": {
+                    "type": "string",
+                    "default": "normalizeMedian",
+                    "description": "Comma-separated string of normalization functions to use on the MaxQuant intensities.",                    
+                    "help_text": "'normalizeMedian', 'normalizeQuantiles' or any comma-separated combination thereof"
+                },
+                "proteus_plotSD_method": {
+                    "type": "string",
+                    "default": "violin",
+                    "description": "Which method to use for plotting sample distributions of the MaxQuant intensities.",
+                    "help_text": "'violin', 'dist' or 'box'",
+                    "enum": ["violin", "dist", "box"]
+                },
+                "proteus_plotMV_loess": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Should a loess line be added to the plot of mean-variance relationship of the conditions? Default: true."
+                },
+                "proteus_palette_name": {
+                    "type": "string",
+                    "default": "Set1",
+                    "help_text": "Check the content of `RColorBrewer::brewer.pal.info` from an R terminal for valid palette names.",
+                    "description": "Valid R palette name",
+                    "fa_icon": "fas fa-palette"
+                },
+                "proteus_round_digits": {
+                    "type": "number",
+                    "default": -1,
+                    "description": "Number of decimals to round the MaxQuant intensities to; default: -1 (will not round)."
+                }
+            }
         },
         "filtering": {
             "title": "Filtering",
@@ -1094,6 +1137,9 @@
         },
         {
             "$ref": "#/definitions/affy_input_options"
+        },
+        {
+            "$ref": "#/definitions/proteus_input_options"
         },
         {
             "$ref": "#/definitions/filtering"
