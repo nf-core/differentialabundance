@@ -1,6 +1,6 @@
 ---
-title: "Differential Abundance Report"
-description: "Inserire descrizione"
+title: "Difference Abundance Report"
+subtitle: "aggiungere sottotitolo"
 author:
   - name: Bioinfo TEAM 
     url: https://github.com/NEGEDIA
@@ -8,26 +8,37 @@ author:
     affiliation-url: http://www.ngdx.eu/
 ---
 
-## Quarto
+## Analisi {{< var project >}}
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+La pagina html viene generata utilizzando il Quarto e, per ora, utilzziamo il formato html per avere un singolo file in cui sono elencati tutti i risultati.
+In alto c'è la barra con titolo e sottotitolo, quello che farei è:
+- aggiungere il logo
+- aggiungere un tema 
+- ...
 
-## terzo
+Per creare questo file html sono necessari diversi file, solo per la sua creazione. Questi non saranno necessari per visualizzare in seguito l'html.
+In ordine:
+- _quarto.yml
+- _variables.yml
+- style.css
+
+## Section
+
+Ciao
+
+### subsection 1
+
+### subsection 2
+
+
+## _quarto.yml
+In qesto file sono presenti tutte le impostazioni utili a generare il file html. Ad esempio: la presenza o meno del TOC e la sua posizione, che tipo di file voglio in output, le varie informazioni, il tema e la posizione del file style.css
+
+## _variables.yml
+In questo file sono incluse le variabili che faranno riferimento ai file generati durante la pipeline. Sarò comodo includerli in questo modo e poi utilizzarli come file var con la sintassi {{< var >}}. Un esempio è il nome del progetto, che cambia in base alla variabile project che inserisco nel file yml.
+
+## style.css
 ::: justify
-The values provided here are crucial parameters in the field of cancer research and diagnosis. They represent thresholds or cutoffs that are used to make important clinical decisions and determine the severity and treatment of different types of cancers. In this discussion, we will examine each of these values in detail and their significance in cancer research.
-
-The first value, minReads, refers to the minimum number of reads required to perform a proper genomic sequencing analysis. In molecular biology, sequencing is the process of determining the precise order of nucleotides in a DNA molecule. This value of 8 million reads represents a high-quality sequencing analysis that allows researchers to accurately identify mutations or genetic variations associated with specific types of cancer. Genomic sequencing is a critical tool in personalized medicine and helps clinicians identify the best treatment options for their patients.
-
-The next value, minGenes, represents the minimum number of genes that need to be sequenced to obtain a comprehensive understanding of the genetic profile of a patient's cancer. The human genome contains approximately 20,000-25,000 genes, and sequencing 12,000 of them allows researchers to identify mutations that are directly linked to cancer progression. These mutations can help clinicians understand the underlying genetic causes of the disease and develop targeted therapies that can improve patient outcomes.
-
-The next three values, thrMKI67, thrER, and thrPR, represent thresholds used to determine the severity of breast cancer. MKI67 is a protein that is associated with cellular proliferation and is expressed in rapidly dividing cells. A high level of MKI67 expression is indicative of a more aggressive form of breast cancer. The threshold of 20% is used to determine the level of MKI67 expression in tumor cells. Similarly, ER and PR are hormone receptors that are often overexpressed in breast cancer cells. The thresholds of 1% for each of these receptors are used to determine the level of expression and inform treatment decisions. Hormone therapy is often used to treat breast cancer patients with high ER and PR expression levels.
-
-Finally, the value of thrHER2 represents the threshold used to determine the level of HER2 protein expression in breast cancer cells. HER2 is a protein that is overexpressed in approximately 20% of breast cancer cases and is associated with a more aggressive form of the disease. The threshold of 3 represents a positive HER2 status and is used to determine treatment options. HER2-targeted therapies, such as trastuzumab and pertuzumab, are often used to treat patients with HER2-positive breast cancer.
-
-In conclusion, these values are critical parameters in cancer research and diagnosis. They help clinicians and researchers identify genetic mutations and protein expression levels associated with different types of cancers, and inform treatment decisions. The use of these thresholds has revolutionized the field of personalized medicine and has improved patient outcomes by allowing for more targeted and effective treatments.
+Il file css è il file che permette di includere guide, impostazioni, temi ed altro al file html. Ad esempio questo chunk utilizza la formattazione **giustificato**, settato nel file css.
 :::
 
-
-## Params
-
-Ciao, questa è una prova per inserire parametri all'interno del testo e non del code chunk. Ad esempio, per questo rendere sono state impostate {{< var cpus >}} cpus. Version {{< var version >}} is a minor upgrade. Please contact us at {{< var email.info >}}. Quarto includes {{< var engine.jupyter >}} and {{< var engine.knitr >}} computation engines.

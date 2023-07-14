@@ -9,3 +9,5 @@ engine:
   knitr: "[Knitr](<https://yihui.name/knitr>)"
   
 cpus: 4
+
+project: p63_project

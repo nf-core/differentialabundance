@@ -1,0 +1,4 @@
+- source: project
+  quarto-pub:
+    - id: "qpa_QlNVAtsKkO94E5brYguuXYAxjbdIdtJgmpsnHICBckwgUYhxBUq1BVBTrzgTGOjh"
+      url: "https://giuseppemartone.quarto.pub/test"
