@@ -1,9 +1,9 @@
 ---
-title: "BreastPathology"
-description: "An algorithm for breast cancer diagnostic"
+title: "Differential Abundance Report"
+description: "Inserire descrizione"
 author:
-  - name: Giuseppe Martone 
-    url: https://github.com/giusmar
+  - name: Bioinfo TEAM 
+    url: https://github.com/NEGEDIA
     affiliation: NEGEDIA
     affiliation-url: http://www.ngdx.eu/
 ---
