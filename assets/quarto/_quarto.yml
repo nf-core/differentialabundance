@@ -1,0 +1,37 @@
+title: "Differential Abundance Report"
+description: "Inserire descrizione"
+author:
+  - name: Bioinfo TEAM 
+    url: https://github.com/NEGEDIA
+    affiliation: NEGEDIA
+    affiliation-url: http://www.ngdx.eu/
+date: "10/11/22"
+date-format: "DD/MM/YY"
+format:
+  html:
+    toc: true
+    html-math-method: katex 
+    toc-location: left
+    toc-title: Contents
+    embed-resources: true
+    number-sections: true
+    code-fold: true
+    code-tools: true
+    code-link: true
+    code-overflow: scroll
+    code-summary: "Show the code"
+    page-layout: full
+execute:
+  echo: true
+  warning: false
+smooth-scroll: true
+title-block-banner: true
+editor: visual
+theme: cosmo
+comments:
+  hypothesis: 
+    theme: clean
+editor_options:
+  chunk_output_type: console
+cpus: NULL
+css: style.css
