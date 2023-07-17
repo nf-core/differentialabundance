@@ -11,10 +11,11 @@ process READ_FROM_SOFT {
     tuple val(meta), path(samplesheet)
 
     output:
-    tuple val(meta), path("*.rds")             , emit: rds
-    tuple val(meta), path("*matrix.tsv")      , emit: expression
-    tuple val(meta), path("*.annotation.tsv")  , emit: annotation
-    path "versions.yml"                        , emit: versions
+    tuple val(meta), path("*.rds")                  , emit: rds
+    tuple val(meta), path("*matrix.tsv")            , emit: expression
+    tuple val(meta), path("*matrix.annotated.tsv")  , emit: expression_annotated
+    tuple val(meta), path("*.annotation.tsv")       , emit: annotation
+    path "versions.yml"                             , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
