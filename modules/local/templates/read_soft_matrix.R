@@ -107,7 +107,7 @@ write.table(
             check.names = FALSE
         ),
         by.x=opt\$features_id_col,
-        by.y = rownames(eset),
+        by.y = "probe_id",
         all.x = TRUE
      ),
     file = paste0(output_prefix, 'matrix.annotated.tsv'),
