@@ -46,7 +46,8 @@ round_dataframe_columns <- function(df, columns = NULL, digits = 8){
 
 opt <- list(
     querygse = '',
-    metacols = ''
+    metacols = '',
+    features_id_col = ''
 )
 args_opt <- parse_args('$task.ext.args')
 for ( ao in names(args_opt)){
@@ -96,6 +97,26 @@ write.table(
     col.names = TRUE, row.names = FALSE,
     sep = '\t', quote = FALSE
 )
+
+write.table(
+    merge(
+        fData(eset)[,feature_cols],
+        data.frame(
+            probe_id = rownames(eset),
+            round_dataframe_columns(as.data.frame(exprs(eset))),
+            check.names = FALSE
+        ),
+        by.x=opt\$features_id_col,
+        by.y = rownames(eset),
+        all.x = TRUE
+     ),
+    file = paste0(output_prefix, 'matrix.annotated.tsv'),
+    col.names = TRUE,
+    row.names = FALSE,
+    sep = '\t',
+    quote = FALSE
+)
+
 
 
 ############################
