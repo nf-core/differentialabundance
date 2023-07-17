@@ -271,7 +271,6 @@ output_prefix <- '$task.ext.prefix'
 saveRDS(eset, file = paste0(output_prefix, 'eset.rds'))
 
 # Write matrix
-
 write.table(
     data.frame(
         probe_id = rownames(eset),
@@ -284,6 +283,28 @@ write.table(
     sep = '\t',
     quote = FALSE
 )
+
+# also write annotated matrix with symbols
+write.table(
+    merge(
+        anno, # subset on annotation df columns was made above
+        data.frame(
+            probe_id = rownames(eset),
+            round_dataframe_columns(as.data.frame(exprs(eset))),
+            check.names = FALSE
+        ),
+        by.x="PROBEID",
+        by.y = rownames(eset),
+        all.x = TRUE
+     ),
+    file = paste0(output_prefix, 'matrix.annotated.tsv'),
+    col.names = TRUE,
+    row.names = FALSE,
+    sep = '\t',
+    quote = FALSE
+)
+
+
 
 ################################################
 ################################################
