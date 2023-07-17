@@ -106,10 +106,10 @@ write.table(
             round_dataframe_columns(as.data.frame(exprs(eset))),
             check.names = FALSE
         ),
-        by.x=opt\$features_id_col,
+        by.x = opt\$features_id_col,
         by.y = "probe_id",
         all.x = TRUE
-     ),
+    ),
     file = paste0(output_prefix, 'matrix.annotated.tsv'),
     col.names = TRUE,
     row.names = FALSE,
