@@ -244,7 +244,7 @@
                 "proteus_norm_functions": {
                     "type": "string",
                     "default": "normalizeMedian",
-                    "description": "Comma-separated string of normalization functions to use on the MaxQuant intensities.",                    
+                    "description": "Comma-separated string of normalization functions to use on the MaxQuant intensities.",
                     "help_text": "'normalizeMedian', 'normalizeQuantiles' or any comma-separated combination thereof"
                 },
                 "proteus_plotSD_method": {

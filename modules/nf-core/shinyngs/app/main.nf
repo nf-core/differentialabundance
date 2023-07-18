@@ -40,7 +40,7 @@ process SHINYNGS_APP {
     make_app_from_files.R \\
         --sample_metadata $sample \\
         --feature_metadata $feature_meta \\
-        --assay_files "/home/iivow01/git/differentialabundance/results_Px_noNA/proteus/output_prefix.proteus.raw_proteingroups_tab.tsv,/home/iivow01/git/differentialabundance/results_Px_noNA/proteus/output_prefix.proteus.normalizeMedian.normalised_proteingroups_tab.tsv" \\
+        --assay_files ${assay_files.join(',')} \\
         --contrast_file $contrasts \\
         --contrast_stats_assay $contrast_stats_assay \\
         --differential_results ${differential_results.join(',')} \\
@@ -54,11 +54,3 @@ process SHINYNGS_APP {
     END_VERSIONS
     """
 }
-
-//        --assay_files ${assay_files.join(',')} \\
-
-//        --differential_results ${differential_results.join(',')} \\
-
-//        --assay_files "/home/iivow01/git/differentialabundance/results_Px_noNA/proteus/output_prefix.proteus.raw_proteingroups_tab.tsv,/home/iivow01/git/differentialabundance/results_Px_noNA/proteus/output_prefix.proteus.normalizeMedian.normalised_proteingroups_tab.tsv" \\
-
-//        --differential_results "/home/iivow01/git/differentialabundance/results_Px_noNA/tables/differential/Condition__genotype-WT-NFAT1_plus_2_minus_KO.limma.results.tsv,/home/iivow01/git/differentialabundance/results_Px_noNA/tables/differential/Condition__genotype-WT-NFAT1_minus_KO.limma.results.tsv,/home/iivow01/git/differentialabundance/results_Px_noNA/tables/differential/Condition__genotype-WT-NFAT2_minus_KO.limma.results.tsv" \\
