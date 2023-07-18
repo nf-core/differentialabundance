@@ -33,6 +33,8 @@ params:
   features_id_col: NULL
   features_name_col: NULL
   features_metadata_cols: NULL 
+  features_gtf_feature_type: NULL
+  features_gtf_table_first_field: NULL
   raw_matrix: null                                            # e.g. 0_salmon.merged.gene_counts.tsv
   normalised_matrix: null
   variance_stabilised_matrix: null                            # e.g. test_files/3_treatment-WT-P23H.vst.tsv
@@ -239,7 +241,7 @@ assay_data <- lapply(assay_files, function(x) {
   colnames(mat) <- observations[[params$observations_name_col]][match(colnames(mat), rownames(observations))]
 
   # Bit hacky, but ensure log
-  if (max(mat, na.rm=T) > 20){
+  if (max(mat) > 20){
     log2(mat+1)
   }else{
     mat 
@@ -320,6 +322,7 @@ differential_results <- lapply(differential_files, function(diff_file){
   }
   
   # Annotate differential tables if possible
+
   if (! is.null(params$features)){
     diff <- merge(features, diff, by.x = params$features_id_col, by.y = params$differential_feature_id_column)
   }

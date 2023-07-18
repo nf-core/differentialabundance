@@ -36,7 +36,7 @@ if (params.study_type == 'affy_array'){
 }
 
 // Check optional parameters
-if (params.control_features) { ch_control_features = file(params.control_features, checkIfExists: true) } else { ch_control_features = [[],[]] }
+if (params.control_features) { ch_control_features = Channel.of([ exp_meta, file(params.control_features, checkIfExists: true)]).first() } else { ch_control_features = [[],[]] }
 if (params.gsea_run) {
     if (params.gsea_gene_sets){
         gene_sets_files = params.gsea_gene_sets.split(",")
