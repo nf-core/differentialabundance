@@ -155,8 +155,8 @@ intensities.table <-
         row.names = opt\$probe_id_col,
         check.names = FALSE
     )
-
 sample.sheet <- read_delim_flexible(file = opt\$sample_file)
+
 # Deal with spaces that may be in sample column
 opt\$sample_id_col <- make.names(opt\$sample_id_col)
 
