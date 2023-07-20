@@ -12,7 +12,7 @@
 
 ## Introduction
 
-**nf-core/differentialabundance** is a bioinformatics pipeline that can be used to analyse data represented as matrices, comparing groups of observations to generate differential statistics and downstream analyses. The initial feature set is built around RNA-seq, but we anticipate rapid expansion to include other platforms.
+**nf-core/differentialabundance** is an advanced bioinformatics pipeline that can be used to analyse data represented as matrices, comparing groups of observations to generate differential statistics and downstream analyses. The pipeline already supports RNA-seq data, as demonstrated in the nf-core [rnaseq workflow](https://github.com/nf-core/rnaseq), and Affymetrix/ThermoFisher .CEL files. However, our team is actively working on expanding its capabilities to encompass a broader range of platforms and maintain an effective tool to explore gene expression with ease and accuracy.
 
 The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. Where possible, these processes have been submitted to and installed from [nf-core/modules](https://github.com/nf-core/modules) in order to make them available to all nf-core pipelines, and to everyone within the Nextflow community!
 
