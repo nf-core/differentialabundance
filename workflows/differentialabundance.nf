@@ -46,6 +46,7 @@ if (params.gsea_run) {
 } 
 
 report_file = file(params.report_file, checkIfExists: true)
+quarto_report_file = file(params.quarto_report_file, checkIfExists: true)
 logo_file = file(params.logo_file, checkIfExists: true)
 css_file = file(params.css_file, checkIfExists: true)
 citations_file = file(params.citations_file, checkIfExists: true)
@@ -64,6 +65,8 @@ citations_file = file(params.citations_file, checkIfExists: true)
 */
 
 include { TABULAR_TO_GSEA_CHIP } from '../modules/local/tabular_to_gsea_chip'
+include { QUARTODOCUMENT       } from '../modules/local/quartoreport' 
+
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -399,6 +402,9 @@ workflow DIFFERENTIALABUNDANCE {
     
     // Generate a list of files that will be used by the markdown report
 
+    ch_quarto_report_file = Channel.from(quarto_report_file)
+        .map{ tuple(exp_meta, it) }
+
     ch_report_file = Channel.from(report_file)
         .map{ tuple(exp_meta, it) }
 
@@ -472,6 +478,12 @@ workflow DIFFERENTIALABUNDANCE {
     
     RMARKDOWNNOTEBOOK(
         ch_report_file,
+        ch_report_params,
+        ch_report_input_files
+    )
+
+    QUARTODOCUMENT(
+        ch_quarto_report_file,
         ch_report_params,
         ch_report_input_files
     )
