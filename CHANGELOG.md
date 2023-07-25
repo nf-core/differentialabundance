@@ -11,12 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#129](https://github.com/nf-core/differentialabundance/pull/129)] - Module updates to fit with recent registry changes ([@pinin4fjords](https://github.com/pinin4fjords), review by [@maxulysse](https://github.com/maxulysse), [@adamrtalbot](https://github.com/adamrtalbot))
 - [[#130](https://github.com/nf-core/differentialabundance/pull/130)] - Document reasons for lack of differential expression ([@pinin4fjords](https://github.com/pinin4fjords), review by [@jfy133](https://github.com/jfy133))
 - [[#131](https://github.com/nf-core/differentialabundance/pull/131)] - Improve gtf to table configurability ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
+- [[#137](https://github.com/nf-core/differentialabundance/pull/137)] - Add `--sizefactors_from_controls` and `--gene_id_col` for DESeq2 module to modules.config ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 
 ### `Fixed`
 
 - [[#116](https://github.com/nf-core/differentialabundance/issues/116)] - Skip outlier detection with low replication ([@pinin4fjords](https://github.com/pinin4fjords), review by [@nvnieuwk](https://github.com/nvnieuwk))
 - [[#122](https://github.com/nf-core/differentialabundance/pull/126)] - Add spaces to satisfy nf-core download for singularity ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#127](https://github.com/nf-core/differentialabundance/issues/127)] - [Bug] Can't pass samplesheet with -c file.config , or -params-file params.yml or directly with --input samplesheet.csv ([@ctuni](https://github.com/ctuni), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#138 ](https://github.com/nf-core/differentialabundance/issues/138)]- Fix bugs with --control_features and --sizefactors_from_controls ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 
 ## v1.2.0 - 2023-04-19
 
