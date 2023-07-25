@@ -1071,7 +1071,6 @@
                     "fa_icon": "fas fa-palette",
                     "default": false,
                     "hidden": true
-                    "fa_icon": "fas fa-palette"
                 },
                 "hook_url": {
                     "type": "string",
