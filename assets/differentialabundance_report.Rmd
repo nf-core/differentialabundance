@@ -295,10 +295,7 @@ treatment-mCherry-hND6-batcheffect.deseq2.results.tsv
 
 ```{r, echo=FALSE}
 
-prefix_part_names <- c('variable', 'reference', 'target', 'blocking')
-diff_prefixes <- sub('-$', '', apply(contrasts[,prefix_part_names], 1, function(x) paste(x, collapse = '-')))
-
-differential_files <- lapply(diff_prefixes, function(d){
+differential_files <- lapply(contrasts$id, function(d){
  file.path(params$input_dir, paste0(gsub(' |;', '_', d), params$differential_file_suffix)) 
 })
 
@@ -328,16 +325,31 @@ differential_results <- lapply(differential_files, function(diff_file){
   }
   diff
 })
-names(differential_results) <- diff_prefixes
+names(differential_results) <- contrasts$id
 ```
 
 <!-- Calculate some summary statistics -->
 
 ```{r, echo=FALSE}
 
-contrast_descriptions <- paste(contrasts$target, 'versus', contrasts$reference, 'in', contrasts$variable) 
-with_blocking <- which(contrasts$blocking != '')
-contrast_descriptions[with_blocking] <- paste0(contrast_descriptions[with_blocking], " (blocking on ", contrasts$blocking[with_blocking],")")
+# Function to make friendly contrast name from contrast components, including optional bits
+
+name_contrast <- function(i){
+  contrast_name <- paste(contrasts$target[i], 'versus', contrasts$reference[i], 'in', contrasts$variable[i])
+  contrast_vals <- contrasts[i,]
+  populated <- colnames(contrasts)[! (is.na(contrast_vals) | contrast_vals == '' | is.null(contrast_vals))]
+  optional <- setdiff(populated, c('id', 'target', 'reference', 'variable'))
+
+  if (length(optional) > 0){
+    optional_part <-  paste0('(', paste(paste(optional, contrasts[i,optional], sep=': '), collapse=', '), ')')
+  }else{
+    optional_part <- ''
+  }
+
+  paste(contrast_name, optional_part)
+}
+
+contrast_descriptions <- unlist(lapply(1:nrow(contrasts), function(x) name_contrast(x)))
 
 # Check both adjusted and unadjusted p values
 
