@@ -59,5 +59,5 @@ process QUARTODOCUMENT {
 
     # Create output directory
     mkdir artifacts
-    """"
+    """
 }
