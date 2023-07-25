@@ -30,6 +30,7 @@
                 "input": {
                     "type": "string",
                     "format": "file-path",
+                    "exists": true,
                     "mimetype": "text/csv",
                     "pattern": "^\\S+\\.(csv|tsv|txt)$",
                     "schema": "assets/schema_input.json",
@@ -916,6 +917,7 @@
                     "description": "Genome annotation file in GTF format",
                     "pattern": "^\\S+\\.gtf(\\.gz)?",
                     "format": "file-path",
+                    "exists": true,
                     "mimetype": "text/plain",
                     "help_text": "\"This parameter is *mandatory* if `--genome` is not specified.\"",
                     "fa_icon": "fas fa-book"
@@ -1014,7 +1016,7 @@
                     "description": "Maximum amount of time that can be requested for any single job.",
                     "default": "240.h",
                     "fa_icon": "far fa-clock",
-                    "pattern": "^(\\d+\\.?\\s*(s|m|h|day)\\s*)+$",
+                    "pattern": "^(\\d+\\.?\\s*(s|m|h|d|day)\\s*)+$",
                     "hidden": true,
                     "help_text": "Use to set an upper-limit for the time requirement for each process. Should be a string in the format integer-unit e.g. `--max_time '2.h'`"
                 }
@@ -1030,12 +1032,15 @@
                 "help": {
                     "type": "boolean",
                     "description": "Display help text.",
-                    "fa_icon": "fas fa-question-circle"
+                    "fa_icon": "fas fa-question-circle",
+                    "default": false,
+                    "hidden": true
                 },
                 "version": {
                     "type": "boolean",
                     "description": "Display version and exit.",
                     "fa_icon": "fas fa-question-circle",
+                    "default": false,
                     "hidden": true
                 },
                 "publish_dir_mode": {
@@ -1056,12 +1061,16 @@
                 "plaintext_email": {
                     "type": "boolean",
                     "description": "Send plain-text email instead of HTML.",
-                    "fa_icon": "fas fa-remove-format"
+                    "fa_icon": "fas fa-remove-format",
+                    "default": false,
+                    "hidden": true
                 },
                 "monochrome_logs": {
                     "type": "boolean",
                     "description": "Do not use coloured log outputs.",
-                    "fa_icon": "fas fa-palette"
+                    "fa_icon": "fas fa-palette",
+                    "default": false,
+                    "hidden": true
                 },
                 "hook_url": {
                     "type": "string",
@@ -1070,23 +1079,35 @@
                     "help_text": "Incoming hook URL for messaging service. Currently, MS Teams and Slack are supported.",
                     "hidden": true
                 },
-                "tracedir": {
-                    "type": "string",
-                    "description": "Directory to keep pipeline Nextflow logs and reports.",
-                    "default": "${params.outdir}/pipeline_info",
-                    "fa_icon": "fas fa-cogs"
-                },
                 "validate_params": {
                     "type": "boolean",
                     "description": "Boolean whether to validate parameters against the schema at runtime",
                     "default": true,
                     "fa_icon": "fas fa-check-square"
                 },
-                "show_hidden_params": {
+                "validationShowHiddenParams": {
                     "type": "boolean",
                     "fa_icon": "far fa-eye-slash",
                     "description": "Show all params when using `--help`",
+                    "default": false,
+                    "hidden": true,
                     "help_text": "By default, parameters set as _hidden_ in the schema are not shown on the command line when a user runs with `--help`. Specifying this option will tell the pipeline to show all parameters."
+                },
+                "validationFailUnrecognisedParams": {
+                    "type": "boolean",
+                    "fa_icon": "far fa-check-circle",
+                    "description": "Validation of parameters fails when an unrecognised parameter is found.",
+                    "default": false,
+                    "hidden": true,
+                    "help_text": "By default, when an unrecognised parameter is found, it returns a warinig."
+                },
+                "validationLenientMode": {
+                    "type": "boolean",
+                    "fa_icon": "far fa-check-circle",
+                    "description": "Validation of parameters in lenient more.",
+                    "default": false,
+                    "hidden": true,
+                    "help_text": "Allows string values that are parseable as numbers or booleans. For further information see [JSONSchema docs](https://github.com/everit-org/json-schema#lenient-mode)."
                 }
             }
         }
