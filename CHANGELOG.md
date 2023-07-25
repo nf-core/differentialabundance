@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#105](https://github.com/nf-core/differentialabundance/pull/105)] - Enabled multiple GMT/GMX files for GSEA ([@WackerO](https://github.com/WackerO), reported by [@grst](https://github.com/grst), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#108](https://github.com/nf-core/differentialabundance/issues/108)] - Add shiny app generation (starting feature set) ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#110](https://github.com/nf-core/differentialabundance/pull/110)] - Add shiny app outputs to tower.yml ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO), [@maxulysse](https://github.com/maxulysse))
+- [[#149]](https://github.com/nf-core/differentialabundance/pull/149) - Update README.md - add ref to nf-core/rnaseq and Affymetrix ([@smoe](https://github.com/smoe), review by [@pinin4fjords](https://github.com/pinin4fjords))
 
 ### `Fixed`
 
