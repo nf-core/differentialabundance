@@ -1,3 +1,5 @@
+include { dump_params_yml; indent_code_block } from "./parametrize"
+
 process QUARTODOCUMENT {
     tag "$meta.id"
     label 'process_single'
