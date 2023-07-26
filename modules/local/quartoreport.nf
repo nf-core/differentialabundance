@@ -19,7 +19,13 @@ process QUARTODOCUMENT {
     path "*"                                  , includeInputs: true
 
     script:
+    def args = task.ext.args ?: ''
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    def parametrize = (task.ext.parametrize == null) ?  true : task.ext.parametrize
+    def implicit_params = (task.ext.implicit_params == null) ? true : task.ext.implicit_params
+    def meta_params = (task.ext.meta_params == null) ? true : task.ext.meta_params
     """
-    echo ciao
+    # Dump .params.yml heredoc (section will be empty if parametrization is disabled)
+    ${indent_code_block(params_cmd, 4)}
     """
 }
