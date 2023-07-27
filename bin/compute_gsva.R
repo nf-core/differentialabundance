@@ -35,7 +35,7 @@ mapped_df <- data.frame(
   "entrez_id" = mapIds(
     # Replace with annotation package for the organism relevant to your data
     org.Hs.eg.db,
-    keys = counts$ensembl_id,
+    keys = counts$gene_id,
     # Replace with the type of gene identifiers in your data
     keytype = "ENSEMBL",
     # Replace with the type of gene identifiers you would like to map to
@@ -50,7 +50,7 @@ mapped_df <- data.frame(
   # Make an `Ensembl` column to store the row names
   tibble::rownames_to_column("Ensembl") %>%
   # Now let's join the rest of the expression data
-  dplyr::inner_join(counts, by = c("Ensembl" = "ensembl_id"))
+  dplyr::inner_join(counts, by = c("Ensembl" = "gene_id"))
 
 gene_means <- rowMeans(mapped_df %>% dplyr::select(-Ensembl, -entrez_id))
 
