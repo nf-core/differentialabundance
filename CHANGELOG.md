@@ -22,6 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#138](https://github.com/nf-core/differentialabundance/issues/138)]- Fix bugs with --control_features and --sizefactors_from_controls ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#133](https://github.com/nf-core/differentialabundance/issues/133)] - Sample exclusion options fail due to contrast-wise normalisation ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 
+### `Changed`
+
+- [[#151](https://github.com/nf-core/differentialabundance/issues/151)] - Module update ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+
 ## v1.2.0 - 2023-04-19
 
 ### `Added`
