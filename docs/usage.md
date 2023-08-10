@@ -11,10 +11,10 @@ Differential analysis is a common task in a variety of use cases. In essence, al
 With the above in mind, running this workflow requires:
 
 - a set of abundance values. This can be:
-  - (for RNA-seq): a matrix of quantifications with observations by column and features by row
+  - (for RNA-seq or MaxQuant proteomics measurements): a matrix of quantifications with observations by column and features by row
   - (for Affymetrix microarrays): a tar'd archive of CEL files
 - a description of the observations such as a sample sheet from RNA-seq analysis
-- a description of the features, for our initial RNA-seq application this can be simply the GTF file from which gene annotations can be derived. For Affymetrix arrays this can be derived from the array platform annotation package automatically. You can also supply your own table.
+- a description of the features (skip for MaxQuant), for our initial RNA-seq application this can be simply the GTF file from which gene annotations can be derived. For Affymetrix arrays this can be derived from the array platform annotation package automatically. You can also supply your own table.
 - a specification of how the matrix should be split, and how the resulting groups should be compared
 
 ## Observations (samplesheet) input
@@ -48,6 +48,14 @@ The file can be tab or comma separated.
 ```
 
 This is a numeric square matrix file, comma or tab-separated, with a column for every observation, and features corresponding to the supplied feature set. The parameters `--observations_id_col` and `--features_id_col` define which of the associated fields should be matched in those inputs.
+
+### MaxQuant intensities
+
+```bash
+--matrix '[path to matrix file]'
+```
+
+This is the proteinGroups.txt file produced by MaxQuant. It is a tab-separated matrix file with a column for every observation (plus additional columns for other types of measurements and information); each row contains these data for a set of proteins. The parameters `--observations_id_col` and `--features_id_col` define which of the associated fields should be matched in those inputs. The parameter `--proteus_measurecol_prefix` defines which prefix is used to extract those matrix columns which contain the measurements to be used. For example, the default `LFQ intensity ` will indicate that columns like LFQ intensity S1, LFQ intensity S2, LFQ intensity S3 etc. are used (do not forget trailing whitespace in this parameter, if required!).
 
 ### Affymetrix microarrays
 
@@ -93,7 +101,7 @@ The file can be tab or comma separated.
 --gtf '[path to gtf file]'
 ```
 
-This is usually the easiest way to supply annotations for RNA-seq features. It should match the GTF used in nf-core/rnaseq if that workflow was used to produce the input expression matrix.
+This is usually the easiest way to supply annotations for RNA-seq features. It should match the GTF used in nf-core/rnaseq if that workflow was used to produce the input expression matrix. Skip for MaxQuant.
 
 ### Annotation package identifiers for Affymetrix arrays
 
@@ -107,11 +115,11 @@ To override the above options, you may also supply your own features table as a 
 --features '[path to features TSV]'
 ```
 
-By default, if you don't provide features, for non-array data the workflow will fall back to attempting to use the matrix itself as a source of feature annotations. For this to work you must make sure to set the `features_id_col`, `features_name_col` and `features_metadata_cols` parameters to the appropriate values, for example by setting them to 'gene_id' if that is the identifier column on the matrix. This will cause the gene ID to be used everywhere rather than more accessible gene symbols (as can be derived from the GTF), but the workflow should run.
+By default, if you don't provide features, for non-array data the workflow will fall back to attempting to use the matrix itself as a source of feature annotations. For this to work you must make sure to set the `features_id_col`, `features_name_col` and `features_metadata_cols` parameters to the appropriate values, for example by setting them to 'gene_id' if that is the identifier column on the matrix. This will cause the gene ID to be used everywhere rather than more accessible gene symbols (as can be derived from the GTF), but the workflow should run. Please use this option for MaxQuant analysis.
 
 ## Shiny app generation
 
-The pipeline is capable of building, and even deploying (to [shinyapps.io](https://www.shinyapps.io/)) for you a Shiny app built with [ShinyNGS](https://github.com/pinin4fjords/shinyngs).
+The pipeline is capable of building, and even deploying (to [shinyapps.io](https://www.shinyapps.io/)) for you a Shiny app built with [ShinyNGS](https://github.com/pinin4fjords/shinyngs) (disabled for MaxQuant).
 
 This is enabled with:
 

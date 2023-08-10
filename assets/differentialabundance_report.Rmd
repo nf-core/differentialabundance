@@ -71,6 +71,7 @@ params:
   exploratory_mad_threshold: null
   exploratory_main_variable: null
   exploratory_assay_names: NULL
+  exploratory_assay_log2: NULL
   exploratory_final_assay: NULL
   exploratory_palette_name: NULL
   versions_file: null                                         # e.g 17_software_versions.yml
@@ -231,21 +232,67 @@ informative_variables <- informative_variables[ ! duplicated(lapply(structure(in
 assay_names <- simpleSplit(params$exploratory_assay_names)
 names(assay_names) = assay_names
 assay_files <- lapply(assay_names, function(x) params[[paste0(x, '_matrix')]])
+capture.output(assay_files, file="/home-link/iivow01/git/differentialabundance/error/assay_files")
+capture.output(names(assay_files), file="/home-link/iivow01/git/differentialabundance/error/assay_files_names")
+capture.output(assay_names, file="/home-link/iivow01/git/differentialabundance/error/assay_names")
+
+assay_counter <- 0 # Counter to keep track of which assay is currently being processed
+
+# If set, prepare exploratory_assay_log2 before lapply
+if (! is.null(params$exploratory_assay_log2)) {
+  if (is_valid_positive_integer_vector(params$exploratory_assay_log2)) {
+    unlogged <- unique(as.integer(simpleSplit(params$exploratory_assay_log2)))
+    invalid_assays <- unlogged[! unlogged %in% 1:length(assay_files)]
+    if (length(invalid_assays) > 0){
+      stop(paste0("Invalid assay numbers: ", paste(invalid_assays, collapse=', ')))
+    }
+  }
+
+  else {
+    unlogged <- unique(simpleSplit(params$exploratory_assay_log2))
+
+    # Check if all names are valid
+    if (any(!(unlogged %in% names(assay_files)))) {
+      invalid_assays <- paste(unlogged[!(unlogged %in% names(assay_files))], collapse=", ")
+      stop(paste0(invalid_assays, " is/are not valid assay name(s). Valid assay names are: ", paste(names(assay_files), collapse=", "), ". Please check param --exploratory_assay_log2."))
+    }
+
+    for (unlogged_expression_type in unlogged) {
+      assay_data[[unlogged_expression_type]] <- log2(assay_data[[unlogged_expression_type]])
+    }
+  }
+}
 
 assay_data <- lapply(assay_files, function(x) {
-  mat <- read_matrix(
-    x,
-    sample_metadata = observations,
-    row.names = 1
+  
+  mat <- na.omit(
+    read_matrix(
+      x,
+      sample_metadata = observations,
+      row.names = 1
+    )
   )
   colnames(mat) <- observations[[params$observations_name_col]][match(colnames(mat), rownames(observations))]
 
-  # Bit hacky, but ensure log
-  if (max(mat) > 20){
-    log2(mat+1)
-  }else{
+  # Determine if log2 should be guessed/applied to no assays/applied to certain assays
+  if (is.null(params$exploratory_assay_log2)) {
+    if (max(mat) > 20){
+      log2(mat+1)
+    }
+  } else if (params$exploratory_assay_log2 == "") {
+    mat
+  } else if (is_valid_positive_integer_vector(params$exploratory_assay_log2)) {
+    
+  }
+  
+  
+  
+  else{
     mat 
   }
+  
+  
+  
 })
 
 # Now we can rename the observations rows using the title field
