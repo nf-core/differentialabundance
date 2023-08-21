@@ -35,6 +35,7 @@ params:
   features_metadata_cols: NULL 
   features_gtf_feature_type: NULL
   features_gtf_table_first_field: NULL
+  features_log2_assays: NULL
   raw_matrix: null                                            # e.g. 0_salmon.merged.gene_counts.tsv
   normalised_matrix: null
   variance_stabilised_matrix: null                            # e.g. test_files/3_treatment-WT-P23H.vst.tsv
@@ -71,7 +72,6 @@ params:
   exploratory_mad_threshold: null
   exploratory_main_variable: null
   exploratory_assay_names: NULL
-  exploratory_assay_log2: NULL
   exploratory_final_assay: NULL
   exploratory_palette_name: NULL
   versions_file: null                                         # e.g 17_software_versions.yml
@@ -148,9 +148,28 @@ datatable(NULL)
 ```
 
 ```{r, include=FALSE}
-versions <- unlist(yaml.load_file(file.path(params$input_dir, params$versions_file)), recursive = FALSE)
-params_table <- data.frame(Parameter = names(unlist(params)), Value = unlist(params), row.names = NULL)
+custom_num_handler <- function(i) { 
+  tryCatch(
+    {
+      as.numeric(i)
+     # write(paste0("Tying to convert argument", i, "to numeric."), file="/home-link/iivow01/git/differentialabundance/error/trystuff", append=T)
 
+    },
+    error=function(e) {
+      write(paste0("Could not convert argument", i, "to numeric because of the following error\n", e, "\nWill treat as character."), file="/home-link/iivow01/git/differentialabundance/error/errorstuff", append=T)
+      as.character(i)
+    },
+    warning=function(w) {
+      print(paste0("Could not convert argument", i, "to numeric because of the following warning\n", w, "\nWill treat as character."))
+      write(paste0("Could not convert argument", i, "to numeric because of the following error\n", e, "\nWill treat as character."), file="/home-link/iivow01/git/differentialabundance/error/warnstuff", append=T)
+      as.character(i)
+    }
+  )
+}
+
+versions <- unlist(yaml.load_file(file.path(params$input_dir, params$versions_file), handlers=list("float#fix"=custom_num_handler)), recursive = FALSE)
+params_table <- data.frame(Parameter = names(unlist(params)), Value = unlist(params), row.names = NULL)
+write.table(params_table, file="/home-link/iivow01/git/differentialabundance/error/pars.tsv", sep="\t", quote=F)
 # We'll subset the params table for different report sections
 make_params_table <- function(name, pattern = NULL, remove_pattern = FALSE){
   subparams <- params_table
@@ -228,72 +247,78 @@ informative_variables <- unique(c(contrasts$variable, chooseGroupingVariables(ob
 
 # Remove any informative variables that group observations the same way
 informative_variables <- informative_variables[ ! duplicated(lapply(structure(informative_variables, names= informative_variables), function(x) as.numeric(factor(observations[[x]], levels=unique(observations[[x]])))))]
-
 assay_names <- simpleSplit(params$exploratory_assay_names)
 names(assay_names) = assay_names
 assay_files <- lapply(assay_names, function(x) params[[paste0(x, '_matrix')]])
-capture.output(assay_files, file="/home-link/iivow01/git/differentialabundance/error/assay_files")
-capture.output(names(assay_files), file="/home-link/iivow01/git/differentialabundance/error/assay_files_names")
-capture.output(assay_names, file="/home-link/iivow01/git/differentialabundance/error/assay_names")
+write(length(assay_files), file="/home-link/iivow01/git/differentialabundance/error/assay_length")
 
-assay_counter <- 0 # Counter to keep track of which assay is currently being processed
-
-# If set, prepare exploratory_assay_log2 before lapply
-if (! is.null(params$exploratory_assay_log2)) {
-  if (is_valid_positive_integer_vector(params$exploratory_assay_log2)) {
-    unlogged <- unique(as.integer(simpleSplit(params$exploratory_assay_log2)))
-    invalid_assays <- unlogged[! unlogged %in% 1:length(assay_files)]
-    if (length(invalid_assays) > 0){
-      stop(paste0("Invalid assay numbers: ", paste(invalid_assays, collapse=', ')))
-    }
-  }
-
-  else {
-    unlogged <- unique(simpleSplit(params$exploratory_assay_log2))
-
-    # Check if all names are valid
-    if (any(!(unlogged %in% names(assay_files)))) {
-      invalid_assays <- paste(unlogged[!(unlogged %in% names(assay_files))], collapse=", ")
-      stop(paste0(invalid_assays, " is/are not valid assay name(s). Valid assay names are: ", paste(names(assay_files), collapse=", "), ". Please check param --exploratory_assay_log2."))
-    }
-
-    for (unlogged_expression_type in unlogged) {
-      assay_data[[unlogged_expression_type]] <- log2(assay_data[[unlogged_expression_type]])
-    }
-  }
+# Set up vector of unlogged assay files (if any)
+unlogged <- c()
+features_log2_assays <- gsub('\\]$', '', gsub('^\\[', '', params$features_log2_assays))  
+if (params$study_type == "maxquant") {
+  # Overwrite param for maxquant as the proteus module always logs
+ # features_log2_assays <- "0"
 }
 
-assay_data <- lapply(assay_files, function(x) {
-  
+
+
+
+capture.output(params$limma_stdev_coef_lim, file="/home-link/iivow01/git/differentialabundance/error/aaaaa")
+capture.output(typeof(params$features_log2_assays), file="/home-link/iivow01/git/differentialabundance/error/aaaaa", append=T)
+capture.output(params$features_log2_assays, file="/home-link/iivow01/git/differentialabundance/error/aaaaa", append=T)
+capture.output(typeof(params$features_log2_assays), file="/home-link/iivow01/git/differentialabundance/error/aaaaa", append=T)
+capture.output(features_log2_assays, file="/home-link/iivow01/git/differentialabundance/error/aaaaa", append=T)
+capture.output(typeof(features_log2_assays), file="/home-link/iivow01/git/differentialabundance/error/aaaaa", append=T)
+capture.output(params, file="/home-link/iivow01/git/differentialabundance/error/aaaaa", append=T)
+
+if (is.null(features_log2_assays)) {
+  # Guess unlogged assays
+  for (assay in names(assay_files)) {
+    if (max(assay_files[[assay]]) > 20) {
+      unlogged <- append(unlogged, assay)
+    }
+  }
+
+} else if (features_log2_assays == "") {
+  # Do nothing as no assay files are unlogged
+capture.output("Do nothing as no assay files are unlogged", file="/home-link/iivow01/git/differentialabundance/error/aaaaa", append=T)
+
+} else if (is_valid_positive_integer_vector(features_log2_assays)) {
+  # Get assay names at indicated positions
+  unlogged <- unique(as.integer(simpleSplit(features_log2_assays)))
+  invalid_assays <- unlogged[! unlogged %in% 1:length(assay_files)]
+  if (length(invalid_assays) > 0){
+    stop(paste0("Invalid assay numbers: ", paste(invalid_assays, collapse=', ')))
+  }
+
+} else {
+  # Last option is string of assay names, so just split it into a list
+  unlogged <- unique(simpleSplit(features_log2_assays))
+  # Check if all names are valid
+  invalid_assays <- paste(unlogged[!(unlogged %in% names(assay_files))], collapse=", ")
+  if (length(invalid_assays) > 0) {
+    stop(paste0(invalid_assays, " is/are not valid assay name(s). Valid assay names are: ", paste(names(assay_files), collapse=", "), ". Please check param --features_log2_assays."))
+  }
+}
+asdasd
+assay_data <- lapply(names(assay_files), function(x) {
   mat <- na.omit(
     read_matrix(
-      x,
+      assay_files[[x]],
       sample_metadata = observations,
       row.names = 1
     )
   )
   colnames(mat) <- observations[[params$observations_name_col]][match(colnames(mat), rownames(observations))]
 
-  # Determine if log2 should be guessed/applied to no assays/applied to certain assays
-  if (is.null(params$exploratory_assay_log2)) {
-    if (max(mat) > 20){
-      log2(mat+1)
-    }
-  } else if (params$exploratory_assay_log2 == "") {
-    mat
-  } else if (is_valid_positive_integer_vector(params$exploratory_assay_log2)) {
-    
+  # If assay is in unlogged list, apply log2
+  if (x %in% unlogged) {
+    mat <- log2(mat+1)
   }
-  
-  
-  
-  else{
-    mat 
-  }
-  
-  
+  mat
   
 })
+names(assay_data) <- names(assay_files)
 
 # Now we can rename the observations rows using the title field
 rownames(observations) <- observations[[params$observations_name_col]]
@@ -304,7 +329,6 @@ pca_datas <- lapply(names(assay_data), function(assay_type){
   compilePCAData(assay_data[[assay_type]])
 })
 names(pca_datas) <- names(assay_data)
-
 pca_vs_meta <- anova_pca_metadata(pca_datas[[params$exploratory_final_assay]]$coords, observations[,informative_variables, drop = FALSE], pca_datas[[params$exploratory_final_assay]]$percentVar)
 
 # Show the variable with the tightest PC associations first
@@ -342,10 +366,7 @@ treatment-mCherry-hND6-batcheffect.deseq2.results.tsv
 
 ```{r, echo=FALSE}
 
-prefix_part_names <- c('variable', 'reference', 'target', 'blocking')
-diff_prefixes <- sub('-$', '', apply(contrasts[,prefix_part_names], 1, function(x) paste(x, collapse = '-')))
-
-differential_files <- lapply(diff_prefixes, function(d){
+differential_files <- lapply(contrasts$id, function(d){
  file.path(params$input_dir, paste0(gsub(' |;', '_', d), params$differential_file_suffix)) 
 })
 
@@ -375,16 +396,31 @@ differential_results <- lapply(differential_files, function(diff_file){
   }
   diff
 })
-names(differential_results) <- diff_prefixes
+names(differential_results) <- contrasts$id
 ```
 
 <!-- Calculate some summary statistics -->
 
 ```{r, echo=FALSE}
 
-contrast_descriptions <- paste(contrasts$target, 'versus', contrasts$reference, 'in', contrasts$variable) 
-with_blocking <- which(contrasts$blocking != '')
-contrast_descriptions[with_blocking] <- paste0(contrast_descriptions[with_blocking], " (blocking on ", contrasts$blocking[with_blocking],")")
+# Function to make friendly contrast name from contrast components, including optional bits
+
+name_contrast <- function(i){
+  contrast_name <- paste(contrasts$target[i], 'versus', contrasts$reference[i], 'in', contrasts$variable[i])
+  contrast_vals <- contrasts[i,]
+  populated <- colnames(contrasts)[! (is.na(contrast_vals) | contrast_vals == '' | is.null(contrast_vals))]
+  optional <- setdiff(populated, c('id', 'target', 'reference', 'variable'))
+
+  if (length(optional) > 0){
+    optional_part <-  paste0('(', paste(paste(optional, contrasts[i,optional], sep=': '), collapse=', '), ')')
+  }else{
+    optional_part <- ''
+  }
+
+  paste(contrast_name, optional_part)
+}
+
+contrast_descriptions <- unlist(lapply(1:nrow(contrasts), function(x) name_contrast(x)))
 
 # Check both adjusted and unadjusted p values
 
@@ -445,7 +481,6 @@ if (all(minimal_fetchngs_cols %in% colnames(observations))){
 }else{
   additional_useful_cols <- colnames(observations)[which(apply(observations, 2, function(x) max(nchar(x))) <= 20)] 
 }
-
 display_columns <- head(union(display_columns, additional_useful_cols), 5)
 
 # Also add informative columns

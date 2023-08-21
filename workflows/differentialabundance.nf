@@ -1,12 +1,18 @@
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    VALIDATE INPUTS
+    PRINT PARAMS SUMMARY
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
+include { paramsSummaryLog; paramsSummaryMap } from 'plugin/nf-validation'
 
-// Validate input parameters
+def logo = NfcoreTemplate.logo(workflow, params.monochrome_logs)
+def citation = '\n' + WorkflowMain.citation(workflow) + '\n'
+def summary_params = paramsSummaryMap(workflow)
+
+// Print parameter summary log to screen
+log.info logo + paramsSummaryLog(workflow) + citation
+
 WorkflowDifferentialabundance.initialise(params, log)
 
 def checkPathParamList = [ params.input ]
@@ -92,6 +98,7 @@ include { SHINYNGS_APP                                      } from '../modules/n
 include { SHINYNGS_STATICEXPLORATORY as PLOT_EXPLORATORY    } from '../modules/nf-core/shinyngs/staticexploratory/main'
 include { SHINYNGS_STATICDIFFERENTIAL as PLOT_DIFFERENTIAL  } from '../modules/nf-core/shinyngs/staticdifferential/main'
 include { SHINYNGS_VALIDATEFOMCOMPONENTS as VALIDATOR       } from '../modules/nf-core/shinyngs/validatefomcomponents/main'
+include { DESEQ2_DIFFERENTIAL as DESEQ2_NORM                } from '../modules/nf-core/deseq2/differential/main'
 include { DESEQ2_DIFFERENTIAL                               } from '../modules/nf-core/deseq2/differential/main'
 include { LIMMA_DIFFERENTIAL                                } from '../modules/nf-core/limma/differential/main'
 include { CUSTOM_MATRIXFILTER                               } from '../modules/nf-core/custom/matrixfilter/main'
@@ -346,6 +353,14 @@ workflow DIFFERENTIALABUNDANCE {
     }
     else{
 
+	// 
+
+	DESEQ2_NORM (
+            ch_contrasts.first(),
+            ch_samples_and_matrix,
+            ch_control_features
+        )
+
         // Run the DESeq differential module, which doesn't take the feature
         // annotations
 
@@ -354,7 +369,7 @@ workflow DIFFERENTIALABUNDANCE {
             ch_samples_and_matrix,
             ch_control_features
         )
-
+        
         // Let's make the simplifying assumption that the processed matrices from
         // the DESeq runs are the same across contrasts. We run the DESeq process
         // with matrices once for each contrast because DESeqDataSetFromMatrix()
@@ -362,8 +377,8 @@ workflow DIFFERENTIALABUNDANCE {
         // blocking factors included differ. But the normalised and
         // variance-stabilised matrices are not (IIUC) impacted by the model.
 
-        ch_norm = DESEQ2_DIFFERENTIAL.out.normalised_counts.first()
-        ch_vst = DESEQ2_DIFFERENTIAL.out.vst_counts.first()
+        ch_norm = DESEQ2_NORM.out.normalised_counts
+        ch_vst = DESEQ2_NORM.out.vst_counts
         ch_differential = DESEQ2_DIFFERENTIAL.out.results
 
         ch_versions = ch_versions
@@ -372,6 +387,18 @@ workflow DIFFERENTIALABUNDANCE {
         ch_processed_matrices = ch_norm
             .join(ch_vst)
             .map{ it.tail() }
+    }
+    
+    if (params.study_type != 'maxquant') {
+        // VALIDATOR has now run for any study_type, so collect its output
+        ch_all_matrices = VALIDATOR.out.sample_meta                 // meta, samples
+            .join(VALIDATOR.out.feature_meta)                       // meta, samples, features
+            .join(ch_raw)                                           // meta, samples, features, raw matrix
+            .combine(ch_processed_matrices)                         // meta, samples, features, raw, norm, ...
+            .map{
+                tuple(it[0], it[1], it[2], it[3..it.size()-1])
+            }
+            .first()
     }
 
     // Run a gene set analysis where directed
@@ -537,18 +564,20 @@ workflow DIFFERENTIALABUNDANCE {
     if (params.study_type == 'affy_array' || params.study_type == 'maxquant'){
         params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|affy|limma|gsea).*/
     }
-
+    print "params"
+    print params
+    print "params end"
     ch_report_params = ch_report_input_files
         .map{
             params.findAll{ k,v -> k.matches(params_pattern) } +
             [report_file_names, it.collect{ f -> f.name}].transpose().collectEntries()
         }
-
+    
     // Render the final report
 
     RMARKDOWNNOTEBOOK(
         ch_report_file,
-        ch_report_params,
+        ch_report_params.dump(tag:'params'),
         ch_report_input_files
     )
 
