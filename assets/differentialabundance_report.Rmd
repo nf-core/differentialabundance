@@ -148,28 +148,9 @@ datatable(NULL)
 ```
 
 ```{r, include=FALSE}
-custom_num_handler <- function(i) { 
-  tryCatch(
-    {
-      as.numeric(i)
-     # write(paste0("Tying to convert argument", i, "to numeric."), file="/home-link/iivow01/git/differentialabundance/error/trystuff", append=T)
-
-    },
-    error=function(e) {
-      write(paste0("Could not convert argument", i, "to numeric because of the following error\n", e, "\nWill treat as character."), file="/home-link/iivow01/git/differentialabundance/error/errorstuff", append=T)
-      as.character(i)
-    },
-    warning=function(w) {
-      print(paste0("Could not convert argument", i, "to numeric because of the following warning\n", w, "\nWill treat as character."))
-      write(paste0("Could not convert argument", i, "to numeric because of the following error\n", e, "\nWill treat as character."), file="/home-link/iivow01/git/differentialabundance/error/warnstuff", append=T)
-      as.character(i)
-    }
-  )
-}
-
-versions <- unlist(yaml.load_file(file.path(params$input_dir, params$versions_file), handlers=list("float#fix"=custom_num_handler)), recursive = FALSE)
+versions <- unlist(yaml.load_file(file.path(params$input_dir, params$versions_file)), recursive = FALSE)
 params_table <- data.frame(Parameter = names(unlist(params)), Value = unlist(params), row.names = NULL)
-write.table(params_table, file="/home-link/iivow01/git/differentialabundance/error/pars.tsv", sep="\t", quote=F)
+
 # We'll subset the params table for different report sections
 make_params_table <- function(name, pattern = NULL, remove_pattern = FALSE){
   subparams <- params_table
@@ -250,26 +231,10 @@ informative_variables <- informative_variables[ ! duplicated(lapply(structure(in
 assay_names <- simpleSplit(params$exploratory_assay_names)
 names(assay_names) = assay_names
 assay_files <- lapply(assay_names, function(x) params[[paste0(x, '_matrix')]])
-write(length(assay_files), file="/home-link/iivow01/git/differentialabundance/error/assay_length")
 
 # Set up vector of unlogged assay files (if any)
 unlogged <- c()
-features_log2_assays <- gsub('\\]$', '', gsub('^\\[', '', params$features_log2_assays))  
-if (params$study_type == "maxquant") {
-  # Overwrite param for maxquant as the proteus module always logs
- # features_log2_assays <- "0"
-}
-
-
-
-
-capture.output(params$limma_stdev_coef_lim, file="/home-link/iivow01/git/differentialabundance/error/aaaaa")
-capture.output(typeof(params$features_log2_assays), file="/home-link/iivow01/git/differentialabundance/error/aaaaa", append=T)
-capture.output(params$features_log2_assays, file="/home-link/iivow01/git/differentialabundance/error/aaaaa", append=T)
-capture.output(typeof(params$features_log2_assays), file="/home-link/iivow01/git/differentialabundance/error/aaaaa", append=T)
-capture.output(features_log2_assays, file="/home-link/iivow01/git/differentialabundance/error/aaaaa", append=T)
-capture.output(typeof(features_log2_assays), file="/home-link/iivow01/git/differentialabundance/error/aaaaa", append=T)
-capture.output(params, file="/home-link/iivow01/git/differentialabundance/error/aaaaa", append=T)
+features_log2_assays <- params$features_log2_assays
 
 if (is.null(features_log2_assays)) {
   # Guess unlogged assays
@@ -279,28 +244,31 @@ if (is.null(features_log2_assays)) {
     }
   }
 
-} else if (features_log2_assays == "") {
-  # Do nothing as no assay files are unlogged
-capture.output("Do nothing as no assay files are unlogged", file="/home-link/iivow01/git/differentialabundance/error/aaaaa", append=T)
-
-} else if (is_valid_positive_integer_vector(features_log2_assays)) {
-  # Get assay names at indicated positions
-  unlogged <- unique(as.integer(simpleSplit(features_log2_assays)))
-  invalid_assays <- unlogged[! unlogged %in% 1:length(assay_files)]
-  if (length(invalid_assays) > 0){
-    stop(paste0("Invalid assay numbers: ", paste(invalid_assays, collapse=', ')))
-  }
-
 } else {
-  # Last option is string of assay names, so just split it into a list
-  unlogged <- unique(simpleSplit(features_log2_assays))
-  # Check if all names are valid
-  invalid_assays <- paste(unlogged[!(unlogged %in% names(assay_files))], collapse=", ")
-  if (length(invalid_assays) > 0) {
-    stop(paste0(invalid_assays, " is/are not valid assay name(s). Valid assay names are: ", paste(names(assay_files), collapse=", "), ". Please check param --features_log2_assays."))
+  features_log2_assays <- gsub('\\]$', '', gsub('^\\[', '', features_log2_assays)) # Remove brackets from assay list
+
+  if (features_log2_assays == "") {
+    # Do nothing as no assay files are unlogged
+
+  } else if (is_valid_positive_integer_vector(features_log2_assays)) {
+    # Get assay names at indicated positions
+    unlogged <- unique(as.integer(simpleSplit(features_log2_assays)))
+    invalid_assays <- unlogged[! unlogged %in% 1:length(assay_files)]
+    if (length(invalid_assays) > 0){
+      stop(paste0("Invalid assay numbers: ", paste(invalid_assays, collapse=', ')))
+    }
+
+  } else {
+    # Last option is string of assay names, so just split it into a list
+    unlogged <- unique(simpleSplit(features_log2_assays))
+    # Check if all names are valid
+    invalid_assays <- paste(unlogged[!(unlogged %in% names(assay_files))], collapse=", ")
+    if (length(invalid_assays) > 0) {
+      stop(paste0(invalid_assays, " is/are not valid assay name(s). Valid assay names are: ", paste(names(assay_files), collapse=", "), ". Please check param --features_log2_assays."))
+    }
   }
 }
-asdasd
+
 assay_data <- lapply(names(assay_files), function(x) {
   mat <- na.omit(
     read_matrix(

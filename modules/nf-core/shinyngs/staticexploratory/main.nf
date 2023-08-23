@@ -33,9 +33,7 @@ process SHINYNGS_STATICEXPLORATORY {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: meta.id
     """
-    echo $args > /home-link/iivow01/git/differentialabundance/error/explo_params
-    #exploratory_plots.R \\
-    /home-link/iivow01/git/differentialabundance/save_stuff/templates/explo_before_param_change.R \\
+    exploratory_plots.R \\
         --sample_metadata "$sample" \\
         --feature_metadata "$feature_meta" \\
         --assay_files "${assay_files.join(',')}" \\

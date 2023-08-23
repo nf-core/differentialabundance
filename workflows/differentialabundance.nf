@@ -564,9 +564,7 @@ workflow DIFFERENTIALABUNDANCE {
     if (params.study_type == 'affy_array' || params.study_type == 'maxquant'){
         params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|affy|limma|gsea).*/
     }
-    print "params"
-    print params
-    print "params end"
+
     ch_report_params = ch_report_input_files
         .map{
             params.findAll{ k,v -> k.matches(params_pattern) } +
@@ -577,7 +575,7 @@ workflow DIFFERENTIALABUNDANCE {
 
     RMARKDOWNNOTEBOOK(
         ch_report_file,
-        ch_report_params.dump(tag:'params'),
+        ch_report_params,
         ch_report_input_files
     )
 
