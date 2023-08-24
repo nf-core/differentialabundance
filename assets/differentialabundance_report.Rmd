@@ -236,9 +236,17 @@ assay_files <- lapply(assay_names, function(x) params[[paste0(x, '_matrix')]])
 unlogged <- c()
 features_log2_assays <- params$features_log2_assays
 
+# For maxquant input override param as all assays are already logged by proteus
+if (params$study_type == 'maxquant') {
+  features_log2_assays <- ""
+  if (! is.null(features_log2_assays)) {
+    print("Got maxquant dataset, will override --features_log2_assays parameter so as not to log the assays twice.")
+  }
+}
+
 if (is.null(features_log2_assays)) {
   # Guess unlogged assays
-  for (assay in names(assay_files)) {
+  for (assay in c(1:length(assay_files))) {
     if (max(assay_files[[assay]]) > 20) {
       unlogged <- append(unlogged, assay)
     }
@@ -251,25 +259,28 @@ if (is.null(features_log2_assays)) {
     # Do nothing as no assay files are unlogged
 
   } else if (is_valid_positive_integer_vector(features_log2_assays)) {
-    # Get assay names at indicated positions
+    # Convert to list of assay positions
     unlogged <- unique(as.integer(simpleSplit(features_log2_assays)))
     invalid_assays <- unlogged[! unlogged %in% 1:length(assay_files)]
+
     if (length(invalid_assays) > 0){
       stop(paste0("Invalid assay numbers: ", paste(invalid_assays, collapse=', ')))
     }
 
   } else {
-    # Last option is string of assay names, so just split it into a list
+    # Last option is string of assay names, so get positions of those names in the assay list
     unlogged <- unique(simpleSplit(features_log2_assays))
+
     # Check if all names are valid
-    invalid_assays <- paste(unlogged[!(unlogged %in% names(assay_files))], collapse=", ")
+    invalid_assays <- unlogged[!(unlogged %in% names(assay_files))]
     if (length(invalid_assays) > 0) {
       stop(paste0(invalid_assays, " is/are not valid assay name(s). Valid assay names are: ", paste(names(assay_files), collapse=", "), ". Please check param --features_log2_assays."))
     }
+    unlogged <- match(unlogged, names(assay_files))
   }
 }
 
-assay_data <- lapply(names(assay_files), function(x) {
+assay_data <- lapply(c(1:length(assay_files)), function(x) {
   mat <- na.omit(
     read_matrix(
       assay_files[[x]],
