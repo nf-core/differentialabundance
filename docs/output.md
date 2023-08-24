@@ -42,7 +42,6 @@ Stand-alone graphical outputs are placed in this directory. They may be useful i
     - `[contrast].proteus.[normfun].normalized_mean_variance_relationship.png`: Plots of log intensity vs mean log intensity after normalization of each contrast level, if chosen.
     - `[contrast].proteus.[normfun].normalized_distributions.png`: A plot of sample distributions after normalization, if chosen.
     - `[contrast].proteus.raw_distributions.png`: A plot of sample distributions without normalization.
-    
 
 </details>
 
