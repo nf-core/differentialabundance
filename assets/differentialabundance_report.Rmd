@@ -228,6 +228,7 @@ informative_variables <- unique(c(contrasts$variable, chooseGroupingVariables(ob
 
 # Remove any informative variables that group observations the same way
 informative_variables <- informative_variables[ ! duplicated(lapply(structure(informative_variables, names= informative_variables), function(x) as.numeric(factor(observations[[x]], levels=unique(observations[[x]])))))]
+
 assay_names <- simpleSplit(params$exploratory_assay_names)
 names(assay_names) = assay_names
 assay_files <- lapply(assay_names, function(x) params[[paste0(x, '_matrix')]])
@@ -297,6 +298,8 @@ assay_data <- lapply(c(1:length(assay_files)), function(x) {
   mat
   
 })
+
+# Lapply does not go over the assay_files themselves anymore, so we need to specifically assign their names to the data
 names(assay_data) <- names(assay_files)
 
 # Now we can rename the observations rows using the title field
@@ -308,6 +311,7 @@ pca_datas <- lapply(names(assay_data), function(assay_type){
   compilePCAData(assay_data[[assay_type]])
 })
 names(pca_datas) <- names(assay_data)
+
 pca_vs_meta <- anova_pca_metadata(pca_datas[[params$exploratory_final_assay]]$coords, observations[,informative_variables, drop = FALSE], pca_datas[[params$exploratory_final_assay]]$percentVar)
 
 # Show the variable with the tightest PC associations first
@@ -460,6 +464,7 @@ if (all(minimal_fetchngs_cols %in% colnames(observations))){
 }else{
   additional_useful_cols <- colnames(observations)[which(apply(observations, 2, function(x) max(nchar(x))) <= 20)] 
 }
+
 display_columns <- head(union(display_columns, additional_useful_cols), 5)
 
 # Also add informative columns
@@ -640,7 +645,6 @@ for (assay_type in rev(names(assay_data))){
     variable_genes <- selectVariableGenes(matrix = assay_data[[assay_type]], ntop = params$exploratory_n_features)
 
     dendroColorScale <- makeColorScale(length(unique(observations[[iv]])), palette = params$exploratory_palette_name)
-
     p <- clusteringDendrogram(
       2^assay_data[[assay_type]][variable_genes, ],
       observations[, iv, drop = FALSE],

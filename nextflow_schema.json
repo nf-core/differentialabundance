@@ -182,7 +182,7 @@
                 "features_log2_assays": {
                     "type": "string",
                     "description": "Of which assays to compute the log2. Not necessary for maxquant data as this is controlled by the pipeline.",
-                    "help_text": "Either comma-separated list of assay names enclosed by square brackets, e.g. '[raw,normalised]'; or list of assay positions, e.g. '[1,2,3]', or empty list '[]' to not log any assay. If not set, will guess which assays need to be logged (those with a maximum > 20)."
+                    "help_text": "Either comma-separated of assay positions, e.g. '[1,2,3]', or empty list '[]' to not log any assay. If not set, will guess which assays need to be logged (those with a maximum > 20)."
                 }
             },
             "required": ["features_id_col", "features_name_col", "features_type"],
@@ -268,7 +268,7 @@
                 "proteus_plotSD_method": {
                     "type": "string",
                     "default": "violin",
-                    "description": "Which method to use for plotting sample distributions of the MaxQuant intensities.",
+                    "description": "Which method to use for plotting sample distributions of the MaxQuant intensities; one of 'violin', 'dist', 'box'.",
                     "help_text": "'violin', 'dist' or 'box'",
                     "enum": ["violin", "dist", "box"]
                 },

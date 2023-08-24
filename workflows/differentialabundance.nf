@@ -570,7 +570,7 @@ workflow DIFFERENTIALABUNDANCE {
             params.findAll{ k,v -> k.matches(params_pattern) } +
             [report_file_names, it.collect{ f -> f.name}].transpose().collectEntries()
         }
-    
+
     // Render the final report
 
     RMARKDOWNNOTEBOOK(
