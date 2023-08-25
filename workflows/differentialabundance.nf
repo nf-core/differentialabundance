@@ -106,7 +106,7 @@ include { CUSTOM_TABULARTOGSEACLS                           } from '../modules/n
 include { RMARKDOWNNOTEBOOK                                 } from '../modules/nf-core/rmarkdownnotebook/main'
 include { AFFY_JUSTRMA as AFFY_JUSTRMA_RAW                  } from '../modules/nf-core/affy/justrma/main'
 include { AFFY_JUSTRMA as AFFY_JUSTRMA_NORM                 } from '../modules/nf-core/affy/justrma/main'
-include { GEOQUERY_GETGEO as READ_FROM_SOFT                 } from '../modules/nf-core/geoquery/getgeo/main'
+include { GEOQUERY_GETGEO                                   } from '../modules/nf-core/geoquery/getgeo/main'
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
@@ -164,12 +164,12 @@ workflow DIFFERENTIALABUNDANCE {
         ch_soft_file_input = ch_input
             .join(ch_querygse)
 
-        READ_FROM_SOFT(ch_soft_file_input)
-        ch_in_raw = READ_FROM_SOFT.out.expression
-        ch_soft_features = READ_FROM_SOFT.out.annotation
+        GEOQUERY_GETGEO(ch_soft_file_input)
+        ch_in_raw = GEOQUERY_GETGEO.out.expression
+        ch_soft_features = GEOQUERY_GETGEO.out.annotation
 
         ch_versions = ch_versions
-            .mix(READ_FROM_SOFT.out.versions)
+            .mix(GEOQUERY_GETGEO.out.versions)
     }
     //// Fetch or derive a feature annotation table
 
