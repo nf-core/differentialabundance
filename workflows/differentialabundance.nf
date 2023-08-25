@@ -32,7 +32,7 @@ if (params.study_type == 'affy_array'){
   // then a GSE study identifier must be provided
 } else if (params.study_type == 'geo_soft_file'){
     if (params.querygse && params.features_metadata_cols) {
-        ch_querygse = Channel.of([exp_meta])
+        ch_querygse = Channel.of([[exp_meta], params.querygse])
     } else {
         error("Query GSE not specified or features metadata columns not specified")
     }
