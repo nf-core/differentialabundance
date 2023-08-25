@@ -164,7 +164,7 @@ workflow DIFFERENTIALABUNDANCE {
         ch_soft_file_input = ch_input
             .join(ch_querygse)
 
-        GEOQUERY_GETGEO(ch_soft_file_input)
+        GEOQUERY_GETGEO(ch_query_gse)
         ch_in_raw = GEOQUERY_GETGEO.out.expression
         ch_soft_features = GEOQUERY_GETGEO.out.annotation
 
