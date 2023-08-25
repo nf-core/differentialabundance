@@ -155,9 +155,6 @@ workflow DIFFERENTIALABUNDANCE {
         ch_versions = ch_versions
             .mix(AFFY_JUSTRMA_RAW.out.versions)
 
-        ch_versions = ch_versions
-            .mix(AFFY_JUSTRMA_NORM.out.versions)
-
     }
     else if(params.study_type == 'geo_soft_file'){
 
