@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
-- [[#152](https://github.com/nf-core/differentialabundance/issues/152)] - RMARKDOWNNOTEBOOK env update ([@WackerO](https://github.com/WackerO), review by )
+- [[#152](https://github.com/nf-core/differentialabundance/issues/152)] - RMARKDOWNNOTEBOOK env update ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#151](https://github.com/nf-core/differentialabundance/issues/151)] - Module update ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 
 ## v1.2.0 - 2023-04-19
