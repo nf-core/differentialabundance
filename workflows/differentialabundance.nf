@@ -160,7 +160,7 @@ workflow DIFFERENTIALABUNDANCE {
     }
     else if(params.study_type == 'geo_soft_file'){
 
-        GEOQUERY_GETGEO(ch_query_gse)
+        GEOQUERY_GETGEO(ch_querygse)
         ch_in_norm = GEOQUERY_GETGEO.out.expression
         ch_soft_features = GEOQUERY_GETGEO.out.annotation
 
