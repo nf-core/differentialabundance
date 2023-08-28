@@ -304,9 +304,7 @@ workflow DIFFERENTIALABUNDANCE {
     }
     else{
 
-	// 
-
-	DESEQ2_NORM (
+	    DESEQ2_NORM (
             ch_contrasts.first(),
             ch_samples_and_matrix,
             ch_control_features
@@ -408,13 +406,16 @@ workflow DIFFERENTIALABUNDANCE {
         }
         .unique()
 
-    if(params.study_type != "geo_soft_file") {
-       ch_mat = ch_raw.combine(ch_processed_matrices)
+    // For geoquery we've done no matrix processing and been supplied with the
+    // normalised matrix, which can be passed through to downstream analysis
+
+    if(params.study_type == "geo_soft_file") {
+       ch_mat = ch_norm
     }else{
-       ch_mat = ch_processed_matrices
+       ch_mat = ch_raw.combine(ch_processed_matrices)
     }
 
-     ch_all_matrices = VALIDATOR.out.sample_meta                 // meta, samples
+    ch_all_matrices = VALIDATOR.out.sample_meta                // meta, samples
         .join(VALIDATOR.out.feature_meta)                       // meta, samples, features
         .join(ch_mat)                                           // meta, samples, features, raw, norm (or just norm)
         .map{
