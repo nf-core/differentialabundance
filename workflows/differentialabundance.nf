@@ -28,9 +28,10 @@ if (params.study_type == 'affy_array'){
     } else {
         error("CEL files archive not specified!")
     }
-  // If this is another array platform and user wish to read from SOFT files
-  // then a GSE study identifier must be provided
 } else if (params.study_type == 'geo_soft_file'){
+
+    // To pull SOFT files from a GEO a GSE study identifer must be provided
+
     if (params.querygse && params.features_metadata_cols) {
         ch_querygse = Channel.of([[exp_meta], params.querygse])
     } else {
@@ -39,6 +40,7 @@ if (params.study_type == 'affy_array'){
 } else {
     // If this is not microarray data, and this an RNA-seq dataset,
     // then assume we're reading from a matrix
+
     if (params.study_type == "rnaseq" && params.matrix) {
         matrix_file = file(params.matrix, checkIfExists: true)
         ch_in_raw = Channel.of([ exp_meta, matrix_file])
@@ -159,7 +161,7 @@ workflow DIFFERENTIALABUNDANCE {
     else if(params.study_type == 'geo_soft_file'){
 
         GEOQUERY_GETGEO(ch_query_gse)
-        ch_in_raw = GEOQUERY_GETGEO.out.expression
+        ch_in_norm = GEOQUERY_GETGEO.out.expression
         ch_soft_features = GEOQUERY_GETGEO.out.annotation
 
         ch_versions = ch_versions
@@ -218,6 +220,9 @@ workflow DIFFERENTIALABUNDANCE {
         ch_matrices_for_validation = ch_in_raw
             .join(ch_in_norm)
             .map{tuple(it[0], [it[1], it[2]])}
+    }
+    else if (params.study_type == 'geo_soft_file'){
+        ch_matrices_for_validation = ch_in_norm
     }
     else{
         ch_matrices_for_validation = ch_in_raw
