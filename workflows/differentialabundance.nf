@@ -33,7 +33,7 @@ if (params.study_type == 'affy_array'){
     // To pull SOFT files from a GEO a GSE study identifer must be provided
 
     if (params.querygse && params.features_metadata_cols) {
-        ch_querygse = Channel.of([[exp_meta], params.querygse])
+        ch_querygse = Channel.of([exp_meta, params.querygse])
     } else {
         error("Query GSE not specified or features metadata columns not specified")
     }
