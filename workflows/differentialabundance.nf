@@ -304,7 +304,7 @@ workflow DIFFERENTIALABUNDANCE {
     }
     else{
 
-	    DESEQ2_NORM (
+        DESEQ2_NORM (
             ch_contrasts.first(),
             ch_samples_and_matrix,
             ch_control_features
