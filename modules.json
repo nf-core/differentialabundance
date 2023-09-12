@@ -40,6 +40,11 @@
                         "git_sha": "d0b4fc03af52a1cc8c6fb4493b921b57352b1dd8",
                         "installed_by": ["modules"]
                     },
+                    "geoquery/getgeo": {
+                        "branch": "master",
+                        "git_sha": "6814b0659c51e447684a58c2b834a9f3b530540d",
+                        "installed_by": ["modules"]
+                    },
                     "gsea/gsea": {
                         "branch": "master",
                         "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",

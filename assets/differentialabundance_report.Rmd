@@ -210,7 +210,9 @@ if (! params$observations_name_col %in% colnames(observations)){
 
 if (! is.null(params$features)){
   features <- read_metadata(file.path(params$input_dir, params$features))
-  features <- features[,colnames(features) %in% simpleSplit(params$features_metadata_cols), drop = FALSE]
+  if (! is.null(params$features_metadata_cols)){
+    features <- features[,colnames(features) %in% simpleSplit(params$features_metadata_cols), drop = FALSE]
+  }
 }
 
 contrasts <- read_metadata(file.path(params$input_dir, params$contrasts_file))
