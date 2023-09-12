@@ -65,6 +65,22 @@ This is the proteinGroups.txt file produced by MaxQuant. It is a tab-separated m
 
 This is an archive of CEL files as frequently found in GEO.
 
+### Use SOFT matrices
+
+Alternatively, the user may want to work with SOFT matrices. In this case, setting
+
+`--study_type geo_soft_file` and `--querygse [GSE study ID]`
+
+enables the pipeline to download normalised SOFT matrices automatically (note that even though Affymetrix arrays are also supported in the SOFT matrix track, it is recommended to work from CEL files in this case).
+
+As for other platforms You may subset the metadata features used in reporting etc. e.g. for GPL570 (Affymetrix Plus 2.0 arrays) this could be done with
+
+```
+--features_metadata_cols ID,Entrez_Gene_ID,Symbol,Definition
+```
+
+Full list of features metadata are available on GEO platform pages.
+
 ## Contrasts file
 
 ```bash

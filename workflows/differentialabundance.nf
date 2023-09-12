@@ -40,15 +40,26 @@ if (params.study_type == 'affy_array'){
         
         // Make channel for proteus
         proteus_in = Channel.of([ exp_meta, file(params.input), file(params.matrix) ])
-} else {
-    // If this is not an affy array or maxquant output, assume we're reading from a matrix
+} else if (params.study_type == 'geo_soft_file'){
 
-    if (params.matrix) {
+    // To pull SOFT files from a GEO a GSE study identifer must be provided
+
+    if (params.querygse && params.features_metadata_cols) {
+        ch_querygse = Channel.of([exp_meta, params.querygse])
+    } else {
+        error("Query GSE not specified or features metadata columns not specified")
+    }
+} else {
+    // If this is not microarray data or maxquant output, and this an RNA-seq dataset,
+    // then assume we're reading from a matrix
+
+    if (params.study_type == "rnaseq" && params.matrix) {
         matrix_file = file(params.matrix, checkIfExists: true)
         ch_in_raw = Channel.of([ exp_meta, matrix_file])
     } else {
         error("Input matrix not specified!")
     }
+
 }
 
 // Check optional parameters
@@ -110,6 +121,7 @@ include { RMARKDOWNNOTEBOOK                                 } from '../modules/n
 include { AFFY_JUSTRMA as AFFY_JUSTRMA_RAW                  } from '../modules/nf-core/affy/justrma/main'
 include { AFFY_JUSTRMA as AFFY_JUSTRMA_NORM                 } from '../modules/nf-core/affy/justrma/main'
 include { PROTEUS_READPROTEINGROUPS as PROTEUS              } from '../modules/nf-core/proteus/readproteingroups/main'
+include { GEOQUERY_GETGEO                                   } from '../modules/nf-core/geoquery/getgeo/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -156,6 +168,9 @@ workflow DIFFERENTIALABUNDANCE {
 
         ch_affy_platform_features = AFFY_JUSTRMA_RAW.out.annotation
 
+        ch_versions = ch_versions
+            .mix(AFFY_JUSTRMA_RAW.out.versions)
+
     } else if (params.study_type == 'maxquant'){
         // For maxquant, run proteus module to import the protein abundances
 
@@ -193,12 +208,18 @@ workflow DIFFERENTIALABUNDANCE {
         ch_in_raw = PROTEUS.out.raw_tab
         ch_in_norm = PROTEUS.out.norm_tab
         ch_versions = ch_versions.mix(PROTEUS.out.versions)
-    } 
+    } else if(params.study_type == 'geo_soft_file'){
 
+        GEOQUERY_GETGEO(ch_querygse)
+        ch_in_norm = GEOQUERY_GETGEO.out.expression
+        ch_soft_features = GEOQUERY_GETGEO.out.annotation
+
+        ch_versions = ch_versions
+            .mix(GEOQUERY_GETGEO.out.versions)
+    }
     //// Fetch or derive a feature annotation table
 
     // If user has provided a feature annotation table, use that
-
     if (params.features){
         ch_features = Channel.of([ exp_meta, file(params.features, checkIfExists: true)])
     } else if (params.study_type == 'affy_array'){
@@ -212,6 +233,8 @@ workflow DIFFERENTIALABUNDANCE {
                 it[1] = file(matrix_as_anno_filename)
                 it
             }
+    } else if(params.study_type == 'geo_soft_file') {
+        ch_features = ch_soft_features
     } else if (params.gtf){
         // Get feature annotations from a GTF file, gunzip if necessary
 
@@ -257,6 +280,9 @@ workflow DIFFERENTIALABUNDANCE {
             .join(ch_in_norm)
             .map{tuple(it[0], [it[1], it[2]])}
     }
+    else if (params.study_type == 'geo_soft_file'){
+        ch_matrices_for_validation = ch_in_norm
+    }
     else{
         ch_matrices_for_validation = ch_in_raw
     }
@@ -279,8 +305,15 @@ workflow DIFFERENTIALABUNDANCE {
             }
         ch_raw = ch_validated_assays.raw
         ch_norm = ch_validated_assays.normalised
+    }
+    else if (params.study_type == 'geo_soft_file') {
+        ch_norm = VALIDATOR.out.assays
+    }
+
+    if(params.study_type != 'rnaseq') {
         ch_matrix_for_differential = ch_norm
-    } else{
+    }
+    else{
         ch_raw = VALIDATOR.out.assays
         ch_matrix_for_differential = ch_raw
     }
@@ -313,7 +346,7 @@ workflow DIFFERENTIALABUNDANCE {
         .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
         .first()
 
-    if (params.study_type == 'affy_array' || params.study_type == 'maxquant'){
+    if (params.study_type == 'affy_array' || params.study_type == 'geo_soft_file' || params.study_type == 'maxquant'){
 
         LIMMA_DIFFERENTIAL (
             ch_contrasts,
@@ -330,9 +363,7 @@ workflow DIFFERENTIALABUNDANCE {
     }
     else{
 
-	// 
-
-	DESEQ2_NORM (
+        DESEQ2_NORM (
             ch_contrasts.first(),
             ch_samples_and_matrix,
             ch_control_features
@@ -424,6 +455,7 @@ workflow DIFFERENTIALABUNDANCE {
             .mix(GSEA_GSEA.out.versions)
     }
 
+
     // The exploratory plots are made by coloring by every unique variable used
     // to define contrasts
 
@@ -433,20 +465,22 @@ workflow DIFFERENTIALABUNDANCE {
         }
         .unique()
 
-    ch_all_matrices = VALIDATOR.out.sample_meta                 // meta, samples
+    // For geoquery we've done no matrix processing and been supplied with the
+    // normalised matrix, which can be passed through to downstream analysis
+
+    if(params.study_type == "geo_soft_file") {
+       ch_mat = ch_norm
+    }else{
+       ch_mat = ch_raw.combine(ch_processed_matrices)
+    }
+
+    ch_all_matrices = VALIDATOR.out.sample_meta                // meta, samples
         .join(VALIDATOR.out.feature_meta)                       // meta, samples, features
-        .join(ch_raw)                                           // meta, samples, features, raw matrix
-        .combine(ch_processed_matrices)                         // meta, samples, features, raw, norm, ...
+        .join(ch_mat)                                           // meta, samples, features, raw, norm (or just norm)
         .map{
             tuple(it[0], it[1], it[2], it[3..it.size()-1])
         }
         .first()
-
-    ch_contrast_variables
-        .combine(ch_all_matrices.map{ it.tail() })
-
-        ch_contrast_variables
-            .combine(ch_all_matrices.map{ it.tail() })
 
     PLOT_EXPLORATORY(
         ch_contrast_variables
@@ -532,7 +566,7 @@ workflow DIFFERENTIALABUNDANCE {
     // Condition params reported on study type
 
     def params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|deseq2|gsea).*/
-    if (params.study_type == 'affy_array'|| params.study_type == 'maxquant'){
+    if (params.study_type == 'affy_array' || params.study_type == 'geo_soft_file' || params.study_type == 'maxquant'){
         params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|affy|limma|gsea).*/
     }
 
