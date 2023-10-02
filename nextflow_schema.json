@@ -266,7 +266,7 @@
                     "default": "LFQ intensity ",
                     "description": "Prefix of the column names of the MaxQuant proteingroups table in which the intensity values are saved; the prefix has to be followed by the sample names that are also found in the samplesheet. Default: 'LFQ intensity '; take care to also consider trailing whitespace between prefix and samplenames."
                 },
-                "proteus_norm_functions": {
+                "proteus_norm_function": {
                     "type": "string",
                     "default": "normalizeMedian",
                     "description": "Comma-separated string of normalization functions to use on the MaxQuant intensities.",
