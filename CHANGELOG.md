@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#127](https://github.com/nf-core/differentialabundance/issues/127)] - [Bug] Can't pass samplesheet with -c file.config , or -params-file params.yml or directly with --input samplesheet.csv ([@ctuni](https://github.com/ctuni), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#138](https://github.com/nf-core/differentialabundance/issues/138)]- Fix bugs with --control_features and --sizefactors_from_controls ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#133](https://github.com/nf-core/differentialabundance/issues/133)] - Sample exclusion options fail due to contrast-wise normalisation ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
+- [[#160](https://github.com/nf-core/differentialabundance/issues/160)]- Fix merge conflicts for Template update 2.10 by nf-core-bot ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 
 ### `Changed`
 
