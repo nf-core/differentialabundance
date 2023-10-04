@@ -149,9 +149,6 @@ library(limma)
 ################################################
 ################################################
 
-file.copy(opt\$count_file, "/home-link/iivow01/git/differentialabundance/error_limma/count_file")
-file.copy(opt\$sample_file, "/home-link/iivow01/git/differentialabundance/error_limma/sample_file")
-
 intensities.table <-
     read_delim_flexible(
         file = opt\$count_file,

@@ -269,17 +269,18 @@
                 "proteus_norm_function": {
                     "type": "string",
                     "default": "normalizeMedian",
-                    "description": "Comma-separated string of normalization functions to use on the MaxQuant intensities.",
-                    "help_text": "'normalizeMedian', 'normalizeQuantiles' or any comma-separated combination thereof"
+                    "description": "Normalization function to use on the MaxQuant intensities.",
+                    "help_text": "'normalizeMedian' or 'normalizeQuantiles'",
+                    "enum": ["normalizeMedian", "normalizeQuantiles"]
                 },
-                "proteus_plotSD_method": {
+                "proteus_plotsd_method": {
                     "type": "string",
                     "default": "violin",
                     "description": "Which method to use for plotting sample distributions of the MaxQuant intensities; one of 'violin', 'dist', 'box'.",
                     "help_text": "'violin', 'dist' or 'box'",
                     "enum": ["violin", "dist", "box"]
                 },
-                "proteus_plotMV_loess": {
+                "proteus_plotmv_loess": {
                     "type": "boolean",
                     "default": true,
                     "description": "Should a loess line be added to the plot of mean-variance relationship of the conditions? Default: true."

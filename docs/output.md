@@ -38,9 +38,9 @@ Stand-alone graphical outputs are placed in this directory. They may be useful i
   - `gsea/`: Directory containing graphical outputs from GSEA (where enabled). Plots are stored in directories named for the associated contrast.
     - `[contrast]/png/[gsea_plot_type].png`
   - `proteus/`: If `--study_type maxquant`: Directory containing plots produced by the proteus module which is used for processing MaxQuant input. Files are prefixed with the associated contrast and chosen normalization function (if any).
-    - `[contrast].proteus.[normfun].normalized_dendrogram.png`: A sample clustering dendrogram after normalization, if chosen.
-    - `[contrast].proteus.[normfun].normalized_mean_variance_relationship.png`: Plots of log intensity vs mean log intensity after normalization of each contrast level, if chosen.
-    - `[contrast].proteus.[normfun].normalized_distributions.png`: A plot of sample distributions after normalization, if chosen.
+    - `[contrast].proteus.[norm_function].normalized_dendrogram.png`: A sample clustering dendrogram after normalization, if chosen.
+    - `[contrast].proteus.[norm_function].normalized_mean_variance_relationship.png`: Plots of log intensity vs mean log intensity after normalization of each contrast level, if chosen.
+    - `[contrast].proteus.[norm_function].normalized_distributions.png`: A plot of sample distributions after normalization, if chosen.
     - `[contrast].proteus.raw_distributions.png`: A plot of sample distributions without normalization.
 
 </details>
@@ -67,7 +67,7 @@ Most plots are included in the HTML report (see above), but are also included in
   - `gsea/`: Directory containing tables of differential gene set analyis from GSEA (where enabled)
     - `[contrast]/[contrast].gsea_report_for_[condition].tsv`: A GSEA report table for each side of each contrast
   - `proteus/`: If `--study_type maxquant`: Directory containing abundance values produced by the proteus module which is used for processing MaxQuant input. Files are prefixed with the associated contrast and chosen normalization function (if any).
-    - `[contrast].proteus.[normfun].normalized_proteingroups_tab.tsv`: Abundance table after normalization, if chosen.
+    - `[contrast].proteus.[norm_function].normalized_proteingroups_tab.tsv`: Abundance table after normalization, if chosen.
     - `[contrast].proteus.raw_proteingroups_tab.tsv`: Abundance table without normalization.
 
 </details>
