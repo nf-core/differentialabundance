@@ -425,7 +425,7 @@ print( htmltools::tagList(datatable(observations_to_print, caption = paste(ucfir
 
 ## Contrasts
 
-Comparisons were made between `r params$observations_type` groups defined using using `r params$observation_type` metadata columns, as described in the following table of contrasts:
+Comparisons were made between `r params$observations_type` groups defined using `r params$observation_type` metadata columns, as described in the following table of contrasts:
 
 ```{r, echo=FALSE, results='asis'}
 contrasts_to_print <- contrasts
@@ -448,6 +448,7 @@ The following plots show the abundance value distributions of input matrices. A 
 ```{r, include=FALSE}
 
 ```
+
 #### Box plots
 
 ```{r, echo=FALSE, results='asis', fig.height=8}
