@@ -127,7 +127,7 @@ By default, if you don't provide features, for non-array data the workflow will 
 
 ## Shiny app generation
 
-The pipeline is capable of building, and even deploying (to [shinyapps.io](https://www.shinyapps.io/)) for you a Shiny app built with [ShinyNGS](https://github.com/pinin4fjords/shinyngs).
+The pipeline is capable of building, and even deploying (to [shinyapps.io](https://www.shinyapps.io/)) for you a Shiny app built with [ShinyNGS](https://github.com/pinin4fjords/shinyngs). There is a basic example running [here](https://pinin4fjords.shinyapps.io/tester/) which shows what this might look like.
 
 This is enabled with:
 
