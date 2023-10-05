@@ -445,6 +445,10 @@ Input was a matrix of `r nrow(assay_data$raw)` `r params$features_type`s for `r 
 
 The following plots show the abundance value distributions of input matrices. A log2 transformation is applied where not already performed.
 
+```{r, include=FALSE}
+
+```
+
 #### Box plots
 
 ```{r, echo=FALSE, results='asis', fig.height=8}
