@@ -221,6 +221,23 @@ First, go to the [nf-core/differentialabundance releases page](https://github.co
 
 This version number will be logged in reports when you run the pipeline, so that you'll know what you used when you look back in the future. For example, at the bottom of the MultiQC reports.
 
+### Restricting DESeq2 to using 4 cores per job
+
+There is a well known problem where DESeq2 uses too many cores per job, eg all 40 cores on the machine per job, instead of the desired 4 cores per job for example. This is a problem in this pipeline where I am running jobs on the local server, not the cluster. It may not be apparent when running on a cluster, since the a potential cgroups implementation should restrict OPENBLAS to eg 4 cores, even though the library would otherwise use 40. 
+
+This workaround works on Ubuntu 20.04 - use your own nextflow.config, eg in the current directory where you are running nextflow from (which should take precedence over configs from the workflow itself).
+
+Just add the following snippet to your `nextflow.config` in the current directory.
+```
+
+env {
+     // restrict DESeq2 to less than all cores
+     OPENBLAS_NUM_THREADS='4'
+}
+```
+
+Hope that helps, now Deseq2 R jobs should only use 4 cores per job, not all 40 per job and thus overloading the server.
+
 ## Core Nextflow arguments
 
 > **NB:** These options are part of Nextflow and use a _single_ hyphen (pipeline parameters use a double-hyphen).
