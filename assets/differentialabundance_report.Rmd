@@ -618,15 +618,16 @@ for (assay_type in rev(names(assay_data))){
 }
 ```
 
-### Outlier detection {.tabset}
-
-Outlier detection based on [median absolute deviation](https://wiki.arrayserver.com/wiki/index.php?title=CorrelationQC.pdf) was undertaken, the outlier scoring is plotted below.
-
 ```{r, echo=FALSE, results='asis', warning=FALSE}
 
 # We can't look for ouliers in sets of less than 3 samples, so exclude variables
 # unless the minimum group size is larger than that
 iv_min_group_sizes <- unlist(lapply(informative_variables, function(x) min(table(observations[[x]]))))
+
+if (any(iv_min_group_sizes > 2)){
+    cat("\n### Outlier detection {.tabset}\n")
+    cat("\nOutlier detection based on [median absolute deviation](https://wiki.arrayserver.com/wiki/index.php?title=CorrelationQC.pdf) was undertaken, the outlier scoring is plotted below.\n")
+}
 
 foo <- lapply(informative_variables[iv_min_group_sizes > 2], function(iv){
   
