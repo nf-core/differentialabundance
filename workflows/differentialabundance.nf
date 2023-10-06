@@ -327,14 +327,19 @@ workflow DIFFERENTIALABUNDANCE {
         // variance-stabilised matrices are not (IIUC) impacted by the model.
 
         ch_norm = DESEQ2_NORM.out.normalised_counts
-        ch_vst = DESEQ2_NORM.out.vst_counts
         ch_differential = DESEQ2_DIFFERENTIAL.out.results
 
         ch_versions = ch_versions
             .mix(DESEQ2_DIFFERENTIAL.out.versions)
 
         ch_processed_matrices = ch_norm
-            .join(ch_vst)
+        if ('rlog' in params.deseq2_vs_method){
+            ch_processed_matrices = ch_processed_matrices.join(DESEQ2_NORM.out.rlog_counts)
+        }
+        if ('vst' in params.deseq2_vs_method){
+            ch_processed_matrices = ch_processed_matrices.join(DESEQ2_NORM.out.vst_counts)
+        }
+        ch_processed_matrices = ch_processed_matrices
             .map{ it.tail() }
     }
 
