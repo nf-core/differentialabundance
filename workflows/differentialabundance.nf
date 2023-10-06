@@ -512,7 +512,7 @@ workflow DIFFERENTIALABUNDANCE {
     // Condition params reported on study type
 
     def params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|deseq2|gsea).*/
-    if (params.study_type == 'affy_array' || 'geo_soft_file'){
+    if (params.study_type == 'affy_array' || params.study_type == 'geo_soft_file'){
         params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|affy|limma|gsea).*/
     }
 
