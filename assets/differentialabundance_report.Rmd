@@ -250,11 +250,14 @@ assay_data <- lapply(c(1:length(assay_files)), function(x) {
     )
   )
   colnames(mat) <- observations[[params$observations_name_col]][match(colnames(mat), rownames(observations))]
+  mat
 })
 
-# Remove brackets from assay list. TODO: Remove if this is added to cond_log2_transform_assays
-params$features_log2_assays <- gsub('\\]$', '', gsub('^\\[', '', features_log2_assays))
-assay_data <- cond_log2_transform_assays(assay_data, params$features_log2_assays)
+if (!is.null(params$features_log2_assays)) {
+  # Remove brackets from assay list. TODO: Remove if this is added to cond_log2_transform_assays
+  features_log2_assays <- gsub('\\]$', '', gsub('^\\[', '', params$features_log2_assays))
+  assay_data <- cond_log2_transform_assays(assay_data, features_log2_assays)
+}
 
 # Lapply does not go over the assay_files themselves anymore, so we need to specifically assign their names to the data
 names(assay_data) <- names(assay_files)
@@ -263,7 +266,6 @@ names(assay_data) <- names(assay_files)
 rownames(observations) <- observations[[params$observations_name_col]]
 
 # Run PCA early so we can understand how important each variable is
-
 pca_datas <- lapply(names(assay_data), function(assay_type){
   compilePCAData(assay_data[[assay_type]])
 })

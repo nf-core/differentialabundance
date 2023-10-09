@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [# 136](https://github.com/nf-core/differentialabundance/pull/136)] - Added support for non-Affymetrix arrays via automatic download of SOFT matrices in GEO ([@azedinez](https://github.com/azedinez), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#137](https://github.com/nf-core/differentialabundance/pull/137)] - Add `--sizefactors_from_controls` and `--gene_id_col` for DESeq2 module to modules.config ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#145](https://github.com/nf-core/differentialabundance/pull/145)] - Template update for nf-core/tools v2.9 ([@nf-core-bot](https://github.com/nf-core-bot), review by [@pinin4fjords](https://github.com/pinin4fjords), [@WackerO](https://github.com/WackerO))
-- [[#147](https://github.com/nf-core/differentialabundance/pull/147)] - Add Maxquant analysis module ([@WackerO](https://github.com/WackerO), review by)
+- [[#147](https://github.com/nf-core/differentialabundance/pull/147)] - Add Maxquant analysis module ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 
 ### `Fixed`
 
@@ -29,8 +29,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Changed`
 
 - [[#159](https://github.com/nf-core/differentialabundance/issues/159)] - CUSTOM/MATRIXFILTER module update ([@WackerO](https://github.com/WackerO), review by [@suzannejin](https://github.com/suzannejin))
-- [[#152](https://github.com/nf-core/differentialabundance/issues/152)] - RMARKDOWNNOTEBOOK env update ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#154](https://github.com/nf-core/differentialabundance/issues/154)] - RMARKDOWNNOTEBOOK env update ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#151](https://github.com/nf-core/differentialabundance/issues/151)] - Module update ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#147](https://github.com/nf-core/differentialabundance/pull/147)] - RMARKDOWNNOTEBOOK env update ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 
 ## v1.2.0 - 2023-04-19
 

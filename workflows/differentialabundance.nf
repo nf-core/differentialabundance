@@ -41,9 +41,10 @@ if (params.study_type == 'affy_array'){
         if (!params.matrix) {
             error("Input matrix not specified!")
         }
-        
+        matrix_file = file(params.matrix, checkIfExists: true)
+
         // Make channel for proteus
-        proteus_in = Channel.of([ file(params.input), file(params.matrix) ])
+        proteus_in = Channel.of([ file(params.input), matrix_file ])
 } else if (params.study_type == 'geo_soft_file'){
 
     // To pull SOFT files from a GEO a GSE study identifer must be provided
@@ -195,7 +196,7 @@ workflow DIFFERENTIALABUNDANCE {
             ch_contrast_variables.combine(proteus_in)
         )
 
-        // Re-map the proteus output tables to the study ID as the tables are the same across contrasts
+        // Re-map the proteus output tables to the study ID as the tables are the same across contrasts, only one norm table will be necessary
         ch_in_raw = PROTEUS.out.raw_tab
             .first()
             .map{ meta, matrix -> tuple(exp_meta, matrix) }
@@ -250,17 +251,18 @@ workflow DIFFERENTIALABUNDANCE {
     }
     else{
 
-        // Otherwise we can just use the matrix input
-        matrix_as_anno_filename = "matrix_as_anno.${matrix_file.getExtension()}"
+        // Otherwise we can just use the matrix input; save it to the workdir so that it does not
+        // just appear wherever the user runs the pipeline
+        matrix_as_anno_filename = "${workflow.workDir}/matrix_as_anno.${matrix_file.getExtension()}"
         if (params.study_type == 'maxquant'){
             ch_features_matrix = ch_in_norm
         } else {
             ch_features_matrix = ch_in_raw
         }
         ch_features = ch_features_matrix
-            .map{ exp_meta, matrix_file -> 
-                matrix_file.copyTo(matrix_as_anno_filename)
-                [ exp_meta, file(matrix_as_anno_filename) ]
+            .map{ meta, matrix ->
+                matrix.copyTo(matrix_as_anno_filename)
+                [ meta, file(matrix_as_anno_filename) ]
             }
     }
 
