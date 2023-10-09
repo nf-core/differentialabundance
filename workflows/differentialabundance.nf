@@ -378,14 +378,19 @@ workflow DIFFERENTIALABUNDANCE {
         // variance-stabilised matrices are not (IIUC) impacted by the model.
 
         ch_norm = DESEQ2_NORM.out.normalised_counts
-        ch_vst = DESEQ2_NORM.out.vst_counts
         ch_differential = DESEQ2_DIFFERENTIAL.out.results
 
         ch_versions = ch_versions
             .mix(DESEQ2_DIFFERENTIAL.out.versions)
 
         ch_processed_matrices = ch_norm
-            .join(ch_vst)
+        if ('rlog' in params.deseq2_vs_method){
+            ch_processed_matrices = ch_processed_matrices.join(DESEQ2_NORM.out.rlog_counts)
+        }
+        if ('vst' in params.deseq2_vs_method){
+            ch_processed_matrices = ch_processed_matrices.join(DESEQ2_NORM.out.vst_counts)
+        }
+        ch_processed_matrices = ch_processed_matrices
             .map{ it.tail() }
     }
 
@@ -558,7 +563,10 @@ workflow DIFFERENTIALABUNDANCE {
     // Condition params reported on study type
 
     def params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|deseq2|gsea).*/
-    if (params.study_type == 'affy_array' || params.study_type == 'geo_soft_file' || params.study_type == 'maxquant'){
+    if (params.study_type == 'affy_array' || params.study_type == 'geo_soft_file'){
+        params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|affy|limma|gsea).*/
+    }
+    if (params.study_type == 'maxquant'){
         params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|proteus|affy|limma|gsea).*/
     }
 
