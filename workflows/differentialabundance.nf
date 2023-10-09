@@ -293,7 +293,7 @@ workflow DIFFERENTIALABUNDANCE {
             .transpose()
             .branch {
                 raw: it[1].name.contains('raw')
-                normalised: it[1].name.contains('normalised') || it[1].name.contains('normalized')
+                normalised: it[1].name =~ /normali[sz]ed/
             }
         ch_raw = ch_validated_assays.raw
         ch_norm = ch_validated_assays.normalised
