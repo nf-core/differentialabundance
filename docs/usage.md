@@ -14,7 +14,7 @@ With the above in mind, running this workflow requires:
   - (for RNA-seq or MaxQuant proteomics measurements): a matrix of quantifications with observations by column and features by row
   - (for Affymetrix microarrays): a tar'd archive of CEL files
 - a description of the observations such as a sample sheet from RNA-seq analysis
-- a description of the features (skip for MaxQuant), for our initial RNA-seq application this can be simply the GTF file from which gene annotations can be derived. For Affymetrix arrays this can be derived from the array platform annotation package automatically. You can also supply your own table.
+- a description of the features, for our initial RNA-seq application this can be simply the GTF file from which gene annotations can be derived. For Affymetrix arrays this can be derived from the array platform annotation package automatically. Skip for MaxQuant. You can also supply your own table.
 - a specification of how the matrix should be split, and how the resulting groups should be compared
 
 ## Observations (samplesheet) input

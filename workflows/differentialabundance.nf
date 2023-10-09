@@ -33,7 +33,7 @@ if (params.study_type == 'affy_array'){
         // Should the user have enabled --shinyngs_build_app and/or --gsea_run, throw an error
         if (params.shinyngs_build_app) {
             // This can be removed once shinyngs has an inbuilt NA handler
-            error("Cannot build shinyngs app for maxquant data; please set --shinyngs_build_app to false.")
+            error("Cannot currently build shinyngs app for maxquant data due to data sparsity; please set --shinyngs_build_app to false.")
         }
         if (params.gsea_run) {
             error("Cannot run GSEA for maxquant data; please set --gsea_run to false.")
@@ -295,7 +295,7 @@ workflow DIFFERENTIALABUNDANCE {
             .transpose()
             .branch {
                 raw: it[1].name.contains('raw')
-                normalised: it[1].name.contains('normalised') || it[1].name.contains('normalized')
+                normalised: it[1].name =~ /normali[sz]ed/
             }
         ch_raw = ch_validated_assays.raw
         ch_norm = ch_validated_assays.normalised
@@ -380,14 +380,19 @@ workflow DIFFERENTIALABUNDANCE {
         // variance-stabilised matrices are not (IIUC) impacted by the model.
 
         ch_norm = DESEQ2_NORM.out.normalised_counts
-        ch_vst = DESEQ2_NORM.out.vst_counts
         ch_differential = DESEQ2_DIFFERENTIAL.out.results
 
         ch_versions = ch_versions
             .mix(DESEQ2_DIFFERENTIAL.out.versions)
 
         ch_processed_matrices = ch_norm
-            .join(ch_vst)
+        if ('rlog' in params.deseq2_vs_method){
+            ch_processed_matrices = ch_processed_matrices.join(DESEQ2_NORM.out.rlog_counts)
+        }
+        if ('vst' in params.deseq2_vs_method){
+            ch_processed_matrices = ch_processed_matrices.join(DESEQ2_NORM.out.vst_counts)
+        }
+        ch_processed_matrices = ch_processed_matrices
             .map{ it.tail() }
     }
 
@@ -560,7 +565,10 @@ workflow DIFFERENTIALABUNDANCE {
     // Condition params reported on study type
 
     def params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|deseq2|gsea).*/
-    if (params.study_type == 'affy_array' || params.study_type == 'geo_soft_file' || params.study_type == 'maxquant'){
+    if (params.study_type == 'affy_array' || params.study_type == 'geo_soft_file'){
+        params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|affy|limma|gsea).*/
+    }
+    if (params.study_type == 'maxquant'){
         params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|proteus|affy|limma|gsea).*/
     }
 
