@@ -17,7 +17,7 @@
                     },
                     "custom/dumpsoftwareversions": {
                         "branch": "master",
-                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "git_sha": "05c280924b6c768d484c7c443dad5e605c4ff4b4",
                         "installed_by": ["modules"]
                     },
                     "custom/matrixfilter": {
@@ -77,17 +77,17 @@
                     },
                     "shinyngs/staticdifferential": {
                         "branch": "master",
-                        "git_sha": "707c31e838cb77198e30d8eeb138728ce09a4dd2",
+                        "git_sha": "022afb76b0fc7e304b0061a648f8f6cef03bba95",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/staticexploratory": {
                         "branch": "master",
-                        "git_sha": "707c31e838cb77198e30d8eeb138728ce09a4dd2",
+                        "git_sha": "022afb76b0fc7e304b0061a648f8f6cef03bba95",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/validatefomcomponents": {
                         "branch": "master",
-                        "git_sha": "707c31e838cb77198e30d8eeb138728ce09a4dd2",
+                        "git_sha": "022afb76b0fc7e304b0061a648f8f6cef03bba95",
                         "installed_by": ["modules"]
                     },
                     "untar": {

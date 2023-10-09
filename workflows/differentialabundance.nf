@@ -266,10 +266,6 @@ workflow DIFFERENTIALABUNDANCE {
             }
     }
 
-
-
-
-
     // Check compatibility of FOM elements and contrasts
     if (params.study_type == 'affy_array' || params.study_type == 'maxquant'){
         ch_matrices_for_validation = ch_in_raw
