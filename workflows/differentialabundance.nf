@@ -179,30 +179,29 @@ workflow DIFFERENTIALABUNDANCE {
 
     } else if (params.study_type == 'maxquant'){
 
-        // Split contrasts for proteus and for the later modules
-        ch_contrasts_split = ch_contrasts_file
+        // We'll be running Proteus once per unique contrast variable to generate plots
+        // TODO: there should probably be a separate plotting module in proteus to simplify this
+
+        ch_contrast_variables = ch_contrasts_file
             .splitCsv ( header:true, sep:(params.contrasts.endsWith('tsv') ? '\t' : ','))
             .map{ it.tail().first() }
-
-        // For proteus, extract only contrast variable as the module has to run once per contrast
-        ch_contrasts_proteus = ch_contrasts_split
             .map{
                 tuple('id': it.variable)
             }
-            .unique()
+            .unique()   // uniquify to keep each contrast variable only once (in case it exists in multiple lines for blocking etc.)
 
         // Run proteus to import protein abundances
         PROTEUS(
-            ch_contrasts_proteus.combine(proteus_in)
+            ch_contrast_variables.combine(proteus_in)
         )
 
         // Re-map the proteus output tables to the study ID as the tables are the same across contrasts
         ch_in_raw = PROTEUS.out.raw_tab
-            .reduce{a, b -> a}
-            .map{tuple('id': exp_meta.id, it[1])}
+            .first()
+            .map{ meta, matrix -> tuple(exp_meta, matrix) }
         ch_in_norm = PROTEUS.out.norm_tab
-            .reduce{a, b -> a}
-            .map{tuple('id': exp_meta.id, it[1])}
+            .first()
+            .map{ meta, matrix -> tuple(exp_meta, matrix) }
 
         ch_versions = ch_versions.mix(PROTEUS.out.versions)
     } else if(params.study_type == 'geo_soft_file'){
@@ -221,15 +220,6 @@ workflow DIFFERENTIALABUNDANCE {
         ch_features = Channel.of([ exp_meta, file(params.features, checkIfExists: true)])
     } else if (params.study_type == 'affy_array'){
         ch_features = ch_affy_platform_features
-    } else if (params.study_type == 'maxquant'){
-
-        // For maxquant, we will use the processed matrices from PROTEUS
-        ch_features = ch_in_norm
-            .map{
-                matrix_as_anno_filename = "${it[1].getParent()}/matrix_as_anno.${it[1].getExtension()}"
-                it[1].copyTo(matrix_as_anno_filename)   // copy normalized outfile to use as fake "annotation"
-                it = tuple(it[0], file(matrix_as_anno_filename))
-            }
     } else if(params.study_type == 'geo_soft_file') {
         ch_features = ch_soft_features
     } else if (params.gtf){
@@ -262,9 +252,21 @@ workflow DIFFERENTIALABUNDANCE {
 
         // Otherwise we can just use the matrix input
         matrix_as_anno_filename = "matrix_as_anno.${matrix_file.getExtension()}"
-        matrix_file.copyTo(matrix_as_anno_filename)
-        ch_features = Channel.of([ exp_meta, file(matrix_as_anno_filename)])
+        if (params.study_type == 'maxquant'){
+            ch_features_matrix = ch_in_norm
+        } else {
+            ch_features_matrix = ch_in_raw
+        }
+        ch_features = ch_features_matrix
+            .map{ exp_meta, matrix_file -> 
+                matrix_file.copyTo(matrix_as_anno_filename)
+                [ exp_meta, file(matrix_as_anno_filename) ]
+            }
     }
+
+
+
+
 
     // Check compatibility of FOM elements and contrasts
     if (params.study_type == 'affy_array' || params.study_type == 'maxquant'){

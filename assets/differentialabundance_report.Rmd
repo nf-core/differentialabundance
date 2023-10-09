@@ -241,52 +241,6 @@ assay_names <- simpleSplit(params$exploratory_assay_names)
 names(assay_names) = assay_names
 assay_files <- lapply(assay_names, function(x) params[[paste0(x, '_matrix')]])
 
-# Set up vector of unlogged assay files (if any)
-unlogged <- c()
-features_log2_assays <- params$features_log2_assays
-
-# For maxquant input override param as all assays are already logged by proteus
-if (params$study_type == 'maxquant') {
-  features_log2_assays <- ""
-}
-
-if (is.null(features_log2_assays)) {
-  # Guess unlogged assays
-  for (assay in c(1:length(assay_files))) {
-    if (max(assay_files[[assay]]) > 20) {
-      unlogged <- append(unlogged, assay)
-    }
-  }
-
-} else {
-  features_log2_assays <- gsub('\\]$', '', gsub('^\\[', '', features_log2_assays)) # Remove brackets from assay list
-
-  if (features_log2_assays != "") {
-
-    if (is_valid_positive_integer_vector(features_log2_assays)) {
-      # Convert to list of assay positions
-      unlogged <- unique(as.integer(simpleSplit(features_log2_assays)))
-      invalid_assays <- unlogged[! unlogged %in% 1:length(assay_files)]
-
-      if (length(invalid_assays) > 0){
-        stop(paste0("Invalid assay numbers: ", paste(invalid_assays, collapse=', ')))
-      }
-
-    } else {
-      # Last option is string of assay names, so get positions of those names in the assay list
-      unlogged <- unique(simpleSplit(features_log2_assays))
-
-      # Check if all names are valid
-      invalid_assays <- unlogged[!(unlogged %in% names(assay_files))]
-      if (length(invalid_assays) > 0) {
-        stop(paste0(invalid_assays, " is/are not valid assay name(s). Valid assay names are: ", paste(names(assay_files), collapse=", "), ". Please check param --features_log2_assays."))
-      }
-      unlogged <- match(unlogged, names(assay_files))
-    }
-
-  }
-}
-
 assay_data <- lapply(c(1:length(assay_files)), function(x) {
   mat <- na.omit(
     read_matrix(
@@ -296,14 +250,11 @@ assay_data <- lapply(c(1:length(assay_files)), function(x) {
     )
   )
   colnames(mat) <- observations[[params$observations_name_col]][match(colnames(mat), rownames(observations))]
-
-  # If assay is in unlogged list, apply log2
-  if (x %in% unlogged) {
-    mat <- log2(mat+1)
-  }
-  mat
-  
 })
+
+# Remove brackets from assay list. TODO: Remove if this is added to cond_log2_transform_assays
+params$features_log2_assays <- gsub('\\]$', '', gsub('^\\[', '', features_log2_assays))
+assay_data <- cond_log2_transform_assays(assay_data, params$features_log2_assays)
 
 # Lapply does not go over the assay_files themselves anymore, so we need to specifically assign their names to the data
 names(assay_data) <- names(assay_files)
