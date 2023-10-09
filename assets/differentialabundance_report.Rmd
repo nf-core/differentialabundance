@@ -241,16 +241,16 @@ assay_names <- simpleSplit(params$exploratory_assay_names)
 names(assay_names) = assay_names
 assay_files <- lapply(assay_names, function(x) params[[paste0(x, '_matrix')]])
 
-assay_data <- lapply(c(1:length(assay_files)), function(x) {
+assay_data <- lapply(assay_files, function(x) {
   mat <- na.omit(
     read_matrix(
-      assay_files[[x]],
+      x,
       sample_metadata = observations,
       row.names = 1
     )
   )
   colnames(mat) <- observations[[params$observations_name_col]][match(colnames(mat), rownames(observations))]
-  mat
+  mat 
 })
 
 if (!is.null(params$features_log2_assays)) {
@@ -258,9 +258,6 @@ if (!is.null(params$features_log2_assays)) {
   features_log2_assays <- gsub('\\]$', '', gsub('^\\[', '', params$features_log2_assays))
   assay_data <- cond_log2_transform_assays(assay_data, features_log2_assays)
 }
-
-# Lapply does not go over the assay_files themselves anymore, so we need to specifically assign their names to the data
-names(assay_data) <- names(assay_files)
 
 # Now we can rename the observations rows using the title field
 rownames(observations) <- observations[[params$observations_name_col]]
@@ -604,7 +601,6 @@ for (assay_type in rev(names(assay_data))){
     variable_genes <- selectVariableGenes(matrix = assay_data[[assay_type]], ntop = params$exploratory_n_features)
 
     dendroColorScale <- makeColorScale(length(unique(observations[[iv]])), palette = params$exploratory_palette_name)
-
     p <- clusteringDendrogram(
       2^assay_data[[assay_type]][variable_genes, ],
       observations[, iv, drop = FALSE],

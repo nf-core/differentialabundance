@@ -31,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#159](https://github.com/nf-core/differentialabundance/issues/159)] - CUSTOM/MATRIXFILTER module update ([@WackerO](https://github.com/WackerO), review by [@suzannejin](https://github.com/suzannejin))
 - [[#154](https://github.com/nf-core/differentialabundance/issues/154)] - RMARKDOWNNOTEBOOK env update ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#151](https://github.com/nf-core/differentialabundance/issues/151)] - Module update ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
-- [[#147](https://github.com/nf-core/differentialabundance/pull/147)] - RMARKDOWNNOTEBOOK env update ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#147](https://github.com/nf-core/differentialabundance/pull/147)] - RMARKDOWNNOTEBOOK env update, SHINYNGS and CUSTOM update ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 
 ## v1.2.0 - 2023-04-19
 
