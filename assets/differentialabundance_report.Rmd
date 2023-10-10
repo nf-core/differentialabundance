@@ -35,11 +35,18 @@ params:
   features_metadata_cols: NULL 
   features_gtf_feature_type: NULL
   features_gtf_table_first_field: NULL
+  features_log2_assays: NULL
   raw_matrix: null                                            # e.g. 0_salmon.merged.gene_counts.tsv
   normalised_matrix: null
   variance_stabilised_matrix: null                            # e.g. test_files/3_treatment-WT-P23H.vst.tsv
   contrasts_file: null                                        # e.g. GSE156533.contrasts.csv
   differential_table: file.csv
+  proteus_measurecol_prefix: NULL
+  proteus_norm_function: NULL
+  proteus_plotsd_method: NULL
+  proteus_plotmv_loess: NULL
+  proteus_palette_name: NULL
+  proteus_round_digits: NULL
   affy_cel_files_archive: NULL
   affy_file_name_col: NULL
   affy_background: NULL
@@ -235,26 +242,27 @@ names(assay_names) = assay_names
 assay_files <- lapply(assay_names, function(x) params[[paste0(x, '_matrix')]])
 
 assay_data <- lapply(assay_files, function(x) {
-  mat <- read_matrix(
-    x,
-    sample_metadata = observations,
-    row.names = 1
+  mat <- na.omit(
+    read_matrix(
+      x,
+      sample_metadata = observations,
+      row.names = 1
+    )
   )
   colnames(mat) <- observations[[params$observations_name_col]][match(colnames(mat), rownames(observations))]
-
-  # Bit hacky, but ensure log
-  if (max(mat) > 20){
-    log2(mat+1)
-  }else{
-    mat 
-  }
+  mat 
 })
+
+if (!is.null(params$features_log2_assays)) {
+  # Remove brackets from assay list. TODO: Remove if this is added to cond_log2_transform_assays
+  features_log2_assays <- gsub('\\]$', '', gsub('^\\[', '', params$features_log2_assays))
+  assay_data <- cond_log2_transform_assays(assay_data, features_log2_assays)
+}
 
 # Now we can rename the observations rows using the title field
 rownames(observations) <- observations[[params$observations_name_col]]
 
 # Run PCA early so we can understand how important each variable is
-
 pca_datas <- lapply(names(assay_data), function(assay_type){
   compilePCAData(assay_data[[assay_type]])
 })
@@ -321,7 +329,6 @@ differential_results <- lapply(differential_files, function(diff_file){
   }
   
   # Annotate differential tables if possible
-  
   if (! is.null(params$features)){
     diff <- merge(features, diff, by.x = params$features_id_col, by.y = params$differential_feature_id_column)
   }
@@ -594,7 +601,6 @@ for (assay_type in rev(names(assay_data))){
     variable_genes <- selectVariableGenes(matrix = assay_data[[assay_type]], ntop = params$exploratory_n_features)
 
     dendroColorScale <- makeColorScale(length(unique(observations[[iv]])), palette = params$exploratory_palette_name)
-    
     p <- clusteringDendrogram(
       2^assay_data[[assay_type]][variable_genes, ],
       observations[, iv, drop = FALSE],
@@ -812,6 +818,11 @@ if (any(unlist(params[paste0(possible_gene_set_methods, '_run')]))){
 ```
 
 # Methods
+
+```{r, echo=FALSE, results='asis', eval=params$study_type == 'maxquant'}
+cat(paste0("\n## Protein abundance import\n"))
+make_params_table('importing maxquant output', 'proteus_', remove_pattern = TRUE)
+```
 
 ## Filtering
 

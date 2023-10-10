@@ -30,6 +30,7 @@ jobs:
           - "test"
           - "test_nogtf"
           - "test_affy"
+          - "test_maxquant"
           - "test_soft"
     steps:
       - name: Check out pipeline code
