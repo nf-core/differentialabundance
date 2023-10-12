@@ -133,6 +133,35 @@ To override the above options, you may also supply your own features table as a 
 
 By default, if you don't provide features, for non-array data the workflow will fall back to attempting to use the matrix itself as a source of feature annotations. For this to work you must make sure to set the `features_id_col`, `features_name_col` and `features_metadata_cols` parameters to the appropriate values, for example by setting them to 'gene_id' if that is the identifier column on the matrix. This will cause the gene ID to be used everywhere rather than more accessible gene symbols (as can be derived from the GTF), but the workflow should run. Please use this option for MaxQuant analysis, i.e. do not provide features.
 
+## Working with the output R markdown file
+
+The pipeline produces an R markdown file which, if you're proficient in R, you can use to tweak the report after it's generated (**note**- if you need the same customisations repeatedly we would recommend you supply your own template using the `report_file` parameter).
+
+To work with R markdown files you will need Rstudio. You will also need to have the ShinyNGS R module [installed](https://github.com/pinin4fjords/shinyngs#installation), since it supplies a lot of the accessory plotting functions etc that you will need. The exact way you will do this may depend on your exact systems, but for example
+
+### 1. Create a conda environment with Shinyngs and activate it
+
+```bash
+conda create -n shinyngs r-shinyngs
+conda activate shinyngs
+```
+
+### 2. Open RStudio from this environment
+
+For example, on a Mac Terminal:
+
+```bash
+open -na Rstudio
+```
+
+Now, unzip the report archive, and in RStudio change directory to that location:
+
+```
+setwd("/path/to/unzipped/directory")
+```
+
+Now open the R Markdown file from the RStudio UI, and you should have everything you need to run the various code segments and render the whole document to HTML again if you wish.
+
 ## Shiny app generation
 
 The pipeline is capable of building, and even deploying (to [shinyapps.io](https://www.shinyapps.io/)) for you a Shiny app built with [ShinyNGS](https://github.com/pinin4fjords/shinyngs). There is a basic example running [here](https://pinin4fjords.shinyapps.io/tester/) which shows what this might look like.
