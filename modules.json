@@ -97,7 +97,7 @@
                     },
                     "zip": {
                         "branch": "master",
-                        "git_sha": "363ab4f7ed481242f5b1d73f81ffe76cea33fdaf",
+                        "git_sha": "9ba4f5972ae27474f752ddb20e855f48047aa6c8",
                         "installed_by": ["modules"]
                     }
                 }
