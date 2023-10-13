@@ -60,6 +60,16 @@
                         "git_sha": "d0b4fc03af52a1cc8c6fb4493b921b57352b1dd8",
                         "installed_by": ["modules"]
                     },
+                    "propr/logratio": {
+                        "branch": "master",
+                        "git_sha": "44d9d833c93a8ff792fd075dcce8bb49c2e21a18",
+                        "installed_by": ["modules"]
+                    },
+                    "propr/propd": {
+                        "branch": "master",
+                        "git_sha": "72f633b541815ae9565599e5b3cf66d863736ae1",
+                        "installed_by": ["modules"]
+                    },
                     "proteus/readproteingroups": {
                         "branch": "master",
                         "git_sha": "685765c4a5e3423d20f74aa9c4405ef0b8c4748d",

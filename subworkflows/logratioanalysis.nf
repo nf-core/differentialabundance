@@ -56,7 +56,7 @@ if (params.matrix) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-// include { PROPR_PROPR                                       } from '../modules/local/propr/propr/main'
+include { PROPR_PROPR                                       } from '../modules/local/propr/propr/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -106,9 +106,24 @@ workflow LOGRATIOANALYSIS {
     // TODO need to handle different data structures here (eg. affy, etc)
 
 
+    /*
+     * LOGRATIO-BASED CORRELATION ANALYSIS
+     * Compute basis shrinkage partial correlation, or proportionality
+     */
+    PROPR_LOGRATIO(
+        CUSTOM_MATRIXFILTER.out.filtered
+    )
 
 
+    /*
+    * DIFFERENTIAL PROPORTIONALITY ANALYSIS
+    * Compute differential proportionality coefficients
+    */
+    PROPR_PROPD(
+        CUSTOM_MATRIXFILTER.out.filtered
+    )
 
+    // TODO add GREA
 
 
 }
