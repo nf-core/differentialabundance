@@ -127,6 +127,7 @@ include { AFFY_JUSTRMA as AFFY_JUSTRMA_RAW                  } from '../modules/n
 include { AFFY_JUSTRMA as AFFY_JUSTRMA_NORM                 } from '../modules/nf-core/affy/justrma/main'
 include { PROTEUS_READPROTEINGROUPS as PROTEUS              } from '../modules/nf-core/proteus/readproteingroups/main'
 include { GEOQUERY_GETGEO                                   } from '../modules/nf-core/geoquery/getgeo/main'
+include { ZIP as MAKE_REPORT_BUNDLE                         } from '../modules/nf-core/zip/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -582,6 +583,15 @@ workflow DIFFERENTIALABUNDANCE {
         ch_report_file,
         ch_report_params,
         ch_report_input_files
+    )
+
+    // Make a report bundle comprising the markdown document and all necessary
+    // input files
+
+    MAKE_REPORT_BUNDLE(
+        RMARKDOWNNOTEBOOK.out.parameterised_notebook
+            .combine(ch_report_input_files)
+            .map{[it[0], it[1..-1]]}
     )
 
 }

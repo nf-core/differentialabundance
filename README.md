@@ -74,11 +74,13 @@ For more details and further functionality, please refer to the [usage documenta
 
 The pipeline reports its outcomes in two forms.
 
-#### Markdown-derived HTML report
+#### R markdown and HTML
+
+The primary workflow output is an HTML-format report produced from an [R markdown template](assets/differentialabundance_report.Rmd) (you can also supply your own). This leverages helper functions from [shinyngs](https://github.com/pinin4fjords/shinyngs) to produce rich plots and tables, but does not provide significant interactivity.
 
 ![screenshot of the markdown report](docs/images/markdown_report.png "Markdown report")
 
-The primary workflow output is an HTML-format report produced from an [R markdown template](assets/differentialabundance_report.Rmd). This leverages helper functions from [shinyngs](https://github.com/pinin4fjords/shinyngs) to produce rich plots and tables, but does not provide significant interactivity.
+Additionally, a zip file is produced by the pipeline, containing an R markdown file and all necessary file inputs for reporting. The markdown file is the same as the input template, but with the parameters set appropriately, so that you can run the reporting yourself in RStudio, and add any customisations you need.
 
 #### Shiny-based data mining app
 

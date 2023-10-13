@@ -67,7 +67,7 @@
                     },
                     "rmarkdownnotebook": {
                         "branch": "master",
-                        "git_sha": "603ecbd9f45300c9788f197d2a15a005685b4220",
+                        "git_sha": "4e640839b1076da7c2a2a4a8f160815e00eedfba",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/app": {
@@ -93,6 +93,11 @@
                     "untar": {
                         "branch": "master",
                         "git_sha": "d0b4fc03af52a1cc8c6fb4493b921b57352b1dd8",
+                        "installed_by": ["modules"]
+                    },
+                    "zip": {
+                        "branch": "master",
+                        "git_sha": "9ba4f5972ae27474f752ddb20e855f48047aa6c8",
                         "installed_by": ["modules"]
                     }
                 }
