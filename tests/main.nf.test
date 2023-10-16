@@ -1,14 +1,16 @@
 nextflow_pipeline {
 
     name "Test Workflow main.nf"
-    script "../main.nf"
+    script "./main.nf"
 
     test("Should run without failures") {
+
+	config 'conf/test.config'
 
         when {
             params {
                 // define parameters here. Example: 
-                 outdir = "tests/results"
+                outdir = "tests/results"
             }
         }
 
