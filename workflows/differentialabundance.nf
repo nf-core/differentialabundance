@@ -4,6 +4,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
+// TODO move the validation block from the subworkflows to here
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -18,7 +19,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-// include { DIFFERENTIALABUNDANCE } from '../subworkflows/differentialabundance'
+include { DIFFERENTIALABUNDANCE } from '../subworkflows/differentialabundance'
 include { LOGRATIOANALYSIS      } from '../subworkflows/logratioanalysis'
 
 /*
@@ -35,11 +36,14 @@ include { LOGRATIOANALYSIS      } from '../subworkflows/logratioanalysis'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-
 workflow MAINWORKFLOW {
 
-    // DIFFERENTIALABUNDANCE()
+    if (params.run_differential_abundance){
+        DIFFERENTIALABUNDANCE()
+    }
 
-    LOGRATIOANALYSIS()
+    if (params.run_partial_correlation || params.run_proportionality || params.run_differential_proportionality){
+        LOGRATIOANALYSIS()
+    }
 
 }

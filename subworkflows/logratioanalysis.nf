@@ -85,6 +85,7 @@ workflow LOGRATIOANALYSIS {
      * Fetch and parse the dataset and metadata.
      * Filter data if needed.
      * Replace zeros if needed.
+     * Normalize data if needed.
      */
 
     // Set up some basic variables
@@ -94,23 +95,24 @@ workflow LOGRATIOANALYSIS {
     ch_matrix = ch_in_raw
 
     // Firstly Filter the input matrix
-    // TODO filter both genes and samples(cells) according to some criteria
     CUSTOM_MATRIXFILTER(
         ch_matrix,
         ch_input
     )
 
+    // TODO need to handle different data structures here (eg. affy, etc)
+
     // TODO currently the zeros can be directly handled in the downstream analysis by replacing them with the min value
     // TODO add zero imputation methods
 
-    // TODO need to handle different data structures here (eg. affy, etc)
+    // TODO add normalization blocks
 
 
     /*
      * LOGRATIO-BASED CORRELATION ANALYSIS
      * Compute basis shrinkage partial correlation, or proportionality
      */
-    PROPR_LOGRATIO(
+    PROPR_PROPR(
         CUSTOM_MATRIXFILTER.out.filtered
     )
 
@@ -120,7 +122,8 @@ workflow LOGRATIOANALYSIS {
     * Compute differential proportionality coefficients
     */
     PROPR_PROPD(
-        CUSTOM_MATRIXFILTER.out.filtered
+        CUSTOM_MATRIXFILTER.out.filtered,
+        ch_input
     )
 
     // TODO add GREA

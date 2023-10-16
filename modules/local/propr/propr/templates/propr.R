@@ -117,7 +117,7 @@ opt <- list(
     cutoff_max       = NA,
     cutoff_interval  = NA,
     ncores           = as.integer('$task.cpus'),
-    feature_id_col   = 'gene_id'
+    features_id_col  = 'gene_id'
 )
 opt_types <- list(
     count            = 'character',
@@ -131,7 +131,7 @@ opt_types <- list(
     cutoff_max       = 'numeric',
     cutoff_interval  = 'numeric',
     ncores           = 'numeric',
-    feature_id_col   = 'character'
+    features_id_col   = 'character'
 )
 
 
@@ -205,7 +205,7 @@ library(propr)
 mat <- read_delim_flexible(
     opt\$count,
     header = TRUE,
-    row.names = opt\$feature_id_col,
+    row.names = opt\$features_id_col,
     check.names = FALSE
 )
 mat <- t(mat)
@@ -239,8 +239,8 @@ pro <- propr(
 # update FDR by permutation, if required
 if (opt\$permutation > 0) {
     cutoff <- seq(
-        opt\$cutoff_min, 
-        opt\$cutoff_max, 
+        opt\$cutoff_min,
+        opt\$cutoff_max,
         opt\$cutoff_interval
         )
     pro <- updateCutoffs(pro, cutoff=cutoff, ncores=opt\$ncores)
