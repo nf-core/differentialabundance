@@ -275,6 +275,7 @@ work                # Directory containing the nextflow working files
 ### Hints and tips
 
 - If you don't like the colors used in the report, try a different `RColorBrewer` palette by changing the `exploratory_palette_name` and/or `differential_palette_name` parameters.
+- In rare cases, some users have reported issues with DESeq2 using all available cores on a machine, rather than those specified in the process configuration. This can be prevented by setting the `OPENBLAS_NUM_THREADS` environment variable. 
 
 ### Params files
 
