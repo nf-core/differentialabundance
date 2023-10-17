@@ -319,7 +319,7 @@ workflow DIFFERENTIALABUNDANCE {
         .map{it[1]}
         .splitCsv ( header:true, sep:'\t' )
         .map{
-            it.blocking = it.blocking.replace('NA', '')
+            it.blocking = it.blocking ? it.blocking.replace('NA', '') : ''
             if (!it.id){
                 it.id = it.values().join('_')
             }
@@ -434,9 +434,9 @@ workflow DIFFERENTIALABUNDANCE {
             .combine(ch_gene_sets)
 
         GSEA_GSEA(
-            ch_gsea_inputs,
-            ch_gsea_inputs.map{ tuple(it[0].reference, it[0].target) }, // *
-            TABULAR_TO_GSEA_CHIP.out.chip.first()
+            ch_gsea_inputs.dump(tag:'gsea1'),
+            ch_gsea_inputs.map{ tuple(it[0].reference, it[0].target) }.dump(tag:'gsea2'), // *
+            TABULAR_TO_GSEA_CHIP.out.chip.first().dump(tag:'gsea3')
         )
 
         // * Note: GSEA module currently uses a value channel for the mandatory

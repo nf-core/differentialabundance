@@ -223,7 +223,9 @@ if (! is.null(params$features)){
 }
 
 contrasts <- read_metadata(file.path(params$input_dir, params$contrasts_file))
-contrasts$blocking <- na.replace(contrasts$blocking, '')
+if ("blocking" %in% colnames(contrasts)) {
+  contrasts$blocking <- na.replace(contrasts$blocking, '')
+}
 if (! 'id' %in% colnames(contrasts)){
   contrasts$id <- apply(contrasts, 1, paste, collapse='_')
 }
