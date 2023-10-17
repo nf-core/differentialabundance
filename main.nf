@@ -37,6 +37,8 @@ if (params.help) {
 }
 
 // Validate input parameters
+// this will check that the given parameters met the ones declared in json files
+// it will also check all the required inputs are fullfilled
 if (params.validate_params) {
     validateParameters()
 }
