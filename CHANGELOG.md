@@ -16,8 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#145](https://github.com/nf-core/differentialabundance/pull/145)] - Template update for nf-core/tools v2.9 ([@nf-core-bot](https://github.com/nf-core-bot), review by [@pinin4fjords](https://github.com/pinin4fjords), [@WackerO](https://github.com/WackerO))
 - [[#147](https://github.com/nf-core/differentialabundance/pull/147)] - Add Maxquant analysis module ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#166](https://github.com/nf-core/differentialabundance/issues/166)] - Output a parameter-resolved R Markdown document, as well as rendered HTML ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
-- [[#119](https://github.com/nf-core/differentialabundance/issues/119)] - Document sample sheet for Affy arrays ([@pinin4fjords](https://github.com/pinin4fjords), review by)
-- [[#165](https://github.com/nf-core/differentialabundance/issues/165)] - Update subway map ([@pinin4fjords](https://github.com/pinin4fjords), review by )
+- [[#119](https://github.com/nf-core/differentialabundance/issues/119)] - Document sample sheet for Affy arrays ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
+- [[#165](https://github.com/nf-core/differentialabundance/issues/165)] - Update subway map ([@pinin4fjords](https://github.com/pinin4fjords), review by [@FriederikeHanssen](https://github.com/FriederikeHanssen))
 
 ### `Fixed`
 
