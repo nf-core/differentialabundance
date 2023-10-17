@@ -19,8 +19,12 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { DIFFERENTIALABUNDANCE } from '../subworkflows/differentialabundance'
-include { LOGRATIOANALYSIS      } from '../subworkflows/logratioanalysis'
+if (params.run_differential_abundance){
+    include { DIFFERENTIALABUNDANCE } from '../subworkflows/differentialabundance'
+}
+if (params.run_partial_correlation || params.run_proportionality || params.run_differential_proportionality){
+    include { LOGRATIOANALYSIS      } from '../subworkflows/logratioanalysis'
+}
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -49,7 +49,7 @@ WorkflowMain.initialise(workflow, params, log)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { MAINWORKFLOW } from './workflows/differentialabundance'
+include { MAINWORKFLOW } from './workflows/mainworkflow'
 
 //
 // WORKFLOW: Run main nf-core/differentialabundance analysis pipeline

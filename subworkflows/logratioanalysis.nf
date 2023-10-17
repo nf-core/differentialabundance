@@ -56,7 +56,8 @@ if (params.matrix) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { PROPR_PROPR                                       } from '../modules/local/propr/propr/main'
+include { PROPR_PROPR as PROPR_PARTIALCORRELATION           } from '../modules/local/propr/propr/main'
+include { PROPR_PROPR as PROPR_PROPORTIONALITY              } from '../modules/local/propr/propr/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -66,7 +67,7 @@ include { PROPR_PROPR                                       } from '../modules/l
 
 include { CUSTOM_MATRIXFILTER                               } from '../modules/nf-core/custom/matrixfilter/main'
 include { PROPR_LOGRATIO                                    } from '../modules/nf-core/propr/logratio/main'
-include { PROPR_PROPD                                       } from '../modules/nf-core/propr/propd/main'
+include { PROPR_PROPD as PROPR_DIFFERENTIALPROPORTIONALITY  } from '../modules/nf-core/propr/propd/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -112,7 +113,14 @@ workflow LOGRATIOANALYSIS {
      * LOGRATIO-BASED CORRELATION ANALYSIS
      * Compute basis shrinkage partial correlation, or proportionality
      */
-    PROPR_PROPR(
+
+    // compute partial correlation with shrinkage
+    PROPR_PARTIALCORRELATION(
+        CUSTOM_MATRIXFILTER.out.filtered
+    )
+
+    // compute proportionality
+    PROPR_PROPORTIONALITY(
         CUSTOM_MATRIXFILTER.out.filtered
     )
 
@@ -121,7 +129,7 @@ workflow LOGRATIOANALYSIS {
     * DIFFERENTIAL PROPORTIONALITY ANALYSIS
     * Compute differential proportionality coefficients
     */
-    PROPR_PROPD(
+    PROPR_DIFFERENTIALPROPORTIONALITY(
         CUSTOM_MATRIXFILTER.out.filtered,
         ch_input
     )

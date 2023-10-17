@@ -39,44 +39,6 @@ input:
         This matrix should not contain zeros. Otherwise, they will be replaced by the minimun number.
         It is recommended to handle the zeros beforehand with the method of preference.
       pattern: "*.{csv,tsv}"
-  - transformation:
-      type: string
-      description: |
-        (Optional) 'clr' or 'alr'. If null, then do not transform the data. Default: 'clr'
-  - reference:
-      type: string
-      description: |
-        (Optional) Reference gene for ALR transformation. It can be a number refering to the gene index or a string corresponding to the gene name.
-        Default = last variable
-  - alpha:
-      type: float
-      description: |
-        (Optional) Alpha parameter for Box-Cox transformation. Default = null, standard log transformation is applied to the ratios.
-  - metric:
-      type: string
-      description: |
-        Correlation metric to use.
-        To compute proportionality, options are 'rho', 'phi', 'phs'.
-        To compute partial correlation with basis shrinkage, use 'pcor.bshrink'.
-        To compute logratio variance, use 'vlr'.
-        Default = pcor.bshrink
-      pattern: "*.{csv,tsv}"
-  - permutation:
-      type: integer
-      description: |
-        (Optional) Number of permutation cycles to calculate FDR. Default = 0, no permutation.
-  - cutoff_min:
-      type: float
-      description: |
-        (Optional) Minimun FDR cutoff to test.
-  - cutoff_max:
-      type: float
-      description: |
-        (Optional) Maximun FDR cutoff to test.
-  - cutoff_interval:
-      type: float
-      description: |
-        (Optional) Step between each cutoff.
 
 output:
   - meta:
