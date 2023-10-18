@@ -515,7 +515,7 @@ workflow DIFFERENTIALABUNDANCE {
     ch_report_input_files = ch_all_matrices
         .map{ it.tail() }
         .map{it.flatten()}
-        .combine(ch_contrasts_file.map{it.tail()})
+        .combine(VALIDATOR.out.contrasts.map{it.tail()})
         .combine(CUSTOM_DUMPSOFTWAREVERSIONS.out.yml)
         .combine(ch_logo_file)
         .combine(ch_css_file)
