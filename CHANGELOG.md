@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#119](https://github.com/nf-core/differentialabundance/issues/119)] - Document sample sheet for Affy arrays ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#165](https://github.com/nf-core/differentialabundance/issues/165)] - Update subway map ([@pinin4fjords](https://github.com/pinin4fjords), review by [@FriederikeHanssen](https://github.com/FriederikeHanssen))
 - [[#135](https://github.com/nf-core/differentialabundance/issues/135)] - workaround OPENBLAS using all cores problem ([@pinin4fjords](https://github.com/pinin4fjords), review by [@sateeshperi](https://github.com/sateeshperi))
-- [[#176](https://github.com/nf-core/differentialabundance/pull/176)] - bump shinyngs ([@pinin4fjords](https://github.com/pinin4fjords), review by )
+- [[#176](https://github.com/nf-core/differentialabundance/pull/176)] - bump shinyngs ([@pinin4fjords](https://github.com/pinin4fjords), review by  )
 
 ### `Fixed`
 
