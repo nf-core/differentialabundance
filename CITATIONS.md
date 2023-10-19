@@ -16,13 +16,9 @@
 
 ## R packages
 
-- [R](https://www.R-project.org/)
+- [affy](https://pubmed.ncbi.nlm.nih.gov/14960456/)
 
-  > R Core Team (2017). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria.
-
-- [shinyngs](https://github.com/pinin4fjords/shinyngs)
-
-  > Jonathan R Manning (2022). Shiny apps for NGS etc based on reusable components created using Shiny modules. Computer software. Vers. 1.5.3. Jonathan Manning, Dec. 2022. Web.
+  > Gautier L, Cope L, Bolstad BM, Irizarry RA. Affy--analysis of affymetrix genechip data at the probe level. Bioinformatics. 2004;20(3):307-315.
 
 - [DESeq2](https://pubmed.ncbi.nlm.nih.gov/25516281/)
 
@@ -32,25 +28,45 @@
 
   > H. Wickham (2016). ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York.
 
-- [plotly](https://plotly.com/r/)
+- [GEOQuery](https://pubmed.ncbi.nlm.nih.gov/17496320/)
 
-  > C. Sievert (2020). Interactive Web-Based Data Visualization with R, plotly, and shiny. Chapman and Hall/CRC Florida.
+  > Davis S, Meltzer PS. Geoquery: a bridge between the gene expression omnibus (Geo) and bioconductor. Bioinformatics. 2007;23(14):1846-1847.
+
+- [Limma](https://pubmed.ncbi.nlm.nih.gov/25605792/)
+
+  > Ritchie ME, Phipson B, Wu D, et al. Limma powers differential expression analyses for rna-sequencing and microarray studies. Nucleic Acids Res. 2015;43(7):e47.
 
 - [optparse](https://CRAN.R-project.org/package=optparse)
 
   > Trevor L Davis (2018). optparse: Command Line Option Parser.
 
+- [plotly](https://plotly.com/r/)
+
+  > C. Sievert (2020). Interactive Web-Based Data Visualization with R, plotly, and shiny. Chapman and Hall/CRC Florida.
+
+- [Proteus](https://doi.org/10.1101/416511)
+
+  > Gierlinski M, Gastaldello F, Cole C, Barton GJ. Proteus : An r Package for Downstream Analysis of Maxquant Output. Bioinformatics; 2018.
+
+- [R](https://www.R-project.org/)
+
+  > R Core Team (2017). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria.
+
 - [RColorBrewer](https://CRAN.R-project.org/package=RColorBrewer)
 
   > Erich Neuwirth (2014). RColorBrewer: ColorBrewer Palettes.
 
-- [SummarizedExperiment](https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html)
-
-  > Morgan M, Obenchain V, Hester J and Pagès H (2020). SummarizedExperiment: SummarizedExperiment container.
-
 - [RMarkdown](https://rmarkdown.rstudio.com)
 
   > JJ Allaire and Yihui Xie and Jonathan McPherson and Javier Luraschi and Kevin Ushey and Aron Atkins and Hadley Wickham and Joe Cheng and Winston Chang and Richard Iannone (2022). rmarkdown: Dynamic Documents for R.
+
+- [shinyngs](https://github.com/pinin4fjords/shinyngs)
+
+  > Jonathan R Manning (2022). Shiny apps for NGS etc based on reusable components created using Shiny modules. Computer software. Vers. 1.5.3. Jonathan Manning, Dec. 2022. Web.
+
+- [SummarizedExperiment](https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html)
+
+  > Morgan M, Obenchain V, Hester J and Pagès H (2020). SummarizedExperiment: SummarizedExperiment container.
 
 ## Software packaging/containerisation tools
 

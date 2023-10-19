@@ -47,14 +47,20 @@ class WorkflowDifferentialabundance {
     //
 
     public static String toolCitationText(params) {
-
-        // TODO nf-core: Optionally add in-text citation tools to this list.
-        // Can use ternary operators to dynamically construct based conditions, e.g. params["run_xyz"] ? "Tool (Foo et al. 2023)" : "",
-        // Uncomment function in methodsDescriptionText to render in MultiQC report
         def citation_text = [
                 "Tools used in the workflow included:",
-                "FastQC (Andrews 2010),",
-                "MultiQC (Ewels et al. 2016)",
+                params["study_type"] == 'affy_array' ? "affy (Gautier et al. 2004": "",
+                params["study_type"] == 'rnaseq' ? "DESeq2 (Love et al 2014)," : "",
+                "ggplot2 (Wickham 2016)",
+                "GEOQuery (Davis et al. 2007",
+                params["study_type"] != 'rnaseq' ? "Limma (Ritchie eta al 2015" : "",
+                "optparse (Davis 2018)",
+                "plotly (Sievert 2020)",
+                params["study_type"] != 'maxquant' ? "Proteus (Gierlinski 2018)" : "",
+                "RColorBrewer (Neuwirth 2014)",
+                "RMarkdown (Allaire et al. 2022)",
+                "shinyngs (Manning 2022)",
+                "SummarizedExperiment (Morgan et al. 2020)",
                 "."
             ].join(' ').trim()
 
