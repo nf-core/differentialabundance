@@ -17,7 +17,7 @@
                     },
                     "custom/dumpsoftwareversions": {
                         "branch": "master",
-                        "git_sha": "05c280924b6c768d484c7c443dad5e605c4ff4b4",
+                        "git_sha": "4125fb0c2152efbcec8d9ed71a756c9274b2f7f5",
                         "installed_by": ["modules"]
                     },
                     "custom/matrixfilter": {
@@ -52,7 +52,7 @@
                     },
                     "gunzip": {
                         "branch": "master",
-                        "git_sha": "e06548bfa36ee31869b81041879dd6b3a83b1d57",
+                        "git_sha": "8663c9d215573d4bd0417c93dbc310aa9e6720a4",
                         "installed_by": ["modules"]
                     },
                     "limma/differential": {
