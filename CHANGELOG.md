@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- [[#179](https://github.com/nf-core/differentialabundance/issues/179)] - Removed shiny app error message for proteus runs ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#159](https://github.com/nf-core/differentialabundance/issues/159)] - CUSTOM/MATRIXFILTER module update ([@WackerO](https://github.com/WackerO), review by [@suzannejin](https://github.com/suzannejin))
 - [[#154](https://github.com/nf-core/differentialabundance/issues/154)] - RMARKDOWNNOTEBOOK env update ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#151](https://github.com/nf-core/differentialabundance/issues/151)] - Module update ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
