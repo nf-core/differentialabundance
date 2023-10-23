@@ -30,11 +30,7 @@ if (params.study_type == 'affy_array'){
     }
 } else if (params.study_type == 'maxquant') {
     
-        // Should the user have enabled --shinyngs_build_app and/or --gsea_run, throw an error
-        if (params.shinyngs_build_app) {
-            // This can be removed once shinyngs has an inbuilt NA handler
-            error("Cannot currently build shinyngs app for maxquant data due to data sparsity; please set --shinyngs_build_app to false.")
-        }
+        // Should the user have enabled --gsea_run, throw an error
         if (params.gsea_run) {
             error("Cannot run GSEA for maxquant data; please set --gsea_run to false.")
         }
