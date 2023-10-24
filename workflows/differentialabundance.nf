@@ -233,12 +233,12 @@ workflow DIFFERENTIALABUNDANCE {
     // For Affy, we've validated multiple input matrices for raw and norm,
     // we'll separate them out again here
 
-     if (params.study_type == 'affy_array' || params.study_type == 'maxquant'){
+    if (params.study_type == 'affy_array'){
         ch_validated_assays = VALIDATOR.out.assays
             .transpose()
             .branch {
                 raw: it[1].name.contains('raw')
-                normalised: it[1].name =~ /normali[sz]ed/
+                normalised: it[1].name.contains('normalised')
             }
         ch_raw = ch_validated_assays.raw
         ch_norm = ch_validated_assays.normalised
@@ -281,6 +281,7 @@ workflow DIFFERENTIALABUNDANCE {
 
     ch_samples_and_matrix = VALIDATOR.out.sample_meta
         .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
+        .join(ch_features)                          // -> meta, samplesheet, filtered matrix, annotation
         .first()
 
     if (params.study_type == 'affy_array' || params.study_type == 'geo_soft_file'){
