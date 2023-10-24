@@ -400,7 +400,7 @@ workflow DIFFERENTIALABUNDANCE {
     if(params.study_type != "geo_soft_file") {
        ch_mat = ch_raw.combine(ch_processed_matrices)
     }else{
-       ch_mat = ch_processed_matrices
+       ch_mat = ch_norm
     }
 
      ch_all_matrices = VALIDATOR.out.sample_meta                 // meta, samples
