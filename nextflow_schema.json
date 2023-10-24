@@ -24,12 +24,13 @@
                     "default": "rnaseq",
                     "description": "A string identifying the technology used to produce the data",
                     "help_text": "Currently 'rnaseq' or 'affy_array' may be specified.",
-                    "enum": ["rnaseq", "affy_array"],
+                    "enum": ["rnaseq", "affy_array", "maxquant", "geo_soft_file"],
                     "fa_icon": "far fa-keyboard"
                 },
                 "input": {
                     "type": "string",
                     "format": "file-path",
+                    "exists": true,
                     "mimetype": "text/csv",
                     "pattern": "^\\S+\\.(csv|tsv|txt)$",
                     "schema": "assets/schema_input.json",
@@ -81,6 +82,13 @@
                     "description": "Alternative to matrix: a compressed CEL files archive such as often found in GEO",
                     "fa_icon": "fas fa-file-archive",
                     "help_text": "Use this option to provide a raw archive of CEL files from Affymetrix arrays. Will be ignored if a matrix is specified."
+                },
+                "querygse": {
+                    "type": "string",
+                    "default": "None",
+                    "description": "Use SOFT files from GEO by providing the GSE study identifier",
+                    "fa_icon": "fas fa-keyboard",
+                    "help_text": "Use this option to provide a GSE study identifier."
                 }
             }
         },
@@ -165,6 +173,23 @@
                     "description": "This parameter allows you to supply your own feature annotations. These can often be automatically derived from the GTF used upstream for RNA-seq, or from the Bioconductor annotation package (for affy arrays). ",
                     "help_text": "This parameter allows you to supply your own feature annotations. These can often be automatically derived from the GTF used upstream for RNA-seq, or from the Bioconductor annotation package (for affy arrays). ",
                     "fa_icon": "fas fa-align-justify"
+                },
+                "features_gtf_feature_type": {
+                    "type": "string",
+                    "default": "transcript",
+                    "description": "Where a GTF file is supplied, which feature type to use",
+                    "fa_icon": "fas fa-keyboard"
+                },
+                "features_gtf_table_first_field": {
+                    "type": "string",
+                    "default": "gene_id",
+                    "description": "Where a GTF file is supplied, which field should go first in the converted output table",
+                    "fa_icon": "fas fa-fast-backward"
+                },
+                "features_log2_assays": {
+                    "type": "string",
+                    "description": "Of which assays to compute the log2. Not necessary for maxquant data as this is controlled by the pipeline.",
+                    "help_text": "Either comma-separated of assay positions, e.g. '[1,2,3]', or empty list '[]' to not log any assay. If not set, will guess which assays need to be logged (those with a maximum > 20)."
                 }
             },
             "required": ["features_id_col", "features_name_col", "features_type"],
@@ -229,6 +254,50 @@
                 }
             },
             "fa_icon": "fas fa-table"
+        },
+        "proteus_input_options": {
+            "title": "Proteus input options",
+            "type": "object",
+            "description": "Options for processing of proteomics MaxQuant tables with the Proteus R package",
+            "default": "",
+            "properties": {
+                "proteus_measurecol_prefix": {
+                    "type": "string",
+                    "default": "LFQ intensity ",
+                    "description": "Prefix of the column names of the MaxQuant proteingroups table in which the intensity values are saved; the prefix has to be followed by the sample names that are also found in the samplesheet. Default: 'LFQ intensity '; take care to also consider trailing whitespace between prefix and samplenames."
+                },
+                "proteus_norm_function": {
+                    "type": "string",
+                    "default": "normalizeMedian",
+                    "description": "Normalization function to use on the MaxQuant intensities.",
+                    "help_text": "'normalizeMedian' or 'normalizeQuantiles'",
+                    "enum": ["normalizeMedian", "normalizeQuantiles"]
+                },
+                "proteus_plotsd_method": {
+                    "type": "string",
+                    "default": "violin",
+                    "description": "Which method to use for plotting sample distributions of the MaxQuant intensities; one of 'violin', 'dist', 'box'.",
+                    "help_text": "'violin', 'dist' or 'box'",
+                    "enum": ["violin", "dist", "box"]
+                },
+                "proteus_plotmv_loess": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Should a loess line be added to the plot of mean-variance relationship of the conditions? Default: true."
+                },
+                "proteus_palette_name": {
+                    "type": "string",
+                    "default": "Set1",
+                    "help_text": "Check the content of `RColorBrewer::brewer.pal.info` from an R terminal for valid palette names.",
+                    "description": "Valid R palette name",
+                    "fa_icon": "fas fa-palette"
+                },
+                "proteus_round_digits": {
+                    "type": "number",
+                    "default": -1,
+                    "description": "Number of decimals to round the MaxQuant intensities to; default: -1 (will not round)."
+                }
+            }
         },
         "filtering": {
             "title": "Filtering",
@@ -904,17 +973,10 @@
                     "description": "Genome annotation file in GTF format",
                     "pattern": "^\\S+\\.gtf(\\.gz)?",
                     "format": "file-path",
+                    "exists": true,
                     "mimetype": "text/plain",
                     "help_text": "\"This parameter is *mandatory* if `--genome` is not specified.\"",
                     "fa_icon": "fas fa-book"
-                },
-                "igenomes_base": {
-                    "type": "string",
-                    "format": "directory-path",
-                    "description": "Directory / URL base for iGenomes references.",
-                    "default": "s3://ngi-igenomes/igenomes",
-                    "fa_icon": "fas fa-cloud-download-alt",
-                    "hidden": true
                 },
                 "igenomes_ignore": {
                     "type": "boolean",
@@ -1002,7 +1064,7 @@
                     "description": "Maximum amount of time that can be requested for any single job.",
                     "default": "240.h",
                     "fa_icon": "far fa-clock",
-                    "pattern": "^(\\d+\\.?\\s*(s|m|h|day)\\s*)+$",
+                    "pattern": "^(\\d+\\.?\\s*(s|m|h|d|day)\\s*)+$",
                     "hidden": true,
                     "help_text": "Use to set an upper-limit for the time requirement for each process. Should be a string in the format integer-unit e.g. `--max_time '2.h'`"
                 }
@@ -1018,7 +1080,8 @@
                 "help": {
                     "type": "boolean",
                     "description": "Display help text.",
-                    "fa_icon": "fas fa-question-circle"
+                    "fa_icon": "fas fa-question-circle",
+                    "hidden": true
                 },
                 "version": {
                     "type": "boolean",
@@ -1044,12 +1107,14 @@
                 "plaintext_email": {
                     "type": "boolean",
                     "description": "Send plain-text email instead of HTML.",
-                    "fa_icon": "fas fa-remove-format"
+                    "fa_icon": "fas fa-remove-format",
+                    "hidden": true
                 },
                 "monochrome_logs": {
                     "type": "boolean",
                     "description": "Do not use coloured log outputs.",
-                    "fa_icon": "fas fa-palette"
+                    "fa_icon": "fas fa-palette",
+                    "hidden": true
                 },
                 "hook_url": {
                     "type": "string",
@@ -1058,23 +1123,32 @@
                     "help_text": "Incoming hook URL for messaging service. Currently, MS Teams and Slack are supported.",
                     "hidden": true
                 },
-                "tracedir": {
-                    "type": "string",
-                    "description": "Directory to keep pipeline Nextflow logs and reports.",
-                    "default": "${params.outdir}/pipeline_info",
-                    "fa_icon": "fas fa-cogs"
-                },
                 "validate_params": {
                     "type": "boolean",
                     "description": "Boolean whether to validate parameters against the schema at runtime",
                     "default": true,
                     "fa_icon": "fas fa-check-square"
                 },
-                "show_hidden_params": {
+                "validationShowHiddenParams": {
                     "type": "boolean",
                     "fa_icon": "far fa-eye-slash",
                     "description": "Show all params when using `--help`",
+                    "hidden": true,
                     "help_text": "By default, parameters set as _hidden_ in the schema are not shown on the command line when a user runs with `--help`. Specifying this option will tell the pipeline to show all parameters."
+                },
+                "validationFailUnrecognisedParams": {
+                    "type": "boolean",
+                    "fa_icon": "far fa-check-circle",
+                    "description": "Validation of parameters fails when an unrecognised parameter is found.",
+                    "hidden": true,
+                    "help_text": "By default, when an unrecognised parameter is found, it returns a warinig."
+                },
+                "validationLenientMode": {
+                    "type": "boolean",
+                    "fa_icon": "far fa-check-circle",
+                    "description": "Validation of parameters in lenient more.",
+                    "hidden": true,
+                    "help_text": "Allows string values that are parseable as numbers or booleans. For further information see [JSONSchema docs](https://github.com/everit-org/json-schema#lenient-mode)."
                 }
             }
         }
@@ -1094,6 +1168,9 @@
         },
         {
             "$ref": "#/definitions/affy_input_options"
+        },
+        {
+            "$ref": "#/definitions/proteus_input_options"
         },
         {
             "$ref": "#/definitions/filtering"

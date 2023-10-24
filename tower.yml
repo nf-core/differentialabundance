@@ -1,6 +1,8 @@
 reports:
   "**/report/*.html":
     display: "Final differential abundance report"
+  "**/report/*.zip":
+    display: "Report bundle (markdown + input files)"
   pipeline_info/**:
     display: "Pipeline run info"
   "**/plots/exploratory/**/html/*.html":

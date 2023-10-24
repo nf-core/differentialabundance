@@ -11,10 +11,10 @@ Differential analysis is a common task in a variety of use cases. In essence, al
 With the above in mind, running this workflow requires:
 
 - a set of abundance values. This can be:
-  - (for RNA-seq): a matrix of quantifications with observations by column and features by row
+  - (for RNA-seq or MaxQuant proteomics measurements): a matrix of quantifications with observations by column and features by row
   - (for Affymetrix microarrays): a tar'd archive of CEL files
 - a description of the observations such as a sample sheet from RNA-seq analysis
-- a description of the features, for our initial RNA-seq application this can be simply the GTF file from which gene annotations can be derived. For Affymetrix arrays this can be derived from the array platform annotation package automatically. You can also supply your own table.
+- a description of the features, for our initial RNA-seq application this can be simply the GTF file from which gene annotations can be derived. For Affymetrix arrays this can be derived from the array platform annotation package automatically. Skip for MaxQuant. You can also supply your own table.
 - a specification of how the matrix should be split, and how the resulting groups should be compared
 
 ## Observations (samplesheet) input
@@ -39,6 +39,24 @@ TREATED_REP3,AEG588A2_S1_L004_R1_001.fastq.gz,AEG588A2_S1_L004_R2_001.fastq.gz,t
 
 The file can be tab or comma separated.
 
+### Affymetrix arrays
+
+Abundances for Affy arrays are provided in CEL files within an archive. When creating sample sheets for Affy arrays, it's crucial to include a column that specifies which file corresponds to each sample. This file column is essential for linking each sample to its corresponding data file, as shown in the example below:
+
+```
+"file","id","name","patient","phenotype"
+"GSM1229341_Gudjohnsson_001_6690_PP.CEL.gz","GSM1229341","p6690_PP","6690","lesional"
+"GSM1229342_Gudjohnsson_002_6690_PN.CEL.gz","GSM1229342","p6690_PN","6690","uninvolved"
+"GSM1229343_Gudjohnsson_003_7450_PN.CEL.gz","GSM1229343","p7450_PN","7450","uninvolved"
+"GSM1229344_Gudjohnsson_004_7450_PP.CEL.gz","GSM1229344","p7450_PP","7450","lesional"
+"GSM1229345_Gudjohnsson_005_7912_PP.CEL.gz","GSM1229345","p7912_PP","7912","lesional"
+"GSM1229346_Gudjohnsson_006_7912_PN.CEL.gz","GSM1229346","p7912_PN","7912","uninvolved"
+"GSM1229347_Gudjohnsson_007_8470_PP.CEL.gz","GSM1229347","p8470_PP","6690","lesional"
+"GSM1229348_Gudjohnsson_008_8470_PN.CEL.gz","GSM1229348","p8470_PN","6690","uninvolved"
+```
+
+The "file" column in this example is used to specify the data file associated with each sample, which is essential for data analysis and interpretation.
+
 ## Abundance values
 
 ### RNA-seq and similar
@@ -49,6 +67,14 @@ The file can be tab or comma separated.
 
 This is a numeric square matrix file, comma or tab-separated, with a column for every observation, and features corresponding to the supplied feature set. The parameters `--observations_id_col` and `--features_id_col` define which of the associated fields should be matched in those inputs.
 
+### MaxQuant intensities
+
+```bash
+--matrix '[path to matrix file]'
+```
+
+This is the proteinGroups.txt file produced by MaxQuant. It is a tab-separated matrix file with a column for every observation (plus additional columns for other types of measurements and information); each row contains these data for a set of proteins. The parameters `--observations_id_col` and `--features_id_col` define which of the associated fields should be matched in those inputs. The parameter `--proteus_measurecol_prefix` defines which prefix is used to extract those matrix columns which contain the measurements to be used. For example, the default `LFQ intensity ` will indicate that columns like LFQ intensity S1, LFQ intensity S2, LFQ intensity S3 etc. are used (do not forget trailing whitespace in this parameter, if required!).
+
 ### Affymetrix microarrays
 
 ```bash
@@ -56,6 +82,22 @@ This is a numeric square matrix file, comma or tab-separated, with a column for 
 ```
 
 This is an archive of CEL files as frequently found in GEO.
+
+### Use SOFT matrices
+
+Alternatively, the user may want to work with SOFT matrices. In this case, setting
+
+`--study_type geo_soft_file` and `--querygse [GSE study ID]`
+
+enables the pipeline to download normalised SOFT matrices automatically (note that even though Affymetrix arrays are also supported in the SOFT matrix track, it is recommended to work from CEL files in this case).
+
+As for other platforms You may subset the metadata features used in reporting etc. e.g. for GPL570 (Affymetrix Plus 2.0 arrays) this could be done with
+
+```
+--features_metadata_cols ID,Entrez_Gene_ID,Symbol,Definition
+```
+
+Full list of features metadata are available on GEO platform pages.
 
 ## Contrasts file
 
@@ -93,7 +135,7 @@ The file can be tab or comma separated.
 --gtf '[path to gtf file]'
 ```
 
-This is usually the easiest way to supply annotations for RNA-seq features. It should match the GTF used in nf-core/rnaseq if that workflow was used to produce the input expression matrix.
+This is usually the easiest way to supply annotations for RNA-seq features. It should match the GTF used in nf-core/rnaseq if that workflow was used to produce the input expression matrix. Skip for MaxQuant.
 
 ### Annotation package identifiers for Affymetrix arrays
 
@@ -107,11 +149,40 @@ To override the above options, you may also supply your own features table as a 
 --features '[path to features TSV]'
 ```
 
-By default, if you don't provide features, for non-array data the workflow will fall back to attempting to use the matrix itself as a source of feature annotations. For this to work you must make sure to set the `features_id_col`, `features_name_col` and `features_metadata_cols` parameters to the appropriate values, for example by setting them to 'gene_id' if that is the identifier column on the matrix. This will cause the gene ID to be used everywhere rather than more accessible gene symbols (as can be derived from the GTF), but the workflow should run.
+By default, if you don't provide features, for non-array data the workflow will fall back to attempting to use the matrix itself as a source of feature annotations. For this to work you must make sure to set the `features_id_col`, `features_name_col` and `features_metadata_cols` parameters to the appropriate values, for example by setting them to 'gene_id' if that is the identifier column on the matrix. This will cause the gene ID to be used everywhere rather than more accessible gene symbols (as can be derived from the GTF), but the workflow should run. Please use this option for MaxQuant analysis, i.e. do not provide features.
+
+## Working with the output R markdown file
+
+The pipeline produces an R markdown file which, if you're proficient in R, you can use to tweak the report after it's generated (**note**- if you need the same customisations repeatedly we would recommend you supply your own template using the `report_file` parameter).
+
+To work with R markdown files you will need Rstudio. You will also need to have the ShinyNGS R module [installed](https://github.com/pinin4fjords/shinyngs#installation), since it supplies a lot of the accessory plotting functions etc that you will need. The exact way you will do this may depend on your exact systems, but for example
+
+### 1. Create a conda environment with Shinyngs and activate it
+
+```bash
+conda create -n shinyngs r-shinyngs
+conda activate shinyngs
+```
+
+### 2. Open RStudio from this environment
+
+For example, on a Mac Terminal:
+
+```bash
+open -na Rstudio
+```
+
+Now, unzip the report archive, and in RStudio change directory to that location:
+
+```
+setwd("/path/to/unzipped/directory")
+```
+
+Now open the R Markdown file from the RStudio UI, and you should have everything you need to run the various code segments and render the whole document to HTML again if you wish.
 
 ## Shiny app generation
 
-The pipeline is capable of building, and even deploying (to [shinyapps.io](https://www.shinyapps.io/)) for you a Shiny app built with [ShinyNGS](https://github.com/pinin4fjords/shinyngs).
+The pipeline is capable of building, and even deploying (to [shinyapps.io](https://www.shinyapps.io/)) for you a Shiny app built with [ShinyNGS](https://github.com/pinin4fjords/shinyngs). There is a basic example running [here](https://pinin4fjords.shinyapps.io/tester/) which shows what this might look like.
 
 This is enabled with:
 
@@ -181,7 +252,7 @@ The typical command for running the pipeline is as follows:
 
 ```bash
 nextflow run nf-core/differentialabundance \
-    [--profile rnaseq OR -profile affy] \
+    [-profile rnaseq OR -profile affy] \
     --input samplesheet.csv \
     --contrasts contrasts.csv \
     [--matrix assay_matrix.tsv OR --affy_cel_files_archive cel_files.tar] \
@@ -201,9 +272,37 @@ work                # Directory containing the nextflow working files
 # Other nextflow hidden files, eg. history of pipeline runs and old logs.
 ```
 
-## Hints and tips
+### Hints and tips
 
 - If you don't like the colors used in the report, try a different `RColorBrewer` palette by changing the `exploratory_palette_name` and/or `differential_palette_name` parameters.
+- In rare cases, some users have reported issues with DESeq2 using all available cores on a machine, rather than those specified in the process configuration. This can be prevented by setting the `OPENBLAS_NUM_THREADS` environment variable.
+
+### Params files
+
+If you wish to repeatedly use the same parameters for multiple runs, rather than specifying each flag in the command, you can specify these in a params file.
+
+Pipeline settings can be provided in a `yaml` or `json` file via `-params-file <file>`.
+
+:::warning
+Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources), other infrastructural tweaks (such as output directories), or module arguments (args).
+:::
+
+The above pipeline run specified with a params file in yaml format:
+
+```bash
+nextflow run nf-core/differentialabundance -profile docker -params-file params.yaml
+```
+
+with `params.yaml` containing:
+
+```yaml
+input: './samplesheet.csv'
+outdir: './results/'
+genome: 'GRCh37'
+<...>
+```
+
+You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-co.re/launch).
 
 ### Updating the pipeline
 
@@ -221,17 +320,27 @@ First, go to the [nf-core/differentialabundance releases page](https://github.co
 
 This version number will be logged in reports when you run the pipeline, so that you'll know what you used when you look back in the future. For example, at the bottom of the MultiQC reports.
 
+To further assist in reproducibility, you can use share and re-use [parameter files](#running-the-pipeline) to repeat pipeline runs with the same settings without having to write out a command with every single parameter.
+
+:::tip
+If you wish to share such profile (such as upload as supplementary material for academic publications), make sure to NOT include cluster specific paths to files, nor institutional specific profiles.
+:::
+
 ## Core Nextflow arguments
 
-> **NB:** These options are part of Nextflow and use a _single_ hyphen (pipeline parameters use a double-hyphen).
+:::note
+These options are part of Nextflow and use a _single_ hyphen (pipeline parameters use a double-hyphen).
+:::
 
 ### `-profile`
 
 Use this parameter to choose a configuration profile. Profiles can give configuration presets for different compute environments.
 
-Several generic profiles are bundled with the pipeline which instruct the pipeline to use software packaged using different methods (Docker, Singularity, Podman, Shifter, Charliecloud, Conda) - see below.
+Several generic profiles are bundled with the pipeline which instruct the pipeline to use software packaged using different methods (Docker, Singularity, Podman, Shifter, Charliecloud, Apptainer, Conda) - see below.
 
-> We highly recommend the use of Docker or Singularity containers for full pipeline reproducibility, however when this is not possible, Conda is also supported.
+:::info
+We highly recommend the use of Docker or Singularity containers for full pipeline reproducibility, however when this is not possible, Conda is also supported.
+:::
 
 The pipeline also dynamically loads configurations from [https://github.com/nf-core/configs](https://github.com/nf-core/configs) when it runs, making multiple config profiles for various institutional clusters available at run time. For more information and to see if your system is available in these configs please see the [nf-core/configs documentation](https://github.com/nf-core/configs#documentation).
 
@@ -253,8 +362,10 @@ If `-profile` is not specified, the pipeline will run locally and expect all sof
   - A generic configuration profile to be used with [Shifter](https://nersc.gitlab.io/development/shifter/how-to-use/)
 - `charliecloud`
   - A generic configuration profile to be used with [Charliecloud](https://hpc.github.io/charliecloud/)
+- `apptainer`
+  - A generic configuration profile to be used with [Apptainer](https://apptainer.org/)
 - `conda`
-  - A generic configuration profile to be used with [Conda](https://conda.io/docs/). Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity, Podman, Shifter or Charliecloud.
+  - A generic configuration profile to be used with [Conda](https://conda.io/docs/). Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity, Podman, Shifter, Charliecloud, or Apptainer.
 
 ### `-resume`
 
@@ -298,71 +409,19 @@ Work dir:
 Tip: you can replicate the issue by changing to the process work dir and entering the command `bash .command.run`
 ```
 
-#### For beginners
+To change the resource requests, please see the [max resources](https://nf-co.re/docs/usage/configuration#max-resources) and [tuning workflow resources](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources) section of the nf-core website.
 
-A first step to bypass this error, you could try to increase the amount of CPUs, memory, and time for the whole pipeline. Therefor you can try to increase the resource for the parameters `--max_cpus`, `--max_memory`, and `--max_time`. Based on the error above, you have to increase the amount of memory. Therefore you can go to the [parameter documentation of differentialabundance](https://nf-co.re/differentialabundance/1.0.0/parameters) and scroll down to the `show hidden parameter` button to get the default value for `--max_memory`. In this case 128GB, you than can try to run your pipeline again with `--max_memory 200GB -resume` to skip all process, that were already calculated. If you can not increase the resource of the complete pipeline, you can try to adapt the resource for a single process as mentioned below.
+### Custom Containers
 
-#### Advanced option on process level
+In some cases you may wish to change which container or conda environment a step of the pipeline uses for a particular tool. By default nf-core pipelines use containers and software from the [biocontainers](https://biocontainers.pro/) or [bioconda](https://bioconda.github.io/) projects. However in some cases the pipeline specified version maybe out of date.
 
-To bypass this error you would need to find exactly which resources are set by the `DESEQ2_DIFFERENTIAL` process. The quickest way is to search for `process DESEQ2_DIFFERENTIAL` in the [nf-core/differentialabundance Github repo](https://github.com/nf-core/differentialabundance/search?q=process+DESEQ2_DIFFERENTIAL).
-We have standardised the structure of Nextflow DSL2 pipelines such that all module files will be present in the `modules/` directory and so, based on the search results, the file we want is `modules/nf-core/deseq2/differential/main.nf`.
-If you click on the link to that file you will notice that there is a `label` directive at the top of the module that is set to [`label process_medium`](https://github.com/nf-core/differentialabundance/blob/0c0e457d88a33baeb3061114978eebee6cceb46c/modules/nf-core/deseq2/differential/main.nf#L3).
-The [Nextflow `label`](https://www.nextflow.io/docs/latest/process.html#label) directive allows us to organise workflow processes in separate groups which can be referenced in a configuration file to select and configure subset of processes having similar computing requirements.
-The default values for the `process_medium` label are set in the pipeline's [`base.config`](https://github.com/nf-core/differentialabundance/blob/0c0e457d88a33baeb3061114978eebee6cceb46c/conf/base.config#L37) which in this case is defined as 2GB.
-Providing you haven't set any other standard nf-core parameters to **cap** the [maximum resources](https://nf-co.re/usage/configuration#max-resources) used by the pipeline then we can try and bypass the `DESEQ2_DIFFERENTIAL` process failure by creating a custom config file that sets a higher memory.
-The custom config below can then be provided to the pipeline via the [`-c`](#-c) parameter as highlighted in previous sections.
+To use a different container from the default container or conda environment specified in a pipeline, please see the [updating tool versions](https://nf-co.re/docs/usage/configuration#updating-tool-versions) section of the nf-core website.
 
-```nextflow
-process {
-    withName: 'NFCORE_DIFFERENTIALABUNDANCE:DIFFERENTIALABUNDANCE::DESEQ2_DIFFERENTIAL' {
-        memory = 20.GB
-    }
-}
-```
+### Custom Tool Arguments
 
-> **NB:** We specify the full process name i.e. `NFCORE_DIFFERENTIALABUNDANCE:DIFFERENTIALABUNDANCE::DESEQ2_DIFFERENTIAL` in the config file because this takes priority over the short name (`DESEQ2_DIFFERENTIAL`) and allows existing configuration using the full process name to be correctly overridden.
->
-> If you get a warning suggesting that the process selector isn't recognised check that the process name has been specified correctly.
+A pipeline might not always support every possible argument or option of a particular tool used in pipeline. Fortunately, nf-core pipelines provide some freedom to users to insert additional parameters that the pipeline does not include by default.
 
-### Updating containers (advanced users)
-
-The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. If for some reason you need to use a different version of a particular tool with the pipeline then you just need to identify the `process` name and override the Nextflow `container` definition for that process using the `withName` declaration. For example, in the [nf-core/viralrecon](https://nf-co.re/viralrecon) pipeline a tool called [Pangolin](https://github.com/cov-lineages/pangolin) has been used during the COVID-19 pandemic to assign lineages to SARS-CoV-2 genome sequenced samples. Given that the lineage assignments change quite frequently it doesn't make sense to re-release the nf-core/viralrecon everytime a new version of Pangolin has been released. However, you can override the default container used by the pipeline by creating a custom config file and passing it as a command-line argument via `-c custom.config`.
-
-1. Check the default version used by the pipeline in the module file for [Pangolin](https://github.com/nf-core/viralrecon/blob/a85d5969f9025409e3618d6c280ef15ce417df65/modules/nf-core/software/pangolin/main.nf#L14-L19)
-2. Find the latest version of the Biocontainer available on [Quay.io](https://quay.io/repository/biocontainers/pangolin?tag=latest&tab=tags)
-3. Create the custom config accordingly:
-
-   - For Docker:
-
-     ```nextflow
-     process {
-         withName: PANGOLIN {
-             container = 'quay.io/biocontainers/pangolin:3.0.5--pyhdfd78af_0'
-         }
-     }
-     ```
-
-   - For Singularity:
-
-     ```nextflow
-     process {
-         withName: PANGOLIN {
-             container = 'https://depot.galaxyproject.org/singularity/pangolin:3.0.5--pyhdfd78af_0'
-         }
-     }
-     ```
-
-   - For Conda:
-
-     ```nextflow
-     process {
-         withName: PANGOLIN {
-             conda = 'bioconda::pangolin=3.0.5'
-         }
-     }
-     ```
-
-> **NB:** If you wish to periodically update individual tool-specific results (e.g. Pangolin) generated by the pipeline then you must ensure to keep the `work/` directory otherwise the `-resume` ability of the pipeline will be compromised and it will restart from scratch.
+To learn how to provide additional arguments to a particular tool of the pipeline, please see the [customising tool arguments](https://nf-co.re/docs/usage/configuration#customising-tool-arguments) section of the nf-core website.
 
 ### nf-core/configs
 

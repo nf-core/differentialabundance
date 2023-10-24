@@ -13,10 +13,10 @@ process SHINYNGS_APP {
     //
     // Those values must then be set in your Nextflow secrets.
 
-    conda "bioconda::r-shinyngs=1.7.1"
+    conda "bioconda::r-shinyngs=1.8.4"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/r-shinyngs:1.7.1--r42hdfd78af_1':
-        'quay.io/biocontainers/r-shinyngs:1.7.1--r42hdfd78af_1' }"
+        'https://depot.galaxyproject.org/singularity/r-shinyngs:1.8.4--r43hdfd78af_0' :
+        'biocontainers/r-shinyngs:1.8.4--r43hdfd78af_0' }"
 
     input:
     tuple val(meta), path(sample), path(feature_meta), path(assay_files)    // Experiment-level info
@@ -37,12 +37,9 @@ process SHINYNGS_APP {
     def prefix = task.ext.prefix ?: meta.id
 
     """
-    cp $feature_meta fixed_$feature_meta
-    sed -i.bak s/${params.features_name_col}/gene_name/ fixed_$feature_meta
-
     make_app_from_files.R \\
         --sample_metadata $sample \\
-        --feature_metadata fixed_$feature_meta \\
+        --feature_metadata $feature_meta \\
         --assay_files ${assay_files.join(',')} \\
         --contrast_file $contrasts \\
         --contrast_stats_assay $contrast_stats_assay \\

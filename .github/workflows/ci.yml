@@ -24,12 +24,14 @@ jobs:
     strategy:
       matrix:
         NXF_VER:
-          - "22.10.1"
+          - "23.04.0"
           - "latest-everything"
         profile:
           - "test"
           - "test_nogtf"
           - "test_affy"
+          - "test_maxquant"
+          - "test_soft"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v3
