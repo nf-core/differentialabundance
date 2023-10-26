@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [[#182](https://github.com/nf-core/differentialabundance/pull/182)] - Fixed Jon's employer ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 
-## v1.3.0 - 2023-10-25
+## v1.3.0 - 2023-10-24
 
 ### `Added`
 
