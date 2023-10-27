@@ -3,7 +3,19 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v1.3.0 - 2023-10-25
+## v1.3.1 - 2023-10-26
+
+### `Added`
+
+### `Fixed`
+
+- [[#183](https://github.com/nf-core/differentialabundance/pull/183)] - Fix logging for dendrograms ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
+
+### `Changed`
+
+- [[#182](https://github.com/nf-core/differentialabundance/pull/182)] - Fixed Jon's employer ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
+
+## v1.3.0 - 2023-10-24
 
 ### `Added`
 
@@ -11,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#129](https://github.com/nf-core/differentialabundance/pull/129)] - Module updates to fit with recent registry changes ([@pinin4fjords](https://github.com/pinin4fjords), review by [@maxulysse](https://github.com/maxulysse), [@adamrtalbot](https://github.com/adamrtalbot))
 - [[#130](https://github.com/nf-core/differentialabundance/pull/130)] - Document reasons for lack of differential expression ([@pinin4fjords](https://github.com/pinin4fjords), review by [@jfy133](https://github.com/jfy133))
 - [[#131](https://github.com/nf-core/differentialabundance/pull/131)] - Improve gtf to table configurability ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
-- [# 136](https://github.com/nf-core/differentialabundance/pull/136)] - Added support for non-Affymetrix arrays via automatic download of SOFT matrices in GEO ([@azedinez](https://github.com/azedinez), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#136](https://github.com/nf-core/differentialabundance/pull/136)] - Added support for non-Affymetrix arrays via automatic download of SOFT matrices in GEO ([@azedinez](https://github.com/azedinez), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#137](https://github.com/nf-core/differentialabundance/pull/137)] - Add `--sizefactors_from_controls` and `--gene_id_col` for DESeq2 module to modules.config ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#145](https://github.com/nf-core/differentialabundance/pull/145)] - Template update for nf-core/tools v2.9 ([@nf-core-bot](https://github.com/nf-core-bot), review by [@pinin4fjords](https://github.com/pinin4fjords), [@WackerO](https://github.com/WackerO))
 - [[#147](https://github.com/nf-core/differentialabundance/pull/147)] - Add Maxquant analysis module ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
