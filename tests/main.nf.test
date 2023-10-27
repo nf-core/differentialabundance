@@ -1,23 +1,25 @@
 nextflow_pipeline {
 
-    name "Test Workflow main.nf"
-    script "./main.nf"
-
-    test("Should run without failures") {
+    name "Test pipeline"
+    script "../main.nf"
+    tag "pipeline"
+    tag "pipeline_differentialabundance"
 
 	config 'conf/test.config'
+    
+    test("Run with profile test") {
 
         when {
             params {
-                // define parameters here. Example: 
-                outdir = "tests/results"
+                outdir     = "results"
             }
         }
 
         then {
-            assert workflow.success
+            assertAll(
+                { assert workflow.success }
+            )
         }
-
     }
 
 }
