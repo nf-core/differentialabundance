@@ -5,8 +5,8 @@ nextflow_pipeline {
     tag "pipeline"
     tag "pipeline_differentialabundance"
 
-	config 'conf/test.config'
-    
+    config 'conf/test.config'
+
     test("Run with profile test") {
 
         when {
