@@ -60,6 +60,7 @@ jobs:
         tags: ["${{ fromJson(needs.changes.outputs.tags) }}"]
         profile:
           - "docker"
+          - "conda"
 
     steps:
       - name: Check out pipeline code
