@@ -1,4 +1,4 @@
-pipeline_diffab:
+pipeline_differentialabundance:
   - "**.nf"
   - "**.config"
   - "**.nf.test"
