@@ -16,22 +16,57 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
-    name: Test Nextflow versions and profiles
-    # Only run on push if this is the nf-core dev branch (merged PRs)
-    if: "${{ github.event_name != 'push' || (github.event_name == 'push' && github.repository == 'nf-core/differentialabundance') }}"
+  changes:
+    name: Check for changes
+    runs-on: ubuntu-latest
+    outputs:
+      # Expose matched filters as job 'tags' output variable
+      tags: ${{ steps.filter.outputs.changes }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Combine all tags.yml files
+        id: get_username
+        run: find . -name "tags.yml" -not -path "./.github/*" -exec cat {} + > .github/tags.yml
+      - name: debug
+        run: cat .github/tags.yml
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: ".github/tags.yml"
+
+  define_nxf_versions:
+    name: Choose nextflow versions to test against depending on target branch
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.nxf_versions.outputs.matrix }}
+    steps:
+      - id: nxf_versions
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" && "${{ github.base_ref }}" == "dev" && "${{ matrix.NXF_VER }}" != "latest-everything" ]]; then
+            echo matrix='["latest-everything"]' | tee -a $GITHUB_OUTPUT
+          else
+            echo matrix='["latest-everything", "23.04.0"]' | tee -a $GITHUB_OUTPUT
+          fi
+
+  nf-test:
+    name: ${{ matrix.tags }} ${{ matrix.test_profile }} ${{matrix.compute_profile}} NF ${{ matrix.NXF_VER }}
+    needs: [changes, define_nxf_versions]
+    if: needs.changes.outputs.tags != '[]'
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        NXF_VER:
-          - "23.04.0"
-          - "latest-everything"
-        profile:
-          - "test"
-          - "test_nogtf"
-          - "test_affy"
-          - "test_maxquant"
-          - "test_soft"
+        NXF_VER: ${{ fromJson(needs.define_nxf_versions.outputs.matrix) }}
+        tags: ["${{ fromJson(needs.changes.outputs.tags) }}"]
+        compute_profile:
+          - "docker"
+        test_profile:
+          - test
+          - test_nogtf
+          - test_affy
+          - test_soft
+          - test_maxquant
+
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v3
@@ -41,9 +76,27 @@ jobs:
         with:
           version: "${{ matrix.NXF_VER }}"
 
-      - name: Run pipeline with test data
-        # You can customise CI pipeline run tests as required
-        # For example: adding multiple test runs with different parameters
-        # Remember that you can parallelise this by using strategy.matrix
+      - name: Cache nf-test installation
+        id: cache-software
+        uses: actions/cache@v3
+        with:
+          path: |
+            /usr/local/bin/nf-test
+            /home/runner/.nf-test/nf-test.jar
+          key: ${{ runner.os }}-${{ env.NFTEST_VER }}-nftest
+
+      - name: Install nf-test
+        if: steps.cache-software.outputs.cache-hit != 'true'
         run: |
-          nextflow run ${GITHUB_WORKSPACE} -profile docker,${{ matrix.profile }} --outdir ./results
+          wget -qO- https://code.askimed.com/install/nf-test | bash
+          sudo mv nf-test /usr/local/bin/
+
+      - name: Run nf-test
+        run: |
+          nf-test test --tag ${{ matrix.tags }} --profile "${{ matrix.compute_profile }},${{ matrix.test_profile }}" --junitxml=test.xml
+
+      - name: Output log on failure
+        if: failure()
+        run: |
+          sudo apt install bat > /dev/null
+          batcat --decorations=always --color=always ${{ github.workspace }}/.nf-test/tests/*/meta/nextflow.log

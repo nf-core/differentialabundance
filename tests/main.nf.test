@@ -1,0 +1,23 @@
+nextflow_pipeline {
+
+    name "Test pipeline"
+    script "../main.nf"
+    tag "pipeline"
+    tag "pipeline_differentialabundance"
+
+    test("Run with supplied profile") {
+
+        when {
+            params {
+                outdir     = "results"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success }
+            )
+        }
+    }
+
+}

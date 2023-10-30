@@ -1,0 +1,5 @@
+pipeline_differentialabundance:
+  - "**.nf"
+  - "**.config"
+  - "**.nf.test"
+  - "**.json"
