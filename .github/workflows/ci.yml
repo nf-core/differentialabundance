@@ -49,7 +49,7 @@ jobs:
           fi
 
   nf-test:
-    name: ${{ matrix.tags }} ${{ matrix.profile }} NF ${{ matrix.NXF_VER }}
+    name: ${{ matrix.tags }} ${{ matrix.test_profile }} ${{matrix.compute_profile}} NF ${{ matrix.NXF_VER }}
     needs: [changes, define_nxf_versions]
     if: needs.changes.outputs.tags != '[]'
     runs-on: ubuntu-latest
