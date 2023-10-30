@@ -58,9 +58,14 @@ jobs:
       matrix:
         NXF_VER: ${{ fromJson(needs.define_nxf_versions.outputs.matrix) }}
         tags: ["${{ fromJson(needs.changes.outputs.tags) }}"]
-        profile:
+        compute_profile:
           - "docker"
-          - "conda"
+        test_profile:
+          - test
+          - test_nogtf
+          - test_affy
+          - test_soft
+          - test_maxquant
 
     steps:
       - name: Check out pipeline code
@@ -88,7 +93,7 @@ jobs:
 
       - name: Run nf-test
         run: |
-          nf-test test --tag ${{ matrix.tags }} --profile "test,${{ matrix.profile }}" --junitxml=test.xml
+          nf-test test --tag ${{ matrix.tags }} --profile "${{ matrix.compute_profile }},${{ matrix.test_profile }}" --junitxml=test.xml
 
       - name: Output log on failure
         if: failure()
