@@ -46,7 +46,6 @@ params:
   proteus_plotsd_method: NULL
   proteus_plotmv_loess: NULL
   proteus_palette_name: NULL
-  proteus_round_digits: NULL
   affy_cel_files_archive: NULL
   affy_file_name_col: NULL
   affy_background: NULL
@@ -136,6 +135,22 @@ params:
   gsea_zip_report: NULL
   gsea_chip_file: NULL 
   gsea_gene_sets: NULL
+  gprofiler2_run: false
+  gprofiler2_organism: NULL
+  gprofiler2_significant: NULL
+  gprofiler2_measure_underrepresentation: NULL
+  gprofiler2_correction_method: NULL
+  gprofiler2_sources: NULL
+  gprofiler2_evcodes: NULL
+  gprofiler2_pval_threshold: NULL
+  gprofiler2_gmt_file: NULL
+  gprofiler2_gost_id: NULL
+  gprofiler2_background_file: NULL
+  gprofiler2_background_column: NULL
+  gprofiler2_domain_scope: NULL
+  gprofiler2_min_diff: NULL
+  gprofiler2_enrich_colors: NULL
+  round_digits: NULL
 ---
 
 <!-- Load libraries -->
@@ -146,6 +161,34 @@ library(yaml)
 library(shinyngs)
 library(plotly)
 library(DT)
+```
+
+<!-- Define some functions -->
+
+```{r, include=FALSE}
+round_dataframe_columns <- function(df, columns = NULL, digits = -1) {
+    if (digits == -1) {
+        return(df)                              # if -1, return df without rounding
+    }
+
+    df <- data.frame(df, check.names = FALSE)   # make data.frame from vector as otherwise, the format will get messed up
+    if (is.null(columns)) {
+        columns <- colnames(df)[(unlist(lapply(df, is.numeric), use.names=F))]    # extract only numeric columns for rounding
+    }
+
+    df[,columns] <- round(
+        data.frame(df[, columns], check.names = FALSE),
+        digits = digits
+    )
+
+    # Convert columns back to numeric
+
+    for (c in columns) {
+        df[[c]][grep("^ *NA$", df[[c]])] <- NA
+        df[[c]] <- as.numeric(df[[c]])
+    }
+    df
+}
 ```
 
 ```{r include = FALSE}
@@ -814,6 +857,35 @@ if (any(unlist(params[paste0(possible_gene_set_methods, '_run')]))){
       }
     }
   }
+}
+```
+
+```{r, echo=FALSE, results='asis', eval=params$gprofiler2_run}
+enrichment_files <- grep("gprofiler2", list.files(params$input_dir), value=T, fixed=T)
+cat(paste0("\n## Pathway enrichment analysis {.tabset}"))
+cat(paste0("\nThis section contains the results of the pathway analysis which was done with the R package gprofiler2. The plots show the -log10 adjusted p values of each pathway which was found to be enriched for differential genes (if necessary determined by converting feature IDs to gene IDs); if possible, pathways are grouped by their source database. The tables below give additional info for each pathway; the differential fraction is the number of differential genes in a pathway divided by that pathway's size, i.e. the number of genes annotated for the pathway.\n"))
+
+for (html in rev(grep(".html", enrichment_files, value=T, fixed=T))) {
+  contrast <- unlist(strsplit(html, "gprofiler2.", fixed=T))[2]
+  contrast <- unlist(strsplit(contrast, ".gostplot", fixed=T))[1]
+  if (! file.exists(file.path(params$input_dir, html))){
+    stop(paste("Gprofiler2 gost plot", file.path(params$input_dir, html), "does not exist"))
+  }
+  cat(paste0("\n### ", contrast, "\n"))
+  cat(paste0('<embed type="text/html" src="', file.path(params$input_dir, html), '" width="800" height="400">'))
+
+  table <- paste0("gprofiler2.", contrast, ".all_enriched_pathways.tsv")
+  if (! file.exists(file.path(params$input_dir, table))){
+    stop(paste("Gprofiler2 enrichment table", file.path(params$input_dir, table), "does not exist"))
+  }
+  all_enriched <- read.table(file.path(params$input_dir, table), header=T, sep="\t")
+  all_enriched <- data.frame("Pathway name" = all_enriched$term_name, "Pathway code" = all_enriched$term_id,
+    "Differential features" = all_enriched$intersection_size, "Pathway size" = all_enriched$term_size,
+    "Differential fraction" = (all_enriched$intersection_size/all_enriched$term_size),
+    "Adjusted p value" = all_enriched$p_value, check.names = FALSE)
+  all_enriched <- round_dataframe_columns(all_enriched, digits=params$round_digits)
+  print(htmltools::tagList(datatable(all_enriched, caption = paste('Enriched pathways in', contrast, " (check", table, "for more detail)"), rownames = FALSE)))
+  cat("\n")
 }
 ```
 

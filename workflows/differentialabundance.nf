@@ -116,6 +116,7 @@ include { LIMMA_DIFFERENTIAL                                } from '../modules/n
 include { CUSTOM_MATRIXFILTER                               } from '../modules/nf-core/custom/matrixfilter/main'
 include { ATLASGENEANNOTATIONMANIPULATION_GTF2FEATUREANNOTATION as GTF_TO_TABLE } from '../modules/nf-core/atlasgeneannotationmanipulation/gtf2featureannotation/main'
 include { GSEA_GSEA                                         } from '../modules/nf-core/gsea/gsea/main'
+include { GPROFILER2_GOST as GOST                           } from '../modules/nf-core/gprofiler2/gost/main'
 include { CUSTOM_TABULARTOGSEAGCT                           } from '../modules/nf-core/custom/tabulartogseagct/main'
 include { CUSTOM_TABULARTOGSEACLS                           } from '../modules/nf-core/custom/tabulartogseacls/main'
 include { RMARKDOWNNOTEBOOK                                 } from '../modules/nf-core/rmarkdownnotebook/main'
@@ -449,6 +450,29 @@ workflow DIFFERENTIALABUNDANCE {
             .mix(GSEA_GSEA.out.versions)
     }
 
+    if (params.gprofiler2_run) {
+        if (!params.gprofiler2_background_file) {
+            // If param not set, use empty list as "background"
+            ch_background = []
+        } else if (params.gprofiler2_background_file == "auto") {
+            // If auto, use input matrix as background
+            if(params.study_type == "geo_soft_file") {
+                ch_background = ch_norm.map{it.tail()}
+            } else {
+                ch_background = ch_raw.map{it.tail()}
+            }
+        } else {
+            if (!file(params.gprofiler2_background_file).exists()) {
+                error("Param gprofiler2_background_file must be null, 'auto' or valid file path!")
+            }
+            ch_background = Channel.fromPath(params.gprofiler2_background)
+        }
+
+        GOST(
+            ch_differential,
+            ch_background
+        )
+    }
 
     // The exploratory plots are made by coloring by every unique variable used
     // to define contrasts
@@ -525,6 +549,13 @@ workflow DIFFERENTIALABUNDANCE {
             )
     }
 
+    if (params.gprofiler2_run){
+        ch_report_input_files = ch_report_input_files
+            .combine(GOST.out.plot_html.map{it[1]}.flatMap().toList())
+            .combine(GOST.out.all_enrich.map{it[1]}.flatMap().toList())
+            .combine(GOST.out.sub_enrich.map{it[1]}.flatMap().toList())
+    }
+
     if (params.shinyngs_build_app){
 
         // Make (and optionally deploy) the shinyngs app
@@ -559,12 +590,12 @@ workflow DIFFERENTIALABUNDANCE {
 
     // Condition params reported on study type
 
-    def params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|deseq2|gsea).*/
+    def params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|deseq2|gsea|gprofiler2|round_digits).*/
     if (params.study_type == 'affy_array' || params.study_type == 'geo_soft_file'){
-        params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|affy|limma|gsea).*/
+        params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|affy|limma|gsea|round_digits).*/
     }
     if (params.study_type == 'maxquant'){
-        params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|proteus|affy|limma|gsea).*/
+        params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|proteus|affy|limma|gsea|round_digits).*/
     }
 
     ch_report_params = ch_report_input_files
@@ -577,8 +608,8 @@ workflow DIFFERENTIALABUNDANCE {
 
     RMARKDOWNNOTEBOOK(
         ch_report_file,
-        ch_report_params,
-        ch_report_input_files
+        ch_report_params.dump(tag:'report_params'),
+        ch_report_input_files.dump(tag:'ch_report_input_files')
     )
 
     // Make a report bundle comprising the markdown document and all necessary
