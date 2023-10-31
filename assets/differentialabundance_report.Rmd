@@ -297,10 +297,10 @@ assay_data <- lapply(assay_files, function(x) {
 })
 
 if (!is.null(params$features_log2_assays)) {
-  # Remove brackets from assay list. TODO: Remove if this is added to cond_log2_transform_assays
-  features_log2_assays <- gsub('\\]$', '', gsub('^\\[', '', params$features_log2_assays))
-  assay_data <- cond_log2_transform_assays(assay_data, features_log2_assays)
+  # Remove brackets from assay list. TODO: remove if this is added to cond_log2_transform_assays
+  params$features_log2_assays <- gsub('\\]$', '', gsub('^\\[', '', params$features_log2_assays))
 }
+assay_data <- cond_log2_transform_assays(assay_data, params$features_log2_assays)
 
 # Now we can rename the observations rows using the title field
 rownames(observations) <- observations[[params$observations_name_col]]
