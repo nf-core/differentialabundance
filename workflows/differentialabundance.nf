@@ -73,6 +73,14 @@ if (params.gsea_run) {
         error("GSEA activated but gene set file not specified!")
     }
 }
+if (params.gprofiler2_run) {
+    if (!params.gprofiler2_organism){
+        error("gprofiler2 pathway analysis activated but organism not specified!")
+    }
+    if (!params.gprofiler2_sources){
+        error("gprofiler2 pathway analysis activated but sources not specified!")
+    }
+}
 
 report_file = file(params.report_file, checkIfExists: true)
 logo_file = file(params.logo_file, checkIfExists: true)
@@ -465,10 +473,11 @@ workflow DIFFERENTIALABUNDANCE {
             if (!file(params.gprofiler2_background_file).exists()) {
                 error("Param gprofiler2_background_file must be null, 'auto' or valid file path!")
             }
-            ch_background = Channel.fromPath(params.gprofiler2_background)
+            ch_background = Channel.fromPath(params.gprofiler2_background_file)
         }
 
         GOST(
+            ch_contrasts,
             ch_differential,
             ch_background
         )
@@ -554,6 +563,7 @@ workflow DIFFERENTIALABUNDANCE {
             .combine(GOST.out.plot_html.map{it[1]}.flatMap().toList())
             .combine(GOST.out.all_enrich.map{it[1]}.flatMap().toList())
             .combine(GOST.out.sub_enrich.map{it[1]}.flatMap().toList())
+        GOST.out.plot_html
     }
 
     if (params.shinyngs_build_app){
@@ -608,8 +618,8 @@ workflow DIFFERENTIALABUNDANCE {
 
     RMARKDOWNNOTEBOOK(
         ch_report_file,
-        ch_report_params.dump(tag:'report_params'),
-        ch_report_input_files.dump(tag:'ch_report_input_files')
+        ch_report_params,
+        ch_report_input_files
     )
 
     // Make a report bundle comprising the markdown document and all necessary

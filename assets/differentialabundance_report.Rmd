@@ -142,14 +142,14 @@ params:
   gprofiler2_correction_method: NULL
   gprofiler2_sources: NULL
   gprofiler2_evcodes: NULL
-  gprofiler2_pval_threshold: NULL
+  gprofiler2_max_qval: NULL
   gprofiler2_gmt_file: NULL
-  gprofiler2_gost_id: NULL
+  gprofiler2_gost_token: NULL
   gprofiler2_background_file: NULL
   gprofiler2_background_column: NULL
   gprofiler2_domain_scope: NULL
   gprofiler2_min_diff: NULL
-  gprofiler2_enrich_colors: NULL
+  gprofiler2_palette_name: NULL
   round_digits: NULL
 ---
 
@@ -836,17 +836,17 @@ if (any(unlist(params[paste0(possible_gene_set_methods, '_run')]))){
 
   for (gene_set_method in possible_gene_set_methods){
     if (unlist(params[paste0(gene_set_method, '_run')])){
-      cat("\n### ", toupper(gene_set_method) ," {.tabset}\n")
+      cat("\n#### ", toupper(gene_set_method) ," {.tabset}\n")
       
       for (gmt_file in simpleSplit(params$gsea_gene_sets)) {
         gmt_name <- basename(tools::file_path_sans_ext(gmt_file))
 
-        cat("\n#### ", gmt_name ," {.tabset}\n")
+        cat("\n##### ", gmt_name ," {.tabset}\n")
         reference_gsea_tables <- paste0(contrasts$id, ".", gmt_name, '.gsea_report_for_', contrasts$reference, '.tsv')
         target_gsea_tables <- paste0(contrasts$id, ".", gmt_name, '.gsea_report_for_', contrasts$target, '.tsv')
 
         for (i in 1:nrow(contrasts)){
-          cat("\n##### ", contrast_descriptions[i], "\n")
+          cat("\n###### ", contrast_descriptions[i], "\n")
 
           target_gsea_results <- read_metadata(target_gsea_tables[i])[,c(-2,-3)]
           print( htmltools::tagList(datatable(target_gsea_results, caption = paste0("\nTarget (", contrasts$target[i], ")\n"), rownames = FALSE) ))
@@ -862,30 +862,35 @@ if (any(unlist(params[paste0(possible_gene_set_methods, '_run')]))){
 
 ```{r, echo=FALSE, results='asis', eval=params$gprofiler2_run}
 enrichment_files <- grep("gprofiler2", list.files(params$input_dir), value=T, fixed=T)
-cat(paste0("\n## Pathway enrichment analysis {.tabset}"))
-cat(paste0("\nThis section contains the results of the pathway analysis which was done with the R package gprofiler2. The plots show the -log10 adjusted p values of each pathway which was found to be enriched for differential genes (if necessary determined by converting feature IDs to gene IDs); if possible, pathways are grouped by their source database. The tables below give additional info for each pathway; the differential fraction is the number of differential genes in a pathway divided by that pathway's size, i.e. the number of genes annotated for the pathway.\n"))
+cat(paste0("\n### Pathway enrichment analysis {.tabset}"))
+if (length(grep(".html", enrichment_files, fixed=T))) {
+  cat(paste0("\nThis section contains the results of the pathway analysis which was done with the R package gprofiler2. The plots show the -log10 adjusted p values of each pathway which was found to be enriched for differential genes (if necessary determined by converting feature IDs to gene IDs); if possible, pathways are grouped by their source database. The tables below give additional info for each pathway; the differential fraction is the number of differential genes in a pathway divided by that pathway's size, i.e. the number of genes annotated for the pathway.",
+  ifelse(params$gprofiler2_significant, paste0(" Enrichment was only considered if significant, i.e. adjusted p-value <=", params$gprofiler2_max_qval, "."), ""), "\n"))
 
-for (html in rev(grep(".html", enrichment_files, value=T, fixed=T))) {
-  contrast <- unlist(strsplit(html, "gprofiler2.", fixed=T))[2]
-  contrast <- unlist(strsplit(contrast, ".gostplot", fixed=T))[1]
-  if (! file.exists(file.path(params$input_dir, html))){
-    stop(paste("Gprofiler2 gost plot", file.path(params$input_dir, html), "does not exist"))
-  }
-  cat(paste0("\n### ", contrast, "\n"))
-  cat(paste0('<embed type="text/html" src="', file.path(params$input_dir, html), '" width="800" height="400">'))
+  for (html in rev(grep(".html", enrichment_files, value=T, fixed=T))) {
+    contrast <- unlist(strsplit(html, "gprofiler2.", fixed=T))[2]
+    contrast <- unlist(strsplit(contrast, ".gostplot", fixed=T))[1]
+    if (! file.exists(file.path(params$input_dir, html))){
+      stop(paste("gprofiler2 gost plot", file.path(params$input_dir, html), "does not exist"))
+    }
+    cat(paste0("\n#### ", contrast, "\n"))
+    cat(paste0('<embed type="text/html" src="', file.path(params$input_dir, html), '" width="800" height="400">'))
 
-  table <- paste0("gprofiler2.", contrast, ".all_enriched_pathways.tsv")
-  if (! file.exists(file.path(params$input_dir, table))){
-    stop(paste("Gprofiler2 enrichment table", file.path(params$input_dir, table), "does not exist"))
+    table <- paste0("gprofiler2.", contrast, ".all_enriched_pathways.tsv")
+    if (! file.exists(file.path(params$input_dir, table))){
+      stop(paste("gprofiler2 enrichment table", file.path(params$input_dir, table), "does not exist"))
+    }
+    all_enriched <- read.table(file.path(params$input_dir, table), header=T, sep="\t")
+    all_enriched <- data.frame("Pathway name" = all_enriched$term_name, "Pathway code" = all_enriched$term_id,
+      "Differential features" = all_enriched$intersection_size, "Pathway size" = all_enriched$term_size,
+      "Differential fraction" = (all_enriched$intersection_size/all_enriched$term_size),
+      "Adjusted p value" = all_enriched$p_value, check.names = FALSE)
+    all_enriched <- round_dataframe_columns(all_enriched, digits=params$round_digits)
+    print(htmltools::tagList(datatable(all_enriched, caption = paste('Enriched pathways in', contrast, " (check", table, "for more detail)"), rownames = FALSE)))
+    cat("\n")
   }
-  all_enriched <- read.table(file.path(params$input_dir, table), header=T, sep="\t")
-  all_enriched <- data.frame("Pathway name" = all_enriched$term_name, "Pathway code" = all_enriched$term_id,
-    "Differential features" = all_enriched$intersection_size, "Pathway size" = all_enriched$term_size,
-    "Differential fraction" = (all_enriched$intersection_size/all_enriched$term_size),
-    "Adjusted p value" = all_enriched$p_value, check.names = FALSE)
-  all_enriched <- round_dataframe_columns(all_enriched, digits=params$round_digits)
-  print(htmltools::tagList(datatable(all_enriched, caption = paste('Enriched pathways in', contrast, " (check", table, "for more detail)"), rownames = FALSE)))
-  cat("\n")
+} else {
+  cat(paste0("\nPathway analysis which was done with the R package gprofiler2. No enriched pathways were found."))
 }
 ```
 
@@ -946,12 +951,18 @@ if (any(unlist(params[paste0(possible_gene_set_methods, '_run')]))){
 
   for (gene_set_method in possible_gene_set_methods){
     if (unlist(params[paste0(gene_set_method, '_run')])){
-      cat("\n### ", toupper(gene_set_method) ,"  {.tabset}\n")
+      cat("\n#### ", toupper(gene_set_method) ,"  {.tabset}\n")
       make_params_table(toupper(gene_set_method), paste0(gene_set_method, '_'), remove_pattern = TRUE)
     }
   }
 
 }
+```
+
+```{r, echo=FALSE, results='asis', eval=params$gprofiler2_run}
+cat("\n### Pathway enrichment analysis\n")
+cat("\n#### gprofiler2\n")
+make_params_table("gprofiler2", 'gprofiler2_', remove_pattern = TRUE)
 ```
 
 # Appendices

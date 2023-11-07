@@ -853,6 +853,100 @@
             },
             "fa_icon": "fas fa-layer-group"
         },
+        "gprofiler2": {
+            "title": "gprofiler2",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "gprofiler2_run": {
+                    "type": "boolean",
+                    "description": "Set to run gprofiler2 and do a pathway enrichment analysis.",
+                    "fa_icon": "fas fa-running"
+                },
+                "gprofiler2_organism": {
+                    "type": "string",
+                    "description": "Short name of the organism that is analyzed, e.g. hsapiens for homo sapiens.",
+                    "help_text": "Set this to the short organism name consisting of the first letter of the genus and the full species name, e.g. hsapiens for Homo sapiens, mmusculus for Mus musculus."
+                },
+                "gprofiler2_significant": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Should only significant enrichment results be considered?",
+                    "help_text": "Default true; if false, will consider all enrichment results regardless of significance.",
+                },
+                "gprofiler2_measure_underrepresentation": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Should underrepresentation be measured instead of overrepresentation?",
+                    "help_text": "Default false; if true, will measure overrepresentation."
+                },
+                "gprofiler2_correction_method": {
+                    "type": "string",
+                    "description": "The method that should be used for multiple testing correction.",
+                    "help_text": "One of gSCS (synonyms: analytical, g_SCS), fdr (synonyms: false_discovery_rate), bonferroni.",
+                    "enum": ["gSCS", "analytical", "g_SCS", "fdr", "false_discovery_rate", "bonferroni"]
+                },
+                "gprofiler2_sources": {
+                    "type": "string",
+                    "description": "On which source databases to run the gprofiler query.",
+                    "help_text": "One of gSCS (synonyms: analytical, g_SCS), fdr (synonyms: false_discovery_rate), bonferroni.",
+                    "enum": ["gSCS", "analytical", "g_SCS", "fdr", "false_discovery_rate", "bonferroni"]
+                },
+                "gprofiler2_evcodes": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Whether to include evcodes in the results.",
+                    "help_text": "This can decrease performance and make the query slower. See https://rdrr.io/cran/gprofiler2/man/gost.html",
+                },
+                "gprofiler2_max_qval": {
+                    "type": "number",
+                    "default": 0.05,
+                    "description": "Maximum q value used for significance testing."
+                },
+                "gprofiler2_gmt_file": {
+                    "type": "string",
+                    "format": "file-path",
+                    "pattern": "^\\S+\\.(gmt)$",
+                    "description": "Path to GMT file that should be used as a query.",
+                    "help_text": "For reproducibility, instead of querying the online databases, you can provide a GMT file, e.g. from a previous pipeline run or one you downloaded from https://biit.cs.ut.ee/gprofiler/gost."
+                },
+                "gprofiler2_gost_token": {
+                    "type": "string",
+                    "description": "Token that should be used as a query.",
+                    "help_text": "For reproducibility, instead of querying the online databases, you can provide a token, e.g. from a previous pipeline run or from a manual query on https://biit.cs.ut.ee/gprofiler/gost."
+                },
+                "gprofiler2_background_file": {
+                    "type": "string",
+                    "pattern": "^\\S+\\.(csv|tsv|txt)$|auto|null",
+                    "description": "Path to CSV/TSV/TXT file that should be used as a background for the query; alternatively, 'auto'.",
+                    "help_text": "It is advisable to run pathway analysis with a set of background genes describing which genes exist in the target organism in the first place so that other genes are not at all considered. You can provide a CSV/TSV table where one column contains gene IDs and the other rows contain abundance values, or a TXT file that simply contains one gene ID per line. Alternatively, you can set this parameter to 'auto'; in that case, the input abundance matrix will be used. If a matrix is used, all genes will be considered which had at least some abundance (i.e. sum of all abundance values in a row > 0)."
+                },
+                "gprofiler2_background_column": {
+                    "type": "string",
+                    "description": "Which column to use as gene IDs in the background matrix.",
+                    "help_text": "If a background matrix is provided but this parameter is not set, will assume that the first matrix column contains the IDs."
+                },
+                "gprofiler2_domain_scope": {
+                    "type": "string",
+                    "default": "annotated",
+                    "description": "How to calculate the statistical domain size.",
+                    "help_text": "One of annotated (default), known, custom or custom_annotated; see https://rdrr.io/cran/gprofiler2/man/gost.html",
+                    "enum": ["annotated", "known", "custom", "custom_annotated"]
+                },
+                "gprofiler2_min_diff": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "How many genes must be differentially expressed in a pathway for it to be considered enriched? Default 1."
+                },
+                "gprofiler2_palette_name": {
+                    "type": "string",
+                    "default": "Blues",
+                    "description": "Valid R palette name",
+                    "help_text": "Check the content of `RColorBrewer::brewer.pal.info` from an R terminal for valid palette names."
+                }
+            }
+        },
         "shiny_app_settings": {
             "title": "Shiny app settings",
             "type": "object",
@@ -1198,6 +1292,9 @@
         },
         {
             "$ref": "#/definitions/gsea"
+        },
+        {
+            "$ref": "#/definitions/gprofiler2"
         },
         {
             "$ref": "#/definitions/shiny_app_settings"

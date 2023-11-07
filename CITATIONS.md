@@ -24,6 +24,10 @@
 
   > Love MI, Huber W, Anders S (2014). Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. Genome Biol. 15(12):550. PubMed PMID: 25516281; PubMed Central PMCID: PMC4302049.
 
+- [GEOQuery](https://pubmed.ncbi.nlm.nih.gov/17496320/)
+
+  > Davis S, Meltzer PS. Geoquery: a bridge between the gene expression omnibus (Geo) and bioconductor. Bioinformatics. 2007;23(14):1846-1847.
+
 - [ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html)
 
   > H. Wickham (2016). ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York.
@@ -31,10 +35,6 @@
 - [gprofiler2](https://cran.r-project.org/web/packages/gprofiler2/index.html)
 
   > Kolberg L, Raudvere U, Kuzmin I, Vilo J, Peterson H (2020). “gprofiler2– an R package for gene list functional enrichment analysis and namespace conversion toolset g:Profiler.” F1000Research, 9 (ELIXIR)(709). R package version 0.2.2. 
-
-- [GEOQuery](https://pubmed.ncbi.nlm.nih.gov/17496320/)
-
-  > Davis S, Meltzer PS. Geoquery: a bridge between the gene expression omnibus (Geo) and bioconductor. Bioinformatics. 2007;23(14):1846-1847.
 
 - [Limma](https://pubmed.ncbi.nlm.nih.gov/25605792/)
 
