@@ -246,6 +246,18 @@ With this configuration in place deployment should happen automatically every ti
 
 There is also a [Shiny server application](https://posit.co/download/shiny-server/), which you can install on your own infrastruture and use to host applications yourself.
 
+## Pathway enrichment analysis
+
+Currently, the [gprofiler2](https://cran.r-project.org/web/packages/gprofiler2/vignettes/gprofiler2.html) package can be used to test which pathways are enriched for genes that have been determined to be differentially expressed. In the simplest form, this feature can be enabled with the parameters from the following example:
+
+```bash
+--gprofiler2_run true \
+--gprofiler2_organism mmusculus \
+--gprofiler2_sources 'KEGG,GO'
+```
+
+Both the organism (mmusculus for Mus musculus, hsapiens for Homo sapiens etc.) and the source databases (any comma-separated combination of the databases supported by g:profiler) are required. Check the [pipeline webpage](https://nf-co.re/differentialabundance/1.2.0/parameters#gprofiler2) for optional parameters for this step.
+
 ## Running the pipeline
 
 The typical command for running the pipeline is as follows:
