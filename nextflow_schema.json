@@ -873,7 +873,7 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Should only significant enrichment results be considered?",
-                    "help_text": "Default true; if false, will consider all enrichment results regardless of significance.",
+                    "help_text": "Default true; if false, will consider all enrichment results regardless of significance."
                 },
                 "gprofiler2_measure_underrepresentation": {
                     "type": "boolean",
@@ -890,14 +890,13 @@
                 "gprofiler2_sources": {
                     "type": "string",
                     "description": "On which source databases to run the gprofiler query.",
-                    "help_text": "One of gSCS (synonyms: analytical, g_SCS), fdr (synonyms: false_discovery_rate), bonferroni.",
-                    "enum": ["gSCS", "analytical", "g_SCS", "fdr", "false_discovery_rate", "bonferroni"]
+                    "help_text": "GO, GO:MF, GO:BP, GO:CC, KEGG, REAC, WP, TF, MIRNA, HPA, CORUM, HP, or any comma-reparated combination thereof, e.g. 'KEGG,REAC'."
                 },
                 "gprofiler2_evcodes": {
                     "type": "boolean",
                     "default": false,
                     "description": "Whether to include evcodes in the results.",
-                    "help_text": "This can decrease performance and make the query slower. See https://rdrr.io/cran/gprofiler2/man/gost.html",
+                    "help_text": "This can decrease performance and make the query slower. See https://rdrr.io/cran/gprofiler2/man/gost.html"
                 },
                 "gprofiler2_max_qval": {
                     "type": "number",
