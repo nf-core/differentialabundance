@@ -671,10 +671,35 @@ foo <- lapply(informative_variables[iv_min_group_sizes > 2], function(iv){
     }
   }
 })
-
 ```
 
 ## Differential analysis
+
+```{r, echo=FALSE, results='asis', eval=params$study_type %in% c('rnaseq')}
+# For DESeq2, add some more explanation to the report
+cat(paste0(
+"The `DESeq2 R` package was used for differential analysis. p-values were adjusted with the ",
+params$deseq2_p_adjust_method,
+" method to reduce the number of false positives (",
+params$features_type,
+"s that are not actually differential). ",
+ucfirst(params$features_type),
+"s were considered differential if, for the respective contrast, the adjusted p-value was equal to or lower than ",
+params$deseq2_alpha,
+" and the absolute log2 fold change was equal to or higher than ",
+params$deseq2_lfc_threshold,
+"."
+))
+```
+```{r, echo=FALSE, results='asis'}
+cat(paste0(
+"The following tables and volcano plots show how many and which ",
+params$features_type,
+"s were found to be differential in each contrast. In the plots, a ",
+params$features_type,
+" is colored differently depending on whether it was determined not differential, or differential according to log2 foldchange, or differential according to adjusted p-value, or differential according to both."
+))
+```
 
 ### Differential `r params$features_type` `r params$study_abundance_type` {.tabset}
 
@@ -856,6 +881,23 @@ make_params_table('exploratory analysis', 'exploratory_', remove_pattern = TRUE)
 ```
 
 ## Differential analysis
+
+```{r, echo=FALSE, results='asis', eval=params$study_type %in% c('rnaseq')}
+# For DESeq2, add some more explanation to the report
+cat(paste0(
+"The `DESeq2 R` package was used for differential analysis. p-values were adjusted with the ",
+params$deseq2_p_adjust_method,
+" method to reduce the number of false positives (",
+params$features_type,
+"s that are not actually differential). ",
+ucfirst(params$features_type),
+"s were considered differential if, for the respective contrast, the adjusted p-value was equal to or lower than ",
+params$deseq2_alpha,
+" and the absolute log2 fold change was equal to or higher than ",
+params$deseq2_lfc_threshold,
+"."
+))
+```
 
 ```{r, echo=FALSE, results='asis'}
 if (params$study_type == 'rnaseq'){
