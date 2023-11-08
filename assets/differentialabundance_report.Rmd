@@ -437,6 +437,11 @@ Comparisons were made between `r params$observations_type` groups defined using 
 ```{r, echo=FALSE, results='asis'}
 contrasts_to_print <- contrasts
 colnames(contrasts_to_print) <- prettifyVariablename(colnames(contrasts_to_print))
+
+# If DESeq2 was run instead of Limma, add designs to report
+if (params$study_type %in% c('rnaseq')) {
+  contrasts_to_print[["DESeq2 models"]] <- paste('~ 0 + ', ifelse(contrasts_to_print$Blocking != '', make.names(contrasts_to_print$Blocking), ''), '+ ', make.names(contrasts_to_print$Variable))
+}
 print( htmltools::tagList(datatable(contrasts_to_print, caption = paste0("Table of contrasts"), rownames = FALSE, options = list(dom = 't')) ))
 ```
 
