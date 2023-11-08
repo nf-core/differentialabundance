@@ -592,13 +592,13 @@ for (variable in rownames(pca_vs_meta)){
 
 #### Clustering dendrograms {.tabset}
 
-A hierarchical clustering of `r params$features_type`s was undertaken based on the top  `r params$exploratory_n_features` most variable `r params$features_type`s. Distances between `r params$features_type`s were estimated based on `r params$exploratory_cor_method` correlation, which were then used to produce a clustering via the `r params$exploratory_clustering_method` method with `hclust()` in R. 
+A hierarchical clustering of `r params$features_type`s was undertaken based on `r ifelse(params$exploratory_n_features == -1, paste0("all ", params$features_type), paste0("the ", params$exploratory_n_features, " most variable ", params$features_type))`s. Distances between `r params$features_type`s were estimated based on `r params$exploratory_cor_method` correlation, which were then used to produce a clustering via the `r params$exploratory_clustering_method` method with `hclust()` in R. 
 
 ```{r, echo=FALSE, results='asis'}
 for (assay_type in rev(names(assay_data))){
   for (iv in informative_variables){
     cat(paste0("\n##### ", prettifyVariablename(assay_type), " (", iv, ")\n"))
-    variable_genes <- selectVariableGenes(matrix = assay_data[[assay_type]], ntop = params$exploratory_n_features)
+    variable_genes <- selectVariableGenes(matrix = assay_data[[assay_type]], ntop = ifelse(params$exploratory_n_features == -1, nrow(assay_data[[assay_type]]), params$exploratory_n_features))
 
     dendroColorScale <- makeColorScale(length(unique(observations[[iv]])), palette = params$exploratory_palette_name)
     p <- clusteringDendrogram(
@@ -608,8 +608,7 @@ for (assay_type in rev(names(assay_data))){
       cor_method = params$exploratory_cor_method,
       plot_title = paste0(
         paste0(params$observations_type," clustering dendrogram, "), 
-        params$exploratory_n_features, 
-        " most variable ", 
+        ifelse(params$exploratory_n_features == -1, "all ", paste0(params$exploratory_n_features, " most variable ")),
         params$features_type, 
         "s\n(", params$exploratory_clustering_method, " clustering, ", params$exploratory_cor_method, " correlation)"),
       cluster_method = params$exploratory_clustering_method,
