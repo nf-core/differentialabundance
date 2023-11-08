@@ -952,6 +952,11 @@
                     "default": "None",
                     "fa_icon": "fas fa-feather",
                     "description": "A description for reporting outputs"
+                },
+                "report_scree": {
+                    "type": "boolean",
+                    "default": "false",
+                    "description": "Whether to generate a scree plot in the report"
                 }
             },
             "required": ["report_file", "logo_file", "css_file"]
