@@ -733,8 +733,10 @@ for (i in 1:nrow(contrasts)){
     cat("\n##### ", pvt, " p values\n")
     pval_column <- p_value_types[[pvt]]
   
-    full_de$differential_status <- FALSE
-    full_de$differential_status[abs(full_de[[params$differential_fc_column]]) > log2(params$differential_min_fold_change) & full_de[[pval_column]] < p_value_thresholds[[pvt]]] <- TRUE
+    full_de$differential_status <- "Not significant"
+    full_de$differential_status[abs(full_de[[params$differential_fc_column]]) > log2(params$differential_min_fold_change)] <- paste("abs(logFC) >", params$differential_min_fold_change)
+    full_de$differential_status[full_de[[pval_column]] < p_value_thresholds[[pvt]]] <- paste(pvt, "<=", p_value_thresholds[[pvt]])
+    full_de$differential_status[abs(full_de[[params$differential_fc_column]]) > log2(params$differential_min_fold_change) & full_de[[pval_column]] < p_value_thresholds[[pvt]]] <- paste("abs(logFC) >", params$differential_min_fold_change, "&", pvt, "<=", p_value_thresholds[[pvt]])
 
     # Define the thresholds we'll draw
 
@@ -742,7 +744,10 @@ for (i in 1:nrow(contrasts)){
     hline_thresholds[[paste(pval_column, '=', p_value_thresholds[[pvt]])]] = -log10(p_value_thresholds[[pvt]])
     vline_thresholds[[paste(params$differential_fc_column, '<-', log2(params$differential_min_fold_change))]] = -log2(params$differential_min_fold_change)
     vline_thresholds[[paste(params$differential_fc_column, '>', log2(params$differential_min_fold_change))]] = log2(params$differential_min_fold_change)
-
+    
+    palette_volcano <- makeColorScale(4, params$differential_palette_name)
+    names(palette_volcano) <- c("Not significant", paste("abs(logFC) >", params$differential_min_fold_change), paste(pvt, "<=", p_value_thresholds[[pvt]]), paste("abs(logFC) >", params$differential_min_fold_change, "&", pvt, "<=", p_value_thresholds[[pvt]]))
+    
     plot_args <- list(
       x = full_de[[params$differential_fc_column]],
       y = -log10(full_de[[pval_column]]),
@@ -754,7 +759,7 @@ for (i in 1:nrow(contrasts)){
       vline_thresholds = vline_thresholds,
       show_labels = FALSE,
       legend_title = "Differential status",
-      palette = makeColorScale(2, params$differential_palette_name)
+      palette = palette_volcano
     )
   
     # Let's equalize the axes
