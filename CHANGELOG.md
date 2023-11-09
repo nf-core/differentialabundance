@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- [[#193](https://github.com/nf-core/differentialabundance/pull/193)] - Add DESeq2 text to report ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+
 ### `Fixed`
 
 ### `Changed`
