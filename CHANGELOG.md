@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- [[#188](https://github.com/nf-core/differentialabundance/pull/188)] - Add option to cluster all features ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+
 ### `Fixed`
 
 ### `Changed`

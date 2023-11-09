@@ -608,7 +608,7 @@ for (assay_type in rev(names(assay_data))){
       cor_method = params$exploratory_cor_method,
       plot_title = paste0(
         paste0(params$observations_type," clustering dendrogram, "), 
-        ifelse(params$exploratory_n_features == -1, "all ", paste0(params$exploratory_n_features, " most variable ")),
+        ifelse(params$exploratory_n_features == -1, nrow(assay_data[[assay_type]]), paste0(params$exploratory_n_features, " most variable")), " ",
         params$features_type, 
         "s\n(", params$exploratory_clustering_method, " clustering, ", params$exploratory_cor_method, " correlation)"),
       cluster_method = params$exploratory_clustering_method,
