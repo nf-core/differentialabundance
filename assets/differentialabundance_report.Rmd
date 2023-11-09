@@ -753,7 +753,6 @@ for (i in 1:nrow(contrasts)){
     vline_thresholds[[paste(params$differential_fc_column, '>', log2(params$differential_min_fold_change))]] = log2(params$differential_min_fold_change)
     
     palette_volcano <- makeColorScale(4, params$differential_palette_name)
-    names(palette_volcano) <- c("Not significant", paste("abs(logFC) >", params$differential_min_fold_change), paste(pvt, "<=", p_value_thresholds[[pvt]]), paste("abs(logFC) >", params$differential_min_fold_change, "&", pvt, "<=", p_value_thresholds[[pvt]]))
     
     plot_args <- list(
       x = full_de[[params$differential_fc_column]],
