@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- [[#194](https://github.com/nf-core/differentialabundance/pull/194)] - Change report volcano colors ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+
 ## v1.3.1 - 2023-10-26
 
 ### `Added`
