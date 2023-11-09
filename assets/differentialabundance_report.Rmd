@@ -501,7 +501,6 @@ percentVar_list <- list()
 for (assay_type in rev(names(assay_data))){
   
   pca_data <- pca_datas[[assay_type]]
-  percentVar_list[[assay_type]] <- list()
   for (iv in informative_variables){
   
     cat(paste0("\n##### ", prettifyVariablename(assay_type), " (", iv, ")\n"))
@@ -546,7 +545,9 @@ for (assay_type in rev(names(assay_data))){
 
       print(htmltools::tagList(do.call("plotly_scatterplot", plot_args)))
     }
-    percentVar_list[[assay_type]][[iv]] <- percentVar
+    if (! assay_type %in% names(percentVar_list)){
+      percentVar_list[[assay_type]] <- percentVar
+    }
   }
 }
 ```
@@ -554,24 +555,22 @@ for (assay_type in rev(names(assay_data))){
 ```{r, echo=FALSE, results='asis', eval=params$report_scree}
 cat(paste0("\n#### Scree plot {.tabset}"))
 cat(paste0("\nThe following scree plot visualizes what percentage of total variation in the data can be explained by each of the principal components computed.\n"))
+#iv <- informative_variables[1]
 
 for (assay_type in names(percentVar_list)) {
-  for (iv in names(percentVar_list[[assay_type]])) {
-    percentVarData <- data.frame(percentVar_list[[assay_type]][[iv]])
-    colnames(percentVarData) <- c("var_explained")
-    percentVarData$PCA <- as.numeric(rownames(percentVarData))
-    write.table(percentVarData, file=paste0("/home-link/iivow01/git/save_differentialabundance/error/", assay_type, "_", iv, "_varex.tsv"), quote=F, sep="\t")
-    cat(paste0("\n##### ", prettifyVariablename(assay_type), " (", iv, ")\n"))
-    print(
-      ggplot(percentVarData, aes(x=factor(PCA),y=var_explained, group=1)) +
-      theme_bw() +
-      geom_point(size=4) +
-      geom_line(linetype="dashed") +
-      xlab("PC") +
-      ylab("Percent variance explained")
-    )
-    cat("\n")
-  }
+  percentVarData <- data.frame(percentVar_list[[assay_type]])
+  colnames(percentVarData) <- c("var_explained")
+  percentVarData$PCA <- as.numeric(rownames(percentVarData))
+  cat(paste0("\n##### ", prettifyVariablename(assay_type), "\n"))
+  print(
+    ggplot(percentVarData, aes(x=factor(PCA),y=var_explained, group=1)) +
+    theme_bw() +
+    geom_point(size=4) +
+    geom_line(linetype="dashed") +
+    xlab("PC") +
+    ylab("Percent variance explained")
+  )
+  cat("\n")
 }
 ```
 

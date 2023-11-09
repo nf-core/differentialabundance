@@ -955,7 +955,7 @@
                 },
                 "report_scree": {
                     "type": "boolean",
-                    "default": "false",
+                    "default": "true",
                     "description": "Whether to generate a scree plot in the report"
                 }
             },
