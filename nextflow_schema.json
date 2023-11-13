@@ -353,7 +353,7 @@
                 "exploratory_n_features": {
                     "type": "integer",
                     "default": 500,
-                    "description": "Number of features selected before certain exploratory analyses",
+                    "description": "Number of features selected before certain exploratory analyses. If -1, will use all features",
                     "fa_icon": "fas fa-list-ol"
                 },
                 "exploratory_whisker_distance": {

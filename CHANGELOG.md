@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - [[#192](https://github.com/nf-core/differentialabundance/pull/192)] - Add scree plot in report ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#188](https://github.com/nf-core/differentialabundance/pull/188)] - Add option to cluster all features ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 
 ### `Fixed`
 
@@ -15,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#190](https://github.com/nf-core/differentialabundance/pull/190)] - Fix GSEA indent in report ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 
 ### `Changed`
+
+- [[#188](https://github.com/nf-core/differentialabundance/pull/188)] - Update min nextflow version ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 
 ## v1.3.1 - 2023-10-26
 
