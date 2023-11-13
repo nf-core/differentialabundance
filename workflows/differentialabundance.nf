@@ -459,6 +459,7 @@ workflow DIFFERENTIALABUNDANCE {
     }
 
     if (params.gprofiler2_run) {
+        ch_org_source = Channel.from(tuple(params.organism, params.sources))
         if (!params.gprofiler2_background_file) {
             // If param not set, use empty list as "background"
             ch_background = []
@@ -475,10 +476,17 @@ workflow DIFFERENTIALABUNDANCE {
             }
             ch_background = Channel.fromPath(params.gprofiler2_background_file)
         }
+        if (!params.gprofiler2_gmt) {
+            ch_gmt = []
+        } else {
+            ch_gmt = Channel.fromPath(params.gprofiler2_gmt)
+        }
 
         GOST(
             ch_contrasts,
             ch_differential,
+            ch_org_source,
+            ch_gmt,
             ch_background
         )
     }
