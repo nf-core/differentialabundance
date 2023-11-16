@@ -765,28 +765,41 @@ for (i in 1:nrow(contrasts)){
     cat("\n##### ", pvt, " p values\n")
     pval_column <- p_value_types[[pvt]]
   
-    full_de$differential_status <- FALSE
-    full_de$differential_status[abs(full_de[[params$differential_fc_column]]) > log2(params$differential_min_fold_change) & full_de[[pval_column]] < p_value_thresholds[[pvt]]] <- TRUE
-
+    
+    de_fc <- abs(full_de[[params$differential_fc_column]]) >= log2(params$differential_min_fold_change)
+    de_fc_label <- paste("abs(logFC) >=", params$differential_min_fold_change)
+    
+    de_pval <- full_de[[pval_column]] <= p_value_thresholds[[pvt]]
+    de_pval_label <- paste(pvt, "<=", p_value_thresholds[[pvt]])
+    
+    de_pval_fc_label <- paste(de_fc_label, '&', de_pval_label)
+    
+    full_de$differential_status <- "Not significant"
+    full_de$differential_status[de_fc] <- de_fc_label
+    full_de$differential_status[de_pval] <- de_pval_label
+    full_de$differential_status[de_fc & de_pval] <- de_pval_fc_label
+    full_de$differential_status <- factor(full_de$differential_status, levels = c("Not significant", de_fc_label, de_pval_label, de_pval_fc_label), ordered = TRUE) # Factorize status so that non-significant is always first
     # Define the thresholds we'll draw
 
     hline_thresholds = vline_thresholds = list()
     hline_thresholds[[paste(pval_column, '=', p_value_thresholds[[pvt]])]] = -log10(p_value_thresholds[[pvt]])
-    vline_thresholds[[paste(params$differential_fc_column, '<-', log2(params$differential_min_fold_change))]] = -log2(params$differential_min_fold_change)
-    vline_thresholds[[paste(params$differential_fc_column, '>', log2(params$differential_min_fold_change))]] = log2(params$differential_min_fold_change)
+    vline_thresholds[[paste(params$differential_fc_column, '<=', log2(params$differential_min_fold_change))]] = -log2(params$differential_min_fold_change)
+    vline_thresholds[[paste(params$differential_fc_column, '>=', log2(params$differential_min_fold_change))]] = log2(params$differential_min_fold_change)
+    
+    palette_volcano <- append(c('#999999'), makeColorScale(3, params$differential_palette_name)) # set non-significant to gray
 
     plot_args <- list(
       x = full_de[[params$differential_fc_column]],
       y = -log10(full_de[[pval_column]]),
       colorby = full_de$differential_status,
       ylab = paste("-log(10)", pval_column),
-      xlab = xlabel <- paste("higher in", contrasts$reference[i], "          <<", params$differential_fc_column, ">>           higher in", contrasts$target[i]) ,
+      xlab = xlabel <- paste("higher in", contrasts$reference[i], "          <<", params$differential_fc_column, ">>           higher in", contrasts$target[i]),
       labels = full_de[[label_col]],
       hline_thresholds = hline_thresholds,
       vline_thresholds = vline_thresholds,
       show_labels = FALSE,
       legend_title = "Differential status",
-      palette = makeColorScale(2, params$differential_palette_name)
+      palette = palette_volcano
     )
   
     # Let's equalize the axes
