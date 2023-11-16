@@ -34,7 +34,7 @@
 
 - [gprofiler2](https://cran.r-project.org/web/packages/gprofiler2/index.html)
 
-  > Kolberg L, Raudvere U, Kuzmin I, Vilo J, Peterson H (2020). “gprofiler2– an R package for gene list functional enrichment analysis and namespace conversion toolset g:Profiler.” F1000Research, 9 (ELIXIR)(709). R package version 0.2.2. 
+  > Kolberg L, Raudvere U, Kuzmin I, Vilo J, Peterson H (2020). “gprofiler2– an R package for gene list functional enrichment analysis and namespace conversion toolset g:Profiler.” F1000Research, 9 (ELIXIR)(709). R package version 0.2.2.
 
 - [Limma](https://pubmed.ncbi.nlm.nih.gov/25605792/)
 
