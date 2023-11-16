@@ -772,11 +772,13 @@ for (i in 1:nrow(contrasts)){
     de_pval <- full_de[[pval_column]] <= p_value_thresholds[[pvt]]
     de_pval_label <- paste(pvt, "<=", p_value_thresholds[[pvt]])
     
+    de_pval_fc_label <- paste(de_fc_label, '&', de_pval_label)
+    
     full_de$differential_status <- "Not significant"
     full_de$differential_status[de_fc] <- de_fc_label
     full_de$differential_status[de_pval] <- de_pval_label
-    full_de$differential_status[de_fc & de_pval] <- paste(de_fc_label, '&', de_pval_label)
-    full_de$differential_status <- factor(full_de$differential_status, levels = c("Not significant", de_fc_label, de_pval_label, paste(de_fc_label, '&', de_pval_label)), ordered = TRUE) # Factorize status so that non-significant is always first
+    full_de$differential_status[de_fc & de_pval] <- de_pval_fc_label
+    full_de$differential_status <- factor(full_de$differential_status, levels = c("Not significant", de_fc_label, de_pval_label, de_pval_fc_label), ordered = TRUE) # Factorize status so that non-significant is always first
     # Define the thresholds we'll draw
 
     hline_thresholds = vline_thresholds = list()
