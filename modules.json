@@ -45,6 +45,11 @@
                         "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
                         "installed_by": ["modules"]
                     },
+                    "gprofiler2/gost": {
+                        "branch": "master",
+                        "git_sha": "6b99d8588189292186a12d28ee6746bc72be30d1",
+                        "installed_by": ["modules"]
+                    },
                     "gsea/gsea": {
                         "branch": "master",
                         "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
