@@ -459,7 +459,7 @@ workflow DIFFERENTIALABUNDANCE {
     }
 
     if (params.gprofiler2_run) {
-        ch_org_source = Channel.of([ params.gprofiler2_organism, params.gprofiler2_sources ])
+        ch_org_source = Channel.value([ params.gprofiler2_organism, params.gprofiler2_sources ])
         if (!params.gprofiler2_background_file) {
             // If param not set, use empty list as "background"
             ch_background = []
@@ -468,7 +468,7 @@ workflow DIFFERENTIALABUNDANCE {
             if(params.study_type == "geo_soft_file") {
                 ch_background = ch_norm.map{it.tail()}
             } else {
-                ch_background = ch_raw.map{it.tail()}
+                ch_background = ch_raw.map{it.tail()}.dump(tag:'bg')
             }
         } else {
             if (!file(params.gprofiler2_background_file).exists()) {
@@ -479,14 +479,14 @@ workflow DIFFERENTIALABUNDANCE {
         if (!params.gprofiler2_gmt) {
             ch_gmt = []
         } else {
-            ch_gmt = Channel.fromPath(params.gprofiler2_gmt)
+            ch_gmt = Channel.value(params.gprofiler2_gmt)
         }
-
+        print(ch_background)
         GOST(
-            ch_contrasts,
-            ch_differential,
-            ch_org_source,
-            ch_gmt,
+            ch_contrasts.dump(tag:'contrasts'),
+            ch_differential.dump(tag:'diff'),
+            ch_org_source.dump(tag:'orgsource'),
+            ch_gmt.dump(tag:'gmt'),
             ch_background
         )
     }
