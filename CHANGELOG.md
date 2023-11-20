@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#193](https://github.com/nf-core/differentialabundance/pull/193)] - Add DESeq2 text to report ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#192](https://github.com/nf-core/differentialabundance/pull/192)] - Add scree plot in report ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#188](https://github.com/nf-core/differentialabundance/pull/188)] - Add option to cluster all features ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#198](https://github.com/nf-core/differentialabundance/pull/200)] - Document correct RNAseq matrix usage ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 
 ### `Fixed`
 

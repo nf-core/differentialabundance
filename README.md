@@ -51,6 +51,10 @@ RNA-seq:
      -profile rnaseq,<docker/singularity/podman/shifter/charliecloud/conda/institute>
 ```
 
+:::note
+If you are using the outputs of the nf-core rnaseq workflow as input here, please use the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices. See the [usage documentation](https://nf-co.re/differentialabundance/usage) for more information.
+:::
+
 Affymetrix microarray:
 
 ```bash
