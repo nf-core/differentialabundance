@@ -342,6 +342,7 @@ workflow DIFFERENTIALABUNDANCE {
             ch_samples_and_matrix
         )
         ch_differential = LIMMA_DIFFERENTIAL.out.results
+        ch_model = LIMMA_DIFFERENTIAL.out.model
 
         ch_versions = ch_versions
             .mix(LIMMA_DIFFERENTIAL.out.versions)
@@ -376,6 +377,7 @@ workflow DIFFERENTIALABUNDANCE {
 
         ch_norm = DESEQ2_NORM.out.normalised_counts
         ch_differential = DESEQ2_DIFFERENTIAL.out.results
+        ch_model = DESEQ2_DIFFERENTIAL.out.model
 
         ch_versions = ch_versions
             .mix(DESEQ2_DIFFERENTIAL.out.versions)
@@ -517,6 +519,7 @@ workflow DIFFERENTIALABUNDANCE {
         .combine(ch_css_file)
         .combine(ch_citations_file)
         .combine(ch_differential.map{it[1]}.toList())
+        .combine(ch_model.map{it[1]}.toList())
 
     if (params.gsea_run){
         ch_report_input_files = ch_report_input_files
@@ -574,7 +577,6 @@ workflow DIFFERENTIALABUNDANCE {
         }
 
     // Render the final report
-
     RMARKDOWNNOTEBOOK(
         ch_report_file,
         ch_report_params,
