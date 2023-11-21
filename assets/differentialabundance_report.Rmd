@@ -37,7 +37,7 @@ params:
   features_gtf_feature_type: NULL
   features_gtf_table_first_field: NULL
   features_log2_assays: NULL
-  raw_matrix: null                                            # e.g. 0_salmon.merged.gene_counts.tsv
+  raw_matrix: null                                            # e.g. 0_salmon.merged.gene_counts_length_scaled.tsv
   normalised_matrix: null
   variance_stabilised_matrix: null                            # e.g. test_files/3_treatment-WT-P23H.vst.tsv
   contrasts_file: null                                        # e.g. GSE156533.contrasts.csv

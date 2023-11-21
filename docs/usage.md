@@ -67,6 +67,20 @@ The "file" column in this example is used to specify the data file associated wi
 
 This is a numeric square matrix file, comma or tab-separated, with a column for every observation, and features corresponding to the supplied feature set. The parameters `--observations_id_col` and `--features_id_col` define which of the associated fields should be matched in those inputs.
 
+#### Outputs from nf-core/rnaseq and other tximport-processed results
+
+The nf-core rnaseq workflow uses [tximport](https://bioconductor.org/packages/release/bioc/html/tximport.html) to generate its quantification matrices. It does not currently output sufficient information to allow modelling of transcript length biases in differential analysis by this workflow, so we must use matrices per the second recommended approach in the [documentation](https://bioconductor.org/packages/release/bioc/vignettes/tximport/inst/doc/tximport.html#Downstream_DGE_in_Bioconductor):
+
+> "The second method is to use the tximport argument countsFromAbundance="lengthScaledTPM" or "scaledTPM", and then to use the gene-level count matrix txi$counts directly as you would a regular count matrix with these software. Let’s call this method “bias corrected counts without an offset”"
+
+This corresponds to the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices, respectively, from the rnaseq workflow.
+
+Note that those documents also say:
+
+> "Note: Do not manually pass the original gene-level counts to downstream methods without an offset."
+
+This corresponds to the 'gene_counts.tsv' matrix, so we do not recomend this matrix is used as input for this workflow.
+
 ### MaxQuant intensities
 
 ```bash
