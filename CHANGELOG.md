@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- [[#201](https://github.com/nf-core/differentialabundance/issues/201)] - DESeq2/Limma update, fix incorrect column names issue ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#191](https://github.com/nf-core/differentialabundance/issues/191)] - Fix sample metadata table in the html report not paginating ([@davidecarlson](https://github.com/davidecarlson), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#190](https://github.com/nf-core/differentialabundance/pull/190)] - Fix GSEA indent in report ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 
