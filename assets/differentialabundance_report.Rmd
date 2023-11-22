@@ -438,6 +438,19 @@ Comparisons were made between `r params$observations_type` groups defined using 
 ```{r, echo=FALSE, results='asis'}
 contrasts_to_print <- contrasts
 colnames(contrasts_to_print) <- prettifyVariablename(colnames(contrasts_to_print))
+
+# Add design/model formulae to report
+de_tool <- ifelse(params$study_type %in% c('rnaseq'), "deseq2", "limma")
+contrasts_to_print$model <- sapply(contrasts_to_print$Id, function(id) {
+  model_file <- paste0(id, ".", de_tool, ".model.txt")
+  if (file.exists(model_file)) {
+    first_line <- readLines(model_file, n = 1)
+    return(first_line)
+  } else {
+    return(NA)
+  }
+})
+
 print( htmltools::tagList(datatable(contrasts_to_print, caption = paste0("Table of contrasts"), rownames = FALSE, options = list(dom = 't')) ))
 ```
 
