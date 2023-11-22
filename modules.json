@@ -36,8 +36,8 @@
                         "installed_by": ["modules"]
                     },
                     "deseq2/differential": {
-                        "branch": "deseq2_transcript_lengths",
-                        "git_sha": "69b480c02e2c39e529d757a0bf206203352c3a35",
+                        "branch": "master",
+                        "git_sha": "c992bd93b22a97feda5f04755511366c45423626",
                         "installed_by": ["modules"]
                     },
                     "geoquery/getgeo": {
