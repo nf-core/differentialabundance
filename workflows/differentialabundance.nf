@@ -64,6 +64,7 @@ if (params.study_type == 'affy_array'){
 }
 
 // Check optional parameters
+if (params.transcript_length_matrix) { ch_transcript_lengths = Channel.of([ exp_meta, file(params.transcript_length_matrix, checkIfExists: true)]).first() } else { ch_transcript_lengths = [[],[]] }
 if (params.control_features) { ch_control_features = Channel.of([ exp_meta, file(params.control_features, checkIfExists: true)]).first() } else { ch_control_features = [[],[]] }
 if (params.gsea_run) {
     if (params.gsea_gene_sets){
@@ -356,7 +357,8 @@ workflow DIFFERENTIALABUNDANCE {
         DESEQ2_NORM (
             ch_contrasts.first(),
             ch_samples_and_matrix,
-            ch_control_features
+            ch_control_features,
+            ch_transcript_lengths
         )
 
         // Run the DESeq differential module, which doesn't take the feature
@@ -365,7 +367,8 @@ workflow DIFFERENTIALABUNDANCE {
         DESEQ2_DIFFERENTIAL (
             ch_contrasts,
             ch_samples_and_matrix,
-            ch_control_features
+            ch_control_features,
+            ch_transcript_lengths
         )
         
         // Let's make the simplifying assumption that the processed matrices from

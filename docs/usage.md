@@ -69,17 +69,26 @@ This is a numeric square matrix file, comma or tab-separated, with a column for 
 
 #### Outputs from nf-core/rnaseq and other tximport-processed results
 
-The nf-core rnaseq workflow uses [tximport](https://bioconductor.org/packages/release/bioc/html/tximport.html) to generate its quantification matrices. It does not currently output sufficient information to allow modelling of transcript length biases in differential analysis by this workflow, so we must use matrices per the second recommended approach in the [documentation](https://bioconductor.org/packages/release/bioc/vignettes/tximport/inst/doc/tximport.html#Downstream_DGE_in_Bioconductor):
+The nf-core RNAseq workflow incorporates [tximport](https://bioconductor.org/packages/release/bioc/html/tximport.html) for producing quantification matrices. From [version 3.12.2](https://github.com/nf-core/rnaseq/releases/tag/3.13.2), it additionally provides transcript length matrices which can be directly consumed by DESeq2 to model length bias across samples.
 
-> "The second method is to use the tximport argument countsFromAbundance="lengthScaledTPM" or "scaledTPM", and then to use the gene-level count matrix txi$counts directly as you would a regular count matrix with these software. Let’s call this method “bias corrected counts without an offset”"
+To use this approach, include the transcript lengths file with the **raw counts**:
 
-This corresponds to the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices, respectively, from the rnaseq workflow.
+```bash
+--matrix 'salmon.merged.gene_counts.tsv' \
+--transcript_length_matrix 'salmon.merged.gene_lengths.tsv'
+```
 
-Note that those documents also say:
+Without the transcript lengths, for instance in earlier rnaseq workflow versions, follow the second recommendation in the [tximport documentation](https://bioconductor.org/packages/release/bioc/vignettes/tximport/inst/doc/tximport.html#Downstream_DGE_in_Bioconductor):
 
-> "Note: Do not manually pass the original gene-level counts to downstream methods without an offset."
+> "Use the tximport argument countsFromAbundance='lengthScaledTPM' or 'scaledTPM', then employ the gene-level count matrix txi$counts directly in downstream software, a method we call 'bias corrected counts without an offset'"
 
-This corresponds to the 'gene_counts.tsv' matrix, so we do not recomend this matrix is used as input for this workflow.
+This aligns with the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices in the rnaseq workflow.
+
+Important to note, the documentation advises:
+
+> "Do not manually pass the original gene-level counts to downstream methods without an offset."
+
+So we **do not recommend** raw counts files such as `salmon.merged.gene_counts.tsv` as input for this workflow **except** where the transcript lengths are also provided.
 
 ### MaxQuant intensities
 

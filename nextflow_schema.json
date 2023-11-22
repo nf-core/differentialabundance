@@ -76,6 +76,12 @@
                     "pattern": "^\\S+\\.(tsv|csv|txt)$",
                     "fa_icon": "fas fa-border-all"
                 },
+                "transcript_length_matrix": {
+                    "type": "string",
+                    "fa_icon": "fas fa-border-all",
+                    "description": "(RNA-seq only): optional transcript length matrix with sample samples and genes as the abundance matrix",
+                    "help_text": "if provided, this file willl be used to provide transcript lengths to DESeq2 to model lengh bias across samples"
+                },
                 "affy_cel_files_archive": {
                     "type": "string",
                     "default": "None",
@@ -294,7 +300,7 @@
                 },
                 "proteus_round_digits": {
                     "type": "number",
-                    "default": -1,
+                    "default": -1.0,
                     "description": "Number of decimals to round the MaxQuant intensities to; default: -1 (will not round)."
                 }
             }
@@ -307,13 +313,13 @@
             "properties": {
                 "filtering_min_abundance": {
                     "type": "number",
-                    "default": 1,
+                    "default": 1.0,
                     "description": "Minimum abundance value",
                     "fa_icon": "fas fa-compress-alt"
                 },
                 "filtering_min_samples": {
                     "type": "number",
-                    "default": 1,
+                    "default": 1.0,
                     "description": "Minimum observations that must pass the threshold to retain the row/ feature (e.g. gene).",
                     "fa_icon": "fas fa-compress-alt"
                 },
@@ -445,13 +451,13 @@
                 },
                 "differential_min_fold_change": {
                     "type": "number",
-                    "default": 2,
+                    "default": 2.0,
                     "description": "Minimum fold change used to calculate differential feature numbers",
                     "fa_icon": "fas fa-angle-double-down"
                 },
                 "differential_max_pval": {
                     "type": "number",
-                    "default": 1,
+                    "default": 1.0,
                     "description": "Maximum p value used to calculate differential feature numbers",
                     "fa_icon": "fas fa-angle-double-up"
                 },
@@ -709,7 +715,7 @@
                 },
                 "limma_p_value": {
                     "type": "number",
-                    "default": 1,
+                    "default": 1.0,
                     "description": "cutoff value for adjusted p-values. Only genes with lower p-values are listed.",
                     "fa_icon": "fas fa-angle-double-up"
                 }
@@ -955,7 +961,7 @@
                 },
                 "report_scree": {
                     "type": "boolean",
-                    "default": "true",
+                    "default": true,
                     "description": "Whether to generate a scree plot in the report"
                 }
             },
