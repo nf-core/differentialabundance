@@ -54,8 +54,8 @@ RNA-seq:
 :::note
 If you are using the outputs of the nf-core rnaseq workflow as input here **either**:
 
- - supply the raw count matrices (file names like **gene_counts.tsv**) alongide the transcript length matrix via `--transcript_length_matrix` (rnaseq versions >=3.12.0, preferred)
- - **or** supply  the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices. 
+- supply the raw count matrices (file names like **gene_counts.tsv**) alongide the transcript length matrix via `--transcript_length_matrix` (rnaseq versions >=3.12.0, preferred)
+- **or** supply the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices.
 
 See the [usage documentation](https://nf-co.re/differentialabundance/usage) for more information.
 :::
