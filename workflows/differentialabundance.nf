@@ -468,7 +468,7 @@ workflow DIFFERENTIALABUNDANCE {
             if(params.study_type == "geo_soft_file") {
                 ch_background = ch_norm.map{it.tail()}
             } else {
-                ch_background = ch_raw.map{it.tail()}.dump(tag:'bg')
+                ch_background = ch_raw.map{it.tail()}
             }
         } else {
             if (!file(params.gprofiler2_background_file).exists()) {
@@ -481,13 +481,14 @@ workflow DIFFERENTIALABUNDANCE {
         } else {
             ch_gmt = Channel.value(params.gprofiler2_gmt)
         }
+        print(ch_gmt)
         print(ch_background)
         GOST(
             ch_contrasts.dump(tag:'contrasts'),
             ch_differential.dump(tag:'diff'),
             ch_org_source.dump(tag:'orgsource'),
-            ch_gmt.dump(tag:'gmt'),
-            ch_background
+            ch_gmt,
+            ch_background.dump(tag:'bg')
         )
     }
 
