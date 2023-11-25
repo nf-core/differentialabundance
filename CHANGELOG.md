@@ -27,8 +27,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## v1.3.1 - 2023-10-26
 
-### `Added`
-
 ### `Fixed`
 
 - [[#183](https://github.com/nf-core/differentialabundance/pull/183)] - Fix logging for dendrograms ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
