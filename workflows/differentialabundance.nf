@@ -76,7 +76,7 @@ if (params.gsea_run) {
 }
 if (params.gprofiler2_run) {
     if (params.study_type == 'maxquant'){
-        //error("gprofiler2 pathway analysis is not yet possible with maxquant input data; please set --gprofiler2_run false and rerun pipeline!")
+        error("gprofiler2 pathway analysis is not yet possible with maxquant input data; please set --gprofiler2_run false and rerun pipeline!")
     }
     if (!params.gprofiler2_organism){
         error("gprofiler2 pathway analysis activated but organism not specified!")
