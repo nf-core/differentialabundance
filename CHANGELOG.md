@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- [[#208](https://github.com/nf-core/differentialabundance/pull/208)] - Fix resource issues and bump versions ([@pinin4fjords](https://github.com/pinin4fjords), review by )
+
 ### `Changed`
 
 
