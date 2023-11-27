@@ -481,6 +481,19 @@ Comparisons were made between `r params$observations_type` groups defined using 
 ```{r, echo=FALSE, results='asis'}
 contrasts_to_print <- contrasts
 colnames(contrasts_to_print) <- prettifyVariablename(colnames(contrasts_to_print))
+
+# Add design/model formulae to report
+de_tool <- ifelse(params$study_type %in% c('rnaseq'), "deseq2", "limma")
+contrasts_to_print$model <- sapply(contrasts_to_print$Id, function(id) {
+  model_file <- paste0(id, ".", de_tool, ".model.txt")
+  if (file.exists(model_file)) {
+    first_line <- readLines(model_file, n = 1)
+    return(first_line)
+  } else {
+    return(NA)
+  }
+})
+
 print( htmltools::tagList(datatable(contrasts_to_print, caption = paste0("Table of contrasts"), rownames = FALSE, options = list(dom = 't')) ))
 ```
 
@@ -903,7 +916,6 @@ if (any(unlist(params[paste0(possible_gene_set_methods, '_run')]))){
 
 ```{r, echo=FALSE, results='asis', eval=params$gprofiler2_run}
 enrichment_files <- grep("gprofiler2", list.files(params$input_dir), value=T, fixed=T)
-capture.output(enrichment_files, file="/home-link/iivow01/git/differentialabundance/error/enrichment")
 cat(paste0("\n### Pathway enrichment analysis {.tabset}"))
 if (length(grep(".html", enrichment_files, fixed=T))) {
   cat(paste0("\nThis section contains the results of the pathway analysis which was done with the R package gprofiler2. The plots show the -log10 adjusted p values of each pathway which was found to be enriched for differential genes (if necessary determined by converting feature IDs to gene IDs); if possible, pathways are grouped by their source database. The tables below give additional info for each pathway; the differential fraction is the number of differential genes in a pathway divided by that pathway's size, i.e. the number of genes annotated for the pathway.",
@@ -915,14 +927,16 @@ if (length(grep(".html", enrichment_files, fixed=T))) {
     if (! file.exists(file.path(params$input_dir, html))){
       stop(paste("gprofiler2 gost plot", file.path(params$input_dir, html), "does not exist"))
     }
+
     cat(paste0("\n#### ", contrast, "\n"))
     cat(paste0('<embed type="text/html" src="', file.path(params$input_dir, html), '" width="800" height="400">'))
 
     table <- paste0("gprofiler2.", contrast, ".all_enriched_pathways.tsv")
+
     if (! file.exists(file.path(params$input_dir, table))){
       stop(paste("gprofiler2 enrichment table", file.path(params$input_dir, table), "does not exist"))
     }
-    all_enriched <- read.table(file.path(params$input_dir, table), header=T, sep="\t")
+    all_enriched <- read.table(file.path(params$input_dir, table), header=T, sep="\t", quote="\"")
     all_enriched <- data.frame("Pathway name" = all_enriched$term_name, "Pathway code" = all_enriched$term_id,
       "Differential features" = all_enriched$intersection_size, "Pathway size" = all_enriched$term_size,
       "Differential fraction" = (all_enriched$intersection_size/all_enriched$term_size),
