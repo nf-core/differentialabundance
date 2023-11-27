@@ -84,7 +84,7 @@ Without the transcript lengths, for instance in earlier rnaseq workflow versions
 
 This aligns with the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices in the rnaseq workflow.
 
-Important to note, the documentation advises:
+It is important to note that the documentation advises:
 
 > "Do not manually pass the original gene-level counts to downstream methods without an offset."
 
