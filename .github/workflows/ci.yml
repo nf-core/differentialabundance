@@ -32,6 +32,9 @@ jobs:
           - "test_affy"
           - "test_maxquant"
           - "test_soft"
+        compute:
+          - "docker"
+          - "singularity"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v3
@@ -46,4 +49,4 @@ jobs:
         # For example: adding multiple test runs with different parameters
         # Remember that you can parallelise this by using strategy.matrix
         run: |
-          nextflow run ${GITHUB_WORKSPACE} -profile docker,${{ matrix.profile }} --outdir ./results
+          nextflow run ${GITHUB_WORKSPACE} -profile ${{ matrix.compute }},${{ matrix.profile }} --outdir ./results
