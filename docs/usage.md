@@ -27,7 +27,7 @@ This may well be the same sample sheet used to generate the input matrix. For ex
 
 For example:
 
-```console
+```csv
 sample,fastq_1,fastq_2,condition,replicate,batch
 CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,control,1,A
 CONTROL_REP2,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz,control,2,B
@@ -80,11 +80,11 @@ To use this approach, include the transcript lengths file with the **raw counts*
 
 Without the transcript lengths, for instance in earlier rnaseq workflow versions, follow the second recommendation in the [tximport documentation](https://bioconductor.org/packages/release/bioc/vignettes/tximport/inst/doc/tximport.html#Downstream_DGE_in_Bioconductor):
 
-> "Use the tximport argument countsFromAbundance='lengthScaledTPM' or 'scaledTPM', then employ the gene-level count matrix txi$counts directly in downstream software, a method we call 'bias corrected counts without an offset'"
+> "Use the tximport argument `countsFromAbundance='lengthScaledTPM'` or `'scaledTPM'`, then employ the gene-level count matrix `txi$counts` directly in downstream software, a method we call 'bias corrected counts without an offset'"
 
 This aligns with the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices in the rnaseq workflow.
 
-Important to note, the documentation advises:
+It is important to note that the documentation advises:
 
 > "Do not manually pass the original gene-level counts to downstream methods without an offset."
 
@@ -130,7 +130,7 @@ Full list of features metadata are available on GEO platform pages.
 
 The contrasts file references the observations file to define groups of samples to compare. For example, based on the sample sheet above we could define contrasts like:
 
-```console
+```csv
 id,variable,reference,target,blocking
 condition_control_treated,condition,control,treated,
 condition_control_treated_blockrep,condition,control,treated,replicate;batch
