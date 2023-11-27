@@ -24,6 +24,7 @@ params:
   report_title: NULL,
   report_author: NULL,
   report_description: NULL,
+  report_scree: NULL
   observations_type: NULL
   observations: NULL                                          # GSE156533.samplesheet.csv
   observations_id_col: NULL
@@ -36,7 +37,7 @@ params:
   features_gtf_feature_type: NULL
   features_gtf_table_first_field: NULL
   features_log2_assays: NULL
-  raw_matrix: null                                            # e.g. 0_salmon.merged.gene_counts.tsv
+  raw_matrix: null                                            # e.g. 0_salmon.merged.gene_counts_length_scaled.tsv
   normalised_matrix: null
   variance_stabilised_matrix: null                            # e.g. test_files/3_treatment-WT-P23H.vst.tsv
   contrasts_file: null                                        # e.g. GSE156533.contrasts.csv
@@ -426,7 +427,7 @@ display_columns <- head(union(display_columns, additional_useful_cols), 5)
 display_columns <- unique(c(display_columns, informative_variables))
 observations_to_print <- observations[,unique(display_columns)]
 colnames(observations_to_print) <- prettifyVariablename(colnames(observations_to_print))
-print( htmltools::tagList(datatable(observations_to_print, caption = paste(ucfirst(params$observations_type), 'metadata'), rownames = FALSE, options = list(dom = 't')) ))
+print( htmltools::tagList(datatable(observations_to_print, caption = paste(ucfirst(params$observations_type), 'metadata'), rownames = FALSE, options = list(dom = 'tb')) ))
 
 ```
 
@@ -437,6 +438,19 @@ Comparisons were made between `r params$observations_type` groups defined using 
 ```{r, echo=FALSE, results='asis'}
 contrasts_to_print <- contrasts
 colnames(contrasts_to_print) <- prettifyVariablename(colnames(contrasts_to_print))
+
+# Add design/model formulae to report
+de_tool <- ifelse(params$study_type %in% c('rnaseq'), "deseq2", "limma")
+contrasts_to_print$model <- sapply(contrasts_to_print$Id, function(id) {
+  model_file <- paste0(id, ".", de_tool, ".model.txt")
+  if (file.exists(model_file)) {
+    first_line <- readLines(model_file, n = 1)
+    return(first_line)
+  } else {
+    return(NA)
+  }
+})
+
 print( htmltools::tagList(datatable(contrasts_to_print, caption = paste0("Table of contrasts"), rownames = FALSE, options = list(dom = 't')) ))
 ```
 
@@ -495,10 +509,11 @@ cat(paste0("\n### ", ucfirst(params$observations_type), " relationships\n"))
 Principal components analysis was conducted based on the `r params$exploratory_n_features` most variable `r params$features_type`s. Each component was annotated with its percent contribution to variance. 
 
 ```{r, echo=FALSE, results='asis'}
+# Create nested list to save the percentVars for reusing in the scree plot
+percentVar_list <- list()
 for (assay_type in rev(names(assay_data))){
   
   pca_data <- pca_datas[[assay_type]]
-
   for (iv in informative_variables){
   
     cat(paste0("\n##### ", prettifyVariablename(assay_type), " (", iv, ")\n"))
@@ -543,7 +558,32 @@ for (assay_type in rev(names(assay_data))){
 
       print(htmltools::tagList(do.call("plotly_scatterplot", plot_args)))
     }
+    if (! assay_type %in% names(percentVar_list)){
+      percentVar_list[[assay_type]] <- percentVar
+    }
   }
+}
+```
+
+```{r, echo=FALSE, results='asis', eval=params$report_scree}
+cat(paste0("\n#### Scree plot {.tabset}"))
+cat(paste0("\nThe following scree plot visualizes what percentage of total variation in the data can be explained by each of the principal components computed.\n"))
+#iv <- informative_variables[1]
+
+for (assay_type in names(percentVar_list)) {
+  percentVarData <- data.frame(percentVar_list[[assay_type]])
+  colnames(percentVarData) <- c("var_explained")
+  percentVarData$PCA <- as.numeric(rownames(percentVarData))
+  cat(paste0("\n##### ", prettifyVariablename(assay_type), "\n"))
+  print(
+    ggplot(percentVarData, aes(x=factor(PCA),y=var_explained, group=1)) +
+    theme_bw() +
+    geom_point(size=4) +
+    geom_line(linetype="dashed") +
+    xlab("PC") +
+    ylab("Percent variance explained")
+  )
+  cat("\n")
 }
 ```
 
@@ -592,13 +632,13 @@ for (variable in rownames(pca_vs_meta)){
 
 #### Clustering dendrograms {.tabset}
 
-A hierarchical clustering of `r params$features_type`s was undertaken based on the top  `r params$exploratory_n_features` most variable `r params$features_type`s. Distances between `r params$features_type`s were estimated based on `r params$exploratory_cor_method` correlation, which were then used to produce a clustering via the `r params$exploratory_clustering_method` method with `hclust()` in R. 
+A hierarchical clustering of `r params$features_type`s was undertaken based on `r ifelse(params$exploratory_n_features == -1, paste0("all ", params$features_type), paste0("the ", params$exploratory_n_features, " most variable ", params$features_type))`s. Distances between `r params$features_type`s were estimated based on `r params$exploratory_cor_method` correlation, which were then used to produce a clustering via the `r params$exploratory_clustering_method` method with `hclust()` in R. 
 
 ```{r, echo=FALSE, results='asis'}
 for (assay_type in rev(names(assay_data))){
   for (iv in informative_variables){
     cat(paste0("\n##### ", prettifyVariablename(assay_type), " (", iv, ")\n"))
-    variable_genes <- selectVariableGenes(matrix = assay_data[[assay_type]], ntop = params$exploratory_n_features)
+    variable_genes <- selectVariableGenes(matrix = assay_data[[assay_type]], ntop = ifelse(params$exploratory_n_features == -1, nrow(assay_data[[assay_type]]), params$exploratory_n_features))
 
     dendroColorScale <- makeColorScale(length(unique(observations[[iv]])), palette = params$exploratory_palette_name)
     p <- clusteringDendrogram(
@@ -608,8 +648,7 @@ for (assay_type in rev(names(assay_data))){
       cor_method = params$exploratory_cor_method,
       plot_title = paste0(
         paste0(params$observations_type," clustering dendrogram, "), 
-        params$exploratory_n_features, 
-        " most variable ", 
+        ifelse(params$exploratory_n_features == -1, nrow(assay_data[[assay_type]]), paste0(params$exploratory_n_features, " most variable")), " ",
         params$features_type, 
         "s\n(", params$exploratory_clustering_method, " clustering, ", params$exploratory_cor_method, " correlation)"),
       cluster_method = params$exploratory_clustering_method,
@@ -671,10 +710,16 @@ foo <- lapply(informative_variables[iv_min_group_sizes > 2], function(iv){
     }
   }
 })
-
 ```
 
 ## Differential analysis
+
+```{r, echo=FALSE, results='asis', eval=params$study_type %in% c('rnaseq')}
+# For DESeq2, add some more explanation to the report
+cat(paste0(
+"The `DESeq2 R` package was used for differential analysis. p-values were adjusted with the ", params$deseq2_p_adjust_method, " method to reduce the number of false positives. ", ucfirst(params$features_type), "s were considered differential if, for the respective contrast, the adjusted p-value was equal to or lower than ", params$deseq2_alpha, " and the absolute log2 fold change was equal to or higher than ", params$deseq2_lfc_threshold, "."
+))
+```
 
 ### Differential `r params$features_type` `r params$study_abundance_type` {.tabset}
 
@@ -733,28 +778,41 @@ for (i in 1:nrow(contrasts)){
     cat("\n##### ", pvt, " p values\n")
     pval_column <- p_value_types[[pvt]]
   
-    full_de$differential_status <- FALSE
-    full_de$differential_status[abs(full_de[[params$differential_fc_column]]) > log2(params$differential_min_fold_change) & full_de[[pval_column]] < p_value_thresholds[[pvt]]] <- TRUE
-
+    
+    de_fc <- abs(full_de[[params$differential_fc_column]]) >= log2(params$differential_min_fold_change)
+    de_fc_label <- paste("abs(logFC) >=", params$differential_min_fold_change)
+    
+    de_pval <- full_de[[pval_column]] <= p_value_thresholds[[pvt]]
+    de_pval_label <- paste(pvt, "<=", p_value_thresholds[[pvt]])
+    
+    de_pval_fc_label <- paste(de_fc_label, '&', de_pval_label)
+    
+    full_de$differential_status <- "Not significant"
+    full_de$differential_status[de_fc] <- de_fc_label
+    full_de$differential_status[de_pval] <- de_pval_label
+    full_de$differential_status[de_fc & de_pval] <- de_pval_fc_label
+    full_de$differential_status <- factor(full_de$differential_status, levels = c("Not significant", de_fc_label, de_pval_label, de_pval_fc_label), ordered = TRUE) # Factorize status so that non-significant is always first
     # Define the thresholds we'll draw
 
     hline_thresholds = vline_thresholds = list()
     hline_thresholds[[paste(pval_column, '=', p_value_thresholds[[pvt]])]] = -log10(p_value_thresholds[[pvt]])
-    vline_thresholds[[paste(params$differential_fc_column, '<-', log2(params$differential_min_fold_change))]] = -log2(params$differential_min_fold_change)
-    vline_thresholds[[paste(params$differential_fc_column, '>', log2(params$differential_min_fold_change))]] = log2(params$differential_min_fold_change)
+    vline_thresholds[[paste(params$differential_fc_column, '<=', log2(params$differential_min_fold_change))]] = -log2(params$differential_min_fold_change)
+    vline_thresholds[[paste(params$differential_fc_column, '>=', log2(params$differential_min_fold_change))]] = log2(params$differential_min_fold_change)
+    
+    palette_volcano <- append(c('#999999'), makeColorScale(3, params$differential_palette_name)) # set non-significant to gray
 
     plot_args <- list(
       x = full_de[[params$differential_fc_column]],
       y = -log10(full_de[[pval_column]]),
       colorby = full_de$differential_status,
       ylab = paste("-log(10)", pval_column),
-      xlab = xlabel <- paste("higher in", contrasts$reference[i], "          <<", params$differential_fc_column, ">>           higher in", contrasts$target[i]) ,
+      xlab = xlabel <- paste("higher in", contrasts$reference[i], "          <<", params$differential_fc_column, ">>           higher in", contrasts$target[i]),
       labels = full_de[[label_col]],
       hline_thresholds = hline_thresholds,
       vline_thresholds = vline_thresholds,
       show_labels = FALSE,
       legend_title = "Differential status",
-      palette = makeColorScale(2, params$differential_palette_name)
+      palette = palette_volcano
     )
   
     # Let's equalize the axes
@@ -793,21 +851,17 @@ if (any(unlist(params[paste0(possible_gene_set_methods, '_run')]))){
 
   for (gene_set_method in possible_gene_set_methods){
     if (unlist(params[paste0(gene_set_method, '_run')])){
-      cat("\n### ", toupper(gene_set_method) ," {.tabset}\n")
+      cat("\n#### ", toupper(gene_set_method) ," {.tabset}\n")
       
       for (gmt_file in simpleSplit(params$gsea_gene_sets)) {
         gmt_name <- basename(tools::file_path_sans_ext(gmt_file))
-
-        cat("\n#### ", gmt_name ," {.tabset}\n")
+        cat("\n##### ", gmt_name ," {.tabset}\n")
         reference_gsea_tables <- paste0(contrasts$id, ".", gmt_name, '.gsea_report_for_', contrasts$reference, '.tsv')
         target_gsea_tables <- paste0(contrasts$id, ".", gmt_name, '.gsea_report_for_', contrasts$target, '.tsv')
-
         for (i in 1:nrow(contrasts)){
-          cat("\n##### ", contrast_descriptions[i], "\n")
-
+          cat("\n###### ", contrast_descriptions[i], "\n")
           target_gsea_results <- read_metadata(target_gsea_tables[i])[,c(-2,-3)]
           print( htmltools::tagList(datatable(target_gsea_results, caption = paste0("\nTarget (", contrasts$target[i], ")\n"), rownames = FALSE) ))
-
           ref_gsea_results <- read_metadata(reference_gsea_tables[i])[,c(-2,-3)]
           print( htmltools::tagList(datatable(ref_gsea_results, caption = paste0("\nReference (", contrasts$reference[i], ")\n"), rownames = FALSE) ))
         }
@@ -857,6 +911,7 @@ make_params_table('exploratory analysis', 'exploratory_', remove_pattern = TRUE)
 
 ## Differential analysis
 
+
 ```{r, echo=FALSE, results='asis'}
 if (params$study_type == 'rnaseq'){
   make_params_table('DESeq2', 'deseq2_', remove_pattern = TRUE)
@@ -874,7 +929,7 @@ if (any(unlist(params[paste0(possible_gene_set_methods, '_run')]))){
 
   for (gene_set_method in possible_gene_set_methods){
     if (unlist(params[paste0(gene_set_method, '_run')])){
-      cat("\n### ", toupper(gene_set_method) ,"  {.tabset}\n")
+      cat("\n#### ", toupper(gene_set_method) ,"  {.tabset}\n")
       make_params_table(toupper(gene_set_method), paste0(gene_set_method, '_'), remove_pattern = TRUE)
     }
   }

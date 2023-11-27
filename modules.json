@@ -37,7 +37,7 @@
                     },
                     "deseq2/differential": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "c992bd93b22a97feda5f04755511366c45423626",
                         "installed_by": ["modules"]
                     },
                     "geoquery/getgeo": {
@@ -57,7 +57,7 @@
                     },
                     "limma/differential": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "25047aa940979f64b31d19b94c483a9254263892",
                         "installed_by": ["modules"]
                     },
                     "proteus/readproteingroups": {
