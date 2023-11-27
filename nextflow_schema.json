@@ -79,8 +79,8 @@
                 "transcript_length_matrix": {
                     "type": "string",
                     "fa_icon": "fas fa-border-all",
-                    "description": "(RNA-seq only): optional transcript length matrix with sample samples and genes as the abundance matrix",
-                    "help_text": "if provided, this file willl be used to provide transcript lengths to DESeq2 to model lengh bias across samples"
+                    "description": "(RNA-seq only): optional transcript length matrix with samples and genes as the abundance matrix",
+                    "help_text": "if provided, this file willl be used to provide transcript lengths to DESeq2 to model length bias across samples"
                 },
                 "affy_cel_files_archive": {
                     "type": "string",
@@ -359,7 +359,7 @@
                 "exploratory_n_features": {
                     "type": "integer",
                     "default": 500,
-                    "description": "Number of features selected before certain exploratory analyses. If -1, will use all features",
+                    "description": "Number of features selected before certain exploratory analyses. If -1, will use all features.",
                     "fa_icon": "fas fa-list-ol"
                 },
                 "exploratory_whisker_distance": {
