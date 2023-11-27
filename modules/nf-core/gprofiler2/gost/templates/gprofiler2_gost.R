@@ -208,9 +208,6 @@ if (nrow(de.genes) == 0) {
     stop()
 }
 query <- de.genes[[opt\$de_id_column]]
-file.copy(opt\$de_file, "/home-link/iivow01/git/differentialabundance/error/")
-capture.output(q, file="/home-link/iivow01/git/differentialabundance/error/q")
-capture.output(opt\$de_id_column, file="/home-link/iivow01/git/differentialabundance/error/optde_id_column")
 
 ################################################
 ################################################
