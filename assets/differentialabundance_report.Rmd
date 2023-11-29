@@ -302,6 +302,8 @@ treatment-mCherry-hND6-batcheffect.deseq2.results.tsv
 
 ... where variable, reference, target and blocking come from the contrasts file
 (with blocking being optional) and the suffix is defined in parameters.
+
+Also save the tables again after filtering for DE entries
 -->
 
 ```{r, echo=FALSE}
@@ -333,6 +335,13 @@ differential_results <- lapply(differential_files, function(diff_file){
   if (! is.null(params$features)){
     diff <- merge(features, diff, by.x = params$features_id_col, by.y = params$differential_feature_id_column)
   }
+
+  # Filter tables by logFC threshold and padj threshold and save to TSV
+
+  filtered_diff <- na.omit(diff[log2(params$differential_min_fold_change) <= abs(diff[[params$differential_fc_column]]) & diff[[params$differential_qval_column]] <= params$differential_max_qval,])
+  filtered_diff <- round_dataframe_columns()
+  write.table(filtered_diff, file=file.path(params$artifact_dir, paste0(basename(tools::file_path_sans_ext(diff_file)), "_filtered.tsv")), sep="\t", quote=F, row.names=F)
+
   diff
 })
 names(differential_results) <- contrasts$id
