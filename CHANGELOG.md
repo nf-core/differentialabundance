@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- [[#209](https://github.com/nf-core/differentialabundance/pull/209)] - Update matrixfilter module ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+
 ## v1.4.0 - 2023-11-27
 
 ### `Added`
