@@ -25,6 +25,7 @@ params:
   report_author: NULL,
   report_description: NULL,
   report_scree: NULL
+  report_round_digits: NULL
   observations_type: NULL
   observations: NULL                                          # GSE156533.samplesheet.csv
   observations_id_col: NULL
@@ -151,7 +152,6 @@ params:
   gprofiler2_domain_scope: NULL
   gprofiler2_min_diff: NULL
   gprofiler2_palette_name: NULL
-  round_digits: NULL
 ---
 
 <!-- Load libraries -->
@@ -941,7 +941,7 @@ if (length(grep(".html", enrichment_files, fixed=T))) {
       "Differential features" = all_enriched$intersection_size, "Pathway size" = all_enriched$term_size,
       "Differential fraction" = (all_enriched$intersection_size/all_enriched$term_size),
       "Adjusted p value" = all_enriched$p_value, check.names = FALSE)
-    all_enriched <- round_dataframe_columns(all_enriched, digits=params$round_digits)
+    all_enriched <- round_dataframe_columns(all_enriched, digits=params$report_round_digits)
     print(htmltools::tagList(datatable(all_enriched, caption = paste('Enriched pathways in', contrast, " (check", table, "for more detail)"), rownames = FALSE)))
     cat("\n")
   }

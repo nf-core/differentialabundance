@@ -618,7 +618,7 @@ workflow DIFFERENTIALABUNDANCE {
 
     // Condition params reported on study type
 
-    def params_pattern = "report|study|observations|features|filtering|exploratory|differential|gsea|round_digits"
+    def params_pattern = "report|study|observations|features|filtering|exploratory|differential"
     if (params.study_type == 'rnaseq'){
         params_pattern += "|deseq2"
     }
@@ -630,6 +630,9 @@ workflow DIFFERENTIALABUNDANCE {
     }
     if (params.gprofiler2_run){
         params_pattern += "|gprofiler2"
+    }
+    if (params.gsea_run){
+        params_pattern += "|gsea"
     }
     params_pattern = ~/(${params_pattern}).*/
 
