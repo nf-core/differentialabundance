@@ -67,8 +67,8 @@ if (params.study_type == 'affy_array'){
 if (params.transcript_length_matrix) { ch_transcript_lengths = Channel.of([ exp_meta, file(params.transcript_length_matrix, checkIfExists: true)]).first() } else { ch_transcript_lengths = [[],[]] }
 if (params.control_features) { ch_control_features = Channel.of([ exp_meta, file(params.control_features, checkIfExists: true)]).first() } else { ch_control_features = [[],[]] }
 if (params.gsea_run) {
-    if (params.gsea_gene_sets){
-        gene_sets_files = params.gsea_gene_sets.split(",")
+    if (params.mods_gene_sets){
+        gene_sets_files = params.mods_gene_sets.split(",")
         ch_gene_sets = Channel.of(gene_sets_files).map { file(it, checkIfExists: true) }
     } else {
         error("GSEA activated but gene set file not specified!")
@@ -80,9 +80,6 @@ if (params.gprofiler2_run) {
     }
     if (!params.gprofiler2_organism){
         error("gprofiler2 pathway analysis activated but organism not specified!")
-    }
-    if (!params.gprofiler2_sources){
-        error("gprofiler2 pathway analysis activated but sources not specified!")
     }
 }
 
@@ -128,7 +125,7 @@ include { LIMMA_DIFFERENTIAL                                } from '../modules/n
 include { CUSTOM_MATRIXFILTER                               } from '../modules/nf-core/custom/matrixfilter/main'
 include { ATLASGENEANNOTATIONMANIPULATION_GTF2FEATUREANNOTATION as GTF_TO_TABLE } from '../modules/nf-core/atlasgeneannotationmanipulation/gtf2featureannotation/main'
 include { GSEA_GSEA                                         } from '../modules/nf-core/gsea/gsea/main'
-include { GPROFILER2_GOST as GOST                           } from '../modules/nf-core/gprofiler2/gost/main'
+include { GPROFILER2_GOST                                   } from '../modules/nf-core/gprofiler2/gost/main'
 include { CUSTOM_TABULARTOGSEAGCT                           } from '../modules/nf-core/custom/tabulartogseagct/main'
 include { CUSTOM_TABULARTOGSEACLS                           } from '../modules/nf-core/custom/tabulartogseacls/main'
 include { RMARKDOWNNOTEBOOK                                 } from '../modules/nf-core/rmarkdownnotebook/main'
@@ -467,7 +464,7 @@ workflow DIFFERENTIALABUNDANCE {
     }
 
     if (params.gprofiler2_run) {
-        ch_org_source = Channel.value([ params.gprofiler2_organism, params.gprofiler2_sources ])
+        ch_organism = Channel.value(params.gprofiler2_organism)
         if (!params.gprofiler2_background_file) {
             // If param not set, use empty list as "background"
             ch_background = []
@@ -479,22 +476,19 @@ workflow DIFFERENTIALABUNDANCE {
                 ch_background = ch_raw.map{it.tail()}
             }
         } else {
-            if (!file(params.gprofiler2_background_file).exists()) {
-                error("Param gprofiler2_background_file must be null, 'auto' or valid file path!")
-            }
-            ch_background = Channel.fromPath(params.gprofiler2_background_file)
+            ch_background = Channel.from(file(params.gprofiler2_background_file, checkIfExists: true))
         }
-        if (!params.gprofiler2_gmt_file) {
-            ch_gmt = []
+        if (!params.mods_gene_sets) {
+            ch_gene_sets = []
         } else {
-            ch_gmt = Channel.value(params.gprofiler2_gmt_file)
+            ch_gene_sets = Channel.value(params.mods_gene_sets)
         }
 
-        GOST(
+        GPROFILER2_GOST(
             ch_contrasts,
             ch_differential,
-            ch_org_source,
-            ch_gmt,
+            ch_organism,
+            ch_gene_sets,
             ch_background
         )
     }
@@ -577,10 +571,10 @@ workflow DIFFERENTIALABUNDANCE {
 
     if (params.gprofiler2_run){
         ch_report_input_files = ch_report_input_files
-            .combine(GOST.out.plot_html.map{it[1]}.flatMap().toList())
-            .combine(GOST.out.all_enrich.map{it[1]}.flatMap().toList())
-            .combine(GOST.out.sub_enrich.map{it[1]}.flatMap().toList())
-        GOST.out.plot_html
+            .combine(GPROFILER2_GOST.out.plot_html.map{it[1]}.flatMap().toList())
+            .combine(GPROFILER2_GOST.out.all_enrich.map{it[1]}.flatMap().toList())
+            .combine(GPROFILER2_GOST.out.sub_enrich.map{it[1]}.flatMap().toList())
+        GPROFILER2_GOST.out.plot_html
     }
 
     if (params.shinyngs_build_app){
@@ -618,7 +612,7 @@ workflow DIFFERENTIALABUNDANCE {
 
     // Condition params reported on study type
 
-    def params_pattern = "report|study|observations|features|filtering|exploratory|differential"
+    def params_pattern = "report|mods|study|observations|features|filtering|exploratory|differential"
     if (params.study_type == 'rnaseq'){
         params_pattern += "|deseq2"
     }
