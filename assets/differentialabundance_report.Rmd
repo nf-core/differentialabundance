@@ -25,7 +25,6 @@ params:
   report_author: NULL,
   report_description: NULL,
   report_scree: NULL
-  report_round_digits: NULL
   mods_gene_sets: NULL
   mods_round_digits: NULL
   observations_type: NULL
@@ -146,7 +145,6 @@ params:
   gprofiler2_sources: NULL
   gprofiler2_evcodes: NULL
   gprofiler2_max_qval: NULL
-  gprofiler2_gmt_file: NULL
   gprofiler2_gost_token: NULL
   gprofiler2_background_file: NULL
   gprofiler2_background_column: NULL
