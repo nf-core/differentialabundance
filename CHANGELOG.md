@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - [[#203](https://github.com/nf-core/differentialabundance/pull/203)] - Transcript lengths for DESeq2 ([@pinin4fjords](https://github.com/pinin4fjords), review by [@maxulysse](https://github.com/maxulysse))
-- [[#199](https://github.com/nf-core/differentialabundance/pull/199)] - Add gprofiler2 module([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#199](https://github.com/nf-core/differentialabundance/pull/199)] - Add gprofiler2 module and local differential table filtering module ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#193](https://github.com/nf-core/differentialabundance/pull/193)] - Add DESeq2 text to report ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#192](https://github.com/nf-core/differentialabundance/pull/192)] - Add scree plot in report ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#189](https://github.com/nf-core/differentialabundance/pull/189)] - Add DE models to report ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))

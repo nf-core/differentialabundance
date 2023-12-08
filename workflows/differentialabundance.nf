@@ -67,9 +67,9 @@ if (params.study_type == 'affy_array'){
 if (params.transcript_length_matrix) { ch_transcript_lengths = Channel.of([ exp_meta, file(params.transcript_length_matrix, checkIfExists: true)]).first() } else { ch_transcript_lengths = [[],[]] }
 if (params.control_features) { ch_control_features = Channel.of([ exp_meta, file(params.control_features, checkIfExists: true)]).first() } else { ch_control_features = [[],[]] }
 if (params.gsea_run) {
-    if (params.mods_gene_sets){
-        gene_sets_files = params.mods_gene_sets.split(",")
-        ch_gene_sets = Channel.of(gene_sets_files).map { file(it, checkIfExists: true) }
+    if (params.gene_set_files){
+        gene_set_files = params.gene_set_files.split(",")
+        ch_gene_sets = Channel.of(gene_set_files).map { file(it, checkIfExists: true) }
     } else {
         error("GSEA activated but gene set file not specified!")
     }
@@ -102,6 +102,7 @@ citations_file = file(params.citations_file, checkIfExists: true)
 */
 
 include { TABULAR_TO_GSEA_CHIP } from '../modules/local/tabular_to_gsea_chip'
+include { FILTER_DIFFTABLE } from '../modules/local/filter_difftable'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -405,6 +406,16 @@ workflow DIFFERENTIALABUNDANCE {
             .map{ it.tail() }
     }
 
+    // We'll use a local module to filter the differential tables and create output files that contain only differential features
+    ch_logfc = Channel.value([ (params.study_type == 'rnaseq' ? 'log2FoldChange' : 'logFC'), params.differential_min_fold_change ])
+    ch_padj = Channel.value([ (params.study_type == 'rnaseq' ? 'padj' : 'adj.P.Val'), params.differential_max_qval ])
+
+    FILTER_DIFFTABLE(
+        ch_differential,
+        ch_logfc,
+        ch_padj
+    )
+
     // Run a gene set analysis where directed
 
     // Currently, we're letting GSEA work on the expression data. In future we
@@ -464,6 +475,9 @@ workflow DIFFERENTIALABUNDANCE {
     }
 
     if (params.gprofiler2_run) {
+
+        // For gprofiler2, use only features that are considered differential
+        ch_filtered_diff = FILTER_DIFFTABLE.out.filtered
         ch_organism = Channel.value(params.gprofiler2_organism)
         if (!params.gprofiler2_background_file) {
             // If param not set, use empty list as "background"
@@ -478,15 +492,15 @@ workflow DIFFERENTIALABUNDANCE {
         } else {
             ch_background = Channel.from(file(params.gprofiler2_background_file, checkIfExists: true))
         }
-        if (!params.mods_gene_sets) {
+        if (!params.gene_set_files) {
             ch_gene_sets = []
         } else {
-            ch_gene_sets = Channel.value(params.mods_gene_sets)
+            ch_gene_sets = Channel.value(params.gene_set_files)
         }
 
         GPROFILER2_GOST(
             ch_contrasts,
-            ch_differential,
+            ch_filtered_diff,
             ch_organism,
             ch_gene_sets,
             ch_background
@@ -612,7 +626,7 @@ workflow DIFFERENTIALABUNDANCE {
 
     // Condition params reported on study type
 
-    def params_pattern = "report|mods|study|observations|features|filtering|exploratory|differential"
+    def params_pattern = "report|gene_sets|study|observations|features|filtering|exploratory|differential"
     if (params.study_type == 'rnaseq'){
         params_pattern += "|deseq2"
     }

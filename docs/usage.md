@@ -290,7 +290,7 @@ The organism (mmusculus for Mus musculus, hsapiens for Homo sapiens etc.) is req
 
 ```bash
 --gsea_run true \
---mods_gene_sets gene_sets.gmt
+--gene_set_files gene_sets.gmt
 ```
 
 ## Running the pipeline

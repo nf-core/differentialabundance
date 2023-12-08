@@ -980,23 +980,17 @@
             },
             "fa_icon": "fab fa-app-store-ios"
         },
-        "module_input_options": {
-            "title": "Additional options for multiple modules",
+        "gene_set_options": {
+            "title": "Options related to gene set analysis",
             "type": "object",
             "fa_icon": "fas fa-cogs",
-            "description": "Files and options used by multiple modules.",
+            "description": "Files and options used by gene set analysis modules.",
             "properties": {
-                "mods_gene_sets": {
+                "gene_set_files": {
                     "type": "string",
                     "default": "None",
                     "description": "Gene sets in GMT or GMX-format; for GSEA: multiple comma-separated input files are possible. For gprofiler2: One GMT file is possible.",
                     "fa_icon": "fas fa-bars"
-                },
-                "mods_round_digits": {
-                    "type": "integer",
-                    "default": 4,
-                    "description": "To how many digits should numeric output in different modules be rounded? If -1, will not round.",
-                    "help_text": "This affects output from the following modules (both their tabular output and their result sections in the report): proteus, gprofiler2."
                 }
             }
         },
@@ -1060,6 +1054,12 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Whether to generate a scree plot in the report"
+                },
+                "report_round_digits": {
+                    "type": "integer",
+                    "default": 4,
+                    "description": "To how many digits should numeric output in different modules be rounded? If -1, will not round.",
+                    "help_text": "This affects output from the following modules (both their tabular output and their result sections in the report): proteus, gprofiler2."
                 }
             },
             "required": ["report_file", "logo_file", "css_file"]
@@ -1305,7 +1305,7 @@
             "$ref": "#/definitions/shiny_app_settings"
         },
         {
-            "$ref": "#/definitions/module_input_options"
+            "$ref": "#/definitions/gene_set_options"
         },
         {
             "$ref": "#/definitions/reporting_options"
