@@ -868,7 +868,7 @@
                 "gprofiler2_organism": {
                     "type": "string",
                     "description": "Short name of the organism that is analyzed, e.g. hsapiens for homo sapiens.",
-                    "help_text": "Set this to the short organism name consisting of the first letter of the genus and the full species name, e.g. hsapiens for Homo sapiens, mmusculus for Mus musculus."
+                    "help_text": "Set this to the short organism name consisting of the first letter of the genus and the full species name, e.g. hsapiens for Homo sapiens, mmusculus for Mus musculus. This has lowest priority and will be overridden by --gprofiler2_token and --gene_sets_files."
                 },
                 "gprofiler2_significant": {
                     "type": "boolean",
@@ -890,8 +890,8 @@
                 },
                 "gprofiler2_sources": {
                     "type": "string",
-                    "description": "On which source databases to run the gprofiler query.",
-                    "help_text": "GO, GO:MF, GO:BP, GO:CC, KEGG, REAC, WP, TF, MIRNA, HPA, CORUM, HP, or any comma-reparated combination thereof, e.g. 'KEGG,REAC'."
+                    "description": "On which source databases to run the gprofiler query",
+                    "help_text": "GO, GO:MF, GO:BP, GO:CC, KEGG, REAC, WP, TF, MIRNA, HPA, CORUM, HP, or any comma-reparated combination thereof, e.g. 'KEGG,REAC'. This works if --gprofiler2_organism is used; if a GMT file is provided with --gene_sets_files, should also work; the module will then remove any lines not starting with any of the source names. Does not work for --gprofiler2_token as g:Profiler will not filter such a run."
                 },
                 "gprofiler2_evcodes": {
                     "type": "boolean",
@@ -904,10 +904,10 @@
                     "default": 0.05,
                     "description": "Maximum q value used for significance testing."
                 },
-                "gprofiler2_gost_token": {
+                "gprofiler2_token": {
                     "type": "string",
                     "description": "Token that should be used as a query.",
-                    "help_text": "For reproducibility, instead of querying the online databases, you can provide a token, e.g. from a previous pipeline run or from a manual query on https://biit.cs.ut.ee/gprofiler/gost."
+                    "help_text": "For reproducibility, instead of querying the online databases, you can provide a token, e.g. from a previous pipeline run or from a manual query on https://biit.cs.ut.ee/gprofiler/gost. This has highest priority and will override --gprofiler2_organism and --gene_sets_files."
                 },
                 "gprofiler2_background_file": {
                     "type": "string",
@@ -986,10 +986,10 @@
             "fa_icon": "fas fa-cogs",
             "description": "Files and options used by gene set analysis modules.",
             "properties": {
-                "gene_set_files": {
+                "gene_sets_files": {
                     "type": "string",
                     "default": "None",
-                    "description": "Gene sets in GMT or GMX-format; for GSEA: multiple comma-separated input files are possible. For gprofiler2: One GMT file is possible.",
+                    "description": "Gene sets in GMT or GMX-format; for GSEA: multiple comma-separated input files in either format are possible. For gprofiler2: A single file in GMT format is possible; this has second highest priority and will override --gprofiler2_organism.",
                     "fa_icon": "fas fa-bars"
                 }
             }

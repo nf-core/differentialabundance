@@ -124,7 +124,7 @@ round_dataframe_columns <- function(df, columns = NULL, digits = -1) {
 opt <- list(
     de_file = '$de_file',
     de_id_column = 'gene_id',
-    organism = '$organism',
+    organism = NULL,
     sources = NULL,
     contrast_variable = '$contrast_variable',
     reference_level = '$reference',
@@ -136,7 +136,7 @@ opt <- list(
     evcodes = F,
     pval_threshold = 0.05,
     gmt_file = '$gmt_file',
-    gost_token = NULL,
+    token = NULL,
     background_file = '$background_file',
     background_column = NULL,
     domain_scope = 'annotated',
@@ -164,11 +164,14 @@ for ( ao in names(args_opt)) {
 }
 
 # Check if required parameters have been provided
-required_opts <- c('organism', 'contrast_variable', 'reference_level', 'target_level')
+required_opts <- c('contrast_variable', 'reference_level', 'target_level')
 missing <- required_opts[unlist(lapply(opt[required_opts], is.null)) | ! required_opts %in% names(opt)]
 
 if (length(missing) > 0) {
     stop(paste("Missing required options:", paste(missing, collapse=', ')))
+}
+if (is.null(opt\$organism) && opt\$gmt_file == "" && is.null(opt\$token)) {
+    stop('Please provide organism, gmt_file or token.')
 }
 
 # Check file inputs are valid
@@ -227,11 +230,14 @@ if (nrow(de.genes) > 0) {
     if (!is.null(sources)) {
         sources <-  strsplit(opt\$sources, split = ",")[[1]]
     }
+    if (!is.null(sources)) {
+        sources <-  strsplit(opt\$sources, split = ",")[[1]]
+    }
 
-    if (!is.null(opt\$gost_token)) {
+    if (!is.null(opt\$token)) {
 
-        # First check if a gost_token was provided
-        gost_token <- opt\$gost_token
+        # First check if a token was provided
+        token <- opt\$token
     } else if (opt\$gmt_file != "") {
 
         # Next check if custom GMT file was provided
@@ -244,10 +250,10 @@ if (nrow(de.genes) > 0) {
             writeLines(gmt, gmt_path)
         }
 
-        gost_token <- upload_GMT_file(gmt_path)
+        token <- upload_GMT_file(gmt_path)
 
         # Add gost ID to output GMT name so that it can be reused in future runs
-        file.rename(gmt_path, paste0(strsplit(basename(opt\$gmt_file), split = "\\\\.")[[1]][[1]], ".", paste(sources, collapse="_"), "_gostID_", gost_token, "_filtered.gmt"))
+        file.rename(gmt_path, paste0(strsplit(basename(opt\$gmt_file), split = "\\\\.")[[1]][[1]], ".", paste(sources, collapse="_"), "_gostID_", token, "_filtered.gmt"))
     } else {
 
         # Otherwise, get the GMT file from gprofiler and save both the full file as well as the filtered one to metadata
@@ -279,7 +285,7 @@ if (nrow(de.genes) > 0) {
                 print("For reproducibility reasons, please try to download the GMT file manually by visiting https://biit.cs.ut.ee/gprofiler/gost, then selecting the correct organism and, in datasources, clicking 'combined ENSG.gmt'. Then provide it to the pipeline with the parameter `--gmt_file`")
             }
         )
-        gost_token <- opt\$organism
+        token <- opt\$organism
     }
 
 
@@ -326,7 +332,7 @@ if (nrow(de.genes) > 0) {
 
     gost_results <- gost(
         query=q,
-        organism=gost_token,
+        organism=token,
         significant=opt\$significant,
         measure_underrepresentation=opt\$measure_underrepresentation,
         correction_method=opt\$correction_method,

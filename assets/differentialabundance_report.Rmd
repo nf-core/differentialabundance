@@ -25,7 +25,7 @@ params:
   report_author: NULL,
   report_description: NULL,
   report_scree: NULL
-  gene_set_files: NULL
+  gene_sets_files: NULL
   report_round_digits: NULL
   observations_type: NULL
   observations: NULL                                          # GSE156533.samplesheet.csv
@@ -145,7 +145,7 @@ params:
   gprofiler2_sources: NULL
   gprofiler2_evcodes: NULL
   gprofiler2_max_qval: NULL
-  gprofiler2_gost_token: NULL
+  gprofiler2_token: NULL
   gprofiler2_background_file: NULL
   gprofiler2_background_column: NULL
   gprofiler2_domain_scope: NULL
@@ -894,7 +894,7 @@ if (any(unlist(params[paste0(possible_gene_set_methods, '_run')]))){
     if (unlist(params[paste0(gene_set_method, '_run')])){
       cat("\n#### ", toupper(gene_set_method) ," {.tabset}\n")
       if (gene_set_method == 'gsea') {
-        for (gmt_file in simpleSplit(params$gene_set_files)) {
+        for (gmt_file in simpleSplit(params$gene_sets_files)) {
           gmt_name <- basename(tools::file_path_sans_ext(gmt_file))
           cat("\n##### ", gmt_name ," {.tabset}\n")
 
@@ -911,8 +911,10 @@ if (any(unlist(params[paste0(possible_gene_set_methods, '_run')]))){
 
       } else if (gene_set_method == 'gprofiler2') {
         enrichment_files <- grep("gprofiler2", list.files(params$input_dir), value=T, fixed=T)
-        tsv_files <- grep(".tsv", enrichment_files, fixed=T)
-        if (length(tsv_files)) {
+        tsv_files <- grep("all_enriched_pathways.tsv", enrichment_files, value=T, fixed=T)
+
+        # Make sure to grab only non-empty files
+        if (length(tsv_files) && any(file.size(tsv_files) != 0L)) {
 
           cat(paste0("\nThis section contains the results tables of the pathway analysis which was done with the R package gprofiler2. The differential fraction is the number of differential genes in a pathway divided by that pathway's size, i.e. the number of genes annotated for the pathway.",
           ifelse(params$gprofiler2_significant, paste0(" Enrichment was only considered if significant, i.e. adjusted p-value <= ", params$gprofiler2_max_qval, "."), "Enrichment was also considered if not significant."), "\n"))

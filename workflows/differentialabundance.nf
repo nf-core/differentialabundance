@@ -34,6 +34,9 @@ if (params.study_type == 'affy_array'){
         if (params.gsea_run) {
             error("Cannot run GSEA for maxquant data; please set --gsea_run to false.")
         }
+        if (params.gprofiler2_run){
+            error("gprofiler2 pathway analysis is not yet possible with maxquant input data; please set --gprofiler2_run false and rerun pipeline!")
+        }
         if (!params.matrix) {
             error("Input matrix not specified!")
         }
@@ -67,19 +70,17 @@ if (params.study_type == 'affy_array'){
 if (params.transcript_length_matrix) { ch_transcript_lengths = Channel.of([ exp_meta, file(params.transcript_length_matrix, checkIfExists: true)]).first() } else { ch_transcript_lengths = [[],[]] }
 if (params.control_features) { ch_control_features = Channel.of([ exp_meta, file(params.control_features, checkIfExists: true)]).first() } else { ch_control_features = [[],[]] }
 if (params.gsea_run) {
-    if (params.gene_set_files){
-        gene_set_files = params.gene_set_files.split(",")
-        ch_gene_sets = Channel.of(gene_set_files).map { file(it, checkIfExists: true) }
+    if (params.gene_sets_files){
+        gene_sets_files = params.gene_sets_files.split(",")
+        ch_gene_sets = Channel.of(gene_sets_files).map { file(it, checkIfExists: true) }
     } else {
         error("GSEA activated but gene set file not specified!")
     }
 }
 if (params.gprofiler2_run) {
-    if (params.study_type == 'maxquant'){
-        error("gprofiler2 pathway analysis is not yet possible with maxquant input data; please set --gprofiler2_run false and rerun pipeline!")
-    }
-    if (!params.gprofiler2_organism){
-        error("gprofiler2 pathway analysis activated but organism not specified!")
+    if (!params.gprofiler2_token && !params.gene_sets_files && !params.gprofiler2_organism){
+    } else {
+        error("To run gprofiler2, please provide a run token, GMT file or organism!")
     }
 }
 
@@ -478,7 +479,7 @@ workflow DIFFERENTIALABUNDANCE {
 
         // For gprofiler2, use only features that are considered differential
         ch_filtered_diff = FILTER_DIFFTABLE.out.filtered
-        ch_organism = Channel.value(params.gprofiler2_organism)
+
         if (!params.gprofiler2_background_file) {
             // If param not set, use empty list as "background"
             ch_background = []
@@ -492,16 +493,15 @@ workflow DIFFERENTIALABUNDANCE {
         } else {
             ch_background = Channel.from(file(params.gprofiler2_background_file, checkIfExists: true))
         }
-        if (!params.gene_set_files) {
+        if (!params.gene_sets_files) {
             ch_gene_sets = []
         } else {
-            ch_gene_sets = Channel.value(params.gene_set_files)
+            ch_gene_sets = Channel.value(params.gene_sets_files)
         }
 
         GPROFILER2_GOST(
             ch_contrasts,
             ch_filtered_diff,
-            ch_organism,
             ch_gene_sets,
             ch_background
         )
