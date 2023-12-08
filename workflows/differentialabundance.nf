@@ -622,7 +622,6 @@ workflow DIFFERENTIALABUNDANCE {
         params.exploratory_assay_names.split(',').collect { "${it}_matrix".toString() } +
         [ 'contrasts_file', 'versions_file', 'logo', 'css', 'citations' ]
 
-
     // Condition params reported on study type
 
     def params_pattern = "report|gene_sets|study|observations|features|filtering|exploratory|differential"
