@@ -78,8 +78,7 @@ if (params.gsea_run) {
     }
 }
 if (params.gprofiler2_run) {
-    if (!params.gprofiler2_token && !params.gene_sets_files && !params.gprofiler2_organism){
-    } else {
+    if (!params.gprofiler2_token && !params.gene_sets_files && !params.gprofiler2_organism) {
         error("To run gprofiler2, please provide a run token, GMT file or organism!")
     }
 }

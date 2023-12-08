@@ -27,7 +27,7 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      inkscape:zoom="0.48820553"
-     inkscape:cx="1122.4781"
+     inkscape:cx="693.35552"
      inkscape:cy="719.98365"
      inkscape:window-width="1920"
      inkscape:window-height="1027"
@@ -262,11 +262,11 @@
        y="0"><tspan
          x="296.44824"
          y="226.88177"
-         id="tspan5453">
+         id="tspan5905">
 </tspan><tspan
          x="253.24121"
          y="256.88177"
-         id="tspan5455">getGEO</tspan></text>
+         id="tspan5907">getGEO</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,51.875095,0.5137392)"
@@ -276,11 +276,11 @@
        y="0"><tspan
          x="296.44824"
          y="226.88177"
-         id="tspan5457">
+         id="tspan5909">
 </tspan><tspan
          x="246.04004"
          y="256.88177"
-         id="tspan5459">justRMA</tspan></text>
+         id="tspan5911">justRMA</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,133.63934,0.51683979)"
@@ -290,11 +290,11 @@
        y="0"><tspan
          x="363.71387"
          y="226.88177"
-         id="tspan5461">
+         id="tspan5913">
 </tspan><tspan
          x="241.29395"
          y="256.88177"
-         id="tspan5463">readProteinGroups</tspan></text>
+         id="tspan5915">readProteinGroups</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,-45.419185,5.4990027)"
@@ -304,11 +304,11 @@
        y="0"><tspan
          x="246.04004"
          y="226.88177"
-         id="tspan5465">GTF to 
+         id="tspan5917">GTF to 
 </tspan><tspan
          x="260.44238"
          y="256.88177"
-         id="tspan5467">table</tspan></text>
+         id="tspan5919">table</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,140.02808,123.28689)"
@@ -318,7 +318,7 @@
        y="0"><tspan
          x="238.83887"
          y="226.88177"
-         id="tspan5469">Validate</tspan></text>
+         id="tspan5921">Validate</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,177.0313,166.21407)"
@@ -328,7 +328,7 @@
        y="0"><tspan
          x="260.44238"
          y="226.88177"
-         id="tspan5471">Limma</tspan></text>
+         id="tspan5923">Limma</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,49.40072,222.38578)"
@@ -338,7 +338,7 @@
        y="0"><tspan
          x="267.64355"
          y="226.88177"
-         id="tspan5473">GSEA</tspan></text>
+         id="tspan5925">GSEA</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,181.95729,221.55905)"
@@ -348,7 +348,7 @@
        y="0"><tspan
          x="224.43652"
          y="226.88177"
-         id="tspan5475">gprofiler2</tspan></text>
+         id="tspan5927">gprofiler2</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,51.136387,166.16226)"
@@ -358,7 +358,7 @@
        y="0"><tspan
          x="253.24121"
          y="226.88177"
-         id="tspan5477">DESeq2</tspan></text>
+         id="tspan5929">DESeq2</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,148.92521,140.27104)"
@@ -368,7 +368,7 @@
        y="0"><tspan
          x="202.83301"
          y="226.88177"
-         id="tspan5479">Filter matrix</tspan></text>
+         id="tspan5931">Filter matrix</tspan></text>
     <g
        id="g9404-0-1-9-1"
        transform="matrix(0.20995105,0,0,0.20995105,-95.820292,110.48647)"
@@ -804,7 +804,7 @@
        y="0"><tspan
          x="253.24121"
          y="226.88177"
-         id="tspan5481">GEO ID</tspan></text>
+         id="tspan5933">GEO ID</tspan></text>
     <path
        style="fill:none;stroke:#aa0000;stroke-width:2.64583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 110.97606,95.336087 h -3.22004 c -2.40007,0 -4.74297,-1.465291 -6.44007,-3.098172 -1.610027,-1.549071 -3.220038,-3.887086 -3.220038,-6.196324 v -3.098152"
@@ -1036,11 +1036,11 @@
        y="0"><tspan
          x="285.08398"
          y="226.88177"
-         id="tspan5483">Maxquant
+         id="tspan5935">Maxquant
 </tspan><tspan
          x="299.48633"
          y="256.88177"
-         id="tspan5485">output</tspan></text>
+         id="tspan5937">output</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,58.454709,-31.462883)"
@@ -1050,11 +1050,11 @@
        y="0"><tspan
          x="313.88867"
          y="226.88177"
-         id="tspan5487">Affy
+         id="tspan5939">Affy
 </tspan><tspan
          x="263.48047"
          y="256.88177"
-         id="tspan5489">intensities</tspan></text>
+         id="tspan5941">intensities</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,-34.219921,-32.196288)"
@@ -1064,15 +1064,15 @@
        y="0"><tspan
          x="263.48047"
          y="226.88177"
-         id="tspan5493"><tspan
+         id="tspan5945"><tspan
            style="text-anchor:middle"
-           id="tspan5491"> Reference 
+           id="tspan5943"> Reference 
 </tspan></tspan><tspan
          x="270.68164"
          y="256.88177"
-         id="tspan5497"><tspan
+         id="tspan5949"><tspan
            style="text-anchor:middle"
-           id="tspan5495">annotation</tspan></tspan></text>
+           id="tspan5947">annotation</tspan></tspan></text>
     <circle
        r="2.6458333"
        cy="110.70493"
@@ -1137,11 +1137,11 @@
          y="0"><tspan
            x="290.62109"
            y="226.88177"
-           id="tspan5499">Contrast
+           id="tspan5951">Contrast
 </tspan><tspan
            x="269.01758"
            y="256.88177"
-           id="tspan5501">definitions</tspan></text>
+           id="tspan5953">definitions</tspan></text>
     </g>
     <g
        id="g4">
@@ -1164,11 +1164,11 @@
          y="0"><tspan
            x="297.82227"
            y="226.88177"
-           id="tspan5503">Feature
+           id="tspan5955">Feature
 </tspan><tspan
            x="269.01758"
            y="256.88177"
-           id="tspan5505">annotations</tspan></text>
+           id="tspan5957">annotations</tspan></text>
     </g>
     <g
        id="g3"
@@ -1192,11 +1192,11 @@
          y="0"><tspan
            x="283.41992"
            y="226.88177"
-           id="tspan5507">Abundance
+           id="tspan5959">Abundance
 </tspan><tspan
            x="305.02344"
            y="256.88177"
-           id="tspan5509">values</tspan></text>
+           id="tspan5961">values</tspan></text>
     </g>
     <g
        id="g2"
@@ -1220,11 +1220,11 @@
          y="0"><tspan
            x="269.01758"
            y="226.88177"
-           id="tspan5511">Observation
+           id="tspan5963">Observation
 </tspan><tspan
            x="269.01758"
            y="256.88177"
-           id="tspan5513">annotations</tspan></text>
+           id="tspan5965">annotations</tspan></text>
     </g>
     <circle
        r="2.6458333"
@@ -1528,7 +1528,7 @@
        y="0"><tspan
          x="255.54883"
          y="226.88177"
-         id="tspan5515">Plot exploratory</tspan></text>
+         id="tspan5967">Plot exploratory</tspan></text>
     <circle
        cy="333.05283"
        cx="194.46797"
@@ -1544,7 +1544,7 @@
        y="0"><tspan
          x="248.34766"
          y="226.88177"
-         id="tspan5517">Plot differential</tspan></text>
+         id="tspan5969">Plot differential</tspan></text>
     <circle
        cy="349.09232"
        cx="194.44521"
