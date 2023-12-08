@@ -25,7 +25,6 @@ params:
   report_author: NULL,
   report_description: NULL,
   report_scree: NULL
-  gene_sets_files: NULL
   report_round_digits: NULL
   observations_type: NULL
   observations: NULL                                          # GSE156533.samplesheet.csv
@@ -151,6 +150,7 @@ params:
   gprofiler2_domain_scope: NULL
   gprofiler2_min_diff: NULL
   gprofiler2_palette_name: NULL
+  gene_sets_files: NULL
 ---
 
 <!-- Load libraries -->
