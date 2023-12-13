@@ -789,7 +789,7 @@ for (i in 1:nrow(contrasts)){
   
     
     de_fc <- abs(full_de[[params$differential_fc_column]]) >= log2(params$differential_min_fold_change)
-    de_fc_label <- paste("abs(logFC) >=", params$differential_min_fold_change)
+    de_fc_label <- paste("abs(logFC) >=", log2(params$differential_min_fold_change))
     
     de_pval <- full_de[[pval_column]] <= p_value_thresholds[[pvt]]
     de_pval_label <- paste(pvt, "<=", p_value_thresholds[[pvt]])
