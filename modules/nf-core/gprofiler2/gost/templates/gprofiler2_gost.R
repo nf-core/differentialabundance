@@ -357,7 +357,7 @@ if (nrow(de.genes) > 0) {
 
         # R object for other processes to use
 
-        saveRDS(gost_results, file = paste(output_prefix, 'gprofiler2.gost_results.rds', sep = '.'))
+        saveRDS(gost_results, file = paste(output_prefix, 'gost_results.rds', sep = '.'))
 
         # Write full enrichment table (except parents column as that one throws an error)
 
