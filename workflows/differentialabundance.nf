@@ -482,14 +482,11 @@ workflow DIFFERENTIALABUNDANCE {
         if (!params.gprofiler2_background_file) {
             // If deactivated, use empty list as "background"
             ch_background = []
-            print('Using no bg')
         } else if (params.gprofiler2_background_file == "auto") {
             // If auto, use input matrix as background
             ch_background = CUSTOM_MATRIXFILTER.out.filtered.map{it.tail()}.first()
-            print('Using auto bg')
         } else {
             ch_background = Channel.from(file(params.gprofiler2_background_file, checkIfExists: true))
-            print('Using custom bg')
         }
         if (!params.gene_sets_files) {
             ch_gene_sets = []
