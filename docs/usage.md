@@ -273,6 +273,15 @@ There is also a [Shiny server application](https://posit.co/download/shiny-serve
 
 Currently, two tools can be used to do gene set enrichment analysis.
 
+### GSEA
+
+[GSEA](https://www.gsea-msigdb.org/gsea/index.jsp) tests for differential genes from within a user-provided set of genes; this requires a GMT or GMX file. The following example shows how to enable this:
+
+```bash
+--gsea_run true \
+--gene_sets_files gene_sets.gmt
+```
+
 ### g:Profiler
 
 The [gprofiler2](https://cran.r-project.org/web/packages/gprofiler2/vignettes/gprofiler2.html) package can be used to test which pathways are enriched for genes that have been determined to be differentially expressed; it is an R interface for the g:Profiler webtool. In the simplest form, this feature can be enabled with the parameters from the following example:
@@ -283,15 +292,6 @@ The [gprofiler2](https://cran.r-project.org/web/packages/gprofiler2/vignettes/gp
 ```
 
 The organism (mmusculus for Mus musculus, hsapiens for Homo sapiens etc.) is required. Check the [pipeline webpage](https://nf-co.re/differentialabundance/1.2.0/parameters#gprofiler2) for optional parameters for this step.
-
-### GSEA
-
-[GSEA](https://www.gsea-msigdb.org/gsea/index.jsp) tests for differential genes from within a user-provided set of genes; this requires a GMT or GMX file. The following example shows how to enable this:
-
-```bash
---gsea_run true \
---gene_sets_files gene_sets.gmt
-```
 
 ## Running the pipeline
 

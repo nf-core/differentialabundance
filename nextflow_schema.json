@@ -911,9 +911,9 @@
                 },
                 "gprofiler2_background_file": {
                     "type": "string",
-                    "pattern": "^\\S+\\.(csv|tsv|txt)$|auto|null",
-                    "description": "Path to CSV/TSV/TXT file that should be used as a background for the query; alternatively, 'auto'.",
-                    "help_text": "It is advisable to run pathway analysis with a set of background genes describing which genes exist in the target organism in the first place so that other genes are not at all considered. You can provide a CSV/TSV table where one column contains gene IDs and the other rows contain abundance values, or a TXT file that simply contains one gene ID per line. Alternatively, you can set this parameter to 'auto'; in that case, the input abundance matrix will be used. If a matrix is used, all genes will be considered which had at least some abundance (i.e. sum of all abundance values in a row > 0)."
+                    "pattern": "^\\S+\\.(csv|tsv|txt)$|auto|false",
+                    "description": "Path to CSV/TSV/TXT file that should be used as a background for the query; alternatively, 'auto' (default) or 'false'.",
+                    "help_text": "It is advisable to run pathway analysis with a set of background genes describing which genes exist in the target organism in the first place so that other genes are not at all considered. This parameter is by default set to 'auto', meaning that the filtered input abundance matrix will be used. Alternatively, you can provide a CSV/TSV table where one column contains gene IDs and the other rows contain abundance values, or a TXT file that simply contains one gene ID per line. If a custom CSV/TSV is used, all genes will be considered which had at least some abundance (i.e. sum of all abundance values in a row > 0). Set to 'false' if you do not want to use a background."
                 },
                 "gprofiler2_background_column": {
                     "type": "string",

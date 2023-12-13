@@ -407,8 +407,8 @@ workflow DIFFERENTIALABUNDANCE {
     }
 
     // We'll use a local module to filter the differential tables and create output files that contain only differential features
-    ch_logfc = Channel.value([ (params.study_type == 'rnaseq' ? 'log2FoldChange' : 'logFC'), params.differential_min_fold_change ])
-    ch_padj = Channel.value([ (params.study_type == 'rnaseq' ? 'padj' : 'adj.P.Val'), params.differential_max_qval ])
+    ch_logfc = Channel.value([ params.differential_fc_column, params.differential_min_fold_change ])
+    ch_padj = Channel.value([ params.differential_qval_column, params.differential_max_qval ])
 
     FILTER_DIFFTABLE(
         ch_differential,
@@ -480,17 +480,16 @@ workflow DIFFERENTIALABUNDANCE {
         ch_filtered_diff = FILTER_DIFFTABLE.out.filtered
 
         if (!params.gprofiler2_background_file) {
-            // If param not set, use empty list as "background"
+            // If deactivated, use empty list as "background"
             ch_background = []
+            print('Using no bg')
         } else if (params.gprofiler2_background_file == "auto") {
             // If auto, use input matrix as background
-            if(params.study_type == "geo_soft_file") {
-                ch_background = ch_norm.map{it.tail()}
-            } else {
-                ch_background = ch_raw.map{it.tail()}
-            }
+            ch_background = CUSTOM_MATRIXFILTER.out.filtered.map{it.tail()}.first()
+            print('Using auto bg')
         } else {
             ch_background = Channel.from(file(params.gprofiler2_background_file, checkIfExists: true))
+            print('Using custom bg')
         }
         if (!params.gene_sets_files) {
             ch_gene_sets = []
@@ -499,7 +498,6 @@ workflow DIFFERENTIALABUNDANCE {
         }
 
         GPROFILER2_GOST(
-            ch_contrasts,
             ch_filtered_diff,
             ch_gene_sets,
             ch_background
