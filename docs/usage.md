@@ -284,7 +284,7 @@ Currently, two tools can be used to do gene set enrichment analysis.
 
 ### g:Profiler
 
-The [gprofiler2](https://cran.r-project.org/web/packages/gprofiler2/vignettes/gprofiler2.html) package can be used to test which pathways are enriched for genes that have been determined to be differentially expressed; it is an R interface for the g:Profiler webtool. In the simplest form, this feature can be enabled with the parameters from the following example:
+The [gprofiler2](https://cran.r-project.org/web/packages/gprofiler2/vignettes/gprofiler2.html) package can be used to test which pathways are enriched in the sets of differential genes produced by the the DESeq2 or limma modules. It is an R interface for the g:Profiler webtool. In the simplest form, this feature can be enabled with the parameters from the following example:
 
 ```bash
 --gprofiler2_run true \
