@@ -22,34 +22,36 @@ process FILTER_DIFFTABLE {
     script:
     def VERSION = '9.1' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
     """
-    function find_column_number {
-        file=\$1
-        column=\$2
+output_file="\${input_file%.*}_filtered.tsv"
 
-        head -n 1 \$file | tr '\\t' '\\n' | grep -n "^\${column}\$" | awk -F':' '{print \$1}'
-    }
+# Function to find column number
+find_column_number() {
+    awk -v column="\$2" '{for(i=1;i<=NF;i++) if (\$i == column) {print i; exit}}' <<< "\$(head -n 1 "\$1")"
+}
 
-    # export the two threshold as otherwise, awk will for some reason interpret them incorrectly; padj_threshold 0.05 then becomes 0
-    export logFC_threshold
-    export padj_threshold
+# Extract column numbers
+logFC_col=\$(find_column_number "\$input_file" "log2FoldChange")
+padj_col=\$(find_column_number "\$input_file" "padj")
 
+# Prepare the output file
+head -n 1 "\$input_file" > "\${output_file}.tmp"
 
-    logFC_threshold=$logFC_threshold
-    padj_threshold=$padj_threshold
+# The following snippet performs the following checks on each row (add +0.0 to the numbers so that they are definitely treated as numerics):
+#
+# 1. Check that the current logFC/padj is not NA
+# 2. Check that the current logFC is >= threshold (abs does not work, so use a workaround)
+# 3. Check that the current padj is <= threshold
+#
+# If this is true, the row is written to the new file, otherwise not
+    
+awk -F'\\t' -v logFC_col="\$logFC_col" -v padj_col="\$padj_col" -v logFC_thresh="\$logFC_threshold" -v padj_thresh="\$padj_threshold" '
+    NR > 1 && \$logFC_col != "NA" && \$padj_col != "NA" &&
+    ((\$logFC_col+0.0 >= logFC_thresh+0.0) || (-\$logFC_col+0.0 >= logFC_thresh+0.0)) &&
+    \$padj_col+0.0 <= padj_thresh+0.0 { print }
+' "\$input_file" >> "\${output_file}.tmp"
 
-    logFC_col=\$(find_column_number $tsv $logFC_column)
-    padj_col=\$(find_column_number $tsv $padj_column)
-    outfile=\$(echo $tsv | sed 's/\\(.*\\)\\..*/\\1/')_filtered.tsv
-
-    head -n 1 $tsv > \${outfile}.tmp
-
-    # The following snippet performs the following checks on each row (add +0.0 to the numbers so that they are definitely treated as numerics):
-    # 1. Check that the current logFC/padj is not NA
-    # 2. Check that the current logFC is >= threshold (abs does not work, so use a workaround)
-    # 3. Check that the current padj is <= threshold
-    # If this is true, the row is written to the new file, otherwise not
-    tail -n +2 $tsv | awk -F'\\t' -v logFC_col=\$logFC_col -v padj_col=\$padj_col '
-    \$logFC_col != "NA" && \$padj_col != "NA" && (\$logFC_col+0.0 >= 0 ? \$logFC_col+0.0 >= ENVIRON["logFC_threshold"]+0.0 : -(\$logFC_col+0.0) >= ENVIRON["logFC_threshold"]+0.0) && \$padj_col+0.0 <= ENVIRON["padj_threshold"]+0.0 {print}' >> \${outfile}.tmp
+# Rename temporary file to final output file
+mv "\${output_file}.tmp" "\$output_file"
 
     mv \${outfile}.tmp \${outfile}
 
