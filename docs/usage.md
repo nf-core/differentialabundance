@@ -291,7 +291,7 @@ The [gprofiler2](https://cran.r-project.org/web/packages/gprofiler2/vignettes/gp
 --gprofiler2_organism mmusculus
 ```
 
-The organism (mmusculus for Mus musculus, hsapiens for Homo sapiens etc.) is required. Check the [pipeline webpage](https://nf-co.re/differentialabundance/1.2.0/parameters#gprofiler2) for optional parameters for this step.
+Either a token from a previous g:profiler run, a custom GMT file or the organism (mmusculus for Mus musculus, hsapiens for Homo sapiens etc.) is required. Check the [pipeline webpage](https://nf-co.re/differentialabundance/1.2.0/parameters#gprofiler2) for the parameters for this step. Also, by default the analysis will be run with a background list of genes that passed the abundance filter (i.e. those genes that actually had some expression); see for example https://doi.org/10.1186/s13059-015-0761-7 for why this is advisable. You can provide your own background list with `--gprofiler2_background_file background.txt`; alternatively, if you want to not use any background, set this: `--gprofiler2_background_file false`.
 
 ## Running the pipeline
 
