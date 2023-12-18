@@ -81,6 +81,12 @@ if (params.gprofiler2_run) {
     if (!params.gprofiler2_token && !params.gene_sets_files && !params.gprofiler2_organism) {
         error("To run gprofiler2, please provide a run token, GMT file or organism!")
     }
+    if (params.gprofiler2_mode == "token" && !params.gprofiler2_token) {
+        error("--gprofiler2_mode set to 'token' but no --gprofiler2_token provided!")
+    }
+    if (params.gprofiler2_mode == "organism" && !params.gprofiler2_organism) {
+        error("--gprofiler2_mode set to 'organism' but no --gprofiler2_organism provided!")
+    }
 }
 
 report_file = file(params.report_file, checkIfExists: true)
@@ -488,7 +494,7 @@ workflow DIFFERENTIALABUNDANCE {
         } else {
             ch_background = Channel.from(file(params.gprofiler2_background_file, checkIfExists: true))
         }
-        if (!params.gene_sets_files) {
+        if (!params.gene_sets_files || params.gprofiler2_mode == "token" || params.gprofiler2_mode == "organism") {
             ch_gene_sets = []
         } else {
             ch_gene_sets = Channel.value(params.gene_sets_files)

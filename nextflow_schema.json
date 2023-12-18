@@ -865,6 +865,12 @@
                     "description": "Set to run gprofiler2 and do a pathway enrichment analysis.",
                     "fa_icon": "fas fa-running"
                 },
+                "gprofiler2_mode": {
+                    "type": "string",
+                    "description": "Set this param if --gene_sets_files is set for other modules but gprofiler2 should use token or organism.",
+                    "help_text": "One of token, organism.",
+                    "enum": ["token", "organism"]
+                },
                 "gprofiler2_organism": {
                     "type": "string",
                     "description": "Short name of the organism that is analyzed, e.g. hsapiens for homo sapiens.",
