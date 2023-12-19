@@ -27,7 +27,7 @@ This may well be the same sample sheet used to generate the input matrix. For ex
 
 For example:
 
-```console
+```csv
 sample,fastq_1,fastq_2,condition,replicate,batch
 CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,control,1,A
 CONTROL_REP2,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz,control,2,B
@@ -39,6 +39,24 @@ TREATED_REP3,AEG588A2_S1_L004_R1_001.fastq.gz,AEG588A2_S1_L004_R2_001.fastq.gz,t
 
 The file can be tab or comma separated.
 
+### Affymetrix arrays
+
+Abundances for Affy arrays are provided in CEL files within an archive. When creating sample sheets for Affy arrays, it's crucial to include a column that specifies which file corresponds to each sample. This file column is essential for linking each sample to its corresponding data file, as shown in the example below:
+
+```
+"file","id","name","patient","phenotype"
+"GSM1229341_Gudjohnsson_001_6690_PP.CEL.gz","GSM1229341","p6690_PP","6690","lesional"
+"GSM1229342_Gudjohnsson_002_6690_PN.CEL.gz","GSM1229342","p6690_PN","6690","uninvolved"
+"GSM1229343_Gudjohnsson_003_7450_PN.CEL.gz","GSM1229343","p7450_PN","7450","uninvolved"
+"GSM1229344_Gudjohnsson_004_7450_PP.CEL.gz","GSM1229344","p7450_PP","7450","lesional"
+"GSM1229345_Gudjohnsson_005_7912_PP.CEL.gz","GSM1229345","p7912_PP","7912","lesional"
+"GSM1229346_Gudjohnsson_006_7912_PN.CEL.gz","GSM1229346","p7912_PN","7912","uninvolved"
+"GSM1229347_Gudjohnsson_007_8470_PP.CEL.gz","GSM1229347","p8470_PP","6690","lesional"
+"GSM1229348_Gudjohnsson_008_8470_PN.CEL.gz","GSM1229348","p8470_PN","6690","uninvolved"
+```
+
+The "file" column in this example is used to specify the data file associated with each sample, which is essential for data analysis and interpretation.
+
 ## Abundance values
 
 ### RNA-seq and similar
@@ -48,6 +66,29 @@ The file can be tab or comma separated.
 ```
 
 This is a numeric square matrix file, comma or tab-separated, with a column for every observation, and features corresponding to the supplied feature set. The parameters `--observations_id_col` and `--features_id_col` define which of the associated fields should be matched in those inputs.
+
+#### Outputs from nf-core/rnaseq and other tximport-processed results
+
+The nf-core RNAseq workflow incorporates [tximport](https://bioconductor.org/packages/release/bioc/html/tximport.html) for producing quantification matrices. From [version 3.12.2](https://github.com/nf-core/rnaseq/releases/tag/3.13.2), it additionally provides transcript length matrices which can be directly consumed by DESeq2 to model length bias across samples.
+
+To use this approach, include the transcript lengths file with the **raw counts**:
+
+```bash
+--matrix 'salmon.merged.gene_counts.tsv' \
+--transcript_length_matrix 'salmon.merged.gene_lengths.tsv'
+```
+
+Without the transcript lengths, for instance in earlier rnaseq workflow versions, follow the second recommendation in the [tximport documentation](https://bioconductor.org/packages/release/bioc/vignettes/tximport/inst/doc/tximport.html#Downstream_DGE_in_Bioconductor):
+
+> "Use the tximport argument `countsFromAbundance='lengthScaledTPM'` or `'scaledTPM'`, then employ the gene-level count matrix `txi$counts` directly in downstream software, a method we call 'bias corrected counts without an offset'"
+
+This aligns with the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices in the rnaseq workflow.
+
+It is important to note that the documentation advises:
+
+> "Do not manually pass the original gene-level counts to downstream methods without an offset."
+
+So we **do not recommend** raw counts files such as `salmon.merged.gene_counts.tsv` as input for this workflow **except** where the transcript lengths are also provided.
 
 ### MaxQuant intensities
 
@@ -89,7 +130,7 @@ Full list of features metadata are available on GEO platform pages.
 
 The contrasts file references the observations file to define groups of samples to compare. For example, based on the sample sheet above we could define contrasts like:
 
-```console
+```csv
 id,variable,reference,target,blocking
 condition_control_treated,condition,control,treated,
 condition_control_treated_blockrep,condition,control,treated,replicate;batch
@@ -257,6 +298,7 @@ work                # Directory containing the nextflow working files
 ### Hints and tips
 
 - If you don't like the colors used in the report, try a different `RColorBrewer` palette by changing the `exploratory_palette_name` and/or `differential_palette_name` parameters.
+- In rare cases, some users have reported issues with DESeq2 using all available cores on a machine, rather than those specified in the process configuration. This can be prevented by setting the `OPENBLAS_NUM_THREADS` environment variable.
 
 ### Params files
 

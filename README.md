@@ -3,7 +3,7 @@
 [![GitHub Actions CI Status](https://github.com/nf-core/differentialabundance/workflows/nf-core%20CI/badge.svg)](https://github.com/nf-core/differentialabundance/actions?query=workflow%3A%22nf-core+CI%22)
 [![GitHub Actions Linting Status](https://github.com/nf-core/differentialabundance/workflows/nf-core%20linting/badge.svg)](https://github.com/nf-core/differentialabundance/actions?query=workflow%3A%22nf-core+linting%22)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/differentialabundance/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.7568000-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.7568000)
 
-[![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A523.04.0-23aa62.svg)](https://www.nextflow.io/)
+[![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A523.10.0-23aa62.svg)](https://www.nextflow.io/)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
@@ -50,6 +50,15 @@ RNA-seq:
      --outdir <OUTDIR>  \
      -profile rnaseq,<docker/singularity/podman/shifter/charliecloud/conda/institute>
 ```
+
+:::note
+If you are using the outputs of the nf-core rnaseq workflow as input here **either**:
+
+- supply the raw count matrices (file names like **gene_counts.tsv**) alongide the transcript length matrix via `--transcript_length_matrix` (rnaseq versions >=3.12.0, preferred)
+- **or** supply the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices.
+
+See the [usage documentation](https://nf-co.re/differentialabundance/usage) for more information.
+:::
 
 Affymetrix microarray:
 
@@ -100,7 +109,7 @@ For more details about the output files and reports, please refer to the
 
 ## Credits
 
-nf-core/differentialabundance was originally written by Jonathan Manning ([@pinin4fjords](https://github.com/pinin4fjords)) and Oskar Wacker ([@WackerO](https://github.com/WackerO)). Jonathan Manning is an employee of Healx, an AI-powered, patient-inspired tech company, accelerating the discovery and development of treatments for rare diseases. We are grateful for their support of open science in this project.
+nf-core/differentialabundance was originally written by Jonathan Manning ([@pinin4fjords](https://github.com/pinin4fjords)) and Oskar Wacker ([@WackerO](https://github.com/WackerO)). Jonathan Manning (now at Seqera) initially worked on this workflow as an employee of Healx, an AI-powered, patient-inspired tech company, accelerating the discovery and development of treatments for rare diseases. We are grateful for their support of open science in this project.
 
 We thank the many members of the nf-core community who assisted with this pipeline, often by reviewing module pull requests including but not limited to:
 

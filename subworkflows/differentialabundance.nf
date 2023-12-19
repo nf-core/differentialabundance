@@ -30,11 +30,7 @@ if (params.study_type == 'affy_array'){
     }
 } else if (params.study_type == 'maxquant') {
     
-        // Should the user have enabled --shinyngs_build_app and/or --gsea_run, throw an error
-        if (params.shinyngs_build_app) {
-            // This can be removed once shinyngs has an inbuilt NA handler
-            error("Cannot currently build shinyngs app for maxquant data due to data sparsity; please set --shinyngs_build_app to false.")
-        }
+        // Should the user have enabled --gsea_run, throw an error
         if (params.gsea_run) {
             error("Cannot run GSEA for maxquant data; please set --gsea_run to false.")
         }
@@ -68,6 +64,7 @@ if (params.study_type == 'affy_array'){
 }
 
 // Check optional parameters
+if (params.transcript_length_matrix) { ch_transcript_lengths = Channel.of([ exp_meta, file(params.transcript_length_matrix, checkIfExists: true)]).first() } else { ch_transcript_lengths = [[],[]] }
 if (params.control_features) { ch_control_features = Channel.of([ exp_meta, file(params.control_features, checkIfExists: true)]).first() } else { ch_control_features = [[],[]] }
 if (params.gsea_run) {
     if (params.gsea_gene_sets){
@@ -346,6 +343,7 @@ workflow DIFFERENTIALABUNDANCE {
             ch_samples_and_matrix
         )
         ch_differential = LIMMA_DIFFERENTIAL.out.results
+        ch_model = LIMMA_DIFFERENTIAL.out.model
 
         ch_versions = ch_versions
             .mix(LIMMA_DIFFERENTIAL.out.versions)
@@ -359,7 +357,8 @@ workflow DIFFERENTIALABUNDANCE {
         DESEQ2_NORM (
             ch_contrasts.first(),
             ch_samples_and_matrix,
-            ch_control_features
+            ch_control_features,
+            ch_transcript_lengths
         )
 
         // Run the DESeq differential module, which doesn't take the feature
@@ -368,7 +367,8 @@ workflow DIFFERENTIALABUNDANCE {
         DESEQ2_DIFFERENTIAL (
             ch_contrasts,
             ch_samples_and_matrix,
-            ch_control_features
+            ch_control_features,
+            ch_transcript_lengths
         )
         
         // Let's make the simplifying assumption that the processed matrices from
@@ -380,6 +380,7 @@ workflow DIFFERENTIALABUNDANCE {
 
         ch_norm = DESEQ2_NORM.out.normalised_counts
         ch_differential = DESEQ2_DIFFERENTIAL.out.results
+        ch_model = DESEQ2_DIFFERENTIAL.out.model
 
         ch_versions = ch_versions
             .mix(DESEQ2_DIFFERENTIAL.out.versions)
@@ -515,12 +516,13 @@ workflow DIFFERENTIALABUNDANCE {
     ch_report_input_files = ch_all_matrices
         .map{ it.tail() }
         .map{it.flatten()}
-        .combine(ch_contrasts_file.map{it.tail()})
+        .combine(VALIDATOR.out.contrasts.map{it.tail()})
         .combine(CUSTOM_DUMPSOFTWAREVERSIONS.out.yml)
         .combine(ch_logo_file)
         .combine(ch_css_file)
         .combine(ch_citations_file)
         .combine(ch_differential.map{it[1]}.toList())
+        .combine(ch_model.map{it[1]}.toList())
 
     if (params.gsea_run){
         ch_report_input_files = ch_report_input_files
@@ -578,7 +580,6 @@ workflow DIFFERENTIALABUNDANCE {
         }
 
     // Render the final report
-
     RMARKDOWNNOTEBOOK(
         ch_report_file,
         ch_report_params,
