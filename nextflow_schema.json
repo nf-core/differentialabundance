@@ -865,16 +865,10 @@
                     "description": "Set to run gprofiler2 and do a pathway enrichment analysis.",
                     "fa_icon": "fas fa-running"
                 },
-                "gprofiler2_mode": {
-                    "type": "string",
-                    "description": "Set this param if --gene_sets_files is set for other modules but gprofiler2 should use token or organism.",
-                    "help_text": "One of token, organism.",
-                    "enum": ["token", "organism"]
-                },
                 "gprofiler2_organism": {
                     "type": "string",
                     "description": "Short name of the organism that is analyzed, e.g. hsapiens for homo sapiens.",
-                    "help_text": "Set this to the short organism name consisting of the first letter of the genus and the full species name, e.g. hsapiens for Homo sapiens, mmusculus for Mus musculus. This has lowest priority and will be overridden by --gprofiler2_token and --gene_sets_files."
+                    "help_text": "Set this to the short organism name consisting of the first letter of the genus and the full species name, e.g. hsapiens for Homo sapiens, mmusculus for Mus musculus. This has second priority and will be overridden by --gprofiler2_token."
                 },
                 "gprofiler2_significant": {
                     "type": "boolean",
@@ -995,7 +989,7 @@
                 "gene_sets_files": {
                     "type": "string",
                     "default": "None",
-                    "description": "Gene sets in GMT or GMX-format; for GSEA: multiple comma-separated input files in either format are possible. For gprofiler2: A single file in GMT format is possible; this has second highest priority and will override --gprofiler2_organism.",
+                    "description": "Gene sets in GMT or GMX-format; for GSEA: multiple comma-separated input files in either format are possible. For gprofiler2: A single file in GMT format is possible; this has lowest priority and will be overridden by --gprofiler2_token and --gprofiler2_organism.",
                     "fa_icon": "fas fa-bars"
                 }
             }
