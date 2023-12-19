@@ -276,7 +276,6 @@ if (nrow(de.genes) > 0) {
             gmt_path <- paste0(strsplit(basename(opt\$gmt_file), split = "\\\\.")[[1]][[1]], ".", paste(sources, collapse="_"), "_filtered.gmt")
             writeLines(gmt, gmt_path)
         }
-
         token <- upload_GMT_file(gmt_path)
 
         # Add gost ID to output GMT name so that it can be reused in future runs

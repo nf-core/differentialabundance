@@ -29,7 +29,7 @@ if (params.study_type == 'affy_array'){
         error("CEL files archive not specified!")
     }
 } else if (params.study_type == 'maxquant') {
-    
+
         // Should the user have enabled --gsea_run, throw an error
         if (params.gsea_run) {
             error("Cannot run GSEA for maxquant data; please set --gsea_run to false.")
@@ -69,17 +69,21 @@ if (params.study_type == 'affy_array'){
 // Check optional parameters
 if (params.transcript_length_matrix) { ch_transcript_lengths = Channel.of([ exp_meta, file(params.transcript_length_matrix, checkIfExists: true)]).first() } else { ch_transcript_lengths = [[],[]] }
 if (params.control_features) { ch_control_features = Channel.of([ exp_meta, file(params.control_features, checkIfExists: true)]).first() } else { ch_control_features = [[],[]] }
-if (params.gsea_run) {
-    if (params.gene_sets_files){
+
+def run_gene_set_analysis = params.gsea_run || params.gprofiler2_run
+
+if (run_gene_set_analysis) {
+    if (params.gene_sets_files) {
         gene_sets_files = params.gene_sets_files.split(",")
         ch_gene_sets = Channel.of(gene_sets_files).map { file(it, checkIfExists: true) }
-    } else {
+    } else if (params.gsea_run) {
         error("GSEA activated but gene set file not specified!")
-    }
-}
-if (params.gprofiler2_run) {
-    if (!params.gprofiler2_token && !params.gene_sets_files && !params.gprofiler2_organism) {
-        error("To run gprofiler2, please provide a run token, GMT file or organism!")
+    } else if (params.gprofiler2_run) {
+        if (!params.gprofiler2_token && !params.gprofiler2_organism) {
+            error("To run gprofiler2, please provide a run token, GMT file or organism!")
+        }
+    } else {
+        ch_gene_sets = []    // For methods that can run without gene sets
     }
 }
 
@@ -380,7 +384,7 @@ workflow DIFFERENTIALABUNDANCE {
             ch_control_features,
             ch_transcript_lengths
         )
-        
+
         // Let's make the simplifying assumption that the processed matrices from
         // the DESeq runs are the same across contrasts. We run the DESeq process
         // with matrices once for each contrast because DESeqDataSetFromMatrix()
@@ -488,15 +492,18 @@ workflow DIFFERENTIALABUNDANCE {
         } else {
             ch_background = Channel.from(file(params.gprofiler2_background_file, checkIfExists: true))
         }
-        if (!params.gene_sets_files) {
-            ch_gene_sets = []
+
+        if (params.gprofiler2_token || params.gprofiler2_organism) {
+            // For gprofiler2, token and organism have priority and will override a gene_sets file
+            ch_gprofiler_gene_sets = []
         } else {
-            ch_gene_sets = Channel.value(params.gene_sets_files)
+            ch_gprofiler_gene_sets = ch_gene_sets.toList()
+                .map{it -> it.size() > 1 ? error("gprofiler2 currently only accepts a single gene sets file!") : it.first()}            
         }
 
         GPROFILER2_GOST(
             ch_filtered_diff,
-            ch_gene_sets,
+            ch_gprofiler_gene_sets,
             ch_background
         )
     }
