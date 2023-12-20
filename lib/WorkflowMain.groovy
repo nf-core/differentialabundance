@@ -31,6 +31,11 @@ class WorkflowMain {
             System.exit(0)
         }
 
+        // Check that at least one of the expected analysis is specified by the user
+        if (!params.run_differential_abundance && !params.run_partial_correlation && !params.run_proportionality && !params.run_differential_proportionality){
+            Nextflow.error("Please specify the analysis you want to perform. \ne.g. '--run_differential_abundance' '--run_partial_correlation' '--run_proportionality' or '--run_differential_proportionality'")
+        }
+
         // Check that a -profile or Nextflow config has been provided to run the pipeline
         NfcoreTemplate.checkConfigProvided(workflow, log)
 

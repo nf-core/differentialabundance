@@ -253,6 +253,11 @@ if (opt\$permutation > 0) {
 ################################################
 ################################################
 
+saveRDS(
+    pro,
+    file = paste0(opt\$prefix, '.propr.rds')
+)
+
 write.table(
     pro@matrix,
     file      = paste0(opt\$prefix, '.propr.tsv'),

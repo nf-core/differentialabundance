@@ -8,7 +8,6 @@ include { paramsSummaryLog; paramsSummaryMap } from 'plugin/nf-validation'
 
 def logo = NfcoreTemplate.logo(workflow, params.monochrome_logs)
 def citation = '\n' + WorkflowMain.citation(workflow) + '\n'
-def summary_params = paramsSummaryMap(workflow)
 
 log.info logo + paramsSummaryLog(workflow) + citation
 
@@ -19,6 +18,18 @@ log.info logo + paramsSummaryLog(workflow) + citation
 */
 
 // TODO put the commont parts between logratioanalysis.nf and differentialabundance.nf to here
+
+// Validate input parameters
+WorkflowDifferentialabundance.initialise(params, log)
+
+// Check input path parameters to see if they exist
+def checkPathParamList = [ params.input ]
+for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
+
+// Check mandatory input
+if (!params.input) { exit 1, 'Input samplesheet not specified!' }
+
+// TODO now the pipeline only takes one input dataset, maybe at some point we want to parallely run the pipeline for many datasets
 
 
 /*
@@ -35,12 +46,8 @@ log.info logo + paramsSummaryLog(workflow) + citation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-if (params.run_differential_abundance){
-    include { DIFFERENTIALABUNDANCE } from '../subworkflows/differentialabundance'
-}
-if (params.run_partial_correlation || params.run_proportionality || params.run_differential_proportionality){
-    include { LOGRATIOANALYSIS      } from '../subworkflows/logratioanalysis'
-}
+include { DIFFERENTIALABUNDANCE } from '../subworkflows/differentialabundance'
+include { LOGRATIOANALYSIS      } from '../subworkflows/logratioanalysis'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

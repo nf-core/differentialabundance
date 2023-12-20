@@ -47,6 +47,10 @@ output:
         Groovy Map containing sample information.
         This can be used at the workflow level to pass optional parameters to the module.
         [id: 'test', ...]
+  - propr:
+      type: file
+      description: R propr object
+      pattern: "*.propr.rds"
   - matrix:
       type: file
       description: Coefficient matrix

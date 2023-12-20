@@ -12,23 +12,19 @@
             "properties": {
                 "run_differential_abundance": {
                     "type": "boolean",
-                    "default": false,
                     "description": "Run genewise differential abundance analysis"
                 },
                 "run_partial_correlation": {
                     "type": "boolean",
-                    "default": false,
                     "description": "Run logratio-based partial correlation with shrinkage"
                 },
                 "run_proportionality": {
                     "type": "boolean",
-                    "default": false,
-                    "description": "Run logratio proportionality analysis"
+                    "description": "Run proportionality analysis"
                 },
                 "run_differential_proportionality": {
                     "type": "boolean",
-                    "default": false,
-                    "description": "Run differential logratio proportionality analysis"
+                    "description": "Run differential proportionality analysis"
                 }
             }
         },
@@ -353,7 +349,7 @@
                 },
                 "proteus_round_digits": {
                     "type": "number",
-                    "default": -1.0,
+                    "default": -1,
                     "description": "Number of decimals to round the MaxQuant intensities to; default: -1 (will not round)."
                 }
             }
@@ -366,13 +362,13 @@
             "properties": {
                 "filtering_min_abundance": {
                     "type": "number",
-                    "default": 1.0,
+                    "default": 1,
                     "description": "Minimum abundance value",
                     "fa_icon": "fas fa-compress-alt"
                 },
                 "filtering_min_samples": {
                     "type": "number",
-                    "default": 1.0,
+                    "default": 1,
                     "description": "Minimum observations that must pass the threshold to retain the row/ feature (e.g. gene).",
                     "fa_icon": "fas fa-compress-alt"
                 },
@@ -468,10 +464,122 @@
                 "exploratory_palette_name"
             ]
         },
-        "differential_analysis": {
-            "title": "Differential analysis",
+        "logratio_partial_correlation_options": {
+            "title": "Logratio partial correlation options",
             "type": "object",
-            "description": "Options related to differential operations",
+            "description": "Options for computing logratio partial correlation",
+            "default": "",
+            "properties": {
+                "partial_correlation_permutation": {
+                    "type": "integer",
+                    "default": 10,
+                    "description": "The number of permutations to perform for calculating the false #'  discovery rate (FDR)"
+                },
+                "partial_correlation_cutoff_min": {
+                    "type": "number",
+                    "default": 0.001,
+                    "description": "Minimun value to compute the FDR"
+                },
+                "partial_correlation_cutoff_max": {
+                    "type": "number",
+                    "default": 0.2,
+                    "description": "Maximun value to compute the FDR"
+                },
+                "partial_correlation_cutoff_interval": {
+                    "type": "number",
+                    "default": 0.001,
+                    "description": "Interval between cutoffs"
+                }
+            }
+        },
+        "proportionality_options": {
+            "title": "Proportionality options",
+            "type": "object",
+            "description": "Options for computing proportionality",
+            "default": "",
+            "properties": {
+                "proportionality_metric": {
+                    "type": "string",
+                    "default": "rho",
+                    "description": "Metric of proportionality to use. Options: 'rho', 'phi', 'phs'"
+                },
+                "proportionality_transformation": {
+                    "type": "string",
+                    "default": "clr",
+                    "description": "Logratio transformation to apply. Options: 'clr' or 'alr'"
+                },
+                "proportionality_alr_reference": {
+                    "type": "string",
+                    "default": "None",
+                    "description": "The gene reference for ALR-transformation"
+                },
+                "proportionality_alpha": {
+                    "type": "string",
+                    "description": "Box-cox transformation alpha parameter"
+                },
+                "proportionality_permutation": {
+                    "type": "integer",
+                    "default": 10,
+                    "description": "The number of permutations to perform for calculating the false #'  discovery rate (FDR)"
+                },
+                "proportionality_cutoff_min": {
+                    "type": "number",
+                    "default": 0.1,
+                    "description": "Minimun value to compute the FDR"
+                },
+                "proportionality_cutoff_max": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "Maximun value to compute the FDR"
+                },
+                "proportionality_cutoff_interval": {
+                    "type": "number",
+                    "default": 0.05,
+                    "description": "Interval between cutoffs"
+                }
+            }
+        },
+        "differential_proportionality_options": {
+            "title": "Differential proportionality options",
+            "type": "object",
+            "description": "Options for computing differential proportionality",
+            "default": "",
+            "properties": {
+                "differential_proportionality_metric": {
+                    "type": "string",
+                    "default": "theta_d",
+                    "description": "Metric of differential proportionality. Options: 'theta_d', 'theta_e'"
+                },
+                "differential_proportionality_alpha": {
+                    "type": "string",
+                    "description": "Box-cox transformation alpha parameter"
+                },
+                "differential_proportionality_permutation": {
+                    "type": "integer",
+                    "default": 10,
+                    "description": "The number of permutations to perform for calculating the false #'  discovery rate (FDR)"
+                },
+                "differential_proportionality_cutoff_min": {
+                    "type": "number",
+                    "default": 0.001,
+                    "description": "Minimun value to compute the FDR"
+                },
+                "differential_proportionality_cutoff_max": {
+                    "type": "number",
+                    "default": 0.2,
+                    "description": "Maximun value to compute the FDR"
+                },
+                "differential_proportionality_cutoff_interval": {
+                    "type": "number",
+                    "default": 0.001,
+                    "description": "Interval between cutoffs"
+                }
+            }
+        },
+        "differential_abundance_analysis": {
+            "title": "Differential abundance analysis",
+            "type": "object",
+            "description": "Options related to differential abundance operations",
             "default": "",
             "properties": {
                 "differential_file_suffix": {
@@ -506,13 +614,13 @@
                 },
                 "differential_min_fold_change": {
                     "type": "number",
-                    "default": 2.0,
+                    "default": 2,
                     "description": "Minimum fold change used to calculate differential feature numbers",
                     "fa_icon": "fas fa-angle-double-down"
                 },
                 "differential_max_pval": {
                     "type": "number",
-                    "default": 1.0,
+                    "default": 1,
                     "description": "Maximum p value used to calculate differential feature numbers",
                     "fa_icon": "fas fa-angle-double-up"
                 },
@@ -798,7 +906,7 @@
                 },
                 "limma_p_value": {
                     "type": "number",
-                    "default": 1.0,
+                    "default": 1,
                     "description": "cutoff value for adjusted p-values. Only genes with lower p-values are listed.",
                     "fa_icon": "fas fa-angle-double-up"
                 }
@@ -1213,14 +1321,12 @@
                     "type": "boolean",
                     "description": "Display help text.",
                     "fa_icon": "fas fa-question-circle",
-                    "default": false,
                     "hidden": true
                 },
                 "version": {
                     "type": "boolean",
                     "description": "Display version and exit.",
                     "fa_icon": "fas fa-question-circle",
-                    "default": false,
                     "hidden": true
                 },
                 "publish_dir_mode": {
@@ -1249,14 +1355,12 @@
                     "type": "boolean",
                     "description": "Send plain-text email instead of HTML.",
                     "fa_icon": "fas fa-remove-format",
-                    "default": false,
                     "hidden": true
                 },
                 "monochrome_logs": {
                     "type": "boolean",
                     "description": "Do not use coloured log outputs.",
                     "fa_icon": "fas fa-palette",
-                    "default": false,
                     "hidden": true
                 },
                 "hook_url": {
@@ -1276,7 +1380,6 @@
                     "type": "boolean",
                     "fa_icon": "far fa-eye-slash",
                     "description": "Show all params when using `--help`",
-                    "default": false,
                     "hidden": true,
                     "help_text": "By default, parameters set as _hidden_ in the schema are not shown on the command line when a user runs with `--help`. Specifying this option will tell the pipeline to show all parameters."
                 },
@@ -1284,7 +1387,6 @@
                     "type": "boolean",
                     "fa_icon": "far fa-check-circle",
                     "description": "Validation of parameters fails when an unrecognised parameter is found.",
-                    "default": false,
                     "hidden": true,
                     "help_text": "By default, when an unrecognised parameter is found, it returns a warinig."
                 },
@@ -1292,7 +1394,6 @@
                     "type": "boolean",
                     "fa_icon": "far fa-check-circle",
                     "description": "Validation of parameters in lenient more.",
-                    "default": false,
                     "hidden": true,
                     "help_text": "Allows string values that are parseable as numbers or booleans. For further information see [JSONSchema docs](https://github.com/everit-org/json-schema#lenient-mode)."
                 }
@@ -1328,7 +1429,16 @@
             "$ref": "#/definitions/exploratory_analysis"
         },
         {
-            "$ref": "#/definitions/differential_analysis"
+            "$ref": "#/definitions/logratio_partial_correlation_options"
+        },
+        {
+            "$ref": "#/definitions/proportionality_options"
+        },
+        {
+            "$ref": "#/definitions/differential_proportionality_options"
+        },
+        {
+            "$ref": "#/definitions/differential_abundance_analysis"
         },
         {
             "$ref": "#/definitions/deseq2_specific_options_rna_seq_only"

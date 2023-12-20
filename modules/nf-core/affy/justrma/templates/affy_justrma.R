@@ -133,7 +133,8 @@ opt <- list(
     rm.mask = FALSE,
     rm.outliers = FALSE,
     rm.extra = FALSE,
-    build_annotation = FALSE
+    build_annotation = FALSE,
+    keep.log2 = TRUE
 )
 if (opt\$description == ''){
     opt\$description = NULL
@@ -269,6 +270,11 @@ if (opt\$build_annotation){
 
 output_prefix <- '$task.ext.prefix'
 saveRDS(eset, file = paste0(output_prefix, 'eset.rds'))
+
+# TODO update this to nf-core
+# Remove log2
+if (!opt\$keep.log2) exprs(eset) <- 2**exprs(eset)
+
 
 # Write matrix
 

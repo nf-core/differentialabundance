@@ -28,10 +28,13 @@ params.gtf = WorkflowMain.getGenomeAttribute(params, 'gtf')
 include { validateParameters; paramsHelp } from 'plugin/nf-validation'
 
 // Print help message if needed
+// TODO check if command2 is correct
 if (params.help) {
     def logo = NfcoreTemplate.logo(workflow, params.monochrome_logs)
     def citation = '\n' + WorkflowMain.citation(workflow) + '\n'
-    def String command = "nextflow run ${workflow.manifest.name} --input samplesheet.csv --genome GRCh37 -profile docker"
+    def String command1 = "To run differential abundance: \n\tnextflow run ${workflow.manifest.name} --input samplesheet.csv --genome GRCh37 -profile docker --run_differential_abundance"
+    def String command2 = "To run logratio partial correlation: \n\tnextflow run ${workflow.manifest.name} --input samplesheet.csv --genome GRCh37 -profile docker --run_partial_correlation"
+    def String command = command1 + '\n\n' + command2
     log.info logo + paramsHelp(command) + citation + NfcoreTemplate.dashedLine(params.monochrome_logs)
     System.exit(0)
 }
@@ -51,6 +54,7 @@ WorkflowMain.initialise(workflow, params, log)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
+// TODO we need to rename 
 include { MAINWORKFLOW } from './workflows/mainworkflow'
 
 //

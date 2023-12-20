@@ -4,22 +4,12 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-// Validate input parameters
-WorkflowDifferentialabundance.initialise(params, log)
-
-// Check input path parameters to see if they exist
-def checkPathParamList = [ params.input ]
-for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
-
-// Check mandatory parameters
+// Set mandatory input channel
 def exp_meta = [ "id": params.study_name  ]
-if (params.input) { 
-    ch_input = Channel.of([ exp_meta, file(params.input, checkIfExists: true) ]) 
-} else { 
-    exit 1, 'Input samplesheet not specified!' 
-}
+ch_input = Channel.of([ exp_meta, file(params.input, checkIfExists: true) ])
 
-// handle different data formats
+// Handle different data formats
+// TODO now it only handles affy_array and rnaseq. It should be able to handle all the data types that differentialabundance.nf handles.
 if (params.study_type == 'affy_array'){
 
     if (params.affy_cel_files_archive) {
@@ -46,7 +36,6 @@ logo_file      = file(params.logo_file, checkIfExists: true)
 css_file       = file(params.css_file, checkIfExists: true)
 citations_file = file(params.citations_file, checkIfExists: true)
 
-
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     CONFIG FILES
@@ -60,6 +49,7 @@ citations_file = file(params.citations_file, checkIfExists: true)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
+// TODO need to make the containers and put these modules into nf-core
 include { PROPR_PROPR as PROPR_PARTIALCORRELATION           } from '../modules/local/propr/propr/main'
 include { PROPR_PROPR as PROPR_PROPORTIONALITY              } from '../modules/local/propr/propr/main'
 
@@ -69,18 +59,25 @@ include { PROPR_PROPR as PROPR_PROPORTIONALITY              } from '../modules/l
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
+//
+// MODULE: Installed directly from nf-core/modules
+//
 include { UNTAR                                             } from '../modules/nf-core/untar/main.nf'
-include { AFFY_JUSTRMA as AFFY_JUSTRMA_RAW                  } from '../modules/nf-core/affy/justrma/main'
+include { AFFY_JUSTRMA                                      } from '../modules/nf-core/affy/justrma/main'
 include { SHINYNGS_VALIDATEFOMCOMPONENTS as VALIDATOR       } from '../modules/nf-core/shinyngs/validatefomcomponents/main'
 include { CUSTOM_MATRIXFILTER                               } from '../modules/nf-core/custom/matrixfilter/main'
-include { PROPR_LOGRATIO                                    } from '../modules/nf-core/propr/logratio/main'
 include { PROPR_PROPD as PROPR_DIFFERENTIALPROPORTIONALITY  } from '../modules/nf-core/propr/propd/main'
+include { CUSTOM_DUMPSOFTWAREVERSIONS                       } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+
+// Info required for completion email and summary
+// TODO need to implement the code to record the metrics into multiqc report
+def multiqc_report = []
 
 workflow LOGRATIOANALYSIS {
 
@@ -92,36 +89,40 @@ workflow LOGRATIOANALYSIS {
      * it parses the expression matrix, the features metadata, and the contrast file
      */
 
-    // format data
+    // Get expression matrix
+    // This is required when data type is not rnaseq
+    // TODO add code for other data types
     if (params.study_type == 'affy_array'){
 
         // Uncompress the CEL files archive
+
         UNTAR ( ch_celfiles )
+
         ch_affy_input = ch_input
             .join(UNTAR.out.untar)
 
         // Run affy to derive the matrix
-        AFFY_JUSTRMA_RAW (
+
+        AFFY_JUSTRMA (
             ch_affy_input,
             [[],[]]
         )
 
         // Fetch affy outputs and reset the meta
-        ch_in_raw = AFFY_JUSTRMA_RAW.out.expression
-        ch_affy_platform_features = AFFY_JUSTRMA_RAW.out.annotation
+
+        ch_in_raw = AFFY_JUSTRMA.out.expression
+        ch_affy_platform_features = AFFY_JUSTRMA.out.annotation
         
         ch_versions = ch_versions
             .mix(UNTAR.out.versions)
-            .mix(AFFY_JUSTRMA_RAW.out.versions)
+            .mix(AFFY_JUSTRMA.out.versions)
     }
 
     // If user has provided a feature annotation table, use that
     if (params.features){
         ch_features = Channel.of([ exp_meta, file(params.features, checkIfExists: true)])
-
     } else if (params.study_type == 'affy_array'){
         ch_features = ch_affy_platform_features
-
     } else if (params.study_type == 'rnaseq'){
 
         // Otherwise we can just use the matrix input; save it to the workdir so that it does not
@@ -148,7 +149,7 @@ workflow LOGRATIOANALYSIS {
         ch_input.join(ch_in_raw),
         ch_features,
         ch_contrasts_file
-    ) 
+    )
     ch_matrix = VALIDATOR.out.assays
     ch_versions = ch_versions
             .mix(VALIDATOR.out.versions)
@@ -165,49 +166,81 @@ workflow LOGRATIOANALYSIS {
 
     CUSTOM_MATRIXFILTER(
         ch_matrix,
-        ch_input
+        VALIDATOR.out.sample_meta
     )
+
+    ch_input = VALIDATOR.out.sample_meta
     ch_matrix = CUSTOM_MATRIXFILTER.out.filtered
+    ch_samples_and_matrix = ch_input.join(ch_matrix)     // -> meta, samplesheet, filtered matrix
+
     ch_versions = ch_versions
             .mix(CUSTOM_MATRIXFILTER.out.versions)
 
+    // TODO run and check what is VALIDATOR.out.sample_meta
+
     /*
-     * PROCESS DATA
-     * Replace zeros if needed.
-     * Normalize data if needed.
+     * HANDLE ZEROS
      */
 
     // TODO currently the zeros can be directly handled in the downstream analysis by replacing them with the min value
     // TODO add zero imputation methods
 
-    // TODO add normalization blocks
-
     /*
-     * LOGRATIO-BASED CORRELATION ANALYSIS
-     * Compute basis shrinkage partial correlation, or proportionality
+     * LOGRATIO-BASED ANALYSIS
      */
 
-    PROPR_PARTIALCORRELATION(
-        ch_matrix
-    )
-    PROPR_PROPORTIONALITY(
-        ch_matrix
-    )
-    ch_versions = ch_versions
+    // TODO should I also put the samplesheet information into logratio modules?
+
+    // compute logratio partial correlation with basis shrinkage
+    if (params.run_partial_correlation){
+        PROPR_PARTIALCORRELATION(
+            ch_matrix
+        )
+        ch_versions = ch_versions
             .mix(PROPR_PARTIALCORRELATION.out.versions)
-            .mix(PROPR_PROPORTIONALITY.out.versions)
+    }
 
-    /*
-    * DIFFERENTIAL PROPORTIONALITY ANALYSIS
-    * Compute differential proportionality coefficients
-    */
-    PROPR_DIFFERENTIALPROPORTIONALITY(
-        ch_matrix,
-        ch_input
+    // compute proportionality
+    if (params.run_proportionality){
+        PROPR_PROPORTIONALITY(
+            ch_matrix
+        )
+        ch_versions = ch_versions
+                .mix(PROPR_PROPORTIONALITY.out.versions)
+    }
+
+    // compute differential proportionality
+    if (params.run_differential_proportionality){
+        PROPR_DIFFERENTIALPROPORTIONALITY(
+            ch_matrix,
+            ch_input
+        )
+        ch_versions = ch_versions
+                .mix(PROPR_DIFFERENTIALPROPORTIONALITY.out.versions)
+
+        // TODO add GREA
+    }
+
+    // TODO plot exploratory figures
+    // TODO add results analysis, etc
+
+    CUSTOM_DUMPSOFTWAREVERSIONS (
+        ch_versions.unique().collectFile(name: 'collated_versions.yml')
     )
-    ch_versions = ch_versions
-            .mix(PROPR_DIFFERENTIALPROPORTIONALITY.out.versions)
 
-    // TODO add GREA
+    // TODO handle report
 
 }
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    COMPLETION EMAIL AND SUMMARY
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    THE END
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
