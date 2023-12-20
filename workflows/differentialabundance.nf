@@ -493,17 +493,11 @@ workflow DIFFERENTIALABUNDANCE {
             ch_background = Channel.from(file(params.gprofiler2_background_file, checkIfExists: true))
         }
 
-        if (params.gprofiler2_token || params.gprofiler2_organism) {
-            // For gprofiler2, token and organism have priority and will override a gene_sets file
-            ch_gprofiler_gene_sets = []
-        } else {
-            ch_gprofiler_gene_sets = ch_gene_sets.toList()
-                .map{it -> it.size() > 1 ? error("gprofiler2 currently only accepts a single gene sets file!") : it.first()}            
-        }
+        // For gprofiler2, token and organism have priority and will override a gene_sets file
 
         GPROFILER2_GOST(
             ch_filtered_diff,
-            ch_gprofiler_gene_sets,
+            ch_gene_sets,
             ch_background
         )
     }
