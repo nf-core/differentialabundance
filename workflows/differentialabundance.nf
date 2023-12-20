@@ -76,6 +76,9 @@ if (run_gene_set_analysis) {
     if (params.gene_sets_files) {
         gene_sets_files = params.gene_sets_files.split(",")
         ch_gene_sets = Channel.of(gene_sets_files).map { file(it, checkIfExists: true) }
+        if (params.gprofiler2_run && (!params.gprofiler2_token && !params.gprofiler2_organism) && gene_sets_files.size() > 1) {
+            error("gprofiler2 can currently only work with a single gene set file")
+        }
     } else if (params.gsea_run) {
         error("GSEA activated but gene set file not specified!")
     } else if (params.gprofiler2_run) {
@@ -497,7 +500,7 @@ workflow DIFFERENTIALABUNDANCE {
 
         GPROFILER2_GOST(
             ch_filtered_diff,
-            ch_gene_sets,
+            ch_gene_sets.first(),
             ch_background
         )
     }
