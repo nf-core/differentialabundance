@@ -291,7 +291,11 @@ The [gprofiler2](https://cran.r-project.org/web/packages/gprofiler2/vignettes/gp
 --gprofiler2_organism mmusculus
 ```
 
-Either a `--gprofiler2_token` from a previous g:profiler run, the `--gprofiler2_organism` (mmusculus for Mus musculus, hsapiens for Homo sapiens etc.) or a custom `--gene_sets_files` GMT file is required; if multiple options are provided, will prioritize token, then organism, then GMT file. Check the [pipeline webpage](https://nf-co.re/differentialabundance/1.2.0/parameters#gprofiler2) for the parameters for this step. Also, by default the analysis will be run with a background list of genes that passed the abundance filter (i.e. those genes that actually had some expression); see for example https://doi.org/10.1186/s13059-015-0761-7 for why this is advisable. You can provide your own background list with `--gprofiler2_background_file background.txt`; alternatively, if you want to not use any background, set this: `--gprofiler2_background_file false`.
+If gene sets have been specified to the workflow via `--gene_sets_files` these are used by default. Specifying  `--gprofiler2_organism` (mmusculus for Mus musculus, hsapiens for Homo sapiens etc.) will override those gene sets with g:profiler's own for the relevant species. `--gprofiler2_token` will override both options and use gene sets from a previous g:profiler run.  
+
+By default the analysis will be run with a background list of genes that passed the abundance filter (i.e. those genes that actually had some expression); see for example https://doi.org/10.1186/s13059-015-0761-7 for why this is advisable. You can provide your own background list with `--gprofiler2_background_file background.txt`or if you want to not use any background, set `--gprofiler2_background_file false`.
+
+Check the [pipeline webpage](https://nf-co.re/differentialabundance/parameters#gprofiler2) for a full listing of the relevant parameters. 
 
 ## Running the pipeline
 
