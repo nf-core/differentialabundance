@@ -269,6 +269,34 @@ With this configuration in place deployment should happen automatically every ti
 
 There is also a [Shiny server application](https://posit.co/download/shiny-server/), which you can install on your own infrastruture and use to host applications yourself.
 
+## Gene set enrichment analysis
+
+Currently, two tools can be used to do gene set enrichment analysis.
+
+### GSEA
+
+[GSEA](https://www.gsea-msigdb.org/gsea/index.jsp) tests for differential genes from within a user-provided set of genes; this requires a GMT or GMX file. The following example shows how to enable this:
+
+```bash
+--gsea_run true \
+--gene_sets_files gene_sets.gmt
+```
+
+### g:Profiler
+
+The [gprofiler2](https://cran.r-project.org/web/packages/gprofiler2/vignettes/gprofiler2.html) package can be used to test which pathways are enriched in the sets of differential genes produced by the the DESeq2 or limma modules. It is an R interface for the g:Profiler webtool. In the simplest form, this feature can be enabled with the parameters from the following example:
+
+```bash
+--gprofiler2_run true \
+--gprofiler2_organism mmusculus
+```
+
+If gene sets have been specified to the workflow via `--gene_sets_files` these are used by default. Specifying `--gprofiler2_organism` (mmusculus for Mus musculus, hsapiens for Homo sapiens etc.) will override those gene sets with g:profiler's own for the relevant species. `--gprofiler2_token` will override both options and use gene sets from a previous g:profiler run.
+
+By default the analysis will be run with a background list of genes that passed the abundance filter (i.e. those genes that actually had some expression); see for example https://doi.org/10.1186/s13059-015-0761-7 for why this is advisable. You can provide your own background list with `--gprofiler2_background_file background.txt`or if you want to not use any background, set `--gprofiler2_background_file false`.
+
+Check the [pipeline webpage](https://nf-co.re/differentialabundance/parameters#gprofiler2) for a full listing of the relevant parameters.
+
 ## Running the pipeline
 
 The typical command for running the pipeline is as follows:
