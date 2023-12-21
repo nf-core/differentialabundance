@@ -22,7 +22,7 @@
                     },
                     "custom/matrixfilter": {
                         "branch": "master",
-                        "git_sha": "65ad3e0b9a4099592e1102e92e10455dc661cf53",
+                        "git_sha": "0ed73182b77383134387509ebfde7071bd65b3ea",
                         "installed_by": ["modules"]
                     },
                     "custom/tabulartogseacls": {
