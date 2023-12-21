@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- [[#219](https://github.com/nf-core/differentialabundance/pull/219)] - Template update for nf-core/tools v2.11.1 ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+
 ### `Fixed`
 
 - [[#213](https://github.com/nf-core/differentialabundance/pull/213)] - Fix volcano plot legend ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
