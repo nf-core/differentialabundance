@@ -7,8 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- [[#219](https://github.com/nf-core/differentialabundance/pull/219)] - Template update for nf-core/tools v2.11.1 ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+
 ### `Fixed`
 
+- [[#213](https://github.com/nf-core/differentialabundance/pull/213)] - Fix volcano plot legend ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
+- [[#210](https://github.com/nf-core/differentialabundance/pull/210)] - Include Affy timeout fix ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#208](https://github.com/nf-core/differentialabundance/pull/208)] - Fix resource issues and bump versions ([@pinin4fjords](https://github.com/pinin4fjords), review by [@sguizard](https://github.com/sguizard))
 
 ### `Changed`
@@ -20,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - [[#203](https://github.com/nf-core/differentialabundance/pull/203)] - Transcript lengths for DESeq2 ([@pinin4fjords](https://github.com/pinin4fjords), review by [@maxulysse](https://github.com/maxulysse))
+- [[#199](https://github.com/nf-core/differentialabundance/pull/199)] - Add gprofiler2 module and local differential table filtering module ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#193](https://github.com/nf-core/differentialabundance/pull/193)] - Add DESeq2 text to report ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#192](https://github.com/nf-core/differentialabundance/pull/192)] - Add scree plot in report ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#189](https://github.com/nf-core/differentialabundance/pull/189)] - Add DE models to report ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
