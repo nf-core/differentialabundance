@@ -16,10 +16,13 @@ if (params.study_type == 'affy_array'){
         error("CEL files archive not specified!")
     }
 } else if (params.study_type == 'maxquant') {
-    
+
         // Should the user have enabled --gsea_run, throw an error
         if (params.gsea_run) {
             error("Cannot run GSEA for maxquant data; please set --gsea_run to false.")
+        }
+        if (params.gprofiler2_run){
+            error("gprofiler2 pathway analysis is not yet possible with maxquant input data; please set --gprofiler2_run false and rerun pipeline!")
         }
         if (!params.matrix) {
             error("Input matrix not specified!")
@@ -53,12 +56,24 @@ if (params.study_type == 'affy_array'){
 // Check optional parameters
 if (params.transcript_length_matrix) { ch_transcript_lengths = Channel.of([ exp_meta, file(params.transcript_length_matrix, checkIfExists: true)]).first() } else { ch_transcript_lengths = [[],[]] }
 if (params.control_features) { ch_control_features = Channel.of([ exp_meta, file(params.control_features, checkIfExists: true)]).first() } else { ch_control_features = [[],[]] }
-if (params.gsea_run) {
-    if (params.gsea_gene_sets){
-        gene_sets_files = params.gsea_gene_sets.split(",")
+
+def run_gene_set_analysis = params.gsea_run || params.gprofiler2_run
+
+if (run_gene_set_analysis) {
+    if (params.gene_sets_files) {
+        gene_sets_files = params.gene_sets_files.split(",")
         ch_gene_sets = Channel.of(gene_sets_files).map { file(it, checkIfExists: true) }
-    } else {
+        if (params.gprofiler2_run && (!params.gprofiler2_token && !params.gprofiler2_organism) && gene_sets_files.size() > 1) {
+            error("gprofiler2 can currently only work with a single gene set file")
+        }
+    } else if (params.gsea_run) {
         error("GSEA activated but gene set file not specified!")
+    } else if (params.gprofiler2_run) {
+        if (!params.gprofiler2_token && !params.gprofiler2_organism) {
+            error("To run gprofiler2, please provide a run token, GMT file or organism!")
+        }
+    } else {
+        ch_gene_sets = []    // For methods that can run without gene sets
     }
 }
 
@@ -81,6 +96,7 @@ citations_file = file(params.citations_file, checkIfExists: true)
 */
 
 include { TABULAR_TO_GSEA_CHIP } from '../modules/local/tabular_to_gsea_chip'
+include { FILTER_DIFFTABLE } from '../modules/local/filter_difftable'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -104,6 +120,7 @@ include { LIMMA_DIFFERENTIAL                                } from '../modules/n
 include { CUSTOM_MATRIXFILTER                               } from '../modules/nf-core/custom/matrixfilter/main'
 include { ATLASGENEANNOTATIONMANIPULATION_GTF2FEATUREANNOTATION as GTF_TO_TABLE } from '../modules/nf-core/atlasgeneannotationmanipulation/gtf2featureannotation/main'
 include { GSEA_GSEA                                         } from '../modules/nf-core/gsea/gsea/main'
+include { GPROFILER2_GOST                                   } from '../modules/nf-core/gprofiler2/gost/main'
 include { CUSTOM_TABULARTOGSEAGCT                           } from '../modules/nf-core/custom/tabulartogseagct/main'
 include { CUSTOM_TABULARTOGSEACLS                           } from '../modules/nf-core/custom/tabulartogseacls/main'
 include { RMARKDOWNNOTEBOOK                                 } from '../modules/nf-core/rmarkdownnotebook/main'
@@ -357,7 +374,7 @@ workflow DIFFERENTIALABUNDANCE {
             ch_control_features,
             ch_transcript_lengths
         )
-        
+
         // Let's make the simplifying assumption that the processed matrices from
         // the DESeq runs are the same across contrasts. We run the DESeq process
         // with matrices once for each contrast because DESeqDataSetFromMatrix()
@@ -382,6 +399,16 @@ workflow DIFFERENTIALABUNDANCE {
         ch_processed_matrices = ch_processed_matrices
             .map{ it.tail() }
     }
+
+    // We'll use a local module to filter the differential tables and create output files that contain only differential features
+    ch_logfc = Channel.value([ params.differential_fc_column, params.differential_min_fold_change ])
+    ch_padj = Channel.value([ params.differential_qval_column, params.differential_max_qval ])
+
+    FILTER_DIFFTABLE(
+        ch_differential,
+        ch_logfc,
+        ch_padj
+    )
 
     // Run a gene set analysis where directed
 
@@ -441,6 +468,29 @@ workflow DIFFERENTIALABUNDANCE {
             .mix(GSEA_GSEA.out.versions)
     }
 
+    if (params.gprofiler2_run) {
+
+        // For gprofiler2, use only features that are considered differential
+        ch_filtered_diff = FILTER_DIFFTABLE.out.filtered
+
+        if (!params.gprofiler2_background_file) {
+            // If deactivated, use empty list as "background"
+            ch_background = []
+        } else if (params.gprofiler2_background_file == "auto") {
+            // If auto, use input matrix as background
+            ch_background = CUSTOM_MATRIXFILTER.out.filtered.map{it.tail()}.first()
+        } else {
+            ch_background = Channel.from(file(params.gprofiler2_background_file, checkIfExists: true))
+        }
+
+        // For gprofiler2, token and organism have priority and will override a gene_sets file
+
+        GPROFILER2_GOST(
+            ch_filtered_diff,
+            ch_gene_sets.first(),
+            ch_background
+        )
+    }
 
     // The exploratory plots are made by coloring by every unique variable used
     // to define contrasts
@@ -518,6 +568,14 @@ workflow DIFFERENTIALABUNDANCE {
             )
     }
 
+    if (params.gprofiler2_run){
+        ch_report_input_files = ch_report_input_files
+            .combine(GPROFILER2_GOST.out.plot_html.map{it[1]}.flatMap().toList())
+            .combine(GPROFILER2_GOST.out.all_enrich.map{it[1]}.flatMap().toList())
+            .combine(GPROFILER2_GOST.out.sub_enrich.map{it[1]}.flatMap().toList())
+        GPROFILER2_GOST.out.plot_html
+    }
+
     if (params.shinyngs_build_app){
 
         // Make (and optionally deploy) the shinyngs app
@@ -552,13 +610,23 @@ workflow DIFFERENTIALABUNDANCE {
 
     // Condition params reported on study type
 
-    def params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|deseq2|gsea).*/
+    def params_pattern = "report|gene_sets|study|observations|features|filtering|exploratory|differential"
+    if (params.study_type == 'rnaseq'){
+        params_pattern += "|deseq2"
+    }
     if (params.study_type == 'affy_array' || params.study_type == 'geo_soft_file'){
-        params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|affy|limma|gsea).*/
+        params_pattern += "|affy|limma"
     }
     if (params.study_type == 'maxquant'){
-        params_pattern = ~/^(report|study|observations|features|filtering|exploratory|differential|proteus|affy|limma|gsea).*/
+        params_pattern += "|proteus|limma"
     }
+    if (params.gprofiler2_run){
+        params_pattern += "|gprofiler2"
+    }
+    if (params.gsea_run){
+        params_pattern += "|gsea"
+    }
+    params_pattern = ~/(${params_pattern}).*/
 
     ch_report_params = ch_report_input_files
         .map{

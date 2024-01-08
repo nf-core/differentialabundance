@@ -17,12 +17,12 @@
                     },
                     "custom/dumpsoftwareversions": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "bba7e362e4afead70653f84d8700588ea28d0f9e",
                         "installed_by": ["modules"]
                     },
                     "custom/matrixfilter": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "0ed73182b77383134387509ebfde7071bd65b3ea",
                         "installed_by": ["modules"]
                     },
                     "custom/tabulartogseacls": {
@@ -43,6 +43,11 @@
                     "geoquery/getgeo": {
                         "branch": "master",
                         "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "installed_by": ["modules"]
+                    },
+                    "gprofiler2/gost": {
+                        "branch": "master",
+                        "git_sha": "c75e76bff35e2ee5305ebe89b513637b38e79d1d",
                         "installed_by": ["modules"]
                     },
                     "gsea/gsea": {
