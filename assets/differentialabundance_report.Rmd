@@ -874,6 +874,7 @@ for (i in 1:nrow(contrasts)){
       colnames(contrast_de) <- prettifyVariablename(colnames(contrast_de))
         
       if (nrow(contrast_de) > 0){
+        contrast_de <- round_dataframe_columns(contrast_de, digits=params$report_round_digits)
         print( htmltools::tagList(datatable(contrast_de, caption = paste('Differential genes', dir, 'in', contrast_descriptions[i], " (check", differential_files[[i]], "for more detail)"), rownames = FALSE) ))
       }else{
         cat(paste0("No significantly differential '", dir, "' genes.\n\n"))
@@ -903,8 +904,10 @@ if (any(unlist(params[paste0(possible_gene_set_methods, '_run')]))){
           for (i in 1:nrow(contrasts)){
             cat("\n###### ", contrast_descriptions[i], "\n")
             target_gsea_results <- read_metadata(target_gsea_tables[i])[,c(-2,-3)]
+            target_gsea_results <- round_dataframe_columns(target_gsea_results, digits=params$report_round_digits)
             print( htmltools::tagList(datatable(target_gsea_results, caption = paste0("\nTarget (", contrasts$target[i], ")\n"), rownames = FALSE) ))
             ref_gsea_results <- read_metadata(reference_gsea_tables[i])[,c(-2,-3)]
+            ref_gsea_results <- round_dataframe_columns(ref_gsea_results, digits=params$report_round_digits)
             print( htmltools::tagList(datatable(ref_gsea_results, caption = paste0("\nReference (", contrasts$reference[i], ")\n"), rownames = FALSE) ))
           }
         }
