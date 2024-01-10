@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
-- [[#223](https://github.com/nf-core/differentialabundance/pull/223)] - tabulartogseacls fixes ([@pinin4fjords](https://github.com/pinin4fjords), review by)
+- [[#223](https://github.com/nf-core/differentialabundance/pull/223)] - tabulartogseacls fixes ([@pinin4fjords](https://github.com/pinin4fjords), review by [@maxulysse](https://github.com/maxulysse))
 - [[#213](https://github.com/nf-core/differentialabundance/pull/213)] - Fix volcano plot legend ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#210](https://github.com/nf-core/differentialabundance/pull/210)] - Include Affy timeout fix ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#208](https://github.com/nf-core/differentialabundance/pull/208)] - Fix resource issues and bump versions ([@pinin4fjords](https://github.com/pinin4fjords), review by [@sguizard](https://github.com/sguizard))
