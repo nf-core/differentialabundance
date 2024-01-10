@@ -27,7 +27,7 @@
                     },
                     "custom/tabulartogseacls": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "3fb69a931aa3c968ac87bc17961f30da4c9f17b5",
                         "installed_by": ["modules"]
                     },
                     "custom/tabulartogseagct": {
