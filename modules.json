@@ -7,7 +7,7 @@
                 "nf-core": {
                     "affy/justrma": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "02a65e8871e06bac203dec16985fa3de648c99b6",
                         "installed_by": ["modules"]
                     },
                     "atlasgeneannotationmanipulation/gtf2featureannotation": {
@@ -17,17 +17,17 @@
                     },
                     "custom/dumpsoftwareversions": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "bba7e362e4afead70653f84d8700588ea28d0f9e",
                         "installed_by": ["modules"]
                     },
                     "custom/matrixfilter": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "0ed73182b77383134387509ebfde7071bd65b3ea",
                         "installed_by": ["modules"]
                     },
                     "custom/tabulartogseacls": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "3fb69a931aa3c968ac87bc17961f30da4c9f17b5",
                         "installed_by": ["modules"]
                     },
                     "custom/tabulartogseagct": {
@@ -37,12 +37,17 @@
                     },
                     "deseq2/differential": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "9326d73af3fbe2ee90d9ce0a737461a727c5118e",
                         "installed_by": ["modules"]
                     },
                     "geoquery/getgeo": {
                         "branch": "master",
                         "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "installed_by": ["modules"]
+                    },
+                    "gprofiler2/gost": {
+                        "branch": "master",
+                        "git_sha": "c75e76bff35e2ee5305ebe89b513637b38e79d1d",
                         "installed_by": ["modules"]
                     },
                     "gsea/gsea": {
@@ -57,7 +62,7 @@
                     },
                     "limma/differential": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "9326d73af3fbe2ee90d9ce0a737461a727c5118e",
                         "installed_by": ["modules"]
                     },
                     "proteus/readproteingroups": {
@@ -72,22 +77,22 @@
                     },
                     "shinyngs/app": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "d2d6072ae4c3a9d394dfe773bb0751f34df7a896",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/staticdifferential": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "d2d6072ae4c3a9d394dfe773bb0751f34df7a896",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/staticexploratory": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "d2d6072ae4c3a9d394dfe773bb0751f34df7a896",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/validatefomcomponents": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "d2d6072ae4c3a9d394dfe773bb0751f34df7a896",
                         "installed_by": ["modules"]
                     },
                     "untar": {

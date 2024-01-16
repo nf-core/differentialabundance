@@ -33,11 +33,8 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 ## Usage
 
-:::note
-If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how
-to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline)
-with `-profile test` before running the workflow on actual data.
-:::
+> [!NOTE]
+> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
 RNA-seq:
 
@@ -51,6 +48,15 @@ RNA-seq:
      -profile rnaseq,<docker/singularity/podman/shifter/charliecloud/conda/institute>
 ```
 
+:::note
+If you are using the outputs of the nf-core rnaseq workflow as input here **either**:
+
+- supply the raw count matrices (file names like **gene_counts.tsv**) alongide the transcript length matrix via `--transcript_length_matrix` (rnaseq versions >=3.12.0, preferred)
+- **or** supply the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices.
+
+See the [usage documentation](https://nf-co.re/differentialabundance/usage) for more information.
+:::
+
 Affymetrix microarray:
 
 ```bash
@@ -62,11 +68,9 @@ Affymetrix microarray:
      -profile affy,<docker/singularity/podman/shifter/charliecloud/conda/institute>
 ```
 
-:::warning
-Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those
-provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_;
-see [docs](https://nf-co.re/usage/configuration#custom-configuration-files).
-:::
+> [!WARNING]
+> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_;
+> see [docs](https://nf-co.re/usage/configuration#custom-configuration-files).
 
 For more details and further functionality, please refer to the [usage documentation](https://nf-co.re/differentialabundance/usage) and the [parameter documentation](https://nf-co.re/differentialabundance/parameters).
 

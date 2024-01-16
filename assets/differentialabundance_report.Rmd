@@ -26,6 +26,7 @@ params:
   report_author: NULL,
   report_description: NULL,
   report_scree: NULL
+  report_round_digits: NULL
   observations_type: NULL
   observations: NULL                                          # GSE156533.samplesheet.csv
   observations_id_col: NULL
@@ -38,7 +39,7 @@ params:
   features_gtf_feature_type: NULL
   features_gtf_table_first_field: NULL
   features_log2_assays: NULL
-  raw_matrix: null                                            # e.g. 0_salmon.merged.gene_counts.tsv
+  raw_matrix: null                                            # e.g. 0_salmon.merged.gene_counts_length_scaled.tsv
   normalised_matrix: null
   variance_stabilised_matrix: null                            # e.g. test_files/3_treatment-WT-P23H.vst.tsv
   contrasts_file: null                                        # e.g. GSE156533.contrasts.csv
@@ -48,7 +49,6 @@ params:
   proteus_plotsd_method: NULL
   proteus_plotmv_loess: NULL
   proteus_palette_name: NULL
-  proteus_round_digits: NULL
   affy_cel_files_archive: NULL
   affy_file_name_col: NULL
   affy_background: NULL
@@ -137,8 +137,21 @@ params:
   gsea_save_rnd_lists: NULL
   gsea_zip_report: NULL
   gsea_chip_file: NULL 
-  gsea_gene_sets: NULL
-  report_bla: NULL
+  gprofiler2_run: false
+  gprofiler2_organism: NULL
+  gprofiler2_significant: NULL
+  gprofiler2_measure_underrepresentation: NULL
+  gprofiler2_correction_method: NULL
+  gprofiler2_sources: NULL
+  gprofiler2_evcodes: NULL
+  gprofiler2_max_qval: NULL
+  gprofiler2_token: NULL
+  gprofiler2_background_file: NULL
+  gprofiler2_background_column: NULL
+  gprofiler2_domain_scope: NULL
+  gprofiler2_min_diff: NULL
+  gprofiler2_palette_name: NULL
+  gene_sets_files: NULL
 ---
 
 <!-- Load libraries -->
@@ -149,6 +162,34 @@ library(yaml)
 library(shinyngs)
 library(plotly)
 library(DT)
+```
+
+<!-- Define some functions -->
+
+```{r, include=FALSE}
+round_dataframe_columns <- function(df, columns = NULL, digits = -1) {
+    if (digits == -1) {
+        return(df)                              # if -1, return df without rounding
+    }
+
+    df <- data.frame(df, check.names = FALSE)   # make data.frame from vector as otherwise, the format will get messed up
+    if (is.null(columns)) {
+        columns <- colnames(df)[(unlist(lapply(df, is.numeric), use.names=F))]    # extract only numeric columns for rounding
+    }
+
+    df[,columns] <- round(
+        data.frame(df[, columns], check.names = FALSE),
+        digits = digits
+    )
+
+    # Convert columns back to numeric
+
+    for (c in columns) {
+        df[[c]][grep("^ *NA$", df[[c]])] <- NA
+        df[[c]] <- as.numeric(df[[c]])
+    }
+    df
+}
 ```
 
 ```{r include = FALSE}
@@ -455,7 +496,6 @@ display_columns <- unique(c(display_columns, informative_variables))
 observations_to_print <- observations[,unique(display_columns)]
 colnames(observations_to_print) <- prettifyVariablename(colnames(observations_to_print))
 print( htmltools::tagList(datatable(observations_to_print, caption = paste(ucfirst(params$observations_type), 'metadata'), rownames = FALSE, options = list(dom = 'tb')) ))
-
 ```
 
 ## Contrasts
@@ -465,6 +505,19 @@ Comparisons were made between `r params$observations_type` groups defined using 
 ```{r, echo=FALSE, results='asis'}
 contrasts_to_print <- contrasts
 colnames(contrasts_to_print) <- prettifyVariablename(colnames(contrasts_to_print))
+
+# Add design/model formulae to report
+de_tool <- ifelse(params$study_type %in% c('rnaseq'), "deseq2", "limma")
+contrasts_to_print$model <- sapply(contrasts_to_print$Id, function(id) {
+  model_file <- paste0(id, ".", de_tool, ".model.txt")
+  if (file.exists(model_file)) {
+    first_line <- readLines(model_file, n = 1)
+    return(first_line)
+  } else {
+    return(NA)
+  }
+})
+
 print( htmltools::tagList(datatable(contrasts_to_print, caption = paste0("Table of contrasts"), rownames = FALSE, options = list(dom = 't')) ))
 ```
 
@@ -792,28 +845,41 @@ for (i in 1:nrow(contrasts)){
     cat("\n##### ", pvt, " p values\n")
     pval_column <- p_value_types[[pvt]]
   
-    full_de$differential_status <- FALSE
-    full_de$differential_status[abs(full_de[[params$differential_fc_column]]) > log2(params$differential_min_fold_change) & full_de[[pval_column]] < p_value_thresholds[[pvt]]] <- TRUE
-
+    
+    de_fc <- abs(full_de[[params$differential_fc_column]]) >= log2(params$differential_min_fold_change)
+    de_fc_label <- paste("abs(logFC) >=", log2(params$differential_min_fold_change))
+    
+    de_pval <- full_de[[pval_column]] <= p_value_thresholds[[pvt]]
+    de_pval_label <- paste(pvt, "<=", p_value_thresholds[[pvt]])
+    
+    de_pval_fc_label <- paste(de_fc_label, '&', de_pval_label)
+    
+    full_de$differential_status <- "Not significant"
+    full_de$differential_status[de_fc] <- de_fc_label
+    full_de$differential_status[de_pval] <- de_pval_label
+    full_de$differential_status[de_fc & de_pval] <- de_pval_fc_label
+    full_de$differential_status <- factor(full_de$differential_status, levels = c("Not significant", de_fc_label, de_pval_label, de_pval_fc_label), ordered = TRUE) # Factorize status so that non-significant is always first
     # Define the thresholds we'll draw
 
     hline_thresholds = vline_thresholds = list()
     hline_thresholds[[paste(pval_column, '=', p_value_thresholds[[pvt]])]] = -log10(p_value_thresholds[[pvt]])
-    vline_thresholds[[paste(params$differential_fc_column, '<-', log2(params$differential_min_fold_change))]] = -log2(params$differential_min_fold_change)
-    vline_thresholds[[paste(params$differential_fc_column, '>', log2(params$differential_min_fold_change))]] = log2(params$differential_min_fold_change)
+    vline_thresholds[[paste(params$differential_fc_column, '<=', log2(params$differential_min_fold_change))]] = -log2(params$differential_min_fold_change)
+    vline_thresholds[[paste(params$differential_fc_column, '>=', log2(params$differential_min_fold_change))]] = log2(params$differential_min_fold_change)
+    
+    palette_volcano <- append(c('#999999'), makeColorScale(3, params$differential_palette_name)) # set non-significant to gray
 
     plot_args <- list(
       x = full_de[[params$differential_fc_column]],
       y = -log10(full_de[[pval_column]]),
       colorby = full_de$differential_status,
       ylab = paste("-log(10)", pval_column),
-      xlab = xlabel <- paste("higher in", contrasts$reference[i], "          <<", params$differential_fc_column, ">>           higher in", contrasts$target[i]) ,
+      xlab = xlabel <- paste("higher in", contrasts$reference[i], "          <<", params$differential_fc_column, ">>           higher in", contrasts$target[i]),
       labels = full_de[[label_col]],
       hline_thresholds = hline_thresholds,
       vline_thresholds = vline_thresholds,
       show_labels = FALSE,
       legend_title = "Differential status",
-      palette = makeColorScale(2, params$differential_palette_name)
+      palette = palette_volcano
     )
   
     # Let's equalize the axes
@@ -833,38 +899,67 @@ for (i in 1:nrow(contrasts)){
       colnames(contrast_de) <- prettifyVariablename(colnames(contrast_de))
         
       if (nrow(contrast_de) > 0){
+        contrast_de <- round_dataframe_columns(contrast_de, digits=params$report_round_digits)
         print( htmltools::tagList(datatable(contrast_de, caption = paste('Differential genes', dir, 'in', contrast_descriptions[i], " (check", differential_files[[i]], "for more detail)"), rownames = FALSE) ))
       }else{
         cat(paste0("No significantly differential '", dir, "' genes.\n\n"))
       }
     }
   }
-  
 }
 ```
 
 <!-- Gene set analysis results -->
 
 ```{r, echo=FALSE, results='asis'}
-possible_gene_set_methods <- c('gsea')
+possible_gene_set_methods <- c('gsea', 'gprofiler2')
 if (any(unlist(params[paste0(possible_gene_set_methods, '_run')]))){
   cat("\n### Gene set analysis\n")
 
   for (gene_set_method in possible_gene_set_methods){
     if (unlist(params[paste0(gene_set_method, '_run')])){
       cat("\n#### ", toupper(gene_set_method) ," {.tabset}\n")
-      
-      for (gmt_file in simpleSplit(params$gsea_gene_sets)) {
-        gmt_name <- basename(tools::file_path_sans_ext(gmt_file))
-        cat("\n##### ", gmt_name ," {.tabset}\n")
-        reference_gsea_tables <- paste0(contrasts$id, ".", gmt_name, '.gsea_report_for_', contrasts$reference, '.tsv')
-        target_gsea_tables <- paste0(contrasts$id, ".", gmt_name, '.gsea_report_for_', contrasts$target, '.tsv')
-        for (i in 1:nrow(contrasts)){
-          cat("\n###### ", contrast_descriptions[i], "\n")
-          target_gsea_results <- read_metadata(target_gsea_tables[i])[,c(-2,-3)]
-          print( htmltools::tagList(datatable(target_gsea_results, caption = paste0("\nTarget (", contrasts$target[i], ")\n"), rownames = FALSE) ))
-          ref_gsea_results <- read_metadata(reference_gsea_tables[i])[,c(-2,-3)]
-          print( htmltools::tagList(datatable(ref_gsea_results, caption = paste0("\nReference (", contrasts$reference[i], ")\n"), rownames = FALSE) ))
+      if (gene_set_method == 'gsea') {
+        for (gmt_file in simpleSplit(params$gene_sets_files)) {
+          gmt_name <- basename(tools::file_path_sans_ext(gmt_file))
+          cat("\n##### ", gmt_name ," {.tabset}\n")
+
+          reference_gsea_tables <- paste0(contrasts$id, ".", gmt_name, '.gsea_report_for_', contrasts$reference, '.tsv')
+          target_gsea_tables <- paste0(contrasts$id, ".", gmt_name, '.gsea_report_for_', contrasts$target, '.tsv')
+          for (i in 1:nrow(contrasts)){
+            cat("\n###### ", contrast_descriptions[i], "\n")
+            target_gsea_results <- read_metadata(target_gsea_tables[i])[,c(-2,-3)]
+            target_gsea_results <- round_dataframe_columns(target_gsea_results, digits=params$report_round_digits)
+            print( htmltools::tagList(datatable(target_gsea_results, caption = paste0("\nTarget (", contrasts$target[i], ")\n"), rownames = FALSE) ))
+            ref_gsea_results <- read_metadata(reference_gsea_tables[i])[,c(-2,-3)]
+            ref_gsea_results <- round_dataframe_columns(ref_gsea_results, digits=params$report_round_digits)
+            print( htmltools::tagList(datatable(ref_gsea_results, caption = paste0("\nReference (", contrasts$reference[i], ")\n"), rownames = FALSE) ))
+          }
+        }
+
+      } else if (gene_set_method == 'gprofiler2') {
+
+        cat(paste0("\nThis section contains the results tables of the pathway analysis which was done with the R package gprofiler2. The differential fraction is the number of differential genes in a pathway divided by that pathway's size, i.e. the number of genes annotated for the pathway.",
+        ifelse(params$gprofiler2_significant, paste0(" Enrichment was only considered if significant, i.e. adjusted p-value <= ", params$gprofiler2_max_qval, "."), "Enrichment was also considered if not significant."), "\n"))
+
+        # Make sure to grab only non-empty files
+        for (i in 1:nrow(contrasts)) {
+          cat(paste0("\n##### ", contrasts$id[i], "\n"))
+
+          table <- paste0(contrasts$id[i], ".gprofiler2.all_enriched_pathways.tsv")
+          table_path <- file.path(params$input_dir, table)
+          if (!file.exists(table_path) || file.size(table_path) == 0){
+            cat(paste0("No ", ifelse(params$gprofiler2_significant, "significantly", ""), " enriched pathways were found for this contrast."))
+          } else {
+            all_enriched <- read.table(table_path, header=T, sep="\t", quote="\"")
+            all_enriched <- data.frame("Pathway name" = all_enriched$term_name, "Pathway code" = all_enriched$term_id,
+              "Differential features" = all_enriched$intersection_size, "Pathway size" = all_enriched$term_size,
+              "Differential fraction" = (all_enriched$intersection_size/all_enriched$term_size),
+              "Adjusted p value" = all_enriched$p_value, check.names = FALSE)
+            all_enriched <- round_dataframe_columns(all_enriched, digits=params$report_round_digits)
+            print(htmltools::tagList(datatable(all_enriched, caption = paste('Enriched pathways in', contrasts$id[i], " (check", table, "for more detail)"), rownames = FALSE)))
+          }
+          cat("\n")
         }
       }
     }
@@ -923,7 +1018,7 @@ make_params_table('downstream differential analysis', 'differential_', remove_pa
 <!-- If any gene set methods have been activated show their params -->
 
 ```{r, echo=FALSE, results='asis'}
-possible_gene_set_methods <- c('gsea')
+possible_gene_set_methods <- c('gsea', 'gprofiler2')
 
 if (any(unlist(params[paste0(possible_gene_set_methods, '_run')]))){
   cat("\n### Gene set analysis\n")
