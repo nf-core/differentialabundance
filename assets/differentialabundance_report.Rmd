@@ -22,22 +22,7 @@ params:
   study_abundance_type: NULL
   report_file: NULL,
   report_title: NULL,
-  report_pi_name: NULL
-  report_pi_email: NULL
-  report_pi_address1: NULL
-  report_pi_address2: NULL
-  report_pi_address3: NULL
-  report_pi_address4: NULL
-  report_pi_address5: NULL
-  report_pi_address6: NULL
-  report_contact_name: NULL
-  report_contact_email: NULL
-  report_contact_address1: NULL
-  report_contact_address2: NULL
-  report_contact_address3: NULL
-  report_contact_address4: NULL
-  report_contact_address5: NULL
-  report_contact_address6: NULL
+  report_contacts_file: NULL
   report_author: NULL,
   report_description: NULL,
   report_scree: NULL
@@ -153,6 +138,7 @@ params:
   gsea_zip_report: NULL
   gsea_chip_file: NULL 
   gsea_gene_sets: NULL
+  report_bla: NULL
 ---
 
 <!-- Load libraries -->
@@ -203,36 +189,6 @@ subtitle: `r report_subtitle`
 ---
 \
 
-```{r, results='asis', echo=F, eval=T}
-if (!is.null(params$report_pi_name)) {
-  cat(paste0("**Project Members**:  \n"))
-  cat(paste0((params$report_pi_name)))
-}
-# Add further PI info only if name was provided
-if (!is.null(params$report_pi_name) & !is.null(params$report_pi_email))     { cat(paste0( "  \n", params$report_pi_email )) }
-if (!is.null(params$report_pi_name) & !is.null(params$report_pi_address1))  { cat(paste0( "  \n", params$report_pi_address1 )) }
-if (!is.null(params$report_pi_name) & !is.null(params$report_pi_address2))  { cat(paste0( "  \n", params$report_pi_address2 )) }
-if (!is.null(params$report_pi_name) & !is.null(params$report_pi_address3))  { cat(paste0( "  \n", params$report_pi_address3 )) }
-if (!is.null(params$report_pi_name) & !is.null(params$report_pi_address4))  { cat(paste0( "  \n", params$report_pi_address4 )) }
-if (!is.null(params$report_pi_name) & !is.null(params$report_pi_address5))  { cat(paste0( "  \n", params$report_pi_address5 )) }
-if (!is.null(params$report_pi_name) & !is.null(params$report_pi_address6))  { cat(paste0( "  \n", params$report_pi_address6 )) }
-if (!is.null(params$report_pi_name))                                        { cat(paste0( "<br><br>" )) }
-
-if (!is.null(params$report_contact_name)) {
-  cat(paste0("**Contact persons**:  \n"))
-  cat(paste0((params$report_contact_name)))
-}
-# Add further contact info only if name was provided
-if (!is.null(params$report_contact_name) & !is.null(params$report_contact_email))     { cat(paste0( "  \n", params$report_contact_email )) }
-if (!is.null(params$report_contact_name) & !is.null(params$report_contact_address1))  { cat(paste0( "  \n", params$report_contact_address1 )) }
-if (!is.null(params$report_contact_name) & !is.null(params$report_contact_address2))  { cat(paste0( "  \n", params$report_contact_address2 )) }
-if (!is.null(params$report_contact_name) & !is.null(params$report_contact_address3))  { cat(paste0( "  \n", params$report_contact_address3 )) }
-if (!is.null(params$report_contact_name) & !is.null(params$report_contact_address4))  { cat(paste0( "  \n", params$report_contact_address4 )) }
-if (!is.null(params$report_contact_name) & !is.null(params$report_contact_address5))  { cat(paste0( "  \n", params$report_contact_address5 )) }
-if (!is.null(params$report_contact_name) & !is.null(params$report_contact_address6))  { cat(paste0( "  \n", params$report_contact_address6 )) }
-if (!is.null(params$report_contact_name))                                             { cat(paste0( "<br><br>" )) }
-```
-
 <!-- set notebook defaults -->
 
 ```{r setup, include=FALSE}
@@ -253,6 +209,30 @@ cat(paste0("
 }
 </style>
 "))
+```
+
+<!-- Include PI/contact info if provided -->
+
+```{r, results='asis', echo=F, eval=!is.null(params$report_contacts_file)}
+PIs <- paste(readLines(params$report_contacts_file), collapse="<br>")
+PIs <- simpleSplit(PIs, "<br><br>")  # Split at double linebreaks to get list of PIs
+
+if (length(PIs) > 1) {
+  for (r in 1:length(PIs)) {
+    if (r %% 2 != 0) {
+      # This happens for the 1., 3. etc. entry which are put into the left column
+      cat(paste0("<div class='div-container'>"))  # Open surrounding div that will contain 2 PIs next to each other
+      cat(paste0("<div class='div-left'>**", PIs[r], "**</div>")) # Create inner left div
+    } else {
+      if (r <= length(PIs)) {
+        cat(paste0("<div class='div-right'>**", PIs[r], "**</div>")) # Create inner right div; will skip this for the last row if number of PIs is uneven
+      }
+      cat(paste0("</div>"))
+    }
+  }
+} else if (length(PIs) == 1) {
+  cat(paste0("", PIs, ""))
+}
 ```
 
 <!-- Load input data -->
