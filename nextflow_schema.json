@@ -1050,7 +1050,6 @@
                     "exists": true,
                     "mimetype": "text/plain",
                     "pattern": "^\\S+\\.txt$",
-                    "default": "None",
                     "description": "A TXT file containing a list of PIs, project contacts or other people that should be listed at the beginning of the report.",
                     "help_text": "Separate info of different persons by empty lines (double linebreaks), these will be used to create blocks for each person. Linebreaks within the info of one person will be kept in the report."
                 },
