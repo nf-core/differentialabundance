@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- [[#226](https://github.com/nf-core/differentialabundance/pull/226) - Fix DESEQ2_NORM in modules.config ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#221](https://github.com/nf-core/differentialabundance/pull/221) - Update shinyngs modules to address density plots issue ([@pinin4fjords](https://github.com/pinin4fjords), review by [@maxulysse](https://github.com/maxulysse))
 - [[#223](https://github.com/nf-core/differentialabundance/pull/223)] - tabulartogseacls fixes ([@pinin4fjords](https://github.com/pinin4fjords), review by [@maxulysse](https://github.com/maxulysse))
 - [[#213](https://github.com/nf-core/differentialabundance/pull/213)] - Fix volcano plot legend ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
