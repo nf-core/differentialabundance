@@ -1044,14 +1044,10 @@
                     "fa_icon": "fas fa-user-edit",
                     "description": "An author for reporting outputs"
                 },
-                "report_contacts_file": {
+                "report_contributors": {
                     "type": "string",
-                    "format": "file-path",
-                    "exists": true,
-                    "mimetype": "text/plain",
-                    "pattern": "^\\S+\\.txt$",
-                    "description": "A TXT file containing a list of PIs, project contacts or other people that should be listed at the beginning of the report.",
-                    "help_text": "Separate info of different persons by empty lines (double linebreaks), these will be used to create blocks for each person. Linebreaks within the info of one person will be kept in the report."
+                    "description": "Semicolon-separated string of contributor info that should be listed in the report.",
+                    "help_text": "List here names, roles, affiliations, contact info etc. of contributors to your project. Entries of different contributors are separated by semicolons, linebreaks within a contributor are separated by \n. The first line of each contributor will be bold in the report. E.g.: 'Jane Doe\nDirector of Institute of Microbiology\nUniversity of Smallville;John Smith\nPhD student\nUniversity of Smallville'"
                 },
                 "report_description": {
                     "type": "string",

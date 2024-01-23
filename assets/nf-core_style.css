@@ -69,17 +69,13 @@ a {
   text-decoration: none;
 }
 
-.div-container {
-  display: inline-block;
-}
-
-.div-left {
-  display: inline-block;
-  margin-right: 150px;
+.div-row {
+  display: flex;
   margin-bottom: 25px;
 }
 
-.div-right {
+.div-column {
+  flex: 1;
   display: inline-block;
-  margin-bottom: 25px;
+  box-sizing: border-box;
 }

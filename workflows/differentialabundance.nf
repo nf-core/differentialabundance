@@ -574,11 +574,6 @@ workflow DIFFERENTIALABUNDANCE {
         .combine(ch_differential.map{it[1]}.toList())
         .combine(ch_model.map{it[1]}.toList())
 
-    if (params.report_contacts_file){
-        ch_report_input_files = ch_report_input_files
-            .combine(Channel.of(file(params.report_contacts_file, checkIfExists: true)))
-    }
-
     if (params.gsea_run){
         ch_report_input_files = ch_report_input_files
             .combine(ch_gsea_results
