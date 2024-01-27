@@ -255,27 +255,16 @@ cat(paste0("
 <!-- Include PI/contact info if provided -->
 
 ```{r, results='asis', echo=F, eval=!is.null(params$report_contributors)}
-contributors <- gsub("\n", "<br>", params$report_contributors, fixed=T)   # Insert correct linebreaks for HTML
-contributors <- simpleSplit(contributors, ";")                            # Split at semicolon to get list of contributors
-contributors <- lapply(contributors, function (s) {
+contributors <- gsub("\n", "<br>", params$report_contributors, fixed = TRUE)
+contributors <- lapply(simpleSplit(contributors, ";"), function(s) {
   splt <- simpleSplit(s, "<br>")
-  first <- head(splt, 1)
-  rest  <- tail(splt, length(splt)-1)
-  paste0("**", first, "**<br>", paste(rest, collapse="<br>"))             # Make first line of each contributor bold
+  paste0("**", head(splt, 1), "**<br>", paste(tail(splt, -1), collapse = "<br>"))
 })
 
-if (length(contributors) > 1) {
-  for (r in 1:length(contributors)) {
-    if (r %% 2 != 0) {
-      cat(paste0("<div class='div-row'>"))                                # For 1., 3. etc. entry open surrounding div that will contain 2 contributors side-by-side
-    }
-    cat(paste0("<div class='div-column'>", contributors[r], "</div>"))    # Create inner div containing the PI info itself
-    if (r %% 2 == 0 || r == length(contributors)) {
-      cat(paste0("</div>"))                                               # For 2., 4. etc. entry and for last entry, close outer div
-    }
-  }
-} else if (length(contributors) == 1) {
-  cat(paste0("", contributors, ""))
+for (r in seq_along(contributors)) {
+  if (r %% 2 == 1) cat("<div class='div-row'>")
+  cat(paste0("<div class='div-column'>", contributors[r], "</div>"))
+  if (r %% 2 == 0 || r == length(contributors)) cat("</div>")
 }
 ```
 
