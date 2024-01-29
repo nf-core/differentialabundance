@@ -22,6 +22,7 @@ params:
   study_abundance_type: NULL
   report_file: NULL,
   report_title: NULL,
+  report_contributors: NULL
   report_author: NULL,
   report_description: NULL,
   report_scree: NULL
@@ -220,13 +221,14 @@ make_params_table <- function(name, pattern = NULL, remove_pattern = FALSE){
 }
 
 report_title <- paste0('Differential ',  params$features_type, ' abundance report', ifelse(is.null(params$report_title), '', paste0(': ', params$report_title)))
-report_subtitle <- paste0(ifelse(is.null(params$report_author), '', paste0('By ', params$report_author, ', ')), 'differentialabundance workflow version', versions[["Workflow.nf-core/differentialabundance"]])
+report_subtitle <- paste0(ifelse(is.null(params$report_author), '', paste0('By ', params$report_author, ', ')), '<br>differentialabundance workflow version', versions[["Workflow.nf-core/differentialabundance"]])
 ```
 
 ---
 title:  "<img src=\"`r file.path(params$input_dir, params$logo)`\" style=\"float: left;\"/>`r report_title`"
 subtitle: `r report_subtitle`
 ---
+\
 
 <!-- set notebook defaults -->
 
@@ -248,6 +250,22 @@ cat(paste0("
 }
 </style>
 "))
+```
+
+<!-- Include PI/contact info if provided -->
+
+```{r, results='asis', echo=F, eval=!is.null(params$report_contributors)}
+contributors <- gsub("\n", "<br>", params$report_contributors, fixed = TRUE)
+contributors <- lapply(simpleSplit(contributors, ";"), function(s) {
+  splt <- simpleSplit(s, "<br>")
+  paste0("**", head(splt, 1), "**<br>", paste(tail(splt, -1), collapse = "<br>"))
+})
+
+for (r in seq_along(contributors)) {
+  if (r %% 2 == 1) cat("<div class='div-row'>")
+  cat(paste0("<div class='div-column'>", contributors[r], "</div>"))
+  if (r %% 2 == 0 || r == length(contributors)) cat("</div>")
+}
 ```
 
 <!-- Load input data -->
