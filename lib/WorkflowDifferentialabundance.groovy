@@ -13,11 +13,6 @@ class WorkflowDifferentialabundance {
     public static void initialise(params, log) {
 
         genomeExistsError(params, log)
-
-
-        if (!params.fasta) {
-            Nextflow.error "Genome fasta file not specified with e.g. '--fasta genome.fa' or via a detectable config file."
-        }
     }
 
     //
@@ -52,14 +47,21 @@ class WorkflowDifferentialabundance {
     //
 
     public static String toolCitationText(params) {
-
-        // TODO nf-core: Optionally add in-text citation tools to this list.
-        // Can use ternary operators to dynamically construct based conditions, e.g. params["run_xyz"] ? "Tool (Foo et al. 2023)" : "",
-        // Uncomment function in methodsDescriptionText to render in MultiQC report
         def citation_text = [
                 "Tools used in the workflow included:",
-                "FastQC (Andrews 2010),",
-                "MultiQC (Ewels et al. 2016)",
+                params["study_type"] == 'affy_array' ? "affy (Gautier et al. 2004": "",
+                params["study_type"] == 'rnaseq' ? "DESeq2 (Love et al. 2014)," : "",
+                "ggplot2 (Wickham 2016)",
+                "GEOQuery (Davis et al. 2007",
+                params["study_type"] != 'rnaseq' ? "Limma (Ritchie et al. 2015" : "",
+                "optparse (Davis 2018)",
+                "plotly (Sievert 2020)",
+                params["study_type"] != 'maxquant' ? "Proteus (Gierlinski 2018)" : "",
+                params["gprofiler2_run"] ? "gprofiler2 (Kolberg et al. 2020)" : "",
+                "RColorBrewer (Neuwirth 2014)",
+                "RMarkdown (Allaire et al. 2022)",
+                "shinyngs (Manning 2022)",
+                "SummarizedExperiment (Morgan et al. 2020)",
                 "."
             ].join(' ').trim()
 
