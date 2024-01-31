@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- [[#228](https://github.com/nf-core/differentialabundance/pull/228)] - Template update for nf-core/tools v2.12 ([@nf-core-bot](https://github.com/nf-core-bot), review by [@pinin4fjords](https://github.com/pinin4fjords), [@WackerO](https://github.com/WackerO))
 - [[#222](https://github.com/nf-core/differentialabundance/pull/222)] - Add rounding to all numeric report tables ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#219](https://github.com/nf-core/differentialabundance/pull/219)] - Template update for nf-core/tools v2.11.1 ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#197](https://github.com/nf-core/differentialabundance/pull/197)] - Add contributor info to report ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))

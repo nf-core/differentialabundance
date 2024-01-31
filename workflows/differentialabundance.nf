@@ -518,9 +518,9 @@ workflow DIFFERENTIALABUNDANCE {
     // normalised matrix, which can be passed through to downstream analysis
 
     if(params.study_type == "geo_soft_file") {
-       ch_mat = ch_norm
+        ch_mat = ch_norm
     }else{
-       ch_mat = ch_raw.combine(ch_processed_matrices)
+        ch_mat = ch_raw.combine(ch_processed_matrices)
     }
 
     ch_all_matrices = VALIDATOR.out.sample_meta                // meta, samples
