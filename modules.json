@@ -17,17 +17,17 @@
                     },
                     "custom/dumpsoftwareversions": {
                         "branch": "master",
-                        "git_sha": "bba7e362e4afead70653f84d8700588ea28d0f9e",
+                        "git_sha": "8ec825f465b9c17f9d83000022995b4f7de6fe93",
                         "installed_by": ["modules"]
                     },
                     "custom/matrixfilter": {
                         "branch": "master",
-                        "git_sha": "0ed73182b77383134387509ebfde7071bd65b3ea",
+                        "git_sha": "c9488585ce7bd35ccd2a30faa2371454c8112fb9",
                         "installed_by": ["modules"]
                     },
                     "custom/tabulartogseacls": {
                         "branch": "master",
-                        "git_sha": "3fb69a931aa3c968ac87bc17961f30da4c9f17b5",
+                        "git_sha": "8ec825f465b9c17f9d83000022995b4f7de6fe93",
                         "installed_by": ["modules"]
                     },
                     "custom/tabulartogseagct": {

@@ -518,9 +518,9 @@ workflow DIFFERENTIALABUNDANCE {
     // normalised matrix, which can be passed through to downstream analysis
 
     if(params.study_type == "geo_soft_file") {
-       ch_mat = ch_norm
+        ch_mat = ch_norm
     }else{
-       ch_mat = ch_raw.combine(ch_processed_matrices)
+        ch_mat = ch_raw.combine(ch_processed_matrices)
     }
 
     ch_all_matrices = VALIDATOR.out.sample_meta                // meta, samples
@@ -679,6 +679,13 @@ workflow.onComplete {
     NfcoreTemplate.summary(workflow, params, log)
     if (params.hook_url) {
         NfcoreTemplate.IM_notification(workflow, params, summary_params, projectDir, log)
+    }
+}
+
+workflow.onError {
+    if (workflow.errorReport.contains("Process requirement exceeds available memory")) {
+        println("🛑 Default resources exceed availability 🛑 ")
+        println("💡 See here on how to configure pipeline: https://nf-co.re/docs/usage/configuration#tuning-workflow-resources 💡")
     }
 }
 
