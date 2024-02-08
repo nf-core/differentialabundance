@@ -176,11 +176,7 @@ round_dataframe_columns <- function(df, columns = NULL, digits = -1) {
     if (is.null(columns)) {
         columns <- colnames(df)[(unlist(lapply(df, is.numeric), use.names=F))]    # extract only numeric columns for rounding
     }
-
-    df[,columns] <- round(
-        data.frame(df[, columns], check.names = FALSE),
-        digits = digits
-    )
+    df[,columns] <- format(df[,columns], scientific=T, digits=params$report_round_digits)
 
     # Convert columns back to numeric
 
@@ -772,7 +768,7 @@ foo <- lapply(informative_variables[iv_min_group_sizes > 2], function(iv){
 ```{r, echo=FALSE, results='asis', eval=params$study_type %in% c('rnaseq')}
 # For DESeq2, add some more explanation to the report
 cat(paste0(
-"The `DESeq2 R` package was used for differential analysis. p-values were adjusted with the ", params$deseq2_p_adjust_method, " method to reduce the number of false positives. ", ucfirst(params$features_type), "s were considered differential if, for the respective contrast, the adjusted p-value was equal to or lower than ", params$deseq2_alpha, " and the absolute log2 fold change was equal to or higher than ", params$deseq2_lfc_threshold, "."
+"The `DESeq2 R` package was used for differential analysis. p-values were adjusted with the ", params$deseq2_p_adjust_method, " method to reduce the number of false positives. ", ucfirst(params$features_type), "s were considered differential if, for the respective contrast, the adjusted p-value was equal to or lower than ", params$deseq2_alpha, " and the absolute log2 fold change was equal to or higher than ", params$deseq2_lfc_threshold, ". Please note that for very small p-values, dots may not appear in the volcano plots. You can find these values in the tables instead."
 ))
 ```
 
