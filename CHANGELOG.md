@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- [[#231](https://github.com/nf-core/differentialabundance/pull/231) - Update GSEA module to fix butterfly plot bug ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#226](https://github.com/nf-core/differentialabundance/pull/226) - Fix DESEQ2_NORM in modules.config ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#221](https://github.com/nf-core/differentialabundance/pull/221) - Update shinyngs modules to address density plots issue ([@pinin4fjords](https://github.com/pinin4fjords), review by [@maxulysse](https://github.com/maxulysse))
 - [[#223](https://github.com/nf-core/differentialabundance/pull/223)] - tabulartogseacls fixes ([@pinin4fjords](https://github.com/pinin4fjords), review by [@maxulysse](https://github.com/maxulysse))
