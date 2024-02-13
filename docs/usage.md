@@ -346,7 +346,7 @@ You will not get the final reporting outcomes of the workflow, but you will get 
 
 #### Restricting samples considered by DESeq2 or Limma
 
-By default, the DESeq2 or Limma differential modules model all samples at once, rather than just the samples involved in the contrast. This is usually the correct thing to do, but when there are are large numbers of samples involved in each contrast it may be unnecessary, and things can be sped up significantly by setting `--differential_subset_to_contrast_samples`. This will remove any samples not relevant to the contrast before the main differential analysis routines are called. 
+By default, the DESeq2 or Limma differential modules model all samples at once, rather than just the samples involved in the contrast. This is usually the correct thing to do, but when there are are large numbers of samples involved in each contrast it may be unnecessary, and things can be sped up significantly by setting `--differential_subset_to_contrast_samples`. This will remove any samples not relevant to the contrast before the main differential analysis routines are called.
 
 ### Params files
 
