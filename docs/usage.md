@@ -336,7 +336,7 @@ A number of workflow steps are not optimised to deal with large sample numbers a
 
 ```
 process {
-    withName:'PLOT_EXPLORATORY|PLOT_DIFFERENTIAL|RMARKDOWNNOTEBOOK|MAKE_REPORT_BUNDLE'{
+    withName:'PLOT_EXPLORATORY|PLOT_DIFFERENTIAL|RMARKDOWNNOTEBOOK|MAKE_REPORT_BUNDLE|SHINYNGS_APP'{
         ext.when = false
     }
 }
