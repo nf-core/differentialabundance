@@ -4,17 +4,6 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { paramsSummaryLog; paramsSummaryMap } from 'plugin/nf-validation'
-
-def logo = NfcoreTemplate.logo(workflow, params.monochrome_logs)
-def citation = '\n' + WorkflowMain.citation(workflow) + '\n'
-def summary_params = paramsSummaryMap(workflow)
-
-// Print parameter summary log to screen
-log.info logo + paramsSummaryLog(workflow) + citation
-
-WorkflowDifferentialabundance.initialise(params, log)
-
 def checkPathParamList = [ params.input ]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
@@ -122,7 +111,6 @@ include { FILTER_DIFFTABLE } from '../modules/local/filter_difftable'
 //
 include { GUNZIP as GUNZIP_GTF                              } from '../modules/nf-core/gunzip/main'
 include { UNTAR                                             } from '../modules/nf-core/untar/main.nf'
-include { CUSTOM_DUMPSOFTWAREVERSIONS                       } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 include { SHINYNGS_APP                                      } from '../modules/nf-core/shinyngs/app/main'
 include { SHINYNGS_STATICEXPLORATORY as PLOT_EXPLORATORY    } from '../modules/nf-core/shinyngs/staticexploratory/main'
 include { SHINYNGS_STATICDIFFERENTIAL as PLOT_DIFFERENTIAL  } from '../modules/nf-core/shinyngs/staticdifferential/main'
@@ -567,7 +555,6 @@ workflow DIFFERENTIALABUNDANCE {
         .map{ it.tail() }
         .map{it.flatten()}
         .combine(VALIDATOR.out.contrasts.map{it.tail()})
-        .combine(CUSTOM_DUMPSOFTWAREVERSIONS.out.yml)
         .combine(ch_logo_file)
         .combine(ch_css_file)
         .combine(ch_citations_file)
@@ -663,11 +650,6 @@ workflow DIFFERENTIALABUNDANCE {
             .map{[it[0], it[1..-1]]}
     )
 
-}
-
-    emit:
-    multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
-    versions       = ch_versions                 // channel: [ path(versions.yml) ]
 }
 
 /*
