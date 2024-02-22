@@ -29,6 +29,8 @@ include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_diff
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
+params.gtf = getGenomeAttribute('gtf')
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     NAMED WORKFLOWS FOR PIPELINE
@@ -39,22 +41,7 @@ include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_diff
 // WORKFLOW: Run main analysis pipeline depending on type of input
 //
 workflow NFCORE_DIFFERENTIALABUNDANCE {
-
-    take:
-    samplesheet // channel: samplesheet read in from --input
-
-    main:
-
-    //
-    // WORKFLOW: Run pipeline
-    //
-    DIFFERENTIALABUNDANCE (
-        samplesheet
-    )
-
-    emit:
-    multiqc_report = DIFFERENTIALABUNDANCE.out.multiqc_report // channel: /path/to/multiqc_report.html
-
+    DIFFERENTIALABUNDANCE ()
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -63,8 +50,6 @@ workflow NFCORE_DIFFERENTIALABUNDANCE {
 */
 
 workflow {
-
-    main:
 
     //
     // SUBWORKFLOW: Run initialisation tasks
@@ -82,22 +67,8 @@ workflow {
     //
     // WORKFLOW: Run main workflow
     //
-    NFCORE_DIFFERENTIALABUNDANCE (
-        PIPELINE_INITIALISATION.out.samplesheet
-    )
+    NFCORE_DIFFERENTIALABUNDANCE ()
 
-    //
-    // SUBWORKFLOW: Run completion tasks
-    //
-    PIPELINE_COMPLETION (
-        params.email,
-        params.email_on_fail,
-        params.plaintext_email,
-        params.outdir,
-        params.monochrome_logs,
-        params.hook_url,
-        NFCORE_DIFFERENTIALABUNDANCE.out.multiqc_report
-    )
 }
 
 /*

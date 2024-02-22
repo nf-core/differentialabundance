@@ -130,6 +130,7 @@ include { AFFY_JUSTRMA as AFFY_JUSTRMA_NORM                 } from '../modules/n
 include { PROTEUS_READPROTEINGROUPS as PROTEUS              } from '../modules/nf-core/proteus/readproteingroups/main'
 include { GEOQUERY_GETGEO                                   } from '../modules/nf-core/geoquery/getgeo/main'
 include { ZIP as MAKE_REPORT_BUNDLE                         } from '../modules/nf-core/zip/main'
+include { softwareVersionsToYAML                            } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -228,6 +229,7 @@ workflow DIFFERENTIALABUNDANCE {
 
         file_gtf_in = file(params.gtf)
         file_gtf = [ [ "id": file_gtf_in.simpleName ], file_gtf_in ]
+        print("waaaaa")
 
         if ( params.gtf.endsWith('.gz') ){
             GUNZIP_GTF(file_gtf)
@@ -539,8 +541,9 @@ workflow DIFFERENTIALABUNDANCE {
     // Collate and save software versions
     //
     softwareVersionsToYAML(ch_versions)
-        .collectFile(storeDir: "${params.outdir}/pipeline_info", name: 'nf_core_pipeline_software_mqc_versions.yml', sort: true, newLine: true)
         .set { ch_collated_versions }
+
+    ch_collated_versions.dump(tag:'svty')
 
     // Generate a list of files that will be used by the markdown report
 
@@ -555,6 +558,7 @@ workflow DIFFERENTIALABUNDANCE {
         .map{ it.tail() }
         .map{it.flatten()}
         .combine(VALIDATOR.out.contrasts.map{it.tail()})
+        .combine(ch_collated_versions)
         .combine(ch_logo_file)
         .combine(ch_css_file)
         .combine(ch_citations_file)
