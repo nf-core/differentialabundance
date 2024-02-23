@@ -229,7 +229,6 @@ workflow DIFFERENTIALABUNDANCE {
 
         file_gtf_in = file(params.gtf)
         file_gtf = [ [ "id": file_gtf_in.simpleName ], file_gtf_in ]
-        print("waaaaa")
 
         if ( params.gtf.endsWith('.gz') ){
             GUNZIP_GTF(file_gtf)
@@ -540,11 +539,9 @@ workflow DIFFERENTIALABUNDANCE {
     //
     // Collate and save software versions
     //
-    ch_collated_versions = softwareVersionsToYAML(ch_versions)
-        .collectFile(name: 'collated_versions.yml')
 
-    ch_versions.dump(tag:'versionssssss')
-    ch_collated_versions.dump(tag:'svtyyyyyy')
+    ch_collated_versions = softwareVersionsToYAML(ch_versions)
+        .collectFile(storeDir: "${params.outdir}/pipeline_info", name: 'collated_versions.yml', sort: true, newLine: true)
 
     // Generate a list of files that will be used by the markdown report
 
@@ -633,13 +630,10 @@ workflow DIFFERENTIALABUNDANCE {
     }
     params_pattern = ~/(${params_pattern}).*/
 
-    print params.findAll{ k,v -> k.matches(params_pattern) }
-    print report_file_names
-    print params_pattern
     ch_report_params = ch_report_input_files
         .map{
             params.findAll{ k,v -> k.matches(params_pattern) } +
-            [report_file_names, it.collect{ f -> print f; print f.name; print f.getClass(); print "iiii"; f.name}].transpose().collectEntries()
+            [report_file_names, it.collect{ f -> f.name}].transpose().collectEntries()
         }
 
     // Render the final report
