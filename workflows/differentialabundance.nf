@@ -540,10 +540,11 @@ workflow DIFFERENTIALABUNDANCE {
     //
     // Collate and save software versions
     //
-    softwareVersionsToYAML(ch_versions)
-        .set { ch_collated_versions }
+    ch_collated_versions = softwareVersionsToYAML(ch_versions)
+        .collectFile(name: 'collated_versions.yml')
 
-    ch_collated_versions.dump(tag:'svty')
+    ch_versions.dump(tag:'versionssssss')
+    ch_collated_versions.dump(tag:'svtyyyyyy')
 
     // Generate a list of files that will be used by the markdown report
 
@@ -632,10 +633,13 @@ workflow DIFFERENTIALABUNDANCE {
     }
     params_pattern = ~/(${params_pattern}).*/
 
+    print params.findAll{ k,v -> k.matches(params_pattern) }
+    print report_file_names
+    print params_pattern
     ch_report_params = ch_report_input_files
         .map{
             params.findAll{ k,v -> k.matches(params_pattern) } +
-            [report_file_names, it.collect{ f -> f.name}].transpose().collectEntries()
+            [report_file_names, it.collect{ f -> print f; print f.name; print f.getClass(); print "iiii"; f.name}].transpose().collectEntries()
         }
 
     // Render the final report
