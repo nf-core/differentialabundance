@@ -328,6 +328,26 @@ work                # Directory containing the nextflow working files
 - If you don't like the colors used in the report, try a different `RColorBrewer` palette by changing the `exploratory_palette_name` and/or `differential_palette_name` parameters.
 - In rare cases, some users have reported issues with DESeq2 using all available cores on a machine, rather than those specified in the process configuration. This can be prevented by setting the `OPENBLAS_NUM_THREADS` environment variable.
 
+### Scaling up to large sample numbers
+
+#### Deactivating reporting processes
+
+A number of workflow steps are not optimised to deal with large sample numbers and will cause the overall workflow to fail. If you have sample numbers on the order of 100s or more, you should disable these processes like:
+
+```
+process {
+    withName:'PLOT_EXPLORATORY|PLOT_DIFFERENTIAL|RMARKDOWNNOTEBOOK|MAKE_REPORT_BUNDLE|SHINYNGS_APP'{
+        ext.when = false
+    }
+}
+```
+
+You will not get the final reporting outcomes of the workflow, but you will get the differential tables produced by DESeq2 or Limma, and the results of any gene seta analysis you have enabled.
+
+#### Restricting samples considered by DESeq2 or Limma
+
+By default, the DESeq2 or Limma differential modules model all samples at once, rather than just the samples involved in the contrast. This is usually the correct thing to do, but when there are are large numbers of samples involved in each contrast it may be unnecessary, and things can be sped up significantly by setting `--differential_subset_to_contrast_samples`. This will remove any samples not relevant to the contrast before the main differential analysis routines are called.
+
 ### Params files
 
 If you wish to repeatedly use the same parameters for multiple runs, rather than specifying each flag in the command, you can specify these in a params file.
