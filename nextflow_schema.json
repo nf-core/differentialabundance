@@ -329,6 +329,17 @@
                     "help_text": "The variable can be used to define groups and derive a minimum group size upon which to base minimum observation numbers. The rationale for this is to allow retention of features that might be present in only one group. Note that this is consciously NOT filtering with an explicit awareness of groups (\"feature must be present in all samples of group A\"), since this is known to create biases towards discovery of differential features.",
                     "description": "An optional grouping variable to be used to calculate a min_samples value",
                     "fa_icon": "fas fa-users"
+                },
+                "filtering_min_proportion_not_na": {
+                    "type": "number",
+                    "default": 0.5,
+                    "description": "A minimum proportion of observations, given as a number between 0 and 1, that must have a value (not NA) to retain the row/ feature (e.g. gene).",
+                    "fa_icon": "fas fa-compress-alt"
+                },
+                "filtering_min_samples_not_na": {
+                    "type": "number",
+                    "description": "Minimum observations that must have a value (not NA) to retain the row/ feature (e.g. gene). Overrides filtering_min_proportion_not_na.",
+                    "fa_icon": "fas fa-percent"
                 }
             },
             "fa_icon": "fas fa-filter",
