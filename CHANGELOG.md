@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- [[#250](https://github.com/nf-core/differentialabundance/pull/250)] - Template update for nf-core/tools v2.13.1 ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#244](https://github.com/nf-core/differentialabundance/pull/244)] - Add pipeline params for matrixfilter NA options ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#241](https://github.com/nf-core/differentialabundance/pull/241)] - Template update for nf-core/tools v2.13 ([@WackerO](https://github.com/WackerO), review by [@nvnieuwk](https://github.com/nvnieuwk))
 - [[#228](https://github.com/nf-core/differentialabundance/pull/228)] - Template update for nf-core/tools v2.12 ([@nf-core-bot](https://github.com/nf-core-bot), review by [@pinin4fjords](https://github.com/pinin4fjords), [@WackerO](https://github.com/WackerO))
