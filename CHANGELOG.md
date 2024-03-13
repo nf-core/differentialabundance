@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- [[#244](https://github.com/nf-core/differentialabundance/pull/244)] - Add pipeline params for matrixfilter NA options ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#241](https://github.com/nf-core/differentialabundance/pull/241)] - Template update for nf-core/tools v2.13 ([@WackerO](https://github.com/WackerO), review by [@nvnieuwk](https://github.com/nvnieuwk))
 - [[#228](https://github.com/nf-core/differentialabundance/pull/228)] - Template update for nf-core/tools v2.12 ([@nf-core-bot](https://github.com/nf-core-bot), review by [@pinin4fjords](https://github.com/pinin4fjords), [@WackerO](https://github.com/WackerO))
 - [[#222](https://github.com/nf-core/differentialabundance/pull/222)] - Add rounding to all numeric report tables ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#219](https://github.com/nf-core/differentialabundance/pull/219)] - Template update for nf-core/tools v2.11.1 ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
@@ -15,15 +17,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Fixed`
 
 - [[#240](https://github.com/nf-core/differentialabundance/pull/240) - Publish GSEA reports ([@pinin4fjords](https://github.com/pinin4fjords), review by )
-- [[#231](https://github.com/nf-core/differentialabundance/pull/231) - Update GSEA module to fix butterfly plot bug ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
-- [[#226](https://github.com/nf-core/differentialabundance/pull/226) - Fix DESEQ2_NORM in modules.config ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
-- [[#221](https://github.com/nf-core/differentialabundance/pull/221) - Update shinyngs modules to address density plots issue ([@pinin4fjords](https://github.com/pinin4fjords), review by [@maxulysse](https://github.com/maxulysse))
+- [[#231](https://github.com/nf-core/differentialabundance/pull/231)] - Update GSEA module to fix butterfly plot bug ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#226](https://github.com/nf-core/differentialabundance/pull/226)] - Fix DESEQ2_NORM in modules.config ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#221](https://github.com/nf-core/differentialabundance/pull/221)] - Update shinyngs modules to address density plots issue ([@pinin4fjords](https://github.com/pinin4fjords), review by [@maxulysse](https://github.com/maxulysse))
 - [[#223](https://github.com/nf-core/differentialabundance/pull/223)] - tabulartogseacls fixes ([@pinin4fjords](https://github.com/pinin4fjords), review by [@maxulysse](https://github.com/maxulysse))
 - [[#213](https://github.com/nf-core/differentialabundance/pull/213)] - Fix volcano plot legend ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#210](https://github.com/nf-core/differentialabundance/pull/210)] - Include Affy timeout fix ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#208](https://github.com/nf-core/differentialabundance/pull/208)] - Fix resource issues and bump versions ([@pinin4fjords](https://github.com/pinin4fjords), review by [@sguizard](https://github.com/sguizard))
 
 ### `Changed`
+
+- [[#232](https://github.com/nf-core/differentialabundance/pull/232)] - Mention missing dots in volcano plot, change rounding, turn off rounding by default ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 
 ## v1.4.0 - 2023-11-27
 
@@ -138,7 +142,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## v1.0.1 - 2023-01-25
 
-- [[#49](https://github.com/nf-core/differentialabundance/pull/49) - Add citation fixes, missing logos, output detail, and trigger Zenodo ([@pinin4fjords](https://github.com/pinin4fjords), review by [@apeltzer](https://github.com/apeltzer), [@jfy133](https://github.com/jfy133))
+- [[#49](https://github.com/nf-core/differentialabundance/pull/49)] - Add citation fixes, missing logos, output detail, and trigger Zenodo ([@pinin4fjords](https://github.com/pinin4fjords), review by [@apeltzer](https://github.com/apeltzer), [@jfy133](https://github.com/jfy133))
 
 ## v1.0.0 - 2023-01-23
 

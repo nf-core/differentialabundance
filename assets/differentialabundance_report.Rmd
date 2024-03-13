@@ -176,12 +176,7 @@ round_dataframe_columns <- function(df, columns = NULL, digits = -1) {
     if (is.null(columns)) {
         columns <- colnames(df)[(unlist(lapply(df, is.numeric), use.names=F))]    # extract only numeric columns for rounding
     }
-
-    df[,columns] <- round(
-        data.frame(df[, columns], check.names = FALSE),
-        digits = digits
-    )
-
+    df[,columns] <- format(data.frame(df[, columns], check.names = FALSE), scientific=T, digits=params$report_round_digits)
     # Convert columns back to numeric
 
     for (c in columns) {
@@ -833,7 +828,6 @@ for (i in 1:nrow(contrasts)){
         cat("\n##### ", pvt, " p values\n")
         pval_column <- p_value_types[[pvt]]
 
-
         de_fc <- abs(full_de[[params$differential_fc_column]]) >= log2(params$differential_min_fold_change)
         de_fc_label <- paste("abs(logFC) >=", log2(params$differential_min_fold_change))
 
@@ -872,6 +866,13 @@ for (i in 1:nrow(contrasts)){
 
         # Let's equalize the axes
         max_fc <- max(abs(full_de[[params$differential_fc_column]])) * 1.1
+
+        # Print warning if any p values are 0
+        zero_p <- length(which(full_de[[pval_column]]==0))
+        if (zero_p) {
+            cat(paste0("<i>", zero_p, " feature", ifelse(zero_p>1, "s are", " is"), " not shown because of p value = 0; please refer to the results tables.</i><br><br>"))
+        }
+
         p <- do.call(plotly_scatterplot, plot_args) %>%
         layout(xaxis = list(range=list(-max_fc, max_fc)))
 
