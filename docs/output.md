@@ -13,7 +13,7 @@ This directory contains the main reporting output of the workflow.
 
 - `report/`
   - `*.html`: an HTML report file named according to the value of `params.study_name`, containing graphical and tabular summary results for the workflow run.
-  - `*.zip`: a zip file containing an R markdown file with parameters set and all necessary input files to open and customise the reporting.
+  - `*.zip`: a zip file containing an R markdown file with parameters set and all necessary input files to open and customize the reporting.
 
 </details>
 
@@ -28,14 +28,14 @@ Stand-alone graphical outputs are placed in this directory. They may be useful i
   - `qc/`: Directory containing quality control plots from initial processing e.g. DESeq2
     - `*.png`
   - `exploratory/`: Directory containing standalone plots from exploratory analysis. Plots are stored in directories named for the main coloring variable used.
-    - `[coloring variable]/png/boxplot.png`: Boxplot visualisation of abundance distributions
-    - `[coloring variable]/png/density.png`: Density visualisation of abundance distributions
+    - `[coloring variable]/png/boxplot.png`: Boxplot visualization of abundance distributions
+    - `[coloring variable]/png/density.png`: Density visualization of abundance distributions
     - `[coloring variable]/png/pca2d.png`: 2-dimensional PCA plot
     - `[coloring variable]/png/pca3d.png`: 3-dimensional PCA plot
     - `[coloring variable]/png/sample_dendrogram.png`: A sample clustering dendrogram
     - `[coloring variable]/png/mad_correlation.png`: Outlier prediction plots using median absolute deviation (MAD)
   - `differential/`: Directory containing standalone plots from differential analysis. Plots are stored in directories named for the associated contrast.
-    - `[contrast]/png/volcano.png`: Volcano plots of -log(10) p value agains log(2) fold changes
+    - `[contrast]/png/volcano.png`: Volcano plots of -log(10) p value against log(2) fold changes
   - `gsea/`: Directory containing graphical outputs from GSEA (where enabled). Plots are stored in directories named for the associated contrast.
     - `[contrast]/png/[gsea_plot_type].png`
   - `proteus/`: If `--study_type maxquant`: Directory containing plots produced by the proteus module which is used for processing MaxQuant input. Files are prefixed with the associated contrast and chosen normalization function (if any).
@@ -58,14 +58,14 @@ Most plots are included in the HTML report (see above), but are also included in
     - `[array platform].annotation.tsv`: Annotations derived from an array platform
     - `[GTF name].anno.tsv`: Species wise annotations derived from a GTF in RNA-seq analysis
   - `processed_abundance/`: Directory containing processed abundance values from initial processing from e.g. DESeq2 or Affy:
-    - `[contrast_name].normalised_counts.tsv`: Normalised counts table (DESeq2)
-    - `[contrast_name].vst.tsv`: Normalised counts table with a variance-stabilising transform (DESeq2)
+    - `[contrast_name].normalised_counts.tsv`: Normalized counts table (DESeq2)
+    - `[contrast_name].vst.tsv`: Normalized counts table with a variance-stabilizing transform (DESeq2)
     - `raw.matrix.tsv`: RMA background corrected matrix (Affy)
-    - `normalised.matrix.tsv`: RMA background corrected and normalised intensities matrix (Affy)
+    - `normalised.matrix.tsv`: RMA background corrected and normalized intensities matrix (Affy)
   - `differential/`: Directory containing tables of differential statistics reported by differential modules such as DESeq2
-    - `[contrast_name].deseq2.results.tsv`: Results of DESeq2 differential analyis (RNA-seq)
-    - `OR [contrast_name].limma.results.tsv`: Results of Limma differential analyis (Affymetrix arrays)
-  - `gsea/`: Directory containing tables of differential gene set analyis from GSEA (where enabled)
+    - `[contrast_name].deseq2.results.tsv`: Results of DESeq2 differential analysis (RNA-seq)
+    - `OR [contrast_name].limma.results.tsv`: Results of Limma differential analysis (Affymetrix arrays)
+  - `gsea/`: Directory containing tables of differential gene set analysis from GSEA (where enabled)
     - `[contrast]/[contrast].gsea_report_for_[condition].tsv`: A GSEA report table for each side of each contrast
   - `proteus/`: If `--study_type maxquant`: Directory containing abundance values produced by the proteus module which is used for processing MaxQuant input. Files are prefixed with the associated contrast and chosen normalization function (if any).
     - `[contrast]/[norm_function].normalized_proteingroups_tab.tsv`: Abundance table after normalization.
