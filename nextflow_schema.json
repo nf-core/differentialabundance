@@ -119,7 +119,6 @@
                 },
                 "observations_name_col": {
                     "type": "string",
-                    "default": "sample",
                     "description": "Column in the sample sheet to be used as the display identifier for observations",
                     "fa_icon": "fas fa-file-signature"
                 }
@@ -137,13 +136,13 @@
                 "features_id_col": {
                     "type": "string",
                     "default": "gene_id",
-                    "description": "Feature ID attribute in the GTF file (e.g. the gene_id field)",
+                    "description": "Feature ID attribute in the abundance table as well as in the GTF file (e.g. the gene_id field)",
                     "fa_icon": "fas fa-address-card"
                 },
                 "features_name_col": {
                     "type": "string",
                     "default": "gene_name",
-                    "description": "Feature name attribute in the GTF file (e.g. the gene symbol field)",
+                    "description": "Feature name attribute in the abundance table as well as in the GTF file (e.g. the gene symbol field)",
                     "fa_icon": "fas fa-signature"
                 },
                 "features_type": {
@@ -1014,6 +1013,7 @@
                 "report_file": {
                     "type": "string",
                     "description": "Rmd report template from which to create the pipeline report",
+                    "help_text": "The pipeline will always generate a default report which gives a good overview of the analysis results. Should this default report not suit your needs, you can provide the path to a custom report instead.",
                     "format": "file-path",
                     "pattern": "^\\S+\\.Rmd$",
                     "fa_icon": "fas fa-book"

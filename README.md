@@ -110,7 +110,7 @@ For more details about the output files and reports, please refer to the
 
 ## Credits
 
-nf-core/differentialabundance was originally written by Jonathan Manning ([@pinin4fjords](https://github.com/pinin4fjords)) and Oskar Wacker ([@WackerO](https://github.com/WackerO)). Jonathan Manning (now at Seqera) initially worked on this workflow as an employee of Healx, an AI-powered, patient-inspired tech company, accelerating the discovery and development of treatments for rare diseases. We are grateful for their support of open science in this project.
+nf-core/differentialabundance was originally written by Jonathan Manning ([@pinin4fjords](https://github.com/pinin4fjords)) and Oskar Wacker ([@WackerO](https://github.com/WackerO)). Jonathan Manning (now at Seqera) initially worked on this workflow as an employee of Healx, an AI-powered, patient-inspired tech company, accelerating the discovery and development of treatments for rare diseases. Oskar Wacker works for [QBiC](https://www.qbic.uni-tuebingen.de/) at Tübingen University. We are grateful for their support of open science in this project.
 
 We thank the many members of the nf-core community who assisted with this pipeline, often by reviewing module pull requests including but not limited to:
 
