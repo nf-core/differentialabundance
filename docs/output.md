@@ -35,7 +35,7 @@ Stand-alone graphical outputs are placed in this directory. They may be useful i
     - `[coloring variable]/png/sample_dendrogram.png`: A sample clustering dendrogram
     - `[coloring variable]/png/mad_correlation.png`: Outlier prediction plots using median absolute deviation (MAD)
   - `differential/`: Directory containing standalone plots from differential analysis. Plots are stored in directories named for the associated contrast.
-    - `[contrast]/png/volcano.png`: Volcano plots of -log(10) p value against log(2) fold changes
+    - `[contrast]/png/volcano.png`: Volcano plots of -log(10) p value against log(2) fold changes. Each dot in the plot represents one gene. The higher genes in the volcano plot are highly significant, and the genes located in right or left side of the plot are highly dysregulated.
   - `gsea/`: Directory containing graphical outputs from GSEA (where enabled). Plots are stored in directories named for the associated contrast.
     - `[contrast]/png/[gsea_plot_type].png`
   - `proteus/`: If `--study_type maxquant`: Directory containing plots produced by the proteus module which is used for processing MaxQuant input. Files are prefixed with the associated contrast and chosen normalization function (if any).
@@ -58,13 +58,13 @@ Most plots are included in the HTML report (see above), but are also included in
     - `[array platform].annotation.tsv`: Annotations derived from an array platform
     - `[GTF name].anno.tsv`: Species wise annotations derived from a GTF in RNA-seq analysis
   - `processed_abundance/`: Directory containing processed abundance values from initial processing from e.g. DESeq2 or Affy:
-    - `[contrast_name].normalised_counts.tsv`: Normalized counts table (DESeq2)
+    - `[contrast_name].normalised_counts.tsv`: Normalized counts table (DESeq2). Rows are ensembl IDs and columns are samples.
     - `[contrast_name].vst.tsv`: Normalized counts table with a variance-stabilizing transform (DESeq2)
     - `raw.matrix.tsv`: RMA background corrected matrix (Affy)
     - `normalised.matrix.tsv`: RMA background corrected and normalized intensities matrix (Affy)
   - `differential/`: Directory containing tables of differential statistics reported by differential modules such as DESeq2
     - `[contrast_name].deseq2.results.tsv`: Results of DESeq2 differential analysis (RNA-seq)
-    - `OR [contrast_name].limma.results.tsv`: Results of Limma differential analysis (Affymetrix arrays)
+    - `OR [contrast_name].limma.results.tsv`: Results of Limma differential analysis (Affymetrix arrays) including ensembl ID, log2FC, and adjusted P. Value
   - `gsea/`: Directory containing tables of differential gene set analysis from GSEA (where enabled)
     - `[contrast]/[contrast].gsea_report_for_[condition].tsv`: A GSEA report table for each side of each contrast
   - `proteus/`: If `--study_type maxquant`: Directory containing abundance values produced by the proteus module which is used for processing MaxQuant input. Files are prefixed with the associated contrast and chosen normalization function (if any).
@@ -136,7 +136,10 @@ The app must be run in an environment with [ShinyNGS](https://github.com/pinin4f
 
 **Problem:** The experimental intervention may not lead to observable differential expression at the individual gene level, but there may be coordinated changes at the pathway or functional level.
 
-**Suggested course of action:** Utilize pathway analysis tools such as Gene Set Enrichment Analysis (GSEA), available in this workflow. These tools evaluate the enrichment of gene sets or functional annotations to identify broader biological processes influenced by the experimental intervention. By focusing on pathway-level analysis, you can capture the overall impact of the intervention on biological processes, even if differential expression at the individual gene level is not apparent.
+**Suggested course of action:** Utilize pathway analysis tools such as Gene Set Enrichment Analysis (GSEA), available in this workflow. These tools evaluate the enrichment of gene sets or functional annotations to identify broader biological processes influenced by the experimental intervention.
+In this analysis, the differentially expressed genes (DEGs) divides into different groups, based on their effect of specific signaling pathways. In each group, genes will be sorted and assigned by scores based on their logFC and significance level. It is a good approach to find hub DEGs in disease-related signaling pathways.
+
+By focusing on pathway-level analysis, you can capture the overall impact of the intervention on biological processes, even if differential expression at the individual gene level is not apparent.
 
 #### 6. Limited options for normalization:
 
