@@ -80,7 +80,7 @@
                     "type": "string",
                     "fa_icon": "fas fa-border-all",
                     "description": "(RNA-seq only): optional transcript length matrix with samples and genes as the abundance matrix",
-                    "help_text": "if provided, this file willl be used to provide transcript lengths to DESeq2 to model length bias across samples"
+                    "help_text": "If provided, this file willl be used to provide transcript lengths to DESeq2 to model length bias across samples"
                 },
                 "affy_cel_files_archive": {
                     "type": "string",
@@ -388,13 +388,6 @@
                     "help_text": "Some plots are only generated once, with a single sample grouping, this option defines how that sample grouping is selected. It should be 'auto_pca' (variable selected from the sample sheet with the most association with the first principal component), 'contrasts' (pick the variable associated with the first contrast), or a value specifying a specific column in the observations.",
                     "fa_icon": "fas fa-home"
                 },
-                "exploratory_assay_names": {
-                    "type": "string",
-                    "default": "raw,normalised,variance_stabilised",
-                    "hidden": true,
-                    "description": "Specifies assay names to be used for matrices, platform-specific",
-                    "fa_icon": "fas fa-file-signature"
-                },
                 "exploratory_final_assay": {
                     "type": "string",
                     "default": "variance_stabilised",
@@ -425,12 +418,6 @@
             "description": "Options related to differential operations",
             "default": "",
             "properties": {
-                "differential_file_suffix": {
-                    "type": "string",
-                    "default": ".deseq2.results.tsv",
-                    "description": "The suffix associated tabular differential results tables",
-                    "fa_icon": "fas fa-signature"
-                },
                 "differential_feature_id_column": {
                     "type": "string",
                     "default": "gene_id",
@@ -499,7 +486,6 @@
                 }
             },
             "required": [
-                "differential_file_suffix",
                 "differential_feature_id_column",
                 "differential_fc_column",
                 "differential_qval_column",
@@ -1079,6 +1065,27 @@
                 }
             },
             "required": ["report_file", "logo_file", "css_file"]
+        },
+        "advanced_options": {
+            "title": "Advanced options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "differential_file_suffix": {
+                    "type": "string",
+                    "description": "The suffix associated tabular differential results tables",
+                    "fa_icon": "fas fa-signature"
+                },
+                "exploratory_assay_names": {
+                    "type": "string",
+                    "default": "raw,normalised,variance_stabilised",
+                    "hidden": true,
+                    "description": "Specifies assay names to be used for matrices, platform-specific",
+                    "fa_icon": "fas fa-file-signature"
+                }
+            },
+            "required": ["differential_file_suffix", "exploratory_assay_names"]
         },
         "reference_genome_options": {
             "title": "Reference genome options",

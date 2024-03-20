@@ -360,9 +360,12 @@ treatment-mCherry-hND6-batcheffect.deseq2.results.tsv
 -->
 
 ```{r, echo=FALSE}
-
+differential_file_suffix <- params$differential_file_suffix
+if (is.null(differential_file_suffix)) {
+    differential_file_suffix <- ifelse(params$study_type %in% c('rnaseq'), ".deseq2.results.tsv", ".limma.results.tsv")
+}
 differential_files <- lapply(contrasts$id, function(d){
-    file.path(params$input_dir, paste0(gsub(' |;', '_', d), params$differential_file_suffix))
+    file.path(params$input_dir, paste0(gsub(' |;', '_', d), differential_file_suffix))
 })
 
 differential_results <- lapply(differential_files, function(diff_file){
