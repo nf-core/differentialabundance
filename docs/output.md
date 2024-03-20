@@ -154,7 +154,7 @@ The app must be run in an environment with [ShinyNGS](https://github.com/pinin4f
 **Problem:** The experimental intervention may not lead to observable differential expression at the individual gene level, but there may be coordinated changes at the pathway or functional level.
 
 **Suggested course of action:** Utilise pathway analysis tools such as Gene Set Enrichment Analysis (GSEA), available in this workflow. These tools evaluate the enrichment of gene sets or functional annotations to identify broader biological processes influenced by the experimental intervention.
-In this analysis, the differentially expressed genes (DEGs) divides into different groups, based on their effect of specific signaling pathways. In each group, genes will be sorted and assigned by scores based on their logFC and significance level. It is a good approach to find hub DEGs in disease-related signaling pathways.
+In this analysis, the differentially expressed genes (DEGs) are divided into different groups, based on their effect of specific signaling pathways. In each group, genes will be sorted and assigned by scores based on their logFC and significance level. It is a good approach to find hub DEGs in disease-related signaling pathways.
 
 By focusing on pathway-level analysis, you can capture the overall impact of the intervention on biological processes, even if differential expression at the individual gene level is not apparent.
 
