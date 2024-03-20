@@ -77,7 +77,6 @@ Most plots are included in the HTML report (see above), but are also included in
     - `[contrast_name].[deseq2|limma].results.tsv`: Results of DESeq2 differential analyis (RNA-seq) OR limma differential analysis (Affymetrix arrays, GEO studies, Maxquant proteomics studies)
     - `[contrast_name].[deseq2|limma].results_filtered.tsv`: Results of DESeq2 differential analyis (RNA-seq) OR limma differential analysis (Affymetrix arrays, GEO studies, Maxquant proteomics studies); filtered for differentially abundant entries
   - `gsea/`: Directory containing tables of differential gene set analyis from GSEA (where enabled)
-
     - `[contrast]/[contrast].gsea_report_for_[condition].tsv`: A GSEA report table for each side of each contrast
 
   - `gprofiler2/`: Directory containing tables of differential gene set analyis from gprofiler2 (where enabled)
