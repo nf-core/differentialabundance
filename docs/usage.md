@@ -6,7 +6,7 @@
 
 ## Introduction
 
-Differential analysis is a frequent task in a variety of use cases. In essence, all these use cases entail taking an input matrix containing features (e.g. genes) and observations (e.g. samples), and comparing groups of observations in all or a subset of the features. The feature/ observation language here reflects our hope that this workflow will extend in future to encompass a variety of applications where an assumption of gene vs sample may not be a valid one- though that is the application to which the first release will apply.
+Differential analysis is a frequent task in a variety of use cases. In essence, all these use cases entail taking an input matrix containing features (e.g. genes) and observations (e.g. samples), and comparing groups of observations in all or a subset of the features. The feature/observation language here reflects our hope that this workflow will extend in future to encompass a variety of applications where an assumption of gene vs. sample may not be a valid one – though that is the application to which the first release will apply.
 
 With the above in mind, running this workflow requires:
 
