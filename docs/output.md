@@ -58,6 +58,7 @@ Most plots are included in the HTML report (see above), but are also included in
 <summary>Output files</summary>
 
 - `tables/`
+
   - `annotation1/`: Directory containing annotation matrices generated in the course of analysis
     - `[array platform].annotation.tsv`: Annotations derived from an array platform
     - `[GTF name].anno.tsv`: Species wise annotations derived from a GTF in RNA-seq analysis
@@ -69,14 +70,17 @@ Most plots are included in the HTML report (see above), but are also included in
   - `differential/`: Directory containing tables of differential statistics reported by differential modules such as DESeq2
 
     - `[contrast_name].deseq2.results.tsv`: Results of DESeq2 differential analysis (RNA-seq)
-    - `OR [contrast_name].limma.results.tsv`: Results of Limma differential analysis (Affymetrix arrays) including ensembl ID, log2FC, and adjusted P. Value
+    - `OR [contrast_name].limma.results.tsv`: Results of Limma differential analysis (Affymetrix arrays)
+
   - `gsea/`: Directory containing tables of differential gene set analysis from GSEA (where enabled)
 
     - `[contrast_name].[deseq2|limma].results.tsv`: Results of DESeq2 differential analyis (RNA-seq) OR Limma differential analysis (Affymetrix arrays, GEO studies, Maxquant proteomics studies)
     - `[contrast_name].[deseq2|limma].results_filtered.tsv`: Results of DESeq2 differential analyis (RNA-seq) OR Limma differential analysis (Affymetrix arrays, GEO studies, Maxquant proteomics studies); filtered for differentially abundant entries
+
   - `gsea/`: Directory containing tables of differential gene set analyis from GSEA (where enabled)
 
     - `[contrast]/[contrast].gsea_report_for_[condition].tsv`: A GSEA report table for each side of each contrast
+
   - `gprofiler2/`: Directory containing tables of differential gene set analyis from gprofiler2 (where enabled)
     - `[contrast]/[contrast].gprofiler2.all_enriched_pathways.tsv`: A gprofiler2 report table for all enrichment results
     - `[contrast]/[contrast].gprofiler2.[source].sub_enriched_pathways.tsv`: A gprofiler2 report table of enriched pathways from one specific source/database, e.g. REAC
