@@ -1334,6 +1334,9 @@
             "$ref": "#/definitions/reporting_options"
         },
         {
+            "$ref": "#/definitions/advanced_options"
+        },
+        {
             "$ref": "#/definitions/reference_genome_options"
         },
         {
