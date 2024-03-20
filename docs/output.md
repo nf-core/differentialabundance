@@ -13,7 +13,7 @@ This directory contains the main reporting output of the workflow.
 
 - `report/`
   - `*.html`: an HTML report file named according to the value of `params.study_name`, containing graphical and tabular summary results for the workflow run.
-  - `*.zip`: a zip file containing an R markdown file with parameters set and all necessary input files to open and customize the reporting.
+  - `*.zip`: a zip file containing an R markdown file with parameters set and all necessary input files to open and customise the reporting.
 
 </details>
 
@@ -28,8 +28,8 @@ Stand-alone graphical outputs are placed in this directory. They may be useful i
   - `qc/`: Directory containing quality control plots from initial processing e.g. DESeq2
     - `*.png`
   - `exploratory/`: Directory containing standalone plots from exploratory analysis. Plots are stored in directories named for the main coloring variable used.
-    - `[coloring variable]/png/boxplot.png`: Boxplot visualization of abundance distributions
-    - `[coloring variable]/png/density.png`: Density visualization of abundance distributions
+    - `[coloring variable]/png/boxplot.png`: Boxplot visualisation of abundance distributions
+    - `[coloring variable]/png/density.png`: Density visualisation of abundance distributions
     - `[coloring variable]/png/pca2d.png`: 2-dimensional PCA plot
     - `[coloring variable]/png/pca3d.png`: 3-dimensional PCA plot
     - `[coloring variable]/png/sample_dendrogram.png`: A sample clustering dendrogram
@@ -63,9 +63,9 @@ Most plots are included in the HTML report (see above), but are also included in
     - `[GTF name].anno.tsv`: Species wise annotations derived from a GTF in RNA-seq analysis
   - `processed_abundance/`: Directory containing processed abundance values from initial processing from e.g. DESeq2 or Affy:
     - `[contrast_name].normalised_counts.tsv`: Normalized counts table (DESeq2). Rows are ensembl IDs and columns are samples.
-    - `[contrast_name].vst.tsv`: Normalized counts table with a variance-stabilizing transform (DESeq2)
+    - `[contrast_name].vst.tsv`: Normalised counts table with a variance-stabilising transform (DESeq2)
     - `raw.matrix.tsv`: RMA background corrected matrix (Affy)
-    - `normalised.matrix.tsv`: RMA background corrected and normalized intensities matrix (Affy)
+    - `normalised.matrix.tsv`: RMA background corrected and normalised intensities matrix (Affy)
   - `differential/`: Directory containing tables of differential statistics reported by differential modules such as DESeq2
 
     - `[contrast_name].deseq2.results.tsv`: Results of DESeq2 differential analysis (RNA-seq)
@@ -149,7 +149,7 @@ The app must be run in an environment with [ShinyNGS](https://github.com/pinin4f
 
 **Problem:** The experimental intervention may not lead to observable differential expression at the individual gene level, but there may be coordinated changes at the pathway or functional level.
 
-**Suggested course of action:** Utilize pathway analysis tools such as Gene Set Enrichment Analysis (GSEA), available in this workflow. These tools evaluate the enrichment of gene sets or functional annotations to identify broader biological processes influenced by the experimental intervention.
+**Suggested course of action:** Utilise pathway analysis tools such as Gene Set Enrichment Analysis (GSEA), available in this workflow. These tools evaluate the enrichment of gene sets or functional annotations to identify broader biological processes influenced by the experimental intervention.
 In this analysis, the differentially expressed genes (DEGs) divides into different groups, based on their effect of specific signaling pathways. In each group, genes will be sorted and assigned by scores based on their logFC and significance level. It is a good approach to find hub DEGs in disease-related signaling pathways.
 
 By focusing on pathway-level analysis, you can capture the overall impact of the intervention on biological processes, even if differential expression at the individual gene level is not apparent.

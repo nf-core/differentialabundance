@@ -112,7 +112,7 @@ Alternatively, the user may want to work with SOFT matrices. In this case, setti
 
 `--study_type geo_soft_file` and `--querygse [GSE study ID]`
 
-enables the pipeline to download normalized SOFT matrices automatically (note that even though Affymetrix arrays are also supported in the SOFT matrix track, it is recommended to work from CEL files in this case).
+enables the pipeline to download normalised SOFT matrices automatically (note that even though Affymetrix arrays are also supported in the SOFT matrix track, it is recommended to work from CEL files in this case).
 
 As for other platforms You may subset the metadata features used in reporting etc. e.g. for GPL570 (Affymetrix Plus 2.0 arrays) this could be done with
 
@@ -162,7 +162,7 @@ This is usually the easiest way to supply annotations for RNA-seq features. It s
 
 ### Annotation package identifiers for Affymetrix arrays
 
-For `-profile affy`, default behavior is to derive an annotation table while running the affy/justrma module based on the CDF name discovered there.
+For `-profile affy`, default behaviour is to derive an annotation table while running the affy/justrma module based on the CDF name discovered there.
 
 ### Your own features, or no features
 
@@ -176,7 +176,7 @@ By default, if you don't provide features, for non-array data the workflow will 
 
 ## Working with the output R markdown file
 
-The pipeline produces an R markdown file which, if you're proficient in R, you can use to tweak the report after it's generated (**note**- if you need the same customizations repeatedly we would recommend you supply your own template using the `report_file` parameter).
+The pipeline produces an R markdown file which, if you're proficient in R, you can use to tweak the report after it's generated (**note**- if you need the same customisations repeatedly we would recommend you supply your own template using the `report_file` parameter).
 
 To work with R markdown files you will need RStudio. You will also need to have the ShinyNGS R module [installed](https://github.com/pinin4fjords/shinyngs#installation), since it supplies a lot of the accessory plotting functions etc that you will need. The exact way you will do this may depend on your exact systems, but for example
 
@@ -452,7 +452,7 @@ Specify the path to a specific config file (this is a core Nextflow command). Se
 
 ### Resource requests
 
-Whilst the default requirements set within the pipeline will hopefully work for most people and with most input data, you may find that you want to customize the compute resources that the pipeline requests. Each step in the pipeline has a default set of requirements for number of CPUs, memory and time. For most of the steps in the pipeline, if the job exits with any of the error codes specified [here](https://github.com/nf-core/differentialabundance/blob/dev/conf/base.config#L17) it will automatically be resubmitted with higher requests (2 x original, then 3 x original). If it still fails after the third attempt then the pipeline execution is stopped.
+Whilst the default requirements set within the pipeline will hopefully work for most people and with most input data, you may find that you want to customise the compute resources that the pipeline requests. Each step in the pipeline has a default set of requirements for number of CPUs, memory and time. For most of the steps in the pipeline, if the job exits with any of the error codes specified [here](https://github.com/nf-core/differentialabundance/blob/dev/conf/base.config#L17) it will automatically be resubmitted with higher requests (2 x original, then 3 x original). If it still fails after the third attempt then the pipeline execution is stopped.
 
 For example, if the nf-core/differentialabundance pipeline is failing after multiple re-submissions of the `DESEQ2_DIFFERENTIAL` process due to an exit code of `137` this would indicate that there is an out of memory issue:
 
