@@ -63,7 +63,7 @@ Most plots are included in the HTML report (see above), but are also included in
     - `[array platform].annotation.tsv`: Annotations derived from an array platform
     - `[GTF name].anno.tsv`: Species wise annotations derived from a GTF in RNA-seq analysis
   - `processed_abundance/`: Directory containing processed abundance values from initial processing from e.g. DESeq2 or Affy:
-    - `[contrast_name].normalised_counts.tsv`: Normalized counts table (DESeq2). Rows are Ensembl IDs and columns are samples.
+    - `[contrast_name].normalised_counts.tsv`: Normalised counts table (DESeq2). Rows are feature (e.g. gene) IDs and columns are observations (e.g. samples).
     - `[contrast_name].vst.tsv`: Normalised counts table with a variance-stabilising transform (DESeq2)
     - `raw.matrix.tsv`: RMA background corrected matrix (Affy)
     - `normalised.matrix.tsv`: RMA background corrected and normalised intensities matrix (Affy)
