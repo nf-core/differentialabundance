@@ -78,11 +78,11 @@ To use this approach, include the transcript lengths file with the **raw counts*
 --transcript_length_matrix 'salmon.merged.gene_lengths.tsv'
 ```
 
-Without the transcript lengths, for instance in earlier RNAseq workflow versions, follow the second recommendation in the [tximport documentation](https://bioconductor.org/packages/release/bioc/vignettes/tximport/inst/doc/tximport.html#Downstream_DGE_in_Bioconductor):
+Without the transcript lengths, for instance in earlier nf-core/rnaseq workflow versions, follow the second recommendation in the [tximport documentation](https://bioconductor.org/packages/release/bioc/vignettes/tximport/inst/doc/tximport.html#Downstream_DGE_in_Bioconductor):
 
 > "Use the tximport argument `countsFromAbundance='lengthScaledTPM'` or `'scaledTPM'`, then employ the gene-level count matrix `txi$counts` directly in downstream software, a method we call 'bias corrected counts without an offset'"
 
-This aligns with the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices in the RNAseq workflow.
+This aligns with the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices in the nf-core/rnaseq workflow.
 
 It is important to note that the documentation advises:
 
@@ -158,7 +158,7 @@ The file can be tab or comma separated.
 --gtf '[path to gtf file]'
 ```
 
-This is usually the easiest way to supply annotations for RNA-seq features. It should match the GTF used in nf-core/RNAseq if that workflow was used to produce the input expression matrix. Skip for MaxQuant.
+This is usually the easiest way to supply annotations for RNA-seq features. It should match the GTF used in nf-core/rnaseq if that workflow was used to produce the input expression matrix. Skip for MaxQuant.
 
 ### Annotation package identifiers for Affymetrix arrays
 
