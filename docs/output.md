@@ -35,7 +35,7 @@ Stand-alone graphical outputs are placed in this directory. They may be useful i
     - `[coloring variable]/png/sample_dendrogram.png`: A sample clustering dendrogram
     - `[coloring variable]/png/mad_correlation.png`: Outlier prediction plots using median absolute deviation (MAD)
   - `differential/`: Directory containing standalone plots from differential analysis. Plots are stored in directories named for the associated contrast.
-    - `[contrast]/png/volcano.png`: Volcano plots of -log(10) p value against log(2) fold changes. Each dot in the plot represents one gene. The higher genes in the volcano plot are highly significant, and the genes located in right or left side of the plot are highly dysregulated.
+    - `[contrast]/png/volcano.png`: Volcano plots of -log(10) p value against log(2) fold changes. 
   - `gsea/`: Directory containing graphical outputs from GSEA (where enabled). Plots are stored in directories named for the associated contrast.
     - `[contrast]/png/[gsea_plot_type].png`
   - `gprofiler2/`: Directory containing graphical outputs from gprofiler2 (where enabled). Plots are stored in directories named for the associated contrast.
