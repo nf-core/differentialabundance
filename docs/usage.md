@@ -6,7 +6,7 @@
 
 ## Introduction
 
-Differential analysis is a frequent task in a variety of use cases. In essence, all these use cases entail taking an input matrix containing features (e.g. genes) and observations (e.g. samples), and comparing groups of observations in all or a subset of the features. The feature/observation language here reflects our hope that this workflow will extend in future to encompass a variety of applications where an assumption of gene vs. sample may not be a valid one – though that is the application to which the first release will apply.
+Differential analysis is a common task in a variety of use cases. In essence, all these use cases entail taking an input matrix containing features (e.g. genes) and observations (e.g. samples), and comparing groups of observations in all or a subset of the features. The feature/ observation language here reflects our hope that this workflow will extend in future to encompass a variety of applications where an assumption of gene vs sample may not be a valid one- though that is the application to which the first release will apply.
 
 With the above in mind, running this workflow requires:
 
@@ -178,7 +178,7 @@ By default, if you don't provide features, for non-array data the workflow will 
 
 The pipeline produces an R markdown file which, if you're proficient in R, you can use to tweak the report after it's generated (**note**- if you need the same customisations repeatedly we would recommend you supply your own template using the `report_file` parameter).
 
-To work with R markdown files you will need RStudio. You will also need to have the ShinyNGS R module [installed](https://github.com/pinin4fjords/shinyngs#installation), since it supplies a lot of the accessory plotting functions etc. that you will need. The exact way to set this up may depend on your specific system, but is likely similar to the following example:
+To work with R markdown files you will need Rstudio. You will also need to have the ShinyNGS R module [installed](https://github.com/pinin4fjords/shinyngs#installation), since it supplies a lot of the accessory plotting functions etc that you will need. The exact way you will do this may depend on your exact systems, but for example
 
 ### 1. Create a conda environment with Shinyngs and activate it
 
@@ -267,7 +267,7 @@ With this configuration in place deployment should happen automatically every ti
 
 ### 3. Run your own Shiny server
 
-There is also a [Shiny server application](https://posit.co/download/shiny-server/), which you can install on your own infrastruture and use to host applications yourself.
+There is also a [Shiny server application](https://posit.co/download/shiny-server/), which you can install on your own infrastructure and use to host applications yourself.
 
 ## Gene set enrichment analysis
 

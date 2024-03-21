@@ -35,7 +35,7 @@ Stand-alone graphical outputs are placed in this directory. They may be useful i
     - `[coloring variable]/png/sample_dendrogram.png`: A sample clustering dendrogram
     - `[coloring variable]/png/mad_correlation.png`: Outlier prediction plots using median absolute deviation (MAD)
   - `differential/`: Directory containing standalone plots from differential analysis. Plots are stored in directories named for the associated contrast.
-    - `[contrast]/png/volcano.png`: Volcano plots of -log(10) p value against log(2) fold changes. 
+    - `[contrast]/png/volcano.png`: Volcano plots of -log(10) p value against log(2) fold changes.
   - `gsea/`: Directory containing graphical outputs from GSEA (where enabled). Plots are stored in directories named for the associated contrast.
     - `[contrast]/png/[gsea_plot_type].png`
   - `gprofiler2/`: Directory containing graphical outputs from gprofiler2 (where enabled). Plots are stored in directories named for the associated contrast.
@@ -58,29 +58,19 @@ Most plots are included in the HTML report (see above), but are also included in
 <summary>Output files</summary>
 
 - `tables/`
-
   - `annotation1/`: Directory containing annotation matrices generated in the course of analysis
     - `[array platform].annotation.tsv`: Annotations derived from an array platform
     - `[GTF name].anno.tsv`: Species wise annotations derived from a GTF in RNA-seq analysis
   - `processed_abundance/`: Directory containing processed abundance values from initial processing from e.g. DESeq2 or Affy:
-    - `[contrast_name].normalised_counts.tsv`: Normalised counts table (DESeq2). Rows are feature (e.g. gene) IDs and columns are observations (e.g. samples).
+    - `[contrast_name].normalised_counts.tsv`: Normalised counts table (DESeq2)
     - `[contrast_name].vst.tsv`: Normalised counts table with a variance-stabilising transform (DESeq2)
     - `raw.matrix.tsv`: RMA background corrected matrix (Affy)
     - `normalised.matrix.tsv`: RMA background corrected and normalised intensities matrix (Affy)
   - `differential/`: Directory containing tables of differential statistics reported by differential modules such as DESeq2
-
     - `[contrast_name].deseq2.results.tsv`: Results of DESeq2 differential analysis (RNA-seq)
-    - `OR [contrast_name].limma.results.tsv`: Results of limma differential analysis (Affymetrix arrays)
-
+    - `OR [contrast_name].limma.results.tsv`: Results of Limma differential analysis (Affymetrix arrays)
   - `gsea/`: Directory containing tables of differential gene set analysis from GSEA (where enabled)
-
-    - `[contrast_name].[deseq2|limma].results.tsv`: Results of DESeq2 differential analyis (RNA-seq) OR limma differential analysis (Affymetrix arrays, GEO studies, Maxquant proteomics studies)
-    - `[contrast_name].[deseq2|limma].results_filtered.tsv`: Results of DESeq2 differential analyis (RNA-seq) OR limma differential analysis (Affymetrix arrays, GEO studies, Maxquant proteomics studies); filtered for differentially abundant entries
-  - `gsea/`: Directory containing tables of differential gene set analyis from GSEA (where enabled)
     - `[contrast]/[contrast].gsea_report_for_[condition].tsv`: A GSEA report table for each side of each contrast
-  - `gprofiler2/`: Directory containing tables of differential gene set analyis from gprofiler2 (where enabled)
-    - `[contrast]/[contrast].gprofiler2.all_enriched_pathways.tsv`: A gprofiler2 report table for all enrichment results
-    - `[contrast]/[contrast].gprofiler2.[source].sub_enriched_pathways.tsv`: A gprofiler2 report table of enriched pathways from one specific source/database, e.g. REAC
   - `proteus/`: If `--study_type maxquant`: Directory containing abundance values produced by the proteus module which is used for processing MaxQuant input. Files are prefixed with the associated contrast and chosen normalization function (if any).
     - `[contrast]/[norm_function].normalized_proteingroups_tab.tsv`: Abundance table after normalization.
     - `[contrast]/raw_proteingroups_tab.tsv`: Abundance table without normalization.
@@ -150,10 +140,7 @@ The app must be run in an environment with [ShinyNGS](https://github.com/pinin4f
 
 **Problem:** The experimental intervention may not lead to observable differential expression at the individual gene level, but there may be coordinated changes at the pathway or functional level.
 
-**Suggested course of action:** Utilise pathway analysis tools such as Gene Set Enrichment Analysis (GSEA), available in this workflow. These tools evaluate the enrichment of gene sets or functional annotations to identify broader biological processes influenced by the experimental intervention.
-In this analysis, the differentially expressed genes (DEGs) are divided into different groups, based on their effect of specific signaling pathways. In each group, genes will be sorted and assigned by scores based on their logFC and significance level. It is a good approach to find hub DEGs in disease-related signaling pathways.
-
-By focusing on pathway-level analysis, you can capture the overall impact of the intervention on biological processes, even if differential expression at the individual gene level is not apparent.
+**Suggested course of action:** Utilize pathway analysis tools such as Gene Set Enrichment Analysis (GSEA), available in this workflow. These tools evaluate the enrichment of gene sets or functional annotations to identify broader biological processes influenced by the experimental intervention. By focusing on pathway-level analysis, you can capture the overall impact of the intervention on biological processes, even if differential expression at the individual gene level is not apparent.
 
 #### 6. Limited options for normalization:
 
