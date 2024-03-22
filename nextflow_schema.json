@@ -119,7 +119,7 @@
                 },
                 "observations_name_col": {
                     "type": "string",
-                    "description": "Column in the sample sheet to be used as the display identifier for observations",
+                    "description": "Column in the sample sheet to be used as the display identifier for observations. If unset, will use value of --observations_id_col.",
                     "fa_icon": "fas fa-file-signature"
                 }
             },
