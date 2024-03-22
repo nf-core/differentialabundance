@@ -80,7 +80,7 @@
                     "type": "string",
                     "fa_icon": "fas fa-border-all",
                     "description": "(RNA-seq only): optional transcript length matrix with samples and genes as the abundance matrix",
-                    "help_text": "if provided, this file willl be used to provide transcript lengths to DESeq2 to model length bias across samples"
+                    "help_text": "If provided, this file willl be used to provide transcript lengths to DESeq2 to model length bias across samples"
                 },
                 "affy_cel_files_archive": {
                     "type": "string",
@@ -119,8 +119,7 @@
                 },
                 "observations_name_col": {
                     "type": "string",
-                    "default": "sample",
-                    "description": "Column in the sample sheet to be used as the display identifier for observations",
+                    "description": "Column in the sample sheet to be used as the display identifier for observations. If unset, will use value of --observations_id_col.",
                     "fa_icon": "fas fa-file-signature"
                 }
             },
@@ -137,13 +136,13 @@
                 "features_id_col": {
                     "type": "string",
                     "default": "gene_id",
-                    "description": "Feature ID attribute in the GTF file (e.g. the gene_id field)",
+                    "description": "Feature ID attribute in the abundance table as well as in the GTF file (e.g. the gene_id field)",
                     "fa_icon": "fas fa-address-card"
                 },
                 "features_name_col": {
                     "type": "string",
                     "default": "gene_name",
-                    "description": "Feature name attribute in the GTF file (e.g. the gene symbol field)",
+                    "description": "Feature name attribute in the abundance table as well as in the GTF file (e.g. the gene symbol field)",
                     "fa_icon": "fas fa-signature"
                 },
                 "features_type": {
@@ -393,7 +392,7 @@
                     "type": "string",
                     "default": "raw,normalised,variance_stabilised",
                     "hidden": true,
-                    "description": "Specifies assay names to be used for matrices, platform-specific",
+                    "description": "Specifies assay names to be used for matrices, platform-specific.",
                     "fa_icon": "fas fa-file-signature"
                 },
                 "exploratory_final_assay": {
@@ -428,8 +427,7 @@
             "properties": {
                 "differential_file_suffix": {
                     "type": "string",
-                    "default": ".deseq2.results.tsv",
-                    "description": "The suffix associated tabular differential results tables",
+                    "description": "Advanced option: the suffix associated tabular differential results tables. Will by default use the appropriate suffix according to the study_type.",
                     "fa_icon": "fas fa-signature"
                 },
                 "differential_feature_id_column": {
@@ -500,7 +498,6 @@
                 }
             },
             "required": [
-                "differential_file_suffix",
                 "differential_feature_id_column",
                 "differential_fc_column",
                 "differential_qval_column",
@@ -1014,6 +1011,7 @@
                 "report_file": {
                     "type": "string",
                     "description": "Rmd report template from which to create the pipeline report",
+                    "help_text": "The pipeline will always generate a default report which gives a good overview of the analysis results. Should this default report not suit your needs, you can provide the path to a custom report instead.",
                     "format": "file-path",
                     "pattern": "^\\S+\\.Rmd$",
                     "fa_icon": "fas fa-book"
