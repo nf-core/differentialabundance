@@ -3,4 +3,4 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - conda-forge::coreutils=9.1
+  - bioconda::multiqc=1.21

@@ -38,6 +38,10 @@ Stand-alone graphical outputs are placed in this directory. They may be useful i
     - `[contrast]/png/volcano.png`: Volcano plots of -log(10) p value agains log(2) fold changes
   - `gsea/`: Directory containing graphical outputs from GSEA (where enabled). Plots are stored in directories named for the associated contrast.
     - `[contrast]/png/[gsea_plot_type].png`
+  - `gprofiler2/`: Directory containing graphical outputs from gprofiler2 (where enabled). Plots are stored in directories named for the associated contrast.
+    - `[contrast]/[contrast].gprofiler2.[source].gostplot.html`: An interactive gprofiler2 Manhattan plot of enriched pathways from one specific source/database, e.g. REAC
+    - `[contrast]/[contrast].gprofiler2.[source].gostplot.png`: A static gprofiler2 Manhattan plot of enriched pathways from one specific source/database, e.g. REAC
+    - `[contrast]/[contrast].gprofiler2.[source].sub_enriched_pathways.png`: A gprofiler2 bar plot of enriched pathways and how strongly enriched they are from one specific source/database, e.g. REAC
   - `proteus/`: If `--study_type maxquant`: Directory containing plots produced by the proteus module which is used for processing MaxQuant input. Files are prefixed with the associated contrast and chosen normalization function (if any).
     - `[contrast]/[norm_function].normalized_dendrogram.png`: A sample clustering dendrogram after normalization.
     - `[contrast]/[norm_function].normalized_mean_variance_relationship.png`: Plots of log intensity vs mean log intensity after normalization of each contrast level.
@@ -63,10 +67,13 @@ Most plots are included in the HTML report (see above), but are also included in
     - `raw.matrix.tsv`: RMA background corrected matrix (Affy)
     - `normalised.matrix.tsv`: RMA background corrected and normalised intensities matrix (Affy)
   - `differential/`: Directory containing tables of differential statistics reported by differential modules such as DESeq2
-    - `[contrast_name].deseq2.results.tsv`: Results of DESeq2 differential analyis (RNA-seq)
-    - `OR [contrast_name].limma.results.tsv`: Results of Limma differential analyis (Affymetrix arrays)
+    - `[contrast_name].[deseq2|limma].results.tsv`: Results of DESeq2 differential analyis (RNA-seq) OR Limma differential analysis (Affymetrix arrays, GEO studies, Maxquant proteomics studies)
+    - `[contrast_name].[deseq2|limma].results_filtered.tsv`: Results of DESeq2 differential analyis (RNA-seq) OR Limma differential analysis (Affymetrix arrays, GEO studies, Maxquant proteomics studies); filtered for differentially abundant entries
   - `gsea/`: Directory containing tables of differential gene set analyis from GSEA (where enabled)
     - `[contrast]/[contrast].gsea_report_for_[condition].tsv`: A GSEA report table for each side of each contrast
+  - `gprofiler2/`: Directory containing tables of differential gene set analyis from gprofiler2 (where enabled)
+    - `[contrast]/[contrast].gprofiler2.all_enriched_pathways.tsv`: A gprofiler2 report table for all enrichment results
+    - `[contrast]/[contrast].gprofiler2.[source].sub_enriched_pathways.tsv`: A gprofiler2 report table of enriched pathways from one specific source/database, e.g. REAC
   - `proteus/`: If `--study_type maxquant`: Directory containing abundance values produced by the proteus module which is used for processing MaxQuant input. Files are prefixed with the associated contrast and chosen normalization function (if any).
     - `[contrast]/[norm_function].normalized_proteingroups_tab.tsv`: Abundance table after normalization.
     - `[contrast]/raw_proteingroups_tab.tsv`: Abundance table without normalization.

@@ -68,3 +68,14 @@ a {
   color: #24b064;
   text-decoration: none;
 }
+
+.div-row {
+  display: flex;
+  margin-bottom: 25px;
+}
+
+.div-column {
+  flex: 1;
+  display: inline-block;
+  box-sizing: border-box;
+}
