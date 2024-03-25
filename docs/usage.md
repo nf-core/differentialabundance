@@ -78,11 +78,11 @@ To use this approach, include the transcript lengths file with the **raw counts*
 --transcript_length_matrix 'salmon.merged.gene_lengths.tsv'
 ```
 
-Without the transcript lengths, for instance in earlier rnaseq workflow versions, follow the second recommendation in the [tximport documentation](https://bioconductor.org/packages/release/bioc/vignettes/tximport/inst/doc/tximport.html#Downstream_DGE_in_Bioconductor):
+Without the transcript lengths, for instance in earlier nf-core/rnaseq workflow versions, follow the second recommendation in the [tximport documentation](https://bioconductor.org/packages/release/bioc/vignettes/tximport/inst/doc/tximport.html#Downstream_DGE_in_Bioconductor):
 
 > "Use the tximport argument `countsFromAbundance='lengthScaledTPM'` or `'scaledTPM'`, then employ the gene-level count matrix `txi$counts` directly in downstream software, a method we call 'bias corrected counts without an offset'"
 
-This aligns with the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices in the rnaseq workflow.
+This aligns with the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices in the nf-core/rnaseq workflow.
 
 It is important to note that the documentation advises:
 
@@ -146,7 +146,7 @@ The necessary fields in order are:
 You can optionally supply:
 
 - `blocking` - semicolon-delimited, any additional variables (also observation columns) that should be modelled alongside the contrast variable
-- `exclude_samples_col` and `exclude_samples_values` - the former being a valid column in the samples sheet, the latter a semicolon-delimited list of values in that column which should be used to select samples prior to differential modelling. This is helpful where certain samples need to be exluded prior to analysis of a given contrast.
+- `exclude_samples_col` and `exclude_samples_values` - the former being a valid column in the samplesheet, the latter a semicolon-delimited list of values in that column which should be used to select samples prior to differential modelling. This is helpful where certain samples need to be excluded prior to analysis of a given contrast.
 
 The file can be tab or comma separated.
 
@@ -240,7 +240,7 @@ Listening on http://127.0.0.1:3326
 
 shinyapps.io is a hosting solution supplied by Posit (formerly RStudio) which gives you quick and easy access to hosting for Shiny applications. There is a free tier, though you'll have to pay for features such as authentication and improved resources.
 
-You can upload your app to shinyapps.io youself, or deploy directly to shinyapps.io with this workflow, for which a few things need to happen:
+You can upload your app to shinyapps.io yourself, or deploy directly to shinyapps.io with this workflow, for which a few things need to happen:
 
 #### Account and app setup
 
@@ -267,7 +267,7 @@ With this configuration in place deployment should happen automatically every ti
 
 ### 3. Run your own Shiny server
 
-There is also a [Shiny server application](https://posit.co/download/shiny-server/), which you can install on your own infrastruture and use to host applications yourself.
+There is also a [Shiny server application](https://posit.co/download/shiny-server/), which you can install on your own infrastructure and use to host applications yourself.
 
 ## Gene set enrichment analysis
 
@@ -418,7 +418,7 @@ The pipeline also dynamically loads configurations from [https://github.com/nf-c
 Note that multiple profiles can be loaded, for example: `-profile test,docker` - the order of arguments is important!
 They are loaded in sequence, so later profiles can overwrite earlier profiles.
 
-If `-profile` is not specified, the pipeline will run locally and expect all software to be installed and available on the `PATH`. This is _not_ recommended, since it can lead to different results on different machines dependent on the computer enviroment.
+If `-profile` is not specified, the pipeline will run locally and expect all software to be installed and available on the `PATH`. This is _not_ recommended, since it can lead to different results on different machines dependent on the computer environment.
 
 - `test`
   - A profile with a complete configuration for automated testing
