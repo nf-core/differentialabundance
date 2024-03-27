@@ -1011,6 +1011,7 @@
             "properties": {
                 "report_file": {
                     "type": "string",
+                    "default": "${projectDir}/assets/differentialabundance_report.Rmd",
                     "description": "Rmd report template from which to create the pipeline report",
                     "help_text": "The pipeline will always generate a default report which gives a good overview of the analysis results. Should this default report not suit your needs, you can provide the path to a custom report instead.",
                     "format": "file-path",
@@ -1026,19 +1027,19 @@
                 },
                 "logo_file": {
                     "type": "string",
-                    "default": "docs/images/nf-core-differentialabundance_logo_light.png",
+                    "default": "${projectDir}/docs/images/nf-core-differentialabundance_logo_light.png",
                     "description": "A logo to display in the report instead of the generic pipeline logo",
                     "fa_icon": "far fa-font-awesome-logo-full"
                 },
                 "css_file": {
                     "type": "string",
-                    "default": "assets/nf-core_style.css",
+                    "default": "${projectDir}/assets/nf-core_style.css",
                     "description": "CSS to use to style the output, in lieu of the default nf-core styling",
                     "fa_icon": "far fa-file-code"
                 },
                 "citations_file": {
                     "type": "string",
-                    "default": "CITATIONS.md",
+                    "default": "${projectDir}/CITATIONS.md",
                     "description": "A markdown file containing citations to include in the fiinal report",
                     "fa_icon": "fas fa-ad"
                 },
