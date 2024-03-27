@@ -100,7 +100,7 @@ So we **do not recommend** raw counts files such as `salmon.merged.gene_counts.t
 --matrix '[path to matrix file]'
 ```
 
-This is the proteinGroups.txt file produced by MaxQuant. It is a tab-separated matrix file with a column for every observation (plus additional columns for other types of measurements and information); each row contains these data for a set of proteins. The parameters `--observations_id_col` and `--features_id_col` define which of the associated fields should be matched in those inputs. The parameter `--proteus_measurecol_prefix` defines which prefix is used to extract those matrix columns which contain the measurements to be used. For example, the default `LFQ intensity ` will indicate that columns like LFQ intensity S1, LFQ intensity S2, LFQ intensity S3 etc. are used (do not forget trailing whitespace in this parameter, if required!).
+This is the proteinGroups.txt file produced by MaxQuant. It is a tab-separated matrix file with a column for every observation (plus additional columns for other types of measurements and information); each row contains these data for a set of proteins. The parameters `--observations_id_col` and `--features_id_col` define which of the associated fields should be matched in those inputs. The parameter `--proteus_measurecol_prefix` defines which prefix is used to extract those matrix columns which contain the measurements to be used. For example, the default `LFQ intensity_s` will indicate that columns like LFQ intensity S1, LFQ intensity S2, LFQ intensity S3 etc. are used (_s at the end of the prefix indicates a whitespace; please write any whitespaces in the middle of the prefix normally).
 
 ### Affymetrix microarrays
 

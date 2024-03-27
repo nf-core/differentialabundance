@@ -268,8 +268,9 @@
             "properties": {
                 "proteus_measurecol_prefix": {
                     "type": "string",
-                    "default": "LFQ intensity ",
-                    "description": "Prefix of the column names of the MaxQuant proteingroups table in which the intensity values are saved; the prefix has to be followed by the sample names that are also found in the samplesheet. Default: 'LFQ intensity '; take care to also consider trailing whitespace between prefix and samplenames."
+                    "default": "LFQ intensity_s",
+                    "description": "Prefix of the column names of the MaxQuant proteingroups table in which the intensity values are saved; the prefix has to be followed by the sample names that are also found in the samplesheet. Default: 'LFQ intensity_s'.",
+                    "help_text": "If the sample columns are e.g. called 'LFQ intensity sample1', 'LFQ intensity sample2' etc., please set this parameter to 'LFQ intensity_s', the pipeline will replace the _s at the end (and only at the end) with a whitespace (using an actual whitespace might cause an error instead)."
                 },
                 "proteus_norm_function": {
                     "type": "string",
