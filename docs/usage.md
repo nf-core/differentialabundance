@@ -27,7 +27,7 @@ This may well be the same sample sheet used to generate the input matrix. For ex
 
 - a column listing the sample IDs (must be the same IDs as in the abundance matrix), in the example below it is called 'sample'. For some study_types, this column might need to be filled in with file names, e.g. when doing an affymetrix analysis.
 - one or more columns describing conditions for the differential analysis. In the example below it is called 'condition'
-- optionally one or more columns describing sample batches or similar which you want to be considered in the analysis; in the example below it is called batch.
+- optionally one or more columns describing sample batches or similar which you want to be considered in the analysis. In the example below it is called 'batch'
 
 For example:
 
