@@ -3,11 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v1.5.0dev
+## v1.5.0
 
 ### `Added`
 
 - [[#259](https://github.com/nf-core/differentialabundance/pull/259)] - Bump gtf2featureannotation to fix GTF handling error ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
+- [[#254](https://github.com/nf-core/differentialabundance/pull/254)] - Some parameter changes, added qbic credits ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#250](https://github.com/nf-core/differentialabundance/pull/250)] - Template update for nf-core/tools v2.13.1 ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#244](https://github.com/nf-core/differentialabundance/pull/244)] - Add pipeline params for matrixfilter NA options ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#241](https://github.com/nf-core/differentialabundance/pull/241)] - Template update for nf-core/tools v2.13 ([@WackerO](https://github.com/WackerO), review by [@nvnieuwk](https://github.com/nvnieuwk))
 - [[#228](https://github.com/nf-core/differentialabundance/pull/228)] - Template update for nf-core/tools v2.12 ([@nf-core-bot](https://github.com/nf-core-bot), review by [@pinin4fjords](https://github.com/pinin4fjords), [@WackerO](https://github.com/WackerO))
@@ -17,7 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
-- [[#240](https://github.com/nf-core/differentialabundance/pull/240) - Publish GSEA reports ([@pinin4fjords](https://github.com/pinin4fjords), review by )
+- [[#254](https://github.com/nf-core/differentialabundance/pull/254)] - Made differential_file_suffix optional ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#240](https://github.com/nf-core/differentialabundance/pull/240)] - Publish GSEA reports ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#231](https://github.com/nf-core/differentialabundance/pull/231)] - Update GSEA module to fix butterfly plot bug ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#226](https://github.com/nf-core/differentialabundance/pull/226)] - Fix DESEQ2_NORM in modules.config ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#221](https://github.com/nf-core/differentialabundance/pull/221)] - Update shinyngs modules to address density plots issue ([@pinin4fjords](https://github.com/pinin4fjords), review by [@maxulysse](https://github.com/maxulysse))
