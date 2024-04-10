@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
-- [[#254](https://github.com/nf-core/differentialabundance/pull/254)] - Added advanced params section, added QBiC credits ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#259](https://github.com/nf-core/differentialabundance/pull/259)] - Bump gtf2featureannotation to fix GTF handling error ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
+- [[#254](https://github.com/nf-core/differentialabundance/pull/254)] - Some parameter changes, added qbic credits ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#250](https://github.com/nf-core/differentialabundance/pull/250)] - Template update for nf-core/tools v2.13.1 ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#244](https://github.com/nf-core/differentialabundance/pull/244)] - Add pipeline params for matrixfilter NA options ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#241](https://github.com/nf-core/differentialabundance/pull/241)] - Template update for nf-core/tools v2.13 ([@WackerO](https://github.com/WackerO), review by [@nvnieuwk](https://github.com/nvnieuwk))

@@ -12,7 +12,7 @@
                     },
                     "atlasgeneannotationmanipulation/gtf2featureannotation": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "04bc484c987b523ea5420ed6bbc1fdc6d8aef751",
                         "installed_by": ["modules"]
                     },
                     "custom/matrixfilter": {
