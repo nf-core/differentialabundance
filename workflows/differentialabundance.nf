@@ -400,7 +400,7 @@ workflow DIFFERENTIALABUNDANCE {
     }
 
     // We'll use a local module to filter the differential tables and create output files that contain only differential features
-    ch_logfc = Channel.value([ params.differential_fc_column, params.differential_min_fold_change ])
+    ch_logfc = Channel.value([ params.differential_fc_column, Math.log(params.differential_min_fold_change)/Math.log(2) ])
     ch_padj = Channel.value([ params.differential_qval_column, params.differential_max_qval ])
 
     FILTER_DIFFTABLE(
