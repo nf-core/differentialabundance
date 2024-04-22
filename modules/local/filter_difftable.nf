@@ -37,9 +37,9 @@ process FILTER_DIFFTABLE {
 
     table = pd.read_csv("$input_file", sep=("," if "$input_file".endswith(".csv") else "\t"), header=0)
     table = table[~table["$logFC_column"].isna() &
-              ~table["$padj_column"].isna() &
-              (pd.to_numeric(table["$logFC_column"], errors='coerce').abs() >= float("$logFC_threshold")) &
-              (pd.to_numeric(table["$padj_column"], errors='coerce') <= float("$padj_threshold"))]
+                ~table["$padj_column"].isna() &
+                (pd.to_numeric(table["$logFC_column"], errors='coerce').abs() >= float("$logFC_threshold")) &
+                (pd.to_numeric(table["$padj_column"], errors='coerce') <= float("$padj_threshold"))]
 
     table.to_csv(path.splitext(path.basename("$input_file"))[0]+"_filtered.tsv", sep="\t", index=False)
 
