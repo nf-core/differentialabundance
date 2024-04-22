@@ -9,7 +9,7 @@ process FILTER_DIFFTABLE {
 
     input:
     tuple val(meta), path(input_file)
-    tuple val(logFC_column), val(logFC_threshold)
+    tuple val(logFC_column), val(FC_threshold)
     tuple val(padj_column), val(padj_threshold)
 
     output:
@@ -23,6 +23,7 @@ process FILTER_DIFFTABLE {
     """
     #!/usr/bin/env python
 
+    from math import log2
     from os import path
     import pandas as pd
     import platform
@@ -36,9 +37,10 @@ process FILTER_DIFFTABLE {
         exit("Please provide a .csv, .tsv or .txt file!")
 
     table = pd.read_csv("$input_file", sep=("," if "$input_file".endswith(".csv") else "\t"), header=0)
+    logFC_threshold = log2(float("$FC_threshold"))
     table = table[~table["$logFC_column"].isna() &
                 ~table["$padj_column"].isna() &
-                (pd.to_numeric(table["$logFC_column"], errors='coerce').abs() >= float("$logFC_threshold")) &
+                (pd.to_numeric(table["$logFC_column"], errors='coerce').abs() >= float(logFC_threshold)) &
                 (pd.to_numeric(table["$padj_column"], errors='coerce') <= float("$padj_threshold"))]
 
     table.to_csv(path.splitext(path.basename("$input_file"))[0]+"_filtered.tsv", sep="\t", index=False)
