@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- [[#260](https://github.com/nf-core/differentialabundance/pull/260)] - Change FILTER_DIFFTABLE to python because AWK does not correctly filter reliablys ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#232](https://github.com/nf-core/differentialabundance/pull/232)] - Mention missing dots in volcano plot, change rounding, turn off rounding by default ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 
 ## v1.4.0 - 2023-11-27
