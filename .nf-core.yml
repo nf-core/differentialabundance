@@ -1,1 +1,8 @@
 repository_type: pipeline
+lint:
+  nextflow_config:
+    - config_defaults:
+        - params.logo_file
+        - params.css_file
+        - params.citations_file
+        - params.report_file

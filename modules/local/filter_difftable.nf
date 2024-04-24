@@ -2,14 +2,14 @@ process FILTER_DIFFTABLE {
 
     label 'process_single'
 
-    conda "conda-forge::gawk=5.1.0"
+    conda "pandas=1.5.2"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/gawk:5.1.0' :
-        'biocontainers/gawk:5.1.0' }"
+        'https://depot.galaxyproject.org/singularity/pandas:1.5.2' :
+        'biocontainers/pandas:1.5.2' }"
 
     input:
     tuple val(meta), path(input_file)
-    tuple val(logFC_column), val(logFC_threshold)
+    tuple val(logFC_column), val(FC_threshold)
     tuple val(padj_column), val(padj_threshold)
 
     output:
@@ -20,42 +20,33 @@ process FILTER_DIFFTABLE {
     task.ext.when == null || task.ext.when
 
     script:
-    def VERSION = '9.1' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
     """
-    output_file=\$(echo $input_file | sed 's/\\(.*\\)\\..*/\\1/')_filtered.tsv
+    #!/usr/bin/env python
 
-    # Function to find column number
-    find_column_number() {
-        awk -v column="\$2" '{for(i=1;i<=NF;i++) if (\$i == column) {print i; exit}}' <<< "\$(head -n 1 "\$1")"
-    }
+    from math import log2
+    from os import path
+    import pandas as pd
+    import platform
+    from sys import exit
 
-    # Extract column numbers
-    logFC_col=\$(find_column_number "$input_file" "log2FoldChange")
-    padj_col=\$(find_column_number "$input_file" "padj")
-
-    # Prepare the output file
-    head -n 1 "$input_file" > "\${output_file}.tmp"
-
-    # The following snippet performs the following checks on each row (add +0.0 to the numbers so that they are definitely treated as numerics):
-    #
     # 1. Check that the current logFC/padj is not NA
     # 2. Check that the current logFC is >= threshold (abs does not work, so use a workaround)
     # 3. Check that the current padj is <= threshold
-    #
     # If this is true, the row is written to the new file, otherwise not
+    if not any("$input_file".endswith(ext) for ext in [".csv", ".tsv", ".txt"]):
+        exit("Please provide a .csv, .tsv or .txt file!")
 
-    awk -F'\\t' -v logFC_col="\$logFC_col" -v padj_col="\$padj_col" -v logFC_thresh="$logFC_threshold" -v padj_thresh="$padj_threshold" '
-        NR > 1 && \$logFC_col != "NA" && \$padj_col != "NA" &&
-        ((\$logFC_col+0.0 >= logFC_thresh+0.0) || (-\$logFC_col+0.0 >= logFC_thresh+0.0)) &&
-        \$padj_col+0.0 <= padj_thresh+0.0 { print }
-    ' "$input_file" >> "\${output_file}.tmp"
+    table = pd.read_csv("$input_file", sep=("," if "$input_file".endswith(".csv") else "\t"), header=0)
+    logFC_threshold = log2(float("$FC_threshold"))
+    table = table[~table["$logFC_column"].isna() &
+                ~table["$padj_column"].isna() &
+                (pd.to_numeric(table["$logFC_column"], errors='coerce').abs() >= float(logFC_threshold)) &
+                (pd.to_numeric(table["$padj_column"], errors='coerce') <= float("$padj_threshold"))]
 
-    # Rename temporary file to final output file
-    mv "\${output_file}.tmp" "\$output_file"
+    table.to_csv(path.splitext(path.basename("$input_file"))[0]+"_filtered.tsv", sep="\t", index=False)
 
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        bash: \$(echo \$(bash --version | grep -Eo 'version [[:alnum:].]+' | sed 's/version //'))
-    END_VERSIONS
+    with open('versions.yml', 'a') as version_file:
+        version_file.write('"${task.process}":' + "\\n")
+        version_file.write("    pandas: " + str(pd.__version__) + "\\n")
     """
 }
