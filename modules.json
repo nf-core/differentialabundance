@@ -62,7 +62,7 @@
                     },
                     "proteus/readproteingroups": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "a069b29783583c219c1f23ed3dcf64a5aee1340b",
                         "installed_by": ["modules"]
                     },
                     "rmarkdownnotebook": {

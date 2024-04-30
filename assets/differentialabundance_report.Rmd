@@ -267,8 +267,9 @@ for (r in seq_along(contributors)) {
 
 ```{r, echo=FALSE}
 observations <- read_metadata(file.path(params$input_dir, params$observations), id_col = params$observations_id_col)
-if (! params$observations_name_col %in% colnames(observations)){
-    stop(paste('Invalid observation name column specified: ', params$observations_name_col, paste0('(Valid values are: ', paste(colnames(observations), collapse=', '),')')))
+observations_name_col <- ifelse(!is.null(params$observations_name_col), params$observations_name_col, params$observations_id_col)
+if (! observations_name_col %in% colnames(observations)){
+    stop(paste('Invalid observation name column specified: ', observations_name_col, paste0('(Valid values are: ', paste(colnames(observations), collapse=', '),')')))
 }
 
 if (! is.null(params$features)){
@@ -305,7 +306,7 @@ assay_data <- lapply(assay_files, function(x) {
         row.names = 1
         )
     )
-    colnames(mat) <- observations[[params$observations_name_col]][match(colnames(mat), rownames(observations))]
+    colnames(mat) <- observations[[observations_name_col]][match(colnames(mat), rownames(observations))]
     mat
 })
 
@@ -316,7 +317,7 @@ if (!is.null(params$features_log2_assays)) {
 assay_data <- cond_log2_transform_assays(assay_data, params$features_log2_assays)
 
 # Now we can rename the observations rows using the title field
-rownames(observations) <- observations[[params$observations_name_col]]
+rownames(observations) <- observations[[observations_name_col]]
 
 # Run PCA early so we can understand how important each variable is
 pca_datas <- lapply(names(assay_data), function(assay_type){
@@ -547,7 +548,7 @@ Whiskers in the above boxplots show `r params$exploratory_whisker_distance` time
 plotly_densityplot(
     assay_data,
     experiment = observations,
-    colorby = params$observations_name_col,
+    colorby = observations_name_col,
     expressiontype = paste("count per", params$features_type),
     makeColorScale(length(unique(observations[[params$observations_id_col]])), palette = "Set1")
 )
