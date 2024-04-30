@@ -38,7 +38,7 @@ params:
     features_metadata_cols: NULL
     features_gtf_feature_type: NULL
     features_gtf_table_first_field: NULL
-    features_log2_assays: NULL
+    exploratory_log2_assays: NULL
     raw_matrix: null                                            # e.g. 0_salmon.merged.gene_counts_length_scaled.tsv
     normalised_matrix: null
     variance_stabilised_matrix: null                            # e.g. test_files/3_treatment-WT-P23H.vst.tsv
@@ -310,11 +310,12 @@ assay_data <- lapply(assay_files, function(x) {
     mat
 })
 
-if (!is.null(params$features_log2_assays)) {
+log2_assays <- params$exploratory_log2_assays
+if (!is.null(log2_assays)) {
     # Remove brackets from assay list. TODO: remove if this is added to cond_log2_transform_assays
-    params$features_log2_assays <- gsub('\\]$', '', gsub('^\\[', '', params$features_log2_assays))
+    log2_assays <- gsub('\\]$', '', gsub('^\\[', '', log2_assays))
 }
-assay_data <- cond_log2_transform_assays(assay_data, params$features_log2_assays)
+assay_data <- cond_log2_transform_assays(assay_data, log2_assays)
 
 # Now we can rename the observations rows using the title field
 rownames(observations) <- observations[[observations_name_col]]
