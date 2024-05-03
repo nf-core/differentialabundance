@@ -315,7 +315,7 @@ if (!is.null(log2_assays)) {
     # Remove brackets from assay list. TODO: remove if this is added to cond_log2_transform_assays
     log2_assays <- gsub('\\]$', '', gsub('^\\[', '', log2_assays))
 }
-assay_data <- cond_log2_transform_assays(assay_data, log2_assays)
+assay_data <- cond_log2_transform_assays(assay_data, log2_assays, prettify_names = FALSE)
 
 # Now we can rename the observations rows using the title field
 rownames(observations) <- observations[[observations_name_col]]
