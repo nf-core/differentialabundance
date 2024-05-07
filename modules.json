@@ -72,22 +72,22 @@
                     },
                     "shinyngs/app": {
                         "branch": "master",
-                        "git_sha": "d2d6072ae4c3a9d394dfe773bb0751f34df7a896",
+                        "git_sha": "85519fe9deccf2c5f7ff1f3b5d3494c61a794643",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/staticdifferential": {
                         "branch": "master",
-                        "git_sha": "d2d6072ae4c3a9d394dfe773bb0751f34df7a896",
+                        "git_sha": "85519fe9deccf2c5f7ff1f3b5d3494c61a794643",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/staticexploratory": {
                         "branch": "master",
-                        "git_sha": "d2d6072ae4c3a9d394dfe773bb0751f34df7a896",
+                        "git_sha": "85519fe9deccf2c5f7ff1f3b5d3494c61a794643",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/validatefomcomponents": {
                         "branch": "master",
-                        "git_sha": "d2d6072ae4c3a9d394dfe773bb0751f34df7a896",
+                        "git_sha": "85519fe9deccf2c5f7ff1f3b5d3494c61a794643",
                         "installed_by": ["modules"]
                     },
                     "untar": {
@@ -111,7 +111,7 @@
                     },
                     "utils_nfcore_pipeline": {
                         "branch": "master",
-                        "git_sha": "5caf7640a9ef1d18d765d55339be751bb0969dfa",
+                        "git_sha": "92de218a329bfc9a9033116eb5f65fd270e72ba3",
                         "installed_by": ["subworkflows"]
                     },
                     "utils_nfvalidation_plugin": {
