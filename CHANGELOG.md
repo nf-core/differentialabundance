@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- [[#266](https://github.com/nf-core/differentialabundance/pull/266)] - Fix logging by specifying assays to log ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#259](https://github.com/nf-core/differentialabundance/pull/259)] - Bump gtf2featureannotation to fix GTF handling error ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#257](https://github.com/nf-core/differentialabundance/pull/257)] - Added maxquant profile to nextflow.config to make it available ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#254](https://github.com/nf-core/differentialabundance/pull/254)] - Some parameter changes, added qbic credits ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
