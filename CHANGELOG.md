@@ -21,7 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
-- [[#265](https://github.com/nf-core/differentialabundance/pull/265) - GSEA- pngs and htmls in same place ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
+- [[#267](https://github.com/nf-core/differentialabundance/pull/267)] - Whitespace fix, remove TODO, also update changelog for release release 1.5.0 ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#265](https://github.com/nf-core/differentialabundance/pull/265)] - GSEA- pngs and htmls in same place ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#257](https://github.com/nf-core/differentialabundance/pull/257)] - Fixed FILTER_DIFFTABLE module, updated PROTEUS module to better handle whitespace in prefix param, made docs clearer ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#254](https://github.com/nf-core/differentialabundance/pull/254)] - Made differential_file_suffix optional ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#240](https://github.com/nf-core/differentialabundance/pull/240)] - Publish GSEA reports ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
@@ -35,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- [[#256](https://github.com/nf-core/differentialabundance/pull/256)] - Release 1.5.0 ([@WackerO](https://github.com/WackerO), review by [@maxulysse](https://github.com/maxulysse), [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#264](https://github.com/nf-core/differentialabundance/pull/264)] - Change FILTER_DIFFTABLE to python because AWK does not correctly filter reliably ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#232](https://github.com/nf-core/differentialabundance/pull/232)] - Mention missing dots in volcano plot, change rounding, turn off rounding by default ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 
