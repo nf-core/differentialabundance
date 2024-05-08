@@ -7,27 +7,22 @@
                 "nf-core": {
                     "affy/justrma": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "02a65e8871e06bac203dec16985fa3de648c99b6",
                         "installed_by": ["modules"]
                     },
                     "atlasgeneannotationmanipulation/gtf2featureannotation": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
-                        "installed_by": ["modules"]
-                    },
-                    "custom/dumpsoftwareversions": {
-                        "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "04bc484c987b523ea5420ed6bbc1fdc6d8aef751",
                         "installed_by": ["modules"]
                     },
                     "custom/matrixfilter": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "f4ae1d942bd50c5c0b9bd2de1393ce38315ba57c",
                         "installed_by": ["modules"]
                     },
                     "custom/tabulartogseacls": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "b7ebe95761cd389603f9cc0e0dc384c0f663815a",
                         "installed_by": ["modules"]
                     },
                     "custom/tabulartogseagct": {
@@ -37,7 +32,7 @@
                     },
                     "deseq2/differential": {
                         "branch": "master",
-                        "git_sha": "c992bd93b22a97feda5f04755511366c45423626",
+                        "git_sha": "9326d73af3fbe2ee90d9ce0a737461a727c5118e",
                         "installed_by": ["modules"]
                     },
                     "geoquery/getgeo": {
@@ -45,9 +40,14 @@
                         "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
                         "installed_by": ["modules"]
                     },
+                    "gprofiler2/gost": {
+                        "branch": "master",
+                        "git_sha": "c75e76bff35e2ee5305ebe89b513637b38e79d1d",
+                        "installed_by": ["modules"]
+                    },
                     "gsea/gsea": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "7aa7ced253469386f0645133ec3e838098dbe67c",
                         "installed_by": ["modules"]
                     },
                     "gunzip": {
@@ -57,12 +57,12 @@
                     },
                     "limma/differential": {
                         "branch": "master",
-                        "git_sha": "25047aa940979f64b31d19b94c483a9254263892",
+                        "git_sha": "9326d73af3fbe2ee90d9ce0a737461a727c5118e",
                         "installed_by": ["modules"]
                     },
                     "proteus/readproteingroups": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "a069b29783583c219c1f23ed3dcf64a5aee1340b",
                         "installed_by": ["modules"]
                     },
                     "rmarkdownnotebook": {
@@ -72,22 +72,22 @@
                     },
                     "shinyngs/app": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "85519fe9deccf2c5f7ff1f3b5d3494c61a794643",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/staticdifferential": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "85519fe9deccf2c5f7ff1f3b5d3494c61a794643",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/staticexploratory": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "85519fe9deccf2c5f7ff1f3b5d3494c61a794643",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/validatefomcomponents": {
                         "branch": "master",
-                        "git_sha": "516189e968feb4ebdd9921806988b4c12b4ac2dc",
+                        "git_sha": "85519fe9deccf2c5f7ff1f3b5d3494c61a794643",
                         "installed_by": ["modules"]
                     },
                     "untar": {
@@ -103,7 +103,23 @@
                 }
             },
             "subworkflows": {
-                "nf-core": {}
+                "nf-core": {
+                    "utils_nextflow_pipeline": {
+                        "branch": "master",
+                        "git_sha": "5caf7640a9ef1d18d765d55339be751bb0969dfa",
+                        "installed_by": ["subworkflows"]
+                    },
+                    "utils_nfcore_pipeline": {
+                        "branch": "master",
+                        "git_sha": "92de218a329bfc9a9033116eb5f65fd270e72ba3",
+                        "installed_by": ["subworkflows"]
+                    },
+                    "utils_nfvalidation_plugin": {
+                        "branch": "master",
+                        "git_sha": "5caf7640a9ef1d18d765d55339be751bb0969dfa",
+                        "installed_by": ["subworkflows"]
+                    }
+                }
             }
         }
     }

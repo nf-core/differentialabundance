@@ -23,7 +23,11 @@ With the above in mind, running this workflow requires:
 --input '[path to samplesheet file]'
 ```
 
-This may well be the same sample sheet used to generate the input matrix. For example, in RNA-seq this might be the same sample sheet, perhaps derived from [fetchngs](https://github.com/nf-core/fetchngs), that was input to the [RNA-seq workflow](https://github.com/nf-core/rnaseq). It may be necessary to add columns that describe the groups you want to compare.
+This may well be the same sample sheet used to generate the input matrix. For example, in RNA-seq this might be the same sample sheet, perhaps derived from [fetchngs](https://github.com/nf-core/fetchngs), that was input to the [RNA-seq workflow](https://github.com/nf-core/rnaseq). It may be necessary to add columns that describe the groups you want to compare. The columns that the pipeline requires are:
+
+- a column listing the sample IDs (must be the same IDs as in the abundance matrix), in the example below it is called 'sample'. For some study_types, this column might need to be filled in with file names, e.g. when doing an affymetrix analysis.
+- one or more columns describing conditions for the differential analysis. In the example below it is called 'condition'
+- optionally one or more columns describing sample batches or similar which you want to be considered in the analysis. In the example below it is called 'batch'
 
 For example:
 
@@ -96,7 +100,7 @@ So we **do not recommend** raw counts files such as `salmon.merged.gene_counts.t
 --matrix '[path to matrix file]'
 ```
 
-This is the proteinGroups.txt file produced by MaxQuant. It is a tab-separated matrix file with a column for every observation (plus additional columns for other types of measurements and information); each row contains these data for a set of proteins. The parameters `--observations_id_col` and `--features_id_col` define which of the associated fields should be matched in those inputs. The parameter `--proteus_measurecol_prefix` defines which prefix is used to extract those matrix columns which contain the measurements to be used. For example, the default `LFQ intensity ` will indicate that columns like LFQ intensity S1, LFQ intensity S2, LFQ intensity S3 etc. are used (do not forget trailing whitespace in this parameter, if required!).
+This is the proteinGroups.txt file produced by MaxQuant. It is a tab-separated matrix file with a column for every observation (plus additional columns for other types of measurements and information); each row contains these data for a set of proteins. The parameters `--observations_id_col` and `--features_id_col` define which of the associated fields should be matched in those inputs. The parameter `--proteus_measurecol_prefix` defines which prefix is used to extract those matrix columns which contain the measurements to be used. For example, the default `LFQ intensity ` will indicate that columns like LFQ intensity S1, LFQ intensity S2, LFQ intensity S3 etc. are used (one whitespace is automatically added if necessary).
 
 ### Affymetrix microarrays
 
@@ -269,6 +273,34 @@ With this configuration in place deployment should happen automatically every ti
 
 There is also a [Shiny server application](https://posit.co/download/shiny-server/), which you can install on your own infrastruture and use to host applications yourself.
 
+## Gene set enrichment analysis
+
+Currently, two tools can be used to do gene set enrichment analysis.
+
+### GSEA
+
+[GSEA](https://www.gsea-msigdb.org/gsea/index.jsp) tests for differential genes from within a user-provided set of genes; this requires a GMT or GMX file. The following example shows how to enable this:
+
+```bash
+--gsea_run true \
+--gene_sets_files gene_sets.gmt
+```
+
+### g:Profiler
+
+The [gprofiler2](https://cran.r-project.org/web/packages/gprofiler2/vignettes/gprofiler2.html) package can be used to test which pathways are enriched in the sets of differential genes produced by the the DESeq2 or limma modules. It is an R interface for the g:Profiler webtool. In the simplest form, this feature can be enabled with the parameters from the following example:
+
+```bash
+--gprofiler2_run true \
+--gprofiler2_organism mmusculus
+```
+
+If gene sets have been specified to the workflow via `--gene_sets_files` these are used by default. Specifying `--gprofiler2_organism` (mmusculus for Mus musculus, hsapiens for Homo sapiens etc.) will override those gene sets with g:profiler's own for the relevant species. `--gprofiler2_token` will override both options and use gene sets from a previous g:profiler run.
+
+By default the analysis will be run with a background list of genes that passed the abundance filter (i.e. those genes that actually had some expression); see for example https://doi.org/10.1186/s13059-015-0761-7 for why this is advisable. You can provide your own background list with `--gprofiler2_background_file background.txt`or if you want to not use any background, set `--gprofiler2_background_file false`.
+
+Check the [pipeline webpage](https://nf-co.re/differentialabundance/parameters#gprofiler2) for a full listing of the relevant parameters.
+
 ## Running the pipeline
 
 The typical command for running the pipeline is as follows:
@@ -299,6 +331,26 @@ work                # Directory containing the nextflow working files
 
 - If you don't like the colors used in the report, try a different `RColorBrewer` palette by changing the `exploratory_palette_name` and/or `differential_palette_name` parameters.
 - In rare cases, some users have reported issues with DESeq2 using all available cores on a machine, rather than those specified in the process configuration. This can be prevented by setting the `OPENBLAS_NUM_THREADS` environment variable.
+
+### Scaling up to large sample numbers
+
+#### Deactivating reporting processes
+
+A number of workflow steps are not optimised to deal with large sample numbers and will cause the overall workflow to fail. If you have sample numbers on the order of 100s or more, you should disable these processes like:
+
+```
+process {
+    withName:'PLOT_EXPLORATORY|PLOT_DIFFERENTIAL|RMARKDOWNNOTEBOOK|MAKE_REPORT_BUNDLE|SHINYNGS_APP'{
+        ext.when = false
+    }
+}
+```
+
+You will not get the final reporting outcomes of the workflow, but you will get the differential tables produced by DESeq2 or Limma, and the results of any gene seta analysis you have enabled.
+
+#### Restricting samples considered by DESeq2 or Limma
+
+By default, the DESeq2 or Limma differential modules model all samples at once, rather than just the samples involved in the contrast. This is usually the correct thing to do, but when there are are large numbers of samples involved in each contrast it may be unnecessary, and things can be sped up significantly by setting `--differential_subset_to_contrast_samples`. This will remove any samples not relevant to the contrast before the main differential analysis routines are called.
 
 ### Params files
 
