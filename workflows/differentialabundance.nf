@@ -74,7 +74,7 @@ if (run_gene_set_analysis) {
         if (!params.gprofiler2_token && !params.gprofiler2_organism) {
             error("To run gprofiler2, please provide a run token, GMT file or organism!")
         } else {
-            ch_gene_sets = [[]]     // If one of token or organism is provided, make gene_sets empty
+            ch_gene_sets = [[]]     // If one of token or organism is provided, make gene_sets empty (nested because of .first() in the gprofiler call)
         }
     } else {
         ch_gene_sets = []    // For methods that can run without gene sets
