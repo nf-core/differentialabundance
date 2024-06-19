@@ -342,7 +342,7 @@ workflow DIFFERENTIALABUNDANCE {
     if (params.study_type == 'affy_array' ||
         params.study_type == 'geo_soft_file' ||
         params.study_type == 'maxquant' ||
-        (params.study_type == 'rnaseq' && params.use_limma_for_rnaseq){
+        (params.study_type == 'rnaseq' && params.use_limma_for_rnaseq)){
 
         LIMMA_DIFFERENTIAL (
             ch_contrasts,
