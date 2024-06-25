@@ -71,23 +71,23 @@
                         "installed_by": ["modules"]
                     },
                     "shinyngs/app": {
-                        "branch": "master",
-                        "git_sha": "85519fe9deccf2c5f7ff1f3b5d3494c61a794643",
+                        "branch": "bump_shinyngs",
+                        "git_sha": "fc5e93b84073ed8367fa6215f9ca52aac3d7dd9a",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/staticdifferential": {
-                        "branch": "master",
-                        "git_sha": "85519fe9deccf2c5f7ff1f3b5d3494c61a794643",
+                        "branch": "bump_shinyngs",
+                        "git_sha": "1cf0fc9ef6d1e4f3fd8ff3812e369da1c7970133",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/staticexploratory": {
-                        "branch": "master",
-                        "git_sha": "85519fe9deccf2c5f7ff1f3b5d3494c61a794643",
+                        "branch": "bump_shinyngs",
+                        "git_sha": "fc5e93b84073ed8367fa6215f9ca52aac3d7dd9a",
                         "installed_by": ["modules"]
                     },
                     "shinyngs/validatefomcomponents": {
-                        "branch": "master",
-                        "git_sha": "85519fe9deccf2c5f7ff1f3b5d3494c61a794643",
+                        "branch": "bump_shinyngs",
+                        "git_sha": "1cf0fc9ef6d1e4f3fd8ff3812e369da1c7970133",
                         "installed_by": ["modules"]
                     },
                     "untar": {
