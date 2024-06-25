@@ -584,9 +584,9 @@ workflow DIFFERENTIALABUNDANCE {
         // Make a new contrasts file from the differential metas to guarantee the
         // same order as the differential results
 
-        ch_app_differential = ch_differential.first().map{it[0].keySet().join(',')}
+        ch_app_differential = ch_differential.first().map{it[0].keySet().tail().join(',')}
             .concat(
-                ch_differential.map{it[0].values().join(',')}
+                ch_differential.map{it[0].values().tail().join(',')}
             )
             .collectFile(name: 'contrasts.csv', newLine: true, sort: false)
             .map{
