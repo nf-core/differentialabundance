@@ -426,6 +426,11 @@
             "description": "Options related to differential operations",
             "default": "",
             "properties": {
+                "differential_use_limma": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-adjust",
+                    "description": "If true limma will be used for all study_types"
+                },
                 "differential_file_suffix": {
                     "type": "string",
                     "description": "Advanced option: the suffix associated tabular differential results tables. Will by default use the appropriate suffix according to the study_type.",
@@ -478,11 +483,6 @@
                     "default": "gene_name",
                     "description": "Where a features file (GTF) has been provided, what attributed to use to name features",
                     "fa_icon": "fas fa-signature"
-                },
-                "use_limma": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-adjust",
-                    "description": "If true limma will be used for all study_types"
                 },
                 "differential_foldchanges_logged": {
                     "type": "boolean",
