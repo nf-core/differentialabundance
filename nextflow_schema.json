@@ -479,6 +479,11 @@
                     "description": "Where a features file (GTF) has been provided, what attributed to use to name features",
                     "fa_icon": "fas fa-signature"
                 },
+                "use_limma": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-adjust",
+                    "description": "If true limma will be used for all study_types"
+                },
                 "differential_foldchanges_logged": {
                     "type": "boolean",
                     "default": true,
@@ -633,8 +638,8 @@
             },
             "fa_icon": "fas fa-adjust"
         },
-        "limma_specific_options_microarray_only": {
-            "title": "Limma specific options (microarray only)",
+        "limma_specific_options": {
+            "title": "Limma specific options",
             "type": "object",
             "description": "",
             "default": "",
