@@ -346,7 +346,8 @@ workflow DIFFERENTIALABUNDANCE {
 
         LIMMA_DIFFERENTIAL (
             ch_contrasts,
-            ch_samples_and_matrix
+            ch_samples_and_matrix,
+            params.study_type
         )
         ch_differential = LIMMA_DIFFERENTIAL.out.results
         ch_model = LIMMA_DIFFERENTIAL.out.model

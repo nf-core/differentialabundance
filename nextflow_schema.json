@@ -1314,7 +1314,7 @@
             "$ref": "#/definitions/deseq2_specific_options_rna_seq_only"
         },
         {
-            "$ref": "#/definitions/limma_specific_options_microarray_only"
+            "$ref": "#/definitions/limma_specific_options"
         },
         {
             "$ref": "#/definitions/gsea"

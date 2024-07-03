@@ -10,6 +10,7 @@ process LIMMA_DIFFERENTIAL {
     input:
     tuple val(meta), val(contrast_variable), val(reference), val(target)
     tuple val(meta2), path(samplesheet), path(intensities)
+    val type
 
     output:
     tuple val(meta), path("*.limma.results.tsv")          , emit: results
@@ -23,5 +24,10 @@ process LIMMA_DIFFERENTIAL {
     task.ext.when == null || task.ext.when
 
     script:
-    template 'limma_de.R'
+    if (type == 'rnaseq') {
+        template 'limma_de_rna_seq.R'
+    } else {
+        template 'limma_de_micro_array.R'
+    }
+
 }
