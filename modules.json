@@ -60,6 +60,26 @@
                         "git_sha": "9326d73af3fbe2ee90d9ce0a737461a727c5118e",
                         "installed_by": ["modules"]
                     },
+                    "mygene": {
+                        "branch": "master",
+                        "git_sha": "82024cf6325d2ee194e7f056d841ecad2f6856e9",
+                        "installed_by": ["modules"]
+                    },
+                    "propr/grea": {
+                        "branch": "master",
+                        "git_sha": "71b1180a5a3de6398eb0eb4d55424cbda36f52d8",
+                        "installed_by": ["modules"]
+                    },
+                    "propr/propd": {
+                        "branch": "master",
+                        "git_sha": "08b360512467e8e7079f995bb7c981a7c204d00f",
+                        "installed_by": ["modules"]
+                    },
+                    "propr/propr": {
+                        "branch": "master",
+                        "git_sha": "c8b064f86eaa6c7ca89286bc12c0e517be0e6215",
+                        "installed_by": ["modules"]
+                    },
                     "proteus/readproteingroups": {
                         "branch": "master",
                         "git_sha": "a069b29783583c219c1f23ed3dcf64a5aee1340b",
