@@ -1,11 +1,11 @@
 process PROPR_GREA {
     tag "$meta.id"
-    label 'process_high'
+    label 'process_single'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/r-propr:5.0.4':
-        'quay.io/biocontainers/r-propr:5.0.4' }"
+        'biocontainers/r-propr:5.0.4' }"
 
     input:
     tuple val(meta), path(adj)

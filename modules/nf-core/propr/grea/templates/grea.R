@@ -122,8 +122,8 @@ add_missing <- function(adjacency_matrix, knowledge_matrix){
 opt <- list(
     adj              = '$adj',
     gmt              = '$gmt',
-    prefix           = ifelse('$task.ext.prefix' == 'null', '$meta.pathway_name',  '$task.ext.prefix'),
-    permutation      = 10,
+    prefix           = ifelse('$task.ext.prefix' == 'null', '$meta.id',  '$task.ext.prefix'),
+    permutation      = 100,
     fixseed          = TRUE,
     ncores           = as.integer('$task.cpus')
 )
@@ -214,7 +214,7 @@ write.table(
     G,
     file      = paste0(opt\$prefix, '.go.tsv'),
     col.names = TRUE,
-    row.names = TRUE, # False
+    row.names = TRUE,
     sep       = '\\t',
     quote     = FALSE
 
