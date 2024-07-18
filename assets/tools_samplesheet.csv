@@ -1,0 +1,6 @@
+pathway_name,diff_method,args_diff,enr_diff_method,args_enr_diff,cor_method,args_cor,enr_cor_method,args_enr_cor,sel_method,args_sel
+diff_prop,propd, --adjacency true --permutation 100 --fixseed true, , ,,, , ,,
+filtered_pcor,propd, --adjacency true --permutation 100 --fixseed true, , ,propr,  --permutation 10 --adjacency true --cutoff_min 0.005 --cutoff_max 0.5 --cutoff_interval 0.01 --metric pcor.bshrink, , , filtervar,
+prop,, , , ,propr,  --cutoff_min 0.05 --cutoff_max 0.95 --cutoff_interval 0.05 --fixseed true --metric rho --permutation 100 --adjacency true, , , ,
+diff_grea,propd,--group_col fase --adjacency true --permutation 10,grea, --permutation 10, , , , ,,
+deseq2,deseq2,,gsea,,,,,,,
