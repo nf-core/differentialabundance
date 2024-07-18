@@ -46,7 +46,7 @@
                 "type": "string",
                 "meta": ["args_enr_cor"]
             },
-            "sel_method":{
+            "sel_method": {
                 "type": "string",
                 "meta": ["sel_method"],
                 "errorMessage": "choose filtervar or none"
