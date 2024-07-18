@@ -66,7 +66,7 @@ read_delim_flexible <- function(file, header = TRUE, row.names = 1, check.names 
 #' Extract the values for a single metric and convert it into a genes x genes matrix.
 #'
 #' @param object propd object
-one_metric_df <- function(object) {
+one_metric_df <- function(object){
     results <- getResults(object)
     #keep only the metric of interest
     one_metric <- cbind(results\$Partner, results\$Pair, results\$theta)
@@ -138,7 +138,7 @@ convert_to_adjacency <- function(matrix, cutoff) {
 ################################################
 
 opt <- list(
-    prefix          = ifelse('$task.ext.prefix' == 'null','$meta.pathway_name', '$task.ext.prefix'),
+    prefix          = ifelse('$task.ext.prefix' == 'null', '$meta.id', '$task.ext.prefix'),
     count           = '$count',
     samplesheet     = '$samplesheet',
     features_id_col = 'gene_id',            # column name of feature ids
@@ -147,9 +147,9 @@ opt <- list(
     metric          = 'theta_d',            # differential proportionality metric: theta_d, theta_e or theta_f
     alpha           = NA,                   # alpha for boxcox transformation
     permutation     = 0,                    # permutation cycles for computing FDR
-    cutoff_min      = 0.05,                   # minimun threshold to test
-    cutoff_max      = 0.95,                   # maximun threshold to test
-    cutoff_interval = 0.05,                   # interval between thresholds
+    cutoff_min      = NA,                   # minimun threshold to test
+    cutoff_max      = NA,                   # maximun threshold to test
+    cutoff_interval = NA,                   # interval between thresholds
     fixseed         = FALSE,
     adjacency       = FALSE,
     fdrVal          = 0.05,
