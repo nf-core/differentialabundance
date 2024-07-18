@@ -77,7 +77,7 @@
                     },
                     "propr/propr": {
                         "branch": "master",
-                        "git_sha": "c8b064f86eaa6c7ca89286bc12c0e517be0e6215",
+                        "git_sha": "132fa6c9bd2515807f6a1cdec1ad7d03c817bcc9",
                         "installed_by": ["modules"]
                     },
                     "proteus/readproteingroups": {

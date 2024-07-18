@@ -121,39 +121,6 @@ seqCutoff <- function(object){
 #' @param metric Metric used to calculate the proportionality values. Options are 'cor', 'rho', 'phi', 'phs', 'vlr', 'pcor', 'pcor.shrink', 'pcor.bshrink'
 #'
 #' @return cutoff value. Proportionality values higher than this cutoff are considered significant.
-# valCutoff  <- function(object, metric, fdrVal = 0.05){
-#     fdr_df <- object@fdr
-#     print(fdr_df)
-#     metric_up <- c("rho", "cor", "pcor", "pcor.shrink", "pcor.bshrink")
-#     if (prod(dim(fdr_df) == 0)){
-#         warning("Please run updateCutoff on propr first")
-#     }else{
-#         fdr_vals <- fdr_df\$FDR
-#         if (any(is.na(fdr_vals))){
-#             stop("FDR not defined. This metric is not appropiate for the given dataset")
-#         }
-#         threshold <- any(fdr_vals <= fdrVal)
-#         if (metric %in% metric_up){
-#             if (threshold){
-#                 fdr_threshold <- fdr_vals[which.max(fdr_vals <= fdrVal)]
-#             }else{
-#                 warning("FDR is higher than the specified threshold for all proportionality values. Using the lowest fdr instead")
-#                 fdr_threshold <- fdr_vals[length(fdr_vals)]
-#             }
-#         }else{
-#             if (threshold){
-#                 fdr_threshold <- fdr_vals[which.min(fdr_vals <= fdrVal) - 1]
-#             }else{
-#                 warning("FDR is higher than the specified threshold for all proportionality values. Using the lowest fdr instead")
-#                 fdr_threshold <- fdr_vals[1]
-#             }
-#         }
-#     cutoff <- fdr_df\$cutoff[fdr_df\$FDR == fdr_threshold]
-#     }
-#     return(cutoff)
-# }
-
-
 valCutoff  <- function(object, metric, fdrVal = 0.05){
     fdr_df <- object@fdr
     print(fdr_df)
@@ -203,7 +170,7 @@ convert_to_adjacency <- function(matrix, cutoff, metric) {
 
 opt <- list(
     count            = '$count',
-    prefix           = ifelse('$task.ext.prefix' == 'null', '$meta.pathway_name', '$task.ext.prefix'),
+    prefix           = ifelse('$task.ext.prefix' == 'null', '$meta.id', '$task.ext.prefix'),
     transformation   = 'clr',
     reference        = NA,
     alpha            = NA,
