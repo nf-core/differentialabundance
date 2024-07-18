@@ -1,0 +1,25 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "title": "nf-core/testpipeline pipeline parameters",
+    "description": "this is a test",
+    "type": "object",
+    "definitions": {
+        "tools_options": {
+            "title": "Tools options",
+            "type": "object",
+            "description": "Define where the pipeline should find input data",
+            "required": ["tools"],
+            "properties": {
+                "tools": {
+                    "type": "string",
+                    "format": "file-path",
+                    "mimetype": "text/csv",
+                    "schema": "assets/schema_tools.json",
+                    "pattern": "^\\S+\\.(csv|tsv|yaml)$",
+                    "description": "Path to comma-separated file containing samplesheet",
+                    "help_text": "this is just a test"
+                }
+            }
+        }
+    }
+}
