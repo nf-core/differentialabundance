@@ -22,7 +22,7 @@ workflow CORRELATION {
         .set { ch_counts_cor }
 
     // Hacer un branch del channel para coger las counts normales cuando no hay variable selection
-    
+
     ch_counts_cor.propr
         .branch{
             no_sel:    it[0]["sel_method"] == null

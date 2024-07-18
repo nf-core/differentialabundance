@@ -21,7 +21,7 @@ workflow DIFFERENTIAL {
             deseq2: it[0]["diff_method"] == "deseq2"
         }
         .set { ch_counts_tools }
-     
+
     PROPD(ch_counts_tools.propd, ch_samplesheet)
     ch_results = PROPD.out.results
     ch_adjacency = PROPD.out.adj

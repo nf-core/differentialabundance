@@ -37,7 +37,7 @@ workflow EXPERIMENTAL {
         }
         .set { ch_counts_tools }
 
-    // Perform CODA analysis 
+    // Perform CODA analysis
     ch_out = Channel.empty()
 
     // Perform differential analysis
@@ -48,10 +48,10 @@ workflow EXPERIMENTAL {
 
     // Perform variable selection
     ch_counts_filtered = VARIABLE_SELECTION(ch_diff_adjacency, ch_counts)
-    
+
     //VARIABLE_SELECTION.out.count.view()
 
-    // Perform correlation analysis 
+    // Perform correlation analysis
     CORRELATION(ch_counts, ch_tools, ch_counts_filtered)
     ch_matrix = CORRELATION.out.matrix
     ch_cor_adjacency = CORRELATION.out.adjacency
@@ -59,14 +59,14 @@ workflow EXPERIMENTAL {
 
     //ch_diff_adjacency.view()
     //ch_cor_adjacency.view()
-    
+
     // Perform enrichment analysis
     ENRICHMENT(ch_diff_adjacency, ch_cor_adjacency, ch_counts)
     ch_enriched_cor = ENRICHMENT.out.enriched_cor
     ch_enriched_diff = ENRICHMENT.out.enriched_diff
 
     ch_out.mix(ch_enriched_diff, ch_enriched_cor)
-    
+
 
     emit:
     output = ch_out

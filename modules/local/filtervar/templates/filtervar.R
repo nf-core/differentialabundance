@@ -189,23 +189,23 @@ A\$per_gene <- per_gene_connection
 
 A <- A[order(A\$per_gene, decreasing = TRUE),]
 
-# Define selection criteria 
+# Define selection criteria
 
 max_gene_number <- ncol(count)*10 # 10x samples for technical reasons (pcor)
 
-#Calculate connection threshold 
+#Calculate connection threshold
 total_connections <- sum(per_gene_connection)/2 # 2 because the matrix is symmetric
 possible_connections <- nrow(count)*(nrow(count)-1)/2
 
 percentage_expected <- total_connections/possible_connections
 connection_threshold <- percentage_expected * nrow(count)
 
-# Filter count matrix according to selected genes 
+# Filter count matrix according to selected genes
 
 col_genes <- which(names(count) == opt\$features_id_col)
 
 if (opt\$filterVar == 'yes'){
-    # select only differentially proportional genes 
+    # select only differentially proportional genes
     top_genes <- rownames(A[which(A\$per_gene > connection_threshold),])
     count_filtered <- count[count[,col_genes] %in% top_genes,]
     warning("non differentially proportional genes were removed before correlation analysis")

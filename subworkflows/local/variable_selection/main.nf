@@ -16,7 +16,7 @@ workflow VARIABLE_SELECTION {
         .combine(ch_adj)
         //.view()
         .map{
-            counts, meta, adj -> 
+            counts, meta, adj ->
                 [ meta, counts, adj]
         }
         //.view()
@@ -34,7 +34,7 @@ workflow VARIABLE_SELECTION {
     ch_counts_cor = FILTERVAR.out.count
     //ch_counts_cor.view()
 
-    
+
     emit:
     count = ch_counts_cor
 }

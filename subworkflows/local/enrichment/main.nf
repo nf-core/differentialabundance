@@ -8,8 +8,8 @@ include { MYGENE } from "../../modules/nf-core/mygene/main.nf"
 workflow ENRICHMENT {
     take:
     ch_diff_adjacency
-    ch_cor_adjacency 
-    ch_counts 
+    ch_cor_adjacency
+    ch_counts
 
 
     main:
