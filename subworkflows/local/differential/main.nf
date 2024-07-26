@@ -1,5 +1,5 @@
 // include modules
-include {PROPR_PROPD as PROPD} from "../../modules/nf-core/propr/propd/main.nf"
+include {PROPR_PROPD as PROPD} from "../../../modules/nf-core/propr/propd/main.nf"
 
 
 workflow DIFFERENTIAL {

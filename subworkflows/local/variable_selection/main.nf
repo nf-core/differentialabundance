@@ -1,5 +1,5 @@
 // include modules
-include { FILTERVAR } from "../../modules/local/filtervar/main.nf"
+include { FILTERVAR } from "../../../modules/local/filtervar/main.nf"
 
 workflow VARIABLE_SELECTION {
     take:

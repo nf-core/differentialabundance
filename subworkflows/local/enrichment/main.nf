@@ -1,8 +1,8 @@
 // include modules
 
-include { PROPR_GREA as GREA_DIFF } from "../../modules/nf-core/propr/grea/main.nf"
-include { PROPR_GREA as GREA_COR } from "../../modules/nf-core/propr/grea/main.nf"
-include { MYGENE } from "../../modules/nf-core/mygene/main.nf"
+include { PROPR_GREA as GREA_DIFF } from "../../../modules/nf-core/propr/grea/main.nf"
+include { PROPR_GREA as GREA_COR  } from "../../../modules/nf-core/propr/grea/main.nf"
+include { MYGENE } from "../../../modules/nf-core/mygene/main.nf"
 
 
 workflow ENRICHMENT {

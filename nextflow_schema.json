@@ -58,6 +58,16 @@
                     "default": "counts",
                     "description": "Type of abundance measure used, platform-dependent",
                     "fa_icon": "fas fa-keyboard"
+                },
+                "tools": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "mimetype": "text/csv",
+                    "schema": "assets/schema_tools.json",
+                    "pattern": "^\\S+\\.(csv|tsv|yaml)$",
+                    "description": "Path to comma-separated file containing samplesheet",
+                    "help_text": "This file defines possible combinations of tools, which are to be run by the pipeline"
                 }
             }
         },

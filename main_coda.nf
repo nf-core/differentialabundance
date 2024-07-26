@@ -2,15 +2,15 @@
 // include { PROPR_PROPD        } from '../../../modules/nf-core/propr/propd/main'
 // include { PROPR_GREA         } from '../../../modules/nf-core/propr/grea/main'
 // include { MYGENE             } from '../../../modules/nf-core/mygene/main'
-include { EXPERIMENTAL        } from './subworkflows/experimental/main.nf'
+include { EXPERIMENTAL        } from './subworkflows/local/experimental/main.nf'
 include { fromSamplesheet } from 'plugin/nf-validation'
 
 
 // These are local files from my Bachelor Thesis project, I am creating the ch_samples_and_matrix
 // manually for testing but it should be be provided by the processing section of nf-core/differentialabundance
-Counts_ch = Channel.fromPath("../YMC/counts_sin0.csv")
+Counts_ch = Channel.fromPath(params.matrix)
 
-Sample_ch = Channel.fromPath("../YMC/samplesheet_RCvsOX.csv")
+Sample_ch = Channel.fromPath(params.input)
     .map{ it -> [[id: 'YMC'], it]}
 
 ch_samples_and_matrix = Sample_ch.combine(Counts_ch)

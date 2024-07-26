@@ -1,6 +1,6 @@
 
 // include nf-core modules
-include {PROPR_PROPR as PROPR} from "../../modules/nf-core/propr/propr/main.nf"
+include {PROPR_PROPR as PROPR} from "../../../modules/nf-core/propr/propr/main.nf"
 
 
 workflow CORRELATION {
