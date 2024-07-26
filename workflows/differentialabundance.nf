@@ -261,7 +261,7 @@ workflow DIFFERENTIALABUNDANCE {
         }
         ch_features = ch_features_matrix
             .map{ meta, matrix ->
-                matrix.copyTo(matrix_as_anno_filename)
+                matrix.mklink(options = ['overwrite':true], matrix_as_anno_filename)
                 [ meta, file(matrix_as_anno_filename) ]
             }
     }
