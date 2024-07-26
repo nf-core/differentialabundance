@@ -262,7 +262,8 @@ workflow DIFFERENTIALABUNDANCE {
         }
         ch_features = ch_features_matrix
             .map{ meta, matrix ->
-                matrix.mklink(matrix_as_anno_filename, overwrite:true)
+                matrix_copy = file(matrix_as_anno_filename)
+                matrix_copy.exists() && matrix.getText().md5().equals(matrix_copy.getText().md5()) ?: matrix.copyTo(matrix_as_anno_filename)
                 [ meta, file(matrix_as_anno_filename) ]
             }
     }
