@@ -253,7 +253,7 @@ workflow DIFFERENTIALABUNDANCE {
 
         // Otherwise we can just use the matrix input; save it to the workdir so that it does not
         // just appear wherever the user runs the pipeline
-        matrix_as_anno_filename = "${workflow.workDir}/matrix_as_anno.${matrix_file.getExtension()}"
+        matrix_as_anno_filename = "${workflow.workDir}/${matrix_file.getBaseName()}_as_anno.${matrix_file.getExtension()}"
         if (params.study_type == 'maxquant'){
             ch_features_matrix = ch_in_norm
         } else {
@@ -261,7 +261,8 @@ workflow DIFFERENTIALABUNDANCE {
         }
         ch_features = ch_features_matrix
             .map{ meta, matrix ->
-                matrix.copyTo(matrix_as_anno_filename)
+                matrix_copy = file(matrix_as_anno_filename)
+                matrix_copy.exists() && matrix.getText().md5().equals(matrix_copy.getText().md5()) ?: matrix.copyTo(matrix_as_anno_filename)
                 [ meta, file(matrix_as_anno_filename) ]
             }
     }
