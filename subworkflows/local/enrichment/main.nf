@@ -1,9 +1,9 @@
-// include modules
-
+//
+// Perform enrichment analysis
+//
 include { PROPR_GREA as GREA_DIFF } from "../../../modules/nf-core/propr/grea/main.nf"
 include { PROPR_GREA as GREA_COR  } from "../../../modules/nf-core/propr/grea/main.nf"
 include { MYGENE } from "../../../modules/nf-core/mygene/main.nf"
-
 
 workflow ENRICHMENT {
     take:
@@ -11,9 +11,7 @@ workflow ENRICHMENT {
     ch_cor_adjacency
     ch_counts
 
-
     main:
-
     MYGENE(ch_counts)
     ch_gmt = MYGENE.out.gmt
 
@@ -38,7 +36,6 @@ workflow ENRICHMENT {
 
     GREA_COR(ch_cor_grea.grea, ch_gmt.collect())
     ch_enriched_cor = GREA_COR.out.enrichedGO
-
 
     emit:
     enriched_diff = ch_enriched_diff
