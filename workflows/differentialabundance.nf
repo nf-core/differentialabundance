@@ -43,7 +43,7 @@ if (params.study_type == 'affy_array'){
         error("Query GSE not specified or features metadata columns not specified")
     }
 } else {
-    // If this is not microarray data or maxquant output, and this an RNA-seq dataset,
+    // If this is not microarray data or maxquant output, and this an RNA-seq dataset or experimental analysis,
     // then assume we're reading from a matrix
 
     if (params.study_type in ["rnaseq", "experimental"] && params.matrix) {
@@ -308,7 +308,7 @@ workflow DIFFERENTIALABUNDANCE {
         ch_norm = VALIDATOR.out.assays
     }
 
-    if(!params.study_type in ['rnaseq', 'experimental']) {
+    if(params.study_type !in ['rnaseq', 'experimental']) {
         ch_matrix_for_differential = ch_norm
     }
     else{
