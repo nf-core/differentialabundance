@@ -62,6 +62,7 @@ if (params.control_features) { ch_control_features = Channel.of([ exp_meta, file
 def run_gene_set_analysis = params.gsea_run || params.gprofiler2_run
 
 if (run_gene_set_analysis) {
+    ch_gene_sets = Channel.of([])    // For methods that can run without gene sets
     if (params.gene_sets_files) {
         gene_sets_files = params.gene_sets_files.split(",")
         ch_gene_sets = Channel.of(gene_sets_files).map { file(it, checkIfExists: true) }
@@ -74,8 +75,6 @@ if (run_gene_set_analysis) {
         if (!params.gprofiler2_token && !params.gprofiler2_organism) {
             error("To run gprofiler2, please provide a run token, GMT file or organism!")
         }
-    } else {
-        ch_gene_sets = []    // For methods that can run without gene sets
     }
 }
 
@@ -254,7 +253,7 @@ workflow DIFFERENTIALABUNDANCE {
 
         // Otherwise we can just use the matrix input; save it to the workdir so that it does not
         // just appear wherever the user runs the pipeline
-        matrix_as_anno_filename = "${workflow.workDir}/matrix_as_anno.${matrix_file.getExtension()}"
+        matrix_as_anno_filename = "${workflow.workDir}/${matrix_file.getBaseName()}_as_anno.${matrix_file.getExtension()}"
         if (params.study_type == 'maxquant'){
             ch_features_matrix = ch_in_norm
         } else {
@@ -262,7 +261,8 @@ workflow DIFFERENTIALABUNDANCE {
         }
         ch_features = ch_features_matrix
             .map{ meta, matrix ->
-                matrix.copyTo(matrix_as_anno_filename)
+                matrix_copy = file(matrix_as_anno_filename)
+                matrix_copy.exists() && matrix.getText().md5().equals(matrix_copy.getText().md5()) ?: matrix.copyTo(matrix_as_anno_filename)
                 [ meta, file(matrix_as_anno_filename) ]
             }
     }
@@ -585,9 +585,9 @@ workflow DIFFERENTIALABUNDANCE {
         // Make a new contrasts file from the differential metas to guarantee the
         // same order as the differential results
 
-        ch_app_differential = ch_differential.first().map{it[0].keySet().join(',')}
+        ch_app_differential = ch_differential.first().map{it[0].keySet().tail().join(',')}
             .concat(
-                ch_differential.map{it[0].values().join(',')}
+                ch_differential.map{it[0].values().tail().join(',')}
             )
             .collectFile(name: 'contrasts.csv', newLine: true, sort: false)
             .map{
