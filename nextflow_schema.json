@@ -24,7 +24,7 @@
                     "default": "rnaseq",
                     "description": "A string identifying the technology used to produce the data",
                     "help_text": "Currently 'rnaseq' or 'affy_array' may be specified.",
-                    "enum": ["rnaseq", "affy_array", "maxquant", "geo_soft_file"],
+                    "enum": ["rnaseq", "affy_array", "maxquant", "geo_soft_file", "experimental"],
                     "fa_icon": "far fa-keyboard"
                 },
                 "input": {
@@ -58,7 +58,15 @@
                     "default": "counts",
                     "description": "Type of abundance measure used, platform-dependent",
                     "fa_icon": "fas fa-keyboard"
-                },
+                }
+            }
+        },
+        "experimental_analysis_options": {
+            "title": "Experimental analysis, including CoDa",
+            "type": "object",
+            "fa_icon": "fas fa-terminal",
+            "description": "Values required for experimental analysis",
+            "properties": {
                 "tools": {
                     "type": "string",
                     "format": "file-path",
@@ -68,6 +76,12 @@
                     "pattern": "^\\S+\\.(csv|tsv|yaml)$",
                     "description": "Path to comma-separated file containing samplesheet",
                     "help_text": "This file defines possible combinations of tools, which are to be run by the pipeline"
+                },
+                "pathway": {
+                    "type": "string",
+                    "fa_icon": "fas fa-border-all",
+                    "description": "(experimantal only): Choose a (list of) pathway from those predefined in the tool sheet",
+                    "help_text": "Choose the a subset of pathways to run. Pathways are defined in the tool sheet."
                 }
             }
         },
@@ -1297,6 +1311,9 @@
     "allOf": [
         {
             "$ref": "#/definitions/input_output_options"
+        },
+        {
+            "$ref": "#/definitions/experimental_analysis_options"
         },
         {
             "$ref": "#/definitions/abundance_values"

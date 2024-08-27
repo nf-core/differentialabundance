@@ -1,6 +1,7 @@
-// include modules
+//
+// Perform differential analysis
+//
 include {PROPR_PROPD as PROPD} from "../../../modules/nf-core/propr/propd/main.nf"
-
 
 workflow DIFFERENTIAL {
     take:
@@ -15,9 +16,8 @@ workflow DIFFERENTIAL {
             metacounts, counts, meta ->
                 [ metacounts+meta, counts ]
         }
-        //.view()
         .branch {
-            propd:    it[0]["diff_method"] == "propd"
+            propd:  it[0]["diff_method"] == "propd"
             deseq2: it[0]["diff_method"] == "deseq2"
         }
         .set { ch_counts_tools }
