@@ -355,6 +355,10 @@ workflow DIFFERENTIALABUNDANCE {
         ch_versions = ch_versions
             .mix(LIMMA_DIFFERENTIAL.out.versions)
 
+        if (params.study_type == 'rnaseq') {
+            ch_norm = LIMMA_DIFFERENTIAL.out.normalised_counts
+        }
+
         ch_processed_matrices = ch_norm
             .map{ it.tail() }
             .first()
@@ -618,7 +622,11 @@ workflow DIFFERENTIALABUNDANCE {
 
     def params_pattern = "report|gene_sets|study|observations|features|filtering|exploratory|differential"
     if (params.study_type == 'rnaseq'){
-        params_pattern += "|deseq2"
+        if (params.differential_use_limma){
+            params_pattern += "|lima"
+        } else {
+            params_pattern += "|deseq2"
+        }
     }
     if (params.study_type == 'affy_array' || params.study_type == 'geo_soft_file'){
         params_pattern += "|affy|limma"
