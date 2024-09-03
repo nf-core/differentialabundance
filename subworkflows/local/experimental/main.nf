@@ -40,7 +40,6 @@ workflow EXPERIMENTAL {
     )
     ch_matrix = CORRELATION.out.matrix
     ch_cor_adjacency = CORRELATION.out.adjacency
-    ch_out.mix(ch_matrix)
 
     // Perform enrichment analysis
     ENRICHMENT(
@@ -54,7 +53,7 @@ workflow EXPERIMENTAL {
     emit:
     diff_res    = ch_diff_results
     diff_adj    = ch_diff_adjacency
-    counts_cor  = VARIABLE_SELECTION.out.counts_cor
+    var_count   = ch_counts_filtered
     corr_matrix = ch_matrix
     corr_adj    = ch_cor_adjacency
     enriched_cor    = ch_enriched_cor
