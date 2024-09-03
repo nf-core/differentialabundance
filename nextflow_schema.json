@@ -644,6 +644,23 @@
             "description": "",
             "default": "",
             "properties": {
+                "limma_IHW_correction": {
+                    "type": "boolean",
+                    "description": "Turns on and off IHW correction for limma analysis",
+                    "default": true,
+                    "fa_icon": "far fa-check-square"
+                },
+                "limma_analysis_type": {
+                    "type": "string",
+                    "description": "allows modification of limma analysis type",
+                    "enum": ["mixedmodel", "pairwise", "default"],
+                    "fa_icon": "fas fa-chart-line"
+                },
+                "limma_pair_id_col": {
+                    "type": "string",
+                    "description": "name of pair informaction column from submission sheet used only in paired mode",
+                    "fa_icon": "fas fa-table"
+                },
                 "limma_ndups": {
                     "type": "number",
                     "fa_icon": "fas fa-clone",
