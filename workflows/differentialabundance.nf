@@ -360,9 +360,6 @@ workflow DIFFERENTIALABUNDANCE {
             .first()
     } else if (params.study_type == 'experimental') {
 
-        ch_samples_and_matrix = ch_input.combine(ch_in_raw.map{it[1]})
-        ch_samples_and_matrix.view()
-
         // Convert the samplesheet.csv in a channel with the proper format
         ch_tools = Channel.fromSamplesheet('tools')
 
@@ -377,10 +374,12 @@ workflow DIFFERENTIALABUNDANCE {
                 }
                 .set{ ch_tools_single }
         }
-        ch_tools_single.view()
 
-        EXPERIMENTAL(ch_samples_and_matrix, ch_tools_single)
-        EXPERIMENTAL.out.output.view()
+        EXPERIMENTAL(
+            ch_contrasts,
+            VALIDATOR.out.sample_meta,
+            CUSTOM_MATRIXFILTER.out.filtered,
+            ch_tools_single)
 
         ch_norm = Channel.empty()
         ch_differential = Channel.empty()
