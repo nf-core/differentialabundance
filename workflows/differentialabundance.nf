@@ -363,14 +363,13 @@ workflow DIFFERENTIALABUNDANCE {
         // Convert the samplesheet.csv in a channel with the proper format
         ch_tools = Channel.fromSamplesheet('tools')
 
-        // TO DO: This should be modified to run one path per default, not all
         if (params.pathway == "all") {
             ch_tools
                 .set{ ch_tools_single }
         } else {
             ch_tools
                 .filter{
-                    it[0]["pathway_name"] == params.pathway // TO DO: change pathway to path also in the tools_samplesheet file
+                    it[0]["pathway_name"] in params.pathway.tokenize(',')
                 }
                 .set{ ch_tools_single }
         }
@@ -379,7 +378,8 @@ workflow DIFFERENTIALABUNDANCE {
             ch_contrasts,
             VALIDATOR.out.sample_meta,
             CUSTOM_MATRIXFILTER.out.filtered,
-            ch_tools_single)
+            ch_tools_single
+        )
 
         ch_norm = Channel.empty()
         ch_differential = Channel.empty()

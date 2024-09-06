@@ -16,18 +16,15 @@ workflow EXPERIMENTAL {
 
 
     main:
-
     // Perform differential analysis
     DIFFERENTIAL(
         ch_contrasts,
+        ch_samplesheet,
         ch_counts,
-        ch_tools,
-        ch_samplesheet.collect()
+        ch_tools
     )
     ch_diff_results = DIFFERENTIAL.out.results
     ch_diff_adjacency = DIFFERENTIAL.out.adjacency
-    ch_diff_results.view{"diff: " + it}
-    ch_diff_adjacency.view{"adj: " + it}
 
     // Perform variable selection
     ch_counts_filtered = VARIABLE_SELECTION(ch_diff_adjacency, ch_counts)
