@@ -79,6 +79,7 @@
                 },
                 "pathway": {
                     "type": "string",
+                    "default": "diff_prop",
                     "fa_icon": "fas fa-border-all",
                     "description": "(experimantal only): Choose a (list of) pathway from those predefined in the tool sheet",
                     "help_text": "Choose the a subset of pathways to run. Pathways are defined in the tool sheet."
