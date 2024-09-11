@@ -273,7 +273,13 @@ if (opt\$analysis_type == "pairwise") {
   voom_1 <- do.call(voom, voom_args)
   # Write the normalized counts matrix to a TSV file
   normalized_counts <- voom_1\$E
-  write.table(normalized_counts, file = paste(opt\$output_prefix, "normalised_counts.tsv", sep = '.'), sep = "\t", quote = FALSE)
+  normalized_counts_with_genes <- data.frame(Gene = rownames(normalized_counts), normalized_counts, row.names = NULL)
+  colnames(normalized_counts_with_genes)[1] <- opt\$probe_id_col
+  write.table(normalized_counts_with_genes,
+              file = paste(opt\$output_prefix, "normalised_counts.tsv", sep = '.'),
+              sep = "\t",
+              quote = FALSE,
+              row.names = FALSE)
 
   lmfit_args = list(object = voom_1, design = design)
   fit <- do.call(lmFit, lmfit_args)
@@ -309,7 +315,13 @@ if (opt\$analysis_type == "pairwise") {
   voom_1 <- do.call(voom, voom_args)
     # Write the normalized counts matrix to a TSV file
   normalized_counts <- voom_1\$E
-  write.table(normalized_counts, file = paste(opt\$output_prefix, "normalised_counts.tsv", sep = '.'), sep = "\t", quote = FALSE)
+  normalized_counts_with_genes <- data.frame(Gene = rownames(normalized_counts), normalized_counts, row.names = NULL)
+  colnames(normalized_counts_with_genes)[1] <- opt\$probe_id_col
+  write.table(normalized_counts_with_genes,
+              file = paste(opt\$output_prefix, "normalised_counts.tsv", sep = '.'),
+              sep = "\t",
+              quote = FALSE,
+              row.names = FALSE)
 
   corfit_args <- list(object = voom_1, design = design, block = blocking.vars)
   corfit = do.call(duplicateCorrelation, corfit_args)
