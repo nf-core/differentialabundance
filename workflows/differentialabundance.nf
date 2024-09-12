@@ -356,7 +356,7 @@ workflow DIFFERENTIALABUNDANCE {
             .mix(LIMMA_DIFFERENTIAL.out.versions)
 
         if (params.study_type == 'rnaseq') {
-            ch_norm = LIMMA_DIFFERENTIAL.out.normalised_counts
+            ch_norm = LIMMA_DIFFERENTIAL.out.normalised_counts.first()
         }
 
         ch_processed_matrices = ch_norm
@@ -647,7 +647,6 @@ workflow DIFFERENTIALABUNDANCE {
             params.findAll{ k,v -> k.matches(params_pattern) } +
             [report_file_names, it.collect{ f -> f.name}].transpose().collectEntries()
         }
-
     // Render the final report
     RMARKDOWNNOTEBOOK(
         ch_report_file,

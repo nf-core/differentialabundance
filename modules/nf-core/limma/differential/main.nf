@@ -6,7 +6,7 @@ process LIMMA_DIFFERENTIAL {
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/bioconductor-limma:3.54.0--r42hc0cfd56_0' :
         'community.wave.seqera.io/library/bioconductor-edger_bioconductor-ihw_bioconductor-limma_r-dplyr_r-readr:edea0f9fbaeba3a0' }"
-    debug true
+
 
     input:
     tuple val(meta), val(contrast_variable), val(reference), val(target)
