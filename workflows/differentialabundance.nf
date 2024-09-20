@@ -74,6 +74,8 @@ if (run_gene_set_analysis) {
     } else if (params.gprofiler2_run) {
         if (!params.gprofiler2_token && !params.gprofiler2_organism) {
             error("To run gprofiler2, please provide a run token, GMT file or organism!")
+        } else {
+            ch_gene_sets = [[]]     // For gprofiler2 which calls ch_gene_sets.first()
         }
     }
 }
