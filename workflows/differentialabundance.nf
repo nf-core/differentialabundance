@@ -365,20 +365,20 @@ workflow DIFFERENTIALABUNDANCE {
 
         if (params.pathway == "all") {
             ch_tools
-                .set{ ch_tools_single }
+                .set{ ch_tools_filtered }
         } else {
             ch_tools
                 .filter{
                     it[0]["pathway_name"] in params.pathway.tokenize(',')
                 }
-                .set{ ch_tools_single }
+                .set{ ch_tools_filtered }
         }
 
         EXPERIMENTAL(
             ch_contrasts,
             VALIDATOR.out.sample_meta,
             CUSTOM_MATRIXFILTER.out.filtered,
-            ch_tools_single
+            ch_tools_filtered
         )
 
         ch_norm = Channel.empty()
