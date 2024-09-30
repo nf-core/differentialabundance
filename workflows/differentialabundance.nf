@@ -344,8 +344,26 @@ workflow DIFFERENTIALABUNDANCE {
         params.study_type == 'maxquant' ||
         (params.study_type == 'rnaseq' && params.differential_use_limma)){
 
+        if (params.limma_analysis_type == 'mixedmodel') {
+            ch_contrasts_limma = ch_contrasts.map{ row -> [row[0][0], row[0]] }
+            .groupTuple()
+            .map{
+                contrast = it[1][0]
+                if (it[1].size() > 1) {
+                    it[1][1..-1].each { element ->
+                        contrast.variable = contrast.variable + ';' + element.variable
+                        contrast.reference = contrast.reference + ';' + element.reference
+                        contrast.target = contrast.target + ';' + element.target
+                    }
+                }
+                tuple(contrast, contrast.variable, contrast.reference, contrast.target)
+            }
+        } else {
+            ch_contrasts_limma = ch_contrasts
+        }
+
         LIMMA_DIFFERENTIAL (
-            ch_contrasts,
+            ch_contrasts_limma,
             ch_samples_and_matrix,
             params.study_type
         )

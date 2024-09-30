@@ -132,7 +132,7 @@ opt <- list(
   contrast_variable = '$contrast_variable',
   reference_level = '$reference',
   target_level = '$target',
-  blocking_variables = NULL,
+  blocking_variables = '$meta.blocking',
   probe_id_col = "probe_id",
   sample_id_col = "sample",
   analysis_type = NULL,
@@ -302,9 +302,9 @@ if (opt\$analysis_type == "pairwise") {
   sample.sheet[[contrast_variable]] = paste(sample.sheet[[strsplit2(contrast_variable, split = "\\\\.")[1]]],
                                             sample.sheet[[strsplit2(contrast_variable, split = "\\\\.")[2]]], sep = ".")
 
-  validate_sample_sheet(sample.sheet, contrast_variable, reference_level, target_level, block_var)
+  validate_sample_sheet(sample.sheet, contrast_variable, reference_level, target_level, opt\$blocking_variables)
 
-  blocking.vars <- sample.sheet[[block_var]]
+  blocking.vars <- sample.sheet[[opt\$blocking_variables]]
 
   # Mixed model analysis setup
   model <- paste('~ 0 +', contrast_variable)
