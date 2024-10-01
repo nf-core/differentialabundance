@@ -345,7 +345,7 @@ workflow DIFFERENTIALABUNDANCE {
         (params.study_type == 'rnaseq' && params.differential_use_limma)){
 
         if (params.limma_analysis_type == 'mixedmodel') {
-            ch_contrasts_limma = ch_contrasts.map{ row -> [row[0][0], row[0]] }
+            ch_contrasts_limma = ch_contrasts.map{ row -> [row[0].id, row[0]] }
             .groupTuple()
             .map{
                 contrast = it[1][0]
