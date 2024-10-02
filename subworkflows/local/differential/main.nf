@@ -6,10 +6,10 @@ include { DESEQ2_DIFFERENTIAL  } from '../../../modules/nf-core/deseq2/different
 
 workflow DIFFERENTIAL {
     take:
-    ch_contrasts    // [meta, contrast_variable, reference, target]
-    ch_samplesheet
-    ch_counts
     ch_tools
+    ch_counts
+    ch_samplesheet
+    ch_contrasts    // [meta, contrast_variable, reference, target]
 
     main:
 
@@ -74,4 +74,5 @@ workflow DIFFERENTIAL {
     emit:
     results   = ch_results
     adjacency = ch_adjacency
+    // TODO add filtered results channel
 }
