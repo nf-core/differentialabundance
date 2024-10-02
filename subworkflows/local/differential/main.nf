@@ -4,7 +4,6 @@
 include { PROPR_PROPD as PROPD } from "../../../modules/nf-core/propr/propd/main.nf"
 include { DESEQ2_DIFFERENTIAL  } from '../../../modules/nf-core/deseq2/differential/main'
 
-
 workflow DIFFERENTIAL {
     take:
     ch_contrasts    // [meta, contrast_variable, reference, target]
