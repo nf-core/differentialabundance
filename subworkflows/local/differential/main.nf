@@ -13,6 +13,13 @@ workflow DIFFERENTIAL {
     ch_tools
 
     main:
+
+    // initialize empty results channels
+    ch_results   = Channel.empty()
+    ch_adjacency = Channel.empty()
+
+
+    // branch tools to select the correct differential analysis method
     ch_tools
         .branch {
             propd:  it[0]["diff_method"] == "propd"
@@ -21,14 +28,17 @@ workflow DIFFERENTIAL {
         .set { ch_tools_single }
 
 
-    // Perform differential analysis with PROPD
+    // ----------------------------------------------------
+    // Perform differential analysis with propd
+    // ----------------------------------------------------
+
     ch_counts
         .combine(ch_tools_single.propd)
         .combine(ch_contrasts)
         .map {
             meta_counts, counts, tools, meta_contrast, contrast_variable, reference, target ->
                 def meta = meta_counts.clone() + tools.clone()
-                meta.args_diff = (meta.args_diff ?: "") + " --group_col $contrast_variable"
+                meta.args_diff = (meta.args_diff ?: "") + " --group_col $contrast_variable"  // TODO parse the toolsheet with the ext.arg from modules.config at the beginning of the experimental workflow
                 [ meta, counts ]
         }
         .unique()
@@ -38,10 +48,13 @@ workflow DIFFERENTIAL {
         ch_counts_propd,
         ch_samplesheet.first()
     )
-    ch_results   = PROPD.out.results
-    ch_adjacency = PROPD.out.adj
+    ch_results = ch_results.mix(PROPD.out.results)
+    ch_adjacency = ch_adjacency.mix(PROPD.out.adj)
 
+    // ----------------------------------------------------
     // Perform differential analysis with DESeq2
+    // ----------------------------------------------------
+    
     // ToDo: In order to use deseq2 the downstream processes need to be updated to process the output correctly
     // if (params.transcript_length_matrix) { ch_transcript_lengths = Channel.of([ exp_meta, file(params.transcript_length_matrix, checkIfExists: true)]).first() } else { ch_transcript_lengths = [[],[]] }
     // if (params.control_features) { ch_control_features = Channel.of([ exp_meta, file(params.control_features, checkIfExists: true)]).first() } else { ch_control_features = [[],[]] }
