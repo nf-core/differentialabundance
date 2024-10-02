@@ -51,7 +51,7 @@ workflow DIFFERENTIAL {
     // ----------------------------------------------------
     // Perform differential analysis with DESeq2
     // ----------------------------------------------------
-    
+
     // ToDo: In order to use deseq2 the downstream processes need to be updated to process the output correctly
     // if (params.transcript_length_matrix) { ch_transcript_lengths = Channel.of([ exp_meta, file(params.transcript_length_matrix, checkIfExists: true)]).first() } else { ch_transcript_lengths = [[],[]] }
     // if (params.control_features) { ch_control_features = Channel.of([ exp_meta, file(params.control_features, checkIfExists: true)]).first() } else { ch_control_features = [[],[]] }
