@@ -50,6 +50,13 @@ workflow EXPERIMENTAL {
     ch_enriched_cor = ENRICHMENT.out.enriched_cor
     ch_enriched_diff = ENRICHMENT.out.enriched_diff
 
+    // ----------------------------------------------------
+    // VISUALIZATION BLOCK
+    // ----------------------------------------------------
+
+    // TODO: add visualization stuff here
+
+    // do we need to emit anything?
     emit:
     diff_res        = ch_diff_results
     diff_adj        = ch_diff_adjacency
