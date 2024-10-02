@@ -18,7 +18,6 @@ workflow DIFFERENTIAL {
     ch_results   = Channel.empty()
     ch_adjacency = Channel.empty()
 
-
     // branch tools to select the correct differential analysis method
     ch_tools
         .branch {
@@ -26,7 +25,6 @@ workflow DIFFERENTIAL {
             deseq2: it[0]["diff_method"] == "deseq2"
         }
         .set { ch_tools_single }
-
 
     // ----------------------------------------------------
     // Perform differential analysis with propd
@@ -77,5 +75,4 @@ workflow DIFFERENTIAL {
     emit:
     results   = ch_results
     adjacency = ch_adjacency
-
 }
