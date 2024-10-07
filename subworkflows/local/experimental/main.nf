@@ -1,11 +1,9 @@
 //
 // Run experimental analysis
 //
-include { CORRELATION }         from '../correlation/main.nf'
 include { DIFFERENTIAL }        from '../differential/main.nf'
-include { VARIABLE_SELECTION }  from '../variable_selection/main.nf'
+include { CORRELATION }         from '../correlation/main.nf'
 include { ENRICHMENT }          from '../enrichment/main.nf'
-
 
 workflow EXPERIMENTAL {
     take:
@@ -14,45 +12,54 @@ workflow EXPERIMENTAL {
     ch_counts
     ch_tools
 
-
     main:
-    // Perform differential analysis
+
+    ch_tools.view()
+
+    // initialize empty results channels
+    ch_results = Channel.empty()      // differential results - it should be a table
+    ch_adjacency = Channel.empty()    // adjacency matrix showing the connections between the genes, with values 1|0
+    ch_matrix = Channel.empty()       // correlation matrix
+    ch_enriched = Channel.empty()     // output table from enrichment analysis
+
+    // ----------------------------------------------------
+    // DIFFERENTIAL ANALYSIS BLOCK
+    // ----------------------------------------------------
+
     DIFFERENTIAL(
-        ch_contrasts,
-        ch_samplesheet,
-        ch_counts,
-        ch_tools
-    )
-    ch_diff_results = DIFFERENTIAL.out.results
-    ch_diff_adjacency = DIFFERENTIAL.out.adjacency
-
-    // Perform variable selection
-    ch_counts_filtered = VARIABLE_SELECTION(ch_diff_adjacency, ch_counts)
-
-    // Perform correlation analysis
-    CORRELATION(
-        ch_counts,
         ch_tools,
-        ch_counts_filtered
+        ch_counts,
+        ch_samplesheet,
+        ch_contrasts
     )
-    ch_matrix = CORRELATION.out.matrix
-    ch_cor_adjacency = CORRELATION.out.adjacency
+    ch_results = ch_results.mix(DIFFERENTIAL.out.results)
+    ch_adjacency = ch_adjacency.mix(DIFFERENTIAL.out.adjacency)
 
-    // Perform enrichment analysis
-    ENRICHMENT(
-        ch_diff_adjacency,
-        ch_cor_adjacency,
+    // ----------------------------------------------------
+    // CORRELATION ANALYSIS BLOCK
+    // ----------------------------------------------------
+
+    CORRELATION(
+        ch_tools,
         ch_counts
     )
-    ch_enriched_cor = ENRICHMENT.out.enriched_cor
-    ch_enriched_diff = ENRICHMENT.out.enriched_diff
+    ch_matrix = ch_matrix.mix(CORRELATION.out.matrix)
+    ch_adjacency = ch_adjacency.mix(CORRELATION.out.adjacency)
 
-    emit:
-    diff_res    = ch_diff_results
-    diff_adj    = ch_diff_adjacency
-    var_count   = ch_counts_filtered
-    corr_matrix = ch_matrix
-    corr_adj    = ch_cor_adjacency
-    enriched_cor    = ch_enriched_cor
-    enriched_cor    = ch_enriched_diff
+    // ----------------------------------------------------
+    // FUNCTIONAL ENRICHMENT BLOCK
+    // ----------------------------------------------------
+
+    ENRICHMENT(
+        ch_counts,
+        ch_results,
+        ch_adjacency
+    )
+    ch_enriched = ch_enriched.mix(ENRICHMENT.out.enriched)
+
+    // ----------------------------------------------------
+    // VISUALIZATION BLOCK
+    // ----------------------------------------------------
+
+    // TODO: call visualization stuff here
 }

@@ -1,43 +1,46 @@
 //
 // Perform enrichment analysis
 //
-include { PROPR_GREA as GREA_DIFF } from "../../../modules/nf-core/propr/grea/main.nf"
-include { PROPR_GREA as GREA_COR  } from "../../../modules/nf-core/propr/grea/main.nf"
 include { MYGENE } from "../../../modules/nf-core/mygene/main.nf"
+include { PROPR_GREA as GREA } from "../../../modules/nf-core/propr/grea/main.nf"
 
 workflow ENRICHMENT {
     take:
-    ch_diff_adjacency
-    ch_cor_adjacency
     ch_counts
+    ch_results
+    ch_adjacency
+    // TODO: add ch_gm when provided by user, etc.
 
     main:
+
+    // initialize empty results channels
+    ch_enriched = Channel.empty()
+
+    // ----------------------------------------------------
+    // Perform enrichment analysis with GREA
+    // ----------------------------------------------------
+
+    // construct the gene set selection
+    // TODO this should be optional, only run when there is no gene set data provided by user
     MYGENE(ch_counts)
     ch_gmt = MYGENE.out.gmt
 
+    // GREA method needs adjacency matrix as input
+    ch_adjacency
+        .filter { it[0]["enr_method"] == "grea" }
+        .set { ch_adjacency_grea }
 
-    ch_diff_adjacency
-        .branch {
-            grea: it[0]["enr_diff_method"] == "grea"
-            gsea: it[0]["enr_diff_method"] == "gsea"
-        }
-        .set { ch_diff_grea }
+    // run GREA
+    GREA(ch_adjacency_grea, ch_gmt.collect())
+    ch_enriched = ch_enriched.mix(GREA.out.enrichedGO)
 
-    GREA_DIFF(ch_diff_grea.grea, ch_gmt.collect())
-    ch_enriched_diff = GREA_DIFF.out.enrichedGO
+    // ----------------------------------------------------
+    // Perform enrichment analysis with GSEA
+    // ----------------------------------------------------
 
-    ch_cor_adjacency
-        .branch {
-            grea: it[0]["enr_cor_method"] == "grea"        }
-        .set { ch_cor_grea }
-
-    ch_cor_grea.grea.view()
-    ch_diff_grea.grea.view()
-
-    GREA_COR(ch_cor_grea.grea, ch_gmt.collect())
-    ch_enriched_cor = GREA_COR.out.enrichedGO
+    // todo: add gsea here
+    // then we need to add the corresponding input channels to this subworkflow
 
     emit:
-    enriched_diff = ch_enriched_diff
-    enriched_cor = ch_enriched_cor
+    enriched = ch_enriched
 }
