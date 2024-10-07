@@ -1,7 +1,7 @@
 //
 // Perform differential analysis
 //
-include { PROPR_PROPD as PROPD } from "../../../modules/nf-core/propr/propd/main.nf"
+include { PROPR_PROPD as PROPD } from "../../../modules/local/propr/propd/main.nf"
 include { DESEQ2_DIFFERENTIAL  } from '../../../modules/nf-core/deseq2/differential/main'
 
 workflow DIFFERENTIAL {
@@ -14,8 +14,11 @@ workflow DIFFERENTIAL {
     main:
 
     // initialize empty results channels
-    ch_results   = Channel.empty()
-    ch_adjacency = Channel.empty()
+    ch_results_pairwise          = Channel.empty()
+    ch_results_pairwise_filtered = Channel.empty()
+    ch_results_genewise          = Channel.empty()
+    ch_results_genewise_filtered = Channel.empty()
+    ch_adjacency                 = Channel.empty()
 
     // branch tools to select the correct differential analysis method
     ch_tools
@@ -45,8 +48,10 @@ workflow DIFFERENTIAL {
         ch_counts_propd,
         ch_samplesheet.first()
     )
-    ch_results = ch_results.mix(PROPD.out.results)
-    ch_adjacency = ch_adjacency.mix(PROPD.out.adj)
+    ch_results_pairwise = ch_results_pairwise.mix(PROPD.out.results)
+    ch_results_pairwise_filtered = ch_results_pairwise_filtered.mix(PROPD.out.results_filtered)
+    ch_results_genewise_filtered = ch_results_genewise_filtered.mix(PROPD.out.hub_genes)
+    ch_adjacency = ch_adjacency.mix(PROPD.out.adjacency)
 
     // ----------------------------------------------------
     // Perform differential analysis with DESeq2
@@ -72,7 +77,9 @@ workflow DIFFERENTIAL {
     //     .mix(DESEQ2_DIFFERENTIAL.out.results)
 
     emit:
-    results   = ch_results
-    adjacency = ch_adjacency
-    // TODO add filtered results channel
+    results_pairwise          = ch_results_pairwise
+    results_pairwise_filtered = ch_results_pairwise_filtered
+    results_genewise          = ch_results_genewise
+    results_genewise_filtered = ch_results_genewise_filtered
+    adjacency                 = ch_adjacency
 }
