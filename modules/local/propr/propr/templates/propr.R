@@ -242,12 +242,12 @@ if (opt\$permutation > 0) {
 ################################################
 
 saveRDS(
-    pro,
+    pr,
     file = paste0(opt\$prefix, '.propr.rds')
 )
 
 write.table(
-    round(pro@matrix, 8),  # round matrix decimals to avoid floating point inconsistencies
+    round(pr@matrix, 8),  # round matrix decimals to avoid floating point inconsistencies
     file      = paste0(opt\$prefix, '.propr.matrix.csv'),
     col.names = TRUE,
     row.names = TRUE,
@@ -268,7 +268,7 @@ if (!is.null(adj)) {
 
 if (opt\$permutation > 0) {
     write.table(
-        pro@fdr,
+        pr@fdr,
         file      = paste0(opt\$prefix, '.propr.fdr.tsv'),
         col.names = TRUE,
         row.names = FALSE,
