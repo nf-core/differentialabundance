@@ -55,7 +55,7 @@ read_delim_flexible <- function(file, header = TRUE, row.names = 1, check.names 
 #' Get hub genes from adjacency matrix
 #' 
 #' Here hub genes are those that have a degree higher than the expected degree.
-#  The expected degree is the number of connections that each gene would have
+#' The expected degree is the number of connections that each gene would have
 #' if the connections were distributed uniformly. In other words, the average 
 #' degree by node.
 #' 
@@ -159,6 +159,7 @@ for (file_input in c('count','samplesheet')){
     }
 }
 
+# TODO maybe add a function to pretty print the arguments?
 print(opt)
 
 ################################################
@@ -177,7 +178,10 @@ library(propr)
 
 # set seed when required
 
-if (!is.na(opt\$seed)) set.seed(opt\$seed)
+if (!is.na(opt\$seed)) {
+    warning('Setting seed ', opt\$seed, ' for reproducibility')
+    set.seed(opt\$seed)
+}
 
 # read matrix
 
@@ -190,8 +194,10 @@ mat <- read_delim_flexible(
 mat <- t(mat)  # transpose matrix to have features (genes) as columns
 
 # parse group
-# this creates a vector referring to the group id for each observation
-# TODO one can parse the 'group_col' from the contrast file information as the other modules
+# This creates a vector referring to the group id for each observation.
+# The vector should have 2+ different groups, so that differential proportionality will 
+# be computed to compare the variances between and within groups. TODO one can parse the 
+# 'group_col' from the contrast file information as the other modules
 
 samplesheet <- read_delim_flexible(
     opt\$samplesheet,
@@ -214,7 +220,12 @@ pd <- propd(
     p        = opt\$permutation
 )
 
+# use F-stat FDR-adjusted p-values to get significant pairs, if permutation == 0
+# otherwise, get FDR values using permutation tests (more computationally expensive but likely more conservative FDRs)
+
 if (opt\$permutation == 0) {
+
+    warning('FDR-adjusted p-values are used to get significant pairs.')
 
     # update FDR-adjusted p-values
 
@@ -236,7 +247,7 @@ if (opt\$permutation == 0) {
 
     hub_genes <- get_hub_genes_from_adjacency(adj)
 
-    # get significant results and classify pairs
+    # get significant pairs and classify them into red/yellow/green pairs
 
     results <- getSignificantResultsFstat(
         pd,
@@ -250,6 +261,8 @@ if (opt\$permutation == 0) {
 
 } else {
 
+    warning('Permutation tests are used to compute FDR values.')
+
     # update FDR values using permutation tests
 
     pd <- updateCutoffs(
@@ -258,7 +271,14 @@ if (opt\$permutation == 0) {
         ncores = opt\$ncores
     )
 
-    # TODO take top pairs when no cutoff has FDR below desired threshold
+    # TODO take top n pairs when no cutoff has FDR below desired threshold
+    cutoff <- getCutoffFDR(
+        pd, 
+        fdr=opt\$fdr,
+        window_size=1
+    )
+    if (!cutoff) stop('No cutoff has FDR below desired threshold')
+
     # get adjacency matrix
 
     adj <- getAdjacencyFDR(
@@ -271,7 +291,7 @@ if (opt\$permutation == 0) {
 
     hub_genes <- get_hub_genes_from_adjacency(adj)
 
-    # get significant results and classify pairs
+    # get significant pairs and classify them into red/yellow/green pairs
 
     results <- getSignificantResultsFDR(
         pd,
