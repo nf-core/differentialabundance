@@ -3,9 +3,6 @@ process PROPR_PROPD {
     label 'process_medium'
 
     conda "${moduleDir}/environment.yml"
-    // container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-    //     'https://depot.galaxyproject.org/singularity/r-propr:5.0.3':
-    //     'biocontainers/r-propr:5.0.3' }"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/mulled-v2-401a215d4024df776a98d90a352048199e342a3d:5ba9bbf6cd4f4f98983526673c223d2e7d829b36-0':
         'biocontainers/mulled-v2-401a215d4024df776a98d90a352048199e342a3d:5ba9bbf6cd4f4f98983526673c223d2e7d829b36-0' }"
