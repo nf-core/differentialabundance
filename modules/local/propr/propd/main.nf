@@ -14,9 +14,9 @@ process PROPR_PROPD {
     output:
     tuple val(meta), path("*.propd.rds")                 , emit: rds
     tuple val(meta), path("*.propd.results.tsv")         , emit: results
-    tuple val(meta), path("*.propd.results_filtered.tsv"), emit: results_filtered
-    tuple val(meta), path("*.propd.adjacency.csv")       , emit: adjacency
-    tuple val(meta), path("*.propd.hub_genes.tsv")       , emit: hub_genes
+    tuple val(meta), path("*.propd.results_filtered.tsv"), emit: results_filtered, optional: true
+    tuple val(meta), path("*.propd.adjacency.csv")       , emit: adjacency       , optional: true
+    tuple val(meta), path("*.propd.hub_genes.tsv")       , emit: hub_genes       , optional: true
     tuple val(meta), path("*.propd.fdr.tsv")             , emit: fdr             , optional: true
     path "*.warnings.log"                                , emit: warnings
     path "*.R_sessionInfo.log"                           , emit: session_info

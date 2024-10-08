@@ -271,37 +271,48 @@ if (opt\$permutation == 0) {
         ncores = opt\$ncores
     )
 
+    # get cutoff
+    # this is the cutoff used to get the significant pairs and ensemble of adjacency matrix
     # TODO take top n pairs when no cutoff has FDR below desired threshold
+
     cutoff <- getCutoffFDR(
         pd,
         fdr=opt\$fdr,
         window_size=1
     )
-    if (!cutoff) stop('No cutoff has FDR below desired threshold')
 
-    # get adjacency matrix
+    if (cutoff) {
 
-    adj <- getAdjacencyFDR(
-        pd,
-        fdr=opt\$fdr,
-        window_size=1
-    )
+        # get adjacency matrix
 
-    # get hub genes
+        adj <- getAdjacencyFDR(
+            pd,
+            fdr=opt\$fdr,
+            window_size=1
+        )
 
-    hub_genes <- get_hub_genes_from_adjacency(adj)
+        # get hub genes
 
-    # get significant pairs and classify them into red/yellow/green pairs
+        hub_genes <- get_hub_genes_from_adjacency(adj)
 
-    results <- getSignificantResultsFDR(
-        pd,
-        fdr=opt\$fdr,
-        window_size=1
-    )
-    results <- results[,c("Partner", "Pair", "theta")]
-    results\$class <- "red"
-    results\$class[which(results\$Pair %in% hub_genes\$gene | results\$Partner %in% hub_genes\$gene)] <- "yellow"
-    results\$class[which(results\$Pair %in% hub_genes\$gene & results\$Partner %in% hub_genes\$gene)] <- "green"
+        # get significant pairs and classify them into red/yellow/green pairs
+
+        results <- getSignificantResultsFDR(
+            pd,
+            fdr=opt\$fdr,
+            window_size=1
+        )
+        results <- results[,c("Partner", "Pair", "theta")]
+        results\$class <- "red"
+        results\$class[which(results\$Pair %in% hub_genes\$gene | results\$Partner %in% hub_genes\$gene)] <- "yellow"
+        results\$class[which(results\$Pair %in% hub_genes\$gene & results\$Partner %in% hub_genes\$gene)] <- "green"
+
+    } else {
+        warning('No pairs have FDR below desired threshold.')
+        adj <- NULL
+        hub_genes <- NULL
+        results <- NULL
+    }
 }
 
 ################################################
@@ -314,7 +325,6 @@ saveRDS(
     pd,
     file = paste0(opt\$prefix, '.propd.rds')
 )
-
 write.table(
     getResults(pd),
     file      = paste0(opt\$prefix, '.propd.results.tsv'),
@@ -323,42 +333,40 @@ write.table(
     sep       = '\\t',
     quote     = FALSE
 )
-
-write.table(
-    results,
-    file      = paste0(opt\$prefix, '.propd.results_filtered.tsv'),
-    col.names = TRUE,
-    row.names = FALSE,
-    sep       = '\\t',
-    quote     = FALSE
-)
-
-write.table(
-    adj,
-    file      = paste0(opt\$prefix, '.propd.adjacency.csv'),
-    col.names = TRUE,
-    row.names = TRUE,
-    sep       = ',',
-    quote     = FALSE
-)
-
-write.table(
-    hub_genes,
-    file      = paste0(opt\$prefix, '.propd.hub_genes.tsv'),
-    col.names = TRUE,
-    row.names = FALSE,
-    sep       = '\\t',
-    quote     = FALSE
-)
-
-if (opt\$permutation > 0) {
+if (!is.null(adj)) {
     write.table(
-        pd@fdr,
-        file      = paste0(opt\$prefix, '.propd.fdr.tsv'),
+        results,
+        file      = paste0(opt\$prefix, '.propd.results_filtered.tsv'),
         col.names = TRUE,
+        row.names = FALSE,
         sep       = '\\t',
         quote     = FALSE
     )
+    write.table(
+        adj,
+        file      = paste0(opt\$prefix, '.propd.adjacency.csv'),
+        col.names = TRUE,
+        row.names = TRUE,
+        sep       = ',',
+        quote     = FALSE
+    )
+    write.table(
+        hub_genes,
+        file      = paste0(opt\$prefix, '.propd.hub_genes.tsv'),
+        col.names = TRUE,
+        row.names = FALSE,
+        sep       = '\\t',
+        quote     = FALSE
+    )
+    if (opt\$permutation > 0) {
+        write.table(
+            pd@fdr,
+            file      = paste0(opt\$prefix, '.propd.fdr.tsv'),
+            col.names = TRUE,
+            sep       = '\\t',
+            quote     = FALSE
+        )
+    }
 }
 
 ################################################
