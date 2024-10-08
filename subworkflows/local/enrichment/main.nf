@@ -2,7 +2,7 @@
 // Perform enrichment analysis
 //
 include { MYGENE } from "../../../modules/nf-core/mygene/main.nf"
-include { PROPR_GREA as GREA } from "../../../modules/nf-core/propr/grea/main.nf"
+include { PROPR_GREA as GREA } from "../../../modules/local/propr/grea/main.nf"
 
 workflow ENRICHMENT {
     take:
