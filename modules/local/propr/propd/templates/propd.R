@@ -53,14 +53,14 @@ read_delim_flexible <- function(file, header = TRUE, row.names = 1, check.names 
 }
 
 #' Get hub genes from adjacency matrix
-#' 
+#'
 #' Here hub genes are those that have a degree higher than the expected degree.
 #' The expected degree is the number of connections that each gene would have
-#' if the connections were distributed uniformly. In other words, the average 
+#' if the connections were distributed uniformly. In other words, the average
 #' degree by node.
-#' 
+#'
 #' @param adj Adjacency matrix
-#' 
+#'
 #' @return data frame with hub genes
 get_hub_genes_from_adjacency <- function(adj){
 
@@ -195,8 +195,8 @@ mat <- t(mat)  # transpose matrix to have features (genes) as columns
 
 # parse group
 # This creates a vector referring to the group id for each observation.
-# The vector should have 2+ different groups, so that differential proportionality will 
-# be computed to compare the variances between and within groups. TODO one can parse the 
+# The vector should have 2+ different groups, so that differential proportionality will
+# be computed to compare the variances between and within groups. TODO one can parse the
 # 'group_col' from the contrast file information as the other modules
 
 samplesheet <- read_delim_flexible(
@@ -273,7 +273,7 @@ if (opt\$permutation == 0) {
 
     # TODO take top n pairs when no cutoff has FDR below desired threshold
     cutoff <- getCutoffFDR(
-        pd, 
+        pd,
         fdr=opt\$fdr,
         window_size=1
     )

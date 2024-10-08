@@ -22,7 +22,7 @@ workflow ENRICHMENT {
     // ----------------------------------------------------
 
     // TODO this should be optional, only run when there is no gene set data provided by user
-    
+
     MYGENE(ch_counts.take(1))  // only one data is provided to this pipeline
     ch_gmt = MYGENE.out.gmt
 
