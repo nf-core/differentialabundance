@@ -50,6 +50,7 @@ workflow DIFFERENTIAL {
     )
     ch_results_pairwise = ch_results_pairwise.mix(PROPD.out.results)
     ch_results_pairwise_filtered = ch_results_pairwise_filtered.mix(PROPD.out.results_filtered)
+    ch_results_genewise = ch_results_genewise.mix(PROPD.out.connectivity)
     ch_results_genewise_filtered = ch_results_genewise_filtered.mix(PROPD.out.hub_genes)
     ch_adjacency = ch_adjacency.mix(PROPD.out.adjacency)
 
