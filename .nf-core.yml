@@ -1,2 +1,22 @@
+bump_version: null
+lint:
+  nextflow_config:
+    - config_defaults:
+        - params.logo_file
+        - params.css_file
+        - params.citations_file
+        - params.report_file
+nf_core_version: 3.0.0
+org_path: null
 repository_type: pipeline
-nf_core_version: "2.14.1"
+template:
+  author: Oskar Wacker, Jonathan Manning
+  description: Differential abundance analysis
+  force: false
+  is_nfcore: true
+  name: differentialabundance
+  org: nf-core
+  outdir: .
+  skip_features: null
+  version: 1.6.0dev
+update: null
