@@ -65,11 +65,6 @@
                         "git_sha": "82024cf6325d2ee194e7f056d841ecad2f6856e9",
                         "installed_by": ["modules"]
                     },
-                    "propr/grea": {
-                        "branch": "master",
-                        "git_sha": "71b1180a5a3de6398eb0eb4d55424cbda36f52d8",
-                        "installed_by": ["modules"]
-                    },
                     "proteus/readproteingroups": {
                         "branch": "master",
                         "git_sha": "a069b29783583c219c1f23ed3dcf64a5aee1340b",
