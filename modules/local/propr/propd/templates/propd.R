@@ -273,7 +273,6 @@ if (opt\$permutation == 0) {
 
     # get cutoff
     # this is the cutoff used to get the significant pairs and ensemble of adjacency matrix
-    # TODO take top n pairs when no cutoff has FDR below desired threshold
 
     cutoff <- getCutoffFDR(
         pd,
@@ -308,6 +307,8 @@ if (opt\$permutation == 0) {
         results\$class[which(results\$Pair %in% hub_genes\$gene & results\$Partner %in% hub_genes\$gene)] <- "green"
 
     } else {
+        # TODO take top n pairs when no cutoff has FDR below desired threshold
+        # For the moment, we just print a warning and set adj, hub_genes and results to NULL
         warning('No pairs have FDR below desired threshold.')
         adj <- NULL
         hub_genes <- NULL
