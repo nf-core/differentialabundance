@@ -35,7 +35,7 @@ workflow ENRICHMENT {
         .set { ch_adjacency_grea }
 
     GREA(ch_adjacency_grea, ch_gmt.collect())
-    ch_enriched = ch_enriched.mix(GREA.out.enrichedGO)
+    ch_enriched = ch_enriched.mix(GREA.out.results)
 
     // ----------------------------------------------------
     // Perform enrichment analysis with GSEA
