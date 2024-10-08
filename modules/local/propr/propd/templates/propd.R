@@ -1,6 +1,5 @@
 #!/usr/bin/env Rscript
 
-
 ################################################
 ################################################
 ## Functions                                  ##
@@ -52,32 +51,52 @@ read_delim_flexible <- function(file, header = TRUE, row.names = 1, check.names 
     )
 }
 
-#' Get hub genes from adjacency matrix
+#' Get connectivity of genes from adjacency matrix
+#'
+#' The connectivity of a gene is the number of connections it has with other genes.
+#' In other words, the degree of a gene.
+#'
+#' @param adj Adjacency matrix
+#'
+#' @return data frame with sorted degree per gene
+get_connectivity <- function(adj){
+
+    # calculate degree per gene
+    diag(adj) <- 0
+    connectivity <- rowSums(adj)
+
+    # create data frame
+    connectivity <- data.frame(
+        'feature' = rownames(adj),
+        'degree' = connectivity
+    )
+    names(connectivity) <- c(opt\$features_id_col, 'degree')
+
+    # sort by degree
+    connectivity <- connectivity[order(connectivity\$degree, decreasing=TRUE),]
+
+    return(connectivity)
+}
+
+#' Determine hub genes based on connectivity
 #'
 #' Here hub genes are those that have a degree higher than the expected degree.
 #' The expected degree is the number of connections that each gene would have
 #' if the connections were distributed uniformly. In other words, the average
 #' degree by node.
 #'
-#' @param adj Adjacency matrix
+#' @param connectivity Data frame with connectivity
 #'
-#' @return data frame with hub genes
-get_hub_genes_from_adjacency <- function(adj){
+#' @return filtered connectivity data frame with hub genes
+get_hub_genes <- function(connectivity){
 
     # get the expected degree
-    degree_per_gene <- rowSums(adj)
-    total_degree <- sum(degree_per_gene)
-    n_nodes <- sum(degree_per_gene > 0)
+    total_degree <- sum(connectivity\$degree)
+    n_nodes <- sum(connectivity > 0)
     expected_degree <- total_degree / n_nodes
 
     # get hub genes
-    hub_genes = degree_per_gene[degree_per_gene > expected_degree]
-    hub_genes = data.frame(
-        'feature' = names(hub_genes),
-        'degree' = as.numeric(hub_genes)
-    )
-    names(hub_genes) <- c(opt\$features_id_col, 'degree')
-    hub_genes <- hub_genes[order(hub_genes\$degree, decreasing=TRUE),]
+    hub_genes <- connectivity[which(connectivity\$degree > expected_degree),]
 
     return(hub_genes)
 }
@@ -243,9 +262,10 @@ if (opt\$permutation == 0) {
         fdr_adjusted=TRUE
     )
 
-    # get hub genes
+    # calculate gene connectivity and get hub genes
 
-    hub_genes <- get_hub_genes_from_adjacency(adj)
+    connectivity <- get_connectivity(adj)
+    hub_genes <- get_hub_genes(connectivity)
 
     # get significant pairs and classify them into red/yellow/green pairs
 
@@ -290,9 +310,10 @@ if (opt\$permutation == 0) {
             window_size=1
         )
 
-        # get hub genes
+        # calculate gene connectivity and get hub genes
 
-        hub_genes <- get_hub_genes_from_adjacency(adj)
+        connectivity <- get_connectivity(adj)
+        hub_genes <- get_hub_genes(connectivity)
 
         # get significant pairs and classify them into red/yellow/green pairs
 
@@ -311,6 +332,7 @@ if (opt\$permutation == 0) {
         # For the moment, we just print a warning and set adj, hub_genes and results to NULL
         warning('No pairs have FDR below desired threshold.')
         adj <- NULL
+        connectivity <- NULL
         hub_genes <- NULL
         results <- NULL
     }
@@ -326,6 +348,7 @@ saveRDS(
     pd,
     file = paste0(opt\$prefix, '.propd.rds')
 )
+
 write.table(
     getResults(pd),
     file      = paste0(opt\$prefix, '.propd.results.tsv'),
@@ -334,6 +357,7 @@ write.table(
     sep       = '\\t',
     quote     = FALSE
 )
+
 if (!is.null(adj)) {
     write.table(
         results,
@@ -352,6 +376,14 @@ if (!is.null(adj)) {
         quote     = FALSE
     )
     write.table(
+        connectivity,
+        file      = paste0(opt\$prefix, '.propd.connectivity.tsv'),
+        col.names = TRUE,
+        row.names = FALSE,
+        sep       = '\\t',
+        quote     = FALSE
+    )
+    write.table(
         hub_genes,
         file      = paste0(opt\$prefix, '.propd.hub_genes.tsv'),
         col.names = TRUE,
@@ -359,15 +391,16 @@ if (!is.null(adj)) {
         sep       = '\\t',
         quote     = FALSE
     )
-    if (opt\$permutation > 0) {
-        write.table(
-            pd@fdr,
-            file      = paste0(opt\$prefix, '.propd.fdr.tsv'),
-            col.names = TRUE,
-            sep       = '\\t',
-            quote     = FALSE
-        )
-    }
+}
+
+if (opt\$permutation > 0) {
+    write.table(
+        pd@fdr,
+        file      = paste0(opt\$prefix, '.propd.fdr.tsv'),
+        col.names = TRUE,
+        sep       = '\\t',
+        quote     = FALSE
+    )
 }
 
 ################################################
