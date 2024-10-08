@@ -111,19 +111,30 @@ get_hub_genes <- function(connectivity){
 
 opt <- list(
     prefix            = ifelse('$task.ext.prefix' == 'null', '$meta.id', '$task.ext.prefix'),
+
+    # input count matrix
     count             = '$count',
-    samplesheet       = '$samplesheet',
     features_id_col   = 'gene_id',            # column name of feature ids
+
+    # comparison groups
+    samplesheet       = '$samplesheet',
     obs_id_col        = 'sample',             # column name of observation ids
     group_col         = 'treatment',          # column name of grouping variable
+
+    # parameters for computing differential proportionality
     alpha             = NA,                   # alpha for boxcox transformation
     moderated         = TRUE,                 # use moderated theta
+
+    # parameters for getting the significant differentially proportional pairs
     fdr               = 0.05,                 # FDR threshold
     permutation       = 0,                    # if permutation > 0, use permutation test to compute FDR
     number_of_cutoffs = 100,                  # number of cutoffs for permutation test
+
+    # other parameters
     seed              = NA,                   # seed for reproducibility
     ncores            = as.integer('$task.cpus')
 )
+
 opt_types <- list(
     prefix            = 'character',
     count             = 'character',

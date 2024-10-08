@@ -1,6 +1,7 @@
 pathway_name,diff_method,args_diff,cor_method,args_cor,enr_method,args_enr
 propd,propd,,,,,
 propd_fdr,propd,--permutation 100,,,,
-pcorbshrink,,,propr,--permutation 10 --adjacency true --cutoff_min 0.005 --cutoff_max 0.5 --cutoff_interval 0.01 --metric pcor.bshrink,,
-propr,,,propr,--cutoff_min 0.05 --cutoff_max 0.95 --cutoff_interval 0.05 --metric rho --permutation 10 --adjacency true,,
+pcorbshrink,,,propr,--metric pcor.bshrink,,
+propr,,,propr,--metric rho,,
+cor,,,propr,--metric cor,,
 propd_grea,propd,,,,grea,--permutation 10
