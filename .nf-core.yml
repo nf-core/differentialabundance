@@ -6,7 +6,7 @@ lint:
         - params.css_file
         - params.citations_file
         - params.report_file
-nf_core_version: 3.0.0
+nf_core_version: 3.0.1
 org_path: null
 repository_type: pipeline
 template:
