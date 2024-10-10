@@ -54,27 +54,39 @@ read_delim_flexible <- function(file, header = TRUE, row.names = 1, check.names 
 #' Loads the .gmt file  and converts it into a knowledge database
 #'
 #' @param filename path of the .gmt file
-#' @param genes vector of gene names
-#' @return output dataframe. A knowledge database where each row is a graph node (eg. gene)
-#' and each column is a concept (eg. GO term, pathway, etc).
+#' @param genes vector of gene names. Note that this set should be as complete as possible.
+#' So it should not only contain the target genes but also the background genes.
+#' @return output a list with: `db` A knowledge database where each row is a graph node (eg. gene)
+#' and each column is a concept (eg. GO term, pathway, etc) and `description` A list of descriptions
+#' for each concept
 load_gmt <- function(filename, nodes) {
 
     # read gmt file
     gmt <- readLines(filename)
-    gmt <- strsplit(gmt, "\t")
+    gmt <- strsplit(gmt, "\\t")
 
     # initialize database matrix
     db <- matrix(0, nrow = length(nodes), ncol = length(gmt))
     rownames(db) <- nodes
     colnames(db) <- sapply(gmt, function(entry) entry[[1]])
 
-    # fill 1 if gene is in concept
+    # description of the concepts
+    description <- list()
+
+    # for concept in gmt
     for (i in 1:length(gmt)) {
+
+        # get concept and description
+        concept <- gmt[[i]][[1]]
+        description[[concept]] <- gmt[[i]][[2]]
+
+        # fill 1 if gene is in concept
         nodes_in_concept <- gmt[[i]][-c(1, 2)]
+        nodes_in_concept <- nodes_in_concept[nodes_in_concept %in% nodes]
         db[nodes_in_concept, i] <- 1
     }
 
-    return(gmt)
+    return(list(db = db, description = description))
 }
 
 ################################################
@@ -91,6 +103,10 @@ opt <- list(
     # input data
     adj              = '$adj',          # adjacency matrix
     gmt              = '$gmt',          # knowledge database .gmt file
+
+    # parameters for gene sets
+    set_min          = 15,              # minimum number of genes in a set
+    set_max          = 500,             # maximum number of genes in a set
 
     # parameters for permutation test
     permutation      = 100,
@@ -173,19 +189,32 @@ if (!is.na(opt\$seed)) {
 # load adjacency matrix
 # this matrix should have gene x gene dimensions
 
-adj <- read_delim_flexible(
+adj <- as.matrix(read_delim_flexible(
     opt\$adj,
     header = TRUE,
     row.names = 1,
     check.names = TRUE
-)
+))
+if (nrow(adj) != ncol(adj)) {
+    stop('Adjacency matrix is not square')
+}
+if (!all(rownames(adj) == colnames(adj))) {
+    stop('Adjacency matrix row names are not equal to column names')
+}
 
 # load and process knowledge database
 
-db <- load_gmt(
+gmt <- load_gmt(
     opt\$gmt,
     rownames(adj)
 )
+
+# filter gene sets
+# gene sets with less than set_min or more than set_max genes are removed
+
+idx <- which(colSums(gmt\$db) > opt\$set_min & colSums(gmt\$db) < opt\$set_max)
+gmt\$db <- gmt\$db[, idx]
+gmt\$description <- gmt\$description[idx]
 
 # run GREA
 # Basically, it calculates the odds ratio of the graph being enriched in each concept,
@@ -193,9 +222,12 @@ db <- load_gmt(
 
 odds <- runGraflex(
     adj,
-    db,
+    gmt\$db,
     p=opt\$permutation,
     ncores=opt\$ncores
+)
+odds\$Description <- sapply(odds\$Concept, function(concept)
+    gmt\$description[[concept]]
 )
 
 ################################################
@@ -208,7 +240,7 @@ write.table(
     odds,
     file      = paste0(opt\$prefix, '.grea.tsv'),
     col.names = TRUE,
-    row.names = TRUE,
+    row.names = FALSE,
     sep       = '\\t',
     quote     = FALSE
 

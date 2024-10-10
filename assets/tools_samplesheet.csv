@@ -4,4 +4,4 @@ propd_fdr,propd,--permutation 100,,,,
 pcorbshrink,,,propr,--metric pcor.bshrink,,
 propr,,,propr,--metric rho,,
 cor,,,propr,--metric cor,,
-propd_grea,propd,,,,grea,--permutation 10
+propd_grea,propd,,,,grea,
