@@ -647,7 +647,6 @@
                 "limma_IHW_correction": {
                     "type": "boolean",
                     "description": "Turns on and off IHW correction for limma analysis",
-                    "default": true,
                     "fa_icon": "far fa-check-square"
                 },
                 "limma_analysis_type": {
