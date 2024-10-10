@@ -1,7 +1,7 @@
 //
 // Perform correlation analysis
 //
-include {PROPR_PROPR as PROPR} from "../../../modules/nf-core/propr/propr/main.nf"
+include {PROPR_PROPR as PROPR} from "../../../modules/local/propr/propr/main.nf"
 
 workflow CORRELATION {
     take:
@@ -11,7 +11,7 @@ workflow CORRELATION {
     main:
 
     // initialize empty results channels
-    ch_results   = Channel.empty()
+    ch_matrix   = Channel.empty()
     ch_adjacency = Channel.empty()
 
     // branch tools to select the correct correlation analysis method
@@ -34,8 +34,8 @@ workflow CORRELATION {
         .set { ch_counts_propr }
 
     PROPR(ch_counts_propr)
-    ch_matrix = PROPR.out.matrix
-    ch_adjacency = PROPR.out.adj
+    ch_matrix = ch_matrix.mix(PROPR.out.matrix)
+    ch_adjacency = ch_adjacency.mix(PROPR.out.adjacency)
 
     // TODO: divide propr module into cor, propr, pcor, pcorbshrink, etc.
 
