@@ -53,8 +53,6 @@ workflow NFCORE_DIFFERENTIALABUNDANCE {
     DIFFERENTIALABUNDANCE (
         samplesheet
     )
-    emit:
-    multiqc_report = DIFFERENTIALABUNDANCE.out.multiqc_report // channel: /path/to/multiqc_report.html
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -93,7 +91,7 @@ workflow {
         params.outdir,
         params.monochrome_logs,
         params.hook_url,
-        NFCORE_DIFFERENTIALABUNDANCE.out.multiqc_report
+        
     )
 }
 

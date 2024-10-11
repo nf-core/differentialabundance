@@ -17,6 +17,8 @@ template:
   name: differentialabundance
   org: nf-core
   outdir: .
-  skip_features: null
+  skip_features:
+    - fastqc
+    - multiqc
   version: 1.6.0dev
 update: null
