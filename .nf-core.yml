@@ -5,7 +5,7 @@ lint:
         - params.css_file
         - params.citations_file
         - params.report_file
-nf_core_version: 3.0.1
+nf_core_version: 3.0.2
 repository_type: pipeline
 template:
   author: Oskar Wacker, Jonathan Manning

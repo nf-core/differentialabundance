@@ -139,7 +139,8 @@ include { softwareVersionsToYAML                            } from '../subworkfl
 
 workflow DIFFERENTIALABUNDANCE {
 
-    // Set up some basic variables
+    main:
+
     ch_versions = Channel.empty()
     // Channel for the contrasts file
     ch_contrasts_file = Channel.from([[exp_meta, file(params.contrasts)]])
