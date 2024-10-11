@@ -5,8 +5,7 @@ lint:
         - params.css_file
         - params.citations_file
         - params.report_file
-  multiqc_config:
-    - assets/multiqc_config.yml
+  multiqc_config: False
   files_exist:
     - assets/multiqc_config.yml
 nf_core_version: 3.0.2
