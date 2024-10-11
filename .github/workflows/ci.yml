@@ -7,9 +7,12 @@ on:
   pull_request:
   release:
     types: [published]
+  workflow_dispatch:
 
 env:
   NXF_ANSI_LOG: false
+  NXF_SINGULARITY_CACHEDIR: ${{ github.workspace }}/.singularity
+  NXF_SINGULARITY_LIBRARYDIR: ${{ github.workspace }}/.singularity
 
 concurrency:
   group: "${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}"
@@ -17,36 +20,72 @@ concurrency:
 
 jobs:
   test:
-    name: Test Nextflow versions and profiles
+    name: "Run pipeline with test data (${{ matrix.NXF_VER }} | ${{ matrix.test_profile }} | ${{ matrix.compute_profile }})"
     # Only run on push if this is the nf-core dev branch (merged PRs)
     if: "${{ github.event_name != 'push' || (github.event_name == 'push' && github.repository == 'nf-core/differentialabundance') }}"
     runs-on: ubuntu-latest
     strategy:
       matrix:
         NXF_VER:
-          - "23.10.0"
+          - "24.04.2"
           - "latest-everything"
-        profile:
+        test_profile:
           - "test"
           - "test_nogtf"
           - "test_affy"
           - "test_maxquant"
           - "test_soft"
+        compute_profile:
+          - "conda"
+          - "docker"
+          - "singularity"
+        test_name:
+          - "test"
+        isMaster:
+          - ${{ github.base_ref == 'master' }}
+        # Exclude conda and singularity on dev
+        exclude:
+          - isMaster: false
+            compute_profile: "conda"
+          - isMaster: false
+            compute_profile: "singularity"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
 
-      - name: Install Nextflow
+      - name: Set up Nextflow
         uses: nf-core/setup-nextflow@v2
         with:
           version: "${{ matrix.NXF_VER }}"
 
-      - name: Disk space cleanup
+      - name: Set up Apptainer
+        if: matrix.compute_profile == 'singularity'
+        uses: eWaterCycle/setup-apptainer@main
+
+      - name: Set up Singularity
+        if: matrix.compute_profile == 'singularity'
+        run: |
+          mkdir -p $NXF_SINGULARITY_CACHEDIR
+          mkdir -p $NXF_SINGULARITY_LIBRARYDIR
+
+      - name: Set up Miniconda
+        if: matrix.compute_profile == 'conda'
+        uses: conda-incubator/setup-miniconda@a4260408e20b96e80095f42ff7f1a15b27dd94ca # v3
+        with:
+          miniconda-version: "latest"
+          auto-update-conda: true
+          conda-solver: libmamba
+          channels: conda-forge,bioconda
+
+      - name: Set up Conda
+        if: matrix.compute_profile == 'conda'
+        run: |
+          echo $(realpath $CONDA)/condabin >> $GITHUB_PATH
+          echo $(realpath python) >> $GITHUB_PATH
+
+      - name: Clean up Disk space
         uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
 
-      - name: Run pipeline with test data
-        # You can customise CI pipeline run tests as required
-        # For example: adding multiple test runs with different parameters
-        # Remember that you can parallelise this by using strategy.matrix
+      - name: "Run pipeline with test data ${{ matrix.NXF_VER }} | ${{ matrix.test_name }} | ${{ matrix.compute_profile }}"
         run: |
-          nextflow run ${GITHUB_WORKSPACE} -profile docker,${{ matrix.profile }} --outdir ./results
+          nextflow run ${GITHUB_WORKSPACE} -profile ${{ matrix.test_profile }},${{ matrix.compute_profile }} --outdir ./results
