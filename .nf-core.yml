@@ -18,9 +18,9 @@ template:
   org: nf-core
   outdir: .
   template:
-      skip_features:
-          - fastqc
-          - multiqc
+    skip_features:
+      - fastqc
+      - multiqc
   skip_features: null
   version: 1.6.0dev
 update: null
