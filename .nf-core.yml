@@ -1,4 +1,3 @@
-bump_version: null
 lint:
   nextflow_config:
     - config_defaults:
@@ -7,7 +6,6 @@ lint:
         - params.citations_file
         - params.report_file
 nf_core_version: 3.0.1
-org_path: null
 repository_type: pipeline
 template:
   author: Oskar Wacker, Jonathan Manning
@@ -17,10 +15,7 @@ template:
   name: differentialabundance
   org: nf-core
   outdir: .
-  template:
-    skip_features:
-      - fastqc
-      - multiqc
-  skip_features: null
+  skip_features:
+    - fastqc
+    - multiqc
   version: 1.6.0dev
-update: null
