@@ -5,6 +5,8 @@ lint:
         - params.css_file
         - params.citations_file
         - params.report_file
+  files_exist:
+    - assets/multiqc_config.yml
 nf_core_version: 3.0.2
 repository_type: pipeline
 template:
