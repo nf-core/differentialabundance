@@ -46,9 +46,9 @@ jobs:
         # Exclude conda and singularity on dev
         exclude:
           - isMaster: false
-            profile: "conda"
+            compute_profile: "conda"
           - isMaster: false
-            profile: "singularity"
+            compute_profile: "singularity"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
@@ -59,17 +59,17 @@ jobs:
           version: "${{ matrix.NXF_VER }}"
 
       - name: Set up Apptainer
-        if: matrix.profile == 'singularity'
+        if: matrix.compute_profile == 'singularity'
         uses: eWaterCycle/setup-apptainer@main
 
       - name: Set up Singularity
-        if: matrix.profile == 'singularity'
+        if: matrix.compute_profile == 'singularity'
         run: |
           mkdir -p $NXF_SINGULARITY_CACHEDIR
           mkdir -p $NXF_SINGULARITY_LIBRARYDIR
 
       - name: Set up Miniconda
-        if: matrix.profile == 'conda'
+        if: matrix.compute_profile == 'conda'
         uses: conda-incubator/setup-miniconda@a4260408e20b96e80095f42ff7f1a15b27dd94ca # v3
         with:
           miniconda-version: "latest"
@@ -78,7 +78,7 @@ jobs:
           channels: conda-forge,bioconda
 
       - name: Set up Conda
-        if: matrix.profile == 'conda'
+        if: matrix.compute_profile == 'conda'
         run: |
           echo $(realpath $CONDA)/condabin >> $GITHUB_PATH
           echo $(realpath python) >> $GITHUB_PATH
@@ -86,6 +86,6 @@ jobs:
       - name: Clean up Disk space
         uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
 
-      - name: "Run pipeline with test data ${{ matrix.NXF_VER }} | ${{ matrix.test_name }} | ${{ matrix.profile }}"
+      - name: "Run pipeline with test data ${{ matrix.NXF_VER }} | ${{ matrix.test_name }} | ${{ matrix.compute_profile }}"
         run: |
           nextflow run ${GITHUB_WORKSPACE} -profile ${{ matrix.test_profile }},${{ matrix.compute_profile }} --outdir ./results
