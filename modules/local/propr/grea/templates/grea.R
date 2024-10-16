@@ -120,6 +120,8 @@ opt_types <- list(
     prefix           = 'character',
     adj              = 'character',
     gmt              = 'character',
+    set_min          = 'numeric',
+    set_max          = 'numeric',
     permutation      = 'numeric',
     seed             = 'numeric',
     ncores           = 'numeric'

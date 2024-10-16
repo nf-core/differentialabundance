@@ -119,7 +119,9 @@ opt <- list(
     # comparison groups
     samplesheet       = '$samplesheet',
     obs_id_col        = 'sample',             # column name of observation ids
-    group_col         = 'treatment',          # column name of grouping variable
+    contrast_variable = "$contrast_variable", # column name of contrast variable
+    reference_group   = "$reference",         # reference group for contrast variable
+    target_group      = "$target",            # target group for contrast variable
 
     # parameters for computing differential proportionality
     alpha             = NA,                   # alpha for boxcox transformation
@@ -141,7 +143,9 @@ opt_types <- list(
     samplesheet       = 'character',
     features_id_col   = 'character',
     obs_id_col        = 'character',
-    group_col         = 'character',
+    contrast_variable = 'character',
+    reference_group   = 'character',
+    target_group      = 'character',
     alpha             = 'numeric',
     moderated         = 'logical',
     fdr               = 'numeric',
@@ -172,7 +176,7 @@ for ( ao in names(args_opt)){
 
 # Check if required parameters have been provided
 
-required_opts <- c('count','samplesheet')
+required_opts <- c('count','samplesheet','contrast_variable','reference_group','target_group')
 missing <- required_opts[unlist(lapply(opt[required_opts], is.null)) | ! required_opts %in% names(opt)]
 if (length(missing) > 0){
     stop(paste("Missing required options:", paste(missing, collapse=', ')))
@@ -224,10 +228,10 @@ mat <- read_delim_flexible(
 mat <- t(mat)  # transpose matrix to have features (genes) as columns
 
 # parse group
-# This creates a vector referring to the group id for each observation.
-# The vector should have 2+ different groups, so that differential proportionality will
-# be computed to compare the variances between and within groups. TODO one can parse the
-# 'group_col' from the contrast file information as the other modules
+# and filter matrix and group values, so that only the contrasted groups are kept
+# TODO propd can also handle more than two groups
+# but that dont work properly with the contrast format
+# Should we provide an alternative way to do that?
 
 samplesheet <- read_delim_flexible(
     opt\$samplesheet,
@@ -235,10 +239,13 @@ samplesheet <- read_delim_flexible(
     row.names = NULL,
     check.names = FALSE
 )
-tmp <- samplesheet[[opt\$group_col]]
-names(tmp) <- samplesheet[[opt\$obs_id_col]]
-group <- as.vector(tmp[rownames(mat)])
+samplesheet <- samplesheet[,c(opt\$obs_id_col, opt\$contrast_variable)]
+idx <- which(samplesheet[,2] %in% c(opt\$reference_group, opt\$target_group))
+mat <- mat[idx,]
+samplesheet <- samplesheet[idx,]
+group <- as.vector(samplesheet[,2])
 if (length(group) != nrow(mat)) stop('Error when parsing group')
+if (length(unique(group)) != 2) stop('Only two groups are allowed for contrast')
 
 # compute differential proportionality
 

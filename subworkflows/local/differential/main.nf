@@ -9,7 +9,7 @@ workflow DIFFERENTIAL {
     ch_tools
     ch_counts
     ch_samplesheet
-    ch_contrasts    // [meta, contrast_variable, reference, target]
+    ch_contrasts
 
     main:
 
@@ -33,21 +33,18 @@ workflow DIFFERENTIAL {
     // ----------------------------------------------------
 
     ch_counts
-        .combine(ch_tools_single.propd)
+        .join(ch_samplesheet)
         .combine(ch_contrasts)
+        .combine(ch_tools_single.propd)
         .map {
-            meta_counts, counts, tools, meta_contrast, contrast_variable, reference, target ->
-                def meta = meta_counts.clone() + tools.clone()
-                meta.args_diff = (meta.args_diff ?: "") + " --group_col $contrast_variable"  // TODO parse the toolsheet with the ext.arg from modules.config at the beginning of the experimental workflow
-                [ meta, counts ]
+            meta_data, counts, samplesheet, meta_contrast, contrast_variable, reference, target, meta_tools ->
+                def meta = meta_data.clone() + ['contrast': meta_contrast.id] + meta_tools.clone()
+                [ meta, counts, samplesheet, contrast_variable, reference, target ]
         }
         .unique()
-        .set { ch_counts_propd }
+        .set { ch_propd }
+    PROPD(ch_propd)
 
-    PROPD(
-        ch_counts_propd,
-        ch_samplesheet.first()
-    )
     ch_results_pairwise = ch_results_pairwise.mix(PROPD.out.results)
     ch_results_pairwise_filtered = ch_results_pairwise_filtered.mix(PROPD.out.results_filtered)
     ch_results_genewise = ch_results_genewise.mix(PROPD.out.connectivity)
