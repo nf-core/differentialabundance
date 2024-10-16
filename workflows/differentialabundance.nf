@@ -362,7 +362,7 @@ workflow DIFFERENTIALABUNDANCE {
     } else if (params.study_type == 'experimental') {
 
         // Convert the samplesheet.csv in a channel with the proper format
-        ch_tools = Channel.fromList(samplesheetToList(params.tools, params.tools_schema))
+        ch_tools = Channel.fromList(samplesheetToList(params.tools, './assets/schema_tools.json'))
 
         // Filter the tools to the pathway(s) of interest, or run everything if requested
         if (params.pathway == "all") {
