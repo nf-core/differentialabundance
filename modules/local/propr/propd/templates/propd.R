@@ -90,6 +90,7 @@ get_connectivity <- function(pd, adj, de, cutoff, features_id_col='gene_id'){
     # add weighted degree
     # each connection is weighted by the theta value
     # so lower theta values (higher between group variance than within group variance) will have a higher weight
+    # NOTE this is a placeholder for the proper weighted degree, maybe we are gonna change the way how we compute it
     mat <- getMatrix(pd)
     diag(mat) <- NA
     connectivity[,3] <- colSums((1 - mat) * adj, na.rm=TRUE)
@@ -100,7 +101,7 @@ get_connectivity <- function(pd, adj, de, cutoff, features_id_col='gene_id'){
     connectivity[,4] <- de
 
     # add average theta of the connections
-    connectivity[,5] <- connectivity[,3] / connectivity[,2]
+    connectivity[,5] <- colSums(mat * adj, na.rm=TRUE) / colSums(adj)
 
     # classification
     # green for DE genes, and red for non-DE genes
@@ -211,7 +212,7 @@ opt <- list(
     number_of_cutoffs = 100,                  # number of cutoffs for permutation test
 
     # parameters for getting the hub genes
-    weighted_degree   = FALSE,                # use weighted degree for hub genes or not
+    weighted_degree   = FALSE,                 # use weighted degree for hub genes or not
 
     # other parameters
     seed              = NA,                   # seed for reproducibility
@@ -232,6 +233,7 @@ opt_types <- list(
     fdr               = 'numeric',
     permutation       = 'numeric',
     number_of_cutoffs = 'numeric',
+    weighted_degree   = 'logical',
     seed              = 'numeric',
     ncores            = 'numeric'
 )
@@ -276,7 +278,7 @@ for (file_input in c('count','samplesheet')){
 
 # check parameters are valid
 
-if (opt$permutation < 0) {
+if (opt\$permutation < 0) {
     stop('permutation should be a positive integer')
 }
 
@@ -383,6 +385,8 @@ if (opt\$permutation == 0) {
     )
     if (theta_cutoff) {
 
+        warning('Significant theta value found: ', theta_cutoff)
+
         # get adjacency matrix
         # this matrix will have 1s for significant pairs and 0s for the rest
         # diagonals are set to 0
@@ -413,8 +417,12 @@ if (opt\$permutation == 0) {
         )
         results <- results[,c("Partner", "Pair", "theta")]
         results\$class <- "red"
-        results\$class[which(results\$Pair %in% hub_genes[opt\$features_id_col] | results\$Partner %in% hub_genes[opt\$features_id_col])] <- "yellow"
-        results\$class[which(results\$Pair %in% hub_genes[opt\$features_id_col] & results\$Partner %in% hub_genes[opt\$features_id_col])] <- "green"
+        results\$class[which(de[results\$Pair] < theta_cutoff | de[results\$Partner] < theta_cutoff)] <- "yellow"
+        results\$class[which(de[results\$Pair] < theta_cutoff & de[results\$Partner] < theta_cutoff)] <- "green"
+
+        # sort significant pairs
+
+        results <- results[order(results\$theta),]
     }
 
 } else {
@@ -437,6 +445,8 @@ if (opt\$permutation == 0) {
         window_size=1
     )
     if (theta_cutoff) {
+
+        warning('Significant theta value found: ', theta_cutoff)
 
         # get adjacency matrix
 
@@ -466,9 +476,12 @@ if (opt\$permutation == 0) {
         )
         results <- results[,c("Partner", "Pair", "theta")]
         results\$class <- "red"
-        results\$class[which(results\$Pair %in% hub_genes\$gene | results\$Partner %in% hub_genes\$gene)] <- "yellow"
-        results\$class[which(results\$Pair %in% hub_genes\$gene & results\$Partner %in% hub_genes\$gene)] <- "green"
+        results\$class[which(de[results\$Pair] < theta_cutoff | de[results\$Partner] < theta_cutoff)] <- "yellow"
+        results\$class[which(de[results\$Pair] < theta_cutoff & de[results\$Partner] < theta_cutoff)] <- "green"
 
+        # sort significant pairs
+
+        results <- results[order(results\$theta),]
     }
 }
 

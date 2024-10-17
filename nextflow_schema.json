@@ -788,6 +788,11 @@
                     "type": "integer",
                     "default": 100,
                     "description": "Because it is expensive to calculate an associated p-value for all the pairs through all the permutation tests, this number is used to define on how many values to calculate the FDR. The higher this value is, the higher the granularity."
+                },
+                "propd_weighted_degree": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "If true, use weighted degree to filter the hub genes. Otherwie, use the degree."
                 }
             }
         },
