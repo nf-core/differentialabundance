@@ -54,26 +54,58 @@ read_delim_flexible <- function(file, header = TRUE, row.names = 1, check.names 
 #' Get connectivity of genes from adjacency matrix
 #'
 #' The connectivity of a gene is the number of connections it has with other genes.
-#' In other words, the degree of a gene.
+#' In other words, the degree of a gene. This connectivity can be weighted. In this
+#' way, the strength of the theta value can be taken into account.
+#' These information can be used to summarize the network and identify genes that are
+#' potentially changing between groups.
 #'
+#' @param pd propd object
 #' @param adj Adjacency matrix
+#' @param de Differential proportionality values for each gene with respect to the
+#' normalization reference
+#' @param cutoff Cutoff value for de values to be considered significant
 #'
-#' @return data frame with sorted degree per gene
-get_connectivity <- function(adj){
+#' @return data frame with the following columns: gene_id, degree, weighted_degree,
+#' genewise_theta, average_theta, classification
+get_connectivity <- function(pd, adj, de, cutoff, features_id_col='gene_id'){
 
-    # calculate degree per gene
-    diag(adj) <- 0
-    connectivity <- rowSums(adj)
-
-    # create data frame
-    connectivity <- data.frame(
-        'feature' = rownames(adj),
-        'degree' = connectivity
+    # initialize empty data frame
+    connectivity <- data.frame(matrix(NA, nrow=ncol(pd@counts), ncol=6))
+    colnames(connectivity) <- c(
+        features_id_col,
+        'degree',
+        'weighted_degree',
+        'genewise_theta',
+        'average_theta',
+        'classification'
     )
-    names(connectivity) <- c(opt\$features_id_col, 'degree')
 
-    # sort by degree
-    connectivity <- connectivity[order(connectivity\$degree, decreasing=TRUE),]
+    # add features ids
+    connectivity[,1] <- colnames(pd@counts)
+
+    # add degree
+    # degree is the number of connections a gene has with other genes
+    connectivity[,2] <- colSums(adj)
+
+    # add weighted degree
+    # each connection is weighted by the theta value
+    # so lower theta values (higher between group variance than within group variance) will have a higher weight
+    mat <- getMatrix(pd)
+    diag(mat) <- NA
+    connectivity[,3] <- colSums((1 - mat) * adj, na.rm=TRUE)
+
+    # add genewise theta
+    # a theta value can be associated to each gene by calculating the between group variance vs within group variance
+    # of the gene normalized with respect to a reference (in this case the geometric mean of the sample)
+    connectivity[,4] <- de
+
+    # add average theta of the connections
+    connectivity[,5] <- connectivity[,3] / connectivity[,2]
+
+    # classification
+    # green for DE genes, and red for non-DE genes
+    connectivity[,6] <- 'green'
+    connectivity[which(de > cutoff), 6] <- 'red'
 
     return(connectivity)
 }
@@ -86,19 +118,65 @@ get_connectivity <- function(adj){
 #' degree by node.
 #'
 #' @param connectivity Data frame with connectivity
+#' @param cutoff Theta value for which DP pairs are considered significant.
+#' @param weighted Boolean. If TRUE, use weighted degree to determine hub genes.
+#' Otherwise, use degree.
 #'
-#' @return filtered connectivity data frame with hub genes
-get_hub_genes <- function(connectivity){
+#' @return filtered and sorted connectivity data frame with hub genes
+get_hub_genes <- function(connectivity, cutoff, weighted=FALSE){
 
     # get the expected degree
-    total_degree <- sum(connectivity\$degree)
-    n_nodes <- sum(connectivity > 0)
+    total_degree <- if (weighted) sum(connectivity\$weighted_degree) else sum(connectivity\$degree)
+    n_nodes <- sum(connectivity\$degree > 0)
     expected_degree <- total_degree / n_nodes
 
     # get hub genes
     hub_genes <- connectivity[which(connectivity\$degree > expected_degree),]
 
+    # sort hub genes
+    if (weighted) {
+        hub_genes <- hub_genes[order(hub_genes\$weighted_degree, decreasing=TRUE),]
+    } else {
+        hub_genes <- hub_genes[order(hub_genes\$degree, decreasing=TRUE),]
+    }
+
     return(hub_genes)
+}
+
+# this function overwrites the one in the propr package, that had a bug
+# TODO update the container with the corrected package, and remove this
+runNormalization <- function(object, norm.factors) {
+    if (!inherits(object, "propd")) {
+        stop("Please provide a propd object.")
+    }
+    if (!identical(length(norm.factors), nrow(object@counts))) {
+        stop("The norm factors should have one value for each subject.")
+    }
+
+    # compute thetas
+    newCounts <- cbind(norm.factors, object@counts)
+    newPD <-
+        propd(
+            newCounts,
+            group = object@group,
+            alpha = object@alpha,
+            p = 0,
+            weighted = object@weighted
+        )
+    if (object@active == "theta_mod") {
+        newPD <- updateF(newPD, moderated = TRUE)
+    }
+    newPD <- setActive(newPD, object@active)
+
+    # parse thetas for each gene
+    rawRes <- newPD@results
+    perFeature <- rawRes[rawRes\$Pair == 1,]
+    if (!identical(perFeature\$Partner, 2:(ncol(newCounts))))
+        stop("DEBUG ERROR #GET001.")
+    thetas <- perFeature\$theta
+    names(thetas) <- colnames(object@counts)
+
+    return(thetas)
 }
 
 ################################################
@@ -131,6 +209,9 @@ opt <- list(
     fdr               = 0.05,                 # FDR threshold
     permutation       = 0,                    # if permutation > 0, use permutation test to compute FDR
     number_of_cutoffs = 100,                  # number of cutoffs for permutation test
+
+    # parameters for getting the hub genes
+    weighted_degree   = FALSE,                # use weighted degree for hub genes or not
 
     # other parameters
     seed              = NA,                   # seed for reproducibility
@@ -191,6 +272,12 @@ for (file_input in c('count','samplesheet')){
     if (! file.exists(opt[[file_input]])){
         stop(paste0('Value of ', file_input, ': ', opt[[file_input]], ' is not a valid file'))
     }
+}
+
+# check parameters are valid
+
+if (opt$permutation < 0) {
+    stop('permutation should be a positive integer')
 }
 
 # TODO maybe add a function to pretty print the arguments?
@@ -257,6 +344,17 @@ pd <- propd(
     p        = opt\$permutation
 )
 
+# compute DE theta values
+# this is the theta value for each gene with respect to the normalization reference
+# in this case, the reference is the geometric mean of the sample
+# These DE values are only for interpreting purposes.
+# TODO if we want to use the outcome from other DE analysis, at some point we should
+# divide the below part into maybe a separate module that can take the DE and DP values as input
+# and coordinate them through the pipeline
+
+ref <- exp(rowMeans(log(pd@counts)))
+de <- runNormalization(pd, ref)
+
 # use F-stat FDR-adjusted p-values to get significant pairs, if permutation == 0
 # otherwise, get FDR values using permutation tests (more computationally expensive but likely more conservative FDRs)
 
@@ -272,30 +370,52 @@ if (opt\$permutation == 0) {
     )
     if (opt\$moderated) pd <- setActive(pd, what='theta_mod')
 
-    # get adjacency matrix
+    # get theta value for which FDR is below desired threshold
+    # theta_cutoff is FALSE when no theta value has FDR below desired threshold
+    # otherwise it is the theta value for which FDR is below desired threshold
+    # Only when there is a meaningful theta, we can compute the next steps
+    # that involve extracting the significant pairs.
 
-    adj <- getAdjacencyFstat(
+    theta_cutoff <- getCutoffFstat(
         pd,
         pval=opt\$fdr,
         fdr_adjusted=TRUE
     )
+    if (theta_cutoff) {
 
-    # calculate gene connectivity and get hub genes
+        # get adjacency matrix
+        # this matrix will have 1s for significant pairs and 0s for the rest
+        # diagonals are set to 0
 
-    connectivity <- get_connectivity(adj)
-    hub_genes <- get_hub_genes(connectivity)
+        adj <- getAdjacencyFstat(
+            pd,
+            pval=opt\$fdr,
+            fdr_adjusted=TRUE
+        )
 
-    # get significant pairs and classify them into red/yellow/green pairs
+        # calculate gene connectivity and get hub genes
 
-    results <- getSignificantResultsFstat(
-        pd,
-        pval=opt\$fdr,
-        fdr_adjusted=TRUE
-    )
-    results <- results[,c("Partner", "Pair", "theta")]
-    results\$class <- "red"
-    results\$class[which(results\$Pair %in% hub_genes\$gene | results\$Partner %in% hub_genes\$gene)] <- "yellow"
-    results\$class[which(results\$Pair %in% hub_genes\$gene & results\$Partner %in% hub_genes\$gene)] <- "green"
+        connectivity <- get_connectivity(
+            pd,
+            adj,
+            de,
+            theta_cutoff,
+            features_id_col=opt\$features_id_col
+        )
+        hub_genes <- get_hub_genes(connectivity, weighted=opt\$weighted_degree)
+
+        # get significant pairs and classify them into red/yellow/green pairs
+
+        results <- getSignificantResultsFstat(
+            pd,
+            pval=opt\$fdr,
+            fdr_adjusted=TRUE
+        )
+        results <- results[,c("Partner", "Pair", "theta")]
+        results\$class <- "red"
+        results\$class[which(results\$Pair %in% hub_genes[opt\$features_id_col] | results\$Partner %in% hub_genes[opt\$features_id_col])] <- "yellow"
+        results\$class[which(results\$Pair %in% hub_genes[opt\$features_id_col] & results\$Partner %in% hub_genes[opt\$features_id_col])] <- "green"
+    }
 
 } else {
 
@@ -309,16 +429,14 @@ if (opt\$permutation == 0) {
         ncores = opt\$ncores
     )
 
-    # get cutoff
-    # this is the cutoff used to get the significant pairs and ensemble of adjacency matrix
+    # get theta cutoff
 
-    cutoff <- getCutoffFDR(
+    theta_cutoff <- getCutoffFDR(
         pd,
         fdr=opt\$fdr,
         window_size=1
     )
-
-    if (cutoff) {
+    if (theta_cutoff) {
 
         # get adjacency matrix
 
@@ -330,8 +448,14 @@ if (opt\$permutation == 0) {
 
         # calculate gene connectivity and get hub genes
 
-        connectivity <- get_connectivity(adj)
-        hub_genes <- get_hub_genes(connectivity)
+        connectivity <- get_connectivity(
+            pd,
+            adj,
+            de,
+            theta_cutoff,
+            features_id_col=opt\$features_id_col
+        )
+        hub_genes <- get_hub_genes(connectivity, weigthted=opt\$weighted_degree)
 
         # get significant pairs and classify them into red/yellow/green pairs
 
@@ -345,15 +469,19 @@ if (opt\$permutation == 0) {
         results\$class[which(results\$Pair %in% hub_genes\$gene | results\$Partner %in% hub_genes\$gene)] <- "yellow"
         results\$class[which(results\$Pair %in% hub_genes\$gene & results\$Partner %in% hub_genes\$gene)] <- "green"
 
-    } else {
-        # TODO take top n pairs when no cutoff has FDR below desired threshold
-        # For the moment, we just print a warning and set adj, hub_genes and results to NULL
-        warning('No pairs have FDR below desired threshold.')
-        adj <- NULL
-        connectivity <- NULL
-        hub_genes <- NULL
-        results <- NULL
     }
+}
+
+# deal with the situation when no significant thetas are found
+# For the moment, we just print a warning and set adj, hub_genes and results to NULL
+# TODO take top n pairs when no cutoff has FDR below desired threshold
+
+if (!theta_cutoff) {
+    warning('No theta value has FDR below desired threshold.')
+    adj <- NULL
+    connectivity <- NULL
+    hub_genes <- NULL
+    results <- NULL
 }
 
 ################################################
@@ -376,7 +504,7 @@ write.table(
     quote     = FALSE
 )
 
-if (!is.null(adj)) {
+if (theta_cutoff) {
     write.table(
         results,
         file      = paste0(opt\$prefix, '.propd.results_filtered.tsv'),
