@@ -14,7 +14,7 @@ workflow EXPERIMENTAL {
 
     main:
 
-    // TODO add a printing function to pretty print what are the pathways (tools, arguments) to run
+    // check tools
     ch_tools.view()
 
     // initialize empty results channels

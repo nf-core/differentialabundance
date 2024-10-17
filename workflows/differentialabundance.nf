@@ -133,7 +133,7 @@ include { GEOQUERY_GETGEO                                   } from '../modules/n
 include { ZIP as MAKE_REPORT_BUNDLE                         } from '../modules/nf-core/zip/main'
 include { softwareVersionsToYAML                            } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 
-include { fromSamplesheet } from 'plugin/nf-validation'
+include { samplesheetToList } from 'plugin/nf-schema'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -362,26 +362,29 @@ workflow DIFFERENTIALABUNDANCE {
     } else if (params.study_type == 'experimental') {
 
         // Convert the samplesheet.csv in a channel with the proper format
-        ch_tools = Channel.fromSamplesheet('tools')
+        ch_tools = Channel.fromList(samplesheetToList(params.tools, './assets/schema_tools.json'))
 
+        // Filter the tools to the pathway(s) of interest, or run everything if requested
         if (params.pathway == "all") {
             ch_tools
-                .set{ ch_tools_filtered }
+                .set{ ch_tools }
         } else {
             ch_tools
                 .filter{
                     it[0]["pathway_name"] in params.pathway.tokenize(',')
                 }
-                .set{ ch_tools_filtered }
+                .set{ ch_tools }
         }
 
         EXPERIMENTAL(
             ch_contrasts,
             VALIDATOR.out.sample_meta,
             CUSTOM_MATRIXFILTER.out.filtered,
-            ch_tools_filtered
+            ch_tools
         )
 
+        // TODO for the moment, these channels are allocated to not breaking the next part.
+        // they have to be properly handled afterwards
         ch_norm = Channel.empty()
         ch_differential = Channel.empty()
         ch_processed_matrices = Channel.empty()

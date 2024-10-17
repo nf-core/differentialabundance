@@ -8,8 +8,7 @@ process PROPR_PROPD {
         'biocontainers/mulled-v2-401a215d4024df776a98d90a352048199e342a3d:5ba9bbf6cd4f4f98983526673c223d2e7d829b36-0' }"
 
     input:
-    tuple val(meta), path(count)
-    tuple val(meta2), path(samplesheet)
+    tuple val(meta), path(count), path(samplesheet), val(contrast_variable), val(reference), val(target)
 
     output:
     tuple val(meta), path("*.propd.rds")                 , emit: rds
