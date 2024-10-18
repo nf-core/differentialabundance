@@ -5,6 +5,7 @@ lint:
         - params.css_file
         - params.citations_file
         - params.report_file
+        - params.tools
   multiqc_config: False
   files_exist:
     - assets/multiqc_config.yml
