@@ -18,6 +18,9 @@ process PROPR_PROPD {
     tuple val(meta), path("*.propd.connectivity.tsv")    , emit: connectivity    , optional: true
     tuple val(meta), path("*.propd.hub_genes.tsv")       , emit: hub_genes       , optional: true
     tuple val(meta), path("*.propd.fdr.tsv")             , emit: fdr             , optional: true
+    tuple val(meta), path("*.propd.red_pairs.pdf")       , emit: red_pairs       , optional: true
+    tuple val(meta), path("*.propd.yellow_pairs.pdf")    , emit: yellow_pairs    , optional: true
+    tuple val(meta), path("*.propd.green_pairs.pdf")     , emit: green_pairs     , optional: true
     path "*.warnings.log"                                , emit: warnings
     path "*.R_sessionInfo.log"                           , emit: session_info
     path "versions.yml"                                  , emit: versions

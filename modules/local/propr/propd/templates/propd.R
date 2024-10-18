@@ -144,40 +144,76 @@ get_hub_genes <- function(connectivity, cutoff, weighted=FALSE){
     return(hub_genes)
 }
 
-# this function overwrites the one in the propr package, that had a bug
-# TODO update the container with the corrected package, and remove this
-runNormalization <- function(object, norm.factors) {
-    if (!inherits(object, "propd")) {
-        stop("Please provide a propd object.")
-    }
-    if (!identical(length(norm.factors), nrow(object@counts))) {
-        stop("The norm factors should have one value for each subject.")
-    }
+#' Plot pairs of genes
+#'
+#' This function plots the following pairs of genes:
+#' - xy vs sample
+#' - x vs y
+#' - x vs sample
+#' - y vs sample
+#' - xr vs yr
+#' - xr vs sample
+#' - yr vs sample
+#' The pairs are colored according to the group they belong to.
+#'
+#' @param df Data frame with the following columns: xy, x, y, xr, yr, sample, group, color
+#' @param x Name of the gene x
+#' @param y Name of the gene y
+#' @param title Title of the plot
+plot_pairs <- function(df, x, y, title){
 
-    # compute thetas
-    newCounts <- cbind(norm.factors, object@counts)
-    newPD <-
-        propd(
-            newCounts,
-            group = object@group,
-            alpha = object@alpha,
-            p = 0,
-            weighted = object@weighted
-        )
-    if (object@active == "theta_mod") {
-        newPD <- updateF(newPD, moderated = TRUE)
-    }
-    newPD <- setActive(newPD, object@active)
+    # Define the layout
+    layout_matrix <- matrix(c(
+        0, 1, 8,    # First row
+        2, 3, 4,    # Second row
+        5, 6, 7     # Third row
+        ), nrow = 3, ncol = 3, byrow = TRUE)
+    layout(layout_matrix, widths = c(1, 1, 1), heights = c(1, 1, 1))
 
-    # parse thetas for each gene
-    rawRes <- newPD@results
-    perFeature <- rawRes[rawRes\$Pair == 1,]
-    if (!identical(perFeature\$Partner, 2:(ncol(newCounts))))
-        stop("DEBUG ERROR #GET001.")
-    thetas <- perFeature\$theta
-    names(thetas) <- colnames(object@counts)
+    # Adjust margins and text sizes
+    par(mar = c(4, 4, 1, 1), cex = 1.5, lwd = 1.5)
 
-    return(thetas)
+    # plot xy vs sample
+    plot(x=df\$sample, y=df\$xy, xlab='sample', ylab=paste0(x, '/', y), col=df\$color)
+
+    # plot x vs y
+    plot(x=df\$x, y=df\$y, xlab=x, ylab=y, col=df\$color)
+
+    # plot x vs sample
+    plot(x=df\$sample, y=df\$x, xlab='sample', ylab=x, col=df\$color)
+
+    # plot y vs sample
+    plot(x=df\$sample, y=df\$y, xlab='sample', ylab=y, col=df\$color)
+
+    # plot xr vs yr
+    plot(x=df\$xr, y=df\$yr, xlab=paste0(x, '/ref'), ylab=paste0(y, '/ref'), col=df\$color)
+
+    # plot xr vs sample
+    plot(x=df\$sample, y=df\$xr, xlab='sample', ylab=paste0(x, '/ref'), col=df\$color)
+
+    # plot yr vs sample
+    plot(x=df\$sample, y=df\$yr, xlab='sample', ylab=paste0(y, '/ref'), col=df\$color)
+
+    # add legend
+    plot.new()
+    par(mar = c(0, 0, 0, 0))
+    legend(
+        "center",
+        legend = unique(df\$group),
+        col = unique(df\$color),
+        pch = 19,
+        cex = 1.5,
+        bty = "n")
+
+    # TODO the title does not appear somehow, fix it
+    # Add main title
+    mtext(
+        title,
+        side = 3,
+        outer = TRUE,
+        line = 1,
+        cex = 2,
+        font = 2)
 }
 
 ################################################
@@ -416,9 +452,9 @@ if (opt\$permutation == 0) {
             fdr_adjusted=TRUE
         )
         results <- results[,c("Partner", "Pair", "theta")]
-        results\$class <- "red"
-        results\$class[which(de[results\$Pair] < theta_cutoff | de[results\$Partner] < theta_cutoff)] <- "yellow"
-        results\$class[which(de[results\$Pair] < theta_cutoff & de[results\$Partner] < theta_cutoff)] <- "green"
+        results\$classification <- "red"
+        results\$classification[which(de[results\$Pair] < theta_cutoff | de[results\$Partner] < theta_cutoff)] <- "yellow"
+        results\$classification[which(de[results\$Pair] < theta_cutoff & de[results\$Partner] < theta_cutoff)] <- "green"
 
         # sort significant pairs
 
@@ -465,7 +501,7 @@ if (opt\$permutation == 0) {
             theta_cutoff,
             features_id_col=opt\$features_id_col
         )
-        hub_genes <- get_hub_genes(connectivity, weigthted=opt\$weighted_degree)
+        hub_genes <- get_hub_genes(connectivity, weighted=opt\$weighted_degree)
 
         # get significant pairs and classify them into red/yellow/green pairs
 
@@ -475,9 +511,9 @@ if (opt\$permutation == 0) {
             window_size=1
         )
         results <- results[,c("Partner", "Pair", "theta")]
-        results\$class <- "red"
-        results\$class[which(de[results\$Pair] < theta_cutoff | de[results\$Partner] < theta_cutoff)] <- "yellow"
-        results\$class[which(de[results\$Pair] < theta_cutoff & de[results\$Partner] < theta_cutoff)] <- "green"
+        results\$classification <- "red"
+        results\$classification[which(de[results\$Pair] < theta_cutoff | de[results\$Partner] < theta_cutoff)] <- "yellow"
+        results\$classification[which(de[results\$Pair] < theta_cutoff & de[results\$Partner] < theta_cutoff)] <- "green"
 
         # sort significant pairs
 
@@ -560,6 +596,51 @@ if (opt\$permutation > 0) {
         sep       = '\\t',
         quote     = FALSE
     )
+}
+
+################################################
+################################################
+## Plot red pairs                             ##
+################################################
+################################################
+
+if (theta_cutoff){
+
+    # get ratios between each gene and the normalization reference
+    ratios <- exp(logratio(pd@counts, 'clr', NA))
+
+    # plot for each pair type
+    for (pair_type in c("red", "yellow", "green")){
+        pdf(paste0(opt\$prefix, '.propd.', pair_type, '_pairs.pdf'), width = 18, height = 18)
+
+        # get pairs
+        pairs <- results[results\$classification == pair_type,]
+
+        # for the top pairs
+        for (idx in c(1:3)){
+
+            # get x and y genes
+            x <- pairs[idx,'Partner']
+            y <- pairs[idx,'Pair']
+
+            # create data frame
+            df <- data.frame(
+                xy=pd@counts[,x]/pd@counts[,y],
+                x=pd@counts[,x],
+                y=pd@counts[,y],
+                xr=ratios[,x],
+                yr=ratios[,y],
+                sample=c(1:nrow(pd@counts)),
+                group=group,
+                color=ifelse(group == opt\$target_group, 'red', 'blue'))
+            df <- df[order(df\$group, df\$sample),]
+
+            # plot
+            title <- paste0("top ", idx, " ", pair_type, " pair with theta=", round(results[idx, 'theta'], 6))
+            plot_pairs(df, x, y, title)
+        }
+
+    }
 }
 
 ################################################

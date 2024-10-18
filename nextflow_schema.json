@@ -756,14 +756,6 @@
             "description": "Parameters to run differential proportionality",
             "default": "",
             "properties": {
-                "propd_group_col": {
-                    "type": "string",
-                    "default": "null"
-                },
-                "propd_group_values": {
-                    "type": "string",
-                    "default": "null"
-                },
                 "propd_alpha": {
                     "type": "string",
                     "default": "null",
