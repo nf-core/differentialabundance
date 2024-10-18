@@ -2,10 +2,10 @@ process PROPR_PROPR {
     tag "$meta.id"
     label 'process_medium'
 
-    conda "${moduleDir}/environment.yml"
+    // conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/mulled-v2-401a215d4024df776a98d90a352048199e342a3d:5ba9bbf6cd4f4f98983526673c223d2e7d829b36-0':
-        'biocontainers/mulled-v2-401a215d4024df776a98d90a352048199e342a3d:5ba9bbf6cd4f4f98983526673c223d2e7d829b36-0' }"
+        'oras://community.wave.seqera.io/library/bioconductor-limma_r-ggplot2_r-propr:75e6dfd62a2313a9':
+        'community.wave.seqera.io/library/bioconductor-limma_r-ggplot2_r-propr:fbd569ab00953cb0' }"
 
     input:
     tuple val(meta), path(count)
