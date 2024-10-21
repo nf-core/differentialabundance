@@ -186,7 +186,7 @@ workflow DIFFERENTIALABUNDANCE {
         // TODO: there should probably be a separate plotting module in proteus to simplify this
 
         ch_contrast_variables = ch_contrasts_file
-            .splitCsv ( header:true, sep:(params.contrasts.endsWith('tsv') ? '\t' : ','))
+            .splitCsv(header:true, sep:(params.contrasts.endsWith('csv') ? ',' : '\t'))
             .map{ it.tail().first() }
             .map{
                 tuple('id': it.variable)

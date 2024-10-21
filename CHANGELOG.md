@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [[#304](https://github.com/nf-core/differentialabundance/pull/304)] - Fix bug when using TXT contrast file ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#289](https://github.com/nf-core/differentialabundance/pull/289)] - Fix missing ch_gene_sets default for gprofiler2 ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#280](https://github.com/nf-core/differentialabundance/pull/280)] - Bump shinyngs, fix contrasts passed to app creation ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#274](https://github.com/nf-core/differentialabundance/pull/274)] - Fix pagination on samples table ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
