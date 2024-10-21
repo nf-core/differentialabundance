@@ -10,7 +10,7 @@ workflow ENRICHMENT {
     ch_results_genewise
     ch_results_genewise_filtered
     ch_adjacency
-    // TODO: add ch_gm when provided by user, etc.
+    gene_sets_file
 
     main:
 
@@ -21,10 +21,25 @@ workflow ENRICHMENT {
     // Construct gene set database
     // ----------------------------------------------------
 
-    // TODO this should be optional, only run when there is no gene set data provided by user
+    // TODO for the moment, it only works with one gene sets file
+    // we may want to support multiple gene sets files
 
-    MYGENE(ch_counts.take(1))  // only one data is provided to this pipeline
-    ch_gmt = MYGENE.out.gmt
+    // TODO either we need to make the mygene module more complete to parse GMT file from different databases,
+    // or use other alternatives like for example the gene set parsed from Gprofiler2. (The problem with this is that it only works for certain organisms)
+
+    if (gene_sets_file == null) {
+        MYGENE(ch_counts.take(1))
+        ch_gene_sets = MYGENE.out.gmt
+    } else {
+        Channel.of(gene_sets_file)
+            .map { file(it, checkIfExists: true) }
+            .map { it -> [[id: it.name], it]}
+            .set { ch_gene_sets }
+    }
+
+    // TODO the gene ids in the gene sets should be the same as the gene ids in the counts table
+    // otherwise GREA won't work properly
+    // We may want to add a step to check this and convert between gene_id/gene_name if necessary
 
     // ----------------------------------------------------
     // Perform enrichment analysis with GREA
@@ -34,7 +49,7 @@ workflow ENRICHMENT {
         .filter { it[0]["enr_method"] == "grea" }
         .set { ch_adjacency_grea }
 
-    GREA(ch_adjacency_grea, ch_gmt.collect())
+    GREA(ch_adjacency_grea, ch_gene_sets.collect())
     ch_enriched = ch_enriched.mix(GREA.out.results)
 
     // ----------------------------------------------------

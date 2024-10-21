@@ -61,7 +61,8 @@ workflow EXPERIMENTAL {
         ch_counts,
         ch_results_genewise,
         ch_results_genewise_filtered,
-        ch_adjacency
+        ch_adjacency,
+        params.gene_sets_files
     )
     ch_enriched = ch_enriched.mix(ENRICHMENT.out.enriched)
 
