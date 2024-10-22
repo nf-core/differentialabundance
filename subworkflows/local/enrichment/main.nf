@@ -3,6 +3,7 @@
 //
 include { MYGENE } from "../../../modules/nf-core/mygene/main.nf"
 include { PROPR_GREA as GREA } from "../../../modules/local/propr/grea/main.nf"
+include { GPROFILER2_GOST as GPROFILER2_GOST_EXPERIMENTAL } from "../../../modules/nf-core/gprofiler2/gost/main.nf"
 
 workflow ENRICHMENT {
     take:
@@ -53,16 +54,33 @@ workflow ENRICHMENT {
     ch_enriched = ch_enriched.mix(GREA.out.results)
 
     // ----------------------------------------------------
+    // Perform enrichment analysis with gprofiler2
+    // ----------------------------------------------------
+
+    // TODO here we assume that ch_gene_sets and ch_counts have only one element, so they can be combined interchangeably
+    // but in the future, with differently processed data, etc., we may want to combine them based on some criteria
+    ch_results_genewise_filtered
+        .filter { it[0]["enr_method"] == "gprofiler2" }
+        .combine(ch_gene_sets)
+        .combine(ch_counts)
+        .multiMap { meta_results, results, meta_gene_sets, gene_sets, meta_counts, counts ->
+            de : [meta_results, results]
+            gmt : [gene_sets]
+            background : [counts]
+        }
+        .set{ ch_enrichment_gprofiler2 }
+
+    GPROFILER2_GOST_EXPERIMENTAL(
+        ch_enrichment_gprofiler2.de,
+        ch_enrichment_gprofiler2.gmt,
+        ch_enrichment_gprofiler2.background
+    )
+
+    // ----------------------------------------------------
     // Perform enrichment analysis with GSEA
     // ----------------------------------------------------
 
     // todo: add gsea here
-
-    // ----------------------------------------------------
-    // Perform enrichment analysis with gprofiler2
-    // ----------------------------------------------------
-
-    // todo: add gprofiler2 here
 
     emit:
     enriched = ch_enriched
