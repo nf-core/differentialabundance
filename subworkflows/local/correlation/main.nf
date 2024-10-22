@@ -3,7 +3,7 @@
 //
 include {PROPR_PROPR as PROPR} from "../../../modules/local/propr/propr/main.nf"
 
-def clean_meta = { meta, data -> 
+def clean_meta = { meta, data ->
     def meta_clone = meta.clone()
     meta_clone.remove('cor_method')
     meta_clone.remove('args_cor')

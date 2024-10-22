@@ -4,7 +4,7 @@
 include { PROPR_PROPD as PROPD } from "../../../modules/local/propr/propd/main.nf"
 include { DESEQ2_DIFFERENTIAL  } from '../../../modules/nf-core/deseq2/differential/main'
 
-def clean_meta = { meta, data -> 
+def clean_meta = { meta, data ->
     def meta_clone = meta.clone()
     meta_clone.remove('diff_method')
     meta_clone.remove('args_diff')

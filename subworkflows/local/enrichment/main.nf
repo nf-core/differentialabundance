@@ -34,8 +34,8 @@ workflow ENRICHMENT {
     ch_adjacency
         .map { meta, matrix -> [meta.subMap(["pathway_name"]), meta, matrix] }
         .join(ch_tools, by: [0])
-        .map { 
-            pathway_name, meta, matrix, meta_tools -> 
+        .map {
+            pathway_name, meta, matrix, meta_tools ->
                 def new_meta = meta.clone() + meta_tools.clone()
                 [ new_meta, matrix ]
             }
