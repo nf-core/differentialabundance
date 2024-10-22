@@ -119,7 +119,6 @@ get_connectivity <- function(pd, adj, de, cutoff, features_id_col='gene_id'){
 #' degree by node.
 #'
 #' @param connectivity Data frame with connectivity
-<<<<<<< Updated upstream
 #' @param cutoff Theta value for which DP pairs are considered significant.
 #' @param weighted Boolean. If TRUE, use weighted degree to determine hub genes.
 #' Otherwise, use degree.
@@ -130,21 +129,11 @@ get_hub_genes <- function(connectivity, cutoff, weighted=FALSE){
     # get the expected degree
     total_degree <- if (weighted) sum(connectivity\$weighted_degree) else sum(connectivity\$degree)
     n_nodes <- sum(connectivity\$degree > 0)
-=======
-#'
-#' @return filtered connectivity data frame with hub genes
-get_hub_genes <- function(connectivity){
-
-    # get the expected degree
-    total_degree <- sum(connectivity\$degree)
-    n_nodes <- sum(connectivity > 0)
->>>>>>> Stashed changes
     expected_degree <- total_degree / n_nodes
 
     # get hub genes
     hub_genes <- connectivity[which(connectivity\$degree > expected_degree),]
 
-<<<<<<< Updated upstream
     # sort hub genes
     if (weighted) {
         hub_genes <- hub_genes[order(hub_genes\$weighted_degree, decreasing=TRUE),]
@@ -227,11 +216,6 @@ plot_pairs <- function(df, x, y, title){
         font = 2)
 }
 
-=======
-    return(hub_genes)
-}
-
->>>>>>> Stashed changes
 ################################################
 ################################################
 ## Parse arguments                            ##
@@ -250,13 +234,9 @@ opt <- list(
     # comparison groups
     samplesheet       = '$samplesheet',
     obs_id_col        = 'sample',             # column name of observation ids
-<<<<<<< Updated upstream
     contrast_variable = "$contrast_variable", # column name of contrast variable
     reference_group   = "$reference",         # reference group for contrast variable
     target_group      = "$target",            # target group for contrast variable
-=======
-    group_col         = 'treatment',          # column name of grouping variable
->>>>>>> Stashed changes
 
     # parameters for computing differential proportionality
     alpha             = NA,                   # alpha for boxcox transformation
@@ -267,12 +247,9 @@ opt <- list(
     permutation       = 0,                    # if permutation > 0, use permutation test to compute FDR
     number_of_cutoffs = 100,                  # number of cutoffs for permutation test
 
-<<<<<<< Updated upstream
     # parameters for getting the hub genes
     weighted_degree   = FALSE,                 # use weighted degree for hub genes or not
 
-=======
->>>>>>> Stashed changes
     # other parameters
     seed              = NA,                   # seed for reproducibility
     ncores            = as.integer('$task.cpus')
@@ -284,22 +261,15 @@ opt_types <- list(
     samplesheet       = 'character',
     features_id_col   = 'character',
     obs_id_col        = 'character',
-<<<<<<< Updated upstream
     contrast_variable = 'character',
     reference_group   = 'character',
     target_group      = 'character',
-=======
-    group_col         = 'character',
->>>>>>> Stashed changes
     alpha             = 'numeric',
     moderated         = 'logical',
     fdr               = 'numeric',
     permutation       = 'numeric',
     number_of_cutoffs = 'numeric',
-<<<<<<< Updated upstream
     weighted_degree   = 'logical',
-=======
->>>>>>> Stashed changes
     seed              = 'numeric',
     ncores            = 'numeric'
 )
@@ -325,11 +295,7 @@ for ( ao in names(args_opt)){
 
 # Check if required parameters have been provided
 
-<<<<<<< Updated upstream
 required_opts <- c('count','samplesheet','contrast_variable','reference_group','target_group')
-=======
-required_opts <- c('count','samplesheet')
->>>>>>> Stashed changes
 missing <- required_opts[unlist(lapply(opt[required_opts], is.null)) | ! required_opts %in% names(opt)]
 if (length(missing) > 0){
     stop(paste("Missing required options:", paste(missing, collapse=', ')))
@@ -346,15 +312,12 @@ for (file_input in c('count','samplesheet')){
     }
 }
 
-<<<<<<< Updated upstream
 # check parameters are valid
 
 if (opt\$permutation < 0) {
     stop('permutation should be a positive integer')
 }
 
-=======
->>>>>>> Stashed changes
 # TODO maybe add a function to pretty print the arguments?
 print(opt)
 
@@ -390,17 +353,10 @@ mat <- read_delim_flexible(
 mat <- t(mat)  # transpose matrix to have features (genes) as columns
 
 # parse group
-<<<<<<< Updated upstream
 # and filter matrix and group values, so that only the contrasted groups are kept
 # TODO propd can also handle more than two groups
 # but that dont work properly with the contrast format
 # Should we provide an alternative way to do that?
-=======
-# This creates a vector referring to the group id for each observation.
-# The vector should have 2+ different groups, so that differential proportionality will
-# be computed to compare the variances between and within groups. TODO one can parse the
-# 'group_col' from the contrast file information as the other modules
->>>>>>> Stashed changes
 
 samplesheet <- read_delim_flexible(
     opt\$samplesheet,
@@ -408,7 +364,6 @@ samplesheet <- read_delim_flexible(
     row.names = NULL,
     check.names = FALSE
 )
-<<<<<<< Updated upstream
 samplesheet <- samplesheet[,c(opt\$obs_id_col, opt\$contrast_variable)]
 idx <- which(samplesheet[,2] %in% c(opt\$reference_group, opt\$target_group))
 mat <- mat[idx,]
@@ -416,12 +371,6 @@ samplesheet <- samplesheet[idx,]
 group <- as.vector(samplesheet[,2])
 if (length(group) != nrow(mat)) stop('Error when parsing group')
 if (length(unique(group)) != 2) stop('Only two groups are allowed for contrast')
-=======
-tmp <- samplesheet[[opt\$group_col]]
-names(tmp) <- samplesheet[[opt\$obs_id_col]]
-group <- as.vector(tmp[rownames(mat)])
-if (length(group) != nrow(mat)) stop('Error when parsing group')
->>>>>>> Stashed changes
 
 # compute differential proportionality
 
@@ -433,7 +382,6 @@ pd <- propd(
     p        = opt\$permutation
 )
 
-<<<<<<< Updated upstream
 # compute DE theta values
 # this is the theta value for each gene with respect to the normalization reference
 # in this case, the reference is the geometric mean of the sample
@@ -445,8 +393,6 @@ pd <- propd(
 ref <- exp(rowMeans(log(pd@counts)))
 de <- runNormalization(pd, ref)
 
-=======
->>>>>>> Stashed changes
 # use F-stat FDR-adjusted p-values to get significant pairs, if permutation == 0
 # otherwise, get FDR values using permutation tests (more computationally expensive but likely more conservative FDRs)
 
@@ -462,7 +408,6 @@ if (opt\$permutation == 0) {
     )
     if (opt\$moderated) pd <- setActive(pd, what='theta_mod')
 
-<<<<<<< Updated upstream
     # get theta value for which FDR is below desired threshold
     # theta_cutoff is FALSE when no theta value has FDR below desired threshold
     # otherwise it is the theta value for which FDR is below desired threshold
@@ -470,16 +415,10 @@ if (opt\$permutation == 0) {
     # that involve extracting the significant pairs.
 
     theta_cutoff <- getCutoffFstat(
-=======
-    # get adjacency matrix
-
-    adj <- getAdjacencyFstat(
->>>>>>> Stashed changes
         pd,
         pval=opt\$fdr,
         fdr_adjusted=TRUE
     )
-<<<<<<< Updated upstream
     if (theta_cutoff) {
 
         warning('Significant theta value found: ', theta_cutoff)
@@ -521,25 +460,6 @@ if (opt\$permutation == 0) {
 
         results <- results[order(results\$theta),]
     }
-=======
-
-    # calculate gene connectivity and get hub genes
-
-    connectivity <- get_connectivity(adj)
-    hub_genes <- get_hub_genes(connectivity)
-
-    # get significant pairs and classify them into red/yellow/green pairs
-
-    results <- getSignificantResultsFstat(
-        pd,
-        pval=opt\$fdr,
-        fdr_adjusted=TRUE
-    )
-    results <- results[,c("Partner", "Pair", "theta")]
-    results\$class <- "red"
-    results\$class[which(results\$Pair %in% hub_genes\$gene | results\$Partner %in% hub_genes\$gene)] <- "yellow"
-    results\$class[which(results\$Pair %in% hub_genes\$gene & results\$Partner %in% hub_genes\$gene)] <- "green"
->>>>>>> Stashed changes
 
 } else {
 
@@ -553,28 +473,16 @@ if (opt\$permutation == 0) {
         ncores = opt\$ncores
     )
 
-<<<<<<< Updated upstream
     # get theta cutoff
 
     theta_cutoff <- getCutoffFDR(
-=======
-    # get cutoff
-    # this is the cutoff used to get the significant pairs and ensemble of adjacency matrix
-
-    cutoff <- getCutoffFDR(
->>>>>>> Stashed changes
         pd,
         fdr=opt\$fdr,
         window_size=1
     )
-<<<<<<< Updated upstream
     if (theta_cutoff) {
 
         warning('Significant theta value found: ', theta_cutoff)
-=======
-
-    if (cutoff) {
->>>>>>> Stashed changes
 
         # get adjacency matrix
 
@@ -586,7 +494,6 @@ if (opt\$permutation == 0) {
 
         # calculate gene connectivity and get hub genes
 
-<<<<<<< Updated upstream
         connectivity <- get_connectivity(
             pd,
             adj,
@@ -595,10 +502,6 @@ if (opt\$permutation == 0) {
             features_id_col=opt\$features_id_col
         )
         hub_genes <- get_hub_genes(connectivity, weighted=opt\$weighted_degree)
-=======
-        connectivity <- get_connectivity(adj)
-        hub_genes <- get_hub_genes(connectivity)
->>>>>>> Stashed changes
 
         # get significant pairs and classify them into red/yellow/green pairs
 
@@ -608,7 +511,6 @@ if (opt\$permutation == 0) {
             window_size=1
         )
         results <- results[,c("Partner", "Pair", "theta")]
-<<<<<<< Updated upstream
         results\$classification <- "red"
         results\$classification[which(de[results\$Pair] < theta_cutoff | de[results\$Partner] < theta_cutoff)] <- "yellow"
         results\$classification[which(de[results\$Pair] < theta_cutoff & de[results\$Partner] < theta_cutoff)] <- "green"
@@ -631,23 +533,6 @@ if (!theta_cutoff) {
     results <- NULL
 }
 
-=======
-        results\$class <- "red"
-        results\$class[which(results\$Pair %in% hub_genes\$gene | results\$Partner %in% hub_genes\$gene)] <- "yellow"
-        results\$class[which(results\$Pair %in% hub_genes\$gene & results\$Partner %in% hub_genes\$gene)] <- "green"
-
-    } else {
-        # TODO take top n pairs when no cutoff has FDR below desired threshold
-        # For the moment, we just print a warning and set adj, hub_genes and results to NULL
-        warning('No pairs have FDR below desired threshold.')
-        adj <- NULL
-        connectivity <- NULL
-        hub_genes <- NULL
-        results <- NULL
-    }
-}
-
->>>>>>> Stashed changes
 ################################################
 ################################################
 ## Generate outputs                           ##
@@ -668,11 +553,7 @@ write.table(
     quote     = FALSE
 )
 
-<<<<<<< Updated upstream
 if (theta_cutoff) {
-=======
-if (!is.null(adj)) {
->>>>>>> Stashed changes
     write.table(
         results,
         file      = paste0(opt\$prefix, '.propd.results_filtered.tsv'),
@@ -719,7 +600,6 @@ if (opt\$permutation > 0) {
 
 ################################################
 ################################################
-<<<<<<< Updated upstream
 ## Plot red pairs                             ##
 ################################################
 ################################################
@@ -765,8 +645,6 @@ if (theta_cutoff){
 
 ################################################
 ################################################
-=======
->>>>>>> Stashed changes
 ## WARNINGS                                   ##
 ################################################
 ################################################
