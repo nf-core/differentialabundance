@@ -364,16 +364,12 @@ workflow DIFFERENTIALABUNDANCE {
         // Convert the toolsheet.csv in a channel with the proper format
         ch_tools = Channel.fromList(samplesheetToList(params.tools, './assets/schema_tools.json'))
                     .map {
-                        meta ->
-                            def pathway_name     = meta[0].subMap(["pathway_name"])
-                            def differential_map = meta[0].subMap(["diff_method","args_diff"])
-                            def enr_diff_map     = meta[0].subMap(["enr_diff_method","args_enr_diff"])
-                            def correlation_map  = meta[0].subMap(["cor_method","args_cor"])
-                            def enr_corr_map     = meta[0].subMap(["enr_cor_method","args_enr_cor"])
-                            def sel_method       = meta[0].subMap(["sel_method","args_sel"])
-                            // def enr_corr_map     = meta[0].subMap(["enr_method","args_enr"])
-                            [ pathway_name, differential_map, enr_diff_map, correlation_map, enr_corr_map, sel_method ]
-                            // [ pathway_name, differential_map, correlation_map, enrichment_map ]
+                        it ->
+                            def pathway_name     = it[0].subMap(["pathway_name"])
+                            def differential_map = it[0].subMap(["diff_method","args_diff"])
+                            def correlation_map  = it[0].subMap(["cor_method","args_cor"])
+                            def enrichment_map   = it[0].subMap(["enr_method","args_enr"])
+                            [ pathway_name, differential_map, correlation_map, enrichment_map ]
                     }.unique()
 
         // Filter the tools to the pathway(s) of interest, or run everything if requested

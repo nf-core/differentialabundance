@@ -4,9 +4,16 @@
 include { PROPR_PROPD as PROPD } from "../../../modules/local/propr/propd/main.nf"
 include { DESEQ2_DIFFERENTIAL  } from '../../../modules/nf-core/deseq2/differential/main'
 
+def clean_meta = { meta, data -> 
+    def meta_clone = meta.clone()
+    meta_clone.remove('diff_method')
+    meta_clone.remove('args_diff')
+    return [meta_clone, data]
+}
+
 workflow DIFFERENTIAL {
     take:
-    ch_tools
+    ch_tools        // [ pathway_name, differential_map ]
     ch_counts
     ch_samplesheet
     ch_contrasts    // [meta, contrast_variable, reference, target]
@@ -21,7 +28,6 @@ workflow DIFFERENTIAL {
     ch_adjacency                 = Channel.empty()
 
     // branch tools to select the correct differential analysis method
-    ch_tools.view{"t "+it}
     ch_tools
         .branch {
             propd:  it[1]["diff_method"] == "propd"
@@ -44,10 +50,8 @@ workflow DIFFERENTIAL {
         }
         .unique()
         .set { ch_propd }
-    PROPD(ch_propd)
-    
-    ch_counts_propd.view{"cp "+it}
 
+    PROPD(ch_propd)
     ch_results_pairwise = ch_results_pairwise.mix(PROPD.out.results)
     ch_results_pairwise_filtered = ch_results_pairwise_filtered.mix(PROPD.out.results_filtered)
     ch_results_genewise = ch_results_genewise.mix(PROPD.out.connectivity)
@@ -78,9 +82,9 @@ workflow DIFFERENTIAL {
     //     .mix(DESEQ2_DIFFERENTIAL.out.results)
 
     emit:
-    results_pairwise          = ch_results_pairwise
-    results_pairwise_filtered = ch_results_pairwise_filtered
-    results_genewise          = ch_results_genewise
-    results_genewise_filtered = ch_results_genewise_filtered
-    adjacency                 = ch_adjacency
+    results_pairwise          = ch_results_pairwise.map(clean_meta)
+    results_pairwise_filtered = ch_results_pairwise_filtered.map(clean_meta)
+    results_genewise          = ch_results_genewise.map(clean_meta)
+    results_genewise_filtered = ch_results_genewise_filtered.map(clean_meta)
+    adjacency                 = ch_adjacency.map(clean_meta)
 }

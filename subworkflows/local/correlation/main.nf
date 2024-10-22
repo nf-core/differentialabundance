@@ -3,9 +3,16 @@
 //
 include {PROPR_PROPR as PROPR} from "../../../modules/local/propr/propr/main.nf"
 
+def clean_meta = { meta, data -> 
+    def meta_clone = meta.clone()
+    meta_clone.remove('cor_method')
+    meta_clone.remove('args_cor')
+    return [meta_clone, data]
+}
+
 workflow CORRELATION {
     take:
-    ch_tools
+    ch_tools        // [ pathway_name, correlation_map ]
     ch_counts
 
     main:
@@ -17,7 +24,7 @@ workflow CORRELATION {
     // branch tools to select the correct correlation analysis method
     ch_tools
         .branch {
-            propr:  it[0]["cor_method"] == "propr"
+            propr:  it[1]["cor_method"] == "propr"
         }
         .set { ch_tools_single }
 
@@ -40,6 +47,6 @@ workflow CORRELATION {
     // TODO: divide propr module into cor, propr, pcor, pcorbshrink, etc.
 
     emit:
-    matrix = ch_matrix
-    adjacency = ch_adjacency
+    matrix    = ch_matrix.map(clean_meta)
+    adjacency = ch_adjacency.map(clean_meta)
 }

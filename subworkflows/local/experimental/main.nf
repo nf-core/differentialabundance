@@ -10,19 +10,19 @@ workflow EXPERIMENTAL {
     ch_contrasts    // [ meta, contrast_variable, reference, target ]
     ch_samplesheet  // [ meta, samplesheet ]
     ch_counts       // [ meta, counts]
-    ch_tools        // [ pathway_name, differential_map, enr_diff_map, correlation_map, enr_corr_map, sel_method ]
+    ch_tools        // [ pathway_name, differential_map, correlation_map, enrichment_map ]
 
     main:
 
     // split toolsheet into channels
-    ch_tools.view()
     ch_tools
         .multiMap{
-            pathway_name, differential_map, enr_diff_map, correlation_map, enr_corr_map, sel_method ->
+            pathway_name, differential_map, correlation_map, enrichment_map ->
                 diff: [ pathway_name, differential_map ]
                 corr: [ pathway_name, correlation_map ]
-                enr:  [ pathway_name, enr_diff_map, enr_corr_map ]
-        }.set{ ch_tools }
+                enr:  [ pathway_name, enrichment_map ]
+        }
+        .set{ ch_tools }
 
 
     // initialize empty results channels
@@ -66,6 +66,7 @@ workflow EXPERIMENTAL {
     // ----------------------------------------------------
 
     ENRICHMENT(
+        ch_tools.enr,
         ch_counts,
         ch_results_genewise,
         ch_results_genewise_filtered,
