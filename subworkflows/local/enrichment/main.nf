@@ -3,7 +3,7 @@
 //
 include { MYGENE } from "../../../modules/nf-core/mygene/main.nf"
 include { PROPR_GREA as GREA } from "../../../modules/local/propr/grea/main.nf"
-include { GPROFILER2_GOST as GPROFILER2_GOST_EXPERIMENTAL } from "../../../modules/nf-core/gprofiler2/gost/main.nf"
+include { GPROFILER2_GOST } from "../../../modules/nf-core/gprofiler2/gost/main.nf"
 
 workflow ENRICHMENT {
     take:
@@ -70,7 +70,7 @@ workflow ENRICHMENT {
         }
         .set{ ch_enrichment_gprofiler2 }
 
-    GPROFILER2_GOST_EXPERIMENTAL(
+    GPROFILER2_GOST(
         ch_enrichment_gprofiler2.de,
         ch_enrichment_gprofiler2.gmt,
         ch_enrichment_gprofiler2.background
