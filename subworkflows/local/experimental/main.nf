@@ -1,9 +1,9 @@
 //
 // Run experimental analysis
 //
-include { DIFFERENTIAL }        from '../differential/main.nf'
-include { CORRELATION }         from '../correlation/main.nf'
-include { ENRICHMENT }          from '../enrichment/main.nf'
+include { DIFFERENTIAL } from '../differential/main.nf'
+include { CORRELATION }  from '../correlation/main.nf'
+include { ENRICHMENT }   from '../enrichment/main.nf'
 
 workflow EXPERIMENTAL {
     take:
@@ -30,11 +30,26 @@ workflow EXPERIMENTAL {
     // DIFFERENTIAL ANALYSIS BLOCK
     // ----------------------------------------------------
 
+    // parse optional input files that affect the normalization
+    // TODO we should consider to put this kind of stuff in a separate data handling / preprocessing / normalization block
+    if (params.control_features) {
+        ch_control_features = Channel.of([ [ "id": params.study_name  ], file(params.control_features, checkIfExists: true)]).first()
+    } else {
+        ch_control_features = [[],[]]
+    }
+    if (params.transcript_length_matrix) {
+        ch_transcript_lengths = Channel.of([ [ "id": params.study_name  ], file(params.transcript_length_matrix, checkIfExists: true)]).first()
+    } else {
+        ch_transcript_lengths = [[],[]]
+    }
+
     DIFFERENTIAL(
         ch_tools,
         ch_counts,
         ch_samplesheet,
-        ch_contrasts
+        ch_contrasts,
+        ch_control_features,
+        ch_transcript_lengths
     )
     ch_results_pairwise = ch_results_pairwise.mix(DIFFERENTIAL.out.results_pairwise)
     ch_results_pairwise_filtered = ch_results_pairwise_filtered.mix(DIFFERENTIAL.out.results_pairwise_filtered)
