@@ -133,7 +133,7 @@ include { GEOQUERY_GETGEO                                   } from '../modules/n
 include { ZIP as MAKE_REPORT_BUNDLE                         } from '../modules/nf-core/zip/main'
 include { softwareVersionsToYAML                            } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 
-include { fromSamplesheet } from 'plugin/nf-validation'
+include { samplesheetToList } from 'plugin/nf-schema'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -143,7 +143,8 @@ include { fromSamplesheet } from 'plugin/nf-validation'
 
 workflow DIFFERENTIALABUNDANCE {
 
-    // Set up some basic variables
+    main:
+
     ch_versions = Channel.empty()
     // Channel for the contrasts file
     ch_contrasts_file = Channel.from([[exp_meta, file(params.contrasts)]])
@@ -360,27 +361,42 @@ workflow DIFFERENTIALABUNDANCE {
             .first()
     } else if (params.study_type == 'experimental') {
 
-        // Convert the samplesheet.csv in a channel with the proper format
-        ch_tools = Channel.fromSamplesheet('tools')
+        // Convert the toolsheet.csv in a channel with the proper format
+        ch_tools = Channel.fromList(samplesheetToList(params.tools, './assets/schema_tools.json'))
+                    .map {
+                        meta ->
+                            def pathway_name     = meta[0].subMap(["pathway_name"])
+                            def differential_map = meta[0].subMap(["diff_method","args_diff"])
+                            def enr_diff_map     = meta[0].subMap(["enr_diff_method","args_enr_diff"])
+                            def correlation_map  = meta[0].subMap(["cor_method","args_cor"])
+                            def enr_corr_map     = meta[0].subMap(["enr_cor_method","args_enr_cor"])
+                            def sel_method       = meta[0].subMap(["sel_method","args_sel"])
+                            // def enr_corr_map     = meta[0].subMap(["enr_method","args_enr"])
+                            [ pathway_name, differential_map, enr_diff_map, correlation_map, enr_corr_map, sel_method ]
+                            // [ pathway_name, differential_map, correlation_map, enrichment_map ]
+                    }.unique()
 
+        // Filter the tools to the pathway(s) of interest, or run everything if requested
         if (params.pathway == "all") {
             ch_tools
-                .set{ ch_tools_filtered }
+                .set{ ch_tools }
         } else {
             ch_tools
                 .filter{
                     it[0]["pathway_name"] in params.pathway.tokenize(',')
                 }
-                .set{ ch_tools_filtered }
+                .set{ ch_tools }
         }
 
         EXPERIMENTAL(
             ch_contrasts,
             VALIDATOR.out.sample_meta,
             CUSTOM_MATRIXFILTER.out.filtered,
-            ch_tools_filtered
+            ch_tools
         )
 
+        // TODO for the moment, these channels are allocated to not breaking the next part.
+        // they have to be properly handled afterwards
         ch_norm = Channel.empty()
         ch_differential = Channel.empty()
         ch_processed_matrices = Channel.empty()

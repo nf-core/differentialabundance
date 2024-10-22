@@ -1,43 +1,54 @@
 //
 // Perform enrichment analysis
 //
-include { PROPR_GREA as GREA_DIFF } from "../../../modules/nf-core/propr/grea/main.nf"
-include { PROPR_GREA as GREA_COR  } from "../../../modules/nf-core/propr/grea/main.nf"
 include { MYGENE } from "../../../modules/nf-core/mygene/main.nf"
+include { PROPR_GREA as GREA } from "../../../modules/local/propr/grea/main.nf"
 
 workflow ENRICHMENT {
     take:
-    ch_diff_adjacency
-    ch_cor_adjacency
     ch_counts
+    ch_results_genewise
+    ch_results_genewise_filtered
+    ch_adjacency
+    // TODO: add ch_gm when provided by user, etc.
 
     main:
-    MYGENE(ch_counts)
+
+    // initialize empty results channels
+    ch_enriched = Channel.empty()
+
+    // ----------------------------------------------------
+    // Construct gene set database
+    // ----------------------------------------------------
+
+    // TODO this should be optional, only run when there is no gene set data provided by user
+
+    MYGENE(ch_counts.take(1))  // only one data is provided to this pipeline
     ch_gmt = MYGENE.out.gmt
 
+    // ----------------------------------------------------
+    // Perform enrichment analysis with GREA
+    // ----------------------------------------------------
 
-    ch_diff_adjacency
-        .branch {
-            grea: it[0]["enr_diff_method"] == "grea"
-            gsea: it[0]["enr_diff_method"] == "gsea"
-        }
-        .set { ch_diff_grea }
+    ch_adjacency
+        .filter { it[0]["enr_method"] == "grea" }
+        .set { ch_adjacency_grea }
 
-    GREA_DIFF(ch_diff_grea.grea, ch_gmt.collect())
-    ch_enriched_diff = GREA_DIFF.out.enrichedGO
+    GREA(ch_adjacency_grea, ch_gmt.collect())
+    ch_enriched = ch_enriched.mix(GREA.out.results)
 
-    ch_cor_adjacency
-        .branch {
-            grea: it[0]["enr_cor_method"] == "grea"        }
-        .set { ch_cor_grea }
+    // ----------------------------------------------------
+    // Perform enrichment analysis with GSEA
+    // ----------------------------------------------------
 
-    ch_cor_grea.grea.view()
-    ch_diff_grea.grea.view()
+    // todo: add gsea here
 
-    GREA_COR(ch_cor_grea.grea, ch_gmt.collect())
-    ch_enriched_cor = GREA_COR.out.enrichedGO
+    // ----------------------------------------------------
+    // Perform enrichment analysis with gprofiler2
+    // ----------------------------------------------------
+
+    // todo: add gprofiler2 here
 
     emit:
-    enriched_diff = ch_enriched_diff
-    enriched_cor = ch_enriched_cor
+    enriched = ch_enriched
 }

@@ -1,5 +1,5 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "title": "nf-core/differentialabundance - params.tools schema",
     "description": "Schema for the file provided with params.tools",
     "type": "array",
@@ -12,48 +12,32 @@
             },
             "diff_method": {
                 "type": "string",
-                "errorMessage": "choose propd, DESeq2 or none",
-                "meta": ["diff_method"]
+                "errorMessage": "choose a differential analysis method (eg. deseq2, propd) or none",
+                "meta": ["diff_method"],
+                "enum": ["propd", "deseq2", "none"]
             },
             "args_diff": {
                 "type": "string",
                 "meta": ["args_diff"]
             },
-            "enr_diff_method": {
-                "type": "string",
-                "meta": ["enr_diff_method"],
-                "errorMessage": "choose grea, gsea or none"
-            },
-            "args_enr_diff": {
-                "type": "string",
-                "meta": ["args_enr_diff"]
-            },
             "cor_method": {
                 "type": "string",
                 "meta": ["cor_method"],
-                "errorMessage": "choose correlation,proportionality, partial correlation or none"
+                "errorMessage": "choose a correlation method (eg. propr) or none",
+                "enum": ["propr", "none"]
             },
             "args_cor": {
                 "type": "string",
                 "meta": ["args_cor"]
             },
-            "enr_cor_method": {
+            "enr_method": {
                 "type": "string",
-                "meta": ["enr_cor_method"],
-                "errorMessage": "choose grea or none"
+                "meta": ["enr_method"],
+                "errorMessage": "choose a functional enrichment analysis method (eg. gsea, grea, gprofiler, etc) or none"
             },
-            "args_enr_cor": {
+            "args_enr": {
                 "type": "string",
-                "meta": ["args_enr_cor"]
-            },
-            "sel_method": {
-                "type": "string",
-                "meta": ["sel_method"],
-                "errorMessage": "choose filtervar or none"
-            },
-            "args_sel": {
-                "type": "string",
-                "meta": ["args_sel"]
+                "meta": ["args_enr"]
             }
         },
         "required": []

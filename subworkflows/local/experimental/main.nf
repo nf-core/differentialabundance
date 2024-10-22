@@ -1,58 +1,81 @@
 //
 // Run experimental analysis
 //
-include { CORRELATION }         from '../correlation/main.nf'
 include { DIFFERENTIAL }        from '../differential/main.nf'
-include { VARIABLE_SELECTION }  from '../variable_selection/main.nf'
+include { CORRELATION }         from '../correlation/main.nf'
 include { ENRICHMENT }          from '../enrichment/main.nf'
-
 
 workflow EXPERIMENTAL {
     take:
-    ch_contrasts
-    ch_samplesheet
-    ch_counts
-    ch_tools
-
+    ch_contrasts    // [ meta, contrast_variable, reference, target ]
+    ch_samplesheet  // [ meta, samplesheet ]
+    ch_counts       // [ meta, counts]
+    ch_tools        // [ pathway_name, differential_map, enr_diff_map, correlation_map, enr_corr_map, sel_method ]
 
     main:
-    // Perform differential analysis
+
+    // split toolsheet into channels
+    ch_tools.view()
+    ch_tools
+        .multiMap{
+            pathway_name, differential_map, enr_diff_map, correlation_map, enr_corr_map, sel_method ->
+                diff: [ pathway_name, differential_map ]
+                corr: [ pathway_name, correlation_map ]
+                enr:  [ pathway_name, enr_diff_map, enr_corr_map ]
+        }.set{ ch_tools }
+
+
+    // initialize empty results channels
+    ch_results_pairwise = Channel.empty()               // differential results for pairwise analysis - it should be a table
+    ch_results_pairwise_filtered = Channel.empty()      // differential results for pairwise analysis - filtered - it should be a table
+    ch_results_genewise = Channel.empty()               // differential results for genewise analysis - it should be a table
+    ch_results_genewise_filtered = Channel.empty()      // differential results for genewise analysis - filtered - it should be a table
+    ch_adjacency = Channel.empty()                      // adjacency matrix showing the connections between the genes, with values 1|0
+    ch_matrix = Channel.empty()                         // correlation matrix
+    ch_enriched = Channel.empty()                       // output table from enrichment analysis
+
+    // ----------------------------------------------------
+    // DIFFERENTIAL ANALYSIS BLOCK
+    // ----------------------------------------------------
+
     DIFFERENTIAL(
-        ch_contrasts,
+        ch_tools.diff,
+        ch_counts,
         ch_samplesheet,
-        ch_counts,
-        ch_tools
+        ch_contrasts
     )
-    ch_diff_results = DIFFERENTIAL.out.results
-    ch_diff_adjacency = DIFFERENTIAL.out.adjacency
+    ch_results_pairwise = ch_results_pairwise.mix(DIFFERENTIAL.out.results_pairwise)
+    ch_results_pairwise_filtered = ch_results_pairwise_filtered.mix(DIFFERENTIAL.out.results_pairwise_filtered)
+    ch_results_genewise = ch_results_genewise.mix(DIFFERENTIAL.out.results_genewise)
+    ch_results_genewise_filtered = ch_results_genewise_filtered.mix(DIFFERENTIAL.out.results_genewise_filtered)
+    ch_adjacency = ch_adjacency.mix(DIFFERENTIAL.out.adjacency)
 
-    // Perform variable selection
-    ch_counts_filtered = VARIABLE_SELECTION(ch_diff_adjacency, ch_counts)
+    // ----------------------------------------------------
+    // CORRELATION ANALYSIS BLOCK
+    // ----------------------------------------------------
 
-    // Perform correlation analysis
     CORRELATION(
-        ch_counts,
-        ch_tools,
-        ch_counts_filtered
-    )
-    ch_matrix = CORRELATION.out.matrix
-    ch_cor_adjacency = CORRELATION.out.adjacency
-
-    // Perform enrichment analysis
-    ENRICHMENT(
-        ch_diff_adjacency,
-        ch_cor_adjacency,
+        ch_tools.corr,
         ch_counts
     )
-    ch_enriched_cor = ENRICHMENT.out.enriched_cor
-    ch_enriched_diff = ENRICHMENT.out.enriched_diff
+    ch_matrix = ch_matrix.mix(CORRELATION.out.matrix)
+    ch_adjacency = ch_adjacency.mix(CORRELATION.out.adjacency)
 
-    emit:
-    diff_res    = ch_diff_results
-    diff_adj    = ch_diff_adjacency
-    var_count   = ch_counts_filtered
-    corr_matrix = ch_matrix
-    corr_adj    = ch_cor_adjacency
-    enriched_cor    = ch_enriched_cor
-    enriched_cor    = ch_enriched_diff
+    // ----------------------------------------------------
+    // FUNCTIONAL ENRICHMENT BLOCK
+    // ----------------------------------------------------
+
+    ENRICHMENT(
+        ch_counts,
+        ch_results_genewise,
+        ch_results_genewise_filtered,
+        ch_adjacency
+    )
+    ch_enriched = ch_enriched.mix(ENRICHMENT.out.enriched)
+
+    // ----------------------------------------------------
+    // VISUALIZATION BLOCK
+    // ----------------------------------------------------
+
+    // TODO: call visualization stuff here
 }

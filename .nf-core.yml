@@ -1,4 +1,3 @@
-repository_type: pipeline
 lint:
   nextflow_config:
     - config_defaults:
@@ -6,4 +5,21 @@ lint:
         - params.css_file
         - params.citations_file
         - params.report_file
-nf_core_version: "2.14.1"
+        - params.tools
+  multiqc_config: False
+  files_exist:
+    - assets/multiqc_config.yml
+nf_core_version: 3.0.2
+repository_type: pipeline
+template:
+  author: Oskar Wacker, Jonathan Manning
+  description: Differential abundance analysis
+  force: false
+  is_nfcore: true
+  name: differentialabundance
+  org: nf-core
+  outdir: .
+  skip_features:
+    - fastqc
+    - multiqc
+  version: 1.6.0dev

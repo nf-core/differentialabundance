@@ -1,47 +1,63 @@
 //
 // Perform differential analysis
 //
-include { PROPR_PROPD as PROPD } from "../../../modules/nf-core/propr/propd/main.nf"
+include { PROPR_PROPD as PROPD } from "../../../modules/local/propr/propd/main.nf"
 include { DESEQ2_DIFFERENTIAL  } from '../../../modules/nf-core/deseq2/differential/main'
-
 
 workflow DIFFERENTIAL {
     take:
-    ch_contrasts    // [meta, contrast_variable, reference, target]
-    ch_samplesheet
-    ch_counts
     ch_tools
+    ch_counts
+    ch_samplesheet
+    ch_contrasts    // [meta, contrast_variable, reference, target]
 
     main:
+
+    // initialize empty results channels
+    ch_results_pairwise          = Channel.empty()
+    ch_results_pairwise_filtered = Channel.empty()
+    ch_results_genewise          = Channel.empty()
+    ch_results_genewise_filtered = Channel.empty()
+    ch_adjacency                 = Channel.empty()
+
+    // branch tools to select the correct differential analysis method
+    ch_tools.view{"t "+it}
     ch_tools
         .branch {
-            propd:  it[0]["diff_method"] == "propd"
-            deseq2: it[0]["diff_method"] == "deseq2"
+            propd:  it[1]["diff_method"] == "propd"
+            deseq2: it[1]["diff_method"] == "deseq2"
         }
         .set { ch_tools_single }
 
+    // ----------------------------------------------------
+    // Perform differential analysis with propd
+    // ----------------------------------------------------
 
-    // Perform differential analysis with PROPD
     ch_counts
-        .combine(ch_tools_single.propd)
+        .join(ch_samplesheet)
         .combine(ch_contrasts)
+        .combine(ch_tools_single.propd)
         .map {
-            meta_counts, counts, tools, meta_contrast, contrast_variable, reference, target ->
-                def meta = meta_counts.clone() + tools.clone()
-                meta.args_diff = (meta.args_diff ?: "") + " --group_col $contrast_variable"
-                [ meta, counts ]
+            meta_data, counts, samplesheet, meta_contrast, contrast_variable, reference, target, pathway, meta_tools ->
+                def meta = meta_data.clone() + ['contrast': meta_contrast.id] + meta_tools.clone() + pathway
+                [ meta, counts, samplesheet, contrast_variable, reference, target ]
         }
         .unique()
-        .set { ch_counts_propd }
+        .set { ch_propd }
+    PROPD(ch_propd)
+    
+    ch_counts_propd.view{"cp "+it}
 
-    PROPD(
-        ch_counts_propd,
-        ch_samplesheet.first()
-    )
-    ch_results   = PROPD.out.results
-    ch_adjacency = PROPD.out.adj
+    ch_results_pairwise = ch_results_pairwise.mix(PROPD.out.results)
+    ch_results_pairwise_filtered = ch_results_pairwise_filtered.mix(PROPD.out.results_filtered)
+    ch_results_genewise = ch_results_genewise.mix(PROPD.out.connectivity)
+    ch_results_genewise_filtered = ch_results_genewise_filtered.mix(PROPD.out.hub_genes)
+    ch_adjacency = ch_adjacency.mix(PROPD.out.adjacency)
 
+    // ----------------------------------------------------
     // Perform differential analysis with DESeq2
+    // ----------------------------------------------------
+
     // ToDo: In order to use deseq2 the downstream processes need to be updated to process the output correctly
     // if (params.transcript_length_matrix) { ch_transcript_lengths = Channel.of([ exp_meta, file(params.transcript_length_matrix, checkIfExists: true)]).first() } else { ch_transcript_lengths = [[],[]] }
     // if (params.control_features) { ch_control_features = Channel.of([ exp_meta, file(params.control_features, checkIfExists: true)]).first() } else { ch_control_features = [[],[]] }
@@ -62,7 +78,9 @@ workflow DIFFERENTIAL {
     //     .mix(DESEQ2_DIFFERENTIAL.out.results)
 
     emit:
-    results   = ch_results
-    adjacency = ch_adjacency
-
+    results_pairwise          = ch_results_pairwise
+    results_pairwise_filtered = ch_results_pairwise_filtered
+    results_genewise          = ch_results_genewise
+    results_genewise_filtered = ch_results_genewise_filtered
+    adjacency                 = ch_adjacency
 }
