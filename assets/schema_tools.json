@@ -12,8 +12,9 @@
             },
             "diff_method": {
                 "type": "string",
-                "errorMessage": "choose a differential analysis method (eg. deseq2, propd, limme, etc) or none",
-                "meta": ["diff_method"]
+                "errorMessage": "choose a differential analysis method (eg. deseq2, propd) or none",
+                "meta": ["diff_method"],
+                "enum": ["propd", "deseq2", "none"]
             },
             "args_diff": {
                 "type": "string",
@@ -22,7 +23,8 @@
             "cor_method": {
                 "type": "string",
                 "meta": ["cor_method"],
-                "errorMessage": "choose a correlation method (eg. propr) or none"
+                "errorMessage": "choose a correlation method (eg. propr) or none",
+                "enum": ["propr", "none"]
             },
             "args_cor": {
                 "type": "string",

@@ -7,15 +7,23 @@ include { ENRICHMENT }          from '../enrichment/main.nf'
 
 workflow EXPERIMENTAL {
     take:
-    ch_contrasts
-    ch_samplesheet
-    ch_counts
-    ch_tools
+    ch_contrasts    // [ meta, contrast_variable, reference, target ]
+    ch_samplesheet  // [ meta, samplesheet ]
+    ch_counts       // [ meta, counts]
+    ch_tools        // [ pathway_name, differential_map, correlation_map, enrichment_map ]
 
     main:
 
-    // check tools
-    ch_tools.view()
+    // split toolsheet into channels
+    ch_tools
+        .multiMap{
+            pathway_name, differential_map, correlation_map, enrichment_map ->
+                diff: [ pathway_name, differential_map ]
+                corr: [ pathway_name, correlation_map ]
+                enr:  [ pathway_name, enrichment_map ]
+        }
+        .set{ ch_tools }
+
 
     // initialize empty results channels
     ch_results_pairwise = Channel.empty()               // differential results for pairwise analysis - it should be a table
@@ -31,7 +39,7 @@ workflow EXPERIMENTAL {
     // ----------------------------------------------------
 
     DIFFERENTIAL(
-        ch_tools,
+        ch_tools.diff,
         ch_counts,
         ch_samplesheet,
         ch_contrasts
@@ -47,7 +55,7 @@ workflow EXPERIMENTAL {
     // ----------------------------------------------------
 
     CORRELATION(
-        ch_tools,
+        ch_tools.corr,
         ch_counts
     )
     ch_matrix = ch_matrix.mix(CORRELATION.out.matrix)
@@ -58,6 +66,7 @@ workflow EXPERIMENTAL {
     // ----------------------------------------------------
 
     ENRICHMENT(
+        ch_tools.enr,
         ch_counts,
         ch_results_genewise,
         ch_results_genewise_filtered,
