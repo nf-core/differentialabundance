@@ -363,8 +363,16 @@ workflow DIFFERENTIALABUNDANCE {
     // TODO the experimental branch should be independent from this file
     } else if (params.study_type == 'experimental') {
 
-        // Convert the samplesheet.csv in a channel with the proper format
+        // Convert the toolsheet.csv in a channel with the proper format
         ch_tools = Channel.fromList(samplesheetToList(params.tools, './assets/schema_tools.json'))
+                    .map {
+                        it ->
+                            def pathway_name     = it[0].subMap(["pathway_name"])
+                            def differential_map = it[0].subMap(["diff_method","args_diff"])
+                            def correlation_map  = it[0].subMap(["cor_method","args_cor"])
+                            def enrichment_map   = it[0].subMap(["enr_method","args_enr"])
+                            [ pathway_name, differential_map, correlation_map, enrichment_map ]
+                    }.unique()
 
         // Filter the tools to the pathway(s) of interest, or run everything if requested
         if (params.pathway == "all") {
