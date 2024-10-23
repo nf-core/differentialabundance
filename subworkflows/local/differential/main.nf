@@ -4,16 +4,9 @@
 include { PROPR_PROPD as PROPD } from "../../../modules/local/propr/propd/main.nf"
 include { DESEQ2_DIFFERENTIAL  } from '../../../modules/nf-core/deseq2/differential/main'
 
-def correct_meta_data = { meta, data, pathway ->
-    def meta_clone = meta.clone() + pathway
-    meta_clone.remove('diff_method')
-    meta_clone.remove('args_diff')
-    return [meta_clone, data]
-}
-
 workflow DIFFERENTIAL {
     take:
-    ch_tools        // [ pathway_name, differential_map ]
+    ch_tools        // [ differential_map ] with the keys: diff_method, args_diff
     ch_counts
     ch_samplesheet
     ch_contrasts    // [meta, contrast_variable, reference, target]
@@ -30,8 +23,8 @@ workflow DIFFERENTIAL {
     // branch tools to select the correct differential analysis method
     ch_tools
         .branch {
-            propd:  it[1]["diff_method"] == "propd"
-            deseq2: it[1]["diff_method"] == "deseq2"
+            propd:  it["diff_method"] == "propd"
+            deseq2: it["diff_method"] == "deseq2"
         }
         .set { ch_tools_single }
 
@@ -43,25 +36,19 @@ workflow DIFFERENTIAL {
         .join(ch_samplesheet)
         .combine(ch_contrasts)
         .combine(ch_tools_single.propd)
-        .multiMap {
-            meta_data, counts, samplesheet, meta_contrast, contrast_variable, reference, target, pathway, meta_tools ->
+        .map {
+            meta_data, counts, samplesheet, meta_contrast, contrast_variable, reference, target, meta_tools ->
                 def meta = meta_data.clone() + ['contrast': meta_contrast.id] + meta_tools.clone()
                 input:   [ meta, counts, samplesheet, contrast_variable, reference, target ]
-                pathway: [ meta, pathway ]
         }
         .set { ch_propd }
 
-    PROPD(ch_propd.input.unique())
-    ch_results_pairwise          = PROPD.out.results
-                                        .join(ch_propd.pathway).map(correct_meta_data).mix(ch_results_pairwise)
-    ch_results_pairwise_filtered = PROPD.out.results_filtered
-                                        .join(ch_propd.pathway).map(correct_meta_data).mix(ch_results_pairwise_filtered)
-    ch_results_genewise          = PROPD.out.connectivity
-                                        .join(ch_propd.pathway).map(correct_meta_data).mix(ch_results_genewise)
-    ch_results_genewise_filtered = PROPD.out.hub_genes
-                                        .join(ch_propd.pathway).map(correct_meta_data).mix(ch_results_genewise_filtered)
-    ch_adjacency                 = PROPD.out.adjacency
-                                        .join(ch_propd.pathway).map(correct_meta_data).mix(ch_adjacency)
+    PROPD(ch_propd.unique())
+    ch_results_pairwise          = PROPD.out.results.mix(ch_results_pairwise)
+    ch_results_pairwise_filtered = PROPD.out.results_filtered.mix(ch_results_pairwise_filtered)
+    ch_results_genewise          = PROPD.out.connectivity.mix(ch_results_genewise)
+    ch_results_genewise_filtered = PROPD.out.hub_genes.mix(ch_results_genewise_filtered)
+    ch_adjacency                 = PROPD.out.adjacency.mix(ch_adjacency)
 
     // ----------------------------------------------------
     // Perform differential analysis with DESeq2
