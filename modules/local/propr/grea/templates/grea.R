@@ -190,12 +190,13 @@ if (!is.na(opt\$seed)) {
 
 # load adjacency matrix
 # this matrix should have gene x gene dimensions
+# Here we assume the adjacency matrix have significant pairs but also non significant pairs as background
 
 adj <- as.matrix(read_delim_flexible(
     opt\$adj,
     header = TRUE,
     row.names = 1,
-    check.names = TRUE
+    check.names = FALSE  # this is to avoid names like 'RP23-187D22.11' are changed to 'RP23.187D22.11'
 ))
 if (nrow(adj) != ncol(adj)) {
     stop('Adjacency matrix is not square')
@@ -213,8 +214,13 @@ gmt <- load_gmt(
 
 # filter gene sets
 # gene sets with less than set_min or more than set_max genes are removed
+# TODO maybe one should just skip the process without returning an error
+# basically, as the gprofiler2 does. When nothing is found, it just returns an empty dataframe
 
 idx <- which(colSums(gmt\$db) > opt\$set_min & colSums(gmt\$db) < opt\$set_max)
+if (length(idx) == 0) {
+    stop('No gene sets with the specified number of genes')
+}
 gmt\$db <- gmt\$db[, idx]
 gmt\$description <- gmt\$description[idx]
 
@@ -231,6 +237,7 @@ odds <- runGraflex(
 odds\$Description <- sapply(odds\$Concept, function(concept)
     gmt\$description[[concept]]
 )
+odds <- odds[order(odds\$FDR.over, odds\$Odds, decreasing=c(FALSE, TRUE)),]
 
 ################################################
 ################################################

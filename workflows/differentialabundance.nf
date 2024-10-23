@@ -359,6 +359,8 @@ workflow DIFFERENTIALABUNDANCE {
         ch_processed_matrices = ch_norm
             .map{ it.tail() }
             .first()
+
+    // TODO the experimental branch should be independent from this file
     } else if (params.study_type == 'experimental') {
 
         // Convert the toolsheet.csv in a channel with the proper format
