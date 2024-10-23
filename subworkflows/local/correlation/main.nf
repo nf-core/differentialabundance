@@ -42,9 +42,9 @@ workflow CORRELATION {
         .set { ch_counts_propr }
 
     PROPR(ch_counts_propr.input.unique())
-    ch_matrix    = PROPD.out.matrix
+    ch_matrix    = PROPR.out.matrix
                         .join(ch_counts_propr.pathway).map(correct_meta_data).mix(ch_matrix)
-    ch_adjacency = PROPD.out.adjacency
+    ch_adjacency = PROPR.out.adjacency
                         .join(ch_counts_propr.pathway).map(correct_meta_data).mix(ch_adjacency)
 
     // TODO: divide propr module into cor, propr, pcor, pcorbshrink, etc.
