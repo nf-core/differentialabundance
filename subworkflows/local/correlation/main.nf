@@ -3,8 +3,8 @@
 //
 include {PROPR_PROPR as PROPR} from "../../../modules/local/propr/propr/main.nf"
 
-def clean_meta = { meta, data ->
-    def meta_clone = meta.clone()
+def correct_meta_data = { meta, data, pathway ->
+    def meta_clone = meta.clone() + pathway
     meta_clone.remove('cor_method')
     meta_clone.remove('args_cor')
     return [meta_clone, data]
@@ -34,19 +34,22 @@ workflow CORRELATION {
 
     ch_counts
         .combine(ch_tools_single.propr)
-        .map {
+        .multiMap {
             metacounts, counts, pathway, metatools ->
-                [ metacounts+metatools+pathway, counts ]
+                input:   [ metacounts+metatools, counts ]
+                pathway: [ metacounts+metatools, pathway ]
         }
         .set { ch_counts_propr }
 
-    PROPR(ch_counts_propr)
-    ch_matrix = ch_matrix.mix(PROPR.out.matrix)
-    ch_adjacency = ch_adjacency.mix(PROPR.out.adjacency)
+    PROPR(ch_counts_propr.input.unique())
+    ch_matrix    = PROPD.out.matrix
+                        .join(ch_counts_propr.pathway).map(correct_meta_data).mix(ch_matrix)
+    ch_adjacency = PROPD.out.adjacency
+                        .join(ch_counts_propr.pathway).map(correct_meta_data).mix(ch_adjacency)
 
     // TODO: divide propr module into cor, propr, pcor, pcorbshrink, etc.
 
     emit:
-    matrix    = ch_matrix.map(clean_meta)
-    adjacency = ch_adjacency.map(clean_meta)
+    matrix    = ch_matrix
+    adjacency = ch_adjacency
 }
