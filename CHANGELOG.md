@@ -3,10 +3,27 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v1.5.0
+## v1.6.0dev - xxxx-xx-xx
+
+### Added
+
+### Fixed
+
+- [[#304](https://github.com/nf-core/differentialabundance/pull/304)] - Removed TXT file options from nextflow_schema where they are equivalent to TSV to make the input files clearer ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#299](https://github.com/nf-core/differentialabundance/pull/299)] - Add exclusions for 3.0.1 template update ([@pinin4fjords](https://github.com/pinin4fjords))
+- [[#289](https://github.com/nf-core/differentialabundance/pull/289)] - Fix missing ch_gene_sets default for gprofiler2 ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#282](https://github.com/nf-core/differentialabundance/pull/282)] - In order to improve resumability, create a copy of the matrix as an annotation file only if necessary; add original matrix file name to copy name ([@bjlang](https://github.com/bjlang), review by [@WackerO](https://github.com/WackerO))
+- [[#280](https://github.com/nf-core/differentialabundance/pull/280)] - Bump shinyngs, fix contrasts passed to app creation ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
+- [[#274](https://github.com/nf-core/differentialabundance/pull/274)] - Fix pagination on samples table ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
+- [[#272](https://github.com/nf-core/differentialabundance/pull/272)] - Show >10 contrasts in report ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
+
+### Changed
+
+## v1.5.0 - 2024-05-08
 
 ### `Added`
 
+- [[#273](https://github.com/nf-core/differentialabundance/pull/273)] - Template update for nf-core/tools v2.14.1 ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#266](https://github.com/nf-core/differentialabundance/pull/266)] - Fix logging by specifying assays to log ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#259](https://github.com/nf-core/differentialabundance/pull/259)] - Bump gtf2featureannotation to fix GTF handling error ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#257](https://github.com/nf-core/differentialabundance/pull/257)] - Added maxquant profile to nextflow.config to make it available ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
@@ -21,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- [[#278](https://github.com/nf-core/differentialabundance/pull/278)] - Fix missing ch_gene_sets when running gprofiler without gene sets ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#267](https://github.com/nf-core/differentialabundance/pull/267)] - Whitespace fix, remove TODO, also update changelog for release release 1.5.0 ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#265](https://github.com/nf-core/differentialabundance/pull/265)] - GSEA- pngs and htmls in same place ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#257](https://github.com/nf-core/differentialabundance/pull/257)] - Fixed FILTER_DIFFTABLE module, updated PROTEUS module to better handle whitespace in prefix param, made docs clearer ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))

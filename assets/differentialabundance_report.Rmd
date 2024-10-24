@@ -487,7 +487,7 @@ display_columns <- head(union(display_columns, additional_useful_cols), 5)
 display_columns <- unique(c(display_columns, informative_variables))
 observations_to_print <- observations[,unique(display_columns)]
 colnames(observations_to_print) <- prettifyVariablename(colnames(observations_to_print))
-print( htmltools::tagList(datatable(observations_to_print, caption = paste(ucfirst(params$observations_type), 'metadata'), rownames = FALSE, options = list(dom = 'tb')) ))
+print( htmltools::tagList(datatable(observations_to_print, caption = paste(ucfirst(params$observations_type), 'metadata'), rownames = FALSE, options = list(dom = 'tp')) ))
 ```
 
 ## Contrasts
@@ -510,7 +510,7 @@ contrasts_to_print$model <- sapply(contrasts_to_print$Id, function(id) {
     }
 })
 
-print( htmltools::tagList(datatable(contrasts_to_print, caption = paste0("Table of contrasts"), rownames = FALSE, options = list(dom = 't')) ))
+print( htmltools::tagList(datatable(contrasts_to_print, caption = paste0("Table of contrasts"), rownames = FALSE, options = list(dom = ifelse(nrow(contrasts_to_print) > 10, 'tp', 't'))) ))
 ```
 
 # Results
