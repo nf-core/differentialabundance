@@ -426,6 +426,11 @@
             "description": "Options related to differential operations",
             "default": "",
             "properties": {
+                "differential_use_limma": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-adjust",
+                    "description": "If true limma will be used for all study_types"
+                },
                 "differential_file_suffix": {
                     "type": "string",
                     "description": "Advanced option: the suffix associated tabular differential results tables. Will by default use the appropriate suffix according to the study_type.",
@@ -633,8 +638,8 @@
             },
             "fa_icon": "fas fa-adjust"
         },
-        "limma_specific_options_microarray_only": {
-            "title": "Limma specific options (microarray only)",
+        "limma_specific_options": {
+            "title": "Limma specific options",
             "type": "object",
             "description": "",
             "default": "",
@@ -723,6 +728,12 @@
                     "default": 1.0,
                     "description": "cutoff value for adjusted p-values. Only genes with lower p-values are listed.",
                     "fa_icon": "fas fa-angle-double-up"
+                },
+                "limma_use_voom": {
+                    "type": "boolean",
+                    "description": "Turns on and off usage of voom normalisation in limma module.",
+                    "default": false,
+                    "fa_icon": "far fa-check-square"
                 }
             },
             "fa_icon": "fas fa-border-all"
@@ -1256,7 +1267,7 @@
             "$ref": "#/$defs/deseq2_specific_options_rna_seq_only"
         },
         {
-            "$ref": "#/$defs/limma_specific_options_microarray_only"
+            "$ref": "#/$defs/limma_specific_options"
         },
         {
             "$ref": "#/$defs/gsea"

@@ -119,6 +119,7 @@ include { SHINYNGS_VALIDATEFOMCOMPONENTS as VALIDATOR       } from '../modules/n
 include { DESEQ2_DIFFERENTIAL as DESEQ2_NORM                } from '../modules/nf-core/deseq2/differential/main'
 include { DESEQ2_DIFFERENTIAL                               } from '../modules/nf-core/deseq2/differential/main'
 include { LIMMA_DIFFERENTIAL                                } from '../modules/nf-core/limma/differential/main'
+include { LIMMA_DIFFERENTIAL as LIMMA_RNASEQ                } from '../modules/nf-core/limma/differential/main'
 include { CUSTOM_MATRIXFILTER                               } from '../modules/nf-core/custom/matrixfilter/main'
 include { ATLASGENEANNOTATIONMANIPULATION_GTF2FEATUREANNOTATION as GTF_TO_TABLE } from '../modules/nf-core/atlasgeneannotationmanipulation/gtf2featureannotation/main'
 include { GSEA_GSEA                                         } from '../modules/nf-core/gsea/gsea/main'
@@ -357,49 +358,67 @@ workflow DIFFERENTIALABUNDANCE {
         ch_processed_matrices = ch_norm
             .map{ it.tail() }
             .first()
-    }
-    else{
 
-        DESEQ2_NORM (
-            ch_contrasts.first(),
-            ch_samples_and_matrix,
-            ch_control_features,
-            ch_transcript_lengths
-        )
+    } else {
+        if (params.differential_use_limma) {
 
-        // Run the DESeq differential module, which doesn't take the feature
-        // annotations
+            LIMMA_RNASEQ (
+                ch_contrasts,
+                ch_samples_and_matrix,
+            )
+            ch_differential = LIMMA_RNASEQ.out.results
+            ch_model = LIMMA_RNASEQ.out.model
 
-        DESEQ2_DIFFERENTIAL (
-            ch_contrasts,
-            ch_samples_and_matrix,
-            ch_control_features,
-            ch_transcript_lengths
-        )
+            ch_versions = ch_versions
+                .mix(LIMMA_RNASEQ.out.versions)
 
-        // Let's make the simplifying assumption that the processed matrices from
-        // the DESeq runs are the same across contrasts. We run the DESeq process
-        // with matrices once for each contrast because DESeqDataSetFromMatrix()
-        // takes the model, and the model can vary between contrasts if the
-        // blocking factors included differ. But the normalised and
-        // variance-stabilised matrices are not (IIUC) impacted by the model.
+            ch_norm = LIMMA_RNASEQ.out.normalised_counts.first()
 
-        ch_norm = DESEQ2_NORM.out.normalised_counts
-        ch_differential = DESEQ2_DIFFERENTIAL.out.results
-        ch_model = DESEQ2_DIFFERENTIAL.out.model
+            ch_processed_matrices = ch_norm
+                .map{ it.tail() }
+                .first()
+        } else {
+            DESEQ2_NORM (
+                ch_contrasts.first(),
+                ch_samples_and_matrix,
+                ch_control_features,
+                ch_transcript_lengths
+            )
 
-        ch_versions = ch_versions
-            .mix(DESEQ2_DIFFERENTIAL.out.versions)
+            // Run the DESeq differential module, which doesn't take the feature
+            // annotations
 
-        ch_processed_matrices = ch_norm
-        if ('rlog' in params.deseq2_vs_method){
-            ch_processed_matrices = ch_processed_matrices.join(DESEQ2_NORM.out.rlog_counts)
+            DESEQ2_DIFFERENTIAL (
+                ch_contrasts,
+                ch_samples_and_matrix,
+                ch_control_features,
+                ch_transcript_lengths
+            )
+
+            // Let's make the simplifying assumption that the processed matrices from
+            // the DESeq runs are the same across contrasts. We run the DESeq process
+            // with matrices once for each contrast because DESeqDataSetFromMatrix()
+            // takes the model, and the model can vary between contrasts if the
+            // blocking factors included differ. But the normalised and
+            // variance-stabilised matrices are not (IIUC) impacted by the model.
+
+            ch_norm = DESEQ2_NORM.out.normalised_counts
+            ch_differential = DESEQ2_DIFFERENTIAL.out.results
+            ch_model = DESEQ2_DIFFERENTIAL.out.model
+
+            ch_versions = ch_versions
+                .mix(DESEQ2_DIFFERENTIAL.out.versions)
+
+            ch_processed_matrices = ch_norm
+            if ('rlog' in params.deseq2_vs_method){
+                ch_processed_matrices = ch_processed_matrices.join(DESEQ2_NORM.out.rlog_counts)
+            }
+            if ('vst' in params.deseq2_vs_method){
+                ch_processed_matrices = ch_processed_matrices.join(DESEQ2_NORM.out.vst_counts)
+            }
+            ch_processed_matrices = ch_processed_matrices
+                .map{ it.tail() }
         }
-        if ('vst' in params.deseq2_vs_method){
-            ch_processed_matrices = ch_processed_matrices.join(DESEQ2_NORM.out.vst_counts)
-        }
-        ch_processed_matrices = ch_processed_matrices
-            .map{ it.tail() }
     }
 
     // We'll use a local module to filter the differential tables and create output files that contain only differential features
@@ -617,7 +636,11 @@ workflow DIFFERENTIALABUNDANCE {
 
     def params_pattern = "report|gene_sets|study|observations|features|filtering|exploratory|differential"
     if (params.study_type == 'rnaseq'){
-        params_pattern += "|deseq2"
+        if (params.differential_use_limma){
+            params_pattern += "|lima"
+        } else {
+            params_pattern += "|deseq2"
+        }
     }
     if (params.study_type == 'affy_array' || params.study_type == 'geo_soft_file'){
         params_pattern += "|affy|limma"
@@ -638,7 +661,6 @@ workflow DIFFERENTIALABUNDANCE {
             params.findAll{ k,v -> k.matches(params_pattern) } +
             [report_file_names, it.collect{ f -> f.name}].transpose().collectEntries()
         }
-
     // Render the final report
     RMARKDOWNNOTEBOOK(
         ch_report_file,
