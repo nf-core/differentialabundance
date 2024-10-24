@@ -35,6 +35,7 @@ jobs:
           - "test_affy"
           - "test_maxquant"
           - "test_soft"
+          - "test_rnaseq_limma"
         compute_profile:
           - "conda"
           - "docker"
