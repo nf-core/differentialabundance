@@ -1,0 +1,8 @@
+pathway_name,diff_method,args_diff,cor_method,args_cor,enr_method,args_enr
+propd,propd,,,,,
+propd_fdr,propd,--permutation 100,,,,
+pcorbshrink,,,propr,--metric pcor.bshrink,,
+propr,,,propr,--metric rho,,
+cor,,,propr,--metric cor,,
+propd_grea,propd,,,,grea,
+deseq2,deseq2,,,,gsea,

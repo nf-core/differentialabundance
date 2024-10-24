@@ -1,0 +1,45 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "nf-core/differentialabundance - params.tools schema",
+    "description": "Schema for the file provided with params.tools",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "pathway_name": {
+                "type": "string",
+                "meta": ["pathway_name"]
+            },
+            "diff_method": {
+                "type": "string",
+                "errorMessage": "choose a differential analysis method (eg. deseq2, propd) or none",
+                "meta": ["diff_method"],
+                "enum": ["propd", "deseq2", "none"]
+            },
+            "args_diff": {
+                "type": "string",
+                "meta": ["args_diff"]
+            },
+            "cor_method": {
+                "type": "string",
+                "meta": ["cor_method"],
+                "errorMessage": "choose a correlation method (eg. propr) or none",
+                "enum": ["propr", "none"]
+            },
+            "args_cor": {
+                "type": "string",
+                "meta": ["args_cor"]
+            },
+            "enr_method": {
+                "type": "string",
+                "meta": ["enr_method"],
+                "errorMessage": "choose a functional enrichment analysis method (eg. gsea, grea, gprofiler, etc) or none"
+            },
+            "args_enr": {
+                "type": "string",
+                "meta": ["args_enr"]
+            }
+        },
+        "required": []
+    }
+}
