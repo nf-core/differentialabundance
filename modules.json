@@ -57,7 +57,7 @@
                     },
                     "limma/differential": {
                         "branch": "master",
-                        "git_sha": "9326d73af3fbe2ee90d9ce0a737461a727c5118e",
+                        "git_sha": "2ccee1830c4b65b9158f5750408ddfb6c7b12e9a",
                         "installed_by": ["modules"]
                     },
                     "proteus/readproteingroups": {

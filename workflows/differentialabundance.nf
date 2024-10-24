@@ -118,7 +118,7 @@ include { SHINYNGS_VALIDATEFOMCOMPONENTS as VALIDATOR       } from '../modules/n
 include { DESEQ2_DIFFERENTIAL as DESEQ2_NORM                } from '../modules/nf-core/deseq2/differential/main'
 include { DESEQ2_DIFFERENTIAL                               } from '../modules/nf-core/deseq2/differential/main'
 include { LIMMA_DIFFERENTIAL                                } from '../modules/nf-core/limma/differential/main'
-include { LIMMA_DIFFERENTIAL as LIMMA_RNASEQ                } from '../modules/local/differential/main'
+include { LIMMA_DIFFERENTIAL as LIMMA_RNASEQ                } from '../modules/nf-core/limma/differential/main'
 include { CUSTOM_MATRIXFILTER                               } from '../modules/nf-core/custom/matrixfilter/main'
 include { ATLASGENEANNOTATIONMANIPULATION_GTF2FEATUREANNOTATION as GTF_TO_TABLE } from '../modules/nf-core/atlasgeneannotationmanipulation/gtf2featureannotation/main'
 include { GSEA_GSEA                                         } from '../modules/nf-core/gsea/gsea/main'
@@ -358,28 +358,10 @@ workflow DIFFERENTIALABUNDANCE {
 
     } else {
         if (params.differential_use_limma) {
-            if (params.limma_analysis_type == 'mixedmodel') {
-                ch_contrasts_limma = ch_contrasts.map{ row -> [row[0].id, row[0]] }
-                .groupTuple()
-                .map{
-                    contrast = it[1][0]
-                    if (it[1].size() > 1) {
-                        it[1][1..-1].each { element ->
-                            contrast.variable = contrast.variable + ';' + element.variable
-                            contrast.reference = contrast.reference + ';' + element.reference
-                            contrast.target = contrast.target + ';' + element.target
-                        }
-                    }
-                    tuple(contrast, contrast.variable, contrast.reference, contrast.target)
-                }
-            } else {
-                ch_contrasts_limma = ch_contrasts
-            }
 
             LIMMA_RNASEQ (
-                ch_contrasts_limma,
+                ch_contrasts,
                 ch_samples_and_matrix,
-                params.study_type
             )
             ch_differential = LIMMA_RNASEQ.out.results
             ch_model = LIMMA_RNASEQ.out.model
