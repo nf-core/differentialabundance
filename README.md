@@ -54,8 +54,8 @@ RNA-seq with deseq2:
      -profile rnaseq,<docker/singularity/podman/shifter/charliecloud/conda/institute>
 ```
 
-:::note
-If you are using the outputs of the nf-core rnaseq workflow as input here **either**:
+> [!NOTE]
+> If you are using the outputs of the nf-core rnaseq workflow as input here **either**:
 
 - supply the raw count matrices (file names like **gene_counts.tsv**) alongide the transcript length matrix via `--transcript_length_matrix` (rnaseq versions >=3.12.0, preferred)
 - **or** supply the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices.
@@ -72,17 +72,45 @@ RNA-seq limma+voom:
      -profile rnaseq_limma,<docker/singularity/podman/shifter/charliecloud/conda/institute>
 ```
 
-:::note
-If you would like to use advanced mixed models please create new column in submission sheet with . <dot> seperated values forming the composite variable.
 
-See the [issue 325](https://github.com/nf-core/differentialabundance/issues/325) for more information.
-:::note2
-If you are using the outputs of the nf-core rnaseq workflow as input here you should provide either the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices. This follows the [recommendation from the tximport documentation](https://bioconductor.org/packages/devel/bioc/vignettes/tximport/inst/doc/tximport.html#limma-voom):
+> [!NOTE]
+> To use advanced mixed model in your analysis, you need to prepare your submission sheet by combining experimental factors into a single composite variable. See the necessary steps:
 
-> "Because limma-voom does not use the offset matrix stored in `y$offset`, we recommend using scaled counts generated from abundances, either 'scaledTPM' or 'lengthScaledTPM'."
+##### Step 1: Create a Composite Factor Column
 
-See the [usage documentation](https://nf-co.re/differentialabundance/usage) for more information.
-:::
+- **Combine Experimental Factors**: Add a new column to your submission sheet that merges your experimental factors (e.g., `Condition`, `Tissue`) into a single factor.
+
+- **Use a Dot Separator**: Separate the original factor values with a `.` (dot). This combined factor will serve as your **contrast variable** for model construction.
+
+##### Example Submission Sheet
+
+Below is an example of how your submission sheet should look after creating the composite variable:
+
+| Patient | Condition | Tissue | Condition.Tissue |
+|---------|-----------|--------|------------------|
+| 1       | Diseased  | A      | Diseased.A       |
+| 1       | Diseased  | B      | Diseased.B       |
+| 2       | Diseased  | A      | Diseased.A       |
+| 2       | Diseased  | B      | Diseased.B       |
+| 3       | Diseased  | A      | Diseased.A       |
+| 3       | Diseased  | B      | Diseased.B       |
+| 4       | Normal    | A      | Normal.A         |
+| 4       | Normal    | B      | Normal.B         |
+| 5       | Normal    | A      | Normal.A         |
+| 5       | Normal    | B      | Normal.B         |
+| 6       | Normal    | A      | Normal.A         |
+| 6       | Normal    | B      | Normal.B         |
+
+##### Step 2: Define Contrasts
+
+After creating the composite variable (e.g., `Condition.Tissue`), use this column in your input contrast file to define the specific contrasts you want to test. Make sure all levels of the composite factor are correctly labeled and match the values in your contrast file.
+
+
+> [!NOTE]
+> If you are using the outputs of the nf-core rnaseq workflow as input here you should provide either the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices. This follows the [recommendation from the tximport documentation](https://bioconductor.org/packages/devel/bioc/vignettes/tximport/inst/doc/tximport.html#limma-voom):
+> > "Because limma-voom does not use the offset matrix stored in `y$offset`, we recommend using scaled counts generated from abundances, either 'scaledTPM' or 'lengthScaledTPM'."
+> See the [usage documentation](https://nf-co.re/differentialabundance/usage) for more information.
+
 
 Affymetrix microarray:
 
