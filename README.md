@@ -72,7 +72,6 @@ RNA-seq limma+voom:
      -profile rnaseq_limma,<docker/singularity/podman/shifter/charliecloud/conda/institute>
 ```
 
-
 > [!NOTE]
 > To use advanced mixed model in your analysis, you need to prepare your submission sheet by combining experimental factors into a single composite variable. See the necessary steps:
 
@@ -87,7 +86,7 @@ RNA-seq limma+voom:
 Below is an example of how your submission sheet should look after creating the composite variable:
 
 | Patient | Condition | Tissue | Condition.Tissue |
-|---------|-----------|--------|------------------|
+| ------- | --------- | ------ | ---------------- |
 | 1       | Diseased  | A      | Diseased.A       |
 | 1       | Diseased  | B      | Diseased.B       |
 | 2       | Diseased  | A      | Diseased.A       |
@@ -105,12 +104,11 @@ Below is an example of how your submission sheet should look after creating the 
 
 After creating the composite variable (e.g., `Condition.Tissue`), use this column in your input contrast file to define the specific contrasts you want to test. Make sure all levels of the composite factor are correctly labeled and match the values in your contrast file.
 
-
 > [!NOTE]
 > If you are using the outputs of the nf-core rnaseq workflow as input here you should provide either the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices. This follows the [recommendation from the tximport documentation](https://bioconductor.org/packages/devel/bioc/vignettes/tximport/inst/doc/tximport.html#limma-voom):
+>
 > > "Because limma-voom does not use the offset matrix stored in `y$offset`, we recommend using scaled counts generated from abundances, either 'scaledTPM' or 'lengthScaledTPM'."
-> See the [usage documentation](https://nf-co.re/differentialabundance/usage) for more information.
-
+> > See the [usage documentation](https://nf-co.re/differentialabundance/usage) for more information.
 
 Affymetrix microarray:
 
