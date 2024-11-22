@@ -373,7 +373,7 @@
                 "exploratory_mad_threshold": {
                     "type": "integer",
                     "default": -5,
-                    "help_text": "MAD = median absolute deviation. A threshold on this value is used to define observations (samples) as outliers, or not, in exploratory plots. Based on the definition at https://wiki.arrayserver.com/wiki/index.php?title=CorrelationQC.pdf. ",
+                    "help_text": "MAD = median absolute deviation. A threshold on this value is used to define observations (samples) as outliers, or not, in exploratory plots. Based on the definition at https://archive.ph/o3thZ. For more on MAD, see https://en.wikipedia.org/wiki/Median_absolute_deviation.",
                     "description": "Threshold on MAD score for outlier identification",
                     "fa_icon": "fas fa-angry"
                 },

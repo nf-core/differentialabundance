@@ -1,0 +1,99 @@
+{
+    "Test soft profile": {
+        "content": [
+            10,
+            {
+                "GEOQUERY_GETGEO": {
+                    "r-base": "4.2.1",
+                    "bioconductor-geoquery": "2.66.0"
+                },
+                "LIMMA_DIFFERENTIAL": {
+                    "r-base": "4.3.3",
+                    "bioconductor-limma": "3.58.1"
+                },
+                "PLOT_DIFFERENTIAL": {
+                    "r-base": "4.3.3",
+                    "r-shinyngs": "2.0.0"
+                },
+                "PLOT_EXPLORATORY": {
+                    "r-shinyngs": "2.0.0"
+                },
+                "VALIDATOR": {
+                    "r-base": "4.3.3",
+                    "r-shinyngs": "2.0.0"
+                },
+                "Workflow": {
+                    "nf-core/differentialabundance": "v1.6.0dev"
+                }
+            },
+            [
+                "other",
+                "other/affy",
+                "other/affy/normalised.eset.rds",
+                "other/limma",
+                "other/limma/phenotype_uninvolved_lesional.MArrayLM.limma.rds",
+                "pipeline_info",
+                "pipeline_info/collated_versions.yml",
+                "plots",
+                "plots/differential",
+                "plots/differential/phenotype_uninvolved_lesional",
+                "plots/differential/phenotype_uninvolved_lesional/png",
+                "plots/differential/phenotype_uninvolved_lesional/png/volcano.png",
+                "plots/differential/versions.yml",
+                "plots/exploratory",
+                "plots/exploratory/phenotype",
+                "plots/exploratory/phenotype/png",
+                "plots/exploratory/phenotype/png/boxplot.png",
+                "plots/exploratory/phenotype/png/density.png",
+                "plots/exploratory/phenotype/png/mad_correlation.png",
+                "plots/exploratory/phenotype/png/pca2d.png",
+                "plots/exploratory/phenotype/png/pca3d.png",
+                "plots/exploratory/phenotype/png/sample_dendrogram.png",
+                "plots/exploratory/versions.yml",
+                "plots/qc",
+                "plots/qc/phenotype_uninvolved_lesional.limma.mean_difference.png",
+                "report",
+                "report/study.html",
+                "report/study.zip",
+                "shinyngs_app",
+                "shinyngs_app/study",
+                "shinyngs_app/study/app.R",
+                "shinyngs_app/study/data.rds",
+                "shinyngs_app/versions.yml",
+                "tables",
+                "tables/annotation",
+                "tables/annotation/normalised.annotation.tsv",
+                "tables/differential",
+                "tables/differential/phenotype_uninvolved_lesional.limma.results.tsv",
+                "tables/differential/phenotype_uninvolved_lesional.limma.results_filtered.tsv",
+                "tables/processed_abundance",
+                "tables/processed_abundance/normalised.matrix.tsv"
+            ],
+            [
+                "normalised.eset.rds:md5,7f17b964d5a7b369767910635dfa23d7",
+                "phenotype_uninvolved_lesional.MArrayLM.limma.rds:md5,eecc9b0267ce9a5d3a1330da7fbce4cc",
+                "volcano.png:md5,18e35512a52ff82be16cc14330c1ac89",
+                "versions.yml:md5,b20728a34a3537e339078bbeaababee9",
+                "boxplot.png:md5,4d366be0ef28c1aaabebf1529e2b9dc0",
+                "density.png:md5,09b20c49c9f479fd5c36630f86ce8384",
+                "mad_correlation.png:md5,60f9c0e924d52a569d976a3fb2c22a43",
+                "pca2d.png:md5,aad430028daa7ffa7cd6bea1c6c41d43",
+                "pca3d.png:md5,d32182b1005d696da648170f3bd9dbe8",
+                "sample_dendrogram.png:md5,b66045a3c9df5310f3241544c50f3fd1",
+                "versions.yml:md5,9c47cbf6f2f30c711eb57fff84ea3736",
+                "phenotype_uninvolved_lesional.limma.mean_difference.png:md5,570bc62fbad15b7b25eaea786a416ace",
+                "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
+                "versions.yml:md5,892774f9d56ba10c8646736b7f777ecc",
+                "normalised.annotation.tsv:md5,40300ae222ae35fa54daf10a1b86e830",
+                "phenotype_uninvolved_lesional.limma.results.tsv:md5,2cfa653fffb034be4b82abf306c87bc5",
+                "phenotype_uninvolved_lesional.limma.results_filtered.tsv:md5,6a198c35b193bab0b3148d147c7b08e3",
+                "normalised.matrix.tsv:md5,230f87f91c0c1a7e2ab354200c4b978c"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.10.0"
+        },
+        "timestamp": "2024-11-17T21:40:28.282036327"
+    }
+}

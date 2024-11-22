@@ -7,11 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- [[#358](https://github.com/nf-core/differentialabundance/pull/358)] - Added software version check in nf-tests and gene biotype column check in `.Rmd` ([@atrigila](https://github.com/atrigila), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#345](https://github.com/nf-core/differentialabundance/pull/345)] - Plot differentially expressed genes by gene biotype ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst))
+- [[#343](https://github.com/nf-core/differentialabundance/pull/343)] - Add pipeline-level nf-tests ([@atrigila](https://github.com/atrigila), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@nschcolnicov](https://github.com/nschcolnicov))
 - [[#286](https://github.com/nf-core/differentialabundance/pull/286)] - Integration of limma voom for rnaseq data ([@KamilMaliszArdigen](https://github.com/KamilMaliszArdigen), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#354](https://github.com/nf-core/differentialabundance/pull/354)] - Warning message within the R Markdown report to control when genes don't have annotation data ([@alanmmobbs93](https://github.com/alanmmobbs93)). Review by [@WackerO](https://github.com/WackerO) and [@pinin4fjords](https://github.com/pinin4fjords).
 - [[#325](https://github.com/nf-core/differentialabundance/pull/325)] - Integration of limma voom for rnaseq data with mixed models ([@KamilMaliszArdigen](https://github.com/KamilMaliszArdigen), review by [@pinin4fjords](https://github.com/pinin4fjords))
+
 
 ### Fixed
 
+- [[#358](https://github.com/nf-core/differentialabundance/pull/358)] - Fixed nf-tests not running due to `--changed-since HEAD^`([@atrigila](https://github.com/atrigila), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#344](https://github.com/nf-core/differentialabundance/pull/344)] - Fixed replacement of NA sub-strings
+  ([@atrigila](https://github.com/atrigila), suggested by [@BEFH](https://github.com/BEFH), review by [@apeltzer](https://github.com/apeltzer) and [@nschcolnicov](https://github.com/nschcolnicov))
+- [[#342](https://github.com/nf-core/differentialabundance/pull/342)] - Fixed incorrectly colored dots in report volcano plots for logFC thresholds <1 ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#330](https://github.com/nf-core/differentialabundance/pull/330)] - Fixed broken docs by removing g:profiler colons ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#304](https://github.com/nf-core/differentialabundance/pull/304)] - Removed TXT file options from nextflow_schema where they are equivalent to TSV to make the input files clearer ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#299](https://github.com/nf-core/differentialabundance/pull/299)] - Add exclusions for 3.0.1 template update ([@pinin4fjords](https://github.com/pinin4fjords))
 - [[#289](https://github.com/nf-core/differentialabundance/pull/289)] - Fix missing ch_gene_sets default for gprofiler2 ([@WackerO](https://github.com/WackerO), review by [@pinin4fjords](https://github.com/pinin4fjords))
@@ -21,6 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#272](https://github.com/nf-core/differentialabundance/pull/272)] - Show >10 contrasts in report ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 
 ### Changed
+
+- [[#348](https://github.com/nf-core/differentialabundance/pull/348)] - Update test_full profile matrix file and indentation of profiles in nextflow.config ([@nschcolnicov](https://github.com/nschcolnicov), review by [@WackerO](https://github.com/WackerO) and [@pinin4fjords](https://github.com/pinin4fjords))
 
 ## v1.5.0 - 2024-05-08
 

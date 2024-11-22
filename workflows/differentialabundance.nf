@@ -322,7 +322,7 @@ workflow DIFFERENTIALABUNDANCE {
         .map{it[1]}
         .splitCsv ( header:true, sep:'\t' )
         .map{
-            it.blocking = it.blocking.replace('NA', '')
+            it.blocking = it.blocking.replaceAll('^NA$', '')
             if (!it.id){
                 it.id = it.values().join('_')
             }

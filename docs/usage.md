@@ -286,16 +286,16 @@ Currently, two tools can be used to do gene set enrichment analysis.
 --gene_sets_files gene_sets.gmt
 ```
 
-### g:Profiler
+### gProfiler2
 
-The [gprofiler2](https://cran.r-project.org/web/packages/gprofiler2/vignettes/gprofiler2.html) package can be used to test which pathways are enriched in the sets of differential genes produced by the the DESeq2 or limma modules. It is an R interface for the g:Profiler webtool. In the simplest form, this feature can be enabled with the parameters from the following example:
+The [gprofiler2](https://cran.r-project.org/web/packages/gprofiler2/vignettes/gprofiler2.html) package can be used to test which pathways are enriched in the sets of differential genes produced by the the DESeq2 or limma modules. It is an R interface for the gprofiler webtool. In the simplest form, this feature can be enabled with the parameters from the following example:
 
 ```bash
 --gprofiler2_run true \
 --gprofiler2_organism mmusculus
 ```
 
-If gene sets have been specified to the workflow via `--gene_sets_files` these are used by default. Specifying `--gprofiler2_organism` (mmusculus for Mus musculus, hsapiens for Homo sapiens etc.) will override those gene sets with g:profiler's own for the relevant species. `--gprofiler2_token` will override both options and use gene sets from a previous g:profiler run.
+If gene sets have been specified to the workflow via `--gene_sets_files` these are used by default. Specifying `--gprofiler2_organism` (mmusculus for Mus musculus, hsapiens for Homo sapiens etc.) will override those gene sets with gprofiler's own for the relevant species. `--gprofiler2_token` will override both options and use gene sets from a previous gprofiler run.
 
 By default the analysis will be run with a background list of genes that passed the abundance filter (i.e. those genes that actually had some expression); see for example https://doi.org/10.1186/s13059-015-0761-7 for why this is advisable. You can provide your own background list with `--gprofiler2_background_file background.txt`or if you want to not use any background, set `--gprofiler2_background_file false`.
 

@@ -370,10 +370,13 @@ differential_files <- lapply(contrasts$id, function(d){
     file.path(params$input_dir, paste0(gsub(' |;', '_', d), differential_file_suffix))
 })
 
-differential_results <- lapply(differential_files, function(diff_file){
-    if (! file.exists(diff_file)){
-        stop(paste("Differential file", diff_file, "does not exist"))
-    }
+# Initialize vector to store warning messages before merging tables
+warnings_list <- c()
+
+# Read differential results and merge with features table
+results <- lapply(differential_files, function(diff_file) {
+    if (!file.exists(diff_file)) stop(paste("Differential file", diff_file, "does not exist"))
+
     diff <- read_differential(
         diff_file,
         feature_id_column = params$differential_feature_id_column,
@@ -382,19 +385,49 @@ differential_results <- lapply(differential_files, function(diff_file){
         qval_column = params$differential_qval_column
     )
 
-    # If fold changes are not logged already, log them (we assume they're logged
-    # later on)
-
-    if (! params$differential_foldchanges_logged){
+    # Log transform fold changes if not already logged
+    if (!params$differential_foldchanges_logged) {
         diff[[params$differential_fc_column]] <- log2(diff[[params$differential_fc_column]])
     }
 
-    # Annotate differential tables if possible
-    if (! is.null(params$features)){
-        diff <- merge(features, diff, by.x = params$features_id_col, by.y = params$differential_feature_id_column)
+    # Annotate differential table if features table is provided
+    if (!is.null(params$features)) {
+        ## Merge Differential expression table on features table
+        merged <- merge(features, diff, by.x = params$features_id_col, by.y = params$differential_feature_id_column)
+
+        ## Get number of missing rows
+        n_missing <- length(setdiff(diff[[params$differential_feature_id_column]], merged[[params$features_id_col]]))
+
+        ## Create warnings if necessary
+        warnings <- c(
+            ## Missing IDs
+            if (n_missing > 0) sprintf(
+                '<p style="color:#DAA520;"><strong>WARNING:</strong> %d IDs from the differential table (%s) were lost on merge with features table (%s).</p>',
+                n_missing, basename(diff_file), basename(params$features)
+            ),
+            ## Check whether there are fewer rows, missing data
+            if (nrow(merged) < nrow(diff)) sprintf(
+                '<p style="color:#DAA520;"><strong>WARNING:</strong> Rows were lost on merge (%s -> %s). Original: %d, Merged: %d.</p>',
+                basename(diff_file), basename(params$features), nrow(diff), nrow(merged)
+            ),
+            ## Check whether there are more rows, possible duplications
+            if (nrow(merged) > nrow(diff)) sprintf(
+                '<p style="color:#DAA520;"><strong>WARNING:</strong> Rows were duplicated on merge (%s -> %s). Original: %d, Merged: %d.</p>',
+                basename(diff_file), basename(params$features), nrow(diff), nrow(merged)
+            )
+        )
+    } else {
+        merged <- diff
+        warnings <- character(0)
     }
-    diff
+    ## Collect results
+    list(diff_features = merged, warnings = warnings)
 })
+
+# Separate differential_results and warnings_list from results
+differential_results <- lapply(results, `[[`, "diff_features")
+warnings_list <- unlist(lapply(results, `[[`, "warnings"))
+
 names(differential_results) <- contrasts$id
 ```
 
@@ -726,7 +759,7 @@ iv_min_group_sizes <- unlist(lapply(informative_variables, function(x) min(table
 
 if (any(iv_min_group_sizes > 2)){
     cat("\n### Outlier detection {.tabset}\n")
-    cat("\nOutlier detection based on [median absolute deviation](https://wiki.arrayserver.com/wiki/index.php?title=CorrelationQC.pdf) was undertaken, the outlier scoring is plotted below.\n")
+    cat("\nOutlier detection based on [median absolute deviation](https://archive.ph/o3thZ) was undertaken, the outlier scoring is plotted below. For more on MAD, see [this wiki article](https://en.wikipedia.org/wiki/Median_absolute_deviation).\n")
 }
 
 foo <- lapply(informative_variables[iv_min_group_sizes > 2], function(iv){
@@ -787,7 +820,6 @@ foo <- lapply(names(p_value_types), function(pvt){
 ```
 
 ```{r, echo=FALSE, results='asis', eval = FALSE}
-
 differential_summary_string <- paste(
     paste(
     lapply(
@@ -806,7 +838,13 @@ cat(differential_summary_string)
 
 ### Differential `r params$features_type` details
 
-```{r, echo=FALSE, results='asis'}
+```{r, echo=FALSE, results='asis', warning=FALSE, message=FALSE}
+
+# Display all warnings related to number of rows
+if (length(warnings_list) > 0) {
+    for (warning in warnings_list) { cat(warning) }
+}
+
 for (i in 1:nrow(contrasts)){
     cat("\n#### ", contrast_descriptions[i], "  {.tabset}\n")
 
@@ -833,7 +871,7 @@ for (i in 1:nrow(contrasts)){
         cat("\n##### ", pvt, " p values\n")
         pval_column <- p_value_types[[pvt]]
 
-        de_fc <- abs(full_de[[params$differential_fc_column]]) >= log2(params$differential_min_fold_change)
+        de_fc <- abs(full_de[[params$differential_fc_column]]) >= abs(log2(params$differential_min_fold_change))
         de_fc_label <- paste("abs(logFC) >=", log2(params$differential_min_fold_change))
 
         de_pval <- full_de[[pval_column]] <= p_value_thresholds[[pvt]]
@@ -895,6 +933,28 @@ for (i in 1:nrow(contrasts)){
         if (nrow(contrast_de) > 0){
             contrast_de <- round_dataframe_columns(contrast_de, digits=params$report_round_digits)
             print( htmltools::tagList(datatable(contrast_de, caption = paste('Differential genes', dir, 'in', contrast_descriptions[i], " (check", differential_files[[i]], "for more detail)"), rownames = FALSE) ))
+
+        if ("Gene biotype" %in% colnames(contrast_de)) {
+            # Plot Differentially Expressed Genes by Gene Biotype
+            gene_biotype_table <- contrast_de %>%
+                group_by(`Gene biotype`) %>%
+                summarise(count = dplyr::n(), .groups = 'drop') %>%
+                filter(count > 0) %>%
+                arrange(desc(count))
+
+            gene_biotype_plot <- ggplot(gene_biotype_table, aes(x = reorder(`Gene biotype`, -count), y = count)) +
+                geom_bar(stat = "identity", position = position_dodge()) +
+                labs(
+                    title = paste0("Differentially Expressed Genes by Gene Biotype (", dir, ")"),
+                    x = "Gene Biotype",
+                    y = "Number of Differentially Expressed Genes"  ) +
+                theme_minimal() +
+                theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+            print(gene_biotype_plot)
+        } else {
+            cat("Column 'Gene biotype' does not exist. Skipping plot.\n")
+        }
         }else{
             cat(paste0("No significantly differential '", dir, "' genes.\n\n"))
         }
