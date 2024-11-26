@@ -273,6 +273,39 @@ With this configuration in place deployment should happen automatically every ti
 
 There is also a [Shiny server application](https://posit.co/download/shiny-server/), which you can install on your own infrastruture and use to host applications yourself.
 
+## Limma mixed models
+> To use advanced mixed model in your analysis, you need to prepare your submission sheet by combining experimental factors into a single composite variable. See the necessary steps:
+
+### Step 1: Create a Composite Factor Column
+
+- **Combine Experimental Factors**: Add a new column to your submission sheet that merges your experimental factors (e.g., `Condition`, `Tissue`) into a single factor.
+
+- **Use a Dot Separator**: Separate the original factor values with a `.` (dot). This combined factor will serve as your **contrast variable** for model construction.
+
+#### Example Submission Sheet
+
+Below is an example of how your submission sheet should look after creating the composite variable:
+
+| Patient | Condition | Tissue | Condition.Tissue |
+| ------- | --------- | ------ | ---------------- |
+| 1       | Diseased  | A      | Diseased.A       |
+| 1       | Diseased  | B      | Diseased.B       |
+| 2       | Diseased  | A      | Diseased.A       |
+| 2       | Diseased  | B      | Diseased.B       |
+| 3       | Diseased  | A      | Diseased.A       |
+| 3       | Diseased  | B      | Diseased.B       |
+| 4       | Normal    | A      | Normal.A         |
+| 4       | Normal    | B      | Normal.B         |
+| 5       | Normal    | A      | Normal.A         |
+| 5       | Normal    | B      | Normal.B         |
+| 6       | Normal    | A      | Normal.A         |
+| 6       | Normal    | B      | Normal.B         |
+
+### Step 2: Define Contrasts
+
+After creating the composite variable (e.g., `Condition.Tissue`), use this column in your input contrast file to define the specific contrasts you want to test. Make sure all levels of the composite factor are correctly labeled and match the values in your contrast file.
+
+
 ## Gene set enrichment analysis
 
 Currently, two tools can be used to do gene set enrichment analysis.
