@@ -130,17 +130,17 @@
                 "tables/differential/treatment_mCherry_hND6_sample_number.limma.results_filtered.tsv"
             ],
             [
-                "treatment_mCherry_hND6_.MArrayLM.limma.rds:md5,5727192a1f8175594f4a148306f23988",
+                "treatment_mCherry_hND6_.MArrayLM.limma.rds:md5,fd0318ae1fad729eab8d556ba481f4d6",
                 "treatment_mCherry_hND6_sample_number.MArrayLM.limma.rds:md5,385f960f9330a1dd6bbf4b00166bc96e",
                 "volcano.png:md5,aa3d307fc1bb3284c5a29a469dc9a75e",
                 "volcano.png:md5,e24eaad248b42383269daaa8b98895b9",
                 "versions.yml:md5,b20728a34a3537e339078bbeaababee9",
-                "boxplot.png:md5,fddc3f29ff4561a856cd2d58a1dfe637",
-                "density.png:md5,0ba03b26bc8cfbf79d97c604fe9d142f",
-                "mad_correlation.png:md5,340df9eb381307cf4d98d79da3213e6f",
-                "pca2d.png:md5,ce23b7e9b1300fb83bd593781fc70648",
-                "pca3d.png:md5,458d2c497557113ec203fe38186f5e1c",
-                "sample_dendrogram.png:md5,eb02da7195194e0d56578df41022f9bf",
+                "boxplot.png:md5,f765addfe2b9fff2b4c548edff9e1c8f",
+                "density.png:md5,d758deef78a1934cd46befc339d12208",
+                "mad_correlation.png:md5,8305eb204b5fcd021b728d45f6e75cc4",
+                "pca2d.png:md5,93b5ae1dd494ed8ae3f6ea1da89f4bad",
+                "pca3d.png:md5,a5eb14ea500d70a926d418bf1a6ac622",
+                "sample_dendrogram.png:md5,873d2fcf8b00eca29f1703960be318d0",
                 "versions.yml:md5,9c47cbf6f2f30c711eb57fff84ea3736",
                 "treatment_mCherry_hND6_.limma.mean_difference.png:md5,88ec38c7fb92b3f52675e7c9650bfbcd",
                 "treatment_mCherry_hND6_sample_number.limma.mean_difference.png:md5,4f2ff615728c95914dc773b7d986b5e7",
@@ -167,16 +167,16 @@
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "versions.yml:md5,892774f9d56ba10c8646736b7f777ecc",
                 "Mus_musculus.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
-                "treatment_mCherry_hND6_.limma.results.tsv:md5,26df55a9c0fd182977396f75337d5fc4",
+                "treatment_mCherry_hND6_.limma.results.tsv:md5,3b665bc12007269b7514f70d8e50cf6c",
                 "treatment_mCherry_hND6_.limma.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
                 "treatment_mCherry_hND6_sample_number.limma.results.tsv:md5,2a3937bfc95a1d0a0cbed1f2da4b0bd2",
                 "treatment_mCherry_hND6_sample_number.limma.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce"
             ]
         ],
         "meta": {
-            "nf-test": "0.9.0",
-            "nextflow": "24.10.0"
+            "nf-test": "0.9.1",
+            "nextflow": "24.04.4"
         },
-        "timestamp": "2024-11-17T21:37:45.162699026"
+        "timestamp": "2024-11-27T18:11:02.660282"
     }
 }
