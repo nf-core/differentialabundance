@@ -274,6 +274,7 @@ With this configuration in place deployment should happen automatically every ti
 There is also a [Shiny server application](https://posit.co/download/shiny-server/), which you can install on your own infrastruture and use to host applications yourself.
 
 ## Limma mixed models
+
 > To use advanced mixed model in your analysis, you need to prepare your submission sheet by combining experimental factors into a single composite variable. See the necessary steps:
 
 ### Step 1: Create a Composite Factor Column
@@ -304,7 +305,6 @@ Below is an example of how your submission sheet should look after creating the 
 ### Step 2: Define Contrasts
 
 After creating the composite variable (e.g., `Condition.Tissue`), use this column in your input contrast file to define the specific contrasts you want to test. Make sure all levels of the composite factor are correctly labeled and match the values in your contrast file.
-
 
 ## Gene set enrichment analysis
 

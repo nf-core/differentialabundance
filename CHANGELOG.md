@@ -14,7 +14,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#354](https://github.com/nf-core/differentialabundance/pull/354)] - Warning message within the R Markdown report to control when genes don't have annotation data ([@alanmmobbs93](https://github.com/alanmmobbs93)). Review by [@WackerO](https://github.com/WackerO) and [@pinin4fjords](https://github.com/pinin4fjords).
 - [[#325](https://github.com/nf-core/differentialabundance/pull/325)] - Integration of limma voom for rnaseq data with mixed models ([@KamilMaliszArdigen](https://github.com/KamilMaliszArdigen), review by [@pinin4fjords](https://github.com/pinin4fjords))
 
-
 ### Fixed
 
 - [[#358](https://github.com/nf-core/differentialabundance/pull/358)] - Fixed nf-tests not running due to `--changed-since HEAD^`([@atrigila](https://github.com/atrigila), review by [@pinin4fjords](https://github.com/pinin4fjords))
