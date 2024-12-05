@@ -13,8 +13,8 @@ include { TABULAR_TO_GSEA_CHIP } from '../../../modules/local/tabular_to_gsea_ch
 workflow ENRICHMENT {
     take:
     ch_counts                       // [[meta_input], counts, analysis method]
-    ch_results_genewise             // [[meta_results], results, analysis method] 
-    ch_results_genewise_filtered    // [[meta_results], results, analysis method] 
+    ch_results_genewise             // [[meta_results], results, analysis method]
+    ch_results_genewise_filtered    // [[meta_results], results, analysis method]
     ch_adjacency                    // [[meta_adj_matrix], adj_matrix, analysis method]
     ch_contrasts
     ch_samplesheet
