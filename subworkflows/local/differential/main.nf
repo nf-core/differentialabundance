@@ -10,11 +10,12 @@ include { FILTER_DIFFTABLE as FILTER_DIFFTABLE_DESEQ2 } from '../../../modules/l
 
 workflow DIFFERENTIAL {
     take:
-    ch_counts             // [ meta_exp, counts ] with meta keys: method, args_diff
+    ch_input              // [[meta_input], counts, analysis method]
+
     ch_samplesheet        // [ meta_exp, samplesheet ]
     ch_contrasts          // [ meta_contrast, contrast_variable, reference, target ]
-    ch_transcript_lengths
-    ch_control_features
+    ch_transcript_lengths // [ meta_exp, transcript_lengths]
+    ch_control_features   // [ meta_exp, control_features]
 
     main:
 
@@ -26,14 +27,17 @@ workflow DIFFERENTIAL {
     ch_adjacency                 = Channel.empty()
     ch_versions                  = Channel.empty()
 
-    // branch tools to select the correct differential analysis method
-    ch_counts
-        .branch {
-            propd:  it[0]["method"] == "propd"
-            deseq2: it[0]["method"] == "deseq2"
-            limma:  it[0]["method"] == "limma"
+    // We need to cross the things we're iterating
+    inputs = ch_input
+        .combine(ch_samplesheet)
+        .filter{ meta_input, abundance, analysis_method, meta_exp, samplesheet -> meta_input.subMap(meta_exp.keySet()) == meta_exp }
+        .combine(ch_contrasts)
+        .multiMap { meta_input, abundance, analysis_method, meta_exp, samplesheet, meta_contrast, variable, reference, target ->
+            def meta = meta_input.clone() + meta_contrast.clone() + ['method': analysis_method ]                                                    // ToDo: If modules are updated to combine their input metas, then this merge could be removed
+            samples_and_matrix: [ meta, samplesheet, abundance]
+            contrasts: [ meta, variable, reference, target]
+            propd_input: [ meta + ['contrast': meta_contrast.id, 'method': analysis_method], abundance, samplesheet, variable, reference, target ]  // ToDo: remove this, once propd is updated and uses standardized inputs
         }
-        .set { ch_counts }
 
     // ----------------------------------------------------
     // Perform differential analysis with propd
@@ -42,18 +46,7 @@ workflow DIFFERENTIAL {
     // TODO propd currently don't support blocking, so we should not run propd with same contrast_variable, reference and target,
     // but different blocking variable, since it will simply run the same analysis again.
 
-    ch_counts.propd
-        .combine(ch_samplesheet)
-        .filter{ meta_counts, counts, meta_samplesheet, samplesheet -> meta_counts.subMap(meta_samplesheet.keySet()) == meta_samplesheet }
-        .combine(ch_contrasts)
-        .map {
-            meta_data, counts, meta_samplesheet, samplesheet, meta_contrast, contrast_variable, reference, target ->
-                def meta = meta_data.clone() + ['contrast': meta_contrast.id]
-                return [ meta, counts, samplesheet, contrast_variable, reference, target ]
-        }
-        .set { ch_propd }
-
-    PROPD(ch_propd.unique())
+    PROPD( inputs.propd_input.filter{it[0].method == 'propd'})
     ch_results_pairwise          = PROPD.out.results.mix(ch_results_pairwise)
     ch_results_pairwise_filtered = PROPD.out.results_filtered.mix(ch_results_pairwise_filtered)
     ch_results_genewise          = PROPD.out.connectivity.mix(ch_results_genewise)
@@ -65,29 +58,17 @@ workflow DIFFERENTIAL {
     // Perform differential analysis with DESeq2
     // ----------------------------------------------------
 
-    ch_counts.deseq2
-        .combine(ch_samplesheet)
-        .filter{ meta_counts, counts, meta_samplesheet, samplesheet -> meta_counts.subMap(meta_samplesheet.keySet()) == meta_samplesheet }
-        .combine(ch_contrasts)
-        .multiMap {
-            meta_data, counts, meta_samplesheet, samplesheet, meta_contrast, contrast_variable, reference, target ->
-                def meta = meta_data.clone() + meta_contrast.clone()
-                contrast: [ meta, contrast_variable, reference, target ]
-                samples_and_matrix: [ meta, samplesheet, counts ]
-        }
-        .set { ch_deseq2 }
-
     // do we need this process DESEQ2_NORM?
     DESEQ2_NORM (
-            ch_deseq2.contrast.first(),
-            ch_deseq2.samples_and_matrix,
+            inputs.contrasts.filter{it[0].method == 'deseq2'}.first(),
+            inputs.samples_and_matrix.filter{it[0].method == 'deseq2'},
             ch_control_features,
             ch_transcript_lengths
         )
 
     DESEQ2_DIFFERENTIAL (
-            ch_deseq2.contrast,
-            ch_deseq2.samples_and_matrix,
+            inputs.contrasts.filter{it[0].method == 'deseq2'},
+            inputs.samples_and_matrix.filter{it[0].method == 'deseq2'},
             ch_control_features,
             ch_transcript_lengths
         )
@@ -125,24 +106,11 @@ workflow DIFFERENTIAL {
     // Perform differential analysis with limma
     // ----------------------------------------------------
 
-    // combine the input channels with the tools information
-    // in this way, limma will only be run if the user have specified it, as informed by ch_tools
-    ch_counts.limma
-        .combine(ch_samplesheet)
-        .filter{ meta_counts, counts, meta_samplesheet, samplesheet -> meta_counts.subMap(meta_samplesheet.keySet()) == meta_samplesheet }
-        .combine(ch_contrasts)
-        .unique()
-        .multiMap {
-            meta_data, counts, meta_samplesheet, samplesheet, meta_contrast, contrast_variable, reference, target ->
-                def meta = meta_data.clone() + meta_contrast.clone()
-                input1:  [ meta, contrast_variable, reference, target ]
-                input2:  [ meta, samplesheet, counts ]
-        }
-        .set { ch_limma }
-
-
     // run limma
-    LIMMA_DIFFERENTIAL(ch_limma.input1, ch_limma.input2)
+    LIMMA_DIFFERENTIAL(
+        inputs.contrasts.filter{it[0].method == 'limma'},
+        inputs.samples_and_matrix.filter { it[0].method == 'limma' }
+    )
     ch_versions = LIMMA_DIFFERENTIAL.out.versions.mix(ch_versions)
 
     // filter results

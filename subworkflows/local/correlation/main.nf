@@ -5,7 +5,7 @@ include {PROPR_PROPR as PROPR} from "../../../modules/local/propr/propr/main.nf"
 
 workflow CORRELATION {
     take:
-    ch_counts       // [ meta, counts] with meta keys: method, args_cor
+    ch_counts       // [[meta_input], counts, analysis method]
 
     main:
 
@@ -15,16 +15,15 @@ workflow CORRELATION {
     ch_versions  = Channel.empty()
 
     // branch tools to select the correct correlation analysis method
-    ch_counts
-        .branch {
-            propr:  it[0]["method"] == "propr"
+    inputs = ch_counts
+        .map { meta, abundance, analysis_method ->
+            [ meta + ['method': analysis_method ], abundance]
         }
-        .set { ch_counts }
 
     // ----------------------------------------------------
     // Perform correlation analysis with propr
     // ----------------------------------------------------
-    PROPR(ch_counts.propr.unique())
+    PROPR( inputs.filter{it[0].method == 'propr'})
     ch_matrix    = PROPR.out.matrix.mix(ch_matrix)
     ch_adjacency = PROPR.out.adjacency.mix(ch_adjacency)
     ch_versions  = ch_versions.mix(PROPR.out.versions)

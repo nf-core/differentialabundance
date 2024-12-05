@@ -12,10 +12,10 @@ include { TABULAR_TO_GSEA_CHIP } from '../../../modules/local/tabular_to_gsea_ch
 
 workflow ENRICHMENT {
     take:
-    ch_counts                       // [ meta, counts] with meta keys: method, args_cor
-    ch_results_genewise             // [ meta, results] with meta keys: method, args_cor
-    ch_results_genewise_filtered    // [ meta, results] with meta keys: method, args_cor
-    ch_adjacency                    // [ meta, adj_matrix] with meta keys: method, args_cor
+    ch_counts                       // [[meta_input], counts, analysis method]
+    ch_results_genewise             // [[meta_results], results, analysis method] 
+    ch_results_genewise_filtered    // [[meta_results], results, analysis method] 
+    ch_adjacency                    // [[meta_adj_matrix], adj_matrix, analysis method]
     ch_contrasts
     ch_samplesheet
     ch_featuresheet
@@ -31,14 +31,14 @@ workflow ENRICHMENT {
     ch_versions = Channel.empty()
 
     ch_counts
-        .branch {
-            gsea: it[0]["method"] == "gsea"
+        .map { meta, abundance, analysis_method ->
+            [ meta + ['method': analysis_method ], abundance]
         }
         .set { ch_counts }
 
     ch_adjacency
-        .branch {
-            grea: it[0]["method"] == "grea"
+        .map { meta, adj_matrix, analysis_method ->
+            [ meta + ['method': analysis_method ], adj_matrix]
         }
         .set { ch_adjacency }
 
@@ -56,7 +56,7 @@ workflow ENRICHMENT {
     // Perform enrichment analysis with GREA
     // ----------------------------------------------------
 
-    GREA(ch_adjacency.grea.unique(), ch_gmt.collect())
+    GREA(ch_adjacency.filter{it[0].method == 'grea'}, ch_gmt.collect())
     ch_enriched = ch_enriched.mix(GREA.out.results)
     ch_versions = ch_versions.mix(GREA.out.versions)
 
@@ -68,7 +68,7 @@ workflow ENRICHMENT {
     // input, and process the sample sheet to generate class definitions
     // (CLS) for the variable used in each contrast
 
-    CUSTOM_TABULARTOGSEAGCT ( ch_counts )
+    CUSTOM_TABULARTOGSEAGCT ( ch_counts.filter{it[0].method == 'gsea'} )
 
     // TODO: update CUSTOM_TABULARTOGSEACLS for value channel input per new
     // guidlines (rather than meta usage employed here)
@@ -130,21 +130,20 @@ workflow ENRICHMENT {
         ch_background = []
     } else if (params.gprofiler2_background_file == "auto") {
         // If auto, use input matrix as background
-        ch_background = ch_counts.map { meta, counts -> counts }
+        ch_background = ch_counts.filter{it[0].method == 'gprofiler2'}.map { meta, counts -> counts }
     } else {
         ch_background = Channel.from(file(params.gprofiler2_background_file, checkIfExists: true))
     }
 
     // rearrange channel for GPROFILER2_GOST process
     ch_gmt = ch_gmt.map { meta, gmt -> gmt }
-
     ch_results_genewise_filtered
-        .branch {
-            grea: it[0]["method"] == "gprofiler2"
+        .map { meta, results, analysis_method ->
+            [ meta + ['method': analysis_method ], results]
         }
         .set { ch_results_genewise_filtered }
 
-    GPROFILER2_GOST(ch_results_genewise_filtered, ch_gmt, ch_background)
+    GPROFILER2_GOST(ch_results_genewise_filtered.filter{it[0].method == 'gprofiler2'}, ch_gmt, ch_background)
     ch_versions = ch_versions.mix(GPROFILER2_GOST.out.versions)
 
     emit:

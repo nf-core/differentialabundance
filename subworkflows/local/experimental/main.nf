@@ -9,11 +9,11 @@ def preprocess_subworkflow_output( ch_input, ch_tools_args, method_field_name) {
     // add method arguments to channel meta
     return ch_input
         .combine(ch_tools_args)
-        .filter{  meta, input, pathway, arg_maps -> meta["pathway_name"] ? meta["pathway_name"] == pathway["pathway_name"] : true }
+        .filter{ meta, input, pathway, arg_map -> meta["pathway_name"] ? meta["pathway_name"] == pathway["pathway_name"] : true }
         .map{ meta, input, pathway, arg_map ->
             def meta_clone = meta.clone() + pathway + arg_map.clone()
-            meta_clone["method"] = meta_clone.remove(method_field_name)
-            return [meta_clone, input]
+            def method = meta_clone.remove(method_field_name)
+            return [meta_clone, input, method]
         }
 }
 
