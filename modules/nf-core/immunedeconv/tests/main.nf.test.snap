@@ -1,0 +1,161 @@
+{
+    "test_immunedeconv_bulkmat": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "immunedeconv"
+                        },
+                        "deconvolution_results.tsv:md5,7ea22a01f198957cbe8dae92015583ff"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "immunedeconv"
+                        },
+                        [
+                            "plot1_stacked_bar_chart.png:md5,68884a86fc1daeaa8128f913c4d0505f",
+                            "plot2_points_with_facets.png:md5,9ca7caf63afefe6c38fe13f6a7a834f7"
+                        ]
+                    ]
+                ],
+                "2": [
+                    "versions.yml:md5,e155e29c7a7b3ba2ef8e3ed4c495b929"
+                ],
+                "deconv_plots": [
+                    [
+                        {
+                            "id": "immunedeconv"
+                        },
+                        [
+                            "plot1_stacked_bar_chart.png:md5,68884a86fc1daeaa8128f913c4d0505f",
+                            "plot2_points_with_facets.png:md5,9ca7caf63afefe6c38fe13f6a7a834f7"
+                        ]
+                    ]
+                ],
+                "deconv_table": [
+                    [
+                        {
+                            "id": "immunedeconv"
+                        },
+                        "deconvolution_results.tsv:md5,7ea22a01f198957cbe8dae92015583ff"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,e155e29c7a7b3ba2ef8e3ed4c495b929"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.10.2"
+        },
+        "timestamp": "2024-12-10T21:22:59.810734363"
+    },
+    "test_immunedeconv_bulkmat_mouse": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "immunedeconv"
+                        },
+                        "deconvolution_results.tsv:md5,5c69779bac914a28737eb40460807bec"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "immunedeconv"
+                        },
+                        [
+                            "plot1_stacked_bar_chart.png:md5,1907610f4d0712cc2e75eb64066719de",
+                            "plot2_points_with_facets.png:md5,565088d5475a9be0dc0dadfc0f2e63d2"
+                        ]
+                    ]
+                ],
+                "2": [
+                    "versions.yml:md5,e155e29c7a7b3ba2ef8e3ed4c495b929"
+                ],
+                "deconv_plots": [
+                    [
+                        {
+                            "id": "immunedeconv"
+                        },
+                        [
+                            "plot1_stacked_bar_chart.png:md5,1907610f4d0712cc2e75eb64066719de",
+                            "plot2_points_with_facets.png:md5,565088d5475a9be0dc0dadfc0f2e63d2"
+                        ]
+                    ]
+                ],
+                "deconv_table": [
+                    [
+                        {
+                            "id": "immunedeconv"
+                        },
+                        "deconvolution_results.tsv:md5,5c69779bac914a28737eb40460807bec"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,e155e29c7a7b3ba2ef8e3ed4c495b929"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.10.2"
+        },
+        "timestamp": "2024-12-10T21:23:14.667010563"
+    },
+    "test_immunedeconv - stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "immunedeconv"
+                        },
+                        "deconvolution_results.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "immunedeconv"
+                        },
+                        "deconvolution_results.png:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    "versions.yml:md5,e155e29c7a7b3ba2ef8e3ed4c495b929"
+                ],
+                "deconv_plots": [
+                    [
+                        {
+                            "id": "immunedeconv"
+                        },
+                        "deconvolution_results.png:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "deconv_table": [
+                    [
+                        {
+                            "id": "immunedeconv"
+                        },
+                        "deconvolution_results.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,e155e29c7a7b3ba2ef8e3ed4c495b929"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.10.2"
+        },
+        "timestamp": "2024-12-10T21:23:22.185910251"
+    }
+}

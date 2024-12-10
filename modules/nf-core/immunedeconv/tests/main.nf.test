@@ -1,0 +1,65 @@
+nextflow_process {
+
+    name "Test Process IMMUNEDECONV"
+    script "../main.nf"
+    process "IMMUNEDECONV"
+    tag "modules"
+    tag "modules_nfcore"
+    tag "immunedeconv"
+
+    test("test_immunedeconv_bulkmat") {
+
+        when {
+            process { //val(meta), path(input_file), val(method), val(function)
+                """
+                input[0] = [ [id:"immunedeconv"], file('https://raw.githubusercontent.com/omnideconv/immunedeconv/refs/heads/master/tests/testthat/bulk_mat.tsv', checkIfExists: true), "quantiseq", "deconvolute" ]
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert process.success },
+                { assert snapshot(process.out).match() },
+            )
+        }
+    }
+
+    test("test_immunedeconv_bulkmat_mouse") {
+
+        when {
+            process { //val(meta), path(input_file), val(method), val(function)
+                """
+                input[0] = [ [id:"immunedeconv"], file('https://github.com/omnideconv/immunedeconv/raw/refs/heads/master/tests/testthat/bulk_mat_mouse.tsv', checkIfExists: true), "mmcp_counter", "deconvolute_mouse" ]
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert process.success },
+                { assert snapshot(process.out).match() },
+            )
+        }
+    }
+
+    test("test_immunedeconv - stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [ [id:"immunedeconv"], file('https://raw.githubusercontent.com/omnideconv/immunedeconv/refs/heads/master/tests/testthat/bulk_mat.tsv', checkIfExists: true), "quantiseq", "deconvolute" ]
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert process.success },
+                { assert snapshot(process.out).match() },
+            )
+        }
+    }
+}
