@@ -94,7 +94,6 @@ workflow ENRICHMENT {
         .map{ tuple(it[1], it[0], it[2]) }
         .combine( ch_gmt.map { meta, gmt -> gmt } )
 
-    println("__"+TABULAR_TO_GSEA_CHIP.out.chip)
     GSEA_GSEA(
         ch_gsea_inputs,
         ch_gsea_inputs.map{ tuple(it[0].reference, it[0].target) }, // *

@@ -78,16 +78,6 @@ workflow DIFFERENTIAL {
     ch_model_deseq2        = DESEQ2_DIFFERENTIAL.out.model
     ch_versions            = DESEQ2_DIFFERENTIAL.out.versions.mix(ch_versions)
 
-    ch_processed_matrices = ch_norm_deseq2
-    if ('rlog' in params.deseq2_vs_method){
-        ch_processed_matrices = ch_processed_matrices.join(DESEQ2_NORM.out.rlog_counts)
-    }
-    if ('vst' in params.deseq2_vs_method){
-        ch_processed_matrices = ch_processed_matrices.join(DESEQ2_NORM.out.vst_counts)
-    }
-    ch_processed_matrices = ch_processed_matrices
-        .map{ it.tail() }
-
     // TODO modify the module to accept these parameters as meta/ext.args in the same way how propd does
     ch_logfc_deseq2 = Channel.value([ "log2FoldChange", params.differential_min_fold_change ])
     ch_padj_deseq2 = Channel.value([ "padj", params.differential_max_qval ])

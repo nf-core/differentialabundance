@@ -28,8 +28,6 @@ workflow CORRELATION {
     ch_adjacency = PROPR.out.adjacency.mix(ch_adjacency)
     ch_versions  = ch_versions.mix(PROPR.out.versions)
 
-    // TODO: divide propr module into cor, propr, pcor, pcorbshrink, etc.
-
     emit:
     matrix    = ch_matrix     // channel: [ csv ]
     adjacency = ch_adjacency  // channel: [ csv ]
