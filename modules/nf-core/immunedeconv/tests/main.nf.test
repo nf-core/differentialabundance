@@ -10,9 +10,10 @@ nextflow_process {
     test("test_immunedeconv_bulkmat") {
 
         when {
-            process { //val(meta), path(input_file), val(method), val(function)
+            process {
                 """
                 input[0] = [ [id:"immunedeconv"], file('https://raw.githubusercontent.com/omnideconv/immunedeconv/refs/heads/master/tests/testthat/bulk_mat.tsv', checkIfExists: true), "quantiseq", "deconvolute" ]
+                input[1] = "gene_symbol"
                 """
             }
         }
@@ -28,9 +29,10 @@ nextflow_process {
     test("test_immunedeconv_bulkmat_mouse") {
 
         when {
-            process { //val(meta), path(input_file), val(method), val(function)
+            process {
                 """
                 input[0] = [ [id:"immunedeconv"], file('https://github.com/omnideconv/immunedeconv/raw/refs/heads/master/tests/testthat/bulk_mat_mouse.tsv', checkIfExists: true), "mmcp_counter", "deconvolute_mouse" ]
+                input[1] = "gene_symbol"                
                 """
             }
         }
@@ -51,6 +53,7 @@ nextflow_process {
             process {
                 """
                 input[0] = [ [id:"immunedeconv"], file('https://raw.githubusercontent.com/omnideconv/immunedeconv/refs/heads/master/tests/testthat/bulk_mat.tsv', checkIfExists: true), "quantiseq", "deconvolute" ]
+                input[1] = "gene_symbol"                
                 """
             }
         }

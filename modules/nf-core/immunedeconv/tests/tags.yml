@@ -1,2 +1,0 @@
-untar: ##TODO update for module
-  - modules/nf-core/untar/**
