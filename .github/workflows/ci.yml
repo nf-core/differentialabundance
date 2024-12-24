@@ -8,6 +8,7 @@ on:
     branches:
       - dev
       - master
+      - dev_tmp
   release:
     types: [published]
   workflow_dispatch:

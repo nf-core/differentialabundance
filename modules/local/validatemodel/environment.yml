@@ -1,0 +1,8 @@
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - conda-forge::r-jsonlite
+  - conda-forge::r-optparse
+  - conda-forge::r-tidyverse
+  - conda-forge::r-yaml

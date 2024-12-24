@@ -3,6 +3,9 @@
         "content": [
             20,
             {
+                "CUSTOM_TABULARTOGSEACHIP": {
+                    "gawk": "5.1.0"
+                },
                 "GSEA_GSEA": {
                     "gsea": "4.3.2"
                 },
@@ -22,9 +25,6 @@
                 },
                 "PLOT_EXPLORATORY": {
                     "r-shinyngs": "2.0.0"
-                },
-                "TABULAR_TO_GSEA_CHIP": {
-                    "bash": "4.2.25 3"
                 },
                 "VALIDATOR": {
                     "r-base": "4.3.3",
@@ -175,8 +175,8 @@
         ],
         "meta": {
             "nf-test": "0.9.0",
-            "nextflow": "24.10.2"
+            "nextflow": "24.10.3"
         },
-        "timestamp": "2024-12-04T14:45:14.298568994"
+        "timestamp": "2024-12-20T16:29:49.698674022"
     }
 }

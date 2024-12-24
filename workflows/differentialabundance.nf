@@ -98,8 +98,8 @@ citations_file = file(params.citations_file, checkIfExists: true)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { TABULAR_TO_GSEA_CHIP } from '../modules/local/tabular_to_gsea_chip'
-include { FILTER_DIFFTABLE } from '../modules/local/filter_difftable'
+include { CUSTOM_TABULARTOGSEACHIP       } from '../modules/nf-core/custom/tabulartogseachip/main'
+include { CUSTOM_FILTERDIFFERENTIALTABLE } from '../modules/nf-core/custom/filterdifferentialtable/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -115,7 +115,8 @@ include { UNTAR                                             } from '../modules/n
 include { SHINYNGS_APP                                      } from '../modules/nf-core/shinyngs/app/main'
 include { SHINYNGS_STATICEXPLORATORY as PLOT_EXPLORATORY    } from '../modules/nf-core/shinyngs/staticexploratory/main'
 include { SHINYNGS_STATICDIFFERENTIAL as PLOT_DIFFERENTIAL  } from '../modules/nf-core/shinyngs/staticdifferential/main'
-include { SHINYNGS_VALIDATEFOMCOMPONENTS as VALIDATOR       } from '../modules/nf-core/shinyngs/validatefomcomponents/main'
+// include { SHINYNGS_VALIDATEFOMCOMPONENTS as VALIDATOR       } from '../modules/nf-core/shinyngs/validatefomcomponents/main' //TODO using local version until https://github.com/nf-core/differentialabundance/issues/362 is closed
+include { SHINYNGS_VALIDATEFOMCOMPONENTS as VALIDATOR       } from '../modules/local/shinyngs/validatefomcomponents/main' //TODO remove this line once https://github.com/nf-core/differentialabundance/issues/362 is closed
 include { DESEQ2_DIFFERENTIAL as DESEQ2_NORM                } from '../modules/nf-core/deseq2/differential/main'
 include { DESEQ2_DIFFERENTIAL                               } from '../modules/nf-core/deseq2/differential/main'
 include { LIMMA_DIFFERENTIAL                                } from '../modules/nf-core/limma/differential/main'
@@ -133,6 +134,7 @@ include { GEOQUERY_GETGEO                                   } from '../modules/n
 include { ZIP as MAKE_REPORT_BUNDLE                         } from '../modules/nf-core/zip/main'
 include { IMMUNEDECONV                                      } from '../modules/nf-core/immunedeconv/main'
 include { softwareVersionsToYAML                            } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { VALIDATE_MODEL                                    } from '../modules/local/validatemodel/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -147,6 +149,19 @@ workflow DIFFERENTIALABUNDANCE {
     ch_versions = Channel.empty()
     // Channel for the contrasts file
     ch_contrasts_file = Channel.from([[exp_meta, file(params.contrasts)]])
+
+
+    // Run module to validate models from yml file
+    if ( params.contrasts.endsWith(".yaml") || params.contrasts.endsWith(".yml") ) {
+
+        VALIDATE_MODEL (
+            ch_input,
+            ch_contrasts_file
+        )
+
+        ch_versions = ch_versions
+            .mix(VALIDATE_MODEL.out.versions)
+    }
 
     // If we have affy array data in the form of CEL files we'll be deriving
     // matrix and annotation from them
@@ -187,13 +202,32 @@ workflow DIFFERENTIALABUNDANCE {
         // We'll be running Proteus once per unique contrast variable to generate plots
         // TODO: there should probably be a separate plotting module in proteus to simplify this
 
-        ch_contrast_variables = ch_contrasts_file
-            .splitCsv(header:true, sep:(params.contrasts.endsWith('csv') ? ',' : '\t'))
-            .map{ it.tail().first() }
-            .map{
-                tuple('id': it.variable)
-            }
-            .unique()   // uniquify to keep each contrast variable only once (in case it exists in multiple lines for blocking etc.)
+        // SUPPORT BOTH YAML AND CSV CONTRASTS FILE
+        if (params.contrasts.endsWith(".yaml") || params.contrasts.endsWith(".yml")) {
+            ch_contrast_variables = ch_contrasts_file
+                .map { entry ->
+                    def yaml_file = entry[1]
+                    def yaml_data = new groovy.yaml.YamlSlurper().parse(yaml_file)
+
+                    yaml_data.contrasts.collect { contrast ->
+                        tuple('id': contrast.comparison[0])
+                    }
+                }
+                .flatten()
+                .unique() // Uniquify to keep each contrast variable only once (in case it exists in multiple lines for blocking etc.)
+        } else if (params.contrasts.endsWith(".csv")) {
+            //csv contrasts file processing
+            ch_contrast_variables = ch_contrasts_file
+                .splitCsv(header:true, sep:(params.contrasts.endsWith('csv') ? ',' : '\t'))
+                .map{ it.tail().first() }
+                .map{
+                    tuple('id': it.variable)
+                }
+                .unique()
+        }
+
+        ch_contrast_variables.dump(tag:"ch_contrasts_variables")
+
 
         // Run proteus to import protein abundances
         PROTEUS(
@@ -414,10 +448,12 @@ workflow DIFFERENTIALABUNDANCE {
     ch_logfc = Channel.value([ params.differential_fc_column, params.differential_min_fold_change ])
     ch_padj = Channel.value([ params.differential_qval_column, params.differential_max_qval ])
 
-    FILTER_DIFFTABLE(
+    CUSTOM_FILTERDIFFERENTIALTABLE(
         ch_differential,
-        ch_logfc,
-        ch_padj
+        ch_logfc.map{it[0]},
+        ch_logfc.map{it[1]},
+        ch_padj.map{it[0]},
+        ch_padj.map{it[1]}
     )
 
     // Run a gene set analysis where directed
@@ -443,8 +479,8 @@ workflow DIFFERENTIALABUNDANCE {
 
         CUSTOM_TABULARTOGSEACLS(ch_contrasts_and_samples)
 
-        TABULAR_TO_GSEA_CHIP(
-            VALIDATOR.out.feature_meta.map{ it[1] },
+        CUSTOM_TABULARTOGSEACHIP(
+            VALIDATOR.out.feature_meta,
             [params.features_id_col, params.features_name_col]
         )
 
@@ -461,7 +497,7 @@ workflow DIFFERENTIALABUNDANCE {
         GSEA_GSEA(
             ch_gsea_inputs,
             ch_gsea_inputs.map{ tuple(it[0].reference, it[0].target) }, // *
-            TABULAR_TO_GSEA_CHIP.out.chip.first()
+            CUSTOM_TABULARTOGSEACHIP.out.chip.first().map{ it[1] }
         )
 
         // * Note: GSEA module currently uses a value channel for the mandatory
@@ -474,14 +510,14 @@ workflow DIFFERENTIALABUNDANCE {
 
         // Record GSEA versions
         ch_versions = ch_versions
-            .mix(TABULAR_TO_GSEA_CHIP.out.versions)
+            .mix(CUSTOM_TABULARTOGSEACHIP.out.versions)
             .mix(GSEA_GSEA.out.versions)
     }
 
     if (params.gprofiler2_run) {
 
         // For gprofiler2, use only features that are considered differential
-        ch_filtered_diff = FILTER_DIFFTABLE.out.filtered
+        ch_filtered_diff = CUSTOM_FILTERDIFFERENTIALTABLE.out.filtered
 
         if (!params.gprofiler2_background_file) {
             // If deactivated, use empty list as "background"

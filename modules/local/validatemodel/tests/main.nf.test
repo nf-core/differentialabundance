@@ -1,0 +1,70 @@
+nextflow_process {
+
+    name "Test Process VALIDATE_MODEL"
+    script "../main.nf"
+    process "VALIDATE_MODEL"
+    config "./nextflow.config"
+
+    tag "modules"
+    tag "models"
+    tag "yml"
+    tag "samplesheet"
+
+    test("Samplesheet - YML file - TEST") {
+
+        when {
+            params {
+                module_args = "--sample_id_col 'sample'"
+            }
+            process {
+                """
+                // Samplesheet
+                input[0] =
+                    Channel.fromPath('https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.samplesheet.csv', checkIfExists: true)
+                        .map{ [ [id: "test_samplesheet"], it ] }
+
+                // Models_yml sheet
+                input[1] =
+                    Channel.fromPath("https://github.com/nf-core/test-datasets/raw/refs/heads/differentialabundance/testdata/SRP254919.contrasts.yaml", checkIfExists: true)
+                        .map{ [ [id: "test_yml"], it ] }
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+
+    test("Samplesheet - YML file - MaxQuant TEST") {
+
+        when {
+            params {
+                module_args = "--sample_id_col 'Name'"
+            }
+            process {
+                """
+                // Samplesheet
+                input[0] =
+                    Channel.fromPath('https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/proteomics/maxquant/MaxQuant_samplesheet.tsv', checkIfExists: true)
+                        .map{ [ [id: "maxquant_samplesheet"], it ] }
+
+                // Models_yml sheet
+                input[1] =
+                    Channel.fromPath("https://github.com/nf-core/test-datasets/raw/refs/heads/differentialabundance/testdata/MaxQuant_contrasts.yaml", checkIfExists: true)
+                        .map{ [ [id: "maxquant_yml"], it ] }
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+}

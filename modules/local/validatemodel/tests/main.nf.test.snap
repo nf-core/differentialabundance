@@ -1,0 +1,112 @@
+{
+    "Samplesheet - YML file - MaxQuant TEST": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "maxquant_samplesheet"
+                        },
+                        "pheno_table.csv:md5,e42e42e88a3f71959fd0750dfe93417a"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "maxquant_samplesheet"
+                        },
+                        "designs.json:md5,4ef011dc27b01e863483eb06f0bc4006"
+                    ]
+                ],
+                "2": [
+                    
+                ],
+                "3": [
+                    "versions.yml:md5,bf359bcdd07f0bcc0a2c494ce2823950"
+                ],
+                "designs": [
+                    [
+                        {
+                            "id": "maxquant_samplesheet"
+                        },
+                        "designs.json:md5,4ef011dc27b01e863483eb06f0bc4006"
+                    ]
+                ],
+                "pheno_table": [
+                    [
+                        {
+                            "id": "maxquant_samplesheet"
+                        },
+                        "pheno_table.csv:md5,e42e42e88a3f71959fd0750dfe93417a"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,bf359bcdd07f0bcc0a2c494ce2823950"
+                ],
+                "warnings": [
+                    
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.3"
+        },
+        "timestamp": "2024-12-21T15:37:37.285885311"
+    },
+    "Samplesheet - YML file - TEST": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test_samplesheet"
+                        },
+                        "pheno_table.csv:md5,4969fce19ad1ea5b3cf124f4dcc6a403"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "test_samplesheet"
+                        },
+                        "designs.json:md5,088d536fdff430dc12f4f8b0395a9636"
+                    ]
+                ],
+                "2": [
+                    
+                ],
+                "3": [
+                    "versions.yml:md5,bf359bcdd07f0bcc0a2c494ce2823950"
+                ],
+                "designs": [
+                    [
+                        {
+                            "id": "test_samplesheet"
+                        },
+                        "designs.json:md5,088d536fdff430dc12f4f8b0395a9636"
+                    ]
+                ],
+                "pheno_table": [
+                    [
+                        {
+                            "id": "test_samplesheet"
+                        },
+                        "pheno_table.csv:md5,4969fce19ad1ea5b3cf124f4dcc6a403"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,bf359bcdd07f0bcc0a2c494ce2823950"
+                ],
+                "warnings": [
+                    
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.3"
+        },
+        "timestamp": "2024-12-21T15:37:15.759211744"
+    }
+}
