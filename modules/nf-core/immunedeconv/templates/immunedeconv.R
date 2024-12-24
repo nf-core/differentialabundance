@@ -10,14 +10,14 @@ library(readr)
 #Load prefix
 prefix = ifelse('$task.ext.prefix' == 'null', '$meta.id', '$task.ext.prefix')
 
-# Load the TSV file and keep only $features_name_col column + counts
+# Load the TSV file and keep only $gene_symbol_col column + counts
 gene_expression_matrix <- readr::read_tsv('$input_file') %>%
     as.data.frame() %>%
     dplyr::select(
-        dplyr::all_of('$features_name_col'), # Keep the '$features_name_col' column
+        dplyr::all_of('$gene_symbol_col'), # Keep the '$gene_symbol_col' column
         where(~ !is.character(.))    # Include all non-string columns
     ) %>%
-    tibble::column_to_rownames('$features_name_col')
+    tibble::column_to_rownames('$gene_symbol_col')
 
 # Check if the data is log-transformed or TPM-transformed
 # Check range of values

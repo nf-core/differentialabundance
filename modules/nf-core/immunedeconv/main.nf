@@ -9,7 +9,7 @@ process IMMUNEDECONV {
 
     input:
     tuple val(meta), path(input_file), val(method), val(function)
-    val features_name_col
+    val gene_symbol_col
 
     output:
     tuple val(meta), path("*.deconvolution_results.tsv"), emit: deconv_table

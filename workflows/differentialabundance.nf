@@ -11,7 +11,7 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 def exp_meta = [ "id": params.study_name  ]
 if (params.input) { ch_input = Channel.of([ exp_meta, file(params.input, checkIfExists: true) ]) } else { exit 1, 'Input samplesheet not specified!' }
 
-if (params.study_type == 'affy_array'){
+if (params.study_type == 'affy_array') {
     if (params.affy_cel_files_archive) {
         ch_celfiles = Channel.of([ exp_meta, file(params.affy_cel_files_archive, checkIfExists: true) ])
     } else {
@@ -19,21 +19,21 @@ if (params.study_type == 'affy_array'){
     }
 } else if (params.study_type == 'maxquant') {
 
-        // Should the user have enabled --gsea_run, throw an error
-        if (params.gsea_run) {
-            error("Cannot run GSEA for maxquant data; please set --gsea_run to false.")
-        }
-        if (params.gprofiler2_run){
-            error("gprofiler2 pathway analysis is not yet possible with maxquant input data; please set --gprofiler2_run false and rerun pipeline!")
-        }
-        if (!params.matrix) {
-            error("Input matrix not specified!")
-        }
-        matrix_file = file(params.matrix, checkIfExists: true)
+    // Should the user have enabled --gsea_run, throw an error
+    if (params.gsea_run) {
+        error("Cannot run GSEA for maxquant data; please set --gsea_run to false.")
+    }
+    if (params.gprofiler2_run){
+        error("gprofiler2 pathway analysis is not yet possible with maxquant input data; please set --gprofiler2_run false and rerun pipeline!")
+    }
+    if (!params.matrix) {
+        error("Input matrix not specified!")
+    }
+    matrix_file = file(params.matrix, checkIfExists: true)
 
-        // Make channel for proteus
-        proteus_in = Channel.of([ file(params.input), matrix_file ])
-} else if (params.study_type == 'geo_soft_file'){
+    // Make channel for proteus
+    proteus_in = Channel.of([ file(params.input), matrix_file ])
+} else if (params.study_type == 'geo_soft_file') {
 
     // To pull SOFT files from a GEO a GSE study identifer must be provided
 
@@ -131,6 +131,7 @@ include { AFFY_JUSTRMA as AFFY_JUSTRMA_NORM                 } from '../modules/n
 include { PROTEUS_READPROTEINGROUPS as PROTEUS              } from '../modules/nf-core/proteus/readproteingroups/main'
 include { GEOQUERY_GETGEO                                   } from '../modules/nf-core/geoquery/getgeo/main'
 include { ZIP as MAKE_REPORT_BUNDLE                         } from '../modules/nf-core/zip/main'
+include { IMMUNEDECONV                                      } from '../modules/nf-core/immunedeconv/main'
 include { softwareVersionsToYAML                            } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 
 /*
@@ -586,6 +587,17 @@ workflow DIFFERENTIALABUNDANCE {
             .combine(GPROFILER2_GOST.out.all_enrich.map{it[1]}.flatMap().toList())
             .combine(GPROFILER2_GOST.out.sub_enrich.map{it[1]}.flatMap().toList())
         GPROFILER2_GOST.out.plot_html
+    }
+
+    // Run IMMUNEDECONV
+    if (params.immunedeconv_run){
+        matrix_file =file(params.matrix, checkIfExists:true)
+        IMMUNEDECONV(
+            [ [id:matrix_file.baseName], matrix_file, params.immunedeconv_method, params.immunedeconv_function ],
+            params.features_name_col
+        )
+        ch_versions = ch_versions
+            .mix(IMMUNEDECONV.out.versions)
     }
 
     if (params.shinyngs_build_app){

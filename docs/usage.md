@@ -273,6 +273,24 @@ With this configuration in place deployment should happen automatically every ti
 
 There is also a [Shiny server application](https://posit.co/download/shiny-server/), which you can install on your own infrastruture and use to host applications yourself.
 
+## Immunedeconv
+
+[Immunedeconv](https://omnideconv.org/immunedeconv/index.html) is a computational tool designed to estimate the proportions of immune cell types in bulk transcriptomic data. It leverages established deconvolution algorithms, such as CIBERSORT, EPIC, and xCell, to provide insights into the immune landscape of a given dataset.
+
+This tool is turned off by default, to turn it on set the parameter `--immunedeconv_run` to true. Also make sure that the parameters `--immunedeconv_method` and `--immunedeconv_function` are populated with the desired method and function to run this tool. Default values for these two are quantiseq and deconvolute, respectively. If you want to see the full list of available methods and functions, refer to the tool's [official guide]("https://omnideconv.org/immunedeconv/articles/immunedeconv.html").
+
+For a better understanding on how these parameters affect the module's execution, this is how the parameters are used in the tool:
+
+```bash
+result <- immunedeconv::${function}(gene_expression_matrix, method = '$method')
+```
+
+The default parameters will produce a line that looks like this:
+
+```bash
+result <- immunedeconv::deconvolute(gene_expression_matrix, method = 'quantiseq')
+```
+
 ## Gene set enrichment analysis
 
 Currently, two tools can be used to do gene set enrichment analysis.

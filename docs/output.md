@@ -36,6 +36,8 @@ Stand-alone graphical outputs are placed in this directory. They may be useful i
     - `[coloring variable]/png/mad_correlation.png`: Outlier prediction plots using median absolute deviation (MAD)
   - `differential/`: Directory containing standalone plots from differential analysis. Plots are stored in directories named for the associated contrast.
     - `[contrast]/png/volcano.png`: Volcano plots of -log(10) p value agains log(2) fold changes
+  - `immunedeconv/`: Directory containing graphical outputs of immunedeconv results
+    - `${prefix}.plot1_stacked_bar_chart.png`
   - `gsea/`: Directory containing graphical outputs from GSEA (where enabled). Plots are stored in directories named for the associated contrast.
     - `[contrast]/png/[gsea_plot_type].png`
   - `gprofiler2/`: Directory containing graphical outputs from gprofiler2 (where enabled). Plots are stored in directories named for the associated contrast.
@@ -69,6 +71,8 @@ Most plots are included in the HTML report (see above), but are also included in
   - `differential/`: Directory containing tables of differential statistics reported by differential modules such as DESeq2
     - `[contrast_name].[deseq2|limma].results.tsv`: Results of DESeq2 differential analyis (RNA-seq) OR Limma differential analysis (Affymetrix arrays, GEO studies, Maxquant proteomics studies)
     - `[contrast_name].[deseq2|limma].results_filtered.tsv`: Results of DESeq2 differential analyis (RNA-seq) OR Limma differential analysis (Affymetrix arrays, GEO studies, Maxquant proteomics studies); filtered for differentially abundant entries
+  - `immunedeconv/`: Directory containing table of immunedeconv results
+    - `${prefix}.deconvolution_results.tsv`: TSV output that contains estimated proportions of immune cell types for each sample
   - `gsea/`: Directory containing tables of differential gene set analyis from GSEA (where enabled)
     - `[contrast]/[contrast].gsea_report_for_[condition].tsv`: A GSEA report table for each side of each contrast
   - `gprofiler2/`: Directory containing tables of differential gene set analyis from gprofiler2 (where enabled)

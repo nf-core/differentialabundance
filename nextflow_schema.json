@@ -738,6 +738,32 @@
             },
             "fa_icon": "fas fa-border-all"
         },
+        "immunedeconv": {
+            "title": "IMMUNEDECONV",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "immunedeconv_run": {
+                    "type": "boolean",
+                    "description": "Set to run IMMUNEDECONV",
+                    "default": false,
+                    "fa_icon": "fas fa-running"
+                },
+                "immunedeconv_method": {
+                    "type": "string",
+                    "description": "Set method to run with IMMUNEDECONV. Available options can be found in 'https://omnideconv.org/immunedeconv/articles/immunedeconv.html'",
+                    "default": "quantiseq",
+                    "fa_icon": "fas fa-running"
+                },
+                "immunedeconv_function": {
+                    "type": "string",
+                    "description": "Set function to run with IMMUNEDECONV. Available options can be found in 'https://omnideconv.org/immunedeconv/articles/immunedeconv.html'",
+                    "default": "deconvolute",
+                    "fa_icon": "fas fa-running"
+                }
+            }
+        },
         "gsea": {
             "title": "GSEA",
             "type": "object",
