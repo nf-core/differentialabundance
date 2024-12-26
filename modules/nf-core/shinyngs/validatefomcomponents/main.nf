@@ -44,4 +44,20 @@ process SHINYNGS_VALIDATEFOMCOMPONENTS {
         r-shinyngs: \$(Rscript -e "library(shinyngs); cat(as.character(packageVersion('shinyngs')))")
     END_VERSIONS
     """
+
+    stub:
+    def prefix = task.ext.prefix ?: meta.id
+    """
+    mkdir $prefix
+    touch $prefix/${prefix}.sample_metadata.tsv
+    touch $prefix/${prefix}.feature_metadata.tsv
+    touch $prefix/${prefix}.assay.tsv
+    touch $prefix/${prefix}.contrasts_file.tsv
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        r-base: \$(echo \$(R --version 2>&1) | sed 's/^.*R version //; s/ .*\$//')
+        r-shinyngs: \$(Rscript -e "library(shinyngs); cat(as.character(packageVersion('shinyngs')))")
+    END_VERSIONS
+    """
 }

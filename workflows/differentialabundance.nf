@@ -317,6 +317,11 @@ workflow DIFFERENTIALABUNDANCE {
         ch_matrices_for_validation = ch_in_raw
     }
 
+
+    ch_input.join(ch_matrices_for_validation).dump(tag:"VALIDATOR_ch_input")
+    ch_features.dump(tag:"VALIDATOR_ch_features")
+    ch_contrasts_file.dump(tag:"VALIDATOR_ch_contrasts_file")
+
     VALIDATOR(
         ch_input.join(ch_matrices_for_validation),
         ch_features,
@@ -569,6 +574,8 @@ workflow DIFFERENTIALABUNDANCE {
     )
 
     // Differential analysis using the results of DESeq2
+    ch_differential.dump(tag:"PLOT_DIFFERENTIAL_ch_differential")
+    ch_all_matrices.dump(tag:"PLOT_DIFFERENTIAL_ch_all_matrices")
 
     PLOT_DIFFERENTIAL(
         ch_differential,
