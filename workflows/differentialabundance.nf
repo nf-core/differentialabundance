@@ -493,10 +493,6 @@ workflow DIFFERENTIALABUNDANCE {
             .map{ tuple(it[1], it[0], it[2]) }
             .combine(ch_gene_sets)
 
-        ch_gsea_inputs.dump(tag:"ch_gsea_inputs1")
-        ch_gsea_inputs.map{ tuple(it[0].reference, it[0].target) }.dump(tag:"ch_gsea_inputs2")
-        CUSTOM_TABULARTOGSEACHIP.out.chip.first().map{ it[1] }.dump(tag:"CUSTOM_TABULARTOGSEACHIP3")
-
         GSEA_GSEA(
             ch_gsea_inputs,
             ch_gsea_inputs.map{ tuple(it[0].reference, it[0].target) }, // *
