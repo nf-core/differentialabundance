@@ -20,6 +20,7 @@ nextflow_process {
                 input[0] = Channel.of(
                     [
                         [
+                            id: 'test',
                             contrast_id: 'treatment_mCherry_hND6',
                             contrast_variable: 'treatment',
                             contrast_reference: 'mCherry',
@@ -51,11 +52,12 @@ nextflow_process {
                 input[0] = Channel.of(
                     [
                         [
+                            id: 'test-bf',
                             contrast_id: 'treatment_mCherry_hND6',
                             contrast_variable: 'treatment',
                             contrast_reference: 'mCherry',
                             contrast_target: 'hND6',
-                            blocking_factors: 'sample_number'
+                            blocking_factors: ['sample_number']
                         ],
                         file("https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.samplesheet.csv", checkIfExists: true),
                         file("https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.salmon.merged.gene_counts.top1000cov.tsv", checkIfExists: true)
@@ -83,11 +85,12 @@ nextflow_process {
                 input[0] = Channel.of(
                     [
                         [
+                            id: 'test-stub',
                             contrast_id: 'treatment_mCherry_hND6',
                             contrast_variable: 'treatment',
                             contrast_reference: 'mCherry',
                             contrast_target: 'hND6',
-                            blocking_factors: 'sample_number'
+                            blocking_factors: ['sample_number']
                         ],
                         file("https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.samplesheet.csv", checkIfExists: true),
                         file("https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.salmon.merged.gene_counts.top1000cov.tsv", checkIfExists: true)

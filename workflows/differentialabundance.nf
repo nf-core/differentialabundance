@@ -55,6 +55,38 @@ if (params.study_type == 'affy_array'){
 
 }
 
+/**
+* Parses a YAML file to extract contrast data.
+*
+* @param ymlFile The YAML file to parse.
+* @return A list of maps, each containing keys: id, variable, reference, and target.
+*/
+import org.yaml.snakeyaml.Yaml
+def parseContrastsFromYML(ymlFile) {
+
+    def yaml = new Yaml()
+    def yamlData = yaml.load(ymlFile.text)
+
+    if (!yamlData?.contrasts) {
+        throw new IllegalArgumentException("Invalid YAML structure: Missing 'contrasts' key.")
+    }
+
+    def tuples = yamlData.contrasts.collect { contrasts ->
+        if (!contrasts?.id || !contrasts?.comparison || contrasts.comparison.size() < 3) {
+            throw new IllegalArgumentException("Invalid contrast data: ${contrasts}")
+        }
+
+        [
+            contrast_id: contrasts.id,
+            contrast_variable: contrasts.comparison[0],
+            contrast_reference: contrasts.comparison[1],
+            contrast_target: contrasts.comparison[2],
+            blocking_factors: contrasts.blocking_factors ?: null // Handle missing blocking_factors
+        ]
+    }
+    return tuples
+}
+
 // Check optional parameters
 if (params.transcript_length_matrix) { ch_transcript_lengths = Channel.of([ exp_meta, file(params.transcript_length_matrix, checkIfExists: true)]).first() } else { ch_transcript_lengths = [[],[]] }
 if (params.control_features) { ch_control_features = Channel.of([ exp_meta, file(params.control_features, checkIfExists: true)]).first() } else { ch_control_features = [[],[]] }
@@ -409,21 +441,25 @@ workflow DIFFERENTIALABUNDANCE {
 
             ch_contrasts_file
                 .flatMap{ meta, yml ->
-                    YMLProcessing.parseContrastsFromYML(yml)
-                }                                                       // returns array [ id: <name>, contrast_variable: <variable>, ... ]
-                .combine( ch_samples_and_matrix )                       // channel tuple [meta, samplesheet, filtered_matrix              ]
+                    parseContrastsFromYML(yml)
+                }                                                       // returns array [ contrast_id: <name>, contrast_variable: <variable>, ... ]
+                .combine( ch_samples_and_matrix )                       // ch_samples_and_matrix = [ meta, samplesheet, filtered_matrix            ]
                 .map{
-                    meta_yml, meta_samplesheet, samplesheet, matrix ->  // TODO: We need to remove the 'meta' component from `ch_samples_and_matrix`,
-                        def meta = meta_samplesheet + meta_yml          //       Combine data from experiment (pipeline) + yml (contrasts)
-                        tuple(meta, samplesheet, matrix )               //       Check how to better hormonize these two 'meta' arrays
+                    meta_yml, meta_samplesheet, samplesheet, matrix ->
+                        def meta_update = meta_samplesheet + meta_yml   // Combine data from experiment (pipeline) + yml (contrasts)
+                        tuple(meta_update, samplesheet, matrix )
                 }
                 .set{ ch_contrast_dream }
+
+            //
+            // Run DREAM_DIFFERENTIAL module
+            //
 
             DREAM_DIFFERENTIAL (
                 ch_contrast_dream
             )
 
-            ch_versions = ch_versions.mix(DREAM_DIFFERENTIAL.out.versions)
+            ch_versions = ch_versions.mix(DREAM_DIFFERENTIAL.out.versions.first())
         }
         // END OF NEW BLOCK
 

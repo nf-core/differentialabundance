@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#404](https://github.com/nf-core/differentialabundance/pull/404)] - Add new local module `VALIDATE_MODEL` to check contrasts from YML files against provided metadata ([@alanmmobbs93](https://github.com/alanmmobbs93)), review by [@nschcolnicov](https://github.com/nschcolnicov).
 - [[#411](https://github.com/nf-core/differentialabundance/pull/411)] - Replace local tabulartogseachip with nf-core version. ([@nschcolnicov](https://github.com/nschcolnicov), review by [@TODO](https://github.com/TODO))
 - [[#414](https://github.com/nf-core/differentialabundance/pull/414)] - Add new local module `DREAM_DIFFERENTIAL` to set basics for mixed model analysis ([@alanmmobbs93](https://github.com/alanmmobbs93)), review by [@nschcolnicov](https://github.com/nschcolnicov).
+- [[#416](https://github.com/nf-core/differentialabundance/pull/416)] - Add parameters to control functions from local module `DREAM_DIFFERENTIAL`. Add `blocking_factors` as random variables to the formula ([@alanmmobbs93](https://github.com/alanmmobbs93)), review by [@nschcolnicov](https://github.com/nschcolnicov).
 
 ### Fixed
 

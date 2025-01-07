@@ -154,6 +154,30 @@ You can optionally supply:
 
 The file can be tab or comma separated.
 
+## YML Contrast file (in development)
+
+```bash
+--contrasts '[path/to/contrasts/file.yml]'
+```
+
+The contrasts file references the observations file to define groups of samples to compare. For example, based on the sample sheet above we could define contrasts like:
+
+```yml
+contrasts:
+  - id: "condition_control_treated"
+    comparison: ["condition", "control", "treated"]
+  - id: "condition_control_treated_blockrep"
+    comparison: ["condition", "control", "treated"]
+    blocking_factors: ["replicate", "batch"]
+```
+
+The yml file contains the contrasts to perform, and they must contains the following fields, some of them optionally
+
+- `id` - an arbitrary identifier, will be used to name contrast-wise output files
+- `comparison` - a three-component array that contains the variable in the first spot, and the reference and target levels in the second a third positions.
+- `blocking_factors` - (optional) array that contains any additional variables (also observation columns) that should be modelled alongside the contrast variable
+- `exclude_samples_col` and `exclude_samples_values` - (optional) two arrays with columns and values that will be used to select samples prior to differential modelling. This is helpful where certain samples need to be excluded prior to analysis of a given contrast.
+
 ## Feature annotations
 
 ### GTF file

@@ -41,59 +41,77 @@ input:
 output:
   - results:
       - meta:
-          type: file
-          description: TSV-format table of differential expression information as output
-            by dream
-          pattern: "*.limma.results.tsv"
+          type: map
+          description: |
+            groovy array with metadata information for the contrast generated
       - "*.dream.results.tsv":
           type: file
-          description: TSV-format table of differential expression information as output
-            by Limma
-          pattern: "*.limma.results.tsv"
+          description: |
+            TSV-format table of differential expression information as output by Dream
+          pattern: "*.dream.results.tsv"
   - md_plot:
       - meta:
+          type: map
+          description: |
+            groovy array with metadata information for the contrast generated
+      - "*.dream.mean_difference.png":
           type: file
-          description: Limma mean difference plot
-          pattern: "*.mean_difference.png"
-      - "*.limma.mean_difference.png":
-          type: file
-          description: Limma mean difference plot
+          description: mean difference plot
           pattern: "*.mean_difference.png"
   - rdata:
       - meta:
+          type: map
+          description: |
+            groovy array with metadata information for the contrast generated
+      - "*.MArrayMM.dream.rds":
           type: file
-          description: Serialised MArrayLM object
-          pattern: "*.MArrayLM.limma.rds"
-      - "*.MArrayLM.limma.rds":
-          type: file
-          description: Serialised MArrayLM object
-          pattern: "*.MArrayLM.limma.rds"
+          description: Serialised MArrayMM object
+          pattern: "*.MArrayMM.dream.rds"
   - model:
       - meta:
+          type: map
+          description: |
+            groovy array with metadata information for the contrast generated
+      - "*.dream.model.txt":
           type: file
-          description: TXT-format limma model
-          pattern: "*.limma.model.tsv"
-      - "*.limma.model.txt":
+          description: TXT-format dream model
+          pattern: "*.dream.model.tsv"
+  - contrasts_png:
+      - meta:
+          type: map
+          description: |
+            groovy array with metadata information for the contrast generated
+      - "*.dream.contrasts.png":
           type: file
-          description: TXT-format limma model
-          pattern: "*.limma.model.tsv"
+          description: plot representing the contrast design analyzed
+          pattern: "*.dream.contrasts.png"
+  - var_png:
+      - meta:
+          type: map
+          description: |
+            groovy array with metadata information for the contrast generated
+      - "*.dream.var_plot.png":
+          type: file
+          description: plot representing the variance analyz done with the package
+          pattern: "*.dream.var_plot.png"
   - session_info:
       - meta:
-          type: file
-          description: dump of R SessionInfo
-          pattern: "*.log"
+          type: map
+          description: |
+            groovy array with metadata information for the contrast generated
       - "*.R_sessionInfo.log":
           type: file
           description: dump of R SessionInfo
           pattern: "*.log"
   - normalised_counts:
       - meta:
-          type: file
-          description: normalised TSV format expression matrix with probes by row and samples by column
-          pattern: "*.normalised_counts.tsv"
+          type: map
+          description: |
+            groovy array with metadata information for the contrast generated
       - "*.normalised_counts.tsv":
           type: file
-          description: normalised TSV format expression matrix with probes by row and samples by column
+          description: |
+            normalised TSV format expression matrix created with voom
           pattern: "*.normalised_counts.tsv"
   - versions:
       - versions.yml:

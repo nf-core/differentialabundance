@@ -638,6 +638,82 @@
             },
             "fa_icon": "fas fa-adjust"
         },
+        "dream_specific_options": {
+            "title": "DREAM specific options (RNA-seq only)",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "dream_ddf": {
+                    "type": "string",
+                    "default": "adaptive",
+                    "fa_icon": "fas fa-percent",
+                    "description": "Passed to dream(), indicating the analysis method",
+                    "enum": ["Satterthwaite", "Kenward-Roger", "adaptive"]
+                },
+                "dream_reml": {
+                    "type": "boolean",
+                    "default": true,
+                    "fa_icon": "fas fa-percent",
+                    "description": "Whether to use restricted maximum likelihood to fit linear the mixed model with dream()"
+                },
+                "dream_proportion": {
+                    "type": "number",
+                    "default": 0.01,
+                    "fa_icon": "fas fa-percent",
+                    "description": "passed to eBayes(), a numeric value between 0 and 1, assumed proportion of genes which are differentially expressed"
+                },
+                "dream_trend": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-chart-line",
+                    "description": "passed to eBayes(), logical, should an intensity-dependent trend be allowed for the prior variance?",
+                    "help_text": "If FALSE then the prior variance is constant. Alternatively, trend can be a row-wise numeric vector, which will be used as the covariate for the prior variance."
+                },
+                "dream_robust": {
+                    "type": "boolean",
+                    "fa_icon": "fab fa-android",
+                    "description": "passed to eBayes(), logical, should the estimation of df.prior and var.prior be robustified against outlier sample variances?"
+                },
+                "dream_stdev_coef_lim": {
+                    "type": "string",
+                    "default": "0.1,4",
+                    "description": "passed to eBayes, comma separated string of two values, assumed lower and upper limits for the standard deviation of log2-fold-changes for differentially expressed genes",
+                    "fa_icon": "fas fa-angle-double-up"
+                },
+                "dream_winsor_tail_p": {
+                    "type": "string",
+                    "default": "0.05,0.1",
+                    "description": "passed to eBayes, comma separated string of length 1 or 2, giving left and right tail proportions of x to Winsorize. Used only when robust=TRUE.",
+                    "fa_icon": "fas fa-angle-double-up"
+                },
+                "dream_lfc": {
+                    "type": "integer",
+                    "default": 0,
+                    "fa_icon": "fas fa-exchange-alt",
+                    "description": "passed to topTable(), minimum absolute log2-fold-change required",
+                    "help_text": "topTable and topTableF include only genes with (at least one) absolute log-fold-change greater than lfc. topTreat does not remove genes but ranks genes by evidence that their log-fold-change exceeds lfc."
+                },
+                "dream_confint": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-temperature-low",
+                    "description": "passed to topTable(), logical, should confidence 95% intervals be output for logFC? Alternatively, can take a numeric value between zero and one specifying the confidence level required."
+                },
+                "dream_adjust_method": {
+                    "type": "string",
+                    "default": "BH",
+                    "description": "passed to topTable(), method used to adjust the p-values for multiple testing.",
+                    "enum": ["holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "null"],
+                    "fa_icon": "fas fa-hammer"
+                },
+                "dream_p_value": {
+                    "type": "number",
+                    "default": 1.0,
+                    "description": "cutoff value for adjusted p-values. Only genes with lower p-values are listed.",
+                    "fa_icon": "fas fa-angle-double-up"
+                }
+            },
+            "fa_icon": "fas fa-border-all"
+        },
         "limma_specific_options": {
             "title": "Limma specific options",
             "type": "object",
@@ -1265,6 +1341,9 @@
         },
         {
             "$ref": "#/$defs/deseq2_specific_options_rna_seq_only"
+        },
+        {
+            "$ref": "#/$defs/dream_specific_options"
         },
         {
             "$ref": "#/$defs/limma_specific_options"

@@ -20,6 +20,7 @@ process DREAM_DIFFERENTIAL {
     tuple val(meta), path("*.MArrayMM.dream.rds")       , emit: rdata
     tuple val(meta), path("*.dream.model.txt")          , emit: model
     tuple val(meta), path('*.dream.contrasts_plot.png') , emit: contrasts_png
+    tuple val(meta), path('*.dream.var_plot.png')       , emit: var_png
     tuple val(meta), path("*.R_sessionInfo.log")        , emit: session_info
     tuple val(meta), path("*.normalised_counts.tsv")    , emit: normalised_counts, optional: true
     path "versions.yml"                                 , emit: versions
@@ -32,6 +33,7 @@ process DREAM_DIFFERENTIAL {
     def blocking_factors       = meta.blocking_factors ? "--blocking_variables '${meta.blocking_factors.join(';')}'" : ''
     def exclude_samples_col    = meta.exclude_samples_col ? "--exclude_samples_col '${meta.exclude_samples_col.join(';')}'" : ''
     def exclude_samples_values = meta.exclude_samples_values ? "--exclude_samples_values '${meta.exclude_samples_values.join(';')}'" : ''
+    def args                   = task.ext.args ?: ''
     """
     dream_de.R  \\
         --output_prefix ${meta.contrast_id} \\
@@ -44,7 +46,7 @@ process DREAM_DIFFERENTIAL {
         ${exclude_samples_col} \\
         ${exclude_samples_values} \\
         --threads ${task.cpus} \\
-        --number 100 ## ??
+        ${args}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -62,6 +64,7 @@ process DREAM_DIFFERENTIAL {
     touch "${meta.contrast_id}.dream.results.tsv"
     touch "${meta.contrast_id}.dream.mean_difference.png"
     touch "${meta.contrast_id}.dream.contrasts_plot.png"
+    touch "${meta.contrast_id}.dream.var_plot.png"
     touch "${meta.contrast_id}.MArrayMM.dream.rds"
     touch "${meta.contrast_id}.dream.model.txt"
     touch "${meta.contrast_id}.R_sessionInfo.log"
