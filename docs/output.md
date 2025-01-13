@@ -67,7 +67,7 @@ Most plots are included in the HTML report (see above), but are also included in
     - `raw.matrix.tsv`: RMA background corrected matrix (Affy)
     - `normalised.matrix.tsv`: RMA background corrected and normalised intensities matrix (Affy)
   - `differential/`: Directory containing tables of differential statistics reported by differential modules such as DESeq2
-    - `[contrast_name].[deseq2|limma].results.tsv`: Results of DESeq2 differential analyis (RNA-seq) OR Limma differential analysis (Affymetrix arrays, GEO studies, Maxquant proteomics studies)
+    - `[contrast_name].[deseq2|dream|limma].results.tsv`: Results of DESeq2 differential analyis (RNA-seq), DREAM differential analysis (RNA-seq for mixed linear models) OR Limma differential analysis (Affymetrix arrays, GEO studies, Maxquant proteomics studies)
     - `[contrast_name].[deseq2|limma].results_filtered.tsv`: Results of DESeq2 differential analyis (RNA-seq) OR Limma differential analysis (Affymetrix arrays, GEO studies, Maxquant proteomics studies); filtered for differentially abundant entries
   - `gsea/`: Directory containing tables of differential gene set analyis from GSEA (where enabled)
     - `[contrast]/[contrast].gsea_report_for_[condition].tsv`: A GSEA report table for each side of each contrast

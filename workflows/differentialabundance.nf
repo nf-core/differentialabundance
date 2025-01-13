@@ -55,6 +55,38 @@ if (params.study_type == 'affy_array'){
 
 }
 
+/**
+* Parses a YAML file to extract contrast data.
+*
+* @param ymlFile The YAML file to parse.
+* @return A list of maps, each containing keys: id, variable, reference, and target.
+*/
+import org.yaml.snakeyaml.Yaml
+def parseContrastsFromYML(ymlFile) {
+
+    def yaml = new Yaml()
+    def yamlData = yaml.load(ymlFile.text)
+
+    if (!yamlData?.contrasts) {
+        throw new IllegalArgumentException("Invalid YAML structure: Missing 'contrasts' key.")
+    }
+
+    def tuples = yamlData.contrasts.collect { contrasts ->
+        if (!contrasts?.id || !contrasts?.comparison || contrasts.comparison.size() < 3) {
+            throw new IllegalArgumentException("Invalid contrast data: ${contrasts}")
+        }
+
+        [
+            contrast_id: contrasts.id,
+            contrast_variable: contrasts.comparison[0],
+            contrast_reference: contrasts.comparison[1],
+            contrast_target: contrasts.comparison[2],
+            blocking_factors: contrasts.blocking_factors ?: null // Handle missing blocking_factors
+        ]
+    }
+    return tuples
+}
+
 // Check optional parameters
 if (params.transcript_length_matrix) { ch_transcript_lengths = Channel.of([ exp_meta, file(params.transcript_length_matrix, checkIfExists: true)]).first() } else { ch_transcript_lengths = [[],[]] }
 if (params.control_features) { ch_control_features = Channel.of([ exp_meta, file(params.control_features, checkIfExists: true)]).first() } else { ch_control_features = [[],[]] }
@@ -134,6 +166,7 @@ include { GEOQUERY_GETGEO                                   } from '../modules/n
 include { ZIP as MAKE_REPORT_BUNDLE                         } from '../modules/nf-core/zip/main'
 include { softwareVersionsToYAML                            } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { VALIDATE_MODEL                                    } from '../modules/local/validatemodel/main'
+include { DREAM_DIFFERENTIAL                                } from '../modules/local/dream/differential/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -146,8 +179,9 @@ workflow DIFFERENTIALABUNDANCE {
     main:
 
     ch_versions = Channel.empty()
+
     // Channel for the contrasts file
-    ch_contrasts_file = Channel.from([[exp_meta, file(params.contrasts)]])
+    ch_contrasts_file = Channel.from([[exp_meta, file(params.contrasts, checkIfExists: true)]])
 
 
     // Run module to validate models from yml file
@@ -401,6 +435,35 @@ workflow DIFFERENTIALABUNDANCE {
             .first()
 
     } else {
+
+        // TODO: MOVE THE MODULE TO THE CORRECT SPOT LATER!
+        if ( params.contrasts.endsWith(".yaml") || params.contrasts.endsWith(".yml") ) {
+
+            ch_contrasts_file
+                .flatMap{ meta, yml ->
+                    parseContrastsFromYML(yml)
+                }                                                       // returns array [ contrast_id: <name>, contrast_variable: <variable>, ... ]
+                .combine( ch_samples_and_matrix )                       // ch_samples_and_matrix = [ meta, samplesheet, filtered_matrix            ]
+                .map{
+                    meta_yml, meta_samplesheet, samplesheet, matrix ->
+                        def meta_update = meta_samplesheet + meta_yml   // Combine data from experiment (pipeline) + yml (contrasts)
+                        tuple(meta_update, samplesheet, matrix )
+                }
+                .set{ ch_contrast_dream }
+
+            //
+            // Run DREAM_DIFFERENTIAL module
+            //
+
+            DREAM_DIFFERENTIAL (
+                ch_contrast_dream
+            )
+
+            ch_versions = ch_versions.mix(DREAM_DIFFERENTIAL.out.versions.first())
+        }
+        // END OF NEW BLOCK
+
+
         DESEQ2_NORM (
             ch_contrasts.first(),
             ch_samples_and_matrix,
