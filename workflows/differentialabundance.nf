@@ -84,26 +84,28 @@ if (run_gene_set_analysis) {
 // Normalization tool: default to 'validator'
 tools_normalization = [method: 'validator']
 if (params.study_type == 'rnaseq') {
-    // For RNAseq, choose 'limma' if specified, otherwise 'deseq2'
-    tools_normalization = [method: params.differential_use_limma ? 'limma' : 'deseq2']
+    // For RNAseq, use the specified differential analysis tool for normalization, 
+    // or none if method is propd
+    tools_normalization = [method: params.differential_method == 'propd' ? 'none' : params.differential_method]
 }
 
 // Differential analysis tool:
-// Use 'limma' for specific study types or RNAseq with limma flag; else 'deseq2'
+// Use the specified method.
 // Also set fold change and q-value thresholds.
 tools_differential = [
-    method        : ((params.study_type in ['affy_array', 'geo_soft_file', 'maxquant']) ||
-                    (params.study_type == 'rnaseq' && params.differential_use_limma))
-                    ? 'limma' : 'deseq2',
+    method        : params.differential_method,
     fc_threshold  : params.differential_min_fold_change,
     stat_threshold: params.differential_max_qval
 ]
 
 // Functional analysis tool:
-// Use gprofiler2 (filtered input) if enabled, else gsea (normalized input) if enabled.
-tools_functional = params.gprofiler2_run ?
-    [method: 'gprofiler2', input_type: 'filtered'] :
-    (params.gsea_run ? [method: 'gsea', input_type: 'norm'] : [])
+// Use the specified method, if not null.
+// Also set the input type to 'norm' for GSEA, or 'filtered' for gprofiler2.
+tools_functional = params.functional_method ?
+    (params.functional_method == 'gprofiler2' ? 
+        [method: 'gprofiler2', input_type: 'filtered'] :
+        [method: 'gsea', input_type: 'norm']
+    )
 
 // Combine all tool settings into a channel for downstream use.
 ch_tools = Channel.of([tools_normalization, tools_differential, tools_functional])
