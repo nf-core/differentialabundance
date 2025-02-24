@@ -19,8 +19,12 @@ if (params.study_type == 'affy_array') {
     }
 } else if (params.study_type == 'maxquant') {
 
-    if (params.functional_method) {
-        error("cannot run functional analysis for maxquant data yet; please set --functional_method to null.")
+    // Should the user have enabled --gsea_run, throw an error
+    if (params.gsea_run) {
+        error("Cannot run GSEA for maxquant data; please set --gsea_run to false.")
+    }
+    if (params.gprofiler2_run){
+        error("gprofiler2 pathway analysis is not yet possible with maxquant input data; please set --gprofiler2_run false and rerun pipeline!")
     }
     if (!params.matrix) {
         error("Input matrix not specified!")
@@ -54,17 +58,19 @@ if (params.study_type == 'affy_array') {
 if (params.transcript_length_matrix) { ch_transcript_lengths = Channel.of([ exp_meta, file(params.transcript_length_matrix, checkIfExists: true)]).first() } else { ch_transcript_lengths = Channel.of([[],[]]) }
 if (params.control_features) { ch_control_features = Channel.of([ exp_meta, file(params.control_features, checkIfExists: true)]).first() } else { ch_control_features = Channel.of([[],[]]) }
 
+def run_gene_set_analysis = params.gsea_run || params.gprofiler2_run
+
 ch_gene_sets = Channel.of([[]])
-if (params.functional_method) {
+if (run_gene_set_analysis) {
     if (params.gene_sets_files) {
         gene_sets_files = params.gene_sets_files.split(",")
         ch_gene_sets = Channel.of(gene_sets_files).map { file(it, checkIfExists: true) }
-        if (params.functional_method == 'gprofiler2' && (!params.gprofiler2_token && !params.gprofiler2_organism) && gene_sets_files.size() > 1) {
+        if (params.gprofiler2_run && (!params.gprofiler2_token && !params.gprofiler2_organism) && gene_sets_files.size() > 1) {
             error("gprofiler2 can currently only work with a single gene set file")
         }
-    } else if (params.functional_method == 'gsea') {
+    } else if (params.gsea_run) {
         error("GSEA activated but gene set file not specified!")
-    } else if (params.functional_method == 'gprofiler2') {
+    } else if (params.gprofiler2_run) {
         if (!params.gprofiler2_token && !params.gprofiler2_organism) {
             error("To run gprofiler2, please provide a run token, GMT file or organism!")
         }
@@ -100,14 +106,18 @@ tools_differential = [
 // Functional analysis tool:
 // Use the specified method, if not null.
 // Also set the input type to 'norm' for GSEA, or 'filtered' for gprofiler2.
-tools_functional = params.functional_method ?
-    (params.functional_method == 'gprofiler2' ?
-        [method: 'gprofiler2', input_type: 'filtered'] :
-        [method: 'gsea', input_type: 'norm']
-    ) : []
+tools_functional = Channel.of([[]])
+if (params.gprofiler2_run) {
+    tools_functional = tools_functional
+        .mix(Channel.of([method: 'gprofiler2', input_type: 'filtered']))
+}
+if (params.gsea_run) {
+    tools_functional = tools_functional
+        .mix(Channel.of([method: 'gsea', input_type: 'norm']))
+}
 
 // Combine all tool settings into a channel for downstream use.
-ch_tools = Channel.of([tools_normalization, tools_differential, tools_functional])
+ch_tools = Channel.of([tools_normalization, tools_differential]).combine(tools_functional)
 
 // Report related files
 report_file = file(params.report_file, checkIfExists: true)
@@ -404,6 +414,7 @@ workflow DIFFERENTIALABUNDANCE {
                 tools_diff.stat_threshold
             ]
         }
+        .unique()
 
     // Run differential analysis
 
@@ -453,7 +464,7 @@ workflow DIFFERENTIALABUNDANCE {
     // Prepare background file - for the moment it is only needed for gprofiler2
 
     ch_background = Channel.of([[]])
-    if (params.functional_method == 'gprofiler2') {
+    if (params.gprofiler2_run) {
         if (params.gprofiler2_background_file == "auto") {
             // If auto, use input matrix as background
             ch_background = CUSTOM_MATRIXFILTER.out.filtered.map{it.tail()}.first()
@@ -643,9 +654,11 @@ workflow DIFFERENTIALABUNDANCE {
         // Make a new contrasts file from the differential metas to guarantee the
         // same order as the differential results
 
-        ch_app_differential = ch_differential_results.first().map{it[0].keySet().tail().join(',')}
+        ch_app_differential = Channel.of("variable,reference,target,blocking")
             .concat(
-                ch_differential_results.map{it[0].values().tail().join(',')}
+                ch_differential_results.map{ meta, results ->
+                    [meta.variable, meta.reference, meta.target, meta.blocking].join(',')
+                }
             )
             .collectFile(name: 'contrasts.csv', newLine: true, sort: false)
             .map{
@@ -677,8 +690,11 @@ workflow DIFFERENTIALABUNDANCE {
         params_pattern += "|proteus"
     }
     params_pattern += "|" + params.differential_method
-    if (params.functional_method){
-        params_pattern += "|" + params.functional_method
+    if (params.gprofiler2_run){
+        params_pattern += "|gprofiler2"
+    }
+    if (params.gsea_run){
+        params_pattern += "|gsea"
     }
     params_pattern = ~/(${params_pattern}).*/
 
