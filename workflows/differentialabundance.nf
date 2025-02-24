@@ -82,7 +82,7 @@ if (params.study_type != 'rnaseq' && params.differential_method != 'limma') {
 // Normalization tool: default to 'validator'
 tools_normalization = [method: 'validator']
 if (params.study_type == 'rnaseq') {
-    // For RNAseq, use the specified differential analysis tool for normalization, 
+    // For RNAseq, use the specified differential analysis tool for normalization,
     // or none if method is propd
     tools_normalization = [method: params.differential_method == 'propd' ? 'none' : params.differential_method]
 }
@@ -90,6 +90,7 @@ if (params.study_type == 'rnaseq') {
 // Differential analysis tool:
 // Use the specified method.
 // Also set fold change and q-value thresholds.
+// TODO: change differential_max_qval to differential_max_significance_stat as it is not always a q-value
 tools_differential = [
     method        : params.differential_method,
     fc_threshold  : params.differential_min_fold_change,
@@ -100,8 +101,8 @@ tools_differential = [
 // Use the specified method, if not null.
 // Also set the input type to 'norm' for GSEA, or 'filtered' for gprofiler2.
 tools_functional = params.functional_method ?
-    (params.functional_method == 'gprofiler2' ? 
-        [method: 'gprofiler2', input_type: 'filtered'] : 
+    (params.functional_method == 'gprofiler2' ?
+        [method: 'gprofiler2', input_type: 'filtered'] :
         [method: 'gsea', input_type: 'norm']
     ) : []
 
@@ -444,6 +445,9 @@ workflow DIFFERENTIALABUNDANCE {
             def matrices = vs ? [norm] + vs : [norm]
             [meta, matrices]
         }
+        // NOTE that when method_differential is propd, it does not return normalized matrix as it is
+        // a normalization independent method. Hence, use ifEmpty to cover such scenario
+        .ifEmpty([[],[]])
 
     // ========================================================================
     // Functional analysis
@@ -525,8 +529,8 @@ workflow DIFFERENTIALABUNDANCE {
     if (params.study_type == "geo_soft_file") {
         ch_mat = ch_norm.map {meta, norm -> [meta, [norm]]}
     } else {
-        // otherwise, we take all the matrices: raw, normalized matrix,
-        // and variance stabilized matrices if available
+        // otherwise, we take all the matrices: raw,
+        // normalized matrix, and variance stabilized matrices if available
         ch_mat = ch_raw.map{ it[1] }
             .combine(ch_processed_matrices)
             .map { raw, meta, matrices ->
@@ -542,6 +546,8 @@ workflow DIFFERENTIALABUNDANCE {
         }
 
     // Exploratory analysis
+    // TODO: exploratory plot names should be automatically extracted from input data
+    // instead of asking the user to define it (ie. exploratory_assay_names, exploratory_final_assay, etc)
 
     PLOT_EXPLORATORY(
         ch_contrast_variables
@@ -549,6 +555,7 @@ workflow DIFFERENTIALABUNDANCE {
     )
 
     // Plot differential analysis results
+    // TODO: I need the plot to consider as significant the genes that have >= weighted connectivity threshold
 
     PLOT_DIFFERENTIAL(
         ch_differential_results,
