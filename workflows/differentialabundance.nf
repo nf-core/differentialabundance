@@ -470,22 +470,24 @@ workflow DIFFERENTIALABUNDANCE {
     ch_functional_input = ch_norm.map { meta, input ->
             [[method: meta.method_differential, type: 'norm'], meta, input]
         }
+        .combine(
+            ch_tools.map { tools_norm, tools_diff, tools_func ->
+                [[method: tools_norm.method, type: tools_func.input_type], tools_func.method]
+            }, by:0
+        )
         .mix(
             ch_differential_results_filtered.map { meta, input ->
                 [[method: meta.method_differential, type: 'filtered'], meta, input]
             }
+            .combine(
+                ch_tools.map { tools_norm, tools_diff, tools_func ->
+                    [[method: tools_diff.method, type: tools_func.input_type], tools_func.method]
+                }, by:0
+            )
         )
-        .cross(
-            ch_tools.map { tools_norm, tools_diff, tools_func ->
-                [[method: tools_norm.method, type: tools_func.input_type], tools_func.method]
-            }
-        )
-        .map { input, tools ->
-            [input[1], input[2], tools[1]]  // meta, input, functional analysis method
-        }
         .combine(ch_gene_sets)
         .combine(ch_background)
-        .map { meta, input, method, gene_sets, background ->
+        .map { key, meta, input, method, gene_sets, background ->
             [meta, input, gene_sets, background, method]
         }
 
