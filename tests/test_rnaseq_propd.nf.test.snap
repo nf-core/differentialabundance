@@ -1,0 +1,107 @@
+{
+    "Test rnaseq propd profile": {
+        "content": [
+            16,
+            {
+                "GPROFILER2_GOST": {
+                    "r-ggplot2": "3.4.3",
+                    "r-gprofiler2": "0.2.2"
+                },
+                "GTF_TO_TABLE": {
+                    "atlas-gene-annotation-manipulation": "1.1.1"
+                },
+                "GUNZIP_GTF": {
+                    "gunzip": 1.1
+                },
+                "PLOT_DIFFERENTIAL": {
+                    "r-shinyngs": "2.1.0"
+                },
+                "PLOT_EXPLORATORY": {
+                    "r-shinyngs": "2.1.0"
+                },
+                "PROPR_PROPD": {
+                    "r-propr": "5.1.6"
+                },
+                "VALIDATOR": {
+                    "r-shinyngs": "2.1.0"
+                },
+                "Workflow": {
+                    "nf-core/differentialabundance": "v1.6.0dev"
+                }
+            },
+            [
+                "other",
+                "other/gprofiler2",
+                "other/gprofiler2/treatment_mCherry_hND6__SRP254919",
+                "other/gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919",
+                "other/propd",
+                "pipeline_info",
+                "pipeline_info/collated_versions.yml",
+                "pipeline_info/nf_core_differentialabundance_software_versions.yml",
+                "plots",
+                "plots/differential",
+                "plots/differential/treatment_mCherry_hND6__SRP254919",
+                "plots/differential/treatment_mCherry_hND6__SRP254919/png",
+                "plots/differential/treatment_mCherry_hND6__SRP254919/png/volcano.png",
+                "plots/differential/treatment_mCherry_hND6__SRP254919/treatment_mCherry_hND6__SRP254919.propd.genewise.png",
+                "plots/differential/treatment_mCherry_hND6_sample_number_SRP254919",
+                "plots/differential/treatment_mCherry_hND6_sample_number_SRP254919/png",
+                "plots/differential/treatment_mCherry_hND6_sample_number_SRP254919/png/volcano.png",
+                "plots/differential/treatment_mCherry_hND6_sample_number_SRP254919/treatment_mCherry_hND6_sample_number_SRP254919.propd.genewise.png",
+                "plots/differential/versions.yml",
+                "plots/exploratory",
+                "plots/exploratory/treatment",
+                "plots/exploratory/treatment/png",
+                "plots/exploratory/treatment/png/boxplot.png",
+                "plots/exploratory/treatment/png/density.png",
+                "plots/exploratory/treatment/png/mad_correlation.png",
+                "plots/exploratory/treatment/png/pca2d.png",
+                "plots/exploratory/treatment/png/pca3d.png",
+                "plots/exploratory/treatment/png/sample_dendrogram.png",
+                "plots/exploratory/versions.yml",
+                "plots/gprofiler2",
+                "plots/gprofiler2/treatment_mCherry_hND6__SRP254919",
+                "plots/gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919",
+                "report",
+                "report/SRP254919.html",
+                "report/SRP254919.zip",
+                "shinyngs_app",
+                "shinyngs_app/SRP254919",
+                "shinyngs_app/SRP254919/app.R",
+                "shinyngs_app/SRP254919/data.rds",
+                "shinyngs_app/versions.yml",
+                "tables",
+                "tables/annotation",
+                "tables/annotation/Mus_musculus.anno.tsv",
+                "tables/differential",
+                "tables/differential/treatment_mCherry_hND6__SRP254919.propd.genewise.tsv",
+                "tables/differential/treatment_mCherry_hND6__SRP254919.propd.genewise_filtered.tsv",
+                "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.propd.genewise.tsv",
+                "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.propd.genewise_filtered.tsv",
+                "tables/gprofiler2",
+                "tables/gprofiler2/treatment_mCherry_hND6__SRP254919",
+                "tables/gprofiler2/treatment_mCherry_hND6__SRP254919/treatment_mCherry_hND6__SRP254919.gprofiler2.all_enriched_pathways.tsv",
+                "tables/gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919",
+                "tables/gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919/treatment_mCherry_hND6_sample_number_SRP254919.gprofiler2.all_enriched_pathways.tsv"
+            ],
+            [
+                "versions.yml:md5,3b79bd76b788bcfe6a346b1d0d2dba36",
+                "versions.yml:md5,837080c1af397890cab637f12f6c4851",
+                "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
+                "versions.yml:md5,27cf350d1f743e60e64b4434cf6d4687",
+                "Mus_musculus.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
+                "treatment_mCherry_hND6__SRP254919.propd.genewise.tsv:md5,00c6501076351bf35424c85d4555d531",
+                "treatment_mCherry_hND6__SRP254919.propd.genewise_filtered.tsv:md5,1a1ac63608d70b2d4da99f0a0921a24a",
+                "treatment_mCherry_hND6_sample_number_SRP254919.propd.genewise.tsv:md5,00c6501076351bf35424c85d4555d531",
+                "treatment_mCherry_hND6_sample_number_SRP254919.propd.genewise_filtered.tsv:md5,1a1ac63608d70b2d4da99f0a0921a24a",
+                "treatment_mCherry_hND6__SRP254919.gprofiler2.all_enriched_pathways.tsv:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "treatment_mCherry_hND6_sample_number_SRP254919.gprofiler2.all_enriched_pathways.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.4"
+        },
+        "timestamp": "2025-02-24T18:38:43.044062767"
+    }
+}
