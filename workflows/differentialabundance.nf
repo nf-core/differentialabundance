@@ -445,9 +445,6 @@ workflow DIFFERENTIALABUNDANCE {
             def matrices = vs ? [norm] + vs : [norm]
             [meta, matrices]
         }
-        // NOTE that when method_differential is propd, it does not return normalized matrix as it is
-        // a normalization independent method. Hence, use ifEmpty to cover such scenario
-        .ifEmpty([[],[]])
 
     // ========================================================================
     // Functional analysis
@@ -532,7 +529,13 @@ workflow DIFFERENTIALABUNDANCE {
         // otherwise, we take all the matrices: raw,
         // normalized matrix, and variance stabilized matrices if available
         ch_mat = ch_raw.map{ it[1] }
-            .combine(ch_processed_matrices)
+            .combine(
+                // NOTE that when method_differential is propd,
+                // it does not return normalized matrix as it is
+                // a normalization independent method. Hence,
+                // use ifEmpty to cover such scenario
+                ch_processed_matrices.ifEmpty([exp_meta,[]])
+            )
             .map { raw, meta, matrices ->
                 [meta, [raw] + matrices]
             }
@@ -684,6 +687,8 @@ workflow DIFFERENTIALABUNDANCE {
         }
 
     // Render the final report
+    // TODO: modify rmarkdown notebook for propd
+    // it should plot/visualize the results considering significant >= weighted connectivity threshold
     RMARKDOWNNOTEBOOK(
         ch_report_file,
         ch_report_params,
@@ -698,7 +703,6 @@ workflow DIFFERENTIALABUNDANCE {
             .combine(ch_report_input_files)
             .map{[it[0], it[1..-1]]}
     )
-
 }
 
 /*

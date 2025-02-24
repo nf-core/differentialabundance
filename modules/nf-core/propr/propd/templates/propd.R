@@ -59,6 +59,9 @@ read_delim_flexible <- function(file, header = TRUE, row.names = 1, check.names 
 #' proportional to at least one other gene.
 #'
 #' @param results Data frame with significant pairs
+#' @param group Group vector
+#' @param target Target group
+#' @param reference Reference group
 #' @return Data frame with the following columns:
 #'  - lfc = overall logfold change of the gene with respect to the reference set
 #'  - lfc_error = median average deviation of the logfold changes -> this reflects the error
@@ -67,7 +70,7 @@ read_delim_flexible <- function(file, header = TRUE, row.names = 1, check.names 
 #'      the theta the closer to 1 full connectivity. One can also interpret this as the accumulated
 #'      between group variance of the gene (as the theta values reflects the between group variance
 #'      vs within group variance).
-get_genewise_information <- function(results) {
+get_genewise_information <- function(results, group, target, reference) {
 
     message("Alert: Genewise information is computed based on pairwise ratios.")
 
@@ -75,6 +78,19 @@ get_genewise_information <- function(results) {
 
     genes <- unique(c(results\$Pair, results\$Partner))
     n_genes <- length(genes)
+
+    # get lrm column name for target and reference groups
+
+    group <- unique(group)
+    if (target == group[1]) {
+        lrm_target <- 'lrm1'
+        lrm_reference <- 'lrm2'
+    } else if (target == group[2]) {
+        lrm_target <- 'lrm2'
+        lrm_reference <- 'lrm1'
+    } else {
+        stop('Error when parsing target and reference groups')
+    }
 
     # create empty matrix
 
@@ -104,10 +120,14 @@ get_genewise_information <- function(results) {
 
         # calculate logfold changes of the gene with respect to the reference set
         # Differently to the approach usually implemented in methods like DESeq2,
-        # here we have a dynamic reference defined by all the genes significantly proportional to the target gene.
+        # here we have a dynamic reference defined by all the genes significantly
+        # proportional to the target gene. The logratio mean reflects the change
+        # of a given gene respect to its reference. Then by contrasting the logratio
+        # mean obtained for the target condition vs the reference condition, we get
+        # the logfold change.
 
-        logfoldchange1 <- results[idx1, 'lrm1'] - results[idx1, 'lrm2']
-        logfoldchange2 <- results[idx2, 'lrm2'] - results[idx2, 'lrm1']
+        logfoldchange1 <- results[idx1, lrm_target] - results[idx1, lrm_reference]
+        logfoldchange2 <- -(results[idx2, lrm_target] - results[idx2, lrm_reference])  
         logfoldchanges <- union(logfoldchange1, logfoldchange2)
 
         # fill in matrix values
@@ -121,6 +141,7 @@ get_genewise_information <- function(results) {
     return(mat)
 }
 
+## TODO remove this when PLOT_DIFFERENTIAL works properly for propd, considering cardinality
 #' Plot genewise information
 #'
 #' This function plots the genewise information, which is a scatter plot of the logfold changes
@@ -203,6 +224,7 @@ opt <- list(
     ncores             = as.integer('$task.cpus')
 )
 
+# TODO: simplify this
 opt_types <- list(
     prefix             = 'character',
     counts             = 'character',
@@ -270,8 +292,6 @@ for (file_input in c('counts','samplesheet')){
 if (opt\$permutation < 0) {
     stop('permutation should be a positive integer')
 }
-
-print(opt)
 
 ################################################
 ################################################
@@ -411,7 +431,12 @@ if (opt\$permutation == 0) {
 
         # parse genewise information from pairwise results
 
-        results_genewise <- get_genewise_information(results_pairwise)
+        results_genewise <- get_genewise_information(
+            results_pairwise,
+            group,
+            opt\$target_group,
+            opt\$reference_group
+        )
     }
 
 } else {
@@ -503,7 +528,12 @@ if (opt\$permutation == 0) {
 
         # parse genewise information from pairwise results
 
-        results_genewise <- get_genewise_information(results_pairwise)
+        results_genewise <- get_genewise_information(
+            results_pairwise,
+            group,
+            opt\$target_group,
+            opt\$reference_group
+        )
     }
 }
 
