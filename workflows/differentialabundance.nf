@@ -622,14 +622,14 @@ workflow DIFFERENTIALABUNDANCE {
         .combine(ch_differential_results.map{it[1]}.toList())
         .combine(ch_differential_model.map{it[1]}.toList())
 
-    if (params.functional_method == 'gsea'){
+    if (params.gsea_run){
         ch_report_input_files = ch_report_input_files
             .combine(ch_gsea_results
                 .map{it.tail()}.flatMap().toList()
             )
     }
 
-    if (params.functional_method == 'gprofiler2'){
+    if (params.gprofiler2_run){
         ch_report_input_files = ch_report_input_files
             .combine(gprofiler2_plot_html.map{it[1]}.flatMap().toList())
             .combine(gprofiler2_all_enrich.map{it[1]}.flatMap().toList())
