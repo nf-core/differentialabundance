@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#280](https://github.com/nf-core/differentialabundance/pull/280)] - Bump shinyngs, fix contrasts passed to app creation ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#274](https://github.com/nf-core/differentialabundance/pull/274)] - Fix pagination on samples table ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
 - [[#272](https://github.com/nf-core/differentialabundance/pull/272)] - Show >10 contrasts in report ([@pinin4fjords](https://github.com/pinin4fjords), review by [@WackerO](https://github.com/WackerO))
+- [[#xxx](https://github.com/nf-core/differentialabundance/pull/xxx)] - Fix incorrect tab names in differential report ([@atrigila](https://github.com/atrigila), review by [@TODO](https://github.com/TODO))
 
 ### Changed
 

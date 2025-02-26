@@ -849,8 +849,12 @@ if (length(warnings_list) > 0) {
 }
 
 for (i in 1:nrow(contrasts)){
-    cat("\n#### ", contrast_descriptions[i], "  {.tabset}\n")
+    contrast_name <- paste0(contrasts$variable[i], ": ", contrasts$reference[i], " vs ", contrasts$target[i])
 
+    if (!is.null(contrasts$blocking[i]) && contrasts$blocking[i] != "") {
+        contrast_name <- paste0(contrast_name, " (blocking: ", contrasts$blocking[i], ")")
+    }
+    cat("\n#### ", contrast_name, "  {.tabset}\n")
     ## Make a volcano plot for the contrast first
 
     # Label features with symbol as well as identifier
@@ -871,7 +875,7 @@ for (i in 1:nrow(contrasts)){
     p_value_thresholds <- list(Adjusted = params$differential_max_qval, Unadjusted = params$differential_max_pval)
 
     for (pvt in names(p_value_types)){
-        cat("\n##### ", pvt, " p values\n")
+        cat("\n##### ", contrast_name, " - ", pvt, " p-values\n")
         pval_column <- p_value_types[[pvt]]
 
         de_fc <- abs(full_de[[params$differential_fc_column]]) >= abs(log2(params$differential_min_fold_change))
@@ -949,6 +953,7 @@ for (i in 1:nrow(contrasts)){
                 geom_bar(stat = "identity", position = position_dodge()) +
                 labs(
                     title = paste0("Differentially Expressed Genes by Gene Biotype (", dir, ")"),
+                    subtitle = paste0(contrast_name),
                     x = "Gene Biotype",
                     y = "Number of Differentially Expressed Genes"  ) +
                 theme_minimal() +
@@ -959,7 +964,7 @@ for (i in 1:nrow(contrasts)){
             cat("Column 'Gene biotype' does not exist. Skipping plot.\n")
         }
         }else{
-            cat(paste0("No significantly differential '", dir, "' genes.\n\n"))
+            cat(paste0("No significantly differential '", dir, "' genes in ", contrast_name, ".\n\n"))
         }
         }
     }
