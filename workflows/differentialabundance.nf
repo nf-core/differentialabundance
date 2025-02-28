@@ -19,20 +19,20 @@ if (params.study_type == 'affy_array') {
     }
 } else if (params.study_type == 'maxquant') {
 
-    // Should the user have enabled --gsea_run, throw an error
-    if (params.gsea_run) {
-        error("Cannot run GSEA for maxquant data; please set --gsea_run to false.")
-    }
-    if (params.gprofiler2_run){
-        error("gprofiler2 pathway analysis is not yet possible with maxquant input data; please set --gprofiler2_run false and rerun pipeline!")
-    }
-    if (!params.matrix) {
-        error("Input matrix not specified!")
-    }
-    matrix_file = file(params.matrix, checkIfExists: true)
+        // Should the user have enabled --gsea_run, throw an error
+        if (params.gsea_run) {
+            error("Cannot run GSEA for maxquant data; please set --gsea_run to false.")
+        }
+        if (params.gprofiler2_run){
+            error("gprofiler2 pathway analysis is not yet possible with maxquant input data; please set --gprofiler2_run false and rerun pipeline!")
+        }
+        if (!params.matrix) {
+            error("Input matrix not specified!")
+        }
+        matrix_file = file(params.matrix, checkIfExists: true)
 
-    // Make channel for proteus
-    proteus_in = Channel.of([ file(params.input), matrix_file ])
+        // Make channel for proteus
+        proteus_in = Channel.of([ file(params.input), matrix_file ])
 } else if (params.study_type == 'geo_soft_file') {
 
     // To pull SOFT files from a GEO a GSE study identifer must be provided
@@ -55,14 +55,46 @@ if (params.study_type == 'affy_array') {
 
 }
 
+/**
+* Parses a YAML file to extract contrast data.
+*
+* @param ymlFile The YAML file to parse.
+* @return A list of maps, each containing keys: id, variable, reference, and target.
+*/
+import org.yaml.snakeyaml.Yaml
+def parseContrastsFromYML(ymlFile) {
+
+    def yaml = new Yaml()
+    def yamlData = yaml.load(ymlFile.text)
+
+    if (!yamlData?.contrasts) {
+        throw new IllegalArgumentException("Invalid YAML structure: Missing 'contrasts' key.")
+    }
+
+    def tuples = yamlData.contrasts.collect { contrasts ->
+        if (!contrasts?.id || !contrasts?.comparison || contrasts.comparison.size() < 3) {
+            throw new IllegalArgumentException("Invalid contrast data: ${contrasts}")
+        }
+
+        [
+            contrast_id: contrasts.id,
+            contrast_variable: contrasts.comparison[0],
+            contrast_reference: contrasts.comparison[1],
+            contrast_target: contrasts.comparison[2],
+            blocking_factors: contrasts.blocking_factors ?: null // Handle missing blocking_factors
+        ]
+    }
+    return tuples
+}
+
 // Check optional parameters
-if (params.transcript_length_matrix) { ch_transcript_lengths = Channel.of([ exp_meta, file(params.transcript_length_matrix, checkIfExists: true)]).first() } else { ch_transcript_lengths = Channel.of([[],[]]) }
-if (params.control_features) { ch_control_features = Channel.of([ exp_meta, file(params.control_features, checkIfExists: true)]).first() } else { ch_control_features = Channel.of([[],[]]) }
+if (params.transcript_length_matrix) { ch_transcript_lengths = Channel.of([ exp_meta, file(params.transcript_length_matrix, checkIfExists: true)]).first() } else { ch_transcript_lengths = [[],[]] }
+if (params.control_features) { ch_control_features = Channel.of([ exp_meta, file(params.control_features, checkIfExists: true)]).first() } else { ch_control_features = [[],[]] }
 
 def run_gene_set_analysis = params.gsea_run || params.gprofiler2_run
 
-ch_gene_sets = Channel.of([[]])
 if (run_gene_set_analysis) {
+    ch_gene_sets = Channel.of([])    // For methods that can run without gene sets
     if (params.gene_sets_files) {
         gene_sets_files = params.gene_sets_files.split(",")
         ch_gene_sets = Channel.of(gene_sets_files).map { file(it, checkIfExists: true) }
@@ -74,6 +106,8 @@ if (run_gene_set_analysis) {
     } else if (params.gprofiler2_run) {
         if (!params.gprofiler2_token && !params.gprofiler2_organism) {
             error("To run gprofiler2, please provide a run token, GMT file or organism!")
+        } else {
+            ch_gene_sets = [[]]     // For gprofiler2 which calls ch_gene_sets.first()
         }
     }
 }
@@ -127,6 +161,7 @@ citations_file = file(params.citations_file, checkIfExists: true)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
+include { DREAM_DIFFERENTIAL                                } from '../modules/local/dream/differential/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -421,6 +456,39 @@ workflow DIFFERENTIALABUNDANCE {
     ch_differential_model = ABUNDANCE_DIFFERENTIAL_FILTER.out.model
     ch_differential_norm = ABUNDANCE_DIFFERENTIAL_FILTER.out.normalised_matrix
     ch_differential_varstab = ABUNDANCE_DIFFERENTIAL_FILTER.out.variance_stabilised_matrix
+
+
+    if (!(params.study_type == 'affy_array' || params.study_type == 'geo_soft_file' || params.study_type == 'maxquant' || (params.study_type == 'rnaseq' && params.differential_use_limma))) {
+
+        ch_samples_and_matrix = VALIDATOR.out.sample_meta
+        .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
+        .first()
+
+        // Current DREAM_DIFFERENTIAL implementation only works with yml contrast files
+        if ( params.contrasts_yml ) {
+
+            ch_contrast_dream = ch_contrasts_file
+                .flatMap{ meta, yml ->
+                    parseContrastsFromYML(yml)
+                }                                                       // returns array [ contrast_id: <name>, contrast_variable: <variable>, ... ]
+                .combine( ch_samples_and_matrix )                       // ch_samples_and_matrix = [ meta, samplesheet, filtered_matrix            ]
+                .map{
+                    meta_yml, meta_samplesheet, samplesheet, matrix ->
+                        def meta_update = meta_samplesheet + meta_yml   // Combine data from experiment (pipeline) + yml (contrasts)
+                        tuple(meta_update, samplesheet, matrix )
+                }
+
+            //
+            // Run DREAM_DIFFERENTIAL module
+            //
+
+            DREAM_DIFFERENTIAL (
+                ch_contrast_dream
+            )
+
+            ch_versions = ch_versions.mix(DREAM_DIFFERENTIAL.out.versions.first())
+        }
+    }
 
     ch_versions = ch_versions
         .mix(ABUNDANCE_DIFFERENTIAL_FILTER.out.versions)
