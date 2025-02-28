@@ -19,20 +19,20 @@ if (params.study_type == 'affy_array') {
     }
 } else if (params.study_type == 'maxquant') {
 
-        // Should the user have enabled --gsea_run, throw an error
-        if (params.gsea_run) {
-            error("Cannot run GSEA for maxquant data; please set --gsea_run to false.")
-        }
-        if (params.gprofiler2_run){
-            error("gprofiler2 pathway analysis is not yet possible with maxquant input data; please set --gprofiler2_run false and rerun pipeline!")
-        }
-        if (!params.matrix) {
-            error("Input matrix not specified!")
-        }
-        matrix_file = file(params.matrix, checkIfExists: true)
+    // Should the user have enabled --gsea_run, throw an error
+    if (params.gsea_run) {
+        error("Cannot run GSEA for maxquant data; please set --gsea_run to false.")
+    }
+    if (params.gprofiler2_run){
+        error("gprofiler2 pathway analysis is not yet possible with maxquant input data; please set --gprofiler2_run false and rerun pipeline!")
+    }
+    if (!params.matrix) {
+        error("Input matrix not specified!")
+    }
+    matrix_file = file(params.matrix, checkIfExists: true)
 
-        // Make channel for proteus
-        proteus_in = Channel.of([ file(params.input), matrix_file ])
+    // Make channel for proteus
+    proteus_in = Channel.of([ file(params.input), matrix_file ])
 } else if (params.study_type == 'geo_soft_file') {
 
     // To pull SOFT files from a GEO a GSE study identifer must be provided
@@ -88,13 +88,13 @@ def parseContrastsFromYML(ymlFile) {
 }
 
 // Check optional parameters
-if (params.transcript_length_matrix) { ch_transcript_lengths = Channel.of([ exp_meta, file(params.transcript_length_matrix, checkIfExists: true)]).first() } else { ch_transcript_lengths = [[],[]] }
-if (params.control_features) { ch_control_features = Channel.of([ exp_meta, file(params.control_features, checkIfExists: true)]).first() } else { ch_control_features = [[],[]] }
+if (params.transcript_length_matrix) { ch_transcript_lengths = Channel.of([ exp_meta, file(params.transcript_length_matrix, checkIfExists: true)]).first() } else { ch_transcript_lengths = Channel.of([[],[]]) }
+if (params.control_features) { ch_control_features = Channel.of([ exp_meta, file(params.control_features, checkIfExists: true)]).first() } else { ch_control_features = Channel.of([[],[]]) }
 
 def run_gene_set_analysis = params.gsea_run || params.gprofiler2_run
 
+ch_gene_sets = Channel.of([[]])
 if (run_gene_set_analysis) {
-    ch_gene_sets = Channel.of([])    // For methods that can run without gene sets
     if (params.gene_sets_files) {
         gene_sets_files = params.gene_sets_files.split(",")
         ch_gene_sets = Channel.of(gene_sets_files).map { file(it, checkIfExists: true) }
@@ -106,8 +106,6 @@ if (run_gene_set_analysis) {
     } else if (params.gprofiler2_run) {
         if (!params.gprofiler2_token && !params.gprofiler2_organism) {
             error("To run gprofiler2, please provide a run token, GMT file or organism!")
-        } else {
-            ch_gene_sets = [[]]     // For gprofiler2 which calls ch_gene_sets.first()
         }
     }
 }

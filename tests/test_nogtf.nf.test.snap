@@ -1,11 +1,18 @@
 {
     "Test no gtf profile": {
         "content": [
-            13,
+            15,
             {
                 "DESEQ2_DIFFERENTIAL": {
                     "r-base": "4.1.3",
                     "bioconductor-deseq2": "1.34.0"
+                },
+                "DREAM_DIFFERENTIAL": {
+                    "r-base": "4.3.3",
+                    "r-optparse": "1.7.5",
+                    "r-edger": "4.0.16",
+                    "r-variancepartition": "1.32.2",
+                    "r-biocparallel": "1.36.0"
                 },
                 "PLOT_DIFFERENTIAL": {
                     "r-shinyngs": "2.1.0"
@@ -21,6 +28,21 @@
                 }
             },
             [
+                "dream",
+                "dream/treatment_mCherry_hND6_.MArrayMM.dream.rds",
+                "dream/treatment_mCherry_hND6_.R_sessionInfo.log",
+                "dream/treatment_mCherry_hND6_.dream.contrasts_plot.png",
+                "dream/treatment_mCherry_hND6_.dream.mean_difference.png",
+                "dream/treatment_mCherry_hND6_.dream.model.txt",
+                "dream/treatment_mCherry_hND6_.dream.results.tsv",
+                "dream/treatment_mCherry_hND6_.dream.var_plot.png",
+                "dream/treatment_mCherry_hND6_sample_number.MArrayMM.dream.rds",
+                "dream/treatment_mCherry_hND6_sample_number.R_sessionInfo.log",
+                "dream/treatment_mCherry_hND6_sample_number.dream.contrasts_plot.png",
+                "dream/treatment_mCherry_hND6_sample_number.dream.mean_difference.png",
+                "dream/treatment_mCherry_hND6_sample_number.dream.model.txt",
+                "dream/treatment_mCherry_hND6_sample_number.dream.results.tsv",
+                "dream/treatment_mCherry_hND6_sample_number.dream.var_plot.png",
                 "other",
                 "other/deseq2",
                 "other/deseq2/treatment_mCherry_hND6__SRP254919.dds.rld.rds",
@@ -71,6 +93,14 @@
                 "tables/processed_abundance/all.vst.tsv"
             ],
             [
+                "treatment_mCherry_hND6_.MArrayMM.dream.rds:md5,b712a562618d9ab4b14f0ee07256e2ca",
+                "treatment_mCherry_hND6_.R_sessionInfo.log:md5,e591353ef3f5d63a74889d57f7ce37c6",
+                "treatment_mCherry_hND6_.dream.model.txt:md5,17788b137dd6c2b2a8ed887aa7404f8d",
+                "treatment_mCherry_hND6_.dream.results.tsv:md5,d71ed49555c3dc03897a36ccd09d0d48",
+                "treatment_mCherry_hND6_sample_number.MArrayMM.dream.rds:md5,43327b70b32f1f9a3c27b0901efaded2",
+                "treatment_mCherry_hND6_sample_number.R_sessionInfo.log:md5,e591353ef3f5d63a74889d57f7ce37c6",
+                "treatment_mCherry_hND6_sample_number.dream.model.txt:md5,17788b137dd6c2b2a8ed887aa7404f8d",
+                "treatment_mCherry_hND6_sample_number.dream.results.tsv:md5,d71ed49555c3dc03897a36ccd09d0d48",
                 "treatment_mCherry_hND6__SRP254919.dds.rld.rds:md5,6169c02c9c5dc9bfbd907d1d0ffe5442",
                 "treatment_mCherry_hND6__SRP254919.deseq2.sizefactors.tsv:md5,402909515e7ae8d53d091bf5ad9bc5fd",
                 "treatment_mCherry_hND6_sample_number_SRP254919.dds.rld.rds:md5,4ef00951aa423f2b5d1ab797b16ff20d",
@@ -87,6 +117,10 @@
                 "all.vst.tsv:md5,f25a3a95044074ed2164d155fbdb9571"
             ]
         ],
-        "timestamp": "2025-02-21T14:06:20.881886"
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.4"
+        },
+        "timestamp": "2025-02-28T12:43:03.41889703"
     }
 }

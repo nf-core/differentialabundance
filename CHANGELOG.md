@@ -7,8 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- [[#431](https://github.com/nf-core/differentialabundance/pull/431)] - Add differential and functional subworkflows. ([@suzannejin](https://github.com/suzannejin), co-authored by [@bjlang](https://github.com/bjlang) and [@caraiz2001](https://github.com/caraiz2001), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#441](https://github.com/nf-core/differentialabundance/pull/441)] - Add dream differential module. ([@nschcolnicov](https://github.com/nschcolnicov), review by [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#437](https://github.com/nf-core/differentialabundance/pull/437)] - Add nf-tests to deseq2/differential, rmarkdownnotebook, and proteus modules. ([@nschcolnicov](https://github.com/nschcolnicov), review by [@TODO](TODO)).
+- [[#431](https://github.com/nf-core/differentialabundance/pull/431)] - Add differential and functional subworkflows. ([@suzannejin](https://github.com/suzannejin), co-authored by [@bjlang](https://github.com/bjlang) and [@caraiz2001](https://github.com/caraiz2001), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#421](https://github.com/nf-core/differentialabundance/pull/421)] - Add immunedeconv module ([@nschcolnicov](https://github.com/nschcolnicov), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#420](https://github.com/nf-core/differentialabundance/pull/420)] - Add missing nf-tests to nf-core modules. ([@nschcolnicov](https://github.com/nschcolnicov), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#380](https://github.com/nf-core/differentialabundance/pull/380)] - Replace local filter_diff_table module with nf-core one, and create nf-tests for tabular_to_gsea_chip. ([@nschcolnicov](https://github.com/nschcolnicov), review by [@pinin4fjords](https://github.com/pinin4fjords))
