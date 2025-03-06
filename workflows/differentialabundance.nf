@@ -159,7 +159,6 @@ citations_file = file(params.citations_file, checkIfExists: true)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { DREAM_DIFFERENTIAL                                } from '../modules/local/dream/differential/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -203,7 +202,9 @@ workflow DIFFERENTIALABUNDANCE {
 
     main:
 
-    ch_versions = Channel.empty()
+    ch_versions        = Channel.empty()
+    ch_contrasts_dream = Channel.empty()
+
     // Channel for the contrasts file
     if (params.contrasts_yml && params.contrasts) {
         error("Both '--contrasts' and '--contrasts_yml' parameters are set. Please specify only one of these options to define contrasts.")
@@ -437,25 +438,7 @@ workflow DIFFERENTIALABUNDANCE {
             ]
         }
 
-    // Run differential analysis
-
-    ABUNDANCE_DIFFERENTIAL_FILTER(
-        ch_differential_input,
-        VALIDATOR.out.sample_meta,
-        ch_transcript_lengths,
-        ch_control_features,
-        ch_contrasts
-    )
-
-    // collect differential results
-
-    ch_differential_results = ABUNDANCE_DIFFERENTIAL_FILTER.out.results_genewise
-    ch_differential_results_filtered = ABUNDANCE_DIFFERENTIAL_FILTER.out.results_genewise_filtered
-    ch_differential_model = ABUNDANCE_DIFFERENTIAL_FILTER.out.model
-    ch_differential_norm = ABUNDANCE_DIFFERENTIAL_FILTER.out.normalised_matrix
-    ch_differential_varstab = ABUNDANCE_DIFFERENTIAL_FILTER.out.variance_stabilised_matrix
-
-
+    // Create contrasts dream channel
     if (!(params.study_type == 'affy_array' || params.study_type == 'geo_soft_file' || params.study_type == 'maxquant' || (params.study_type == 'rnaseq' && params.differential_use_limma))) {
 
         ch_samples_and_matrix = VALIDATOR.out.sample_meta
@@ -465,7 +448,7 @@ workflow DIFFERENTIALABUNDANCE {
         // Current DREAM_DIFFERENTIAL implementation only works with yml contrast files
         if ( params.contrasts_yml ) {
 
-            ch_contrast_dream = ch_contrasts_file
+            ch_contrasts_dream = ch_contrasts_file
                 .flatMap{ meta, yml ->
                     parseContrastsFromYML(yml)
                 }                                                       // returns array [ contrast_id: <name>, contrast_variable: <variable>, ... ]
@@ -475,18 +458,27 @@ workflow DIFFERENTIALABUNDANCE {
                         def meta_update = meta_samplesheet + meta_yml   // Combine data from experiment (pipeline) + yml (contrasts)
                         tuple(meta_update, samplesheet, matrix )
                 }
-
-            //
-            // Run DREAM_DIFFERENTIAL module
-            //
-
-            DREAM_DIFFERENTIAL (
-                ch_contrast_dream
-            )
-
-            ch_versions = ch_versions.mix(DREAM_DIFFERENTIAL.out.versions.first())
         }
     }
+
+    // Run differential analysis
+
+    ABUNDANCE_DIFFERENTIAL_FILTER(
+        ch_differential_input,
+        VALIDATOR.out.sample_meta,
+        ch_transcript_lengths,
+        ch_control_features,
+        ch_contrasts,
+        ch_contrasts_dream.ifEmpty([])
+    )
+
+    // collect differential results
+
+    ch_differential_results = ABUNDANCE_DIFFERENTIAL_FILTER.out.results_genewise
+    ch_differential_results_filtered = ABUNDANCE_DIFFERENTIAL_FILTER.out.results_genewise_filtered
+    ch_differential_model = ABUNDANCE_DIFFERENTIAL_FILTER.out.model
+    ch_differential_norm = ABUNDANCE_DIFFERENTIAL_FILTER.out.normalised_matrix
+    ch_differential_varstab = ABUNDANCE_DIFFERENTIAL_FILTER.out.variance_stabilised_matrix
 
     ch_versions = ch_versions
         .mix(ABUNDANCE_DIFFERENTIAL_FILTER.out.versions)
