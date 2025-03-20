@@ -3,6 +3,9 @@
         "content": [
             10,
             {
+                "CUSTOM_FILTERDIFFERENTIALTABLE": {
+                    "pandas": "1.5.2"
+                },
                 "GEOQUERY_GETGEO": {
                     "r-base": "4.3.2",
                     "bioconductor-geoquery": "2.70.0"
@@ -83,8 +86,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.4"
+            "nextflow": "24.10.5"
         },
-        "timestamp": "2025-02-27T17:56:20.053351"
+        "timestamp": "2025-03-20T18:56:44.829385683"
     }
 }

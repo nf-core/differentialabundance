@@ -7,6 +7,9 @@
                     "r-base": "4.3.1",
                     "bioconductor-affy": "1.78.0"
                 },
+                "CUSTOM_FILTERDIFFERENTIALTABLE": {
+                    "pandas": "1.5.2"
+                },
                 "CUSTOM_TABULARTOGSEACHIP": {
                     "gawk": "5.1.0"
                 },
@@ -236,8 +239,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.4"
+            "nextflow": "24.10.5"
         },
-        "timestamp": "2025-02-27T17:44:33.839032162"
+        "timestamp": "2025-03-20T18:44:20.21242966"
     }
 }
