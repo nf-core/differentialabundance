@@ -81,7 +81,8 @@ def parseContrastsFromYML(ymlFile) {
             contrast_variable: contrasts.comparison[0],
             contrast_reference: contrasts.comparison[1],
             contrast_target: contrasts.comparison[2],
-            blocking_factors: contrasts.blocking_factors ?: null // Handle missing blocking_factors
+            blocking_factors: contrasts.blocking_factors ?: null, // Handle missing blocking_factors
+            formula: contrasts.formula ?: null // Handle missing formula
         ]
     }
     return tuples

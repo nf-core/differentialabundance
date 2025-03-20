@@ -26,6 +26,9 @@
                             "type": "string"
                         },
                         "minItems": 1
+                    },
+                    "formula": {
+                        "type": "string"
                     }
                 },
                 "required": ["id", "comparison"],
