@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - [[#441](https://github.com/nf-core/differentialabundance/pull/441)] - Add dream differential module. ([@nschcolnicov](https://github.com/nschcolnicov), review by [@pinin4fjords](https://github.com/pinin4fjords)).
+- [[#440](https://github.com/nf-core/differentialabundance/pull/440)] - Add handling for formula based contrasts. ([@nschcolnicov](https://github.com/nschcolnicov), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#437](https://github.com/nf-core/differentialabundance/pull/437)] - Add nf-tests to deseq2/differential, rmarkdownnotebook, and proteus modules. ([@nschcolnicov](https://github.com/nschcolnicov), review by [@TODO](TODO)).
 - [[#431](https://github.com/nf-core/differentialabundance/pull/431)] - Add differential and functional subworkflows. ([@suzannejin](https://github.com/suzannejin), co-authored by [@bjlang](https://github.com/bjlang) and [@caraiz2001](https://github.com/caraiz2001), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#421](https://github.com/nf-core/differentialabundance/pull/421)] - Add immunedeconv module ([@nschcolnicov](https://github.com/nschcolnicov), review by [@pinin4fjords](https://github.com/pinin4fjords))
@@ -41,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#374](https://github.com/nf-core/differentialabundance/pull/374)] - Update all modules and subworkflows ([@nschcolnicov](https://github.com/nschcolnicov), review by [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#348](https://github.com/nf-core/differentialabundance/pull/348)] - Update test_full profile matrix file and indentation of profiles in nextflow.config ([@nschcolnicov](https://github.com/nschcolnicov), review by [@WackerO](https://github.com/WackerO) and [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#273](https://github.com/nf-core/differentialabundance/pull/273)] - Template update for nf-core/tools v3.2.0. ([@atrigila](https://github.com/atrigila), review by [@nschcolnicov](https://github.com/nschcolnicov))
+- [[#463](https://github.com/nf-core/differentialabundance/pull/463)] - Update shinyngs/validatefomcomponents with new design matrix checks (developed by [@alanmmobbs93](https://github.com/alanmmobbs93) and [@nschcolnicov](https://github.com/nschcolnicov), migrated by [@atrigila](https://github.com/atriila), review by [@grst](https://github.com/grst), [@nschcolnicov](https://github.com/nschcolnicov), [@pinin4fjords](https://github.com/pinin4fjords) and [@suzannejin](https://github.com/suzannejin))
 
 ## v1.5.0 - 2024-05-08
 

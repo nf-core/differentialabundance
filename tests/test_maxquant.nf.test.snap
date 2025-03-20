@@ -8,6 +8,153 @@
                     "bioconductor-limma": "3.58.1"
                 },
                 "PLOT_DIFFERENTIAL": {
+                    "r-shinyngs": "2.2.0"
+                },
+                "PLOT_EXPLORATORY": {
+                    "r-shinyngs": "2.2.0"
+                },
+                "PROTEUS": {
+                    "r-base": "4.2.1",
+                    "r-proteus-bartongroup": "0.2.16",
+                    "r-plotly": "4.10.2",
+                    "bioconductor-limma": "3.54.0"
+                },
+                "VALIDATOR": {
+                    "r-shinyngs": "2.2.0"
+                },
+                "Workflow": {
+                    "nf-core/differentialabundance": "v1.6.0dev"
+                }
+            },
+            [
+                "other",
+                "other/limma",
+                "other/limma/fakebatch_fakeBatch_b1_b2_PXD043349.MArrayLM.limma.rds",
+                "other/limma/genotype_celltype_t1_FoB_PXD043349.MArrayLM.limma.rds",
+                "other/limma/genotype_celltype_t1_MZ_fakeBatch_PXD043349.MArrayLM.limma.rds",
+                "other/limma/genotype_celltype_t1_t2_PXD043349.MArrayLM.limma.rds",
+                "other/proteus",
+                "other/proteus/Celltype",
+                "other/proteus/Celltype/normalizeMedian.normalized_proteingroups.rds",
+                "other/proteus/Celltype/raw_proteingroups.rds",
+                "other/proteus/R_sessionInfo.log",
+                "other/proteus/fakeBatch",
+                "other/proteus/fakeBatch/normalizeMedian.normalized_proteingroups.rds",
+                "other/proteus/fakeBatch/raw_proteingroups.rds",
+                "pipeline_info",
+                "pipeline_info/collated_versions.yml",
+                "pipeline_info/nf_core_differentialabundance_software_versions.yml",
+                "plots",
+                "plots/differential",
+                "plots/differential/fakebatch_fakeBatch_b1_b2_PXD043349",
+                "plots/differential/fakebatch_fakeBatch_b1_b2_PXD043349/png",
+                "plots/differential/fakebatch_fakeBatch_b1_b2_PXD043349/png/volcano.png",
+                "plots/differential/genotype_celltype_t1_FoB_PXD043349",
+                "plots/differential/genotype_celltype_t1_FoB_PXD043349/png",
+                "plots/differential/genotype_celltype_t1_FoB_PXD043349/png/volcano.png",
+                "plots/differential/genotype_celltype_t1_MZ_fakeBatch_PXD043349",
+                "plots/differential/genotype_celltype_t1_MZ_fakeBatch_PXD043349/png",
+                "plots/differential/genotype_celltype_t1_MZ_fakeBatch_PXD043349/png/volcano.png",
+                "plots/differential/genotype_celltype_t1_t2_PXD043349",
+                "plots/differential/genotype_celltype_t1_t2_PXD043349/png",
+                "plots/differential/genotype_celltype_t1_t2_PXD043349/png/volcano.png",
+                "plots/differential/versions.yml",
+                "plots/exploratory",
+                "plots/exploratory/Celltype",
+                "plots/exploratory/Celltype/png",
+                "plots/exploratory/Celltype/png/boxplot.png",
+                "plots/exploratory/Celltype/png/density.png",
+                "plots/exploratory/Celltype/png/mad_correlation.png",
+                "plots/exploratory/Celltype/png/pca2d.png",
+                "plots/exploratory/Celltype/png/pca3d.png",
+                "plots/exploratory/Celltype/png/sample_dendrogram.png",
+                "plots/exploratory/fakeBatch",
+                "plots/exploratory/fakeBatch/png",
+                "plots/exploratory/fakeBatch/png/boxplot.png",
+                "plots/exploratory/fakeBatch/png/density.png",
+                "plots/exploratory/fakeBatch/png/mad_correlation.png",
+                "plots/exploratory/fakeBatch/png/pca2d.png",
+                "plots/exploratory/fakeBatch/png/pca3d.png",
+                "plots/exploratory/fakeBatch/png/sample_dendrogram.png",
+                "plots/exploratory/versions.yml",
+                "plots/proteus",
+                "plots/proteus/Celltype",
+                "plots/proteus/Celltype/normalizeMedian.normalized_dendrogram.png",
+                "plots/proteus/Celltype/normalizeMedian.normalized_distributions.png",
+                "plots/proteus/Celltype/normalizeMedian.normalized_mean_variance_relationship.png",
+                "plots/proteus/Celltype/raw_distributions.png",
+                "plots/proteus/fakeBatch",
+                "plots/proteus/fakeBatch/normalizeMedian.normalized_dendrogram.png",
+                "plots/proteus/fakeBatch/normalizeMedian.normalized_distributions.png",
+                "plots/proteus/fakeBatch/normalizeMedian.normalized_mean_variance_relationship.png",
+                "plots/proteus/fakeBatch/raw_distributions.png",
+                "plots/qc",
+                "plots/qc/fakebatch_fakeBatch_b1_b2_PXD043349.limma.mean_difference.png",
+                "plots/qc/genotype_celltype_t1_FoB_PXD043349.limma.mean_difference.png",
+                "plots/qc/genotype_celltype_t1_MZ_fakeBatch_PXD043349.limma.mean_difference.png",
+                "plots/qc/genotype_celltype_t1_t2_PXD043349.limma.mean_difference.png",
+                "report",
+                "report/PXD043349.html",
+                "report/PXD043349.zip",
+                "tables",
+                "tables/differential",
+                "tables/differential/fakebatch_fakeBatch_b1_b2_PXD043349.limma.results.tsv",
+                "tables/differential/fakebatch_fakeBatch_b1_b2_PXD043349.limma.results_filtered.tsv",
+                "tables/differential/genotype_celltype_t1_FoB_PXD043349.limma.results.tsv",
+                "tables/differential/genotype_celltype_t1_FoB_PXD043349.limma.results_filtered.tsv",
+                "tables/differential/genotype_celltype_t1_MZ_fakeBatch_PXD043349.limma.results.tsv",
+                "tables/differential/genotype_celltype_t1_MZ_fakeBatch_PXD043349.limma.results_filtered.tsv",
+                "tables/differential/genotype_celltype_t1_t2_PXD043349.limma.results.tsv",
+                "tables/differential/genotype_celltype_t1_t2_PXD043349.limma.results_filtered.tsv",
+                "tables/proteus",
+                "tables/proteus/Celltype",
+                "tables/proteus/Celltype/normalizeMedian.normalized_proteingroups_tab.tsv",
+                "tables/proteus/Celltype/raw_proteingroups_tab.tsv",
+                "tables/proteus/fakeBatch",
+                "tables/proteus/fakeBatch/normalizeMedian.normalized_proteingroups_tab.tsv",
+                "tables/proteus/fakeBatch/raw_proteingroups_tab.tsv"
+            ],
+            [
+                "fakebatch_fakeBatch_b1_b2_PXD043349.MArrayLM.limma.rds:md5,f321bf1e4fd44827810df9a9c38776d6",
+                "genotype_celltype_t1_FoB_PXD043349.MArrayLM.limma.rds:md5,4f0cb9d82aa3c0464cee5eca69248589",
+                "genotype_celltype_t1_MZ_fakeBatch_PXD043349.MArrayLM.limma.rds:md5,2021a25cc716b10830ff6851044b6b9d",
+                "genotype_celltype_t1_t2_PXD043349.MArrayLM.limma.rds:md5,34cc962386f20c6e001ab28f035df781",
+                "normalizeMedian.normalized_proteingroups.rds:md5,da660b225f066a1e87bf8bb4196adcc6",
+                "raw_proteingroups.rds:md5,0b38726c41e7b32213e5e15380c29612",
+                "R_sessionInfo.log:md5,411badddf7904da0ed1de02b544109d2",
+                "normalizeMedian.normalized_proteingroups.rds:md5,6f7def9ce31c8ee07f649675db394848",
+                "raw_proteingroups.rds:md5,daef7d25977a1628870dee75e2977ee3",
+                "versions.yml:md5,393bf70818672e793a062e6e63f4e6f1",
+                "versions.yml:md5,857b6d0b01291020eb98da1fd385cdbc",
+                "fakebatch_fakeBatch_b1_b2_PXD043349.limma.results.tsv:md5,2e04750d6c02cf37ed489601980d19b8",
+                "fakebatch_fakeBatch_b1_b2_PXD043349.limma.results_filtered.tsv:md5,6842d5af760839cda6f23d64a3300a09",
+                "genotype_celltype_t1_FoB_PXD043349.limma.results.tsv:md5,990fa0b6a9618bcb03d4c6726f0d518a",
+                "genotype_celltype_t1_FoB_PXD043349.limma.results_filtered.tsv:md5,941463996b8790278d7062a48fbc3419",
+                "genotype_celltype_t1_MZ_fakeBatch_PXD043349.limma.results.tsv:md5,a0cd63a2f76307016904a4463e3b1791",
+                "genotype_celltype_t1_MZ_fakeBatch_PXD043349.limma.results_filtered.tsv:md5,b3120632d1f653e97d18342089157930",
+                "genotype_celltype_t1_t2_PXD043349.limma.results.tsv:md5,8e6f5de58fc478aa954350fc159a9b57",
+                "genotype_celltype_t1_t2_PXD043349.limma.results_filtered.tsv:md5,9db67d9283e7fb2f4f604fd63ec40e4d",
+                "normalizeMedian.normalized_proteingroups_tab.tsv:md5,154fcd8d23409981b897d153e7b7e34e",
+                "raw_proteingroups_tab.tsv:md5,33a8791f84c676ea1aea4842231acb6a",
+                "normalizeMedian.normalized_proteingroups_tab.tsv:md5,154fcd8d23409981b897d153e7b7e34e",
+                "raw_proteingroups_tab.tsv:md5,33a8791f84c676ea1aea4842231acb6a"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.4"
+        },
+        "timestamp": "2025-02-27T17:48:00.075635958"
+    },
+    "Test maxquant profile with yaml contrasts": {
+        "content": [
+            20,
+            {
+                "LIMMA_DIFFERENTIAL": {
+                    "r-base": "4.3.3",
+                    "bioconductor-limma": "3.58.1"
+                },
+                "PLOT_DIFFERENTIAL": {
                     "r-shinyngs": "2.1.0"
                 },
                 "PLOT_EXPLORATORY": {
@@ -20,7 +167,7 @@
                     "bioconductor-limma": "3.54.0"
                 },
                 "VALIDATOR": {
-                    "r-shinyngs": "2.1.0"
+                    "r-shinyngs": "2.2.0"
                 },
                 "Workflow": {
                     "nf-core/differentialabundance": "v1.6.0dev"
@@ -144,6 +291,6 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.4"
         },
-        "timestamp": "2025-02-04T16:34:30.49106646"
+        "timestamp": "2025-02-27T17:49:55.601463217"
     }
 }

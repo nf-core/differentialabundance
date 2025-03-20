@@ -18,7 +18,7 @@
                         "items": {
                             "type": "string"
                         },
-                        "minItems": 1
+                        "minItems": 2
                     },
                     "blocking_factors": {
                         "type": "array",
@@ -28,7 +28,8 @@
                         "minItems": 1
                     },
                     "formula": {
-                        "type": "string"
+                        "type": "string",
+                        "pattern": "^~\\s*[a-zA-Z_][a-zA-Z0-9_]*(\\s*\\+\\s*[a-zA-Z_][a-zA-Z0-9_]*)*$"
                     }
                 },
                 "required": ["id", "comparison"],

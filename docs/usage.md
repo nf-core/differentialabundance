@@ -175,6 +175,18 @@ contrasts:
     blocking_factors: ["replicate"]
 ```
 
+Alternatively, the YAML contrasts also supports formula based model definitions:
+
+```yaml
+contrasts:
+  - id: condition_control_treated
+    formula: "~ condition"
+    comparison: ["condition", "control", "treated"]
+  - id: condition_control_treated_blockrep
+    formula: "~ condition + replicate"
+    comparison: ["condition", "control", "treated"]
+```
+
 The necessary fields in order are:
 
 - `id` - an arbitrary identifier, will be used to name contrast-wise output files
