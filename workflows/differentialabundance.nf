@@ -470,7 +470,7 @@ workflow DIFFERENTIALABUNDANCE {
         ch_transcript_lengths,
         ch_control_features,
         ch_contrasts,
-        ch_contrasts_dream.ifEmpty([])
+        ch_contrasts_dream
     )
 
     // collect differential results
