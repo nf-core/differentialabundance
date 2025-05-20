@@ -774,6 +774,25 @@
                 }
             }
         },
+        "decoupler": {
+            "title": "DECOUPLER",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "decoupler_run": {
+                    "type": "boolean",
+                    "description": "Set to run DECOUPLER",
+                    "default": false,
+                    "fa_icon": "fas fa-running"
+                },
+                "network_decoupler": {
+                    "type": "string",
+                    "pattern": "^\\S+\\.(csv|tsv|txt)$|auto|false",
+                    "description": "Path to CSV/TSV/TXT file containing network file for decoupler"
+                }
+            }
+        },
         "gsea": {
             "title": "GSEA",
             "type": "object",
