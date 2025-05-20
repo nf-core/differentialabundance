@@ -152,6 +152,7 @@ include { PROTEUS_READPROTEINGROUPS as PROTEUS              } from '../modules/n
 include { GEOQUERY_GETGEO                                   } from '../modules/nf-core/geoquery/getgeo/main'
 include { ZIP as MAKE_REPORT_BUNDLE                         } from '../modules/nf-core/zip/main'
 include { IMMUNEDECONV                                      } from '../modules/nf-core/immunedeconv/main'
+include { DECOUPLER                                         } from '../modules/nf-core/decoupler/decoupler/main'
 include { softwareVersionsToYAML                            } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 
 //
@@ -623,6 +624,26 @@ workflow DIFFERENTIALABUNDANCE {
         )
         ch_versions = ch_versions
             .mix(IMMUNEDECONV.out.versions)
+    }
+
+    // Run DECOUPLER
+    if (params.decoupler_run && params.gtf){
+        log.warn "Decoupler is only supported for human or mouse datasets. Please ensure your organism is compatible before enabling this module."
+        //Add contrast label to results metadata
+        ch_differential_results_with_contrast = ch_differential_results.map { meta, file ->
+            def new_meta = meta + [contrast: meta.id]
+            [new_meta, file]
+        }
+        ch_differential_results_with_contrast.view()
+        ch_gtf = file(params.gtf)
+        ch_network_file = file(params.network_decoupler, checkIfExists:true)
+        DECOUPLER(
+            ch_differential_results_with_contrast, ch_network_file, ch_gtf
+        )
+        ch_versions = ch_versions
+            .mix(DECOUPLER.out.versions)
+    }else if (params.decoupler_run && !params.gtf){
+        error("A reference GTF file is required to run Decoupler. Please provide one via the --gtf parameter.")
     }
 
     if (params.shinyngs_build_app){
