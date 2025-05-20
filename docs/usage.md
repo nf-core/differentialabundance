@@ -337,6 +337,31 @@ The default parameters will produce a line that looks like this:
 result <- immunedeconv::deconvolute(gene_expression_matrix, method = 'quantiseq')
 ```
 
+## Decoupler
+[Decoupler](https://decoupler-py.readthedocs.io/en/latest/index.html) `decoupler.decouple` is a Python function that infers biological regulator activities—such as transcription factor or pathway activity—from omics data using multiple statistical enrichment methods. It takes as input a gene expression matrix and a prior knowledge network linking regulators to target genes, and applies one or more methods (e.g., ULM, MLM, wsum) to estimate regulator activity scores across samples. The function supports optional consensus scoring and outputs method-specific activity estimates and p-values, making it a versatile tool for activity inference in both bulk and single-cell datasets. If you want to see the full list of available methods and functions, refer to the functions's [official guide]("https://decoupler-py.readthedocs.io/en/latest/generated/decoupler.decouple.html#decoupler.decouple").
+
+This tool is turned off by default, to turn it on set the parameter `--decoupler_run` to true.
+
+### Input Files
+Decoupler needs a matrix (mat) of molecular readouts (gene expression, logFC, p-values, etc.) and a network (net) that relates target features (genes, proteins, etc.) to “source” biological entities (pathways, transcription factors, molecular processes, etc.).
+
+- The matrix will be taken from the results of the differential expression analysis performed by DESeq2, limma, propr, or variancePartition.
+
+- The network file must be provided explicitly via the '--network_decoupler' parameter. This file should be in long format and contain at least the source and target columns, with optional weight and sign columns describing the strength and direction of each interaction.
+
+#### Network Sources
+You can obtain regulatory networks from well-established databases and tools. Common examples include:
+
+- DoRothEA – transcription factor-target interactions (TFs)
+
+- CollecTRI – curated transcriptional regulatory interactions (TFs)
+
+- PROGENy – pathway-responsive gene signatures (pathways)
+
+If you want to see the full list of available methods and functions, refer to the functions's [official guide] (https://decoupler-py.readthedocs.io/en/latest/notebooks/benchmark.html#Multiple-networks).
+
+**Note**: Decoupler is only supported for human or mouse datasets. Please ensure your organism is compatible before enabling this module.
+
 ## Gene set enrichment analysis
 
 Currently, two tools can be used to do gene set enrichment analysis.

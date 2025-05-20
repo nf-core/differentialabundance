@@ -73,6 +73,9 @@ Most plots are included in the HTML report (see above), but are also included in
     - `[contrast_name].[deseq2|limma].results_filtered.tsv`: Results of DESeq2 differential analyis (RNA-seq) OR Limma differential analysis (Affymetrix arrays, GEO studies, Maxquant proteomics studies); filtered for differentially abundant entries
   - `immunedeconv/`: Directory containing table of immunedeconv results
     - `${prefix}.deconvolution_results.tsv`: TSV output that contains estimated proportions of immune cell types for each sample
+  - `decoupler/`: Directory containing tables of decoupler results
+    - `METHOD_estimate__decoupler.tsv`: contains the estimated activity scores for each regulator (rows) across all samples (columns).
+    - `METHOD_pvals__decoupler.tsv`: contains the associated p-values for those activity scores, when the method supports statistical significance estimation.
   - `gsea/`: Directory containing tables of differential gene set analyis from GSEA (where enabled)
     - `[contrast]/[contrast].gsea_report_for_[condition].tsv`: A GSEA report table for each side of each contrast
   - `gprofiler2/`: Directory containing tables of differential gene set analyis from gprofiler2 (where enabled)
