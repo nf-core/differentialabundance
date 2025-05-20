@@ -40,6 +40,11 @@
                         "git_sha": "100b1dc1ece11cf8d4fec100314d616a66a60875",
                         "installed_by": ["differential_functional_enrichment"]
                     },
+                    "decoupler/decoupler": {
+                        "branch": "master",
+                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
+                        "installed_by": ["modules"]
+                    },
                     "deseq2/differential": {
                         "branch": "master",
                         "git_sha": "25c228dd132d91596e87b636b0e03fd48d4c951a",
