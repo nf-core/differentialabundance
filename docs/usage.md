@@ -349,6 +349,16 @@ Decoupler needs a matrix (mat) of molecular readouts (gene expression, logFC, p-
 
 - The network file must be provided explicitly via the '--network_decoupler' parameter. This file should be in long format and contain at least the source and target columns, with optional weight and sign columns describing the strength and direction of each interaction.
 
+### Parameters
+The Decoupler module includes a min_n parameter to fine-tune its behavior.
+
+- `--decoupler_min_n`: This parameter controls the minimum number of targets a regulator (source) must have in the network to be included in the analysis. Any regulator with fewer than min_n targets will be removed from the network before activity inference is performed.
+
+By default, `--decoupler_min_n` is set to 5, meaning all sources with at least one target will be evaluated. You can increase this value to filter out poorly supported regulators and reduce noise.
+
+Example: setting `--decoupler_min_n 5` will ensure that only regulators with at least 5 target genes are considered.
+
+
 #### Network Sources
 You can obtain regulatory networks from well-established databases and tools. Common examples include:
 
