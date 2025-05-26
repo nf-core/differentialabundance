@@ -643,7 +643,7 @@ workflow DIFFERENTIALABUNDANCE {
         ch_versions = ch_versions
             .mix(DECOUPLER.out.versions)
     }else if (params.decoupler_run && !params.gtf){
-        error("A reference GTF file is required to run Decoupler. Please provide one via the --gtf parameter.")
+        exit 1, "A reference GTF file is required to run Decoupler. Please provide one via the --gtf parameter."
     }
 
     if (params.shinyngs_build_app){
