@@ -1,7 +1,7 @@
 {
     "Test rnaseq dream profile": {
         "content": [
-            8,
+            10,
             {
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
@@ -31,6 +31,15 @@
                 "tables",
                 "tables/annotation",
                 "tables/annotation/Mus_musculus.anno.tsv",
+                "tables/decoupler",
+                "tables/decoupler/consensus_estimate__decoupler.tsv",
+                "tables/decoupler/consensus_pvals__decoupler.tsv",
+                "tables/decoupler/mlm_estimate__decoupler.tsv",
+                "tables/decoupler/mlm_pvals__decoupler.tsv",
+                "tables/decoupler/ulm_estimate__decoupler.tsv",
+                "tables/decoupler/ulm_pvals__decoupler.tsv",
+                "tables/decoupler/wsum_estimate__decoupler.tsv",
+                "tables/decoupler/wsum_pvals__decoupler.tsv",
                 "tables/differential",
                 "tables/differential/treatment_mCherry_hND6__SRP254919.dream.results.tsv",
                 "tables/differential/treatment_mCherry_hND6__SRP254919.dream.results_filtered.tsv",
@@ -39,16 +48,24 @@
             ],
             [
                 "Mus_musculus.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
-                "treatment_mCherry_hND6__SRP254919.dream.results.tsv:md5,dec8a5007db590486bf2c6ee49564327",
-                "treatment_mCherry_hND6__SRP254919.dream.results_filtered.tsv:md5,2882175ce3930af457addbe732309bee",
-                "treatment_mCherry_hND6_sample_number_SRP254919.dream.results.tsv:md5,212ff42de3e40d1bb4cc31b3d4bca28d",
-                "treatment_mCherry_hND6_sample_number_SRP254919.dream.results_filtered.tsv:md5,2882175ce3930af457addbe732309bee"
+                "consensus_estimate__decoupler.tsv:md5,a762cd18108a555253c019197b6972e5",
+                "consensus_pvals__decoupler.tsv:md5,0549d9149bb116ad0a98b911523cb91b",
+                "mlm_estimate__decoupler.tsv:md5,820533a915097e384df46863d6e9f967",
+                "mlm_pvals__decoupler.tsv:md5,6db094fdd321bf4f2813ea1ab587bee4",
+                "ulm_estimate__decoupler.tsv:md5,3c08ede183123bd3db23a5ce5c980174",
+                "ulm_pvals__decoupler.tsv:md5,ba863305547c612de9e7018d995b63ff",
+                "wsum_estimate__decoupler.tsv:md5,d0147a613d0e734d1b5ba8e0f23818f3",
+                "wsum_pvals__decoupler.tsv:md5,73a065e1ec8127be3c93059b6200433d",
+                "treatment_mCherry_hND6__SRP254919.dream.results.tsv:md5,4e5117eb9d659b8b36b9d26038bc27fc",
+                "treatment_mCherry_hND6__SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
+                "treatment_mCherry_hND6_sample_number_SRP254919.dream.results.tsv:md5,b3edc3820482f5aee3a0a78a13835b7b",
+                "treatment_mCherry_hND6_sample_number_SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.5"
+            "nextflow": "24.10.1"
         },
-        "timestamp": "2025-04-02T13:24:02.028163829"
+        "timestamp": "2025-05-26T23:10:58.846962236"
     }
 }
