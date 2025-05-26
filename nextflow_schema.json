@@ -790,6 +790,13 @@
                     "type": "string",
                     "pattern": "^\\S+\\.(csv|tsv|txt)$|auto|false",
                     "description": "Path to CSV/TSV/TXT file containing network file for decoupler"
+                },
+                "decoupler_min_n": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": " min_n targets",
+                    "help_text": "Removes sources of a net with less than min_n targets",
+                    "fa_icon": "fas fa-exchange-alt"
                 }
             }
         },
