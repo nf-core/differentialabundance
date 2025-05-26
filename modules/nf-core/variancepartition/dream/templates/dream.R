@@ -154,6 +154,8 @@ coef_name <- paste0(opt\$contrast_variable, opt\$contrast_target)
 results <- topTable(fitmm, coef = coef_name,
                     adjust.method = opt\$adjust.method, p.value = opt\$p.value,
                     lfc = opt\$lfc, confint = opt\$confint)
+results\$gene_id <- rownames(results)
+results <- results[, c("gene_id", setdiff(names(results), "gene_id"))]
 
 # Export topTable results
 write.table(results, file = paste(opt\$output_prefix, 'dream.results.tsv', sep = '.'),
