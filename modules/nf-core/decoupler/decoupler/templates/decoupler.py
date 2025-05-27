@@ -101,7 +101,7 @@ results = dc.decouple(
 )
 
 for result in results:
-    results[result].to_csv(result + "__decoupler.tsv", sep="\t")
+    results[result].to_csv("${meta.contrast}" + "_" + result + "__decoupler.tsv", sep="\t")
 
 ## VERSIONS FILE
 with open('versions.yml', 'a') as version_file:
