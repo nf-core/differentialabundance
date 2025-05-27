@@ -639,7 +639,6 @@ workflow DIFFERENTIALABUNDANCE {
             def new_meta = meta + [contrast: meta.id]
             [new_meta, file]
         }
-        ch_differential_results_with_contrast.view()
         ch_gtf = file(params.gtf)
         ch_network_file = file(params.network_decoupler, checkIfExists:true)
         DECOUPLER(
