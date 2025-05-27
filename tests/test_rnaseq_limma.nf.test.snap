@@ -153,11 +153,10 @@
                 "tables/processed_abundance/all.normalised_counts.tsv"
             ],
             [
-
-                "treatment_mCherry_hND6__SRP254919.MArrayLM.limma.rds:md5,ff9b67869ea73d2daedd6ec47fcb6605",
-                "treatment_mCherry_hND6_sample_number_SRP254919.MArrayLM.limma.rds:md5,4e2aab8c2cf6faf3536e50a2fcb01a24",
-                "versions.yml:md5,393bf70818672e793a062e6e63f4e6f1",
-                "versions.yml:md5,857b6d0b01291020eb98da1fd385cdbc",
+                "treatment_mCherry_hND6__SRP254919.MArrayLM.limma.rds:md5,5727192a1f8175594f4a148306f23988",
+                "treatment_mCherry_hND6_sample_number_SRP254919.MArrayLM.limma.rds:md5,385f960f9330a1dd6bbf4b00166bc96e",
+                "versions.yml:md5,225ced8832439345efa781c726cf2e5c",
+                "versions.yml:md5,d5f6ad8fe6242dcd75bc62b654d1d211",
                 "gene_sets_treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.HALLMARK_KRAS_SIGNALING_DN.tsv:md5,d47ccff0732fb808d25f91fd7ef15f1c",
                 "gene_sets_treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.Symbol_to_probe_set_mapping_details.tsv:md5,e000a1b93ebbb7eb347d9ce666fd5e26",
                 "treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.gene_set_sizes.tsv:md5,e3049abd72c25ff6d7cd75b14135d245",
@@ -173,27 +172,25 @@
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "versions.yml:md5,b3436c10ff83d0dab55060de3cae3ef2",
                 "Mus_musculus.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
-                "consensus_estimate__decoupler.tsv:md5,f4110e86c0fcc6f0a70c9ea7ff1e0215",
-                "consensus_pvals__decoupler.tsv:md5,b1bde84fdcca1fad08fd163b57fa6a92",
-                "mlm_estimate__decoupler.tsv:md5,fadbb560512d918d8480e05034ebfcb9",
-                "mlm_pvals__decoupler.tsv:md5,25629e6eecb6559a28335b09481599ea",
-                "ulm_estimate__decoupler.tsv:md5,1363654a47583ea08f39d008d78ab3c8",
-                "ulm_pvals__decoupler.tsv:md5,855a2ae46768228adf224f925f92bf8f",
+                "consensus_estimate__decoupler.tsv:md5,1392f1ea63e3663bcb49d0f5106fa43e",
+                "consensus_pvals__decoupler.tsv:md5,f32c284177dbccec60902637de35211f",
+                "mlm_estimate__decoupler.tsv:md5,ab64fd6de70b53fa2cc6ce4acbd3b090",
+                "mlm_pvals__decoupler.tsv:md5,b26ae66b31c2f111710d4c00fc863e0c",
+                "ulm_estimate__decoupler.tsv:md5,a9cd655774bd576aec885c7ae000fa40",
+                "ulm_pvals__decoupler.tsv:md5,8427173b715a671bb64a237f178e8074",
                 "wsum_estimate__decoupler.tsv:md5,b71fdd2b66244fbe6f7ac3de85c3338c",
                 "wsum_pvals__decoupler.tsv:md5,662b0fce5c9aed65b824eb2f6906c7a6",
-                "treatment_mCherry_hND6__SRP254919.limma.results.tsv:md5,4fae1cce0e7990a70376fe28622b8815",
+                "treatment_mCherry_hND6__SRP254919.limma.results.tsv:md5,26df55a9c0fd182977396f75337d5fc4",
                 "treatment_mCherry_hND6__SRP254919.limma.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
-                "treatment_mCherry_hND6_sample_number_SRP254919.limma.results.tsv:md5,4ec1aebed20630563d4f88a717622e92",
+                "treatment_mCherry_hND6_sample_number_SRP254919.limma.results.tsv:md5,2a3937bfc95a1d0a0cbed1f2da4b0bd2",
                 "treatment_mCherry_hND6_sample_number_SRP254919.limma.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
                 "all.normalised_counts.tsv:md5,7510c89d6665176d5026b7af0a64344d"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
-
-            "nextflow": "24.10.1"
+            "nextflow": "25.04.2"
         },
-        "timestamp": "2025-05-26T21:15:17.690789869"
-
+        "timestamp": "2025-05-27T18:15:22.950910272"
     }
 }
