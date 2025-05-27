@@ -6,11 +6,15 @@ nextflow_pipeline {
     tag "rnaseq_dream"
     tag "pipeline"
 
-    test("Test rnaseq dream profile") {
+    test("Test rnaseq dream profile - complex contrast") {
 
         when {
             params {
                 outdir        = "$outputDir"
+                    input                    = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/metadata.tsv'
+                    matrix                   = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/counts.tsv'
+                    contrasts_yml            = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/testdata/formula_contrasts/rnaseq_complex_contrast.yaml'
+
             }
         }
 

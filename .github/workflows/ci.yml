@@ -109,6 +109,7 @@ jobs:
           version: ${{ env.NFT_VER }}
 
       - name: Run Tests (${{matrix.NXF_VER}} | ${{matrix.test_profile}} | ${{matrix.compute_profile}})
+        continue-on-error: ${{ matrix.NXF_VER == 'latest-everything' }}
         run: |
           nf-test test \
               --ci \

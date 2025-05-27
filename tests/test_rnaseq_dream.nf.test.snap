@@ -1,5 +1,5 @@
 {
-    "Test rnaseq dream profile": {
+    "Test rnaseq dream profile - complex contrast": {
         "content": [
             10,
             {
@@ -13,7 +13,7 @@
                     "gunzip": 1.1
                 },
                 "VALIDATOR": {
-                    "r-shinyngs": "2.2.2"
+                    "r-shinyngs": "2.2.4"
                 },
                 "VARIANCEPARTITION_DREAM": {
                     "r-base": "4.3.3",
@@ -41,13 +41,16 @@
                 "tables/decoupler/wsum_estimate__decoupler.tsv",
                 "tables/decoupler/wsum_pvals__decoupler.tsv",
                 "tables/differential",
-                "tables/differential/treatment_mCherry_hND6__SRP254919.dream.results.tsv",
-                "tables/differential/treatment_mCherry_hND6__SRP254919.dream.results_filtered.tsv",
-                "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.dream.results.tsv",
-                "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.dream.results_filtered.tsv"
+                "tables/differential/full_model_with_interactions_SRP254919.dream.results.tsv",
+                "tables/differential/full_model_with_interactions_SRP254919.dream.results_filtered.tsv",
+                "tables/differential/interaction_genotype_treatment_SRP254919.dream.results.tsv",
+                "tables/differential/interaction_genotype_treatment_SRP254919.dream.results_filtered.tsv",
+                "tables/differential/treatment_plus_genotype_SRP254919.dream.results.tsv",
+                "tables/differential/treatment_plus_genotype_SRP254919.dream.results_filtered.tsv"
             ],
             [
                 "Mus_musculus.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
+
                 "consensus_estimate__decoupler.tsv:md5,a762cd18108a555253c019197b6972e5",
                 "consensus_pvals__decoupler.tsv:md5,0549d9149bb116ad0a98b911523cb91b",
                 "mlm_estimate__decoupler.tsv:md5,820533a915097e384df46863d6e9f967",
@@ -59,13 +62,22 @@
                 "treatment_mCherry_hND6__SRP254919.dream.results.tsv:md5,4e5117eb9d659b8b36b9d26038bc27fc",
                 "treatment_mCherry_hND6__SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
                 "treatment_mCherry_hND6_sample_number_SRP254919.dream.results.tsv:md5,b3edc3820482f5aee3a0a78a13835b7b",
-                "treatment_mCherry_hND6_sample_number_SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce"
+                "treatment_mCherry_hND6_sample_number_SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
+                "full_model_with_interactions_SRP254919.dream.results.tsv:md5,75e9a1dd2e967a01469214c1b8434feb",
+                "full_model_with_interactions_SRP254919.dream.results_filtered.tsv:md5,114a0af94613a9c218862086b6c2bb4a",
+                "interaction_genotype_treatment_SRP254919.dream.results.tsv:md5,8b1912c8bb50dc8e01baedbddf08c4e9",
+                "interaction_genotype_treatment_SRP254919.dream.results_filtered.tsv:md5,2882175ce3930af457addbe732309bee",
+                "treatment_plus_genotype_SRP254919.dream.results.tsv:md5,8bca571a727671b0bb2879ee27b87c23",
+                "treatment_plus_genotype_SRP254919.dream.results_filtered.tsv:md5,334f9459e1262b26b00d8b790be89446"
+
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
+
             "nextflow": "24.10.1"
         },
         "timestamp": "2025-05-26T23:10:58.846962236"
+
     }
 }

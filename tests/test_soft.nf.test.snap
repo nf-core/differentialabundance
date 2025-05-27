@@ -15,13 +15,13 @@
                     "bioconductor-limma": "3.58.1"
                 },
                 "PLOT_DIFFERENTIAL": {
-                    "r-shinyngs": "2.2.0"
+                    "r-shinyngs": "2.2.4"
                 },
                 "PLOT_EXPLORATORY": {
-                    "r-shinyngs": "2.2.0"
+                    "r-shinyngs": "2.2.4"
                 },
                 "VALIDATOR": {
-                    "r-shinyngs": "2.2.2"
+                    "r-shinyngs": "2.2.4"
                 },
                 "Workflow": {
                     "nf-core/differentialabundance": "v1.6.0dev"
@@ -74,10 +74,10 @@
             [
                 "normalised.eset.rds:md5,ee83ece8b75d711163af9dd9300db49a",
                 "phenotype_uninvolved_lesional_study.MArrayLM.limma.rds:md5,eecc9b0267ce9a5d3a1330da7fbce4cc",
-                "versions.yml:md5,393bf70818672e793a062e6e63f4e6f1",
-                "versions.yml:md5,857b6d0b01291020eb98da1fd385cdbc",
+                "versions.yml:md5,225ced8832439345efa781c726cf2e5c",
+                "versions.yml:md5,d5f6ad8fe6242dcd75bc62b654d1d211",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
-                "versions.yml:md5,b9e9aeb4e55381e73a796d7760040c3b",
+                "versions.yml:md5,b3436c10ff83d0dab55060de3cae3ef2",
                 "normalised.annotation.tsv:md5,40300ae222ae35fa54daf10a1b86e830",
                 "phenotype_uninvolved_lesional_study.limma.results.tsv:md5,2cfa653fffb034be4b82abf306c87bc5",
                 "phenotype_uninvolved_lesional_study.limma.results_filtered.tsv:md5,6a198c35b193bab0b3148d147c7b08e3",
@@ -86,8 +86,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.5"
+            "nextflow": "24.10.6"
         },
-        "timestamp": "2025-04-02T13:52:16.624113744"
+        "timestamp": "2025-05-07T13:36:03.375147576"
     }
 }
