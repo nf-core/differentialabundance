@@ -94,14 +94,12 @@
                 },
                 "affy_cel_files_archive": {
                     "type": "string",
-                    "default": "null",
                     "description": "Alternative to matrix: a compressed CEL files archive such as often found in GEO",
                     "fa_icon": "fas fa-file-archive",
                     "help_text": "Use this option to provide a raw archive of CEL files from Affymetrix arrays. Will be ignored if a matrix is specified."
                 },
                 "querygse": {
                     "type": "string",
-                    "default": "null",
                     "description": "Use SOFT files from GEO by providing the GSE study identifier",
                     "fa_icon": "fas fa-keyboard",
                     "help_text": "Use this option to provide a GSE study identifier."
@@ -237,7 +235,6 @@
                 },
                 "affy_cdfname": {
                     "type": "string",
-                    "default": "null",
                     "description": "Used to specify the name of an alternative cdf package. If set to NULL, then the usual cdf package based on Affymetrix' mappings will be used.",
                     "fa_icon": "fas fa-signature"
                 },
@@ -314,13 +311,13 @@
             "properties": {
                 "filtering_min_abundance": {
                     "type": "number",
-                    "default": 1.0,
+                    "default": 1,
                     "description": "Minimum abundance value",
                     "fa_icon": "fas fa-compress-alt"
                 },
                 "filtering_min_samples": {
                     "type": "number",
-                    "default": 1.0,
+                    "default": 1,
                     "description": "Minimum observations that must pass the threshold to retain the row/ feature (e.g. gene).",
                     "fa_icon": "fas fa-compress-alt"
                 },
@@ -472,13 +469,13 @@
                 },
                 "differential_min_fold_change": {
                     "type": "number",
-                    "default": 2.0,
+                    "default": 2,
                     "description": "Minimum fold change used to calculate differential feature numbers",
                     "fa_icon": "fas fa-angle-double-down"
                 },
                 "differential_max_pval": {
                     "type": "number",
-                    "default": 1.0,
+                    "default": 1,
                     "description": "Maximum p value used to calculate differential feature numbers",
                     "fa_icon": "fas fa-angle-double-up"
                 },
@@ -661,19 +658,16 @@
                 },
                 "limma_spacing": {
                     "type": "string",
-                    "default": "null",
                     "fa_icon": "fas fa-people-arrows",
                     "description": "passed to lmFit(), positive integer giving the spacing between duplicate occurrences of the same probe, spacing=1 for consecutive rows."
                 },
                 "limma_block": {
                     "type": "string",
-                    "default": "null",
                     "fa_icon": "fas fa-cube",
                     "description": "Sample sheet column to be used to derive a vector or factor specifying a blocking variable on the arrays"
                 },
                 "limma_correlation": {
                     "type": "string",
-                    "default": "null",
                     "fa_icon": "fas fa-chart-line",
                     "description": "passed to lmFit(), the inter-duplicate or inter-technical replicate correlation"
                 },
@@ -735,14 +729,13 @@
                 },
                 "limma_p_value": {
                     "type": "number",
-                    "default": 1.0,
+                    "default": 1,
                     "description": "cutoff value for adjusted p-values. Only genes with lower p-values are listed.",
                     "fa_icon": "fas fa-angle-double-up"
                 },
                 "limma_use_voom": {
                     "type": "boolean",
                     "description": "Turns on and off usage of voom normalisation in the Limma module.",
-                    "default": false,
                     "fa_icon": "far fa-check-square"
                 }
             },
@@ -757,7 +750,6 @@
                 "immunedeconv_run": {
                     "type": "boolean",
                     "description": "Set to run IMMUNEDECONV",
-                    "default": false,
                     "fa_icon": "fas fa-running"
                 },
                 "immunedeconv_method": {
@@ -771,32 +763,6 @@
                     "description": "Set function to run with IMMUNEDECONV. Available options can be found in 'https://omnideconv.org/immunedeconv/articles/immunedeconv.html'",
                     "default": "deconvolute",
                     "fa_icon": "fas fa-running"
-                }
-            }
-        },
-        "decoupler": {
-            "title": "DECOUPLER",
-            "type": "object",
-            "description": "",
-            "default": "",
-            "properties": {
-                "decoupler_run": {
-                    "type": "boolean",
-                    "description": "Set to run DECOUPLER",
-                    "default": false,
-                    "fa_icon": "fas fa-running"
-                },
-                "network_decoupler": {
-                    "type": "string",
-                    "pattern": "^\\S+\\.(csv|tsv|txt)$|auto|false",
-                    "description": "Path to CSV/TSV/TXT file containing network file for decoupler"
-                },
-                "decoupler_min_n": {
-                    "type": "integer",
-                    "default": 1,
-                    "description": " min_n targets",
-                    "help_text": "Removes sources of a net with less than min_n targets",
-                    "fa_icon": "fas fa-exchange-alt"
                 }
             }
         },
@@ -960,7 +926,6 @@
                 },
                 "gprofiler2_measure_underrepresentation": {
                     "type": "boolean",
-                    "default": false,
                     "description": "Should underrepresentation be measured instead of overrepresentation?",
                     "help_text": "Default false; if true, will measure overrepresentation."
                 },
@@ -977,7 +942,6 @@
                 },
                 "gprofiler2_evcodes": {
                     "type": "boolean",
-                    "default": false,
                     "description": "Whether to include evcodes in the results.",
                     "help_text": "This can decrease performance and make the query slower. See https://rdrr.io/cran/gprofiler2/man/gost.html"
                 },
@@ -1043,13 +1007,11 @@
                 },
                 "shinyngs_shinyapps_account": {
                     "type": "string",
-                    "default": "null",
                     "description": "Your shinyapps.io account name",
                     "fa_icon": "fas fa-user"
                 },
                 "shinyngs_shinyapps_app_name": {
                     "type": "string",
-                    "default": "null",
                     "description": "The name of the app to push to in your shinyapps.io account",
                     "fa_icon": "fas fa-file-signature"
                 }
@@ -1064,7 +1026,6 @@
             "properties": {
                 "gene_sets_files": {
                     "type": "string",
-                    "default": "null",
                     "description": "Gene sets in GMT or GMX-format; for GSEA: multiple comma-separated input files in either format are possible. For gprofiler2: A single file in GMT format is possible; this has lowest priority and will be overridden by --gprofiler2_token and --gprofiler2_organism.",
                     "fa_icon": "fas fa-bars"
                 }
@@ -1112,13 +1073,11 @@
                 },
                 "report_title": {
                     "type": "string",
-                    "default": "null",
                     "fa_icon": "fas fa-heading",
                     "description": "A title for reporting outputs"
                 },
                 "report_author": {
                     "type": "string",
-                    "default": "null",
                     "fa_icon": "fas fa-user-edit",
                     "description": "An author for reporting outputs"
                 },
@@ -1129,7 +1088,6 @@
                 },
                 "report_description": {
                     "type": "string",
-                    "default": "null",
                     "fa_icon": "fas fa-feather",
                     "description": "A description for reporting outputs"
                 },
@@ -1301,6 +1259,32 @@
                     "hidden": true
                 }
             }
+        },
+        "decoupler_params": {
+            "title": "Decoupler params",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "decoupler_run": {
+                    "type": "boolean",
+                    "description": "Set to run DECOUPLER"
+                },
+                "network_decoupler": {
+                    "type": "string",
+                    "description": "Path to TSV file containing network file for decoupler",
+                    "format": "file-path",
+                    "mimetype": "text/tsv",
+                    "pattern": "^\\S+\\.(tsv)$"
+                },
+                "decoupler_min_n": {
+                    "type": "integer",
+                    "default": 5,
+                    "description": "Removes sources of a net with less than min_n targets",
+                    "minimum": 1,
+                    "help_text": ""
+                }
+            }
         }
     },
     "allOf": [
@@ -1363,6 +1347,9 @@
         },
         {
             "$ref": "#/$defs/generic_options"
+        },
+        {
+            "$ref": "#/$defs/decoupler_params"
         }
     ]
 }
