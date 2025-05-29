@@ -1270,19 +1270,18 @@
                     "type": "boolean",
                     "description": "Set to run DECOUPLER"
                 },
-                "network_decoupler": {
+                "decoupler_network": {
                     "type": "string",
                     "description": "Path to TSV file containing network file for decoupler",
+                    "pattern": "^\\\\S+\\\\.(tsv)$",
                     "format": "file-path",
-                    "mimetype": "text/tsv",
-                    "pattern": "^\\S+\\.(tsv)$"
+                    "mimetype": "text/tsv"
                 },
                 "decoupler_min_n": {
                     "type": "integer",
                     "default": 5,
                     "description": "Removes sources of a net with less than min_n targets",
-                    "minimum": 1,
-                    "help_text": ""
+                    "minimum": 1
                 }
             }
         }

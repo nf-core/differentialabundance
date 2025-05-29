@@ -640,7 +640,7 @@ workflow DIFFERENTIALABUNDANCE {
             [new_meta, file]
         }
         ch_gtf = file(params.gtf)
-        ch_network_file = file(params.network_decoupler, checkIfExists:true)
+        ch_network_file = file(params.decoupler_network, checkIfExists:true)
         DECOUPLER(
             ch_differential_results_with_contrast, ch_network_file, ch_gtf
         )

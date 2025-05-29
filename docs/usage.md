@@ -377,7 +377,7 @@ Decoupler needs a matrix (mat) of molecular readouts (gene expression, logFC, p-
 
 - The matrix will be taken from the results of the differential expression analysis performed by DESeq2, limma, propr, or variancePartition.
 
-- The network file must be provided explicitly via the '--network_decoupler' parameter. This file should be in long format and contain at least the source and target columns, with optional weight and sign columns describing the strength and direction of each interaction.
+- The network file must be provided explicitly via the '--decoupler_network' parameter. This file should be in long format and contain at least the source and target columns, with optional weight and sign columns describing the strength and direction of each interaction.
 
 ### Parameters
 
