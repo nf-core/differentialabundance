@@ -393,11 +393,11 @@ Example: setting `--decoupler_min_n 5` will ensure that only regulators with at 
 
 You can obtain regulatory networks from well-established databases and tools. Common examples include:
 
-- DoRothEA – transcription factor-target interactions (TFs)
+- DoRothEA – transcription factor-target interactions (TFs) [DoRothEA](https://www.bioconductor.org/packages/release/data/experiment/html/dorothea.html)
 
-- CollecTRI – curated transcriptional regulatory interactions (TFs)
+- CollecTRI – curated transcriptional regulatory interactions (TFs) [CollectTRI] (https://github.com/saezlab/CollecTRI)
 
-- PROGENy – pathway-responsive gene signatures (pathways)
+- PROGENy – pathway-responsive gene signatures (pathways) [PROGENy] (https://saezlab.github.io/progeny/)
 
 If you want to see the full list of available methods and functions, refer to the functions's [official guide] (https://decoupler-py.readthedocs.io/en/latest/notebooks/benchmark.html#Multiple-networks).
 
