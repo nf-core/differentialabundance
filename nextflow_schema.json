@@ -1273,7 +1273,7 @@
                 "decoupler_network": {
                     "type": "string",
                     "description": "Path to TSV file containing network file for decoupler",
-                    "pattern": "^\\\\S+\\\\.(tsv)$",
+                    "pattern": "^\\S+\\.(tsv)$",
                     "format": "file-path",
                     "mimetype": "text/tsv"
                 },
