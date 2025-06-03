@@ -88,7 +88,7 @@ if parsed_args.ensembl_ids.upper() == "TRUE":
         sys.exit(1)
 
 if parsed_args.transpose.upper() == "TRUE":
-    mat = mat[[parsed_args.column]].T.rename(index={parsed_args.column: "${meta.contrast}"})
+    mat = mat[[parsed_args.column]].T.rename(index={parsed_args.column: "${meta.id}"})
 
 parsedargs = {'args': {}}
 parsedargs['min_n'] = parsed_args.min_n
@@ -101,7 +101,7 @@ results = dc.decouple(
 )
 
 for result in results:
-    results[result].to_csv("${meta.contrast}" + "_" + result + "__decoupler.tsv", sep="\t")
+    results[result].to_csv("${task.ext.prefix}" + "_" + result + "_decoupler.tsv", sep="\t")
 
 ## VERSIONS FILE
 with open('versions.yml', 'a') as version_file:
