@@ -604,19 +604,28 @@ workflow DIFFERENTIALABUNDANCE {
     ch_versions = ch_versions
         .mix(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.versions)
 
-    // Run DECOUPLER
+        // Run DECOUPLER
     if (params.decoupler_run && params.gtf){
         log.warn "Decoupler is only supported for human or mouse datasets. Please ensure your organism is compatible before enabling this module."
-        //Add contrast label to results metadata
-        ch_differential_results_with_contrast = ch_differential_results.map { meta, file ->
-            def new_meta = meta + [contrast: meta.id]
-            [new_meta, file]
-        }
+
         ch_gtf = file(params.gtf)
         ch_network_file = file(params.decoupler_network, checkIfExists:true)
+        ch_differential_results_for_module = ch_differential_results.map { key, meta, file ->
+
+            def new_meta = [
+                id: meta.id,
+                method_differential: meta.params.differential_method
+            ]
+
+            [ new_meta, file ]
+        }
+
         DECOUPLER(
-            ch_differential_results_with_contrast, ch_network_file, ch_gtf
+            ch_differential_results_for_module,
+            ch_network_file,
+            ch_gtf
         )
+
         ch_versions = ch_versions
             .mix(DECOUPLER.out.versions)
     }else if (params.decoupler_run && !params.gtf){
