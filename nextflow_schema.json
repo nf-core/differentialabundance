@@ -5,8 +5,8 @@
     "description": "Differential abundance analysis",
     "type": "object",
     "$defs": {
-        "input_output_options": {
-            "title": "Input/output options",
+        "base_input_output_options": {
+            "title": "[base] Input/output options",
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
@@ -68,11 +68,17 @@
                     "default": "counts",
                     "description": "Type of abundance measure used, platform-dependent",
                     "fa_icon": "fas fa-keyboard"
+                },
+                "round_digits": {
+                    "type": "integer",
+                    "default": 4,
+                    "description": "To how many digits should numeric output in different modules be rounded? If -1 or null, will not round.",
+                    "help_text": "This affects output from the following modules (both their tabular output and their result sections in the report): proteus, limma, deseq2, gprofiler2."
                 }
             }
         },
-        "abundance_values": {
-            "title": "Abundance values",
+        "base_abundance_values": {
+            "title": "[base] Abundance values",
             "type": "object",
             "description": "Ways of providing your abundance values",
             "default": "",
@@ -94,22 +100,20 @@
                 },
                 "affy_cel_files_archive": {
                     "type": "string",
-                    "default": "null",
                     "description": "Alternative to matrix: a compressed CEL files archive such as often found in GEO",
                     "fa_icon": "fas fa-file-archive",
                     "help_text": "Use this option to provide a raw archive of CEL files from Affymetrix arrays. Will be ignored if a matrix is specified."
                 },
                 "querygse": {
                     "type": "string",
-                    "default": "null",
                     "description": "Use SOFT files from GEO by providing the GSE study identifier",
                     "fa_icon": "fas fa-keyboard",
                     "help_text": "Use this option to provide a GSE study identifier."
                 }
             }
         },
-        "observations_options": {
-            "title": "Observations (e.g. samples) options",
+        "base_observations_e_g_samples_options": {
+            "title": "[base] Observations (e.g. samples) options",
             "type": "object",
             "description": "",
             "default": "",
@@ -136,8 +140,8 @@
             "required": ["observations_id_col", "observations_type"],
             "fa_icon": "fas fa-eye"
         },
-        "features_options": {
-            "title": "Features options",
+        "base_features_options": {
+            "title": "[base] Features options",
             "type": "object",
             "description": "Options related to features",
             "default": "",
@@ -188,25 +192,33 @@
                     "description": "This parameter allows you to supply your own feature annotations. These can often be automatically derived from the GTF used upstream for RNA-seq, or from the Bioconductor annotation package (for affy arrays). ",
                     "help_text": "This parameter allows you to supply your own feature annotations. These can often be automatically derived from the GTF used upstream for RNA-seq, or from the Bioconductor annotation package (for affy arrays). ",
                     "fa_icon": "fas fa-align-justify"
-                },
-                "features_gtf_feature_type": {
-                    "type": "string",
-                    "default": "transcript",
-                    "description": "Where a GTF file is supplied, which feature type to use",
-                    "fa_icon": "fas fa-keyboard"
-                },
-                "features_gtf_table_first_field": {
-                    "type": "string",
-                    "default": "gene_id",
-                    "description": "Where a GTF file is supplied, which field should go first in the converted output table",
-                    "fa_icon": "fas fa-fast-backward"
                 }
             },
             "required": ["features_id_col", "features_name_col", "features_type"],
             "fa_icon": "fas fa-sitemap"
         },
-        "affy_input_options": {
-            "title": "Affy input options",
+        "base_paramsheet_options": {
+            "title": "[base] Paramsheet options",
+            "type": "object",
+            "description": "Options related to the use of paramsheet",
+            "default": "",
+            "properties": {
+                "paramset_name": {
+                    "type": "string",
+                    "description": "Name of the paramset (as specified in paramsheet) to run"
+                },
+                "paramsheet": {
+                    "type": "string",
+                    "description": "Path to a paramsheet file",
+                    "help_text": "A CSV file that defines a nextflow config per row.",
+                    "pattern": "^\\S+\\.csv$",
+                    "format": "file-path",
+                    "mimetype": "text/csv"
+                }
+            }
+        },
+        "preprocessing_affy_input_options": {
+            "title": "[preprocessing] Affy input options",
             "type": "object",
             "description": "Options for processing of affy arrays with justRMA()",
             "default": "",
@@ -237,7 +249,6 @@
                 },
                 "affy_cdfname": {
                     "type": "string",
-                    "default": "null",
                     "description": "Used to specify the name of an alternative cdf package. If set to NULL, then the usual cdf package based on Affymetrix' mappings will be used.",
                     "fa_icon": "fas fa-signature"
                 },
@@ -265,8 +276,38 @@
             },
             "fa_icon": "fas fa-table"
         },
-        "proteus_input_options": {
-            "title": "Proteus input options",
+        "preprocessing_gtf_parsing_options": {
+            "title": "[preprocessing] GTF parsing options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "gtf": {
+                    "type": "string",
+                    "description": "Genome annotation file in GTF format",
+                    "pattern": "^\\S+\\.gtf(\\.gz)?",
+                    "format": "file-path",
+                    "exists": true,
+                    "mimetype": "text/plain",
+                    "help_text": "\"This parameter is *mandatory* if `--genome` is not specified.\"",
+                    "fa_icon": "fas fa-book"
+                },
+                "features_gtf_feature_type": {
+                    "type": "string",
+                    "default": "transcript",
+                    "description": "Where a GTF file is supplied, which feature type to use",
+                    "fa_icon": "fas fa-keyboard"
+                },
+                "features_gtf_table_first_field": {
+                    "type": "string",
+                    "default": "gene_id",
+                    "description": "Where a GTF file is supplied, which field should go first in the converted output table",
+                    "fa_icon": "fas fa-fast-backward"
+                }
+            }
+        },
+        "preprocessing_proteus_input_options": {
+            "title": "[preprocessing] Proteus input options",
             "type": "object",
             "description": "Options for processing of proteomics MaxQuant tables with the Proteus R package",
             "default": "",
@@ -306,21 +347,21 @@
             },
             "fa_icon": "fas fa-table"
         },
-        "filtering": {
-            "title": "Filtering",
+        "preprocessing_filtering": {
+            "title": "[preprocessing] Filtering",
             "type": "object",
             "description": "Options related to filtering upstream of differential analysis",
             "default": "",
             "properties": {
                 "filtering_min_abundance": {
                     "type": "number",
-                    "default": 1.0,
+                    "default": 1,
                     "description": "Minimum abundance value",
                     "fa_icon": "fas fa-compress-alt"
                 },
                 "filtering_min_samples": {
                     "type": "number",
-                    "default": 1.0,
+                    "default": 1,
                     "description": "Minimum observations that must pass the threshold to retain the row/ feature (e.g. gene).",
                     "fa_icon": "fas fa-compress-alt"
                 },
@@ -350,8 +391,33 @@
             "fa_icon": "fas fa-filter",
             "required": ["filtering_min_abundance"]
         },
-        "exploratory_analysis": {
-            "title": "Exploratory analysis",
+        "preprocessing_immunedeconv": {
+            "title": "[preprocessing] IMMUNEDECONV",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "immunedeconv_run": {
+                    "type": "boolean",
+                    "description": "Set to run IMMUNEDECONV",
+                    "fa_icon": "fas fa-running"
+                },
+                "immunedeconv_method": {
+                    "type": "string",
+                    "description": "Set method to run with IMMUNEDECONV. Available options can be found in 'https://omnideconv.org/immunedeconv/articles/immunedeconv.html'",
+                    "default": "quantiseq",
+                    "fa_icon": "fas fa-running"
+                },
+                "immunedeconv_function": {
+                    "type": "string",
+                    "description": "Set function to run with IMMUNEDECONV. Available options can be found in 'https://omnideconv.org/immunedeconv/articles/immunedeconv.html'",
+                    "default": "deconvolute",
+                    "fa_icon": "fas fa-running"
+                }
+            }
+        },
+        "exploratory_exploratory_analysis": {
+            "title": "[exploratory] Exploratory analysis",
             "type": "object",
             "description": "Options related to data exploration",
             "default": "",
@@ -411,7 +477,8 @@
                 "exploratory_log2_assays": {
                     "type": "string",
                     "description": "Of which assays to compute the log2 during exploratory analysis. Not necessary for maxquant data as this is controlled by the pipeline.",
-                    "help_text": "Either comma-separated of assay positions, e.g. '[1,2,3]', or empty list '[]' to not log any assay. If not set, will guess which assays need to be logged (those with a maximum > 20)."
+                    "help_text": "Either comma-separated of assay positions, e.g. '[1,2,3]', or empty list '[]' to not log any assay. If not set, will guess which assays need to be logged (those with a maximum > 20).",
+                    "default": "raw,normalised"
                 },
                 "exploratory_palette_name": {
                     "type": "string",
@@ -430,16 +497,17 @@
                 "exploratory_palette_name"
             ]
         },
-        "differential_analysis": {
-            "title": "Differential analysis",
+        "differential_differential_analysis": {
+            "title": "[differential] Differential analysis",
             "type": "object",
             "description": "Options related to differential operations",
             "default": "",
             "properties": {
-                "differential_use_limma": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-adjust",
-                    "description": "If true limma will be used for all study_types"
+                "differential_method": {
+                    "type": "string",
+                    "description": "Differential analysis method",
+                    "enum": ["deseq2", "limma", "dream"],
+                    "default": "deseq2"
                 },
                 "differential_file_suffix": {
                     "type": "string",
@@ -472,13 +540,13 @@
                 },
                 "differential_min_fold_change": {
                     "type": "number",
-                    "default": 2.0,
+                    "default": 2,
                     "description": "Minimum fold change used to calculate differential feature numbers",
                     "fa_icon": "fas fa-angle-double-down"
                 },
                 "differential_max_pval": {
                     "type": "number",
-                    "default": 1.0,
+                    "default": 1,
                     "description": "Maximum p value used to calculate differential feature numbers",
                     "fa_icon": "fas fa-angle-double-up"
                 },
@@ -524,8 +592,8 @@
             ],
             "fa_icon": "fas fa-adjust"
         },
-        "deseq2_specific_options_rna_seq_only": {
-            "title": "DESeq2 specific options (RNA-seq only)",
+        "differential_deseq2_specific_options_rna_seq_only": {
+            "title": "[differential] DESeq2 specific options (RNA-seq only)",
             "type": "object",
             "description": "",
             "default": "",
@@ -648,8 +716,8 @@
             },
             "fa_icon": "fas fa-adjust"
         },
-        "limma_specific_options": {
-            "title": "Limma specific options",
+        "differential_limma_specific_options": {
+            "title": "[differential] Limma specific options",
             "type": "object",
             "description": "",
             "default": "",
@@ -661,19 +729,16 @@
                 },
                 "limma_spacing": {
                     "type": "string",
-                    "default": "null",
                     "fa_icon": "fas fa-people-arrows",
                     "description": "passed to lmFit(), positive integer giving the spacing between duplicate occurrences of the same probe, spacing=1 for consecutive rows."
                 },
                 "limma_block": {
                     "type": "string",
-                    "default": "null",
                     "fa_icon": "fas fa-cube",
                     "description": "Sample sheet column to be used to derive a vector or factor specifying a blocking variable on the arrays"
                 },
                 "limma_correlation": {
                     "type": "string",
-                    "default": "null",
                     "fa_icon": "fas fa-chart-line",
                     "description": "passed to lmFit(), the inter-duplicate or inter-technical replicate correlation"
                 },
@@ -735,56 +800,42 @@
                 },
                 "limma_p_value": {
                     "type": "number",
-                    "default": 1.0,
+                    "default": 1,
                     "description": "cutoff value for adjusted p-values. Only genes with lower p-values are listed.",
                     "fa_icon": "fas fa-angle-double-up"
                 },
                 "limma_use_voom": {
                     "type": "boolean",
                     "description": "Turns on and off usage of voom normalisation in the Limma module.",
-                    "default": false,
                     "fa_icon": "far fa-check-square"
                 }
             },
             "fa_icon": "fas fa-border-all"
         },
-        "immunedeconv": {
-            "title": "IMMUNEDECONV",
+        "functional_functional_analysis_options": {
+            "title": "[functional] Functional analysis options",
             "type": "object",
             "description": "",
             "default": "",
             "properties": {
-                "immunedeconv_run": {
-                    "type": "boolean",
-                    "description": "Set to run IMMUNEDECONV",
-                    "default": false,
-                    "fa_icon": "fas fa-running"
-                },
-                "immunedeconv_method": {
+                "functional_method": {
                     "type": "string",
-                    "description": "Set method to run with IMMUNEDECONV. Available options can be found in 'https://omnideconv.org/immunedeconv/articles/immunedeconv.html'",
-                    "default": "quantiseq",
-                    "fa_icon": "fas fa-running"
+                    "description": "Functional analysis method",
+                    "enum": ["null", "gsea", "gprofiler2"]
                 },
-                "immunedeconv_function": {
+                "gene_sets_files": {
                     "type": "string",
-                    "description": "Set function to run with IMMUNEDECONV. Available options can be found in 'https://omnideconv.org/immunedeconv/articles/immunedeconv.html'",
-                    "default": "deconvolute",
-                    "fa_icon": "fas fa-running"
+                    "description": "Gene sets in GMT or GMX-format; for GSEA: multiple comma-separated input files in either format are possible. For gprofiler2: A single file in GMT format is possible; this has lowest priority and will be overridden by --gprofiler2_token and --gprofiler2_organism.",
+                    "fa_icon": "fas fa-bars"
                 }
             }
         },
-        "gsea": {
-            "title": "GSEA",
+        "functional_gsea": {
+            "title": "[functional] GSEA",
             "type": "object",
             "description": "",
             "default": "",
             "properties": {
-                "gsea_run": {
-                    "type": "boolean",
-                    "description": "Set to run GSEA to infer differential gene sets in contrasts",
-                    "fa_icon": "fas fa-running"
-                },
                 "gsea_permute": {
                     "type": "string",
                     "default": "phenotype",
@@ -910,17 +961,12 @@
             },
             "fa_icon": "fas fa-layer-group"
         },
-        "gprofiler2": {
-            "title": "gprofiler2",
+        "functional_gprofiler2": {
+            "title": "[functional] gprofiler2",
             "type": "object",
             "description": "",
             "default": "",
             "properties": {
-                "gprofiler2_run": {
-                    "type": "boolean",
-                    "description": "Set to run gprofiler2 and do a pathway enrichment analysis.",
-                    "fa_icon": "fas fa-running"
-                },
                 "gprofiler2_organism": {
                     "type": "string",
                     "description": "Short name of the organism that is analyzed, e.g. hsapiens for homo sapiens.",
@@ -934,7 +980,6 @@
                 },
                 "gprofiler2_measure_underrepresentation": {
                     "type": "boolean",
-                    "default": false,
                     "description": "Should underrepresentation be measured instead of overrepresentation?",
                     "help_text": "Default false; if true, will measure overrepresentation."
                 },
@@ -942,7 +987,8 @@
                     "type": "string",
                     "description": "The method that should be used for multiple testing correction.",
                     "help_text": "One of gSCS (synonyms: analytical, g_SCS), fdr (synonyms: false_discovery_rate), bonferroni.",
-                    "enum": ["gSCS", "analytical", "g_SCS", "fdr", "false_discovery_rate", "bonferroni"]
+                    "enum": ["gSCS", "analytical", "g_SCS", "fdr", "false_discovery_rate", "bonferroni"],
+                    "default": "gSCS"
                 },
                 "gprofiler2_sources": {
                     "type": "string",
@@ -951,7 +997,6 @@
                 },
                 "gprofiler2_evcodes": {
                     "type": "boolean",
-                    "default": false,
                     "description": "Whether to include evcodes in the results.",
                     "help_text": "This can decrease performance and make the query slower. See https://rdrr.io/cran/gprofiler2/man/gost.html"
                 },
@@ -969,7 +1014,8 @@
                     "type": "string",
                     "pattern": "^\\S+\\.(csv|tsv|txt)$|auto|false",
                     "description": "Path to CSV/TSV/TXT file that should be used as a background for the query; alternatively, 'auto' (default) or 'false'.",
-                    "help_text": "It is advisable to run pathway analysis with a set of background genes describing which genes exist in the target organism in the first place so that other genes are not at all considered. This parameter is by default set to 'auto', meaning that the filtered input abundance matrix will be used. Alternatively, you can provide a CSV/TSV table where one column contains gene IDs and the other rows contain abundance values, or a TXT file that simply contains one gene ID per line. If a custom CSV/TSV is used, all genes will be considered which had at least some abundance (i.e. sum of all abundance values in a row > 0). Set to 'false' if you do not want to use a background."
+                    "help_text": "It is advisable to run pathway analysis with a set of background genes describing which genes exist in the target organism in the first place so that other genes are not at all considered. This parameter is by default set to 'auto', meaning that the filtered input abundance matrix will be used. Alternatively, you can provide a CSV/TSV table where one column contains gene IDs and the other rows contain abundance values, or a TXT file that simply contains one gene ID per line. If a custom CSV/TSV is used, all genes will be considered which had at least some abundance (i.e. sum of all abundance values in a row > 0). Set to 'false' if you do not want to use a background.",
+                    "default": "auto"
                 },
                 "gprofiler2_background_column": {
                     "type": "string",
@@ -997,8 +1043,8 @@
             },
             "fa_icon": "fas fa-layer-group"
         },
-        "shiny_app_settings": {
-            "title": "Shiny app settings",
+        "shiny_shiny_app_settings": {
+            "title": "[shiny] Shiny app settings",
             "type": "object",
             "description": "",
             "default": "",
@@ -1017,35 +1063,19 @@
                 },
                 "shinyngs_shinyapps_account": {
                     "type": "string",
-                    "default": "null",
                     "description": "Your shinyapps.io account name",
                     "fa_icon": "fas fa-user"
                 },
                 "shinyngs_shinyapps_app_name": {
                     "type": "string",
-                    "default": "null",
                     "description": "The name of the app to push to in your shinyapps.io account",
                     "fa_icon": "fas fa-file-signature"
                 }
             },
             "fa_icon": "fab fa-app-store-ios"
         },
-        "gene_set_options": {
-            "title": "Options related to gene set analysis",
-            "type": "object",
-            "fa_icon": "fas fa-cogs",
-            "description": "Files and options used by gene set analysis modules.",
-            "properties": {
-                "gene_sets_files": {
-                    "type": "string",
-                    "default": "null",
-                    "description": "Gene sets in GMT or GMX-format; for GSEA: multiple comma-separated input files in either format are possible. For gprofiler2: A single file in GMT format is possible; this has lowest priority and will be overridden by --gprofiler2_token and --gprofiler2_organism.",
-                    "fa_icon": "fas fa-bars"
-                }
-            }
-        },
-        "reporting_options": {
-            "title": "Reporting options",
+        "report_reporting_options": {
+            "title": "[report] Reporting options",
             "type": "object",
             "description": "",
             "default": "",
@@ -1086,13 +1116,11 @@
                 },
                 "report_title": {
                     "type": "string",
-                    "default": "null",
                     "fa_icon": "fas fa-heading",
                     "description": "A title for reporting outputs"
                 },
                 "report_author": {
                     "type": "string",
-                    "default": "null",
                     "fa_icon": "fas fa-user-edit",
                     "description": "An author for reporting outputs"
                 },
@@ -1103,7 +1131,6 @@
                 },
                 "report_description": {
                     "type": "string",
-                    "default": "null",
                     "fa_icon": "fas fa-feather",
                     "description": "A description for reporting outputs"
                 },
@@ -1111,12 +1138,6 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Whether to generate a scree plot in the report"
-                },
-                "report_round_digits": {
-                    "type": "integer",
-                    "default": 4,
-                    "description": "To how many digits should numeric output in different modules be rounded? If -1, will not round.",
-                    "help_text": "This affects output from the following modules (both their tabular output and their result sections in the report): proteus, gprofiler2."
                 }
             },
             "required": ["report_file", "logo_file", "css_file"]
@@ -1132,16 +1153,6 @@
                     "description": "Name of iGenomes reference.",
                     "fa_icon": "fas fa-book",
                     "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details."
-                },
-                "gtf": {
-                    "type": "string",
-                    "description": "Genome annotation file in GTF format",
-                    "pattern": "^\\S+\\.gtf(\\.gz)?",
-                    "format": "file-path",
-                    "exists": true,
-                    "mimetype": "text/plain",
-                    "help_text": "\"This parameter is *mandatory* if `--genome` is not specified.\"",
-                    "fa_icon": "fas fa-book"
                 },
                 "igenomes_ignore": {
                     "type": "boolean",
@@ -1304,55 +1315,61 @@
     },
     "allOf": [
         {
-            "$ref": "#/$defs/input_output_options"
+            "$ref": "#/$defs/base_input_output_options"
         },
         {
-            "$ref": "#/$defs/abundance_values"
+            "$ref": "#/$defs/base_abundance_values"
         },
         {
-            "$ref": "#/$defs/observations_options"
+            "$ref": "#/$defs/base_observations_e_g_samples_options"
         },
         {
-            "$ref": "#/$defs/features_options"
+            "$ref": "#/$defs/base_features_options"
         },
         {
-            "$ref": "#/$defs/affy_input_options"
+            "$ref": "#/$defs/base_paramsheet_options"
         },
         {
-            "$ref": "#/$defs/proteus_input_options"
+            "$ref": "#/$defs/preprocessing_affy_input_options"
         },
         {
-            "$ref": "#/$defs/filtering"
+            "$ref": "#/$defs/preprocessing_gtf_parsing_options"
         },
         {
-            "$ref": "#/$defs/exploratory_analysis"
+            "$ref": "#/$defs/preprocessing_proteus_input_options"
         },
         {
-            "$ref": "#/$defs/differential_analysis"
+            "$ref": "#/$defs/preprocessing_filtering"
         },
         {
-            "$ref": "#/$defs/deseq2_specific_options_rna_seq_only"
+            "$ref": "#/$defs/preprocessing_immunedeconv"
         },
         {
-            "$ref": "#/$defs/limma_specific_options"
+            "$ref": "#/$defs/exploratory_exploratory_analysis"
         },
         {
-            "$ref": "#/$defs/immunedeconv"
+            "$ref": "#/$defs/differential_differential_analysis"
         },
         {
-            "$ref": "#/$defs/gsea"
+            "$ref": "#/$defs/differential_deseq2_specific_options_rna_seq_only"
         },
         {
-            "$ref": "#/$defs/gprofiler2"
+            "$ref": "#/$defs/differential_limma_specific_options"
         },
         {
-            "$ref": "#/$defs/shiny_app_settings"
+            "$ref": "#/$defs/functional_functional_analysis_options"
         },
         {
-            "$ref": "#/$defs/gene_set_options"
+            "$ref": "#/$defs/functional_gsea"
         },
         {
-            "$ref": "#/$defs/reporting_options"
+            "$ref": "#/$defs/functional_gprofiler2"
+        },
+        {
+            "$ref": "#/$defs/shiny_shiny_app_settings"
+        },
+        {
+            "$ref": "#/$defs/report_reporting_options"
         },
         {
             "$ref": "#/$defs/reference_genome_options"

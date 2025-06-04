@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- [[#443](https://github.com/nf-core/differentialabundance/pull/443)] - Add toolsheet-related implementations. ([@suzannejin](https://github.com/suzannejin), review by [@pinin4fjords](https://github.com/pinin4fjords), [@mirpedrol](https://github.com/mirpedrol) and [@JoseEspinosa](https://github.com/JoseEspinosa))
 - [[#450](https://github.com/nf-core/differentialabundance/pull/441)] - Allow usage of strings for makeContrasts in DREAM. ([@atrigila](https://github.com/atrigila), review by [@pinin4fjords](https://github.com/pinin4fjords), [@suzannejin](https://github.com/suzannejin) and [@grst](https://github.com/grst)).
 - [[#441](https://github.com/nf-core/differentialabundance/pull/441)] - Add dream differential module. ([@nschcolnicov](https://github.com/nschcolnicov) and [@alanmmobbs93](https://github.com/alanmobbs93), review by [@pinin4fjords](https://github.com/pinin4fjords), [@suzannejin](https://github.com/suzannejin) and [@grst](https://github.com/grst)).
 - [[#440](https://github.com/nf-core/differentialabundance/pull/440)] - Add handling for formula based contrasts. ([@nschcolnicov](https://github.com/nschcolnicov), review by [@pinin4fjords](https://github.com/pinin4fjords))
@@ -38,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [[#448](https://github.com/nf-core/differentialabundance/pull/448)] - Simplify toolsheet handling and restructure workflow to use paramset in meta. ([@pinin4fjords](https://github.com/pinin4fjords), review by [@suzannejin](https://github.com/suzannejin) and [@grst](https://github.com/grst))
 - [[#431](https://github.com/nf-core/differentialabundance/pull/431)] - Replace the calls to differential and functional analysis modules by subworkflows. ([@suzannejin](https://github.com/suzannejin), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#410](https://github.com/nf-core/differentialabundance/pull/410)] - Update contrasts file format to allow yaml ([@nschcolnicov](https://github.com/nschcolnicov), review by [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#374](https://github.com/nf-core/differentialabundance/pull/374)] - Update all modules and subworkflows ([@nschcolnicov](https://github.com/nschcolnicov), review by [@pinin4fjords](https://github.com/pinin4fjords)).

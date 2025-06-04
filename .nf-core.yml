@@ -1,6 +1,8 @@
 lint:
   files_exist:
     - assets/multiqc_config.yml
+  files_unchanged:
+    - .github/CONTRIBUTING.md
   multiqc_config: false
   nextflow_config:
     - config_defaults:

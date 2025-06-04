@@ -26,7 +26,7 @@ params:
     report_author: NULL,
     report_description: NULL,
     report_scree: NULL
-    report_round_digits: NULL
+    round_digits: NULL
     observations_type: NULL
     observations: NULL                                          # GSE156533.samplesheet.csv
     observations_id_col: NULL
@@ -90,6 +90,7 @@ params:
     filtering_min_abundance: 1
     filtering_min_proportion: NULL
     filtering_grouping_var: NULL
+    differential_method: NULL
     differential_file_suffix: NULL
     differential_feature_id_column: NULL
     differential_feature_name_column: NULL
@@ -118,7 +119,7 @@ params:
     deseq2_cores: NULL
     deseq2_vs_blind: NULL
     deseq2_vst_nsub: NULL
-    gsea_run: false
+    functional_method: NULL
     gsea_nperm: NULL
     gsea_permute: NULL
     gsea_scoring_scheme: NULL
@@ -137,7 +138,6 @@ params:
     gsea_save_rnd_lists: NULL
     gsea_zip_report: NULL
     gsea_chip_file: NULL
-    gprofiler2_run: false
     gprofiler2_organism: NULL
     gprofiler2_significant: NULL
     gprofiler2_measure_underrepresentation: NULL
@@ -176,7 +176,7 @@ round_dataframe_columns <- function(df, columns = NULL, digits = -1) {
     if (is.null(columns)) {
         columns <- colnames(df)[(unlist(lapply(df, is.numeric), use.names=F))]    # extract only numeric columns for rounding
     }
-    df[,columns] <- format(data.frame(df[, columns], check.names = FALSE), scientific=T, digits=params$report_round_digits)
+    df[,columns] <- format(data.frame(df[, columns], check.names = FALSE), scientific=T, digits=params$round_digits)
     # Convert columns back to numeric
 
     for (c in columns) {
@@ -364,14 +364,12 @@ treatment-mCherry-hND6-batcheffect.deseq2.results.tsv
 ```{r, echo=FALSE}
 differential_file_suffix <- params$differential_file_suffix
 if (is.null(differential_file_suffix)) {
-    differential_file_suffix <- ifelse(params$study_type %in% c('rnaseq'), ".deseq2.results.tsv", ".limma.results.tsv")
+    differential_file_suffix <- paste0(".", params$differential_method, ".results.tsv")
 }
 differential_files <- lapply(contrasts$id, function(d){
     file.path(params$input_dir, paste0(gsub(' |;', '_', d), '_', params$study_name, differential_file_suffix))
 })
-differential_names <- lapply(contrasts$id, function(d){
-    paste0(gsub(' |;', '_', d), '_', params$study_name)
-})
+differential_names <- paste0(contrasts$id, '_', params$study_name)
 
 # Initialize vector to store warning messages before merging tables
 warnings_list <- c()
@@ -535,7 +533,7 @@ contrasts_to_print <- contrasts
 colnames(contrasts_to_print) <- prettifyVariablename(colnames(contrasts_to_print))
 
 # Add design/model formulae to report
-de_tool <- ifelse(params$study_type %in% c('rnaseq'), "deseq2", "limma")
+de_tool <- params$differential_method
 contrasts_to_print$model <- sapply(contrasts_to_print$Id, function(id) {
     model_file <- paste0(id, ".", de_tool, ".model.txt")
     if (file.exists(model_file)) {
@@ -934,7 +932,7 @@ for (i in 1:nrow(contrasts)){
         colnames(contrast_de) <- prettifyVariablename(colnames(contrast_de))
 
         if (nrow(contrast_de) > 0){
-            contrast_de <- round_dataframe_columns(contrast_de, digits=params$report_round_digits)
+            contrast_de <- round_dataframe_columns(contrast_de, digits=params$round_digits)
             print( htmltools::tagList(datatable(contrast_de, caption = paste('Differential genes', dir, 'in', contrast_descriptions[i], " (check", differential_files[[i]], "for more detail)"), rownames = FALSE) ))
 
         if ("Gene biotype" %in% colnames(contrast_de)) {
@@ -969,56 +967,51 @@ for (i in 1:nrow(contrasts)){
 <!-- Gene set analysis results -->
 
 ```{r, echo=FALSE, results='asis'}
-possible_gene_set_methods <- c('gsea', 'gprofiler2')
-if (any(unlist(params[paste0(possible_gene_set_methods, '_run')]))){
+if (!is.null(params$functional_method)){
     cat("\n### Gene set analysis\n")
+    cat("\n#### ", toupper(params$functional_method) ," {.tabset}\n")
 
-    for (gene_set_method in possible_gene_set_methods){
-        if (unlist(params[paste0(gene_set_method, '_run')])){
-        cat("\n#### ", toupper(gene_set_method) ," {.tabset}\n")
-        if (gene_set_method == 'gsea') {
-            for (gmt_file in simpleSplit(params$gene_sets_files)) {
-            gmt_name <- basename(tools::file_path_sans_ext(gmt_file))
-            cat("\n##### ", gmt_name ," {.tabset}\n")
+    if (params$functional_method == 'gsea') {
+        for (gmt_file in simpleSplit(params$gene_sets_files)) {
+        gmt_name <- basename(tools::file_path_sans_ext(gmt_file))
+        cat("\n##### ", gmt_name ," {.tabset}\n")
 
-            reference_gsea_tables <- paste0(differential_names, ".", gmt_name, '.gsea_report_for_', contrasts$reference, '.tsv')
-            target_gsea_tables <- paste0(differential_names, ".", gmt_name, '.gsea_report_for_', contrasts$target, '.tsv')
-            for (i in 1:nrow(contrasts)){
-                cat("\n###### ", contrast_descriptions[i], "\n")
-                target_gsea_results <- read_metadata(target_gsea_tables[i])[,c(-2,-3)]
-                target_gsea_results <- round_dataframe_columns(target_gsea_results, digits=params$report_round_digits)
-                print( htmltools::tagList(datatable(target_gsea_results, caption = paste0("\nTarget (", contrasts$target[i], ")\n"), rownames = FALSE) ))
-                ref_gsea_results <- read_metadata(reference_gsea_tables[i])[,c(-2,-3)]
-                ref_gsea_results <- round_dataframe_columns(ref_gsea_results, digits=params$report_round_digits)
-                print( htmltools::tagList(datatable(ref_gsea_results, caption = paste0("\nReference (", contrasts$reference[i], ")\n"), rownames = FALSE) ))
-            }
-            }
-
-        } else if (gene_set_method == 'gprofiler2') {
-
-            cat(paste0("\nThis section contains the results tables of the pathway analysis which was done with the R package gprofiler2. The differential fraction is the number of differential genes in a pathway divided by that pathway's size, i.e. the number of genes annotated for the pathway.",
-            ifelse(params$gprofiler2_significant, paste0(" Enrichment was only considered if significant, i.e. adjusted p-value <= ", params$gprofiler2_max_qval, "."), "Enrichment was also considered if not significant."), "\n"))
-
-            # Make sure to grab only non-empty files
-            for (name in differential_names) {
-                cat(paste0("\n##### ", name, "\n"))
-
-                table <- paste0(name, ".gprofiler2.all_enriched_pathways.tsv")
-                table_path <- file.path(params$input_dir, table)
-                if (!file.exists(table_path) || file.size(table_path) == 0){
-                    cat(paste0("No ", ifelse(params$gprofiler2_significant, "significantly", ""), " enriched pathways were found for this contrast."))
-                } else {
-                    all_enriched <- read.table(table_path, header=T, sep="\t", quote="\"")
-                    all_enriched <- data.frame("Pathway name" = all_enriched$term_name, "Pathway code" = all_enriched$term_id,
-                    "Differential features" = all_enriched$intersection_size, "Pathway size" = all_enriched$term_size,
-                    "Differential fraction" = (all_enriched$intersection_size/all_enriched$term_size),
-                    "Adjusted p value" = all_enriched$p_value, check.names = FALSE)
-                    all_enriched <- round_dataframe_columns(all_enriched, digits=params$report_round_digits)
-                    print(htmltools::tagList(datatable(all_enriched, caption = paste('Enriched pathways in', name, " (check", table, "for more detail)"), rownames = FALSE)))
-                }
-                cat("\n")
-            }
+        reference_gsea_tables <- paste0(differential_names, ".", gmt_name, '.gsea_report_for_', contrasts$reference, '.tsv')
+        target_gsea_tables <- paste0(differential_names, ".", gmt_name, '.gsea_report_for_', contrasts$target, '.tsv')
+        for (i in 1:nrow(contrasts)){
+            cat("\n###### ", contrast_descriptions[i], "\n")
+            target_gsea_results <- read_metadata(target_gsea_tables[i])[,c(-2,-3)]
+            target_gsea_results <- round_dataframe_columns(target_gsea_results, digits=params$round_digits)
+            print( htmltools::tagList(datatable(target_gsea_results, caption = paste0("\nTarget (", contrasts$target[i], ")\n"), rownames = FALSE) ))
+            ref_gsea_results <- read_metadata(reference_gsea_tables[i])[,c(-2,-3)]
+            ref_gsea_results <- round_dataframe_columns(ref_gsea_results, digits=params$round_digits)
+            print( htmltools::tagList(datatable(ref_gsea_results, caption = paste0("\nReference (", contrasts$reference[i], ")\n"), rownames = FALSE) ))
         }
+    }
+
+    } else if (params$functional_method == 'gprofiler2') {
+
+        cat(paste0("\nThis section contains the results tables of the pathway analysis which was done with the R package gprofiler2. The differential fraction is the number of differential genes in a pathway divided by that pathway's size, i.e. the number of genes annotated for the pathway.",
+        ifelse(params$gprofiler2_significant, paste0(" Enrichment was only considered if significant, i.e. adjusted p-value <= ", params$gprofiler2_max_qval, "."), "Enrichment was also considered if not significant."), "\n"))
+
+        # Make sure to grab only non-empty files
+        for (name in differential_names) {
+            cat(paste0("\n##### ", name, "\n"))
+
+            table <- paste0(name, ".gprofiler2.all_enriched_pathways.tsv")
+            table_path <- file.path(params$input_dir, table)
+            if (!file.exists(table_path) || file.size(table_path) == 0){
+                cat(paste0("No ", ifelse(params$gprofiler2_significant, "significantly", ""), " enriched pathways were found for this contrast."))
+            } else {
+                all_enriched <- read.table(table_path, header=T, sep="\t", quote="\"")
+                all_enriched <- data.frame("Pathway name" = all_enriched$term_name, "Pathway code" = all_enriched$term_id,
+                "Differential features" = all_enriched$intersection_size, "Pathway size" = all_enriched$term_size,
+                "Differential fraction" = (all_enriched$intersection_size/all_enriched$term_size),
+                "Adjusted p value" = all_enriched$p_value, check.names = FALSE)
+                all_enriched <- round_dataframe_columns(all_enriched, digits=params$round_digits)
+                print(htmltools::tagList(datatable(all_enriched, caption = paste('Enriched pathways in', name, " (check", table, "for more detail)"), rownames = FALSE)))
+            }
+            cat("\n")
         }
     }
 }
@@ -1066,7 +1059,7 @@ make_params_table('exploratory analysis', 'exploratory_', remove_pattern = TRUE)
 
 
 ```{r, echo=FALSE, results='asis'}
-if (params$study_type == 'rnaseq'){
+if (params$differential_method == 'deseq2'){
     make_params_table('DESeq2', 'deseq2_', remove_pattern = TRUE)
 }
 make_params_table('downstream differential analysis', 'differential_', remove_pattern = TRUE)
@@ -1075,18 +1068,10 @@ make_params_table('downstream differential analysis', 'differential_', remove_pa
 <!-- If any gene set methods have been activated show their params -->
 
 ```{r, echo=FALSE, results='asis'}
-possible_gene_set_methods <- c('gsea', 'gprofiler2')
-
-if (any(unlist(params[paste0(possible_gene_set_methods, '_run')]))){
+if (!is.null(params$functional_method)){
     cat("\n### Gene set analysis\n")
-
-    for (gene_set_method in possible_gene_set_methods){
-        if (unlist(params[paste0(gene_set_method, '_run')])){
-        cat("\n#### ", toupper(gene_set_method) ,"  {.tabset}\n")
-        make_params_table(toupper(gene_set_method), paste0(gene_set_method, '_'), remove_pattern = TRUE)
-        }
-    }
-
+    cat("\n#### ", toupper(params$functional_method) ,"  {.tabset}\n")
+    make_params_table(toupper(params$functional_method), paste0(params$functional_method, '_'), remove_pattern = TRUE)
 }
 ```
 

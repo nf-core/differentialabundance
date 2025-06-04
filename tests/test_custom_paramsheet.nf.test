@@ -1,0 +1,124 @@
+nextflow_pipeline {
+
+    name "Test Workflow main.nf - DIFFERENTIALABUNDANCE"
+    script "../main.nf"
+    tag "custom_paramsheet"
+    tag "pipeline"
+
+    test("Test profile - deseq2") {
+
+        when {
+            params {
+                outdir              = "$outputDir"
+                paramsheet          = "https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/test_custom_paramsheet.csv"
+                paramset_name       = "deseq2"
+
+                // input data
+                input                    = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.samplesheet.csv'
+                matrix                   = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.salmon.merged.gene_counts.top1000cov.tsv'
+                transcript_length_matrix = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.spoofed_lengths.tsv'
+                contrasts_yml            = 'https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/SRP254919.contrasts.yaml'
+                gtf                      = 'https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz'
+                gene_sets_files          = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt'
+            }
+        }
+
+        then {
+            // stable_name: All files + folders in ${params.outdir}/ with a stable name
+            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in ${params.outdir}/ with stable content
+            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    // Number of successful tasks
+                    workflow.trace.succeeded().size(),
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/collated_versions.yml"),
+                    // All stable path name, with a relative path
+                    stable_name,
+                    // All files with stable contents
+                    stable_path
+                ).match() }
+                )
+        }
+    }
+
+    test("Test profile - gsea") {
+
+        when {
+            params {
+                outdir              = "$outputDir"
+                paramsheet          = "https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/test_custom_paramsheet.csv"
+                paramset_name       = "gsea"
+
+                // input data
+                input                    = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.samplesheet.csv'
+                matrix                   = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.salmon.merged.gene_counts.top1000cov.tsv'
+                transcript_length_matrix = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.spoofed_lengths.tsv'
+                contrasts_yml            = 'https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/SRP254919.contrasts.yaml'
+                gtf                      = 'https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz'
+                gene_sets_files          = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt'
+            }
+        }
+
+        then {
+            // stable_name: All files + folders in ${params.outdir}/ with a stable name
+            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in ${params.outdir}/ with stable content
+            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    // Number of successful tasks
+                    workflow.trace.succeeded().size(),
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/collated_versions.yml"),
+                    // All stable path name, with a relative path
+                    stable_name,
+                    // All files with stable contents
+                    stable_path
+                ).match() }
+                )
+        }
+    }
+
+    test("Test profile - gprofiler2") {
+
+        when {
+            params {
+                outdir              = "$outputDir"
+                paramsheet          = "https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/test_custom_paramsheet.csv"
+                paramset_name       = "gprofiler2"
+
+                // input data
+                input                    = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.samplesheet.csv'
+                matrix                   = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.salmon.merged.gene_counts.top1000cov.tsv'
+                transcript_length_matrix = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.spoofed_lengths.tsv'
+                contrasts_yml            = 'https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/SRP254919.contrasts.yaml'
+                gtf                      = 'https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz'
+                gene_sets_files          = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt'
+            }
+        }
+
+        then {
+            // stable_name: All files + folders in ${params.outdir}/ with a stable name
+            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in ${params.outdir}/ with stable content
+            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    // Number of successful tasks
+                    workflow.trace.succeeded().size(),
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/collated_versions.yml"),
+                    // All stable path name, with a relative path
+                    stable_name,
+                    // All files with stable contents
+                    stable_path
+                ).match() }
+                )
+        }
+    }
+}

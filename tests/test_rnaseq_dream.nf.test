@@ -6,15 +6,43 @@ nextflow_pipeline {
     tag "rnaseq_dream"
     tag "pipeline"
 
+    test("Test rnaseq dream profile - with toolsheet") {
+
+        when {
+            params {
+                outdir              = "$outputDir"
+                paramset_name       = "dream_rnaseq"
+                differential_method = null
+                functional_method   = null
+            }
+        }
+
+        then {
+            // stable_name: All files + folders in ${params.outdir}/ with a stable name
+            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in ${params.outdir}/ with stable content
+            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    // Number of successful tasks
+                    workflow.trace.succeeded().size(),
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/collated_versions.yml"),
+                    // All stable path name, with a relative path
+                    stable_name,
+                    // All files with stable contents
+                    stable_path
+                ).match() }
+                )
+        }
+    }
+
     test("Test rnaseq dream profile - complex contrast") {
 
         when {
             params {
                 outdir        = "$outputDir"
-                    input                    = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/metadata.tsv'
-                    matrix                   = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/counts.tsv'
-                    contrasts_yml            = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/testdata/formula_contrasts/rnaseq_complex_contrast.yaml'
-
             }
         }
 
