@@ -106,15 +106,9 @@ for result in results:
     # Save table
     results[result].to_csv("${task.ext.prefix}" + "_" + result + "_decoupler.tsv", sep="\t")
     contrast_name = results[result].index[0]
-    # Create new figure
     plt.figure(figsize=(8, 6))
-    # Plot → result is a dataframe → pass it to decoupler plot
     dc.plot_barplot(results[result], contrast_name , top=25, vertical=False)
-
-    # Save the figure
     plt.savefig("${task.ext.prefix}" + "_" + result + "_decoupler_plot.png", dpi=300, bbox_inches='tight')
-
-    # Optional: close figure to avoid memory issues in long loops
     plt.close()
 
 
