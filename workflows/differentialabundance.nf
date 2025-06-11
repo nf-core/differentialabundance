@@ -606,7 +606,6 @@ workflow DIFFERENTIALABUNDANCE {
 
         // Run DECOUPLER
     if (params.decoupler_run && params.gtf){
-        log.warn "Decoupler is only supported for human or mouse datasets. Please ensure your organism is compatible before enabling this module."
 
         ch_gtf = file(params.gtf)
         ch_network_file = file(params.decoupler_network, checkIfExists:true)
