@@ -605,7 +605,7 @@ workflow DIFFERENTIALABUNDANCE {
         .mix(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.versions)
 
         // Run DECOUPLER
-    if (params.decoupler_run && params.gtf){
+    if (params.functional_method == 'decoupler' && params.gtf){
 
         ch_gtf = file(params.gtf)
         ch_network_file = file(params.decoupler_network, checkIfExists:true)
