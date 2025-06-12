@@ -627,7 +627,7 @@ workflow DIFFERENTIALABUNDANCE {
 
         ch_versions = ch_versions
             .mix(DECOUPLER.out.versions)
-    }else if (params.decoupler_run && !params.gtf){
+    }else if (params.functional_method == 'decoupler' && !params.gtf){
         exit 1, "A reference GTF file is required to run Decoupler. Please provide one via the --gtf parameter."
     }
 
