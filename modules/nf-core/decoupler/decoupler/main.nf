@@ -13,7 +13,7 @@ process DECOUPLER {
     path(gtf)
 
     output:
-    tuple val(meta), path("*estimate_decoupler.tsv"), emit: dc_estimate
+    tuple val(meta), path("*_decoupler.tsv"), emit: dc_estimate
     path("*_decoupler_plot.png"), emit: png
     path("versions.yml"), emit: versions
 
