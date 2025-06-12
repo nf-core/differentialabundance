@@ -821,7 +821,7 @@
                 "functional_method": {
                     "type": "string",
                     "description": "Functional analysis method",
-                    "enum": ["null", "gsea", "gprofiler2"]
+                    "enum": ["null", "gsea", "gprofiler2", "decoupler"]
                 },
                 "gene_sets_files": {
                     "type": "string",
@@ -1042,6 +1042,27 @@
                 }
             },
             "fa_icon": "fas fa-layer-group"
+        },
+        "functional_decoupler": {
+            "title": "[functional] decoupler",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "decoupler_network": {
+                    "type": "string",
+                    "description": "Path to TSV file containing network file for decoupler",
+                    "pattern": "^\\S+\\.(tsv)$",
+                    "format": "file-path",
+                    "mimetype": "text/tsv"
+                },
+                "decoupler_min_n": {
+                    "type": "integer",
+                    "default": 5,
+                    "description": "Removes sources of a net with less than min_n targets",
+                    "minimum": 1
+                }
+            }
         },
         "shiny_shiny_app_settings": {
             "title": "[shiny] Shiny app settings",
@@ -1286,31 +1307,6 @@
                     "hidden": true
                 }
             }
-        },
-        "decoupler_params": {
-            "title": "Decoupler params",
-            "type": "object",
-            "description": "",
-            "default": "",
-            "properties": {
-                "decoupler_run": {
-                    "type": "boolean",
-                    "description": "Set to run DECOUPLER"
-                },
-                "decoupler_network": {
-                    "type": "string",
-                    "description": "Path to TSV file containing network file for decoupler",
-                    "pattern": "^\\S+\\.(tsv)$",
-                    "format": "file-path",
-                    "mimetype": "text/tsv"
-                },
-                "decoupler_min_n": {
-                    "type": "integer",
-                    "default": 5,
-                    "description": "Removes sources of a net with less than min_n targets",
-                    "minimum": 1
-                }
-            }
         }
     },
     "allOf": [
@@ -1366,6 +1362,9 @@
             "$ref": "#/$defs/functional_gprofiler2"
         },
         {
+            "$ref": "#/$defs/functional_decoupler"
+        },
+        {
             "$ref": "#/$defs/shiny_shiny_app_settings"
         },
         {
@@ -1379,9 +1378,6 @@
         },
         {
             "$ref": "#/$defs/generic_options"
-        },
-        {
-            "$ref": "#/$defs/decoupler_params"
         }
     ]
 }
