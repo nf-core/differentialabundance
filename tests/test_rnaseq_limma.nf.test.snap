@@ -49,24 +49,12 @@
                 "plots/decoupler",
                 "plots/decoupler/limma_treatment_mCherry_hND6__SRP254919_consensus_estimate_decoupler_plot.png",
                 "plots/decoupler/limma_treatment_mCherry_hND6__SRP254919_consensus_pvals_decoupler_plot.png",
-                "plots/decoupler/limma_treatment_mCherry_hND6__SRP254919_mlm_estimate_decoupler_plot.png",
-                "plots/decoupler/limma_treatment_mCherry_hND6__SRP254919_mlm_pvals_decoupler_plot.png",
                 "plots/decoupler/limma_treatment_mCherry_hND6__SRP254919_ulm_estimate_decoupler_plot.png",
                 "plots/decoupler/limma_treatment_mCherry_hND6__SRP254919_ulm_pvals_decoupler_plot.png",
-                "plots/decoupler/limma_treatment_mCherry_hND6__SRP254919_wsum_corr_decoupler_plot.png",
-                "plots/decoupler/limma_treatment_mCherry_hND6__SRP254919_wsum_estimate_decoupler_plot.png",
-                "plots/decoupler/limma_treatment_mCherry_hND6__SRP254919_wsum_norm_decoupler_plot.png",
-                "plots/decoupler/limma_treatment_mCherry_hND6__SRP254919_wsum_pvals_decoupler_plot.png",
                 "plots/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_consensus_estimate_decoupler_plot.png",
                 "plots/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_consensus_pvals_decoupler_plot.png",
-                "plots/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_mlm_estimate_decoupler_plot.png",
-                "plots/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_mlm_pvals_decoupler_plot.png",
                 "plots/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_ulm_estimate_decoupler_plot.png",
                 "plots/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_ulm_pvals_decoupler_plot.png",
-                "plots/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_wsum_corr_decoupler_plot.png",
-                "plots/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_wsum_estimate_decoupler_plot.png",
-                "plots/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_wsum_norm_decoupler_plot.png",
-                "plots/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_wsum_pvals_decoupler_plot.png",
                 "plots/differential",
                 "plots/differential/treatment_mCherry_hND6__SRP254919",
                 "plots/differential/treatment_mCherry_hND6__SRP254919/png",
@@ -102,24 +90,12 @@
                 "tables/decoupler",
                 "tables/decoupler/limma_treatment_mCherry_hND6__SRP254919_consensus_estimate_decoupler.tsv",
                 "tables/decoupler/limma_treatment_mCherry_hND6__SRP254919_consensus_pvals_decoupler.tsv",
-                "tables/decoupler/limma_treatment_mCherry_hND6__SRP254919_mlm_estimate_decoupler.tsv",
-                "tables/decoupler/limma_treatment_mCherry_hND6__SRP254919_mlm_pvals_decoupler.tsv",
                 "tables/decoupler/limma_treatment_mCherry_hND6__SRP254919_ulm_estimate_decoupler.tsv",
                 "tables/decoupler/limma_treatment_mCherry_hND6__SRP254919_ulm_pvals_decoupler.tsv",
-                "tables/decoupler/limma_treatment_mCherry_hND6__SRP254919_wsum_corr_decoupler.tsv",
-                "tables/decoupler/limma_treatment_mCherry_hND6__SRP254919_wsum_estimate_decoupler.tsv",
-                "tables/decoupler/limma_treatment_mCherry_hND6__SRP254919_wsum_norm_decoupler.tsv",
-                "tables/decoupler/limma_treatment_mCherry_hND6__SRP254919_wsum_pvals_decoupler.tsv",
                 "tables/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_consensus_estimate_decoupler.tsv",
                 "tables/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_consensus_pvals_decoupler.tsv",
-                "tables/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_mlm_estimate_decoupler.tsv",
-                "tables/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_mlm_pvals_decoupler.tsv",
                 "tables/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_ulm_estimate_decoupler.tsv",
                 "tables/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_ulm_pvals_decoupler.tsv",
-                "tables/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_wsum_corr_decoupler.tsv",
-                "tables/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_wsum_estimate_decoupler.tsv",
-                "tables/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_wsum_norm_decoupler.tsv",
-                "tables/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_wsum_pvals_decoupler.tsv",
                 "tables/differential",
                 "tables/differential/treatment_mCherry_hND6__SRP254919.limma.results.tsv",
                 "tables/differential/treatment_mCherry_hND6__SRP254919.limma.results_filtered.tsv",
@@ -129,33 +105,21 @@
                 "tables/processed_abundance/all.normalised_counts.tsv"
             ],
             [
-                "treatment_mCherry_hND6__SRP254919.MArrayLM.limma.rds:md5,5727192a1f8175594f4a148306f23988",
-                "treatment_mCherry_hND6_sample_number_SRP254919.MArrayLM.limma.rds:md5,385f960f9330a1dd6bbf4b00166bc96e",
+                "treatment_mCherry_hND6__SRP254919.MArrayLM.limma.rds:md5,ff9b67869ea73d2daedd6ec47fcb6605",
+                "treatment_mCherry_hND6_sample_number_SRP254919.MArrayLM.limma.rds:md5,4e2aab8c2cf6faf3536e50a2fcb01a24",
                 "versions.yml:md5,225ced8832439345efa781c726cf2e5c",
                 "versions.yml:md5,d5f6ad8fe6242dcd75bc62b654d1d211",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "versions.yml:md5,b3436c10ff83d0dab55060de3cae3ef2",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
-                "limma_treatment_mCherry_hND6__SRP254919_consensus_estimate_decoupler.tsv:md5,966a5d599343d2b23a0a7c83ffebbb32",
-                "limma_treatment_mCherry_hND6__SRP254919_consensus_pvals_decoupler.tsv:md5,a1df8286cc676026b56d97695ad22e8d",
-                "limma_treatment_mCherry_hND6__SRP254919_mlm_estimate_decoupler.tsv:md5,8c26995fc53b6ce38e536a4447bb6eae",
-                "limma_treatment_mCherry_hND6__SRP254919_mlm_pvals_decoupler.tsv:md5,c4e25d305ec33b7acf70b0e29d7c5763",
-                "limma_treatment_mCherry_hND6__SRP254919_ulm_estimate_decoupler.tsv:md5,93e9f630eeb2b18aa7f9ee8368f87ae9",
-                "limma_treatment_mCherry_hND6__SRP254919_ulm_pvals_decoupler.tsv:md5,5126f48f59bf1043076699f0677700bd",
-                "limma_treatment_mCherry_hND6__SRP254919_wsum_corr_decoupler.tsv:md5,b7fccf98074abb59b7a0a64e09186a83",
-                "limma_treatment_mCherry_hND6__SRP254919_wsum_estimate_decoupler.tsv:md5,138163395954f8f67025f80815e0ea49",
-                "limma_treatment_mCherry_hND6__SRP254919_wsum_norm_decoupler.tsv:md5,c93fcbbf3abcd1bbd11a91a4b1b4ef93",
-                "limma_treatment_mCherry_hND6__SRP254919_wsum_pvals_decoupler.tsv:md5,9c12fbe21b2bb37817bec13901a61651",
-                "limma_treatment_mCherry_hND6_sample_number_SRP254919_consensus_estimate_decoupler.tsv:md5,f46d885c62096cd10ab6597a9eabe3aa",
-                "limma_treatment_mCherry_hND6_sample_number_SRP254919_consensus_pvals_decoupler.tsv:md5,b1da260d735f019086227e2e659bba14",
-                "limma_treatment_mCherry_hND6_sample_number_SRP254919_mlm_estimate_decoupler.tsv:md5,4fcb524d038017f17c889e9c7be1a3f6",
-                "limma_treatment_mCherry_hND6_sample_number_SRP254919_mlm_pvals_decoupler.tsv:md5,581eab1f21911a4dfa9ba7bc5799d91a",
-                "limma_treatment_mCherry_hND6_sample_number_SRP254919_ulm_estimate_decoupler.tsv:md5,9156bed5878264a8ca2d543b3d2b73cf",
-                "limma_treatment_mCherry_hND6_sample_number_SRP254919_ulm_pvals_decoupler.tsv:md5,b1eebaaa790893da0af00dc311a09236",
-                "limma_treatment_mCherry_hND6_sample_number_SRP254919_wsum_corr_decoupler.tsv:md5,549d7a37d0233142bfd794c6c0226757",
-                "limma_treatment_mCherry_hND6_sample_number_SRP254919_wsum_estimate_decoupler.tsv:md5,51340c6758ca2c52b9117ba194e5b43c",
-                "limma_treatment_mCherry_hND6_sample_number_SRP254919_wsum_norm_decoupler.tsv:md5,802f0f9f5dd62697bd2bac8c660e4a1e",
-                "limma_treatment_mCherry_hND6_sample_number_SRP254919_wsum_pvals_decoupler.tsv:md5,8ff646d5301077e72b893a77bde60dc4",
+                "limma_treatment_mCherry_hND6__SRP254919_consensus_estimate_decoupler.tsv:md5,e5f54baf0bf13a46023de661d42e72ed",
+                "limma_treatment_mCherry_hND6__SRP254919_consensus_pvals_decoupler.tsv:md5,9a52557d04406474e7aaa16f3ec50910",
+                "limma_treatment_mCherry_hND6__SRP254919_ulm_estimate_decoupler.tsv:md5,63c92ca08c2c2d6b4638b098809aa028",
+                "limma_treatment_mCherry_hND6__SRP254919_ulm_pvals_decoupler.tsv:md5,daee3b5ff36942d68df9309bfd19839c",
+                "limma_treatment_mCherry_hND6_sample_number_SRP254919_consensus_estimate_decoupler.tsv:md5,921c51ef7155382adbd33abec35546c7",
+                "limma_treatment_mCherry_hND6_sample_number_SRP254919_consensus_pvals_decoupler.tsv:md5,22516c2c11c45cce2335630b11f44393",
+                "limma_treatment_mCherry_hND6_sample_number_SRP254919_ulm_estimate_decoupler.tsv:md5,221f76ba181c3e56f9ee42cab0dd08e6",
+                "limma_treatment_mCherry_hND6_sample_number_SRP254919_ulm_pvals_decoupler.tsv:md5,93b430e740a74794ac6a2b6533658a31",
                 "treatment_mCherry_hND6__SRP254919.limma.results.tsv:md5,e44a3f1f7edea37ed356d120a6a52a52",
                 "treatment_mCherry_hND6__SRP254919.limma.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
                 "treatment_mCherry_hND6_sample_number_SRP254919.limma.results.tsv:md5,63a5a1b53c9e1c5857fcb52a9aaf6d59",
@@ -165,9 +129,9 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.3"
+            "nextflow": "24.10.1"
         },
-        "timestamp": "2025-06-13T14:01:05.05799671"
+        "timestamp": "2025-06-24T23:18:50.150759772"
     },
     "Test rnaseq limma profile": {
         "content": [
@@ -317,8 +281,8 @@
                 "tables/processed_abundance/all.normalised_counts.tsv"
             ],
             [
-                "treatment_mCherry_hND6__SRP254919.MArrayLM.limma.rds:md5,5727192a1f8175594f4a148306f23988",
-                "treatment_mCherry_hND6_sample_number_SRP254919.MArrayLM.limma.rds:md5,385f960f9330a1dd6bbf4b00166bc96e",
+                "treatment_mCherry_hND6__SRP254919.MArrayLM.limma.rds:md5,ff9b67869ea73d2daedd6ec47fcb6605",
+                "treatment_mCherry_hND6_sample_number_SRP254919.MArrayLM.limma.rds:md5,4e2aab8c2cf6faf3536e50a2fcb01a24",
                 "versions.yml:md5,225ced8832439345efa781c726cf2e5c",
                 "versions.yml:md5,d5f6ad8fe6242dcd75bc62b654d1d211",
                 "gene_sets_treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.HALLMARK_KRAS_SIGNALING_DN.tsv:md5,95973aeca4524d8f53346f434f7f819a",
@@ -345,9 +309,9 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.3"
+            "nextflow": "24.10.1"
         },
-        "timestamp": "2025-06-13T13:54:36.139788405"
+        "timestamp": "2025-06-24T23:14:43.117749553"
     },
     "Test rnaseq limma profile - with toolsheet": {
         "content": [
@@ -497,8 +461,8 @@
                 "tables/processed_abundance/all.normalised_counts.tsv"
             ],
             [
-                "treatment_mCherry_hND6__SRP254919.MArrayLM.limma.rds:md5,5727192a1f8175594f4a148306f23988",
-                "treatment_mCherry_hND6_sample_number_SRP254919.MArrayLM.limma.rds:md5,385f960f9330a1dd6bbf4b00166bc96e",
+                "treatment_mCherry_hND6__SRP254919.MArrayLM.limma.rds:md5,ff9b67869ea73d2daedd6ec47fcb6605",
+                "treatment_mCherry_hND6_sample_number_SRP254919.MArrayLM.limma.rds:md5,4e2aab8c2cf6faf3536e50a2fcb01a24",
                 "versions.yml:md5,225ced8832439345efa781c726cf2e5c",
                 "versions.yml:md5,d5f6ad8fe6242dcd75bc62b654d1d211",
                 "gene_sets_treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.HALLMARK_KRAS_SIGNALING_DN.tsv:md5,95973aeca4524d8f53346f434f7f819a",
@@ -525,8 +489,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.2"
+            "nextflow": "24.10.1"
         },
-        "timestamp": "2025-05-19T15:27:24.165331512"
+        "timestamp": "2025-06-24T23:16:15.218590825"
     }
 }
