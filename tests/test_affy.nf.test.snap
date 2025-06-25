@@ -182,7 +182,6 @@
             ],
             [
                 "raw._eset.rds:md5,8c6c7807ce6c5d8204bd681b941eeb0f",
-                "phenotype_uninvolved_lesional_GSE50790.MArrayLM.limma.rds:md5,b5ef9fc63c87a83bf925f9284d83663f",
                 "versions.yml:md5,225ced8832439345efa781c726cf2e5c",
                 "versions.yml:md5,d5f6ad8fe6242dcd75bc62b654d1d211",
                 "gene_sets_phenotype_uninvolved_lesional_GSE50790.h.all.v2022.1.Hs.symbols.HALLMARK_ADIPOGENESIS.tsv:md5,6dcf05651f6b0386fe089eaa421c3127",
@@ -228,8 +227,6 @@
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "versions.yml:md5,b3436c10ff83d0dab55060de3cae3ef2",
                 "hgu133plus2.annotation.tsv:md5,f2b82ef12b2a2e8e575de06766583d96",
-                "phenotype_uninvolved_lesional_GSE50790.limma.results.tsv:md5,91bfc5e94dd232b927c3fc7f3ece7e36",
-                "phenotype_uninvolved_lesional_GSE50790.limma.results_filtered.tsv:md5,445b8fd9dcd34c2d273613b03ead0a7f",
                 "GSM1229341_Gudjohnsson_001_6690_PP.CEL.gz:md5,259d0908211a071351450f366fd51cad",
                 "GSM1229342_Gudjohnsson_002_6690_PN.CEL.gz:md5,31cc2b8b26e210760b8ebd4b304b52ba",
                 "GSM1229343_Gudjohnsson_003_7450_PN.CEL.gz:md5,713a3ca75a883cbff6da0be7bd251422",
@@ -242,9 +239,9 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.2"
+            "nextflow": "25.04.3"
         },
-        "timestamp": "2025-05-19T14:18:37.123180816"
+        "timestamp": "2025-06-17T15:17:08.723393528"
     },
     "Test affy profile - with toolsheet": {
         "content": [
@@ -429,7 +426,6 @@
             ],
             [
                 "raw._eset.rds:md5,8c6c7807ce6c5d8204bd681b941eeb0f",
-                "phenotype_uninvolved_lesional_GSE50790.MArrayLM.limma.rds:md5,b5ef9fc63c87a83bf925f9284d83663f",
                 "versions.yml:md5,225ced8832439345efa781c726cf2e5c",
                 "versions.yml:md5,d5f6ad8fe6242dcd75bc62b654d1d211",
                 "gene_sets_phenotype_uninvolved_lesional_GSE50790.h.all.v2022.1.Hs.symbols.HALLMARK_ADIPOGENESIS.tsv:md5,6dcf05651f6b0386fe089eaa421c3127",
@@ -475,8 +471,6 @@
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "versions.yml:md5,b3436c10ff83d0dab55060de3cae3ef2",
                 "hgu133plus2.annotation.tsv:md5,f2b82ef12b2a2e8e575de06766583d96",
-                "phenotype_uninvolved_lesional_GSE50790.limma.results.tsv:md5,91bfc5e94dd232b927c3fc7f3ece7e36",
-                "phenotype_uninvolved_lesional_GSE50790.limma.results_filtered.tsv:md5,445b8fd9dcd34c2d273613b03ead0a7f",
                 "GSM1229341_Gudjohnsson_001_6690_PP.CEL.gz:md5,259d0908211a071351450f366fd51cad",
                 "GSM1229342_Gudjohnsson_002_6690_PN.CEL.gz:md5,31cc2b8b26e210760b8ebd4b304b52ba",
                 "GSM1229343_Gudjohnsson_003_7450_PN.CEL.gz:md5,713a3ca75a883cbff6da0be7bd251422",
@@ -489,8 +483,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.2"
+            "nextflow": "25.04.3"
         },
-        "timestamp": "2025-05-19T14:23:52.843918444"
+        "timestamp": "2025-06-17T15:20:21.3699015"
     }
 }

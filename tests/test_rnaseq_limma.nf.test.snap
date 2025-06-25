@@ -281,8 +281,6 @@
                 "tables/processed_abundance/all.normalised_counts.tsv"
             ],
             [
-                "treatment_mCherry_hND6__SRP254919.MArrayLM.limma.rds:md5,ff9b67869ea73d2daedd6ec47fcb6605",
-                "treatment_mCherry_hND6_sample_number_SRP254919.MArrayLM.limma.rds:md5,4e2aab8c2cf6faf3536e50a2fcb01a24",
                 "versions.yml:md5,225ced8832439345efa781c726cf2e5c",
                 "versions.yml:md5,d5f6ad8fe6242dcd75bc62b654d1d211",
                 "gene_sets_treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.HALLMARK_KRAS_SIGNALING_DN.tsv:md5,95973aeca4524d8f53346f434f7f819a",
@@ -300,18 +298,14 @@
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "versions.yml:md5,b3436c10ff83d0dab55060de3cae3ef2",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
-                "treatment_mCherry_hND6__SRP254919.limma.results.tsv:md5,e44a3f1f7edea37ed356d120a6a52a52",
-                "treatment_mCherry_hND6__SRP254919.limma.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
-                "treatment_mCherry_hND6_sample_number_SRP254919.limma.results.tsv:md5,63a5a1b53c9e1c5857fcb52a9aaf6d59",
-                "treatment_mCherry_hND6_sample_number_SRP254919.limma.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
                 "all.normalised_counts.tsv:md5,534f0f37e10325163656cad95418f34a"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.1"
+            "nextflow": "25.04.3"
         },
-        "timestamp": "2025-06-24T23:14:43.117749553"
+        "timestamp": "2025-06-17T15:31:21.996523194"
     },
     "Test rnaseq limma profile - with toolsheet": {
         "content": [
@@ -461,8 +455,6 @@
                 "tables/processed_abundance/all.normalised_counts.tsv"
             ],
             [
-                "treatment_mCherry_hND6__SRP254919.MArrayLM.limma.rds:md5,ff9b67869ea73d2daedd6ec47fcb6605",
-                "treatment_mCherry_hND6_sample_number_SRP254919.MArrayLM.limma.rds:md5,4e2aab8c2cf6faf3536e50a2fcb01a24",
                 "versions.yml:md5,225ced8832439345efa781c726cf2e5c",
                 "versions.yml:md5,d5f6ad8fe6242dcd75bc62b654d1d211",
                 "gene_sets_treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.HALLMARK_KRAS_SIGNALING_DN.tsv:md5,95973aeca4524d8f53346f434f7f819a",
@@ -480,17 +472,13 @@
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "versions.yml:md5,b3436c10ff83d0dab55060de3cae3ef2",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
-                "treatment_mCherry_hND6__SRP254919.limma.results.tsv:md5,e44a3f1f7edea37ed356d120a6a52a52",
-                "treatment_mCherry_hND6__SRP254919.limma.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
-                "treatment_mCherry_hND6_sample_number_SRP254919.limma.results.tsv:md5,63a5a1b53c9e1c5857fcb52a9aaf6d59",
-                "treatment_mCherry_hND6_sample_number_SRP254919.limma.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
                 "all.normalised_counts.tsv:md5,534f0f37e10325163656cad95418f34a"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.1"
+            "nextflow": "25.04.3"
         },
-        "timestamp": "2025-06-24T23:16:15.218590825"
+        "timestamp": "2025-06-17T15:32:31.685717333"
     }
 }

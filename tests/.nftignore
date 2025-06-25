@@ -9,3 +9,10 @@ report/**/*.png
 *html
 shinyngs_app/**/data.rds
 **/*.png
+.DS_Store
+*.dds.rld.rds
+**/**/*.dds.rld.rds
+*.limma.rds
+**/**/*.limma.rds
+*.{limma,dream}.{results,results_filtered}.tsv
+**/**/*.{limma,dream}.{results,results_filtered}.tsv

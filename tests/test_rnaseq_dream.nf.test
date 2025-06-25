@@ -2,9 +2,9 @@ nextflow_pipeline {
 
     name "Test Workflow main.nf - DIFFERENTIALABUNDANCE (dream)"
     script "../main.nf"
-    profile "+test_rnaseq_dream"
     tag "rnaseq_dream"
     tag "pipeline"
+    profile "test_rnaseq_dream"
 
     test("Test rnaseq dream profile - with toolsheet") {
 
@@ -14,7 +14,7 @@ nextflow_pipeline {
                 paramset_name       = "dream_rnaseq"
                 differential_method = null
                 functional_method   = null
-            }
+           }
         }
 
         then {
@@ -28,7 +28,7 @@ nextflow_pipeline {
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/collated_versions.yml"),
+                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_differentialabundance_software_versions.yml"),
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -38,8 +38,8 @@ nextflow_pipeline {
         }
     }
 
-    test("Test rnaseq dream profile - complex contrast") {
 
+    test("Test rnaseq dream profile - complex contrast") {
         when {
             params {
                 outdir        = "$outputDir"
@@ -57,7 +57,7 @@ nextflow_pipeline {
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/collated_versions.yml"),
+                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_differentialabundance_software_versions.yml"),
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -66,4 +66,5 @@ nextflow_pipeline {
                 )
         }
     }
+
 }

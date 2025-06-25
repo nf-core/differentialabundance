@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [[#468](https://github.com/nf-core/differentialabundance/pull/468)] - Template update for nf-core/tools v3.3.1 ([@SusiJo](https://github.com/SusiJo), reviewed by [@famosab](https://github.com/famosab), [@mashehu](https://github.com/mashehu))
 - [[#448](https://github.com/nf-core/differentialabundance/pull/448)] - Simplify toolsheet handling and restructure workflow to use paramset in meta. ([@pinin4fjords](https://github.com/pinin4fjords), review by [@suzannejin](https://github.com/suzannejin) and [@grst](https://github.com/grst))
 - [[#431](https://github.com/nf-core/differentialabundance/pull/431)] - Replace the calls to differential and functional analysis modules by subworkflows. ([@suzannejin](https://github.com/suzannejin), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#410](https://github.com/nf-core/differentialabundance/pull/410)] - Update contrasts file format to allow yaml ([@nschcolnicov](https://github.com/nschcolnicov), review by [@pinin4fjords](https://github.com/pinin4fjords)).

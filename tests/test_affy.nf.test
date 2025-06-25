@@ -2,15 +2,17 @@ nextflow_pipeline {
 
     name "Test Workflow main.nf - DIFFERENTIALABUNDANCE (affy)"
     script "../main.nf"
-    profile "+test_affy"
     tag "affy"
     tag "pipeline"
+    profile "test_affy"
 
     test("Test affy profile") {
 
+
         when {
             params {
-                outdir        = "$outputDir"
+                outdir                     = "$outputDir"
+                study_name                 = 'GSE50790'
             }
         }
 
@@ -27,7 +29,7 @@ nextflow_pipeline {
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/collated_versions.yml"),
+                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_differentialabundance_software_versions.yml"),
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -61,7 +63,7 @@ nextflow_pipeline {
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/collated_versions.yml"),
+                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_differentialabundance_software_versions.yml"),
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents

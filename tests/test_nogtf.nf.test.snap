@@ -81,9 +81,7 @@
                 "tables/processed_abundance/all.vst.tsv"
             ],
             [
-                "treatment_mCherry_hND6__SRP254919.dds.rld.rds:md5,6169c02c9c5dc9bfbd907d1d0ffe5442",
                 "treatment_mCherry_hND6__SRP254919.deseq2.sizefactors.tsv:md5,402909515e7ae8d53d091bf5ad9bc5fd",
-                "treatment_mCherry_hND6_sample_number_SRP254919.dds.rld.rds:md5,4ef00951aa423f2b5d1ab797b16ff20d",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.sizefactors.tsv:md5,402909515e7ae8d53d091bf5ad9bc5fd",
                 "versions.yml:md5,225ced8832439345efa781c726cf2e5c",
                 "versions.yml:md5,d5f6ad8fe6242dcd75bc62b654d1d211",
@@ -99,9 +97,9 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.2"
+            "nextflow": "25.04.3"
         },
-        "timestamp": "2025-05-19T15:11:23.089324882"
+        "timestamp": "2025-06-17T13:15:24.702191564"
     },
     "Test no gtf profile": {
         "content": [
@@ -185,9 +183,7 @@
                 "tables/processed_abundance/all.vst.tsv"
             ],
             [
-                "treatment_mCherry_hND6__SRP254919.dds.rld.rds:md5,6169c02c9c5dc9bfbd907d1d0ffe5442",
                 "treatment_mCherry_hND6__SRP254919.deseq2.sizefactors.tsv:md5,402909515e7ae8d53d091bf5ad9bc5fd",
-                "treatment_mCherry_hND6_sample_number_SRP254919.dds.rld.rds:md5,4ef00951aa423f2b5d1ab797b16ff20d",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.sizefactors.tsv:md5,402909515e7ae8d53d091bf5ad9bc5fd",
                 "versions.yml:md5,225ced8832439345efa781c726cf2e5c",
                 "versions.yml:md5,d5f6ad8fe6242dcd75bc62b654d1d211",
@@ -203,8 +199,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.2"
+            "nextflow": "25.04.3"
         },
-        "timestamp": "2025-05-19T15:08:57.430940077"
+        "timestamp": "2025-06-17T13:14:24.477355722"
     }
 }
