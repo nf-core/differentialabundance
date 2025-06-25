@@ -105,8 +105,6 @@
                 "tables/processed_abundance/all.normalised_counts.tsv"
             ],
             [
-                "treatment_mCherry_hND6__SRP254919.MArrayLM.limma.rds:md5,ff9b67869ea73d2daedd6ec47fcb6605",
-                "treatment_mCherry_hND6_sample_number_SRP254919.MArrayLM.limma.rds:md5,4e2aab8c2cf6faf3536e50a2fcb01a24",
                 "versions.yml:md5,225ced8832439345efa781c726cf2e5c",
                 "versions.yml:md5,d5f6ad8fe6242dcd75bc62b654d1d211",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
@@ -120,10 +118,6 @@
                 "limma_treatment_mCherry_hND6_sample_number_SRP254919_consensus_pvals_decoupler.tsv:md5,22516c2c11c45cce2335630b11f44393",
                 "limma_treatment_mCherry_hND6_sample_number_SRP254919_ulm_estimate_decoupler.tsv:md5,221f76ba181c3e56f9ee42cab0dd08e6",
                 "limma_treatment_mCherry_hND6_sample_number_SRP254919_ulm_pvals_decoupler.tsv:md5,93b430e740a74794ac6a2b6533658a31",
-                "treatment_mCherry_hND6__SRP254919.limma.results.tsv:md5,e44a3f1f7edea37ed356d120a6a52a52",
-                "treatment_mCherry_hND6__SRP254919.limma.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
-                "treatment_mCherry_hND6_sample_number_SRP254919.limma.results.tsv:md5,63a5a1b53c9e1c5857fcb52a9aaf6d59",
-                "treatment_mCherry_hND6_sample_number_SRP254919.limma.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
                 "all.normalised_counts.tsv:md5,534f0f37e10325163656cad95418f34a"
             ]
         ],
@@ -131,7 +125,7 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.1"
         },
-        "timestamp": "2025-06-24T23:18:50.150759772"
+        "timestamp": "2025-06-25T23:45:35.312195176"
     },
     "Test rnaseq limma profile": {
         "content": [
