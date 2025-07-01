@@ -1062,8 +1062,9 @@
                     "description": "Removes sources of a net with less than min_n targets",
                     "minimum": 1
                 },
-                "decoupler_methods":{
+                "decoupler_methods": {
                     "type": "string",
+                    "default": "ulm",
                     "description": "Comma-separated list of methods to use (e.g., 'ora,ulm')"
                 }
             }
