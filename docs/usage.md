@@ -413,6 +413,10 @@ By default, `--decoupler_min_n` is set to 5, meaning all sources with at least o
 
 Example: setting `--decoupler_min_n 5` will ensure that only regulators with at least 5 target genes are considered.
 
+- `--decoupler_methods`: This parameter lets you specify which statistical methods decoupler will use to estimate regulator activities. Decoupler supports multiple methods, each using a different algorithm or statistical approach. You can specify one or more methods by passing them as a comma-separated list.
+
+Example: `--decoupler_methods` mlm,ulsm
+
 #### Network Sources
 
 You can obtain regulatory networks from well-established databases and tools. Common examples include:
