@@ -31,7 +31,7 @@ def parse_ext_args(args_string: str):
       --contrast <str> (optional, e.g., treatment_vs_control)
       --column <str> (Column name to use for transposition; default: log2FoldChange)
       --ensembl_ids <str> (TRUE to convert ENSEMBL IDs to gene symbols, FALSE to skip)
-      --methods <str> (Comma-separated list of methods to use (e.g., 'ora,ulm'))
+      --methods <str> (Comma-separated list of methods to use (e.g., 'mlm,ulm'))
     """
     if args_string == "null":
         args_string = ""
@@ -95,13 +95,6 @@ if parsed_args.transpose.upper() == "TRUE":
 
 parsedargs = {'args': {}}
 parsedargs['min_n'] = parsed_args.min_n
-print('Mat:')
-print(mat)
-print('Net')
-print(net)
-print(f"Input matrix shape: {mat.shape}")
-print(f"Network sources: {net['source'].nunique()}")
-print(f"Network targets: {net['target'].nunique()}")
 
 results = dc.decouple(
     mat=mat,
