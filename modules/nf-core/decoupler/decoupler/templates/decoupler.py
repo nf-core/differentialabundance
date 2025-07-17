@@ -18,7 +18,6 @@ import decoupler as dc
 import matplotlib.pyplot as plt
 
 
-
 mat = pd.read_csv("${mat}", sep="\t", index_col=0)
 net = pd.read_csv("${net}", sep="\t")
 
@@ -96,13 +95,13 @@ if parsed_args.transpose.upper() == "TRUE":
 parsedargs = {'args': {}}
 parsedargs['min_n'] = parsed_args.min_n
 
+
 results = dc.decouple(
     mat=mat,
     net=net,
     methods=methods,
     **parsedargs
 )
-
 
 for result in results:
     # Save table
@@ -113,7 +112,7 @@ for result in results:
     plt.savefig("${task.ext.prefix}" + "_" + result + "_decoupler_plot.png", dpi=300, bbox_inches='tight')
     plt.close()
 
-
 ## VERSIONS FILE
 with open('versions.yml', 'a') as version_file:
+    version_file.write('"${task.process}":' + "\\n")
     version_file.write("decoupler-py: " + dc.__version__ + "\\n")

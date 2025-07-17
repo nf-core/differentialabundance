@@ -42,7 +42,7 @@
                     },
                     "decoupler/decoupler": {
                         "branch": "master",
-                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
+                        "git_sha": "cc15a621134366f0432310f2567282c747560332",
                         "installed_by": ["modules"]
                     },
                     "deseq2/differential": {
