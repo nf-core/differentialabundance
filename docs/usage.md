@@ -200,10 +200,10 @@ contrasts:
 The necessary fields in order are:
 
 - `formula` - A string representation of the model formula. It is used to build the design matrix.
-- `make_contrasts_str` - An explicit literal contrast string (e.g., "treatmenthND6 - treatmentmCherry") that is passed directly to [`limma::makeContrasts()`](https://rdrr.io/bioc/limma/man/makeContrasts.html) in `VARIANCEPARTITION_DREAM`. The parameter names must be syntactically valid variable names in R (see [`make.names`](https://stat.ethz.ch/R-manual/R-devel/library/base/html/make.names.html)). This field provides full control for complex designs. Requires `formula`.
+- `make_contrasts_str` - An explicit literal contrast string (e.g., "treatmenthND6 - treatmentmCherry") that is passed directly to [`limma::makeContrasts()`](https://rdrr.io/bioc/limma/man/makeContrasts.html) in `VARIANCEPARTITION_DREAM` and `LIMMA_DIFFERENTIAL`. The parameter names must be syntactically valid variable names in R (see [`make.names`](https://stat.ethz.ch/R-manual/R-devel/library/base/html/make.names.html)). This field provides full control for complex designs. Requires `formula`.
 
 > [!WARNING]
-> Formula-based contrasts are currently only supported by `VARIANCEPARTITION_DREAM`. They **do not work** with tools like `DESEQ2` or base `LIMMA` implementations yet.
+> Formula-based contrasts are currently only supported by `VARIANCEPARTITION_DREAM` and `LIMMA_DIFFERENTIAL`. They **do not work** with tools like `DESEQ2` yet.
 
 > [!NOTE]
 >
@@ -215,6 +215,7 @@ The necessary fields in order are:
 > - Then, `make_contrasts_str: "conditiontreated"` selects that coefficient for testing.
 >
 > This gives full control over the contrast definition but requires understanding of the model matrix.
+> Some downstream applications (e.g. `GSEA_GSEA`, `SHINYNGS_APP`) do not support formula-based contrasts as they require a `meta.variable`.
 
 Beyond the basic one-factor comparison, the YAML contrasts format supports advanced experimental designs through the use of interaction terms and custom contrast strings. These are particularly useful in multifactorial experiments where the effect of one variable may depend on the level of another (e.g. genotype × treatment). To model an interaction between genotype and treatment, use a formula like `~ genotype * treatment`, which expands the yaml to:
 
@@ -506,6 +507,8 @@ process {
 ```
 
 You will not get the final reporting outcomes of the workflow, but you will get the differential tables produced by DESeq2 or Limma, and the results of any gene seta analysis you have enabled.
+
+We have also added a dedicated pipeline parameter, `--skip_reports` that allows you to skip only the RMarkdown notebook and bundled report while leaving other reporting processes active. The `RMARKDOWNNOTEBOOK` process assumes that every grouping variable you pass to it (from the contrasts file’s variable column or PCA-derived informative_variables) exists as a valid, named column in your sample metadata. If you know your metadata or contrasts might be incomplete or non-standard (such as using formula-based yaml files), the you can use this flag to skip these steps.
 
 #### Restricting samples considered by DESeq2 or Limma
 

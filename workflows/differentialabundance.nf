@@ -135,13 +135,14 @@ workflow DIFFERENTIALABUNDANCE {
             def yaml_data = new groovy.yaml.YamlSlurper().parse(yaml_file)
             yaml_data.contrasts.collect { contrast ->
                 if (contrast.containsKey('formula')) {
-                    tuple(meta, contrast.id)
+                return null
                 }
                 else if (contrast.containsKey('comparison')) { //  Necessary line for Maxquant to work. Check if it can be simplified to use contrast.id
                     tuple(meta, contrast.comparison[0])
                 }
             }
         }
+            .filter { it != null }
         .unique() // Uniquify to keep each contrast variable only once (in case it exists in multiple lines for blocking etc.)
 
     ch_contrasts_variables_from_other = ch_contrast_variables_input.csv.splitCsv(header:true)
@@ -410,6 +411,7 @@ workflow DIFFERENTIALABUNDANCE {
             }
             contrast.formula = contrast.formula?.trim() ? contrast.formula.trim() : null
             contrast.make_contrasts_str = contrast.make_contrasts_str?.trim() ? contrast.make_contrasts_str.trim() : null
+
             return [meta, contrast, contrast.variable, contrast.reference, contrast.target, contrast.formula, contrast.make_contrasts_str]
         }
         .groupTuple() // [meta, [contrast], [variable], [reference], [target], [formula], [comparison]]
@@ -702,9 +704,6 @@ workflow DIFFERENTIALABUNDANCE {
 
     // Make (and optionally deploy) the shinyngs app
 
-    ch_shinyngs = ch_paramsets
-        .filter{ it.params.shinyngs_build_app }
-
     // To prepare the input for shinyngs app we need to first make sure that the differential
     // results are parsed in the same order as the contrast file
     // To do so, as we cannot rely on the order of the channels as they are asynchronous, we
@@ -713,20 +712,27 @@ workflow DIFFERENTIALABUNDANCE {
 
     // Create a channel with the differential results and the corresponding map with
     // the contrast entries
-    ch_differential_with_contrast = ch_shinyngs
-        .join( ch_differential_results.groupTuple() )   // [meta, [meta with contrast], [differential results]]
+    differential_with_contrast = ch_paramsets
+        .join( ch_differential_results
+            .filter { meta, contrast, results -> contrast.variable?.trim() }
+            .groupTuple()
+        )   // [meta, [meta with contrast], [differential results]]
         .join( ch_contrasts )                           // [meta, [contrast], [variable], [reference], [target], [formula], [comparison]]
         .map { meta, meta_with_contrast, results, contrast, variable, reference, target, formula, comparison ->
             // extract the contrast entries from the meta dynamically
             // in this way we don't need to harcode the contrast keys
-            def contrast_keys = contrast[0].keySet()
-            def contrast_maps = meta_with_contrast.collect { it.subMap(contrast_keys) }
-            [meta, results, contrast_maps]   // [meta, [differential results], [contrast maps]]
+            def paramset_contrast_keys = contrast[0].keySet()
+            def contrast_maps = meta_with_contrast.collect { it.subMap(paramset_contrast_keys) }
+            [meta, meta_with_contrast, results, contrast_maps]
+        }
+        .multiMap { meta, meta_with_contrast, results, contrast_maps ->
+            differential_results: [meta, meta_with_contrast, results]
+            contrast_maps: [meta, contrast_maps]
         }
 
     // Save temporary contrast csv files with the entries ordered by the differential results
-    ch_contrasts_sorted = ch_differential_with_contrast
-        .collectFile { meta, results, contrast_map ->
+    ch_contrasts_sorted = differential_with_contrast.contrast_maps
+        .collectFile { meta, contrast_map ->
             def header = contrast_map[0].keySet().join(',')
             def content = contrast_map.collect { it.values().join(',') }
             def lines = header + '\n' + content.join('\n')
@@ -734,21 +740,23 @@ workflow DIFFERENTIALABUNDANCE {
         }
         // parse the channel to have the contrast file with the corresponding meta
         .map { [it.baseName, it] }
-        .join( ch_shinyngs.map { [it.paramset_name, it] } )
+        .join( ch_paramsets.map { [it.paramset_name, it] } )
         .map { paramset_name, contrast_file, meta ->
             [meta, contrast_file]
         }
 
     // Parse input for shinyngs app
-    ch_shinyngs_input = ch_differential_with_contrast
+    ch_shinyngs_input = differential_with_contrast.differential_results
         .join(ch_contrasts_sorted)
         .join(ch_all_matrices)
-        .multiMap { meta, differential_results, contrast_map, contrast_file, samplesheet, features, matrices ->
+        .filter { row ->
+            row[0].params.shinyngs_build_app
+        }
+        .multiMap { meta, meta_with_contrast, differential_results, contrast_file, samplesheet, features, matrices ->
             matrices: [meta, samplesheet, features, matrices]
             contrasts_and_differential: [meta, contrast_file, differential_results]
             contrast_stats_assay: meta.params.exploratory_assay_names.split(',').findIndexOf { it == meta.params.exploratory_final_assay } + 1
         }
-
     SHINYNGS_APP(
         ch_shinyngs_input.matrices,    // meta, samples, features, [  matrices ]
         ch_shinyngs_input.contrasts_and_differential,   // meta, contrast file, [ differential results ]
@@ -790,7 +798,7 @@ workflow DIFFERENTIALABUNDANCE {
     // So all the files generated with the same paramset meta will go together to report.
     // Note that the files generated with different contrasts will also be grouped together for the same paramset meta.
 
-    ch_differential_grouped = ch_differential_results
+    ch_differential_grouped = differential_with_contrast.differential_results.transpose()
         .join(ch_differential_model, by:[0,1])
         .groupTuple()                                 // [ meta, [meta with contrast], [differential results], [differential model] ]
         .map { [it[0], it.tail().tail().flatten()] }  // [ meta, [differential results and models] ]
@@ -805,7 +813,7 @@ workflow DIFFERENTIALABUNDANCE {
     ch_report_input = ch_report_files    // [meta, [report_file, logo_file, css_file, citations_file]]
         .combine(ch_collated_versions)   // [versions file]
         .join(ch_all_matrices)           // [meta, samplesheet, features, [matrices]]
-        .join(ch_validated_contrast)     // [meta, contrast file]
+        .join(ch_contrasts_sorted)       // [meta, contrast file]
         .join(ch_differential_grouped)   // [meta, [differential results and models]]
         .join(ch_functional_grouped, remainder: true) // [meta, [functional results]]
         .map { [it[0], it.tail().flatten().grep()] }  // [meta, [files]]   // note that grep() would remove null files from join with remainder true
@@ -826,21 +834,22 @@ workflow DIFFERENTIALABUNDANCE {
         }
 
     // Render the final report
+    if (!params.skip_reports) {
+        RMARKDOWNNOTEBOOK(
+            ch_report_input.report_file,
+            ch_report_input.report_params,
+            ch_report_input.input_files.map{ meta, files -> files }
+        )
 
-    RMARKDOWNNOTEBOOK(
-        ch_report_input.report_file,
-        ch_report_input.report_params,
-        ch_report_input.input_files.map{ meta, files -> files }
-    )
+        // Make a report bundle comprising the markdown document and all necessary
+        // input files
 
-    // Make a report bundle comprising the markdown document and all necessary
-    // input files
+        ch_bundle_input = RMARKDOWNNOTEBOOK.out.parameterised_notebook
+                .combine(ch_report_input.input_files, by:0)
+                .map{[it[0], it.tail().flatten()]}   // [meta, [files]]
 
-    ch_bundle_input = RMARKDOWNNOTEBOOK.out.parameterised_notebook
-            .combine(ch_report_input.input_files, by:0)
-            .map{[it[0], it.tail().flatten()]}   // [meta, [files]]
-
-    MAKE_REPORT_BUNDLE( ch_bundle_input )
+        MAKE_REPORT_BUNDLE( ch_bundle_input )
+    }
 }
 
 /*
