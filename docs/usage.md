@@ -430,7 +430,7 @@ You can obtain regulatory networks from well-established databases and tools. Co
 
 If you want to see the full list of available methods and functions, refer to the functions's [official guide] (https://decoupler-py.readthedocs.io/en/latest/notebooks/benchmark.html#Multiple-networks).
 
-**Note**: Decoupler is only supported for human or mouse datasets. Please ensure your organism is compatible before enabling this module.
+**Note**: Then resources mentioned above are provided only for human or mouse datasets. Please ensure your organism is compatible before enabling this module or provide a custom, species-specific dataset. 
 
 ## Gene set enrichment analysis
 
