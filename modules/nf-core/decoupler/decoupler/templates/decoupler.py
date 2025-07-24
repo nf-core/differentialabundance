@@ -74,7 +74,7 @@ def parse_gtf(gtf_file: str):
     return mapping
 
 # Parse external arguments
-raw_args = "${task.ext.args}"
+raw_args = """${task.ext.args}"""
 parsed_args = parse_ext_args(raw_args)
 methods = [m.strip() for m in parsed_args.methods.split(",") if m.strip()]
 
