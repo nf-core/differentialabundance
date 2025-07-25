@@ -49,13 +49,9 @@
                 "plots",
                 "plots/decoupler",
                 "plots/decoupler/limma_treatment_mCherry_hND6__SRP254919_consensus_estimate_decoupler_plot.png",
-                "plots/decoupler/limma_treatment_mCherry_hND6__SRP254919_consensus_pvals_decoupler_plot.png",
                 "plots/decoupler/limma_treatment_mCherry_hND6__SRP254919_ulm_estimate_decoupler_plot.png",
-                "plots/decoupler/limma_treatment_mCherry_hND6__SRP254919_ulm_pvals_decoupler_plot.png",
                 "plots/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_consensus_estimate_decoupler_plot.png",
-                "plots/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_consensus_pvals_decoupler_plot.png",
                 "plots/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_ulm_estimate_decoupler_plot.png",
-                "plots/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_ulm_pvals_decoupler_plot.png",
                 "plots/differential",
                 "plots/differential/treatment_mCherry_hND6__SRP254919",
                 "plots/differential/treatment_mCherry_hND6__SRP254919/png",
@@ -126,7 +122,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-07-18T04:21:26.410045095"
+        "timestamp": "2025-07-25T15:26:41.107639839"
     },
     "Test rnaseq limma profile": {
         "content": [
