@@ -49,8 +49,8 @@ Stand-alone graphical outputs are placed in this directory. They may be useful i
     - `[contrast]/[norm_function].normalized_mean_variance_relationship.png`: Plots of log intensity vs mean log intensity after normalization of each contrast level.
     - `[contrast]/[norm_function].normalized_distributions.png`: A plot of sample distributions after normalization.
     - `[contrast]/raw_distributions.png`: A plot of sample distributions without normalization.
-
-</details>
+  - `decoupler/`: Directory containing plots of decoupler results - `[differential_method]_[contrast_name]_[decoupler_method]_estimate_decoupler_plot.png`: contains the plot for the estimated activity scores for each regulator (rows) across all samples (columns).
+  </details>
 
 Most plots are included in the HTML report (see above), but are also included in static files in this folder to facilitate use in external reporting.
 
@@ -74,8 +74,8 @@ Most plots are included in the HTML report (see above), but are also included in
   - `immunedeconv/`: Directory containing table of immunedeconv results
     - `${prefix}.deconvolution_results.tsv`: TSV output that contains estimated proportions of immune cell types for each sample
   - `decoupler/`: Directory containing tables of decoupler results
-    - `METHOD_estimate__decoupler.tsv`: contains the estimated activity scores for each regulator (rows) across all samples (columns).
-    - `METHOD_pvals__decoupler.tsv`: contains the associated p-values for those activity scores, when the method supports statistical significance estimation.
+    - `[differential_method]_[contrast_name]_[decoupler_method]_estimate_decoupler.tsv`: contains the estimated activity scores for each regulator (rows) across all samples (columns).
+    - `[differential_method]_[contrast_name]_[decoupler_method]_pvals_decoupler.{tsv}.tsv`: contains the associated p-values for those activity scores, when the method supports statistical significance estimation.
   - `gsea/`: Directory containing tables of differential gene set analyis from GSEA (where enabled)
     - `[contrast]/[contrast].gsea_report_for_[condition].tsv`: A GSEA report table for each side of each contrast
   - `gprofiler2/`: Directory containing tables of differential gene set analyis from gprofiler2 (where enabled)
