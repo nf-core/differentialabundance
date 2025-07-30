@@ -163,25 +163,13 @@
                 "tables/differential/treatment_plus_genotype_SRP254919.dream.results_filtered.tsv"
             ],
             [
-                "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
-                "dream_full_model_with_interactions_SRP254919_consensus_estimate_decoupler.tsv:md5,e362db3b7988a6cff9138c1f3f04e158",
-                "dream_full_model_with_interactions_SRP254919_consensus_pvals_decoupler.tsv:md5,e0a6f2bac31c0009492607ffffe039b3",
-                "dream_full_model_with_interactions_SRP254919_ulm_estimate_decoupler.tsv:md5,a4647244f62228f23dd181708ba524cb",
-                "dream_full_model_with_interactions_SRP254919_ulm_pvals_decoupler.tsv:md5,c90af52101c49619540ac20adbdd4073",
-                "dream_interaction_genotype_treatment_SRP254919_consensus_estimate_decoupler.tsv:md5,568545acb5825c2cf97a8c39462db454",
-                "dream_interaction_genotype_treatment_SRP254919_consensus_pvals_decoupler.tsv:md5,efb57ded7d4f4c3256759cef4eddab57",
-                "dream_interaction_genotype_treatment_SRP254919_ulm_estimate_decoupler.tsv:md5,33f600b2fbc46b9c7db4bd5c052b4be0",
-                "dream_interaction_genotype_treatment_SRP254919_ulm_pvals_decoupler.tsv:md5,585b6c763eb86100f166adcb87a6ac7a",
-                "dream_treatment_plus_genotype_SRP254919_consensus_estimate_decoupler.tsv:md5,32063dfe8ad7dd2a7fc36144b821150c",
-                "dream_treatment_plus_genotype_SRP254919_consensus_pvals_decoupler.tsv:md5,e248178dd7d51916e088d3666d6435bd",
-                "dream_treatment_plus_genotype_SRP254919_ulm_estimate_decoupler.tsv:md5,8337f5394f2bca6411f8e42fb51ea015",
-                "dream_treatment_plus_genotype_SRP254919_ulm_pvals_decoupler.tsv:md5,d49131ebbabc8ddc737c106b60d41f7a"
+                "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-07-25T16:21:05.088202136"
+        "timestamp": "2025-07-30T19:24:49.419792849"
     }
 }
