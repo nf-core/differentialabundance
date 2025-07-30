@@ -96,7 +96,8 @@ nextflow_pipeline {
                 )
         }
     }
-test("Test profile - with toolsheet and formula") {
+
+    test("Test profile - with toolsheet and formula") {
 
         when {
             params {
@@ -137,7 +138,6 @@ test("Test profile - with toolsheet and formula") {
                 )
         }
     }
-}
 
 test("Test profile - with toolsheet and formula") {
 
