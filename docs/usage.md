@@ -200,10 +200,7 @@ contrasts:
 The necessary fields in order are:
 
 - `formula` - A string representation of the model formula. It is used to build the design matrix.
-- `make_contrasts_str` - An explicit literal contrast string (e.g., "treatmenthND6 - treatmentmCherry") that is passed directly to [`limma::makeContrasts()`](https://rdrr.io/bioc/limma/man/makeContrasts.html) in `VARIANCEPARTITION_DREAM` and `LIMMA_DIFFERENTIAL`. The parameter names must be syntactically valid variable names in R (see [`make.names`](https://stat.ethz.ch/R-manual/R-devel/library/base/html/make.names.html)). This field provides full control for complex designs. Requires `formula`.
-
-> [!WARNING]
-> Formula-based contrasts are currently only supported by `VARIANCEPARTITION_DREAM` and `LIMMA_DIFFERENTIAL`. They **do not work** with tools like `DESEQ2` yet.
+- `make_contrasts_str` - An explicit literal contrast string (e.g., "treatmenthND6 - treatmentmCherry") that is passed directly to [`limma::makeContrasts()`](https://rdrr.io/bioc/limma/man/makeContrasts.html) in `VARIANCEPARTITION_DREAM`, `LIMMA_DIFFERENTIAL` and `DESEQ2_DIFFERENTIAL`. The parameter names must be syntactically valid variable names in R (see [`make.names`](https://stat.ethz.ch/R-manual/R-devel/library/base/html/make.names.html)). This field provides full control for complex designs. Requires `formula`.
 
 > [!NOTE]
 >
@@ -223,7 +220,6 @@ Beyond the basic one-factor comparison, the YAML contrasts format supports advan
 contrasts:
   - id: genotype_WT_KO_treatment_Control_Treated
     formula: "~ genotype * treatment"
-    comparison: ["genotype", "WT", "KO"]
     make_contrasts_str: "genotypeKO.treatmentTreated"
 ```
 

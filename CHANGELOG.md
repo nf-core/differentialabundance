@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- [[#473](https://github.com/nf-core/differentialabundance/pull/473)] - Allow formula-based contrasts in DESEQ2. ([@atrigila](https://github.com/atrigila), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@grst](https://github.com/grst)).
 - [[#443](https://github.com/nf-core/differentialabundance/pull/443)] - Add toolsheet-related implementations. ([@suzannejin](https://github.com/suzannejin), review by [@pinin4fjords](https://github.com/pinin4fjords), [@mirpedrol](https://github.com/mirpedrol) and [@JoseEspinosa](https://github.com/JoseEspinosa))
 - [[#450](https://github.com/nf-core/differentialabundance/pull/441)] - Allow usage of strings for makeContrasts in DREAM. ([@atrigila](https://github.com/atrigila), review by [@pinin4fjords](https://github.com/pinin4fjords), [@suzannejin](https://github.com/suzannejin) and [@grst](https://github.com/grst)).
 - [[#441](https://github.com/nf-core/differentialabundance/pull/441)] - Add dream differential module. ([@nschcolnicov](https://github.com/nschcolnicov) and [@alanmmobbs93](https://github.com/alanmobbs93), review by [@pinin4fjords](https://github.com/pinin4fjords), [@suzannejin](https://github.com/suzannejin) and [@grst](https://github.com/grst)).
