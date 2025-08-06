@@ -8,6 +8,7 @@ include { CUSTOM_TABULARTOGSEACLS  } from '../../../modules/nf-core/custom/tabul
 include { CUSTOM_TABULARTOGSEACHIP } from '../../../modules/nf-core/custom/tabulartogseachip/main.nf'
 include { GSEA_GSEA                } from '../../../modules/nf-core/gsea/gsea/main.nf'
 include { PROPR_GREA               } from "../../../modules/nf-core/propr/grea/main.nf"
+include { DECOUPLER                } from '../../../modules/nf-core/decoupler/decoupler/main'
 
 // Combine meta maps, including merging non-identical values of shared keys (e.g. 'id')
 def mergeMaps(meta, meta2){
@@ -116,7 +117,25 @@ workflow DIFFERENTIAL_FUNCTIONAL_ENRICHMENT {
         ch_input_for_gsea.map{ tuple(it[0].reference, it[0].target) },
         CUSTOM_TABULARTOGSEACHIP.out.chip.first()
     )
+    ch_decoupler_input = ch_input_for_other.input
+        .filter{ it[0].functional_method == 'decoupler' }
+        .map { meta, differential_results ->
+            // Preserve the method_differential field from the original metadata
+            def new_meta = [
+                id: meta.id,
+                method_differential: meta.params.differential_method
+            ]
+            [new_meta, differential_results]
+        }
+    ch_decoupler_input.view()
+    ch_input_for_other.genesets.filter{ it[0].functional_method == 'decoupler' }.map{ meta, genesets -> genesets[0] }.view()
+    ch_input_for_other.background.filter{ it[0].functional_method == 'decoupler' }.map{ meta, background -> background }.view()
 
+    DECOUPLER(
+        ch_decoupler_input,
+        ch_input_for_other.genesets.filter{ it[0].functional_method == 'decoupler' }.map{ meta, genesets -> genesets[0] },
+        ch_input_for_other.background.filter{ it[0].functional_method == 'decoupler' }.map{ meta, background -> background }
+    )
     // ----------------------------------------------------
     // Perform enrichment analysis with GREA
     // ----------------------------------------------------
@@ -125,6 +144,7 @@ workflow DIFFERENTIAL_FUNCTIONAL_ENRICHMENT {
         ch_input_for_other.input.filter{ it[0].functional_method == 'grea' },
         ch_input_for_other.genesets.filter{ it[0].functional_method == 'grea' }
     )
+
 
     // collect versions info
     ch_versions = ch_versions
