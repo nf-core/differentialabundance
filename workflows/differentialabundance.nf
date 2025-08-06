@@ -31,7 +31,6 @@ include { PROTEUS_READPROTEINGROUPS as PROTEUS              } from '../modules/n
 include { GEOQUERY_GETGEO                                   } from '../modules/nf-core/geoquery/getgeo/main'
 include { ZIP as MAKE_REPORT_BUNDLE                         } from '../modules/nf-core/zip/main'
 include { IMMUNEDECONV                                      } from '../modules/nf-core/immunedeconv/main'
-include { DECOUPLER                                         } from '../modules/nf-core/decoupler/decoupler/main'
 include { softwareVersionsToYAML                            } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 
 //
@@ -105,7 +104,11 @@ workflow DIFFERENTIALABUNDANCE {
 
     ch_gene_sets = ch_paramsets
         .map { meta ->
-            [ meta, meta.params.gene_sets_files ? meta.params.gene_sets_files.split(",").collect { file(it, checkIfExists: true) } : [] ]
+            if (meta.params.functional_method == 'decoupler' && meta.params.decoupler_network) {
+                [ meta, [file(meta.params.decoupler_network, checkIfExists: true)] ]
+            } else {
+                [ meta, meta.params.gene_sets_files ? meta.params.gene_sets_files.split(",").collect { file(it, checkIfExists: true) } : [] ]
+            }
         }
 
     // ========================================================================
@@ -542,15 +545,20 @@ workflow DIFFERENTIALABUNDANCE {
                 .map{meta -> [meta, file(meta.params.gprofiler2_background_file, checkIfExists: true)]}
         )
         .mix(
+            ch_validated_featuremeta
+                .filter{meta, features -> meta.params.functional_method == 'decoupler'}
+                .map{meta, features -> [meta, features]}
+        )
+        .mix(
             ch_paramsets
-                .filter{ meta -> meta.params.functional_method != 'gprofiler2'}
+                .filter{ meta -> meta.params.functional_method != 'gprofiler2' && meta.params.functional_method != 'decoupler'}
                 .map{meta -> [meta, []]}
         )
-
     // Prepare input for functional analysis
 
     // - use normalized matrix, if method is gsea
     // - use filtered differential results, if method is gprofiler2
+    // - use unfiltered differential results, if method is decoupler
     ch_functional_analysis_matrices = ch_norm
         .filter{meta, matrix -> meta.params.functional_method == 'gsea'}
         .map{ meta, matrix -> [meta, meta, matrix]}
@@ -560,6 +568,11 @@ workflow DIFFERENTIALABUNDANCE {
                 // Here the key is the meta without contrast info (same as the meta in other channels)
                 // So we can use this key to combine channels
                 .filter{meta, meta_with_contrast, results -> meta.params.functional_method == 'gprofiler2'}
+        )
+        .mix(
+            ch_differential_results
+                // For decoupler, use unfiltered differential results
+                .filter{meta, meta_with_contrast, results -> meta.params.functional_method == 'decoupler'}
         )
 
     ch_functional_input = ch_functional_analysis_matrices  // meta, meta with contrast, file
@@ -606,32 +619,6 @@ workflow DIFFERENTIALABUNDANCE {
     ch_versions = ch_versions
         .mix(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.versions)
 
-        // Run DECOUPLER
-    if (params.functional_method == 'decoupler' && params.gtf){
-
-        ch_gtf = file(params.gtf)
-        ch_network_file = file(params.decoupler_network, checkIfExists:true)
-        ch_differential_results_for_module = ch_differential_results.map { key, meta, file ->
-
-            def new_meta = [
-                id: meta.id,
-                method_differential: meta.params.differential_method
-            ]
-
-            [ new_meta, file ]
-        }
-
-        DECOUPLER(
-            ch_differential_results_for_module,
-            ch_network_file,
-            ch_gtf
-        )
-
-        ch_versions = ch_versions
-            .mix(DECOUPLER.out.versions)
-    }else if (params.functional_method == 'decoupler' && !params.gtf){
-        exit 1, "A reference GTF file is required to run Decoupler. Please provide one via the --gtf parameter."
-    }
 
     // ========================================================================
     // Plot figures
