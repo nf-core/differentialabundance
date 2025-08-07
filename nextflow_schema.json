@@ -1371,7 +1371,7 @@
             "$ref": "#/$defs/functional_gprofiler2"
         },
         {
-            "$ref": "#/$defs/functional_decoupler"
+            "$ref": "#/$defs/functional_decoupler_specific_options"
         },
         {
             "$ref": "#/$defs/shiny_shiny_app_settings"
