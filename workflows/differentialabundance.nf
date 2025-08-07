@@ -104,11 +104,7 @@ workflow DIFFERENTIALABUNDANCE {
 
     ch_gene_sets = ch_paramsets
         .map { meta ->
-            if (meta.params.functional_method == 'decoupler' && meta.params.decoupler_network) {
-                [ meta, [file(meta.params.decoupler_network, checkIfExists: true)] ]
-            } else {
-                [ meta, meta.params.gene_sets_files ? meta.params.gene_sets_files.split(",").collect { file(it, checkIfExists: true) } : [] ]
-            }
+            [ meta, meta.params.gene_sets_files ? meta.params.gene_sets_files.split(",").collect { file(it, checkIfExists: true) } : [] ]
         }
 
     // ========================================================================
@@ -545,13 +541,8 @@ workflow DIFFERENTIALABUNDANCE {
                 .map{meta -> [meta, file(meta.params.gprofiler2_background_file, checkIfExists: true)]}
         )
         .mix(
-            ch_validated_featuremeta
-                .filter{meta, features -> meta.params.functional_method == 'decoupler'}
-                .map{meta, features -> [meta, features]}
-        )
-        .mix(
             ch_paramsets
-                .filter{ meta -> meta.params.functional_method != 'gprofiler2' && meta.params.functional_method != 'decoupler'}
+                .filter{ meta -> meta.params.functional_method != 'gprofiler2'}
                 .map{meta -> [meta, []]}
         )
     // Prepare input for functional analysis
