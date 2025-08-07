@@ -1047,7 +1047,7 @@
             },
             "fa_icon": "fas fa-layer-group"
         },
-        "functional_decoupler": {
+        "functional_decoupler_specific_options": {
             "title": "[functional] decoupler",
             "type": "object",
             "description": "",
