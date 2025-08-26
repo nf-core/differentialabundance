@@ -104,7 +104,11 @@ workflow DIFFERENTIALABUNDANCE {
 
     ch_gene_sets = ch_paramsets
         .map { meta ->
-            [ meta, meta.params.gene_sets_files ? meta.params.gene_sets_files.split(",").collect { file(it, checkIfExists: true) } : [] ]
+            if (meta.params.functional_method == 'decoupler' && meta.params.decoupler_network) {
+                [ meta, [file(meta.params.decoupler_network, checkIfExists: true)] ]
+            } else {
+                [ meta, meta.params.gene_sets_files ? meta.params.gene_sets_files.split(",").collect { file(it, checkIfExists: true) } : [] ]
+            }
         }
 
     // ========================================================================
