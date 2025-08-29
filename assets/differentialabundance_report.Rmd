@@ -754,51 +754,55 @@ for (assay_type in rev(names(assay_data))){
 
 ```{r, echo=FALSE, results='asis', warning=FALSE}
 
-# We can't look for ouliers in sets of less than 3 samples, so exclude variables
-# unless the minimum group size is larger than that
-iv_min_group_sizes <- unlist(lapply(informative_variables, function(x) min(table(observations[[x]]))))
+if (!params$report_skip_outlier_detection){
+    # We can't look for ouliers in sets of less than 3 samples, so exclude variables
+    # unless the minimum group size is larger than that
+    iv_min_group_sizes <- unlist(lapply(informative_variables, function(x) min(table(observations[[x]]))))
 
-if (any(iv_min_group_sizes > 2)){
-    cat("\n### Outlier detection {.tabset}\n")
-    cat("\nOutlier detection based on [median absolute deviation](https://archive.ph/o3thZ) was undertaken, the outlier scoring is plotted below. For more on MAD, see [this wiki article](https://en.wikipedia.org/wiki/Median_absolute_deviation).\n")
-}
+    if (any(iv_min_group_sizes > 2)){
+        cat("\n### Outlier detection {.tabset}\n")
+        cat("\nOutlier detection based on [median absolute deviation](https://archive.ph/o3thZ) was undertaken, the outlier scoring is plotted below. For more on MAD, see [this wiki article](https://en.wikipedia.org/wiki/Median_absolute_deviation).\n")
+    }
 
-foo <- lapply(informative_variables[iv_min_group_sizes > 2], function(iv){
+    foo <- lapply(informative_variables[iv_min_group_sizes > 2], function(iv){
 
-    cat(paste("\n####", iv, "\n"))
+        cat(paste("\n####", iv, "\n"))
 
-    plotdata <-
-    madScore(
-        matrix = assay_data[[params$exploratory_final_assay]],
-        sample_sheet = observations,
-        groupby = iv
-    )
-
-    if (! is.null(plotdata)){
-        mad_plot_args <- list(
-            x = plotdata$group,
-            y = plotdata$mad,
-            color = plotdata$outlier,
-            hline_thresholds = c("Outlier threshold" = params$exploratory_mad_threshold),
-            palette = makeColorScale(2, palette = params$differential_palette_name),
-            legend_title = "Outlier status",
-            labels = rownames(plotdata),
-            show_labels = TRUE,
-            xlab = "Sample group",
-            ylab = "MAD score"
+        plotdata <-
+        madScore(
+            matrix = assay_data[[params$exploratory_final_assay]],
+            sample_sheet = observations,
+            groupby = iv
         )
 
-        print(htmltools::tagList(do.call("plotly_scatterplot", mad_plot_args)))
+        if (! is.null(plotdata)){
+            mad_plot_args <- list(
+                x = plotdata$group,
+                y = plotdata$mad,
+                color = plotdata$outlier,
+                hline_thresholds = c("Outlier threshold" = params$exploratory_mad_threshold),
+                palette = makeColorScale(2, palette = params$differential_palette_name),
+                legend_title = "Outlier status",
+                labels = rownames(plotdata),
+                show_labels = TRUE,
+                xlab = "Sample group",
+                ylab = "MAD score"
+            )
 
-        outliers <- rownames(plotdata)[plotdata$outlier]
+            print(htmltools::tagList(do.call("plotly_scatterplot", mad_plot_args)))
 
-        if (length(outliers) == 0){
-            cat(paste0("No outlying samples were detected in groups defined by ", iv,".\n"))
-        }else{
-            cat(paste0(length(outliers), ' possible outliers were detected in groups defined by ', iv ,': ', paste(outliers, collapse=', '), "\n"))
+            outliers <- rownames(plotdata)[plotdata$outlier]
+
+            if (length(outliers) == 0){
+                cat(paste0("No outlying samples were detected in groups defined by ", iv,".\n"))
+            }else{
+                cat(paste0(length(outliers), ' possible outliers were detected in groups defined by ', iv ,': ', paste(outliers, collapse=', '), "\n"))
+            }
         }
-    }
-})
+    })
+}
+
+
 ```
 
 ## Differential analysis

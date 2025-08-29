@@ -355,13 +355,13 @@
             "properties": {
                 "filtering_min_abundance": {
                     "type": "number",
-                    "default": 1.0,
+                    "default": 1,
                     "description": "Minimum abundance value",
                     "fa_icon": "fas fa-compress-alt"
                 },
                 "filtering_min_samples": {
                     "type": "number",
-                    "default": 1.0,
+                    "default": 1,
                     "description": "Minimum observations that must pass the threshold to retain the row/ feature (e.g. gene).",
                     "fa_icon": "fas fa-compress-alt"
                 },
@@ -540,13 +540,13 @@
                 },
                 "differential_min_fold_change": {
                     "type": "number",
-                    "default": 2.0,
+                    "default": 2,
                     "description": "Minimum fold change used to calculate differential feature numbers",
                     "fa_icon": "fas fa-angle-double-down"
                 },
                 "differential_max_pval": {
                     "type": "number",
-                    "default": 1.0,
+                    "default": 1,
                     "description": "Maximum p value used to calculate differential feature numbers",
                     "fa_icon": "fas fa-angle-double-up"
                 },
@@ -804,7 +804,7 @@
                 },
                 "limma_p_value": {
                     "type": "number",
-                    "default": 1.0,
+                    "default": 1,
                     "description": "cutoff value for adjusted p-values. Only genes with lower p-values are listed.",
                     "fa_icon": "fas fa-angle-double-up"
                 },
@@ -1104,7 +1104,7 @@
                     "type": "string",
                     "default": "${projectDir}/docs/images/nf-core-differentialabundance_logo_light.png",
                     "description": "A logo to display in the report instead of the generic pipeline logo",
-                    "fa_icon": "far fa-font-awesome-logo-full"
+                    "fa_icon": "far fa-image"
                 },
                 "css_file": {
                     "type": "string",
@@ -1130,6 +1130,7 @@
                 },
                 "report_contributors": {
                     "type": "string",
+                    "fa_icon": "fas fa-users",
                     "description": "Semicolon-separated string of contributor info that should be listed in the report.",
                     "help_text": "List here names, roles, affiliations, contact info etc. of contributors to your project. Entries of different contributors are separated by semicolons, linebreaks within a contributor are separated by \n. The first line of each contributor will be bold in the report. E.g.: 'Jane Doe\nDirector of Institute of Microbiology\nUniversity of Smallville;John Smith\nPhD student\nUniversity of Smallville'"
                 },
@@ -1141,7 +1142,13 @@
                 "report_scree": {
                     "type": "boolean",
                     "default": true,
+                    "fa_icon": "fas fa-chart-line",
                     "description": "Whether to generate a scree plot in the report"
+                },
+                "report_skip_outlier_detection": {
+                    "type": "boolean",
+                    "description": "Whether to skip outlier detection plots in report (default: false)",
+                    "fa_icon": "fas fa-braille"
                 }
             },
             "required": ["report_file", "logo_file", "css_file"]
@@ -1266,7 +1273,7 @@
                 "hook_url": {
                     "type": "string",
                     "description": "Incoming hook URL for messaging service",
-                    "fa_icon": "fas fa-people-group",
+                    "fa_icon": "fab fa-internet-explorer",
                     "help_text": "Incoming hook URL for messaging service. Currently, MS Teams and Slack are supported.",
                     "hidden": true
                 },
