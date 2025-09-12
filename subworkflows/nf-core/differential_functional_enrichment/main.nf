@@ -38,10 +38,9 @@ workflow DIFFERENTIAL_FUNCTIONAL_ENRICHMENT {
     // Add method information into meta map of ch_input
     // This information is used later to determine which method to run for each input
     // Also, reorganize the structure to match them with the modules' input organization
-
     ch_input_for_other = ch_input
-        .multiMap {
-            meta, file, genesets, background, method ->
+        .join(ch_featuresheet)
+        .multiMap { meta, file, genesets, background, method, features_sheet, features_id, features_symbol ->
             def meta_with_method = meta + [ 'functional_method': method ]
             input:
                 [ meta_with_method, file ]
@@ -49,8 +48,10 @@ workflow DIFFERENTIAL_FUNCTIONAL_ENRICHMENT {
                 [ meta_with_method, genesets ]
             background:
                 [ meta_with_method, background ]
+            features:
+                [ meta_with_method, features_sheet, features_id, features_symbol]
         }
-
+    
     // In the case of GSEA, it needs additional files coming from other channels that other methods don't use
     // here we define the input channel for the GSEA section
 
@@ -80,25 +81,7 @@ workflow DIFFERENTIAL_FUNCTIONAL_ENRICHMENT {
         .combine(ch_samplesheet.join(ch_featuresheet), by:0)
         .combine(ch_contrasts_transposed, by:0)
         .multiMap(criteria)
-    
-    // In the case of DECOUPLER, it needs additional files coming from other channels that other methods don't use
-    // here we define the input channel for the DECOUPLER section
 
-    ch_decoupler_input = ch_input_for_other.input
-        .filter{ it[0].functional_method == 'decoupler' }
-        .map { meta, differential_results ->
-            // Preserve the method_differential field from the original metadata
-            def new_meta = [
-                id: meta.id,
-                method_differential: meta.params.differential_method
-            ]
-            [new_meta, differential_results]
-        }
-    ch_decoupler_network = ch_input_for_other.input
-        .filter{ it[0].functional_method == 'decoupler' }
-        .map { meta, differential_results ->
-            meta.params.decoupler_network ? file(meta.params.decoupler_network, checkIfExists: true) : []
-        }
 
     // ----------------------------------------------------
     // Perform enrichment analysis with gprofiler2
@@ -141,9 +124,10 @@ workflow DIFFERENTIAL_FUNCTIONAL_ENRICHMENT {
     // ----------------------------------------------------
 
     DECOUPLER(
-        ch_decoupler_input,
-        ch_decoupler_network,
-        ch_featuresheet.map{ meta, features, features_id, features_symbol -> features }.view()
+        ch_input_for_other.input.filter{ it[0].functional_method == 'decoupler' },
+        ch_input_for_other.genesets.filter{ it[0].functional_method == 'decoupler'},
+        ch_input_for_other.features.filter{ it[0].functional_method == 'decoupler'}
+            .map{ meta, features_sheet, features_id, features_symbol -> [meta, features_sheet] }
     )
 
     // ----------------------------------------------------
@@ -176,6 +160,11 @@ workflow DIFFERENTIAL_FUNCTIONAL_ENRICHMENT {
 
     // gsea-specific outputs
     gsea_report           = GSEA_GSEA.out.report_tsvs_ref.join(GSEA_GSEA.out.report_tsvs_target)
+
+    // decoupler-specific outputs
+    decoupler_dc_estimate = DECOUPLER.out.dc_estimate
+    decoupler_dc_pvals = DECOUPLER.out.dc_pvals
+    decoupler_png = DECOUPLER.out.png
 
     // grea-specific outputs
     grea_results          = PROPR_GREA.out.results
