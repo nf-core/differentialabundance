@@ -95,7 +95,7 @@ The `differential` folder is likely to be the core result set for most users, co
 <summary>Output files</summary>
 
 - `shinyngs_app/`
-  - `[study name]`:
+  - `[study_name]`:
     - `data.rds`: serialized R object which can be used to generate a Shiny application
     - `app.R`: minimal R script that will source the data object and generate the app
 
