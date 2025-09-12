@@ -41,23 +41,35 @@ def parse_ext_args(args_string: str):
     parser.add_argument("--column", type=str, default="log2FoldChange", help="Column name to use for transposition")
     parser.add_argument("--ensembl_ids", type=str, default="FALSE", help="Convert ENSEMBL IDs to gene symbols if TRUE")
     parser.add_argument("--methods", type=str, default = "ulm", help="Comma-separated list of methods to use (e.g., 'mlm,ulm')")
+    parser.add_argument("--features_id_col", type=str, default="gene_id", help="Column name for feature IDs")
+    parser.add_argument("--features_symbol_col", type=str, default="gene_name", help="Column name for feature symbols")
     return parser.parse_args(args_list)
 
 # Parse external arguments
-raw_args = """${task.ext.args}"""
+raw_args = "${task.ext.args}"
 parsed_args = parse_ext_args(raw_args)
 methods = [m.strip() for m in parsed_args.methods.split(",") if m.strip()]
 
 if parsed_args.ensembl_ids.upper() == "TRUE":
     try:
-        gtf_df = pd.read_csv("${gtf}", sep="\t")
-        gene_mapping = dict(zip(gtf_df["gene_id"], gtf_df["gene_name"]))
+        if not os.path.exists("${annot}"):
+            raise FileNotFoundError(f"Annotation file not found: ${annot}")
+
+        annot_df = pd.read_csv("${annot}", sep="\t")
+
+        required_cols = {parsed_args.features_id_col, parsed_args.features_symbol_col}
+
+        missing = required_cols - set(annot_df.columns)
+        if missing:
+            raise ValueError(f"Missing required columns in annotation file: {missing}. Available columns: {list(annot_df.columns)}")
+
+        gene_mapping = dict(zip(annot_df[parsed_args.features_id_col], annot_df[parsed_args.features_symbol_col]))
         new_index = [gene_mapping.get(ens, None) for ens in mat.index]
         mat.index = new_index
         mat = mat[mat.index.notnull()]
         mat = mat[~mat.index.duplicated(keep='first')]
     except Exception as e:
-        print("ERROR: Failed to parse GTF:", e)
+        print(f"ERROR: Failed to process annotation file: {e}")
         sys.exit(1)
 
 if parsed_args.transpose.upper() == "TRUE":
