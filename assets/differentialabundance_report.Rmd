@@ -710,6 +710,8 @@ d3heatmap::d3heatmap(
 for (variable in rownames(pca_vs_meta)){
     sig_comps <- pca_vs_meta[variable,] < 0.1
 
+    sig_comps[is.na(sig_comps)] <- FALSE
+
     if (any(sig_comps)){
         min_sig_comp <- min(which(sig_comps))
 
