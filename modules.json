@@ -40,6 +40,11 @@
                         "git_sha": "100b1dc1ece11cf8d4fec100314d616a66a60875",
                         "installed_by": ["differential_functional_enrichment"]
                     },
+                    "decoupler/decoupler": {
+                        "branch": "master",
+                        "git_sha": "4ac815920a457699cb277496aef900d7b68b0431",
+                        "installed_by": ["modules"]
+                    },
                     "deseq2/differential": {
                         "branch": "master",
                         "git_sha": "2e24bf8b6b045e1cf56a2907306b008113a686d0",
@@ -141,7 +146,7 @@
                     },
                     "differential_functional_enrichment": {
                         "branch": "master",
-                        "git_sha": "4006954b7bfbbc61c7d5fb009319ed536d2ffca4",
+                        "git_sha": "4009f11912e107f70f6bd657a3467388bb3395c1",
                         "installed_by": ["subworkflows"]
                     },
                     "utils_nextflow_pipeline": {
