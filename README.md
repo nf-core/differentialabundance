@@ -36,8 +36,9 @@ On release, automated continuous integration tests run the pipeline on a full-si
 4. Optionally run a differential gene set analysis.
 5. Generate exploratory and differential analysis plots for interpretation.
 6. Run immunedeconv to estimate immune cell fractions using established deconvolution methods.
-7. Optionally build and (if specified) deploy a Shiny app for fully interactive mining of results.
-8. Build an HTML report based on R markdown, with interactive plots (where possible) and tables.
+7. Optionally run Decoupler to infer regulator activities (e.g., transcription factors, pathways) using expression data and a prior network.
+8. Optionally build and (if specified) deploy a Shiny app for fully interactive mining of results.
+9. Build an HTML report based on R markdown, with interactive plots (where possible) and tables.
 
 ## Usage
 

@@ -220,7 +220,7 @@ report_subtitle <- paste0(ifelse(is.null(params$report_author), '', paste0('By '
 ```
 
 ---
-title:  "<img src=\"`r file.path(params$input_dir, params$logo)`\" style=\"float: left;\"/>`r report_title`"
+title:  "<img id=\"logo\" src=\"`r file.path(params$input_dir, params$logo)`\" style=\"float: left;\"/>`r report_title`"
 subtitle: `r report_subtitle`
 ---
 \
@@ -603,53 +603,120 @@ percentVar_list <- list()
 for (assay_type in rev(names(assay_data))){
 
     pca_data <- pca_datas[[assay_type]]
-    for (iv in informative_variables){
 
-        cat(paste0("\n##### ", prettifyVariablename(assay_type), " (", iv, ")\n"))
+    plotdata <- pca_data$coords
+    percentVar <- pca_data$percentVar
+    plotdata$name <- rownames(plotdata)
+    labels <- paste0(colnames(plotdata), " (", sprintf("%.1f", percentVar), "%)")
 
-        plotdata <- pca_data$coords
-        plotdata$colorby <- factor(
-        observations[[iv]],
-        levels = unique(observations[[iv]])
-        )
-        pcaColorScale <- makeColorScale(length(unique(observations[[iv]])), palette = params$exploratory_palette_name)
+    cat(paste0("\n##### ", prettifyVariablename(assay_type), "\n"))
 
-        # Make plotting data combining PCA coords with coloring groups etc
+    plot_types <- if (ncol(pca_data$coords) >= 3)
+      list("2" = "scatter", "3" = "scatter3d") else list("2" = "scatter")
 
-        plotdata$name <- rownames(plotdata)
-        percentVar <- pca_data$percentVar
-        labels <- paste0(colnames(plotdata), " (", sprintf("%.1f", percentVar), "%)")
-        ncats <- length(unique(plotdata$colorby))
+    for (d in names(plot_types)) {
 
-        plot_types <- list("2" = "scatter", "3" = "scatter3d")
+        fig <- plot_ly()
+        trace_indices <- list()
+        trace_counter <- 0L
 
-        for (d in names(plot_types)) {
+        for (iv in informative_variables){
 
-        # Default plot args whatever we're doing
+            plotdata$colorby <- factor(
+                observations[[iv]],
+                levels = unique(observations[[iv]])
+            )
+            pcaColorScale <- makeColorScale(length(unique(plotdata$colorby)), palette = params$exploratory_palette_name)
+            lvls <- levels(plotdata$colorby)
 
-        plot_args <- list(
-            x = pca_data$coords[, 1],
-            y = pca_data$coords[, 2],
-            xlab = labels[1],
-            ylab = labels[2],
-            colorby = plotdata$colorby,
-            plot_type = plot_types[[d]],
-            palette = pcaColorScale,
-            legend_title = prettifyVariablename(iv),
-            labels = plotdata$name,
-            show_labels = TRUE
-        )
+            start_idx <- trace_counter + 1L
+            for (j in seq_along(lvls)) {
+                idx <- which(plotdata$colorby == lvls[j])
+                trace_counter <- trace_counter + 1L
 
-        if (d == "3") {
-            plot_args$z <- pca_data$coords[, 3]
-            plot_args$zlab <- labels[3]
+                if (d == "2") {
+                    fig <- fig %>%
+                        add_markers(
+                            x = pca_data$coords[, 1][idx],
+                            y = pca_data$coords[, 2][idx],
+                            text = plotdata$name[idx],
+                            hoverinfo = "text+x+y",
+                            name = lvls[j],
+                            legendgroup = iv,
+                            showlegend = (iv == informative_variables[1]),
+                            marker = list(size = 8, color = pcaColorScale[j]),
+                            visible = (iv == informative_variables[1])
+                        )
+                } else { # "3"
+                    fig <- fig %>%
+                        add_markers(
+                            x = pca_data$coords[, 1][idx],
+                            y = pca_data$coords[, 2][idx],
+                            z = pca_data$coords[, 3][idx],
+                            type = "scatter3d",
+                            mode = "markers",
+                            text = plotdata$name[idx],
+                            hoverinfo = "text+x+y+z",
+                            name = lvls[j],
+                            legendgroup = iv,
+                            showlegend = (iv == informative_variables[1]),
+                            marker = list(size = 3, color = pcaColorScale[j]),
+                            visible = (iv == informative_variables[1])
+                        )
+                }
+            }
+            end_idx <- trace_counter
+            trace_indices[[iv]] <- start_idx:end_idx
         }
 
-        print(htmltools::tagList(do.call("plotly_scatterplot", plot_args)))
+        total_traces <- trace_counter
+        updatemenus <- list(list(
+            type = "dropdown",
+            active = 0,
+            x = 1, xanchor = "right",
+            y = 1.1, yanchor = "top",
+            buttons = lapply(seq_along(informative_variables), function(i) {
+                iv <- informative_variables[i]
+                vis <- rep(FALSE, total_traces); vis[trace_indices[[iv]]] <- TRUE
+                showleg <- rep(FALSE, total_traces); showleg[trace_indices[[iv]]] <- TRUE
+                list(
+                    label = prettifyVariablename(iv),
+                    method = "update",
+                    args = list(
+                        list(visible = vis, showlegend = showleg),
+                        list(title = paste("Color by", prettifyVariablename(iv)))
+                    )
+                )
+            })
+        ))
+
+        if (d == "2") {
+            fig <- fig %>%
+                layout(
+                    updatemenus = updatemenus,
+                    xaxis = list(title = labels[1]),
+                    yaxis = list(title = labels[2]),
+                    title = paste("Color by", prettifyVariablename(informative_variables[1])),
+                    legend = list(title = list(text = prettifyVariablename(informative_variables[1])))
+                )
+        } else {
+            fig <- fig %>%
+                layout(
+                    updatemenus = updatemenus,
+                    scene = list(
+                        xaxis = list(title = labels[1]),
+                        yaxis = list(title = labels[2]),
+                        zaxis = list(title = labels[3])
+                    ),
+                    title = paste("Color by", prettifyVariablename(informative_variables[1]))
+                )
         }
-        if (! assay_type %in% names(percentVar_list)){
+
+        print(htmltools::tagList(fig))
+    }
+
+    if (! assay_type %in% names(percentVar_list)){
         percentVar_list[[assay_type]] <- percentVar
-        }
     }
 }
 ```
@@ -710,6 +777,8 @@ d3heatmap::d3heatmap(
 for (variable in rownames(pca_vs_meta)){
     sig_comps <- pca_vs_meta[variable,] < 0.1
 
+    sig_comps[is.na(sig_comps)] <- FALSE
+
     if (any(sig_comps)){
         min_sig_comp <- min(which(sig_comps))
 
@@ -742,7 +811,7 @@ for (assay_type in rev(names(assay_data))){
             "s\n(", params$exploratory_clustering_method, " clustering, ", params$exploratory_cor_method, " correlation)"),
         cluster_method = params$exploratory_clustering_method,
         palette = dendroColorScale,
-        labelspace = 0.25
+        labelspace = 0.55
         )
         # Defaults in shinyngs make the text in this plot a bit big for the report, so
         # scale it down a bit
@@ -847,29 +916,29 @@ if (length(warnings_list) > 0) {
 }
 
 for (i in 1:nrow(contrasts)){
-    cat("\n#### ", contrast_descriptions[i], "  {.tabset}\n")
+    cat("\n#### ", contrast_descriptions[i], "  {.tabset}\n\n")
 
     ## Make a volcano plot for the contrast first
-
-    # Label features with symbol as well as identifier
-    if (! is.null(params$features) && (! is.null(params$differential_feature_name_column)) ){
-        label_col <- params$differential_feature_name_column
-    }else{
-        label_col <- params$differential_feature_id_column
-    }
 
     # Get the full set of differential stats for this contrast, removing rows with
     # NAs in the fields we need.
     full_de <- differential_results[[i]]
     full_de <- subset(full_de, (! is.na(full_de[[params$differential_fc_column]])) & (! is.na(full_de[[params$differential_qval_colum]])) )
 
+    # Label features with symbol as well as identifier
+    if (! is.null(params$features) &&
+        (! is.null(params$differential_feature_name_column)) &&
+        (params$differential_feature_name_column %in% colnames(full_de)) ){
+        label_col <- params$differential_feature_name_column
+    }else{
+        label_col <- params$differential_feature_id_column
+    }
     # We'll color by whether features are differential according to supplied thresholds
 
     p_value_types <- list(Adjusted = params$differential_qval_column, Unadjusted = params$differential_pval_column)
     p_value_thresholds <- list(Adjusted = params$differential_max_qval, Unadjusted = params$differential_max_pval)
-
     for (pvt in names(p_value_types)){
-        cat("\n##### ", pvt, " p values\n")
+        cat("\n##### ", pvt, " p values\n\n")
         pval_column <- p_value_types[[pvt]]
 
         de_fc <- abs(full_de[[params$differential_fc_column]]) >= abs(log2(params$differential_min_fold_change))
@@ -893,7 +962,6 @@ for (i in 1:nrow(contrasts)){
         vline_thresholds[[paste(params$differential_fc_column, '>=', log2(params$differential_min_fold_change))]] = log2(params$differential_min_fold_change)
 
         palette_volcano <- append(c('#999999'), makeColorScale(3, params$differential_palette_name)) # set non-significant to gray
-
         plot_args <- list(
         x = full_de[[params$differential_fc_column]],
         y = -log10(full_de[[pval_column]]),
@@ -953,6 +1021,7 @@ for (i in 1:nrow(contrasts)){
                 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
             print(gene_biotype_plot)
+            cat("\n")
         } else {
             cat("Column 'Gene biotype' does not exist. Skipping plot.\n")
         }
@@ -987,8 +1056,8 @@ if (!is.null(params$functional_method)){
             gmt_name <- basename(tools::file_path_sans_ext(gmt_file))
             cat("\n##### ", gmt_name ," {.tabset}\n")
 
-            reference_gsea_tables <- paste0(differential_names, ".", gmt_name, '.gsea_report_for_', gsea_contrasts$reference, '.tsv')
-            target_gsea_tables <- paste0(differential_names, ".", gmt_name, '.gsea_report_for_', gsea_contrasts$target, '.tsv')
+            reference_gsea_tables <- paste0(gsea_contrasts$id, ".", gmt_name, '.gsea_report_for_', gsea_contrasts$reference, '.tsv')
+            target_gsea_tables <- paste0(gsea_contrasts$id, ".", gmt_name, '.gsea_report_for_', gsea_contrasts$target, '.tsv')
 
             for (i in seq_len(nrow(gsea_contrasts))) {
                 cat("\n###### ", contrast_descriptions[i], "\n")
@@ -1025,10 +1094,11 @@ if (!is.null(params$functional_method)){
         ifelse(params$gprofiler2_significant, paste0(" Enrichment was only considered if significant, i.e. adjusted p-value <= ", params$gprofiler2_max_qval, "."), "Enrichment was also considered if not significant."), "\n"))
 
         # Make sure to grab only non-empty files
-        for (name in differential_names) {
+        for (i in seq_along(differential_names)) {
+            name <- differential_names[i]
             cat(paste0("\n##### ", name, "\n"))
 
-            table <- paste0(name, ".gprofiler2.all_enriched_pathways.tsv")
+            table <- paste0(contrasts$id[i], ".gprofiler2.all_enriched_pathways.tsv")
             table_path <- file.path(params$input_dir, table)
             if (!file.exists(table_path) || file.size(table_path) == 0){
                 cat(paste0("No ", ifelse(params$gprofiler2_significant, "significantly", ""), " enriched pathways were found for this contrast."))

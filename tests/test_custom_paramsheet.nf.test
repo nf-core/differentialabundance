@@ -90,6 +90,7 @@ nextflow_pipeline {
                 outdir              = "$outputDir"
                 paramsheet          = "https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/test_custom_paramsheet.csv"
                 paramset_name       = "gprofiler2"
+                gprofiler2_organism = 'mmusculus'
 
                 // input data
                 input                    = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.samplesheet.csv'
