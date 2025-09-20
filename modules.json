@@ -43,24 +43,7 @@
                     "decoupler/decoupler": {
                         "branch": "master",
                         "git_sha": "202bddf7ffabd0d53e4c0ecc6b1ab526020a9744",
-                        "installed_by": [
-                            "_",
-                            "a",
-                            "c",
-                            "d",
-                            "e",
-                            "f",
-                            "h",
-                            "i",
-                            "l",
-                            "m",
-                            "modules",
-                            "n",
-                            "o",
-                            "r",
-                            "t",
-                            "u"
-                        ]
+                        "installed_by": ["differential_functional_enrichment"]
                     },
                     "deseq2/differential": {
                         "branch": "master",
