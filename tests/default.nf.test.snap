@@ -400,9 +400,10 @@
                     "r-base": "4.1.3",
                     "bioconductor-deseq2": "1.34.0"
                 },
-                "GPROFILER2_GOST": {
+                "GPROFILER2_GOST\"": {
                     "r-ggplot2": "3.4.3",
-                    "r-gprofiler2": "0.2.2"
+                    "r-gprofiler2": "0.2.2",
+                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '113'\ndisplay_name: Human\ngenebuild: GRCh38.p14\ngprofiler_version: e113_eg59_p19_f6a03c19\norganism: hsapiens\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 05.2025\n      classes: None\n  HPA:\n    name: Human Protein Atlas\n    version: |-\n      annotations: HPA website: 24-10-19\n      classes: script: 25-02-07\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2024-01-22\n  MIRNA:\n    name: miRTarBase\n    version: Release 10.0\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2025-5-23\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2024.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20250510'\ntaxonomy_id: '9606'\n"
                 },
                 "GTF_TO_TABLE": {
                     "atlas-gene-annotation-manipulation": "1.1.1"
@@ -536,9 +537,9 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.6"
+            "nextflow": "25.04.7"
         },
-        "timestamp": "2025-07-24T16:46:01.377784674"
+        "timestamp": "2025-09-20T21:12:01.79964624"
     },
     "Test profile - yml no formula": {
         "content": [
@@ -732,5 +733,149 @@
             "nextflow": "25.04.3"
         },
         "timestamp": "2025-06-23T09:04:21.203865649"
+    },
+    "Test profile - with decoupler": {
+        "content": [
+            18,
+            {
+                "CUSTOM_FILTERDIFFERENTIALTABLE": {
+                    "pandas": "1.5.2"
+                },
+                "DECOUPLER_DECOUPLER": null,
+                "decoupler-py": "1.8.0",
+                "DESEQ2_DIFFERENTIAL": {
+                    "r-base": "4.1.3",
+                    "bioconductor-deseq2": "1.34.0"
+                },
+                "DESEQ2_NORM": {
+                    "r-base": "4.1.3",
+                    "bioconductor-deseq2": "1.34.0"
+                },
+                "GTF_TO_TABLE": {
+                    "atlas-gene-annotation-manipulation": "1.1.1"
+                },
+                "GUNZIP_GTF": {
+                    "gunzip": 1.1
+                },
+                "IMMUNEDECONV": {
+                    "r-immunedeconv": "2.1.0"
+                },
+                "PLOT_DIFFERENTIAL": {
+                    "r-shinyngs": "2.2.4"
+                },
+                "PLOT_EXPLORATORY": {
+                    "r-shinyngs": "2.2.4"
+                },
+                "SHINYNGS_APP": {
+                    "r-shinyngs": "2.2.4"
+                },
+                "VALIDATOR": {
+                    "r-shinyngs": "2.2.4"
+                },
+                "Workflow": {
+                    "nf-core/differentialabundance": "v1.6.0dev"
+                }
+            },
+            [
+                "other",
+                "other/deseq2",
+                "other/deseq2/treatment_mCherry_hND6__SRP254919.dds.rld.rds",
+                "other/deseq2/treatment_mCherry_hND6__SRP254919.deseq2.sizefactors.tsv",
+                "other/deseq2/treatment_mCherry_hND6_sample_number_SRP254919.dds.rld.rds",
+                "other/deseq2/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.sizefactors.tsv",
+                "pipeline_info",
+                "pipeline_info/collated_versions.yml",
+                "pipeline_info/nf_core_differentialabundance_software_versions.yml",
+                "plots",
+                "plots/decoupler",
+                "plots/decoupler/deseq2_treatment_mCherry_hND6__SRP254919_consensus_estimate_decoupler_plot.png",
+                "plots/decoupler/deseq2_treatment_mCherry_hND6__SRP254919_ulm_estimate_decoupler_plot.png",
+                "plots/decoupler/deseq2_treatment_mCherry_hND6_sample_number_SRP254919_consensus_estimate_decoupler_plot.png",
+                "plots/decoupler/deseq2_treatment_mCherry_hND6_sample_number_SRP254919_ulm_estimate_decoupler_plot.png",
+                "plots/differential",
+                "plots/differential/treatment_mCherry_hND6__SRP254919",
+                "plots/differential/treatment_mCherry_hND6__SRP254919/png",
+                "plots/differential/treatment_mCherry_hND6__SRP254919/png/volcano.png",
+                "plots/differential/treatment_mCherry_hND6_sample_number_SRP254919",
+                "plots/differential/treatment_mCherry_hND6_sample_number_SRP254919/png",
+                "plots/differential/treatment_mCherry_hND6_sample_number_SRP254919/png/volcano.png",
+                "plots/differential/versions.yml",
+                "plots/exploratory",
+                "plots/exploratory/treatment",
+                "plots/exploratory/treatment/png",
+                "plots/exploratory/treatment/png/boxplot.png",
+                "plots/exploratory/treatment/png/density.png",
+                "plots/exploratory/treatment/png/mad_correlation.png",
+                "plots/exploratory/treatment/png/pca2d.png",
+                "plots/exploratory/treatment/png/pca3d.png",
+                "plots/exploratory/treatment/png/sample_dendrogram.png",
+                "plots/exploratory/versions.yml",
+                "plots/immunedeconv",
+                "plots/immunedeconv/SRP254919.plot1_stacked_bar_chart.png",
+                "plots/immunedeconv/SRP254919.plot2_points_with_facets.png",
+                "plots/qc",
+                "plots/qc/treatment_mCherry_hND6__SRP254919.deseq2.dispersion.png",
+                "plots/qc/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.dispersion.png",
+                "report",
+                "report/SRP254919.html",
+                "report/SRP254919.zip",
+                "shinyngs_app",
+                "shinyngs_app/SRP254919",
+                "shinyngs_app/SRP254919/app.R",
+                "shinyngs_app/SRP254919/data.rds",
+                "shinyngs_app/versions.yml",
+                "tables",
+                "tables/annotation",
+                "tables/annotation/SRP254919.anno.tsv",
+                "tables/decoupler",
+                "tables/decoupler/deseq2_treatment_mCherry_hND6__SRP254919_consensus_estimate_decoupler.tsv",
+                "tables/decoupler/deseq2_treatment_mCherry_hND6__SRP254919_consensus_pvals_decoupler.tsv",
+                "tables/decoupler/deseq2_treatment_mCherry_hND6__SRP254919_ulm_estimate_decoupler.tsv",
+                "tables/decoupler/deseq2_treatment_mCherry_hND6__SRP254919_ulm_pvals_decoupler.tsv",
+                "tables/decoupler/deseq2_treatment_mCherry_hND6_sample_number_SRP254919_consensus_estimate_decoupler.tsv",
+                "tables/decoupler/deseq2_treatment_mCherry_hND6_sample_number_SRP254919_consensus_pvals_decoupler.tsv",
+                "tables/decoupler/deseq2_treatment_mCherry_hND6_sample_number_SRP254919_ulm_estimate_decoupler.tsv",
+                "tables/decoupler/deseq2_treatment_mCherry_hND6_sample_number_SRP254919_ulm_pvals_decoupler.tsv",
+                "tables/differential",
+                "tables/differential/treatment_mCherry_hND6__SRP254919.deseq2.results.tsv",
+                "tables/differential/treatment_mCherry_hND6__SRP254919.deseq2.results_filtered.tsv",
+                "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results.tsv",
+                "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv",
+                "tables/immunedeconv",
+                "tables/immunedeconv/SRP254919.deconvolution_results.tsv",
+                "tables/processed_abundance",
+                "tables/processed_abundance/all.normalised_counts.tsv",
+                "tables/processed_abundance/all.vst.tsv"
+            ],
+            [
+                "treatment_mCherry_hND6__SRP254919.deseq2.sizefactors.tsv:md5,0703c421c53b260f91568dfc0436c054",
+                "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.sizefactors.tsv:md5,0703c421c53b260f91568dfc0436c054",
+                "versions.yml:md5,225ced8832439345efa781c726cf2e5c",
+                "versions.yml:md5,d5f6ad8fe6242dcd75bc62b654d1d211",
+                "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
+                "versions.yml:md5,b3436c10ff83d0dab55060de3cae3ef2",
+                "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
+                "deseq2_treatment_mCherry_hND6__SRP254919_consensus_estimate_decoupler.tsv:md5,a5b3e2745923318cff953529fe00cfbc",
+                "deseq2_treatment_mCherry_hND6__SRP254919_consensus_pvals_decoupler.tsv:md5,c58f9399180f3bdb5f04836a369141f6",
+                "deseq2_treatment_mCherry_hND6__SRP254919_ulm_estimate_decoupler.tsv:md5,4b6b14af105495b54dda2750b9bc8ec5",
+                "deseq2_treatment_mCherry_hND6__SRP254919_ulm_pvals_decoupler.tsv:md5,d16c790c3d211151430d55df668198cc",
+                "deseq2_treatment_mCherry_hND6_sample_number_SRP254919_consensus_estimate_decoupler.tsv:md5,18cb93ab94c5735ee765a9ffacc339d5",
+                "deseq2_treatment_mCherry_hND6_sample_number_SRP254919_consensus_pvals_decoupler.tsv:md5,1d860e604f24b39c470b82a428536073",
+                "deseq2_treatment_mCherry_hND6_sample_number_SRP254919_ulm_estimate_decoupler.tsv:md5,c7f41fb7362e0fbf06a8ea1fd5557211",
+                "deseq2_treatment_mCherry_hND6_sample_number_SRP254919_ulm_pvals_decoupler.tsv:md5,2e97f82245826902fce3745de5ac4826",
+                "treatment_mCherry_hND6__SRP254919.deseq2.results.tsv:md5,a6dde65d9e54e8e80e3abf3c14f72d34",
+                "treatment_mCherry_hND6__SRP254919.deseq2.results_filtered.tsv:md5,fd803a83c641e843830057f3a43be27a",
+                "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results.tsv:md5,3c827ffb53fe7dab8f13f0ef89a3da06",
+                "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv:md5,c88d36f46f7d8a4dd8c169c249f50540",
+                "SRP254919.deconvolution_results.tsv:md5,3d7ed4550a0da2f63fcfd2e74605e7a3",
+                "all.normalised_counts.tsv:md5,f3ef0fb48f97afde2b5122b72dc4dcc4",
+                "all.vst.tsv:md5,ae82509f76ed01ad0d041d1a62aef703"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.7"
+        },
+        "timestamp": "2025-09-20T21:19:15.72039263"
     }
 }

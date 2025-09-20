@@ -1,4 +1,129 @@
 {
+    "Test rnaseq limma profile - with decoupler": {
+        "content": [
+            17,
+            {
+                "CUSTOM_FILTERDIFFERENTIALTABLE": {
+                    "pandas": "1.5.2"
+                },
+                "DECOUPLER_DECOUPLER": null,
+                "decoupler-py": "1.8.0",
+                "GTF_TO_TABLE": {
+                    "atlas-gene-annotation-manipulation": "1.1.1"
+                },
+                "GUNZIP_GTF": {
+                    "gunzip": 1.1
+                },
+                "LIMMA_DIFFERENTIAL": {
+                    "r-base": "4.3.3",
+                    "bioconductor-limma": "3.58.1"
+                },
+                "LIMMA_NORM": {
+                    "r-base": "4.3.3",
+                    "bioconductor-limma": "3.58.1"
+                },
+                "PLOT_DIFFERENTIAL": {
+                    "r-shinyngs": "2.2.4"
+                },
+                "PLOT_EXPLORATORY": {
+                    "r-shinyngs": "2.2.4"
+                },
+                "SHINYNGS_APP": {
+                    "r-shinyngs": "2.2.4"
+                },
+                "VALIDATOR": {
+                    "r-shinyngs": "2.2.4"
+                },
+                "Workflow": {
+                    "nf-core/differentialabundance": "v1.6.0dev"
+                }
+            },
+            [
+                "other",
+                "other/limma",
+                "other/limma/treatment_mCherry_hND6__SRP254919.MArrayLM.limma.rds",
+                "other/limma/treatment_mCherry_hND6_sample_number_SRP254919.MArrayLM.limma.rds",
+                "pipeline_info",
+                "pipeline_info/collated_versions.yml",
+                "pipeline_info/nf_core_differentialabundance_software_versions.yml",
+                "plots",
+                "plots/decoupler",
+                "plots/decoupler/limma_treatment_mCherry_hND6__SRP254919_consensus_estimate_decoupler_plot.png",
+                "plots/decoupler/limma_treatment_mCherry_hND6__SRP254919_ulm_estimate_decoupler_plot.png",
+                "plots/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_consensus_estimate_decoupler_plot.png",
+                "plots/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_ulm_estimate_decoupler_plot.png",
+                "plots/differential",
+                "plots/differential/treatment_mCherry_hND6__SRP254919",
+                "plots/differential/treatment_mCherry_hND6__SRP254919/png",
+                "plots/differential/treatment_mCherry_hND6__SRP254919/png/volcano.png",
+                "plots/differential/treatment_mCherry_hND6_sample_number_SRP254919",
+                "plots/differential/treatment_mCherry_hND6_sample_number_SRP254919/png",
+                "plots/differential/treatment_mCherry_hND6_sample_number_SRP254919/png/volcano.png",
+                "plots/differential/versions.yml",
+                "plots/exploratory",
+                "plots/exploratory/treatment",
+                "plots/exploratory/treatment/png",
+                "plots/exploratory/treatment/png/boxplot.png",
+                "plots/exploratory/treatment/png/density.png",
+                "plots/exploratory/treatment/png/mad_correlation.png",
+                "plots/exploratory/treatment/png/pca2d.png",
+                "plots/exploratory/treatment/png/pca3d.png",
+                "plots/exploratory/treatment/png/sample_dendrogram.png",
+                "plots/exploratory/versions.yml",
+                "plots/qc",
+                "plots/qc/treatment_mCherry_hND6__SRP254919.limma.mean_difference.png",
+                "plots/qc/treatment_mCherry_hND6_sample_number_SRP254919.limma.mean_difference.png",
+                "report",
+                "report/SRP254919.html",
+                "report/SRP254919.zip",
+                "shinyngs_app",
+                "shinyngs_app/SRP254919",
+                "shinyngs_app/SRP254919/app.R",
+                "shinyngs_app/SRP254919/data.rds",
+                "shinyngs_app/versions.yml",
+                "tables",
+                "tables/annotation",
+                "tables/annotation/SRP254919.anno.tsv",
+                "tables/decoupler",
+                "tables/decoupler/limma_treatment_mCherry_hND6__SRP254919_consensus_estimate_decoupler.tsv",
+                "tables/decoupler/limma_treatment_mCherry_hND6__SRP254919_consensus_pvals_decoupler.tsv",
+                "tables/decoupler/limma_treatment_mCherry_hND6__SRP254919_ulm_estimate_decoupler.tsv",
+                "tables/decoupler/limma_treatment_mCherry_hND6__SRP254919_ulm_pvals_decoupler.tsv",
+                "tables/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_consensus_estimate_decoupler.tsv",
+                "tables/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_consensus_pvals_decoupler.tsv",
+                "tables/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_ulm_estimate_decoupler.tsv",
+                "tables/decoupler/limma_treatment_mCherry_hND6_sample_number_SRP254919_ulm_pvals_decoupler.tsv",
+                "tables/differential",
+                "tables/differential/treatment_mCherry_hND6__SRP254919.limma.results.tsv",
+                "tables/differential/treatment_mCherry_hND6__SRP254919.limma.results_filtered.tsv",
+                "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.limma.results.tsv",
+                "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.limma.results_filtered.tsv",
+                "tables/processed_abundance",
+                "tables/processed_abundance/all.normalised_counts.tsv"
+            ],
+            [
+                "versions.yml:md5,225ced8832439345efa781c726cf2e5c",
+                "versions.yml:md5,d5f6ad8fe6242dcd75bc62b654d1d211",
+                "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
+                "versions.yml:md5,b3436c10ff83d0dab55060de3cae3ef2",
+                "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
+                "limma_treatment_mCherry_hND6__SRP254919_consensus_estimate_decoupler.tsv:md5,a620d9e50bb80a940a1d625c156db57d",
+                "limma_treatment_mCherry_hND6__SRP254919_consensus_pvals_decoupler.tsv:md5,0277a05f838537294818d929a00f3a51",
+                "limma_treatment_mCherry_hND6__SRP254919_ulm_estimate_decoupler.tsv:md5,93e9f630eeb2b18aa7f9ee8368f87ae9",
+                "limma_treatment_mCherry_hND6__SRP254919_ulm_pvals_decoupler.tsv:md5,5126f48f59bf1043076699f0677700bd",
+                "limma_treatment_mCherry_hND6_sample_number_SRP254919_consensus_estimate_decoupler.tsv:md5,40d606009fd45e6e905b5c0284df720e",
+                "limma_treatment_mCherry_hND6_sample_number_SRP254919_consensus_pvals_decoupler.tsv:md5,b58b5606148076511354925719d2476c",
+                "limma_treatment_mCherry_hND6_sample_number_SRP254919_ulm_estimate_decoupler.tsv:md5,9156bed5878264a8ca2d543b3d2b73cf",
+                "limma_treatment_mCherry_hND6_sample_number_SRP254919_ulm_pvals_decoupler.tsv:md5,b1eebaaa790893da0af00dc311a09236",
+                "all.normalised_counts.tsv:md5,534f0f37e10325163656cad95418f34a"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.7"
+        },
+        "timestamp": "2025-09-20T22:22:03.111476705"
+    },
     "Test rnaseq limma profile": {
         "content": [
             22,

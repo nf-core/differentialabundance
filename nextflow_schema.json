@@ -825,7 +825,7 @@
                 "functional_method": {
                     "type": "string",
                     "description": "Functional analysis method",
-                    "enum": ["null", "gsea", "gprofiler2"]
+                    "enum": ["null", "gsea", "gprofiler2", "decoupler"]
                 },
                 "gene_sets_files": {
                     "type": "string",
@@ -1046,6 +1046,32 @@
                 }
             },
             "fa_icon": "fas fa-layer-group"
+        },
+        "functional_decoupler_specific_options": {
+            "title": "[functional] decoupler",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "decoupler_network": {
+                    "type": "string",
+                    "description": "Path to TSV file containing network file for decoupler",
+                    "pattern": "^\\S+\\.(tsv)$",
+                    "format": "file-path",
+                    "mimetype": "text/tsv"
+                },
+                "decoupler_min_n": {
+                    "type": "integer",
+                    "default": 5,
+                    "description": "Removes sources of a net with less than min_n targets",
+                    "minimum": 1
+                },
+                "decoupler_methods": {
+                    "type": "string",
+                    "default": "ulm",
+                    "description": "Comma-separated list of methods to use (e.g., 'ora,ulm')"
+                }
+            }
         },
         "shiny_shiny_app_settings": {
             "title": "[shiny] Shiny app settings",
@@ -1343,6 +1369,9 @@
         },
         {
             "$ref": "#/$defs/functional_gprofiler2"
+        },
+        {
+            "$ref": "#/$defs/functional_decoupler_specific_options"
         },
         {
             "$ref": "#/$defs/shiny_shiny_app_settings"
