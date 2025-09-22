@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- [[#491]](https://github.com/nf-core/differentialabundance/pull/509) - Do not split results table into up- and downregulated. ([@antoniasaracco] (https://github.com/antoniasaracco), review by [@atrigila](https://github.com/atrigila) and [@grst](https://github.com/grst))
 - [[#575](https://github.com/nf-core/differentialabundance/pull/575)] - Fix volcano plot tooltips by adding column existence check for gene name labels and add Gene name to DE table in HTML report ([@antoniasaracco](https://github.com/antoniasaracco), review by [@atrigila](https://github.com/atrigila), [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#567](https://github.com/nf-core/differentialabundance/pull/566)] - Fix `VARIANCEPARTITION_DREAM` output table ([@atrigila](https://github.com/atrigila), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@grst](https://github.com/grst)).
 - [[#566](https://github.com/nf-core/differentialabundance/pull/566)] - Add handling for complex contrasts in `deseq2/differential` ([@delfiterradas](https://github.com/delfiterradas), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@grst](https://github.com/grst)).
