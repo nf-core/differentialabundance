@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [[#476](https://github.com/nf-core/differentialabundance/pull/476)] - Fixed null.csv and warning at top of report ([@SusiJo](https://github.com/SusiJo), reviewed by [@pinin4fjords](https://github.com/pinin4fjords), [@atrigila](https://github.com/atrigila), [@maxulysse](https://github.com/maxulysse))
 - [[#358](https://github.com/nf-core/differentialabundance/pull/358)] - Fixed nf-tests not running due to `--changed-since HEAD^`([@atrigila](https://github.com/atrigila), review by [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#344](https://github.com/nf-core/differentialabundance/pull/344)] - Fixed replacement of NA sub-strings
   ([@atrigila](https://github.com/atrigila), suggested by [@BEFH](https://github.com/BEFH), review by [@apeltzer](https://github.com/apeltzer) and [@nschcolnicov](https://github.com/nschcolnicov))
@@ -40,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [[#476](https://github.com/nf-core/differentialabundance/pull/476)] - Update documentation & report fixes ([@SusiJo](https://github.com/SusiJo), reviewed by [@pinin4fjords](https://github.com/pinin4fjords), [@atrigila](https://github.com/atrigila), [@maxulysse](https://github.com/maxulysse))
 - [[#468](https://github.com/nf-core/differentialabundance/pull/468)] - Template update for nf-core/tools v3.3.1 ([@SusiJo](https://github.com/SusiJo), reviewed by [@famosab](https://github.com/famosab), [@mashehu](https://github.com/mashehu))
 - [[#448](https://github.com/nf-core/differentialabundance/pull/448)] - Simplify toolsheet handling and restructure workflow to use paramset in meta. ([@pinin4fjords](https://github.com/pinin4fjords), review by [@suzannejin](https://github.com/suzannejin) and [@grst](https://github.com/grst))
 - [[#431](https://github.com/nf-core/differentialabundance/pull/431)] - Replace the calls to differential and functional analysis modules by subworkflows. ([@suzannejin](https://github.com/suzannejin), review by [@pinin4fjords](https://github.com/pinin4fjords))

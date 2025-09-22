@@ -15,15 +15,15 @@
                 "study_name": {
                     "type": "string",
                     "default": "study",
-                    "description": "A string to identify results in the output directory",
-                    "help_text": "Also used as an identifier in some processes",
+                    "description": "A string identifier used to name result files in the output directory",
+                    "help_text": "String must not contain any special characters, i.e. spaces or underscores. String is also used as an identifier in some processes.",
                     "fa_icon": "fas fa-signature"
                 },
                 "study_type": {
                     "type": "string",
                     "default": "rnaseq",
                     "description": "A string identifying the technology used to produce the data",
-                    "help_text": "Currently 'rnaseq' or 'affy_array' may be specified.",
+                    "help_text": "Currently one of 'rnaseq', 'affy_array' (microarray), 'maxquant' (proteomics) or 'geo_soft_file' [GEO SOFT](https://www.ncbi.nlm.nih.gov/geo/info/soft.html) may be specified.",
                     "enum": ["rnaseq", "affy_array", "maxquant", "geo_soft_file"],
                     "fa_icon": "far fa-keyboard"
                 },
@@ -34,14 +34,14 @@
                     "mimetype": "text/csv",
                     "pattern": "^\\S+\\.(csv|tsv)$",
                     "schema": "assets/schema_input.json",
-                    "description": "Path to comma-separated file containing information about the samples in the experiment.",
-                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/differentialabundance/usage#samplesheet-input).",
+                    "description": "Path to CSV/TSV file containing information about the samples in the experiment.",
+                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a CSV/TSV file with 3 columns, and a header row. See [usage docs](https://nf-co.re/differentialabundance/usage#observations-samplesheet-input).",
                     "fa_icon": "fas fa-file-csv"
                 },
                 "contrasts": {
                     "type": "string",
-                    "description": "A CSV file describing sample contrasts",
-                    "help_text": "This file is used to define groups of samples from 'input' to compare.  It must contain at least the columns 'variable', 'reference', 'target' and 'blocking', where 'variable' is a column in the input sample sheet, 'reference' and 'target' are values in that column, and blocking is a colon-separated list of additional 'blocking' variables (can be an empty string)",
+                    "description": "A CSV/TSV file describing sample contrasts to compare groups.",
+                    "help_text": "This file is used to define groups of samples from 'input' to compare. It must contain at least the columns 'variable', 'reference', 'target' and 'blocking', where 'variable' is a column in the input sample sheet, 'reference' and 'target' are values in that column, and blocking is a colon-separated list of additional 'blocking' variables (can be an empty string)",
                     "pattern": "^\\S+\\.(csv|tsv)$",
                     "format": "file-path",
                     "mimetype": "text/csv",
@@ -49,7 +49,7 @@
                 },
                 "contrasts_yml": {
                     "type": "string",
-                    "description": "A YAML file describing sample contrasts",
+                    "description": "A YAML file describing sample contrasts to compare groups.",
                     "help_text": "This file defines sample contrasts for differential abundance analysis, with each contrast specifying an `id`, a `comparison` list (variable, reference, target), and optional `blocking_factors`.",
                     "pattern": "^\\S+\\.(yaml|yml)$",
                     "schema": "assets/schema_contrasts.json",
@@ -66,7 +66,8 @@
                 "study_abundance_type": {
                     "type": "string",
                     "default": "counts",
-                    "description": "Type of abundance measure used, platform-dependent",
+                    "description": "Type of abundance measure used, platform-dependent.",
+                    "enum": ["counts", "intensities"],
                     "fa_icon": "fas fa-keyboard"
                 },
                 "round_digits": {
@@ -95,8 +96,8 @@
                 "transcript_length_matrix": {
                     "type": "string",
                     "fa_icon": "fas fa-border-all",
-                    "description": "(RNA-seq only): optional transcript length matrix with samples and genes as the abundance matrix",
-                    "help_text": "If provided, this file willl be used to provide transcript lengths to DESeq2 to model length bias across samples"
+                    "description": "(RNA-seq only): optional transcript/gene length matrix with samples and transcript_ids/gene_ids as in the abundance matrix.",
+                    "help_text": "If provided, this file will be used to provide transcript/gene lengths to DESeq2 to model length bias across samples."
                 },
                 "affy_cel_files_archive": {
                     "type": "string",
@@ -121,7 +122,7 @@
                 "observations_id_col": {
                     "type": "string",
                     "default": "sample",
-                    "description": "Column in the samples sheet to be used as the primary sample identifier",
+                    "description": "Column in the sample sheet to be used as the primary sample identifier",
                     "fa_icon": "fas fa-address-card"
                 },
                 "observations_type": {
@@ -133,7 +134,7 @@
                 },
                 "observations_name_col": {
                     "type": "string",
-                    "description": "Column in the sample sheet to be used as the display identifier for observations. If unset, will use value of --observations_id_col.",
+                    "description": "Column in the sample sheet to be used as identifier for observations. If unset, the --observations_id_col is used.",
                     "fa_icon": "fas fa-file-signature"
                 }
             },
@@ -162,19 +163,19 @@
                 "features_type": {
                     "type": "string",
                     "default": "gene",
-                    "description": "Type of feature we have, often 'gene'",
+                    "description": "Type of feature. Often 'gene'",
                     "fa_icon": "fas fa-keyboard"
                 },
                 "sizefactors_from_controls": {
                     "type": "boolean",
-                    "help_text": "Use supplied control features in normalistion/ scaling operations?",
-                    "description": "When set, use the control features in scaling/ normalisation",
+                    "help_text": "When set, use supplied control features in normalization/ scaling operations",
+                    "description": "When set, use the control features in scaling/ normalization.",
                     "fa_icon": "fas fa-expand-arrows-alt"
                 },
                 "control_features": {
                     "type": "string",
                     "description": "A text file listing technical features (e.g. spikes)",
-                    "help_text": "One feature per row. Note that by default these features will just be stripped from matrices prior to internal processing. To actually use them in e.g. normalisation, set `--sizefactors_from_controls`",
+                    "help_text": "One feature per row. Note that by default these features will just be stripped from matrices prior to internal processing. To actually use them in e.g. normalization, set `--sizefactors_from_controls`",
                     "format": "file-path",
                     "mimetype": "text/plain",
                     "fa_icon": "fas fa-gamepad"
@@ -189,8 +190,8 @@
                     "type": "string",
                     "mimetype": "text/csv",
                     "pattern": "^\\S+\\.(csv|tsv)$",
-                    "description": "This parameter allows you to supply your own feature annotations. These can often be automatically derived from the GTF used upstream for RNA-seq, or from the Bioconductor annotation package (for affy arrays). ",
-                    "help_text": "This parameter allows you to supply your own feature annotations. These can often be automatically derived from the GTF used upstream for RNA-seq, or from the Bioconductor annotation package (for affy arrays). ",
+                    "description": "Supply your own feature annotations. Can be derived from the GTF (rnaseq) or from the Bioconductor annotation package (affy arrays).",
+                    "help_text": "This parameter allows you to supply your own feature annotations. These can often be automatically derived from the GTF used upstream for RNA-seq, or from the Bioconductor annotation package (for affy arrays).",
                     "fa_icon": "fas fa-align-justify"
                 }
             },
@@ -200,12 +201,12 @@
         "base_paramsheet_options": {
             "title": "[base] Paramsheet options",
             "type": "object",
-            "description": "Options related to the use of paramsheet",
+            "description": "Analysis options related to the use of paramsheet to run multiple combinations of analyses (see usage docs for details).",
             "default": "",
             "properties": {
                 "paramset_name": {
                     "type": "string",
-                    "description": "Name of the paramset (as specified in paramsheet) to run"
+                    "description": "Name of the paramset (as specified in assets/paramsheet) to run specific analyses"
                 },
                 "paramsheet": {
                     "type": "string",
@@ -232,7 +233,7 @@
                 "affy_background": {
                     "type": "boolean",
                     "default": true,
-                    "description": "logical value. If TRUE, then background correct using RMA background correction.",
+                    "description": "logical value. If set to true, apply background correction using RMA.",
                     "fa_icon": "fas fa-image"
                 },
                 "affy_bgversion": {
@@ -295,13 +296,13 @@
                 "features_gtf_feature_type": {
                     "type": "string",
                     "default": "transcript",
-                    "description": "Where a GTF file is supplied, which feature type to use",
+                    "description": "If a GTF file is supplied, which feature type to use",
                     "fa_icon": "fas fa-keyboard"
                 },
                 "features_gtf_table_first_field": {
                     "type": "string",
                     "default": "gene_id",
-                    "description": "Where a GTF file is supplied, which field should go first in the converted output table",
+                    "description": "If a GTF file is supplied, which field should go first in the converted output table",
                     "fa_icon": "fas fa-fast-backward"
                 }
             }
@@ -340,7 +341,7 @@
                 "proteus_palette_name": {
                     "type": "string",
                     "default": "Set1",
-                    "help_text": "Check the content of `RColorBrewer::brewer.pal.info` from an R terminal for valid palette names.",
+                    "help_text": "Check the content of `RColorBrewer::brewer.pal.info` from an R terminal for valid palette names. Or view palette names [here](https://r-graph-gallery.com/38-rcolorbrewers-palettes.html).",
                     "description": "Valid R palette name",
                     "fa_icon": "fas fa-palette"
                 }
@@ -485,7 +486,7 @@
                     "default": "Set1",
                     "fa_icon": "fas fa-palette",
                     "description": "Valid R palette name",
-                    "help_text": "Check the content of `RColorBrewer::brewer.pal.info` from an R terminal for valid palette names."
+                    "help_text": "Check the content of `RColorBrewer::brewer.pal.info` from an R terminal for valid palette names or check [here](https://r-graph-gallery.com/38-rcolorbrewers-palettes.html)."
                 }
             },
             "fa_icon": "fas fa-chart-area",
@@ -535,7 +536,7 @@
                 "differential_qval_column": {
                     "type": "string",
                     "default": "padj",
-                    "description": "The q value column in differential results tables.",
+                    "description": "The q value column in differential results tables (adjust p values/ q values).",
                     "fa_icon": "fas fa-columns"
                 },
                 "differential_min_fold_change": {
@@ -559,7 +560,7 @@
                 "differential_feature_name_column": {
                     "type": "string",
                     "default": "gene_name",
-                    "description": "Where a features file (GTF) has been provided, what attributed to use to name features",
+                    "description": "Where a features file (GTF) has been provided, what attribute to use to name features",
                     "fa_icon": "fas fa-signature"
                 },
                 "differential_foldchanges_logged": {
@@ -810,7 +811,7 @@
                 },
                 "limma_use_voom": {
                     "type": "boolean",
-                    "description": "Turns on and off usage of voom normalisation in the Limma module.",
+                    "description": "Turns on and off usage of voom normalization in the Limma module.",
                     "fa_icon": "far fa-check-square"
                 }
             },
@@ -829,7 +830,8 @@
                 },
                 "gene_sets_files": {
                     "type": "string",
-                    "description": "Gene sets in GMT or GMX-format; for GSEA: multiple comma-separated input files in either format are possible. For gprofiler2: A single file in GMT format is possible; this has lowest priority and will be overridden by --gprofiler2_token and --gprofiler2_organism.",
+                    "description": "Gene sets in [GMT or GMX-format](https://docs.gsea-msigdb.org/#GSEA/Data_Formats/#gene-set-database-formats); for GSEA: multiple comma-separated input files in either format are possible. For gprofiler2: A single file in GMT format is possible; this has lowest priority and will be overridden by --gprofiler2_token and --gprofiler2_organism.",
+                    "help": "For GSEA the gene sets have to contain gene symbols. You can check out example files at https://biit.cs.ut.ee/gprofiler//static/gprofiler_full_<short_organism_name>.name.gmt. A list of short organism names cat be found at https://biit.cs.ut.ee/gprofiler/page/organism-list",
                     "fa_icon": "fas fa-bars"
                 }
             }
@@ -974,7 +976,7 @@
                 "gprofiler2_organism": {
                     "type": "string",
                     "description": "Short name of the organism that is analyzed, e.g. hsapiens for homo sapiens.",
-                    "help_text": "Set this to the short organism name consisting of the first letter of the genus and the full species name, e.g. hsapiens for Homo sapiens, mmusculus for Mus musculus. This has second priority and will be overridden by --gprofiler2_token."
+                    "help_text": "Set this to the [short organism name](https://biit.cs.ut.ee/gprofiler/page/organism-list) consisting of the first letter of the genus and the full species name, e.g. hsapiens for Homo sapiens, mmusculus for Mus musculus. This has second priority and will be overridden by --gprofiler2_token."
                 },
                 "gprofiler2_significant": {
                     "type": "boolean",
@@ -1017,7 +1019,7 @@
                 "gprofiler2_background_file": {
                     "type": "string",
                     "pattern": "^\\S+\\.(csv|tsv|txt)$|auto|false",
-                    "description": "Path to CSV/TSV/TXT file that should be used as a background for the query; alternatively, 'auto' (default) or 'false'.",
+                    "description": "Path to CSV/TSV/TXT file that should be used as a background list of genes for the query; alternatively, 'auto' (default) or 'false'.",
                     "help_text": "It is advisable to run pathway analysis with a set of background genes describing which genes exist in the target organism in the first place so that other genes are not at all considered. This parameter is by default set to 'auto', meaning that the filtered input abundance matrix will be used. Alternatively, you can provide a CSV/TSV table where one column contains gene IDs and the other rows contain abundance values, or a TXT file that simply contains one gene ID per line. If a custom CSV/TSV is used, all genes will be considered which had at least some abundance (i.e. sum of all abundance values in a row > 0). Set to 'false' if you do not want to use a background.",
                     "default": "auto"
                 },
@@ -1129,7 +1131,8 @@
                 "logo_file": {
                     "type": "string",
                     "default": "${projectDir}/docs/images/nf-core-differentialabundance_logo_light.png",
-                    "description": "A logo to display in the report instead of the generic pipeline logo",
+                    "description": "A logo to display in the report instead of the generic pipeline logo.",
+                    "help_text": "A logo to display in the report instead of the generic pipeline logo. It can accessed via the id 'logo' in the css_file.",
                     "fa_icon": "far fa-font-awesome-logo-full"
                 },
                 "css_file": {
@@ -1141,7 +1144,7 @@
                 "citations_file": {
                     "type": "string",
                     "default": "${projectDir}/CITATIONS.md",
-                    "description": "A markdown file containing citations to include in the fiinal report",
+                    "description": "A markdown file containing citations to include in the final report",
                     "fa_icon": "fas fa-ad"
                 },
                 "report_title": {
@@ -1157,7 +1160,7 @@
                 "report_contributors": {
                     "type": "string",
                     "description": "Semicolon-separated string of contributor info that should be listed in the report.",
-                    "help_text": "List here names, roles, affiliations, contact info etc. of contributors to your project. Entries of different contributors are separated by semicolons, linebreaks within a contributor are separated by \n. The first line of each contributor will be bold in the report. E.g.: 'Jane Doe\nDirector of Institute of Microbiology\nUniversity of Smallville;John Smith\nPhD student\nUniversity of Smallville'"
+                    "help_text": "List here names, roles, affiliations, contact info etc. of contributors to your project. Entries of different contributors are separated by semicolons, linebreaks within a contributor are separated by '\\n'. The first line of each contributor will be bold in the report. When providing this parameter on the command-line please use literal syntax, see usage docs: $'Jane Doe\nDirector of Institute of Microbiology\nUniversity of Smallville;John Smith\nPhD student\nUniversity of Smallville'. When providing this parameter instead via a params.yml file, use multi-line yml syntax instead with actual line breaks (see [usage](https://nf-co.re/differentialabundance/dev/docs/usage#params-files). There will be no need to escape the newline characters in that case. report_contributors: | \nJane Doe\n  Director of Institute of Microbiology\n  University of Smallville\n  John Smith\n  PhD student\n  University of Smallville"
                 },
                 "report_description": {
                     "type": "string",
@@ -1168,6 +1171,11 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Whether to generate a scree plot in the report"
+                },
+                "skip_reports": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Skip generation of reports"
                 }
             },
             "required": ["report_file", "logo_file", "css_file"]
@@ -1388,10 +1396,5 @@
         {
             "$ref": "#/$defs/generic_options"
         }
-    ],
-    "properties": {
-        "skip_reports": {
-            "type": "boolean"
-        }
-    }
+    ]
 }
