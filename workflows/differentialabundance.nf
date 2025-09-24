@@ -693,7 +693,7 @@ workflow DIFFERENTIALABUNDANCE {
             .filter { meta, contrast, results -> contrast.variable?.trim() }
             .groupTuple()
         )   // [meta, [meta with contrast], [differential results]]
-        .join( ch_contrasts )                           // [meta, [contrast], [variable], [reference], [target], [formula], [comparison]]
+        .join( ch_contrasts )   // [meta, [contrast], [variable], [reference], [target], [formula], [comparison]]
         .map { meta, meta_with_contrast, results, contrast, variable, reference, target, formula, comparison ->
             // extract the contrast entries from the meta dynamically
             // in this way we don't need to harcode the contrast keys
@@ -711,7 +711,7 @@ workflow DIFFERENTIALABUNDANCE {
         .collectFile { meta, contrast_map ->
             def header = contrast_map[0].keySet().join(',')
             def content = contrast_map.collect { it.values().join(',') }
-            def lines = header + '\n' + content.join('\n')
+            def lines = header + '\n' + content.join('\n') + '\n'
             ["${meta.paramset_name}.csv", lines]
         }
         // parse the channel to have the contrast file with the corresponding meta

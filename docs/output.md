@@ -14,6 +14,8 @@ This directory contains the main reporting output of the workflow.
 - `report/`
   - `*.html`: an HTML report file named according to the value of `params.study_name`, containing graphical and tabular summary results for the workflow run.
   - `*.zip`: a zip file containing an R markdown file with parameters set and all necessary input files to open and customise the reporting.
+  - `gsea/`: Directory containing graphical outputs from GSEA (where enabled). Plots are stored in directories named for the associated contrast.
+    - `[contrast]/png/[gsea_plot_type].png`
 
 </details>
 
@@ -38,8 +40,6 @@ Stand-alone graphical outputs are placed in this directory. They may be useful i
     - `[contrast]/png/volcano.png`: Volcano plots of -log(10) p value agains log(2) fold changes
   - `immunedeconv/`: Directory containing graphical outputs of immunedeconv results
     - `${prefix}.plot1_stacked_bar_chart.png`
-  - `gsea/`: Directory containing graphical outputs from GSEA (where enabled). Plots are stored in directories named for the associated contrast.
-    - `[contrast]/png/[gsea_plot_type].png`
   - `gprofiler2/`: Directory containing graphical outputs from gprofiler2 (where enabled). Plots are stored in directories named for the associated contrast.
     - `[contrast]/[contrast].gprofiler2.[source].gostplot.html`: An interactive gprofiler2 Manhattan plot of enriched pathways from one specific source/database, e.g. REAC
     - `[contrast]/[contrast].gprofiler2.[source].gostplot.png`: A static gprofiler2 Manhattan plot of enriched pathways from one specific source/database, e.g. REAC
@@ -92,7 +92,7 @@ The `differential` folder is likely to be the core result set for most users, co
 <summary>Output files</summary>
 
 - `shinyngs_app/`
-  - `[study name]`:
+  - `[study_name]`:
     - `data.rds`: serialized R object which can be used to generate a Shiny application
     - `app.R`: minimal R script that will source the data object and generate the app
 

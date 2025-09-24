@@ -373,8 +373,8 @@ def getParamsheetConfigurations() {
 
 // Get default configurations from pipeline parameters
 def getDefaultConfigurations() {
-    // replace null by string 'null' for paramset_name to avoid certain problems with null object
-    return [params + [paramset_name: 'null']]
+    // replace null by string 'contrasts' for paramset_name to avoid certain problems with null object
+    return [params + [paramset_name: 'contrasts']]
 }
 
 // Create a temporary schema file for paramsheet validation

@@ -104,6 +104,7 @@ nextflow_pipeline {
                 outdir              = "$outputDir"
                 differential_method = 'deseq2'
                 functional_method   = 'gprofiler2'
+                gprofiler2_organism = 'mmusculus'
                 input               = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/metadata.tsv'
                 matrix              = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/counts.tsv'
                 contrasts_yml       = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/testdata/formula_contrasts/rnaseq_complex_contrast.yaml'

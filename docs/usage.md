@@ -6,7 +6,7 @@
 
 ## Introduction
 
-Differential analysis is a common task in a variety of use cases. In essence, all these use cases entail taking an input matrix containing features (e.g. genes) and observations (e.g. samples), and comparing groups of observations in all or a subset of the features. The feature/ observation language here reflects our hope that this workflow will extend in future to encompass a variety of applications where an assumption of gene vs sample may not be a valid one- though that is the application to which the first release will apply.
+Differential analysis is a common task in a variety of use cases. In essence, all these use cases entail taking an input matrix containing features (e.g. genes) and observations (e.g. samples), and comparing groups of observations in all or a subset of the features. The feature/ observation language here reflects our hope that this workflow will extend in future to encompass a variety of applications where an assumption of gene vs sample may not be a valid one - though that is the application to which the first release will apply.
 
 With the above in mind, running this workflow requires:
 
@@ -20,14 +20,14 @@ With the above in mind, running this workflow requires:
 ## Observations (samplesheet) input
 
 ```bash
---input '[path to samplesheet file]'
+--input '[path to samplesheet file].(csv|tsv)'
 ```
 
-This may well be the same sample sheet used to generate the input matrix. For example, in RNA-seq this might be the same sample sheet, perhaps derived from [fetchngs](https://github.com/nf-core/fetchngs), that was input to the [RNA-seq workflow](https://github.com/nf-core/rnaseq). It may be necessary to add columns that describe the groups you want to compare. The columns that the pipeline requires are:
+The samplesheet file can be tab or comma separated. This may well be the same sample sheet used to generate the input matrix. For example, in RNA-seq this might be the same sample sheet, perhaps derived from [fetchngs](https://github.com/nf-core/fetchngs), that was input to the [RNA-seq workflow](https://github.com/nf-core/rnaseq). It may be necessary to add columns that describe the groups you want to compare. The columns that the pipeline requires are:
 
-- a column listing the sample IDs (must be the same IDs as in the abundance matrix), in the example below it is called 'sample'. For some study_types, this column might need to be filled in with file names, e.g. when doing an affymetrix analysis.
-- one or more columns describing conditions for the differential analysis. In the example below it is called 'condition'
-- optionally one or more columns describing sample batches or similar which you want to be considered in the analysis. In the example below it is called 'batch'
+- a column listing the sample IDs (must be the same IDs as in the abundance matrix), in the example below it is called `sample`. For some study_types, this column might need to be filled in with file names, e.g. when doing an affymetrix analysis.
+- one or more columns describing conditions for the differential analysis. In the example below it is called `condition`
+- optionally one or more columns describing sample batches or similar which you want to be considered in the analysis. In the example below it is called `batch`
 
 For example:
 
@@ -40,8 +40,6 @@ TREATED_REP1,AEG588A2_S1_L002_R1_001.fastq.gz,AEG588A2_S1_L002_R2_001.fastq.gz,t
 TREATED_REP2,AEG588A2_S1_L003_R1_001.fastq.gz,AEG588A2_S1_L003_R2_001.fastq.gz,treated,2,A
 TREATED_REP3,AEG588A2_S1_L004_R1_001.fastq.gz,AEG588A2_S1_L004_R2_001.fastq.gz,treated,3,B
 ```
-
-The file can be tab or comma separated.
 
 ### Affymetrix arrays
 
@@ -59,30 +57,30 @@ Abundances for Affy arrays are provided in CEL files within an archive. When cre
 "GSM1229348_Gudjohnsson_008_8470_PN.CEL.gz","GSM1229348","p8470_PN","6690","uninvolved"
 ```
 
-The "file" column in this example is used to specify the data file associated with each sample, which is essential for data analysis and interpretation.
+The `file` column in this example is used to specify the data file associated with each sample, which is essential for data analysis and interpretation.
 
 ## Abundance values
 
 ### RNA-seq and similar
 
 ```bash
---matrix '[path to matrix file]'
+--matrix '[path to matrix file].(csv|tsv)'
 ```
 
-This is a numeric square matrix file, comma or tab-separated, with a column for every observation, and features corresponding to the supplied feature set. The parameters `--observations_id_col` and `--features_id_col` define which of the associated fields should be matched in those inputs.
+This is a numeric matrix file, comma or tab-separated, with features as rows and observations in columns. The features correspond to the supplied feature set. The parameters `--observations_id_col` and `--features_id_col` define which of the associated fields should be matched in those inputs.
 
 #### Outputs from nf-core/rnaseq and other tximport-processed results
 
-The nf-core RNAseq workflow incorporates [tximport](https://bioconductor.org/packages/release/bioc/html/tximport.html) for producing quantification matrices. From [version 3.12.2](https://github.com/nf-core/rnaseq/releases/tag/3.13.2), it additionally provides transcript length matrices which can be directly consumed by DESeq2 to model length bias across samples.
+The nf-core RNAseq workflow incorporates [tximport](https://bioconductor.org/packages/release/bioc/html/tximport.html) for producing quantification matrices. From [version 3.12.2](https://github.com/nf-core/rnaseq/releases/tag/3.13.2), it additionally provides transcript/gene length matrices which can be directly consumed by DESeq2 to model length bias across samples.
 
-To use this approach, include the transcript lengths file with the **raw counts**:
+To use this approach, include the corresponding lengths file with the **raw counts**:
 
 ```bash
 --matrix 'salmon.merged.gene_counts.tsv' \
 --transcript_length_matrix 'salmon.merged.gene_lengths.tsv'
 ```
 
-Without the transcript lengths, for instance in earlier rnaseq workflow versions, follow the second recommendation in the [tximport documentation](https://bioconductor.org/packages/release/bioc/vignettes/tximport/inst/doc/tximport.html#Downstream_DGE_in_Bioconductor):
+Without the transcript/gene lengths, for instance in earlier rnaseq workflow versions, follow the second recommendation in the [tximport documentation](https://bioconductor.org/packages/release/bioc/vignettes/tximport/inst/doc/tximport.html#Downstream_DGE_in_Bioconductor):
 
 > "Use the tximport argument `countsFromAbundance='lengthScaledTPM'` or `'scaledTPM'`, then employ the gene-level count matrix `txi$counts` directly in downstream software, a method we call 'bias corrected counts without an offset'"
 
@@ -92,7 +90,7 @@ It is important to note that the documentation advises:
 
 > "Do not manually pass the original gene-level counts to downstream methods without an offset."
 
-So we **do not recommend** raw counts files such as `salmon.merged.gene_counts.tsv` as input for this workflow **except** where the transcript lengths are also provided.
+So we **do not recommend** raw counts files such as `salmon.merged.gene_counts.tsv` as input for this workflow **except** where the transcript/gene lengths are also provided.
 
 ### MaxQuant intensities
 
@@ -130,13 +128,13 @@ Full list of features metadata are available on GEO platform pages.
 
 The contrasts file references the observations file to define groups of samples to compare. It can be provided in **either** CSV/TSV or YAML format using the parameters `--contrasts` or `--contrasts_yml`, respectively.
 
-### CSV contrasts file
+### CSV/TSV contrasts file
 
 ```bash
---contrasts '[path to CSV contrasts file]'
+--contrasts '[path to contrasts file].(csv|tsv)'
 ```
 
-The contrasts file references the observations file to define groups of samples to compare. For example, based on the sample sheet above we could define contrasts like:
+Based on the sample sheet above we could define contrasts as indicated below:
 
 ```csv
 id,variable,reference,target,blocking
@@ -154,9 +152,7 @@ The necessary fields in order are:
 You can optionally supply:
 
 - `blocking` - semicolon-delimited, any additional variables (also observation columns) that should be modelled alongside the contrast variable
-- `exclude_samples_col` and `exclude_samples_values` - the former being a valid column in the samples sheet, the latter a semicolon-delimited list of values in that column which should be used to select samples prior to differential modelling. This is helpful where certain samples need to be exluded prior to analysis of a given contrast.
-
-The file can be tab or comma separated.
+- `exclude_samples_col` and `exclude_samples_values` - the former being a valid column in the samples sheet, the latter a semicolon-delimited list of values in that column which should be used to select samples prior to differential modelling. This is helpful where certain samples need to be excluded prior to analysis of a given contrast.
 
 ### YAML contrasts file format
 
@@ -264,7 +260,7 @@ To run the pipeline with a specific config row, you can use the `--paramset_name
 
 We provide a `paramsheet.csv` file in the `assets` directory that defines the parameter sets and tool parameters that make sense to run together, for specific study types.
 
-Each row defines a combination of differential analysis tool and functional analysis tool (optional), with the respective arguments.
+Each row defines a combination of a differential analysis tool and a functional analysis tool (optional), with the respective arguments.
 
 To run a given combination of tools, you can use the `--paramset_name` parameter.
 
@@ -427,7 +423,8 @@ nextflow run nf-core/differentialabundance \
     [--gtf mouse.gtf OR --features features.tsv] \
     --outdir <OUTDIR>  \
     -profile docker \
-    [--paramset_name <paramset_name>]
+    [--paramset_name <paramset_name>] \
+    --report_contributors $'Jane Doe\nDirector of Institute of Microbiology\nUniversity of Smallville;John Smith\nPhD student\nInstitute of Microbiology\nUniversity of Smallville'
 ```
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
@@ -460,7 +457,7 @@ process {
 }
 ```
 
-You will not get the final reporting outcomes of the workflow, but you will get the differential tables produced by DESeq2 or Limma, and the results of any gene seta analysis you have enabled.
+You will not get the final reporting outcomes of the workflow, but you will get the differential tables produced by DESeq2 or Limma, and the results of any gene sets analysis you have enabled.
 
 We have also added a dedicated pipeline parameter, `--skip_reports` that allows you to skip only the RMarkdown notebook and bundled report while leaving other reporting processes active. The `RMARKDOWNNOTEBOOK` process assumes that every grouping variable you pass to it (from the contrasts file’s variable column or PCA-derived informative_variables) exists as a valid, named column in your sample metadata. If you know your metadata or contrasts might be incomplete or non-standard (such as using formula-based yaml files), the you can use this flag to skip these steps.
 
@@ -489,6 +486,13 @@ with:
 input: './samplesheet.csv'
 outdir: './results/'
 genome: 'GRCh37'
+report_contributors: |
+  Jane Doe
+  Director of Institute of Microbiology
+  University of Smallville;John Smith
+  PhD student
+  Institute of Microbiology
+  University of Smallville
 <...>
 ```
 
