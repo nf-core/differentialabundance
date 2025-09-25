@@ -356,13 +356,13 @@
             "properties": {
                 "filtering_min_abundance": {
                     "type": "number",
-                    "default": 1.0,
+                    "default": 1,
                     "description": "Minimum abundance value",
                     "fa_icon": "fas fa-compress-alt"
                 },
                 "filtering_min_samples": {
                     "type": "number",
-                    "default": 1.0,
+                    "default": 1,
                     "description": "Minimum observations that must pass the threshold to retain the row/ feature (e.g. gene).",
                     "fa_icon": "fas fa-compress-alt"
                 },
@@ -541,13 +541,13 @@
                 },
                 "differential_min_fold_change": {
                     "type": "number",
-                    "default": 2.0,
+                    "default": 2,
                     "description": "Minimum fold change used to calculate differential feature numbers",
                     "fa_icon": "fas fa-angle-double-down"
                 },
                 "differential_max_pval": {
                     "type": "number",
-                    "default": 1.0,
+                    "default": 1,
                     "description": "Maximum p value used to calculate differential feature numbers",
                     "fa_icon": "fas fa-angle-double-up"
                 },
@@ -805,7 +805,7 @@
                 },
                 "limma_p_value": {
                     "type": "number",
-                    "default": 1.0,
+                    "default": 1,
                     "description": "cutoff value for adjusted p-values. Only genes with lower p-values are listed.",
                     "fa_icon": "fas fa-angle-double-up"
                 },
@@ -816,6 +816,57 @@
                 }
             },
             "fa_icon": "fas fa-border-all"
+        },
+        "differential_dream_specific_options": {
+            "title": "[differential] DREAM specific options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "dream_p_value": {
+                    "type": "integer",
+                    "default": 1
+                },
+                "dream_lfc": {
+                    "type": "integer",
+                    "default": 0
+                },
+                "dream_confint": {
+                    "type": "boolean"
+                },
+                "dream_proportion": {
+                    "type": "number",
+                    "default": 0.01
+                },
+                "dream_stdev_coef_lim": {
+                    "type": "string",
+                    "default": "0.1,4"
+                },
+                "dream_trend": {
+                    "type": "boolean"
+                },
+                "dream_robust": {
+                    "type": "boolean"
+                },
+                "dream_winsor_tail_p": {
+                    "type": "string",
+                    "default": "0.05,0.1"
+                },
+                "dream_ddf": {
+                    "type": "string",
+                    "default": "adaptive"
+                },
+                "dream_reml": {
+                    "type": "boolean"
+                },
+                "dream_apply_voom": {
+                    "type": "boolean"
+                },
+                "dream_adjust_method": {
+                    "type": "string",
+                    "default": "BH"
+                }
+            }
         },
         "functional_functional_analysis_options": {
             "title": "[functional] Functional analysis options",
@@ -1148,7 +1199,6 @@
                 },
                 "skip_reports": {
                     "type": "boolean",
-                    "default": false,
                     "description": "Skip generation of reports"
                 }
             },
@@ -1342,6 +1392,9 @@
         },
         {
             "$ref": "#/$defs/differential_limma_specific_options"
+        },
+        {
+            "$ref": "#/$defs/differential_dream_specific_options"
         },
         {
             "$ref": "#/$defs/functional_functional_analysis_options"

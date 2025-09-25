@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- [[#514](https://github.com/nf-core/differentialabundance/pull/473)] - Expose DREAM options as pipeline params. ([@atrigila](https://github.com/atrigila), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@grst](https://github.com/grst)).
 - [[#492](https://github.com/nf-core/differentialabundance/pull/492)] - Fixed volcano plot tooltips by adding column existence check for gene name labels. ([@antoniasaracco] (https://github.com/antoniasaracco), review by [@atrigila](https://github.com/atrigila) and [@grst](https://github.com/grst))
 - [[#478](https://github.com/nf-core/differentialabundance/pull/489)] - Fixed R Markdown report failure with NA values in sample metadata by converting NAs to FALSE in logical operations. ([@antoniasaracco] (https://github.com/antoniasaracco), review by [@atrigila](https://github.com/atrigila) and [@grst](https://github.com/grst))
 - [[#473](https://github.com/nf-core/differentialabundance/pull/473)] - Allow formula-based contrasts in DESEQ2. ([@atrigila](https://github.com/atrigila), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@grst](https://github.com/grst)).
