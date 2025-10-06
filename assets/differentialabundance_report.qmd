@@ -39,6 +39,7 @@ library(yaml)
 library(shinyngs)
 library(plotly)
 library(DT)
+library(ComplexHeatmap)
 ```
 
 <!-- Define some functions -->
@@ -765,40 +766,66 @@ for (variable in rownames(pca_vs_meta)) {
 }
 ```
 
-#### Clustering dendrograms
+#### Clustering heatmaps
 
 A hierarchical clustering of `{r} params$meta$params$features_type`s was undertaken based on `{r} ifelse(params$meta$params$exploratory_n_features == -1, paste0("all ", params$meta$params$features_type), paste0("the ", params$meta$params$exploratory_n_features, " most variable ", params$meta$params$features_type))`s. Distances between `r params$meta$params$features_type`s were estimated based on `{r} params$meta$params$exploratory_cor_method` correlation, which were then used to produce a clustering via the `{r} params$meta$params$exploratory_clustering_method` method with `hclust()` in R.
 
 ::: {.panel-tabset}
-```{r, echo=FALSE, results='asis'}
+```{r}
 #| echo: false
 #| results: asis
-for (assay_type in rev(names(assay_data))) {
-    for (iv in informative_variables) {
-        cat(paste0("\n##### ", prettifyVariablename(assay_type), " (", iv, ")\n"))
-        variable_genes <- selectVariableGenes(matrix = assay_data[[assay_type]], ntop = ifelse(params$meta$params$exploratory_n_features == -1, nrow(assay_data[[assay_type]]), params$meta$params$exploratory_n_features))
+#| warning: false
+#| message: false
+for (assay_type in rev(names(assay_data))){
+    cat(paste0("\n##### ", prettifyVariablename(assay_type), "\n"))
 
+    variable_genes <- selectVariableGenes(matrix = assay_data[[assay_type]], ntop = ifelse(params$meta$params$exploratory_n_features == -1, nrow(assay_data[[assay_type]]), params$meta$params$exploratory_n_features))
+    ann_colors <- list()
+
+    for (iv in informative_variables) {
+        if (is.numeric(observations[[iv]])) {
+            ann_colors[[iv]] <- circlize::colorRamp2(
+                c(min(observations[[iv]], na.rm = TRUE), max(observations[[iv]], na.rm = TRUE)),
+                c("blue", "red")
+            )
+        } else {
         dendroColorScale <- makeColorScale(length(unique(observations[[iv]])), palette = params$meta$params$exploratory_palette_name)
-        p <- clusteringDendrogram(
-            2^assay_data[[assay_type]][variable_genes, ],
-            observations[, iv, drop = FALSE],
-            colorby = iv,
-            cor_method = params$meta$params$exploratory_cor_method,
-            plot_title = paste0(
-                paste0(params$meta$params$observations_type, " clustering dendrogram, "),
-                ifelse(params$meta$params$exploratory_n_features == -1, nrow(assay_data[[assay_type]]), paste0(params$meta$params$exploratory_n_features, " most variable")), " ",
-                params$meta$params$features_type,
-                "s\n(", params$meta$params$exploratory_clustering_method, " clustering, ", params$meta$params$exploratory_cor_method, " correlation)"
-            ),
-            cluster_method = params$meta$params$exploratory_clustering_method,
-            palette = dendroColorScale,
-            labelspace = 0.55
-        )
-        # Defaults in shinyngs make the text in this plot a bit big for the report, so
-        # scale it down a bit
-        print(p, vp = grid::viewport(gp = grid::gpar(cex = 0.7)))
-        cat("\n")
+        # ensure the length matches number of categories
+        dendroColorScale <- rep(dendroColorScale, length.out = length(unique(observations[[iv]])))
+
+        # assign names matching the category labels
+        names(dendroColorScale) <- sort(unique(na.omit(as.character(observations[[iv]]))))
+        ann_colors[[iv]] <- dendroColorScale
+        }
     }
+
+    # Construct HeatmapAnnotation
+    ha <- HeatmapAnnotation(
+        df = observations[, informative_variables, drop = FALSE],
+        annotation_name_side = "right",
+        col = ann_colors
+    )
+
+    heat_mat <- 2^assay_data[[assay_type]][variable_genes, ]
+    p <- Heatmap(
+        heat_mat,
+        name = "Expression",
+        top_annotation = ha,
+        show_row_names = FALSE,
+        show_column_names = FALSE,
+        clustering_method_columns = params$meta$params$exploratory_clustering_method,
+        clustering_method_rows = params$meta$params$exploratory_clustering_method,
+        clustering_distance_columns = params$meta$params$exploratory_cor_method,
+        clustering_distance_rows = params$meta$params$exploratory_cor_method,
+        column_title = paste0(
+            params$meta$params$observations_type, " clustering heatmap\n(",
+            params$meta$params$exploratory_clustering_method, " clustering, ",
+            params$meta$params$exploratory_cor_method, " correlation)"
+        )
+    )
+
+    print(p)
+    cat("\n")
 }
 cat(":::")
 ```
