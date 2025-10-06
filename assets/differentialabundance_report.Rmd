@@ -1029,8 +1029,30 @@ if (!is.null(params$functional_method)){
             name <- differential_names[i]
             cat(paste0("\n##### ", name, "\n"))
 
+            plot_html <- paste0(contrasts$id[i], ".gprofiler2.gostplot.html")
+            plot_path <- file.path(params$input_dir, plot_html)
+
             table <- paste0(contrasts$id[i], ".gprofiler2.all_enriched_pathways.tsv")
             table_path <- file.path(params$input_dir, table)
+
+            # Check and include interactive plot
+            if (file.exists(plot_path) && file.size(plot_path) > 0) {
+                cat("\n**Interactive Pathway Enrichment Plot:**\n")
+                cat("*Click and hover on points in the plot below to explore enriched pathways.*\n\n")
+                
+                print(htmltools::tags$iframe(
+                    src = plot_path, 
+                    width = "100%", 
+                    height = "600px", 
+                    scrolling = "auto", 
+                    frameBorder = 0
+                ))
+                
+                cat("\n\n")
+            } else {
+                cat("No interactive plot available for this contrast.\n\n")
+            }
+            # Check and include interactive table
             if (!file.exists(table_path) || file.size(table_path) == 0){
                 cat(paste0("No ", ifelse(params$gprofiler2_significant, "significantly", ""), " enriched pathways were found for this contrast."))
             } else {
