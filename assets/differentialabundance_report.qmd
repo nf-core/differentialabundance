@@ -812,7 +812,7 @@ for (assay_type in rev(names(assay_data))){
         name = "Expression",
         top_annotation = ha,
         show_row_names = FALSE,
-        show_column_names = FALSE,
+        show_column_names = TRUE,
         clustering_method_columns = params$meta$params$exploratory_clustering_method,
         clustering_method_rows = params$meta$params$exploratory_clustering_method,
         clustering_distance_columns = params$meta$params$exploratory_cor_method,
@@ -821,11 +821,17 @@ for (assay_type in rev(names(assay_data))){
             params$meta$params$observations_type, " clustering heatmap\n(",
             params$meta$params$exploratory_clustering_method, " clustering, ",
             params$meta$params$exploratory_cor_method, " correlation)"
+        ),
+        column_names_gp = grid::gpar(fontsize = 8),
+        column_names_rot = 45,
+        col = circlize::colorRamp2(
+            c(min(heat_mat), 0, max(heat_mat)),
+            c("blue", "white", "red")
         )
     )
 
-    print(p)
-    cat("\n")
+    draw(p)
+    cat("\n\n")
 }
 cat(":::")
 ```
