@@ -806,7 +806,7 @@ for (assay_type in rev(names(assay_data))){
         col = ann_colors
     )
 
-    heat_mat <- 2^assay_data[[assay_type]][variable_genes, ]
+    heat_mat <- assay_data[[assay_type]][variable_genes, ]
     p <- Heatmap(
         heat_mat,
         name = "Expression",
