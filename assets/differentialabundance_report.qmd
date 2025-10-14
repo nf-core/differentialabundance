@@ -812,7 +812,7 @@ for (assay_type in rev(names(assay_data))){
         name = "Expression",
         top_annotation = ha,
         show_row_names = FALSE,
-        show_column_names = TRUE,
+        show_column_names = ifelse(length(colnames(heat_mat)) < 20, TRUE, FALSE),
         clustering_method_columns = params$meta$params$exploratory_clustering_method,
         cluster_rows = FALSE,
         clustering_distance_columns = params$meta$params$exploratory_cor_method,
