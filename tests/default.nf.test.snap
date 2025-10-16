@@ -1,7 +1,7 @@
 {
     "Test profile - csv contrasts": {
         "content": [
-            23,
+            24,
             {
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
@@ -89,6 +89,7 @@
                 "report",
                 "report/SRP254919.zip",
                 "report/SRP254919_differentialabundance_report.html",
+                "report/SRP254919_molecular_report.html",
                 "report/gsea",
                 "report/gsea/treatment_mCherry_hND6__SRP254919",
                 "report/gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols",
@@ -187,14 +188,14 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.7"
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.2"
         },
-        "timestamp": "2025-09-11T20:21:20.92254816"
+        "timestamp": "2025-10-15T19:42:26.68585354"
     },
     "Test profile - with toolsheet": {
         "content": [
-            23,
+            24,
             {
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
@@ -282,6 +283,7 @@
                 "report",
                 "report/SRP254919.zip",
                 "report/SRP254919_differentialabundance_report.html",
+                "report/SRP254919_molecular_report.html",
                 "report/gsea",
                 "report/gsea/treatment_mCherry_hND6__SRP254919",
                 "report/gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols",
@@ -380,10 +382,10 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.7"
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.2"
         },
-        "timestamp": "2025-09-11T20:18:43.563646744"
+        "timestamp": "2025-10-15T19:38:30.967535654"
     },
     "Test profile - with toolsheet and formula": {
         "content": [
@@ -568,7 +570,7 @@
     },
     "Test profile - yml no formula": {
         "content": [
-            23,
+            24,
             {
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
@@ -656,6 +658,7 @@
                 "report",
                 "report/SRP254919.zip",
                 "report/SRP254919_differentialabundance_report.html",
+                "report/SRP254919_molecular_report.html",
                 "report/gsea",
                 "report/gsea/treatment_mCherry_hND6__SRP254919",
                 "report/gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols",
@@ -754,10 +757,10 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.7"
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.2"
         },
-        "timestamp": "2025-09-11T20:24:06.283889511"
+        "timestamp": "2025-10-15T19:46:08.185418955"
     },
     "Test profile - multiple reports - csv contrasts": {
         "content": [

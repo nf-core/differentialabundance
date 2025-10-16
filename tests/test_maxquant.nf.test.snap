@@ -1,7 +1,7 @@
 {
     "Test maxquant profile": {
         "content": [
-            20,
+            21,
             {
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
@@ -99,6 +99,7 @@
                 "report",
                 "report/PXD043349.zip",
                 "report/PXD043349_differentialabundance_report.html",
+                "report/PXD043349_molecular_report.html",
                 "tables",
                 "tables/differential",
                 "tables/differential/fakebatch_fakeBatch_b1_b2_PXD043349.limma.results.tsv",
@@ -132,14 +133,14 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.7"
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.2"
         },
-        "timestamp": "2025-09-15T17:10:02.22889763"
+        "timestamp": "2025-10-15T20:29:30.131591168"
     },
     "Test maxquant profile - with toolsheet": {
         "content": [
-            20,
+            21,
             {
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
@@ -237,6 +238,7 @@
                 "report",
                 "report/PXD043349.zip",
                 "report/PXD043349_differentialabundance_report.html",
+                "report/PXD043349_molecular_report.html",
                 "tables",
                 "tables/differential",
                 "tables/differential/fakebatch_fakeBatch_b1_b2_PXD043349.limma.results.tsv",
@@ -270,9 +272,9 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.7"
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.2"
         },
-        "timestamp": "2025-09-15T17:12:23.535765477"
+        "timestamp": "2025-10-15T20:32:25.902504343"
     }
 }

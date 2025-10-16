@@ -1,7 +1,7 @@
 {
     "Test soft profile": {
         "content": [
-            10,
+            11,
             {
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
@@ -60,6 +60,7 @@
                 "report",
                 "report/study.zip",
                 "report/study_differentialabundance_report.html",
+                "report/study_molecular_report.html",
                 "shinyngs_app",
                 "shinyngs_app/study",
                 "shinyngs_app/study/app.R",
@@ -85,14 +86,14 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.7"
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.2"
         },
-        "timestamp": "2025-09-15T19:32:07.483062304"
+        "timestamp": "2025-10-15T21:07:38.973202324"
     },
     "Test soft profile - with toolsheet": {
         "content": [
-            10,
+            11,
             {
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
@@ -151,6 +152,7 @@
                 "report",
                 "report/study.zip",
                 "report/study_differentialabundance_report.html",
+                "report/study_molecular_report.html",
                 "shinyngs_app",
                 "shinyngs_app/study",
                 "shinyngs_app/study/app.R",
@@ -176,9 +178,9 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.7"
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.2"
         },
-        "timestamp": "2025-09-15T19:35:48.771685281"
+        "timestamp": "2025-10-15T21:10:53.910940189"
     }
 }

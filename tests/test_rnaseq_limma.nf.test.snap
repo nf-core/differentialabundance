@@ -1,7 +1,7 @@
 {
     "Test rnaseq limma profile - with decoupler": {
         "content": [
-            17,
+            18,
             {
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
@@ -76,6 +76,7 @@
                 "report",
                 "report/SRP254919.zip",
                 "report/SRP254919_differentialabundance_report.html",
+                "report/SRP254919_molecular_report.html",
                 "shinyngs_app",
                 "shinyngs_app/SRP254919",
                 "shinyngs_app/SRP254919/app.R",
@@ -111,14 +112,14 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.7"
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.2"
         },
-        "timestamp": "2025-09-27T19:23:26.816199065"
+        "timestamp": "2025-10-15T21:01:48.415013208"
     },
     "Test rnaseq limma profile": {
         "content": [
-            22,
+            23,
             {
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
@@ -198,6 +199,7 @@
                 "report",
                 "report/SRP254919.zip",
                 "report/SRP254919_differentialabundance_report.html",
+                "report/SRP254919_molecular_report.html",
                 "report/gsea",
                 "report/gsea/treatment_mCherry_hND6__SRP254919",
                 "report/gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols",
@@ -285,14 +287,14 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.7"
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.2"
         },
-        "timestamp": "2025-09-15T19:19:57.070272644"
+        "timestamp": "2025-10-15T20:49:45.864984656"
     },
     "Test rnaseq limma profile - with formula and complex contrasts": {
         "content": [
-            25,
+            26,
             {
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
@@ -382,6 +384,7 @@
                 "report",
                 "report/SRP254919.zip",
                 "report/SRP254919_differentialabundance_report.html",
+                "report/SRP254919_molecular_report.html",
                 "report/gsea",
                 "report/gsea/treatment_effect_classic_comparison_SRP254919",
                 "report/gsea/treatment_effect_classic_comparison_SRP254919/mh.all.v2022.1.Mm.symbols",
@@ -665,14 +668,14 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.7"
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.2"
         },
-        "timestamp": "2025-09-15T19:27:59.703430393"
+        "timestamp": "2025-10-15T20:57:25.968147746"
     },
     "Test rnaseq limma profile - with toolsheet": {
         "content": [
-            22,
+            23,
             {
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
@@ -752,6 +755,7 @@
                 "report",
                 "report/SRP254919.zip",
                 "report/SRP254919_differentialabundance_report.html",
+                "report/SRP254919_molecular_report.html",
                 "report/gsea",
                 "report/gsea/treatment_mCherry_hND6__SRP254919",
                 "report/gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols",
@@ -839,9 +843,9 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.7"
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.2"
         },
-        "timestamp": "2025-09-15T19:23:31.858632588"
+        "timestamp": "2025-10-15T20:52:52.611596946"
     }
 }
