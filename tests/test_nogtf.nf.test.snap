@@ -64,8 +64,8 @@
                 "plots/qc/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.dispersion.png",
                 "report",
                 "report/SRP254919.zip",
-                "report/SRP254919_differentialabundance_report.html",
-                "report/SRP254919_molecular_report.html",
+                "report/SRP254919_report_differential.html",
+                "report/SRP254919_report_exploratory.html",
                 "shinyngs_app",
                 "shinyngs_app/SRP254919",
                 "shinyngs_app/SRP254919/app.R",
@@ -100,7 +100,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-10-15T20:37:27.755483154"
+        "timestamp": "2025-10-17T20:29:20.452512154"
     },
     "Test no gtf profile": {
         "content": [
@@ -167,8 +167,8 @@
                 "plots/qc/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.dispersion.png",
                 "report",
                 "report/SRP254919.zip",
-                "report/SRP254919_differentialabundance_report.html",
-                "report/SRP254919_molecular_report.html",
+                "report/SRP254919_report_differential.html",
+                "report/SRP254919_report_exploratory.html",
                 "shinyngs_app",
                 "shinyngs_app/SRP254919",
                 "shinyngs_app/SRP254919/app.R",
@@ -203,6 +203,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-10-15T20:34:47.128234865"
+        "timestamp": "2025-10-17T20:26:24.354416222"
     }
 }

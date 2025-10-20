@@ -98,8 +98,8 @@
                 "plots/qc/genotype_celltype_t1_t2_PXD043349.limma.mean_difference.png",
                 "report",
                 "report/PXD043349.zip",
-                "report/PXD043349_differentialabundance_report.html",
-                "report/PXD043349_molecular_report.html",
+                "report/PXD043349_report_differential.html",
+                "report/PXD043349_report_exploratory.html",
                 "tables",
                 "tables/differential",
                 "tables/differential/fakebatch_fakeBatch_b1_b2_PXD043349.limma.results.tsv",
@@ -136,7 +136,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-10-15T20:29:30.131591168"
+        "timestamp": "2025-10-17T20:20:35.634047543"
     },
     "Test maxquant profile - with toolsheet": {
         "content": [
@@ -237,8 +237,8 @@
                 "plots/qc/genotype_celltype_t1_t2_PXD043349.limma.mean_difference.png",
                 "report",
                 "report/PXD043349.zip",
-                "report/PXD043349_differentialabundance_report.html",
-                "report/PXD043349_molecular_report.html",
+                "report/PXD043349_report_differential.html",
+                "report/PXD043349_report_exploratory.html",
                 "tables",
                 "tables/differential",
                 "tables/differential/fakebatch_fakeBatch_b1_b2_PXD043349.limma.results.tsv",
@@ -275,6 +275,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-10-15T20:32:25.902504343"
+        "timestamp": "2025-10-17T20:23:51.772930444"
     }
 }

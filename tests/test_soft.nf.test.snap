@@ -59,8 +59,8 @@
                 "plots/qc/phenotype_uninvolved_lesional_study.limma.mean_difference.png",
                 "report",
                 "report/study.zip",
-                "report/study_differentialabundance_report.html",
-                "report/study_molecular_report.html",
+                "report/study_report_differential.html",
+                "report/study_report_exploratory.html",
                 "shinyngs_app",
                 "shinyngs_app/study",
                 "shinyngs_app/study/app.R",
@@ -89,7 +89,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-10-15T21:07:38.973202324"
+        "timestamp": "2025-10-17T20:59:50.172224179"
     },
     "Test soft profile - with toolsheet": {
         "content": [
@@ -151,8 +151,8 @@
                 "plots/qc/phenotype_uninvolved_lesional_study.limma.mean_difference.png",
                 "report",
                 "report/study.zip",
-                "report/study_differentialabundance_report.html",
-                "report/study_molecular_report.html",
+                "report/study_report_differential.html",
+                "report/study_report_exploratory.html",
                 "shinyngs_app",
                 "shinyngs_app/study",
                 "shinyngs_app/study/app.R",
@@ -181,6 +181,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-10-15T21:10:53.910940189"
+        "timestamp": "2025-10-17T21:05:10.822646184"
     }
 }

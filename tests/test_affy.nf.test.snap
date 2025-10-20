@@ -71,8 +71,8 @@
                 "plots/qc/phenotype_uninvolved_lesional_GSE50790.limma.mean_difference.png",
                 "report",
                 "report/GSE50790.zip",
-                "report/GSE50790_differentialabundance_report.html",
-                "report/GSE50790_molecular_report.html",
+                "report/GSE50790_report_differential.html",
+                "report/GSE50790_report_exploratory.html",
                 "report/gsea",
                 "report/gsea/phenotype_uninvolved_lesional_GSE50790",
                 "report/gsea/phenotype_uninvolved_lesional_GSE50790/h.all.v2022.1.Hs.symbols",
@@ -242,7 +242,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-10-15T20:03:33.962613395"
+        "timestamp": "2025-10-17T19:53:59.073028341"
     },
     "Test affy profile - with toolsheet": {
         "content": [
@@ -316,8 +316,8 @@
                 "plots/qc/phenotype_uninvolved_lesional_GSE50790.limma.mean_difference.png",
                 "report",
                 "report/GSE50790.zip",
-                "report/GSE50790_differentialabundance_report.html",
-                "report/GSE50790_molecular_report.html",
+                "report/GSE50790_report_differential.html",
+                "report/GSE50790_report_exploratory.html",
                 "report/gsea",
                 "report/gsea/phenotype_uninvolved_lesional_GSE50790",
                 "report/gsea/phenotype_uninvolved_lesional_GSE50790/h.all.v2022.1.Hs.symbols",
@@ -487,6 +487,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-10-15T20:09:03.600741867"
+        "timestamp": "2025-10-17T20:01:17.007921959"
     }
 }
