@@ -1,7 +1,7 @@
 {
     "Test profile - gprofiler2": {
         "content": [
-            19,
+            21,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -152,11 +152,11 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-10-17T20:12:27.785531255"
+        "timestamp": "2025-10-20T17:24:20.63790886"
     },
     "Test profile - deseq2": {
         "content": [
-            24,
+            26,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -353,11 +353,11 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-10-17T20:05:35.649289421"
+        "timestamp": "2025-10-20T17:17:40.672466284"
     },
     "Test profile - gsea": {
         "content": [
-            24,
+            26,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -554,11 +554,11 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-10-17T20:09:04.13666385"
+        "timestamp": "2025-10-20T17:21:17.356735031"
     },
     "Test profile - with decoupler": {
         "content": [
-            19,
+            21,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -698,6 +698,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-10-17T20:17:36.204182935"
+        "timestamp": "2025-10-20T17:28:23.829044556"
     }
 }

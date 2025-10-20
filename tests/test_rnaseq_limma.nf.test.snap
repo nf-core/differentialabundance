@@ -1,7 +1,7 @@
 {
     "Test rnaseq limma profile - with decoupler": {
         "content": [
-            18,
+            20,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -120,11 +120,11 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-10-17T20:56:38.944390801"
+        "timestamp": "2025-10-20T18:05:05.723498946"
     },
     "Test rnaseq limma profile": {
         "content": [
-            23,
+            25,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -300,11 +300,11 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-10-17T20:44:13.694342414"
+        "timestamp": "2025-10-20T17:51:15.192236059"
     },
     "Test rnaseq limma profile - with formula and complex contrasts": {
         "content": [
-            26,
+            30,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -688,11 +688,11 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-10-17T20:52:00.442010494"
+        "timestamp": "2025-10-20T18:00:47.288111465"
     },
     "Test rnaseq limma profile - with toolsheet": {
         "content": [
-            23,
+            25,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -868,6 +868,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-10-17T20:47:21.115757108"
+        "timestamp": "2025-10-20T17:55:02.990032948"
     }
 }

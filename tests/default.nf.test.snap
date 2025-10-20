@@ -1,7 +1,7 @@
 {
     "Test profile - csv contrasts": {
         "content": [
-            24,
+            26,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -198,11 +198,11 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-10-17T19:37:37.258206864"
+        "timestamp": "2025-10-20T16:52:00.379414866"
     },
     "Test profile - with toolsheet": {
         "content": [
-            24,
+            26,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -399,7 +399,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-10-17T19:34:04.659943684"
+        "timestamp": "2025-10-20T16:48:38.254293616"
     },
     "Test profile - with toolsheet and formula": {
         "content": [
@@ -563,7 +563,7 @@
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "versions.yml:md5,b3436c10ff83d0dab55060de3cae3ef2",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
-                "full_model_with_interactions_SRP254919.deseq2.results.tsv:md5,1a67a0d8c187317a96dd35a3da98771d",
+                "full_model_with_interactions_SRP254919.deseq2.results.tsv:md5,2445cb3e070e63b30979b8c0d672265d",
                 "full_model_with_interactions_SRP254919.deseq2.results_filtered.tsv:md5,24b3287c1e1162d047ced9dda147d54f",
                 "full_model_with_interactions_SRP254919_deseq2.annotated.tsv:md5,c8ecdae0540bde776cf5e0ba0c323555",
                 "interaction_genotype_treatment_SRP254919.deseq2.results.tsv:md5,6246219a561f9c766d7ad74d5f1bb9c3",
@@ -590,11 +590,11 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-10-17T19:44:24.665697277"
+        "timestamp": "2025-10-20T16:58:58.413573767"
     },
     "Test profile - yml no formula": {
         "content": [
-            24,
+            26,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -791,11 +791,11 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-10-17T19:41:10.153679049"
+        "timestamp": "2025-10-20T16:55:23.500013067"
     },
     "Test profile - multiple reports - csv contrasts": {
         "content": [
-            21,
+            26,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -884,6 +884,9 @@
                 "plots/qc/treatment_mCherry_hND6__SRP254919.deseq2.dispersion.png",
                 "plots/qc/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.dispersion.png",
                 "report",
+                "report/SRP254919.zip",
+                "report/SRP254919_quarto.html",
+                "report/SRP254919_report_differential.html",
                 "report/gsea",
                 "report/gsea/treatment_mCherry_hND6__SRP254919",
                 "report/gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols",
@@ -989,6 +992,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-10-17T19:47:03.74996521"
+        "timestamp": "2025-10-20T18:26:41.619546632"
     }
 }

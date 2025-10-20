@@ -1,7 +1,7 @@
 {
     "Test no gtf profile - with toolsheet": {
         "content": [
-            14,
+            16,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -107,11 +107,11 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-10-17T20:29:20.452512154"
+        "timestamp": "2025-10-20T17:38:35.766095372"
     },
     "Test no gtf profile": {
         "content": [
-            14,
+            16,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -217,6 +217,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-10-17T20:26:24.354416222"
+        "timestamp": "2025-10-20T17:36:10.032082198"
     }
 }
