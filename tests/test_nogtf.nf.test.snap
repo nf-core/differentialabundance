@@ -3,6 +3,9 @@
         "content": [
             14,
             {
+                "CSVTK_JOIN": {
+                    "csvtk": "0.31.0"
+                },
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
                 },
@@ -75,8 +78,10 @@
                 "tables/differential",
                 "tables/differential/treatment_mCherry_hND6__SRP254919.deseq2.results.tsv",
                 "tables/differential/treatment_mCherry_hND6__SRP254919.deseq2.results_filtered.tsv",
+                "tables/differential/treatment_mCherry_hND6__SRP254919_deseq2.annotated.tsv",
                 "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results.tsv",
                 "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv",
+                "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919_deseq2.annotated.tsv",
                 "tables/processed_abundance",
                 "tables/processed_abundance/all.normalised_counts.tsv",
                 "tables/processed_abundance/all.vst.tsv"
@@ -90,8 +95,10 @@
                 "versions.yml:md5,b3436c10ff83d0dab55060de3cae3ef2",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results.tsv:md5,083c15a96e86aa34751c779c261cef54",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results_filtered.tsv:md5,024da041c017d0539995aee55af83e26",
+                "treatment_mCherry_hND6__SRP254919_deseq2.annotated.tsv:md5,b792940ceeaaba5fc738eb0ff359ef77",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results.tsv:md5,1cacf5addc0f57199958137bb69fa4ac",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv:md5,67194d019bbda6cedbfd35bfd5f31af7",
+                "treatment_mCherry_hND6_sample_number_SRP254919_deseq2.annotated.tsv:md5,0fc173ec87c2d54357473c79226889ca",
                 "all.normalised_counts.tsv:md5,c01442cf7f86fc1a9f4372b27f837052",
                 "all.vst.tsv:md5,f25a3a95044074ed2164d155fbdb9571"
             ]
@@ -106,6 +113,9 @@
         "content": [
             14,
             {
+                "CSVTK_JOIN": {
+                    "csvtk": "0.31.0"
+                },
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
                 },
@@ -178,8 +188,10 @@
                 "tables/differential",
                 "tables/differential/treatment_mCherry_hND6__SRP254919.deseq2.results.tsv",
                 "tables/differential/treatment_mCherry_hND6__SRP254919.deseq2.results_filtered.tsv",
+                "tables/differential/treatment_mCherry_hND6__SRP254919_deseq2.annotated.tsv",
                 "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results.tsv",
                 "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv",
+                "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919_deseq2.annotated.tsv",
                 "tables/processed_abundance",
                 "tables/processed_abundance/all.normalised_counts.tsv",
                 "tables/processed_abundance/all.vst.tsv"
@@ -193,8 +205,10 @@
                 "versions.yml:md5,b3436c10ff83d0dab55060de3cae3ef2",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results.tsv:md5,083c15a96e86aa34751c779c261cef54",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results_filtered.tsv:md5,024da041c017d0539995aee55af83e26",
+                "treatment_mCherry_hND6__SRP254919_deseq2.annotated.tsv:md5,b792940ceeaaba5fc738eb0ff359ef77",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results.tsv:md5,1cacf5addc0f57199958137bb69fa4ac",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv:md5,67194d019bbda6cedbfd35bfd5f31af7",
+                "treatment_mCherry_hND6_sample_number_SRP254919_deseq2.annotated.tsv:md5,0fc173ec87c2d54357473c79226889ca",
                 "all.normalised_counts.tsv:md5,c01442cf7f86fc1a9f4372b27f837052",
                 "all.vst.tsv:md5,f25a3a95044074ed2164d155fbdb9571"
             ]

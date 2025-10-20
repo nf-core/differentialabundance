@@ -3,6 +3,9 @@
         "content": [
             18,
             {
+                "CSVTK_JOIN": {
+                    "csvtk": "0.31.0"
+                },
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
                 },
@@ -97,8 +100,10 @@
                 "tables/differential",
                 "tables/differential/treatment_mCherry_hND6__SRP254919.limma.results.tsv",
                 "tables/differential/treatment_mCherry_hND6__SRP254919.limma.results_filtered.tsv",
+                "tables/differential/treatment_mCherry_hND6__SRP254919_limma.annotated.tsv",
                 "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.limma.results.tsv",
                 "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.limma.results_filtered.tsv",
+                "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919_limma.annotated.tsv",
                 "tables/processed_abundance",
                 "tables/processed_abundance/all.normalised_counts.tsv"
             ],
@@ -121,6 +126,9 @@
         "content": [
             23,
             {
+                "CSVTK_JOIN": {
+                    "csvtk": "0.31.0"
+                },
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
                 },
@@ -260,8 +268,10 @@
                 "tables/differential",
                 "tables/differential/treatment_mCherry_hND6__SRP254919.limma.results.tsv",
                 "tables/differential/treatment_mCherry_hND6__SRP254919.limma.results_filtered.tsv",
+                "tables/differential/treatment_mCherry_hND6__SRP254919_limma.annotated.tsv",
                 "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.limma.results.tsv",
                 "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.limma.results_filtered.tsv",
+                "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919_limma.annotated.tsv",
                 "tables/processed_abundance",
                 "tables/processed_abundance/all.normalised_counts.tsv"
             ],
@@ -296,6 +306,9 @@
         "content": [
             26,
             {
+                "CSVTK_JOIN": {
+                    "csvtk": "0.31.0"
+                },
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
                 },
@@ -606,12 +619,16 @@
                 "tables/differential",
                 "tables/differential/full_model_with_interactions_SRP254919.limma.results.tsv",
                 "tables/differential/full_model_with_interactions_SRP254919.limma.results_filtered.tsv",
+                "tables/differential/full_model_with_interactions_SRP254919_limma.annotated.tsv",
                 "tables/differential/interaction_genotype_treatment_SRP254919.limma.results.tsv",
                 "tables/differential/interaction_genotype_treatment_SRP254919.limma.results_filtered.tsv",
+                "tables/differential/interaction_genotype_treatment_SRP254919_limma.annotated.tsv",
                 "tables/differential/treatment_effect_classic_comparison_SRP254919.limma.results.tsv",
                 "tables/differential/treatment_effect_classic_comparison_SRP254919.limma.results_filtered.tsv",
+                "tables/differential/treatment_effect_classic_comparison_SRP254919_limma.annotated.tsv",
                 "tables/differential/treatment_plus_genotype_SRP254919.limma.results.tsv",
                 "tables/differential/treatment_plus_genotype_SRP254919.limma.results_filtered.tsv",
+                "tables/differential/treatment_plus_genotype_SRP254919_limma.annotated.tsv",
                 "tables/processed_abundance",
                 "tables/processed_abundance/all.normalised_counts.tsv"
             ],
@@ -677,6 +694,9 @@
         "content": [
             23,
             {
+                "CSVTK_JOIN": {
+                    "csvtk": "0.31.0"
+                },
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
                 },
@@ -816,8 +836,10 @@
                 "tables/differential",
                 "tables/differential/treatment_mCherry_hND6__SRP254919.limma.results.tsv",
                 "tables/differential/treatment_mCherry_hND6__SRP254919.limma.results_filtered.tsv",
+                "tables/differential/treatment_mCherry_hND6__SRP254919_limma.annotated.tsv",
                 "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.limma.results.tsv",
                 "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.limma.results_filtered.tsv",
+                "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919_limma.annotated.tsv",
                 "tables/processed_abundance",
                 "tables/processed_abundance/all.normalised_counts.tsv"
             ],

@@ -71,6 +71,7 @@ Most plots are included in the HTML report (see above), but are also included in
   - `differential/`: Directory containing tables of differential statistics reported by differential modules such as DESeq2
     - `[contrast_name].[deseq2|dream|limma].results.tsv`: Results of DESeq2 differential analyis (RNA-seq), DREAM differential analysis (RNA-seq for mixed linear models) OR Limma differential analysis (Affymetrix arrays, GEO studies, Maxquant proteomics studies)
     - `[contrast_name].[deseq2|limma].results_filtered.tsv`: Results of DESeq2 differential analyis (RNA-seq) OR Limma differential analysis (Affymetrix arrays, GEO studies, Maxquant proteomics studies); filtered for differentially abundant entries
+    - `[contrast_name]_[deseq2|dream|limma].annotated.tsv`: Results of annotated DESeq2 differential analyis (RNA-seq), DREAM differential analysis (RNA-seq for mixed linear models) OR Limma differential analysis (Affymetrix arrays, GEO studies)
   - `immunedeconv/`: Directory containing table of immunedeconv results
     - `${prefix}.deconvolution_results.tsv`: TSV output that contains estimated proportions of immune cell types for each sample
   - `gsea/`: Directory containing tables of differential gene set analyis from GSEA (where enabled)

@@ -3,6 +3,9 @@
         "content": [
             24,
             {
+                "CSVTK_JOIN": {
+                    "csvtk": "0.31.0"
+                },
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
                 },
@@ -150,8 +153,10 @@
                 "tables/differential",
                 "tables/differential/treatment_mCherry_hND6__SRP254919.deseq2.results.tsv",
                 "tables/differential/treatment_mCherry_hND6__SRP254919.deseq2.results_filtered.tsv",
+                "tables/differential/treatment_mCherry_hND6__SRP254919_deseq2.annotated.tsv",
                 "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results.tsv",
                 "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv",
+                "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919_deseq2.annotated.tsv",
                 "tables/immunedeconv",
                 "tables/immunedeconv/SRP254919.deconvolution_results.tsv",
                 "tables/processed_abundance",
@@ -180,8 +185,10 @@
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results.tsv:md5,a6dde65d9e54e8e80e3abf3c14f72d34",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results_filtered.tsv:md5,fd803a83c641e843830057f3a43be27a",
+                "treatment_mCherry_hND6__SRP254919_deseq2.annotated.tsv:md5,14f8c3bcc5665147d494f54b4b2502c9",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results.tsv:md5,3c827ffb53fe7dab8f13f0ef89a3da06",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv:md5,c88d36f46f7d8a4dd8c169c249f50540",
+                "treatment_mCherry_hND6_sample_number_SRP254919_deseq2.annotated.tsv:md5,7925ca370d660117878fb5132a106f47",
                 "SRP254919.deconvolution_results.tsv:md5,3d7ed4550a0da2f63fcfd2e74605e7a3",
                 "all.normalised_counts.tsv:md5,f3ef0fb48f97afde2b5122b72dc4dcc4",
                 "all.vst.tsv:md5,ae82509f76ed01ad0d041d1a62aef703"
@@ -197,6 +204,9 @@
         "content": [
             24,
             {
+                "CSVTK_JOIN": {
+                    "csvtk": "0.31.0"
+                },
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
                 },
@@ -344,8 +354,10 @@
                 "tables/differential",
                 "tables/differential/treatment_mCherry_hND6__SRP254919.deseq2.results.tsv",
                 "tables/differential/treatment_mCherry_hND6__SRP254919.deseq2.results_filtered.tsv",
+                "tables/differential/treatment_mCherry_hND6__SRP254919_deseq2.annotated.tsv",
                 "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results.tsv",
                 "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv",
+                "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919_deseq2.annotated.tsv",
                 "tables/immunedeconv",
                 "tables/immunedeconv/SRP254919.deconvolution_results.tsv",
                 "tables/processed_abundance",
@@ -374,8 +386,10 @@
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results.tsv:md5,a6dde65d9e54e8e80e3abf3c14f72d34",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results_filtered.tsv:md5,fd803a83c641e843830057f3a43be27a",
+                "treatment_mCherry_hND6__SRP254919_deseq2.annotated.tsv:md5,14f8c3bcc5665147d494f54b4b2502c9",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results.tsv:md5,3c827ffb53fe7dab8f13f0ef89a3da06",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv:md5,c88d36f46f7d8a4dd8c169c249f50540",
+                "treatment_mCherry_hND6_sample_number_SRP254919_deseq2.annotated.tsv:md5,7925ca370d660117878fb5132a106f47",
                 "SRP254919.deconvolution_results.tsv:md5,3d7ed4550a0da2f63fcfd2e74605e7a3",
                 "all.normalised_counts.tsv:md5,f3ef0fb48f97afde2b5122b72dc4dcc4",
                 "all.vst.tsv:md5,ae82509f76ed01ad0d041d1a62aef703"
@@ -389,8 +403,11 @@
     },
     "Test profile - with toolsheet and formula": {
         "content": [
-            23,
+            27,
             {
+                "CSVTK_JOIN": {
+                    "csvtk": "0.31.0"
+                },
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
                 },
@@ -507,12 +524,16 @@
                 "tables/differential",
                 "tables/differential/full_model_with_interactions_SRP254919.deseq2.results.tsv",
                 "tables/differential/full_model_with_interactions_SRP254919.deseq2.results_filtered.tsv",
+                "tables/differential/full_model_with_interactions_SRP254919_deseq2.annotated.tsv",
                 "tables/differential/interaction_genotype_treatment_SRP254919.deseq2.results.tsv",
                 "tables/differential/interaction_genotype_treatment_SRP254919.deseq2.results_filtered.tsv",
+                "tables/differential/interaction_genotype_treatment_SRP254919_deseq2.annotated.tsv",
                 "tables/differential/treatment_effect_classic_comparison_SRP254919.deseq2.results.tsv",
                 "tables/differential/treatment_effect_classic_comparison_SRP254919.deseq2.results_filtered.tsv",
+                "tables/differential/treatment_effect_classic_comparison_SRP254919_deseq2.annotated.tsv",
                 "tables/differential/treatment_plus_genotype_SRP254919.deseq2.results.tsv",
                 "tables/differential/treatment_plus_genotype_SRP254919.deseq2.results_filtered.tsv",
+                "tables/differential/treatment_plus_genotype_SRP254919_deseq2.annotated.tsv",
                 "tables/gprofiler2",
                 "tables/gprofiler2/full_model_with_interactions_SRP254919",
                 "tables/gprofiler2/full_model_with_interactions_SRP254919/full_model_with_interactions_SRP254919.gprofiler2.all_enriched_pathways.tsv",
@@ -544,10 +565,13 @@
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
                 "full_model_with_interactions_SRP254919.deseq2.results.tsv:md5,1a67a0d8c187317a96dd35a3da98771d",
                 "full_model_with_interactions_SRP254919.deseq2.results_filtered.tsv:md5,24b3287c1e1162d047ced9dda147d54f",
+                "full_model_with_interactions_SRP254919_deseq2.annotated.tsv:md5,c8ecdae0540bde776cf5e0ba0c323555",
                 "interaction_genotype_treatment_SRP254919.deseq2.results.tsv:md5,6246219a561f9c766d7ad74d5f1bb9c3",
                 "interaction_genotype_treatment_SRP254919.deseq2.results_filtered.tsv:md5,24b3287c1e1162d047ced9dda147d54f",
+                "interaction_genotype_treatment_SRP254919_deseq2.annotated.tsv:md5,76a781929fce69b480721c1fde982fa5",
                 "treatment_effect_classic_comparison_SRP254919.deseq2.results.tsv:md5,1af3f9dadd2d953d68f0faf656bf503f",
                 "treatment_effect_classic_comparison_SRP254919.deseq2.results_filtered.tsv:md5,65e7a9d354eb71db7f13576cc2d5d7e7",
+                "treatment_effect_classic_comparison_SRP254919_deseq2.annotated.tsv:md5,433cdd2cac914f10c19047525fc6656d",
                 "full_model_with_interactions_SRP254919.gprofiler2.all_enriched_pathways.tsv:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "interaction_genotype_treatment_SRP254919.gprofiler2.all_enriched_pathways.tsv:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "treatment_effect_classic_comparison_SRP254919.gprofiler2.CORUM.sub_enriched_pathways.tsv:md5,d7dca3803318350b7d3328dc14e8846b",
@@ -572,6 +596,9 @@
         "content": [
             24,
             {
+                "CSVTK_JOIN": {
+                    "csvtk": "0.31.0"
+                },
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
                 },
@@ -719,8 +746,10 @@
                 "tables/differential",
                 "tables/differential/treatment_mCherry_hND6__SRP254919.deseq2.results.tsv",
                 "tables/differential/treatment_mCherry_hND6__SRP254919.deseq2.results_filtered.tsv",
+                "tables/differential/treatment_mCherry_hND6__SRP254919_deseq2.annotated.tsv",
                 "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results.tsv",
                 "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv",
+                "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919_deseq2.annotated.tsv",
                 "tables/immunedeconv",
                 "tables/immunedeconv/SRP254919.deconvolution_results.tsv",
                 "tables/processed_abundance",
@@ -749,8 +778,10 @@
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results.tsv:md5,a6dde65d9e54e8e80e3abf3c14f72d34",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results_filtered.tsv:md5,fd803a83c641e843830057f3a43be27a",
+                "treatment_mCherry_hND6__SRP254919_deseq2.annotated.tsv:md5,14f8c3bcc5665147d494f54b4b2502c9",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results.tsv:md5,3c827ffb53fe7dab8f13f0ef89a3da06",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv:md5,c88d36f46f7d8a4dd8c169c249f50540",
+                "treatment_mCherry_hND6_sample_number_SRP254919_deseq2.annotated.tsv:md5,7925ca370d660117878fb5132a106f47",
                 "SRP254919.deconvolution_results.tsv:md5,3d7ed4550a0da2f63fcfd2e74605e7a3",
                 "all.normalised_counts.tsv:md5,f3ef0fb48f97afde2b5122b72dc4dcc4",
                 "all.vst.tsv:md5,ae82509f76ed01ad0d041d1a62aef703"
@@ -766,6 +797,9 @@
         "content": [
             21,
             {
+                "CSVTK_JOIN": {
+                    "csvtk": "0.31.0"
+                },
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
                 },
@@ -910,8 +944,10 @@
                 "tables/differential",
                 "tables/differential/treatment_mCherry_hND6__SRP254919.deseq2.results.tsv",
                 "tables/differential/treatment_mCherry_hND6__SRP254919.deseq2.results_filtered.tsv",
+                "tables/differential/treatment_mCherry_hND6__SRP254919_deseq2.annotated.tsv",
                 "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results.tsv",
                 "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv",
+                "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919_deseq2.annotated.tsv",
                 "tables/immunedeconv",
                 "tables/immunedeconv/SRP254919.deconvolution_results.tsv",
                 "tables/processed_abundance",
@@ -940,8 +976,10 @@
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results.tsv:md5,a6dde65d9e54e8e80e3abf3c14f72d34",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results_filtered.tsv:md5,fd803a83c641e843830057f3a43be27a",
+                "treatment_mCherry_hND6__SRP254919_deseq2.annotated.tsv:md5,14f8c3bcc5665147d494f54b4b2502c9",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results.tsv:md5,3c827ffb53fe7dab8f13f0ef89a3da06",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv:md5,c88d36f46f7d8a4dd8c169c249f50540",
+                "treatment_mCherry_hND6_sample_number_SRP254919_deseq2.annotated.tsv:md5,7925ca370d660117878fb5132a106f47",
                 "SRP254919.deconvolution_results.tsv:md5,3d7ed4550a0da2f63fcfd2e74605e7a3",
                 "all.normalised_counts.tsv:md5,f3ef0fb48f97afde2b5122b72dc4dcc4",
                 "all.vst.tsv:md5,ae82509f76ed01ad0d041d1a62aef703"

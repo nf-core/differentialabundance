@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- [[#523](https://github.com/nf-core/differentialabundance/pull/523)] - Add gene_name to differential and abundance tables. ([@antoniasaracco](https://github.com/antoniasaracco), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@grst](https://github.com/grst)).
 - [[#517](https://github.com/nf-core/differentialabundance/pull/473)] - Expose DREAM options as pipeline params. ([@atrigila](https://github.com/atrigila), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@grst](https://github.com/grst)).
 -[[#510]](https://github.com/nf-core/differentialabundance/pull/510) - Add decoupler module to differential functional enrichment subworkflow. ([@antoniasaracco](https://github.com/antoniasaracco), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@grst](https://github.com/grst)).
 - [[#473](https://github.com/nf-core/differentialabundance/pull/473)] - Allow formula-based contrasts in DESEQ2. ([@atrigila](https://github.com/atrigila), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@grst](https://github.com/grst)).

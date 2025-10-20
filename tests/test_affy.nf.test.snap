@@ -7,6 +7,9 @@
                     "r-base": "4.3.1",
                     "bioconductor-affy": "1.78.0"
                 },
+                "CSVTK_JOIN": {
+                    "csvtk": "0.31.0"
+                },
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
                 },
@@ -169,6 +172,7 @@
                 "tables/differential",
                 "tables/differential/phenotype_uninvolved_lesional_GSE50790.limma.results.tsv",
                 "tables/differential/phenotype_uninvolved_lesional_GSE50790.limma.results_filtered.tsv",
+                "tables/differential/phenotype_uninvolved_lesional_GSE50790_limma.annotated.tsv",
                 "tables/processed_abundance",
                 "untar",
                 "untar/GSE50790",
@@ -252,6 +256,9 @@
                     "r-base": "4.3.1",
                     "bioconductor-affy": "1.78.0"
                 },
+                "CSVTK_JOIN": {
+                    "csvtk": "0.31.0"
+                },
                 "CUSTOM_FILTERDIFFERENTIALTABLE": {
                     "pandas": "1.5.2"
                 },
@@ -414,6 +421,7 @@
                 "tables/differential",
                 "tables/differential/phenotype_uninvolved_lesional_GSE50790.limma.results.tsv",
                 "tables/differential/phenotype_uninvolved_lesional_GSE50790.limma.results_filtered.tsv",
+                "tables/differential/phenotype_uninvolved_lesional_GSE50790_limma.annotated.tsv",
                 "tables/processed_abundance",
                 "untar",
                 "untar/GSE50790",

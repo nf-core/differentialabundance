@@ -15,10 +15,13 @@ shinyngs_app/**/data.rds
 **/**/*.dds.rld.rds
 *.limma.rds
 **/**/*.limma.rds
-*.{limma,dream}.{results,results_filtered}.tsv
-**/**/*.{limma,dream}.{results,results_filtered}.tsv
+*.{limma,dream}.{results,results_filtered,annotated}.tsv
+**/**/*.{limma,dream}.{results,results_filtered,annotated}.tsv
+*_{limma,dream}.annotated.tsv
+**/**/*_{limma,dream}.annotated.tsv
 tables/differential/treatment_plus_genotype_SRP254919.deseq2.results.tsv
 tables/differential/treatment_plus_genotype_SRP254919.deseq2.results_filtered.tsv
+tables/differential/treatment_plus_genotype_SRP254919_deseq2.annotated.tsv
 tables/decoupler/{deseq2,limma}_treatment_mCherry_hND6__SRP254919_{consensus,ulm}_{estimate,pvals}_decoupler.tsv
 tables/decoupler/{deseq2,limma}_treatment_mCherry_hND6_sample_number_SRP254919_{consensus,ulm}_{estimate,pvals}_decoupler.tsv
 tables/decoupler/dream_full_model_with_interactions_SRP254919_{consensus,ulm}_{estimate,pvals}_decoupler.tsv
