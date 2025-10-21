@@ -271,7 +271,7 @@ You will be also able to run a specific config row from this custom file using `
 
 ## Working with the output Quarto notebook file
 
-The pipeline produces an Quarto notebook file which, if you're proficient in R, you can use to tweak the report after it's generated (**note**- if you need the same customisations repeatedly we would recommend you supply your own templates using the `report_file` parameter. Multiple templates can be supplied as a comma separated list).
+The pipeline produces two Quarto notebook files which, if you're proficient in R, you can use to tweak the report after it's generated (**note**- if you need the same customisations repeatedly we would recommend you supply your own templates using the `report_file` parameter. Multiple templates can be supplied as a comma separated list).
 
 To work with Quarto notebook files you will need Rstudio/Posit Studio or an equivalent R environment. You will also need to have the ShinyNGS R module [installed](https://github.com/pinin4fjords/shinyngs#installation), since it supplies a lot of the accessory plotting functions etc that you will need. The exact way you will do this may depend on your exact systems, but for example
 
