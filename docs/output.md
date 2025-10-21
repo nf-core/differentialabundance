@@ -12,7 +12,8 @@ This directory contains the main reporting output of the workflow.
 <summary>Output files</summary>
 
 - `report/`
-  - `*_[Quarto notebook name].html`: an HTML report file named according to the value of `params.study_name`, containing graphical and tabular summary results for the workflow run.
+  - `*_report_differential.html`: an HTML report file named according to the value of `params.study_name`, containing graphical and tabular differential summary results for the workflow run.
+  - `*_report_exploratory.html`: an HTML report file named according to the value of `params.study_name`, containing graphical and tabular exploratory results for the workflow run.
   - `*.zip`: a zip file containing a Quarto notebook file with parameters set and all necessary input files to open and customise the reporting.
   - `gsea/`: Directory containing graphical outputs from GSEA (where enabled). Plots are stored in directories named for the associated contrast.
     - `[contrast]/png/[gsea_plot_type].png`
