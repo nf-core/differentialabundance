@@ -781,23 +781,28 @@ for (assay_type in rev(names(assay_data))){
 
     variable_genes <- selectVariableGenes(matrix = assay_data[[assay_type]], ntop = ifelse(params$meta$params$exploratory_n_features == -1, nrow(assay_data[[assay_type]]), params$meta$params$exploratory_n_features))
     ann_colors <- list()
+    annotation_variables <- c()
 
     for (iv in informative_variables) {
-        if (is.numeric(observations[[iv]])) {
-            ann_colors[[iv]] <- circlize::colorRamp2(
-                c(min(observations[[iv]], na.rm = TRUE), max(observations[[iv]], na.rm = TRUE)),
-                c("blue", "red")
-            )
-        } else {
-            vals <- unique(na.omit(as.character(observations[[iv]])))
-            dendroColorScale <- makeColorScale(length(vals), palette = params$meta$params$exploratory_palette_name)
-            
-            # ensure the length matches number of categories
-            dendroColorScale <- rep(dendroColorScale, length.out = length(vals))
-            
-            # assign names matching the category labels
-            names(dendroColorScale) <- sort(vals)
-            ann_colors[[iv]] <- dendroColorScale
+         # Keep columns with no more than 10 levels
+        if (length(unique(observations[[iv]])) <= 10) {
+            annotation_variables <- c(annotation_variables, iv)
+            if (is.numeric(observations[[iv]])) {
+                ann_colors[[iv]] <- circlize::colorRamp2(
+                    c(min(observations[[iv]], na.rm = TRUE), max(observations[[iv]], na.rm = TRUE)),
+                    c("blue", "red")
+                )
+            } else {
+                vals <- unique(na.omit(as.character(observations[[iv]])))
+                dendroColorScale <- makeColorScale(length(vals), palette = params$meta$params$exploratory_palette_name)
+                
+                # ensure the length matches number of categories
+                dendroColorScale <- rep(dendroColorScale, length.out = length(vals))
+                
+                # assign names matching the category labels
+                names(dendroColorScale) <- sort(vals)
+                ann_colors[[iv]] <- dendroColorScale
+            }
         }
     }
 
