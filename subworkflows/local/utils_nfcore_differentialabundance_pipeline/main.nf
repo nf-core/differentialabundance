@@ -380,19 +380,7 @@ def getDefaultConfigurations() {
 
 // Load configurations from yaml file
 def loadYamlConfigs(yaml_path) {
-    // Load yaml content
-    def configs = loadYaml(yaml_path)
 
-    // Resolve includes for each config
-    configs = configs.collect { config ->
-        config = resolveIncludes(config)
-        config.remove('include')
-        return config
-    }
-
-    return configs
-}
-def loadYaml(yaml_path) {
     // Load yaml content
     def yaml_content = yaml_path.text
 
@@ -407,40 +395,6 @@ def loadYaml(yaml_path) {
     def configs = (loaded instanceof List) ? loaded : [loaded]
 
     return configs
-}
-// Helper function to resolve includes recursively
-def resolveIncludes(config) {
-    def yaml_parser = new org.yaml.snakeyaml.Yaml()
-
-    if (config.containsKey('include')) {
-        def includePaths = config.include.split(',') // Split by comma to handle multiple includes
-        includePaths.each { includePath ->
-            def includeParts = includePath.split('/')
-            def includeFile = includeParts[0]
-            def paramsetName = includeParts[1]
-
-            // Load the included YAML file
-            def includeFilePath = file("${projectDir}/conf/${includeFile}.yaml")
-            if (!includeFilePath.exists()) {
-                error("Included file '${includeFilePath}' not found.")
-            }
-            def includeConfigs = loadYaml(includeFilePath)
-
-            // Find the paramset with the given name
-            def includedConfig = includeConfigs.find { it.paramset_name == paramsetName }
-            if (!includedConfig) {
-                error("Paramset '${paramsetName}' not found in included file '${includeFilePath}'.")
-            }
-
-            // Recursively resolve includes in the included config
-            includedConfig = resolveIncludes(includedConfig)
-
-            // Merge configs
-            includedConfig.putAll(config)
-            config = includedConfig
-        }
-    }
-    return config
 }
 
 // prepare the input for the module by keeping only the relevant params
