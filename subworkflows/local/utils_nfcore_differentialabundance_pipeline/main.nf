@@ -387,6 +387,7 @@ def loadYamlConfigs(yaml_path) {
     configs = configs.collect { config ->
         config = resolveIncludes(config)
         config.remove('include')
+        println(config)
         return config
     }
 
@@ -429,6 +430,9 @@ def resolveIncludes(config) {
         if (!includedConfig) {
             error("Paramset '${paramsetName}' not found in included file '${includeFilePath}'.")
         }
+
+        // Recursively resolve includes in the included config
+        includedConfig = resolveIncludes(includedConfig)
 
         // Merge configs
         // This merging is done so that the included config params are updated to config
