@@ -74,6 +74,7 @@ nextflow_pipeline {
                 paramsheet          = "${projectDir}/conf/test_paramsheet.yaml" // TODO move this file to github test-datasets
                 paramset_name       = "dream_rnaseq"
                 functional_method   = "decoupler"
+                decoupler_network   = "https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/progeny/mouse_network.tsv"
                 decoupler_min_n     = 1
             }
         }
