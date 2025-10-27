@@ -413,32 +413,28 @@ def resolveIncludes(config) {
     def yaml_parser = new org.yaml.snakeyaml.Yaml()
 
     if (config.containsKey('include')) {
-        def includePaths = config.include.split(',') // Split by comma to handle multiple includes
-        includePaths.each { includePath ->
-            def includeParts = includePath.split('/')
-            def includeFile = includeParts[0]
-            def paramsetName = includeParts[1]
+        def includeParts = config.include.split('/')
+        def includeFile = includeParts[0]
+        def paramsetName = includeParts[1]
 
-            // Load the included YAML file
-            def includeFilePath = file("${projectDir}/conf/${includeFile}.yaml")
-            if (!includeFilePath.exists()) {
-                error("Included file '${includeFilePath}' not found.")
-            }
-            def includeConfigs = loadYaml(includeFilePath)
-
-            // Find the paramset with the given name
-            def includedConfig = includeConfigs.find { it.paramset_name == paramsetName }
-            if (!includedConfig) {
-                error("Paramset '${paramsetName}' not found in included file '${includeFilePath}'.")
-            }
-
-            // Recursively resolve includes in the included config
-            includedConfig = resolveIncludes(includedConfig)
-
-            // Merge configs
-            includedConfig.putAll(config)
-            config = includedConfig
+        // Load the included YAML file
+        def includeFilePath = file("${projectDir}/conf/${includeFile}.yaml")
+        if (!includeFilePath.exists()) {
+            error("Included file '${includeFilePath}' not found.")
         }
+        def includeConfigs = loadYaml(includeFilePath)
+
+        // Find the paramset with the given name
+        def includedConfig = includeConfigs.find { it.paramset_name == paramsetName }
+        if (!includedConfig) {
+            error("Paramset '${paramsetName}' not found in included file '${includeFilePath}'.")
+        }
+
+        // Merge configs
+        // This merging is done so that the included config params are updated to config
+        // only if they are not already defined in config. This avoids overriding the current config values.
+        includedConfig.putAll(config)
+        config = includedConfig
     }
     return config
 }

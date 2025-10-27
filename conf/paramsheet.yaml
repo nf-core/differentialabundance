@@ -1,3 +1,6 @@
+# --------------------------------------------------------------
+# profiles for rnaseq analysis
+# --------------------------------------------------------------
 - paramset_name: rnaseq
   study_type: rnaseq
   study_abundance_type: counts
@@ -12,6 +15,7 @@
   observations_id_col: sample
   observations_name_col: sample
 
+# rnaseq analysis with deseq2
 - paramset_name: deseq2_rnaseq
   include: paramsheet/rnaseq
 
@@ -26,14 +30,17 @@
   differential_pval_column: pvalue
   differential_qval_column: padj
 
+# rnaseq analysis with deseq2 and gsea
 - paramset_name: deseq2_rnaseq_gsea
   include: paramsheet/deseq2_rnaseq
   functional_method: gsea
 
+# rnaseq analysis with deseq2 and gprofiler2
 - paramset_name: deseq2_rnaseq_gprofiler2
   include: paramsheet/deseq2_rnaseq
   functional_method: gprofiler2
 
+# rnaseq analysis with limma voom
 - paramset_name: limma_rnaseq
   include: paramsheet/rnaseq
   differential_method: limma
@@ -48,18 +55,22 @@
   differential_pval_column: P.Value
   differential_qval_column: adj.P.Val
 
+# rnaseq analysis with limma voom and gsea
 - paramset_name: limma_rnaseq_gsea
   include: paramsheet/limma_rnaseq
   functional_method: gsea
 
+# rnaseq analysis with limma voom and gprofiler2
 - paramset_name: limma_rnaseq_gprofiler2
   include: paramsheet/limma_rnaseq
   functional_method: gprofiler2
 
+# rnaseq analysis with limma voom and decoupler
 - paramset_name: limma_rnaseq_decoupler
   include: paramsheet/limma_rnaseq
   functional_method: decoupler
 
+# rnaseq analysis with dream
 - paramset_name: dream_rnaseq
   include: paramsheet/rnaseq
   differential_method: dream
@@ -73,6 +84,11 @@
   differential_pval_column: P.Value
   differential_qval_column: adj.P.Val
 
+# --------------------------------------------------------------
+# profiles for affy array analysis
+# --------------------------------------------------------------
+
+# affy array analysis with limma
 - paramset_name: limma_affy
   differential_method: limma
 
@@ -96,14 +112,19 @@
 
   shinyngs_build_app: true
 
+# affy array analysis with limma and gsea
 - paramset_name: limma_affy_gsea
   include: paramsheet/limma_affy
   functional_method: gsea
 
+# affy array analysis with limma and gprofiler2
 - paramset_name: limma_affy_gprofiler2
   include: paramsheet/limma_affy
   functional_method: gprofiler2
 
+# --------------------------------------------------------------
+# profiles for soft file analysis
+# --------------------------------------------------------------
 - paramset_name: limma_soft
   differential_method: limma
 
@@ -128,6 +149,9 @@
   differential_feature_id_column: ID
   differential_feature_name_column: Symbol
 
+# ---------------------------------------------------------------
+# profiles for maxquant proteomics analysis
+# ---------------------------------------------------------------
 - paramset_name: limma_maxquant
   differential_method: limma
 

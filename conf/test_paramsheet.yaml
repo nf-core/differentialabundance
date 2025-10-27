@@ -1,5 +1,19 @@
+# --------------------------------------------------------------
+# rnaseq analysis with deseq2 and gsea
+# --------------------------------------------------------------
 - paramset_name: deseq2_rnaseq_gsea
-  include: paramsheet/deseq2_rnaseq_gsea,testdata/rnaseq_testdata
+
+  # include profile
+  include: paramsheet/deseq2_rnaseq_gsea
+
+  # test data
+  study_name: SRP254919
+  input: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.samplesheet.csv
+  matrix: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.salmon.merged.gene_counts.top1000cov.tsv
+  transcript_length_matrix: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.spoofed_lengths.tsv
+  contrasts_yml: https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/SRP254919.contrasts.yaml
+  gtf: https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz
+  gene_sets_files: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt
 
   # Exploratory plots
   exploratory_main_variable: contrasts
@@ -21,8 +35,21 @@
   round_digits: 3
   gsea_rnd_seed: "10"
 
+# --------------------------------------------------------------
+# rnaseq analysis with deseq2 and gsea - complex design
+# --------------------------------------------------------------
 - paramset_name: deseq2_rnaseq_gsea_complex
-  include: paramsheet/deseq2_rnaseq_gsea,testdata/rnaseq_testdata_complex
+
+  # include profile
+  include: paramsheet/deseq2_rnaseq_gsea
+
+  # test data
+  study_name: SRP254919
+  input: https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/metadata.tsv
+  matrix: https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/counts.tsv
+  contrasts_yml: https://github.com/nf-core/test-datasets/raw/differentialabundance/testdata/formula_contrasts/rnaseq_complex_contrast.yaml
+  gtf: https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz
+  gene_sets_files: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt
 
   # Exploratory plots
   exploratory_main_variable: contrasts
@@ -51,8 +78,22 @@
   gsea_rnd_seed: "10"
   skip_reports: true
 
+# --------------------------------------------------------------
+# rnaseq analysis with deseq2 and gprofiler2
+# --------------------------------------------------------------
 - paramset_name: deseq2_rnaseq_gprofiler2
-  include: paramsheet/deseq2_rnaseq_gprofiler2,testdata/rnaseq_testdata
+
+  # include profile
+  include: paramsheet/deseq2_rnaseq_gprofiler2
+
+  # test data
+  study_name: SRP254919
+  input: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.samplesheet.csv
+  matrix: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.salmon.merged.gene_counts.top1000cov.tsv
+  transcript_length_matrix: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.spoofed_lengths.tsv
+  contrasts_yml: https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/SRP254919.contrasts.yaml
+  gtf: https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz
+  gene_sets_files: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt
 
   # Exploratory plots
   exploratory_main_variable: contrasts
@@ -76,8 +117,21 @@
   # Other
   round_digits: 3
 
+# --------------------------------------------------------------
+# rnaseq analysis with deseq2 and gprofiler2 - complex design
+# --------------------------------------------------------------
 - paramset_name: deseq2_rnaseq_gprofiler2_complex
-  include: paramsheet/deseq2_rnaseq_gprofiler2,testdata/rnaseq_testdata_complex
+
+  # include profile
+  include: paramsheet/deseq2_rnaseq_gprofiler2
+
+  # test data
+  study_name: SRP254919
+  input: https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/metadata.tsv
+  matrix: https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/counts.tsv
+  contrasts_yml: https://github.com/nf-core/test-datasets/raw/differentialabundance/testdata/formula_contrasts/rnaseq_complex_contrast.yaml
+  gtf: https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz
+  gene_sets_files: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt
 
   # Exploratory plots
   exploratory_main_variable: contrasts
@@ -108,8 +162,22 @@
   round_digits: 2
   skip_reports: true
 
+# --------------------------------------------------------------
+# rnaseq analysis with limma voom and gsea
+# --------------------------------------------------------------
 - paramset_name: limma_rnaseq_gsea
-  include: paramsheet/limma_rnaseq_gsea,testdata/rnaseq_testdata
+
+  # include profile
+  include: paramsheet/limma_rnaseq_gsea
+
+  # test data
+  study_name: SRP254919
+  input: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.samplesheet.csv
+  matrix: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.salmon.merged.gene_counts.top1000cov.tsv
+  transcript_length_matrix: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.spoofed_lengths.tsv
+  contrasts_yml: https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/SRP254919.contrasts.yaml
+  gtf: https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz
+  gene_sets_files: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt
 
   # Filtering
   filtering_min_abundance: 10
@@ -132,8 +200,21 @@
   # Other
   round_digits: 3
 
+# --------------------------------------------------------------
+# rnaseq analysis with limma voom and gsea - complex design
+# --------------------------------------------------------------
 - paramset_name: limma_rnaseq_gsea_complex
-  include: paramsheet/limma_rnaseq_gsea,testdata/rnaseq_testdata_complex
+
+  # include profile
+  include: paramsheet/limma_rnaseq_gsea
+
+  # test data
+  study_name: SRP254919
+  input: https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/metadata.tsv
+  matrix: https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/counts.tsv
+  contrasts_yml: https://github.com/nf-core/test-datasets/raw/differentialabundance/testdata/formula_contrasts/rnaseq_complex_contrast.yaml
+  gtf: https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz
+  gene_sets_files: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt
 
   # Filtering
   filtering_min_abundance: 10
@@ -158,8 +239,22 @@
   round_digits: 3
   report_grouping_variable: treatment
 
+# --------------------------------------------------------------
+# rnaseq analysis with limma voom and gprofiler2
+# --------------------------------------------------------------
 - paramset_name: limma_rnaseq_gprofiler2
-  include: paramsheet/limma_rnaseq_gprofiler2,testdata/rnaseq_testdata
+
+  # include profile
+  include: paramsheet/limma_rnaseq_gprofiler2
+
+  # test data
+  study_name: SRP254919
+  input: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.samplesheet.csv
+  matrix: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.salmon.merged.gene_counts.top1000cov.tsv
+  transcript_length_matrix: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.spoofed_lengths.tsv
+  contrasts_yml: https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/SRP254919.contrasts.yaml
+  gtf: https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz
+  gene_sets_files: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt
 
   # Filtering
   filtering_min_abundance: 10
@@ -179,8 +274,22 @@
   # Other
   round_digits: 3
 
+# --------------------------------------------------------------
+# rnaseq analysis with limma voom and decoupler
+# --------------------------------------------------------------
 - paramset_name: limma_rnaseq_decoupler
-  include: paramsheet/limma_rnaseq_decoupler,testdata/rnaseq_testdata
+
+  # include profile
+  include: paramsheet/limma_rnaseq_decoupler
+
+  # test data
+  study_name: SRP254919
+  input: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.samplesheet.csv
+  matrix: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.salmon.merged.gene_counts.top1000cov.tsv
+  transcript_length_matrix: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.spoofed_lengths.tsv
+  contrasts_yml: https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/SRP254919.contrasts.yaml
+  gtf: https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz
+  gene_sets_files: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt
 
   # Filtering
   filtering_min_abundance: 10
@@ -197,8 +306,20 @@
   # Other
   round_digits: 3
 
+# --------------------------------------------------------------
+# rnaseq analysis with dream
+# --------------------------------------------------------------
 - paramset_name: dream_rnaseq
-  include: paramsheet/dream_rnaseq,testdata/rnaseq_testdata_complex
+
+  # include profile
+  include: paramsheet/dream_rnaseq
+
+  # test data
+  study_name: SRP254919
+  input: https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/metadata.tsv
+  matrix: https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/counts.tsv
+  contrasts_yml: https://github.com/nf-core/test-datasets/raw/differentialabundance/testdata/formula_contrasts/rnaseq_complex_contrast.yaml
+  gtf: https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz
 
   # Filtering
   filtering_min_abundance: 10
@@ -218,8 +339,20 @@
   # Other
   round_digits: 3
 
+# --------------------------------------------------------------
+# rnaseq analysis with dream - zero intercept design
+# --------------------------------------------------------------
 - paramset_name: dream_rnaseq2
-  include: paramsheet/dream_rnaseq,testdata/rnaseq_testdata_complex2
+
+  # include profile
+  include: paramsheet/dream_rnaseq
+
+  # test data
+  study_name: SRP254919
+  input: https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/metadata.tsv
+  matrix: https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/counts.tsv
+  contrasts_yml: ${projectDir}/tests/assets/zero_intercept_contrasts.yml
+  gtf: https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz
 
   # Filtering
   filtering_min_abundance: 10
@@ -239,8 +372,20 @@
   # Other
   round_digits: 3
 
+# --------------------------------------------------------------
+# affy array analysis with limma and gsea
+# --------------------------------------------------------------
 - paramset_name: limma_affy_gsea
-  include: paramsheet/limma_affy_gsea,testdata/affy_testdata
+
+  # include profile
+  include: paramsheet/limma_affy_gsea
+
+  # test data
+  study_name: GSE50790
+  input: https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/GSE50790.csv
+  contrasts_yml: https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/GSE50790_contrasts.yaml
+  affy_cel_files_archive: https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/GSE50790_RAW.tar
+  gene_sets_files: https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/h.all.v2022.1.Hs.symbols.gmt
 
   # Observations
   observations_id_col: name
@@ -257,8 +402,20 @@
   # GSEA
   gsea_rnd_seed: "10"
 
+# --------------------------------------------------------------
+# affy array analysis with limma and gprofiler2
+# --------------------------------------------------------------
 - paramset_name: limma_affy_gprofiler2
-  include: paramsheet/limma_affy_gprofiler2,testdata/affy_testdata
+
+  # include profile
+  include: paramsheet/limma_affy_gprofiler2
+
+  # test data
+  study_name: GSE50790
+  input: https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/GSE50790.csv
+  contrasts_yml: https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/GSE50790_contrasts.yaml
+  affy_cel_files_archive: https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/GSE50790_RAW.tar
+  gene_sets_files: https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/h.all.v2022.1.Hs.symbols.gmt
 
   # Observations
   observations_id_col: name
@@ -275,11 +432,29 @@
   # gprofiler2 options
   gprofiler2_organism: "mmusculus"
 
+# --------------------------------------------------------------
+# profiles for soft file analysis
+# --------------------------------------------------------------
 - paramset_name: limma_soft
-  include: paramsheet/limma_soft,testdata/soft_testdata
+  include: paramsheet/limma_soft
+  input: https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/GSE50790.csv
+  contrasts_yml: https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/GSE50790_contrasts.yaml
+  querygse: GSE50790
 
+# ---------------------------------------------------------------
+# maxquant protomics analysis with limma
+# ---------------------------------------------------------------
 - paramset_name: limma_maxquant
-  include: paramsheet/limma_maxquant,testdata/maxquant_testdata
+
+  # include profile
+  include: paramsheet/limma_maxquant
+
+  # test data
+  study_name: PXD043349
+  input: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/proteomics/maxquant/MaxQuant_samplesheet.tsv
+  matrix: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/proteomics/maxquant/MaxQuant_proteinGroups.txt
+  contrasts_yml: https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/MaxQuant_contrasts.yaml
+
   # Observations
   observations_id_col: Experiment
   observations_name_col: Name
@@ -291,8 +466,19 @@
   # Proteus
   proteus_measurecol_prefix: LFQ intensity
 
+# ---------------------------------------------------------------
+# rnaseq analysis using deseq2, without gtf
+# ---------------------------------------------------------------
 - paramset_name: rnaseq_nogtf
-  include: paramsheet/deseq2_rnaseq,testdata/rnaseq_testdata_nogtf
+
+  # include profile
+  include: paramsheet/deseq2_rnaseq
+
+  # test data
+  study_name: SRP254919
+  input: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.samplesheet.csv
+  matrix: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.salmon.merged.gene_counts.top1000cov.tsv
+  contrasts_yml: https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/SRP254919.contrasts.yaml
 
   # Exploratory plots
   exploratory_main_variable: contrasts
