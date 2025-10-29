@@ -1186,6 +1186,7 @@ print( htmltools::tagList(datatable(params_table, caption = "All parameters", ro
 ```{r, echo=FALSE, results='asis'}
 #| echo: false
 #| results: asis
+versions <- lapply(versions, function(x) ifelse(is.null(x), "NA", x))
 versions_table <- data.frame(do.call(rbind, strsplit(names(versions), split = '\\.')), unlist(versions))
 colnames(versions_table) <- c('Component', 'Software', 'Version')
 print( htmltools::tagList(datatable(versions_table, caption = "Software versions", rownames = FALSE, options = list(dom = 'ft', paging = FALSE)) ))
