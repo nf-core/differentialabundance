@@ -39,6 +39,11 @@ library(yaml)
 library(shinyngs)
 library(plotly)
 library(DT)
+
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(ggbeeswarm)
 ```
 
 <!-- Define some functions -->
@@ -904,138 +909,314 @@ cat(differential_summary_string)
 
 ### Differential `{r} params$meta$params$features_type` details
 
-```{r, results='asis'}
+```{r}
 #| echo: false
 #| results: asis
 #| warning: false
 #| message: false
 
-# Display all warnings related to number of rows
 if (length(warnings_list) > 0) {
-    for (warning in warnings_list) {
-        cat(warning)
-    }
+  for (warning in warnings_list) cat(warning)
 }
 
 for (i in 1:nrow(contrasts)) {
-    cat("\n#### ", contrast_descriptions[i], "\n")
-    cat("::: {.panel-tabset}", "\n\n")
-    ## Make a volcano plot for the contrast first
 
-    # Get the full set of differential stats for this contrast, removing rows with
-    # NAs in the fields we need.
-    full_de <- differential_results[[i]]
-    full_de <- subset(full_de, (!is.na(full_de[[params$meta$params$differential_fc_column]])) & (!is.na(full_de[[params$meta$params$differential_qval_colum]])))
+  cat("\n#### ", contrast_descriptions[i], "\n\n")
+  cat("::: {.panel-tabset}\n\n")
 
-    # Label features with symbol as well as identifier
-    if (!is.null(params$features) &&
-        (!is.null(params$meta$params$differential_feature_name_column)) &&
-        (params$meta$params$differential_feature_name_column %in% colnames(full_de))) {
-        label_col <- params$meta$params$differential_feature_name_column
-    } else {
-        label_col <- params$meta$params$differential_feature_id_column
+  full_de <- differential_results[[i]]
+
+  # Filter rows with required numeric fields present (robust; fixes current typo)
+  needed <- c(
+    params$meta$params$differential_fc_column,
+    params$meta$params$differential_qval_column,
+    params$meta$params$differential_pval_column
+  )
+  present <- intersect(needed, colnames(full_de))
+  if (length(present) > 0) {
+    full_de <- full_de[stats::complete.cases(full_de[, present, drop = FALSE]), ]
+  }
+
+  # Labels: prefer feature name if present
+  if (!is.null(params$features) &&
+      !is.null(params$meta$params$differential_feature_name_column) &&
+      (params$meta$params$differential_feature_name_column %in% colnames(full_de))) {
+    label_col <- params$meta$params$differential_feature_name_column
+  } else {
+    label_col <- params$meta$params$differential_feature_id_column
+  }
+
+  p_value_types <- list(
+    Adjusted   = params$meta$params$differential_qval_column,
+    Unadjusted = params$meta$params$differential_pval_column
+  )
+  p_value_thresholds <- list(
+    Adjusted   = params$meta$params$differential_max_qval,
+    Unadjusted = params$meta$params$differential_max_pval
+  )
+
+  for (pvt in names(p_value_types)) {
+
+    cat("\n##### ", pvt, " p values\n\n")
+
+    pval_column <- p_value_types[[pvt]]
+
+    de_fc <- abs(full_de[[params$meta$params$differential_fc_column]]) >=
+      abs(log2(params$meta$params$differential_min_fold_change))
+    de_fc_label <- paste("abs(logFC) >=", log2(params$meta$params$differential_min_fold_change))
+
+    de_pval <- full_de[[pval_column]] <= p_value_thresholds[[pvt]]
+    de_pval_label <- paste(pvt, "<=", p_value_thresholds[[pvt]])
+
+    de_pval_fc_label <- paste(de_fc_label, "&", de_pval_label)
+
+    full_de$differential_status <- "Not significant"
+    full_de$differential_status[de_fc] <- de_fc_label
+    full_de$differential_status[de_pval] <- de_pval_label
+    full_de$differential_status[de_fc & de_pval] <- de_pval_fc_label
+    full_de$differential_status <- factor(
+      full_de$differential_status,
+      levels = c("Not significant", de_fc_label, de_pval_label, de_pval_fc_label),
+      ordered = TRUE
+    )
+
+    hline_thresholds <- list(
+      setNames(-log10(p_value_thresholds[[pvt]]), paste(pval_column, "=", p_value_thresholds[[pvt]]))
+    )
+    vline_thresholds <- list(
+      setNames(-log2(params$meta$params$differential_min_fold_change),
+               paste(params$meta$params$differential_fc_column, "<=", log2(params$meta$params$differential_min_fold_change))),
+      setNames( log2(params$meta$params$differential_min_fold_change),
+               paste(params$meta$params$differential_fc_column, ">=", log2(params$meta$params$differential_min_fold_change)))
+    )
+
+    palette_volcano <- append("#999999", makeColorScale(3, params$meta$params$differential_palette_name))
+
+    plot_args <- list(
+      x = full_de[[params$meta$params$differential_fc_column]],
+      y = -log10(full_de[[pval_column]]),
+      colorby = full_de$differential_status,
+      ylab = paste("-log(10)", pval_column),
+      xlab = paste("higher in", contrasts$reference[i], "<<", params$meta$params$differential_fc_column, ">>", "higher in", contrasts$target[i]),
+      labels = full_de[[label_col]],
+      hline_thresholds = hline_thresholds,
+      vline_thresholds = vline_thresholds,
+      show_labels = FALSE,
+      legend_title = "Differential status",
+      palette = palette_volcano
+    )
+
+    max_fc <- max(abs(full_de[[params$meta$params$differential_fc_column]])) * 1.1
+
+    zero_p <- sum(full_de[[pval_column]] == 0, na.rm = TRUE)
+    if (zero_p) {
+      cat(sprintf("<i>%d feature%s not shown because of p value = 0; please refer to the results tables.</i><br><br>",
+                  zero_p, ifelse(zero_p > 1, "s are", " is")))
     }
-    # We'll color by whether features are differential according to supplied thresholds
 
-    p_value_types <- list(Adjusted = params$meta$params$differential_qval_column, Unadjusted = params$meta$params$differential_pval_column)
-    p_value_thresholds <- list(Adjusted = params$meta$params$differential_max_qval, Unadjusted = params$meta$params$differential_max_pval)
+    p <- do.call(plotly_scatterplot, plot_args) %>%
+      layout(xaxis = list(range = list(-max_fc, max_fc)))
+    print(htmltools::tagList(p))
 
-    for (pvt in names(p_value_types)) {
-        cat("\n##### ", pvt, " p values", "\n\n")
-        pval_column <- p_value_types[[pvt]]
+    parts <- list()
 
-        de_fc <- abs(full_de[[params$meta$params$differential_fc_column]]) >= abs(log2(params$meta$params$differential_min_fold_change))
-        de_fc_label <- paste("abs(logFC) >=", log2(params$meta$params$differential_min_fold_change))
+    up_tbl <- sig_differential[[pvt]][[i]][["up"]]
+    if (!is.null(up_tbl) && nrow(up_tbl) > 0) {
+      up_tbl$Direction <- "Up"
+      parts[["Up"]] <- up_tbl
+    }
 
-        de_pval <- full_de[[pval_column]] <= p_value_thresholds[[pvt]]
-        de_pval_label <- paste(pvt, "<=", p_value_thresholds[[pvt]])
+    down_tbl <- sig_differential[[pvt]][[i]][["down"]]
+    if (!is.null(down_tbl) && nrow(down_tbl) > 0) {
+      down_tbl$Direction <- "Down"
+      parts[["Down"]] <- down_tbl
+    }
 
-        de_pval_fc_label <- paste(de_fc_label, "&", de_pval_label)
+    if (length(parts) == 0) {
+      cat("No significantly differential genes in either direction.\n\n")
+      next
+    }
 
-        full_de$differential_status <- "Not significant"
-        full_de$differential_status[de_fc] <- de_fc_label
-        full_de$differential_status[de_pval] <- de_pval_label
-        full_de$differential_status[de_fc & de_pval] <- de_pval_fc_label
-        full_de$differential_status <- factor(full_de$differential_status, levels = c("Not significant", de_fc_label, de_pval_label, de_pval_fc_label), ordered = TRUE) # Factorize status so that non-significant is always first
-        # Define the thresholds we'll draw
+    combined <- do.call(rbind, parts)
 
-        hline_thresholds <- vline_thresholds <- list()
-        hline_thresholds[[paste(pval_column, "=", p_value_thresholds[[pvt]])]] <- -log10(p_value_thresholds[[pvt]])
-        vline_thresholds[[paste(params$meta$params$differential_fc_column, "<=", log2(params$meta$params$differential_min_fold_change))]] <- -log2(params$meta$params$differential_min_fold_change)
-        vline_thresholds[[paste(params$meta$params$differential_fc_column, ">=", log2(params$meta$params$differential_min_fold_change))]] <- log2(params$meta$params$differential_min_fold_change)
+    # Round common numeric columns if present
+    cols_to_round <- c(
+      params$meta$params$differential_fc_column,
+      params$meta$params$differential_pval_column,
+      params$meta$params$differential_qval_column
+    )
+    cols_present <- intersect(cols_to_round, colnames(combined))
+    if (length(cols_present) > 0) {
+      combined[, cols_present] <- signif(combined[, cols_present, drop = FALSE], 8)
+    }
 
-        palette_volcano <- append(c("#999999"), makeColorScale(3, params$meta$params$differential_palette_name)) # set non-significant to gray
+    # Put Direction first and prettify
+    first_cols <- c("Direction", setdiff(colnames(combined), "Direction"))
+    combined <- combined[, first_cols, drop = FALSE]
+    colnames(combined) <- prettifyVariablename(colnames(combined))
+    combined <- round_dataframe_columns(combined, digits = params$meta$params$round_digits)
 
-        plot_args <- list(
-            x = full_de[[params$meta$params$differential_fc_column]],
-            y = -log10(full_de[[pval_column]]),
-            colorby = full_de$differential_status,
-            ylab = paste("-log(10)", pval_column),
-            xlab = xlabel <- paste("higher in", contrasts$reference[i], "          <<", params$meta$params$differential_fc_column, ">>           higher in", contrasts$target[i]),
-            labels = full_de[[label_col]],
-            hline_thresholds = hline_thresholds,
-            vline_thresholds = vline_thresholds,
-            show_labels = FALSE,
-            legend_title = "Differential status",
-            palette = palette_volcano
+    print(htmltools::tagList(
+      datatable(
+        combined,
+        caption = paste(
+          "Differential genes (Up + Down) in",
+          contrast_descriptions[i],
+          "(check", differential_files[[i]], "for more detail)"
+        ),
+        rownames = FALSE
+      )
+    ))
+
+    cat("\n**Box plots**\n\n")
+    cat("The following box plots show the distribution of expression levels for the top 10 genes ranked by significance.\n\n")
+
+    qval_pretty <- prettifyVariablename(params$meta$params$differential_qval_column)
+
+    # choose ID + display label columns in 'combined' after prettify
+    features_id_pretty <- prettifyVariablename(params$meta$params$features_id_col)
+
+    if (!is.null(params$meta$params$features_name_col) &&
+        prettifyVariablename(params$meta$params$features_name_col) %in% colnames(combined)) {
+      feature_label_pretty <- prettifyVariablename(params$meta$params$features_name_col)
+    } else {
+      feature_label_pretty <- prettifyVariablename(label_col)
+      if (!feature_label_pretty %in% colnames(combined)) {
+        feature_label_pretty <- features_id_pretty
+      }
+    }
+
+    # top 10 by qval
+    if (qval_pretty %in% colnames(combined)) {
+      ord <- order(combined[[qval_pretty]])
+      top_ids <- head(combined[[features_id_pretty]][ord], 10)
+      top_ids <- as.character(top_ids)
+    } else {
+      # fallback: take first 10
+      top_ids <- head(as.character(combined[[features_id_pretty]]), 10)
+    }
+
+    for (assay_type in rev(names(assay_data))) {
+      cat(paste0("\n###### ", prettifyVariablename(assay_type), "\n\n"))
+
+      expr_mat <- assay_data[[assay_type]]
+      top_present <- intersect(top_ids, rownames(expr_mat))
+      if (length(top_present) == 0) {
+        cat("*No top genes found in this assay matrix.*\n\n")
+        next
+      }
+
+      # subset observations to samples in expr_mat (columns are already renamed to observation names)
+      obs_sub <- observations[colnames(expr_mat), , drop = FALSE]
+
+      plot_df <- as.data.frame(expr_mat[top_present, , drop = FALSE])
+      plot_df[[prettifyVariablename(params$meta$params$features_type)]] <- rownames(plot_df)
+
+      features_pretty <- prettifyVariablename(params$meta$params$features_type)
+
+      plot_df <- tidyr::pivot_longer(
+        plot_df,
+        cols = -all_of(features_pretty),
+        names_to = "Sample",
+        values_to = "Expression"
+      )
+      plot_df <- dplyr::arrange(plot_df, .data[[features_pretty]])
+
+      # Condition: use first contrast variable if present; else use main grouping var
+      cond_var <- if (length(unique(contrast_variables)) > 0) unique(contrast_variables)[1] else main_grouping_variable
+      plot_df$Condition <- obs_sub[plot_df$Sample, cond_var]
+
+      # Map feature IDs -> display names (symbol if available)
+      feature_names <- combined[[feature_label_pretty]]
+      names(feature_names) <- combined[[features_id_pretty]]
+      plot_df$FeatureName <- unname(feature_names[plot_df[[features_pretty]]])
+
+      # Map feature IDs -> qvals for label
+      if (qval_pretty %in% colnames(combined)) {
+        pvals <- combined[[qval_pretty]]
+        names(pvals) <- combined[[features_id_pretty]]
+        plot_df$pval <- unname(pvals[plot_df[[features_pretty]]])
+      } else {
+        plot_df$pval <- NA_real_
+      }
+
+      pvals_grouped <- plot_df %>%
+        dplyr::group_by(FeatureName) %>%
+        dplyr::summarise(pval = dplyr::first(pval), .groups = "drop")
+
+      # Panel-specific y positions (avoid global max overlap)
+      y_pos <- plot_df %>%
+        dplyr::group_by(FeatureName) %>%
+        dplyr::summarise(y = max(Expression, na.rm = TRUE) * 1.03, .groups = "drop")
+
+      pvals_grouped <- dplyr::left_join(pvals_grouped, y_pos, by = "FeatureName")
+
+      p_box <- ggplot(plot_df, aes(x = Condition, y = Expression)) +
+        geom_boxplot(outlier.shape = NA) +
+        ggbeeswarm::geom_quasirandom(
+          width = 0.2,
+          aes(
+            color = Condition,
+            text = paste0("Sample: ", Sample, "<br>")
+          )
+        ) +
+        facet_wrap(~ FeatureName, scales = "free_y") +
+        scale_color_manual(values = groupColorScale) +
+        theme_light() +
+        theme(
+          axis.text.x = element_text(angle = 45, hjust = 1, margin = margin(t = 20)),
+          legend.position = "none",
+          strip.text = element_text(color = "black", size = 8),
+          strip.background = element_rect(size = 0.1),
+          panel.spacing.y = unit(1.5, "lines"),
+          panel.spacing.x = unit(1.5, "lines"),
+          plot.margin = margin(t = 15, b = 20)
+        ) +
+        geom_text(
+          data = pvals_grouped,
+          aes(x = 1.6, y = y, label = paste0("Padj = ", signif(pval, 3))),
+          inherit.aes = FALSE,
+          size = 2,
+          color = "grey37",
+          fontface = "italic",
+          na.rm = TRUE
         )
 
-        # Let's equalize the axes
-        max_fc <- max(abs(full_de[[params$meta$params$differential_fc_column]])) * 1.1
+      p_box <- ggplotly(p_box, tooltip = c("x", "y", "color", "text")) %>%
+        layout(height = 600)
+      print(htmltools::tagList(p_box))
 
-        # Print warning if any p values are 0
-        zero_p <- length(which(full_de[[pval_column]] == 0))
-        if (zero_p) {
-            cat(paste0("<i>", zero_p, " feature", ifelse(zero_p > 1, "s are", " is"), " not shown because of p value = 0; please refer to the results tables.</i><br><br>"))
-        }
-
-        p <- do.call(plotly_scatterplot, plot_args) %>%
-            layout(xaxis = list(range = list(-max_fc, max_fc)))
-
-        print(htmltools::tagList(p))
-        cat("\n\n")
-        # ... then show tables of the up/ down genes
-
-        for (dir in c("up", "down")) {
-            contrast_de <- sig_differential[[pvt]][[i]][[dir]]
-            cols_to_round <- c(params$meta$params$differential_fc_column, params$meta$params$differential_pval_column, params$meta$params$differential_qval_column)
-            contrast_de[, cols_to_round] <- signif(contrast_de[, cols_to_round], 8)
-
-            colnames(contrast_de) <- prettifyVariablename(colnames(contrast_de))
-
-            if (nrow(contrast_de) > 0) {
-                contrast_de <- round_dataframe_columns(contrast_de, digits = params$meta$params$round_digits)
-                print(htmltools::tagList(datatable(contrast_de, caption = paste("Differential genes", dir, "in", contrast_descriptions[i], " (check", differential_files[[i]], "for more detail)"), rownames = FALSE)))
-
-                if ("Gene biotype" %in% colnames(contrast_de)) {
-                    # Plot Differentially Expressed Genes by Gene Biotype
-                    gene_biotype_table <- contrast_de %>%
-                        group_by(`Gene biotype`) %>%
-                        summarise(count = dplyr::n(), .groups = "drop") %>%
-                        filter(count > 0) %>%
-                        arrange(desc(count))
-
-                    gene_biotype_plot <- ggplot(gene_biotype_table, aes(x = reorder(`Gene biotype`, -count), y = count)) +
-                        geom_bar(stat = "identity", position = position_dodge()) +
-                        labs(
-                            title = paste0("Differentially Expressed Genes by Gene Biotype (", dir, ")"),
-                            x = "Gene Biotype",
-                            y = "Number of Differentially Expressed Genes"
-                        ) +
-                        theme_minimal() +
-                        theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-                    print(gene_biotype_plot)
-                    cat("\n")
-                } else {
-                    cat("Column 'Gene biotype' does not exist. Skipping plot.\n")
-                }
-            } else {
-                cat(paste0("No significantly differential '", dir, "' genes.\n\n"))
-            }
-        }
+      cat("<br><br><br><br><br><br><br><br><br>\n\n")
     }
-    cat(":::")
+
+    if ("Gene biotype" %in% colnames(combined)) {
+      bt <- as.data.frame(table(combined[["Gene biotype"]], combined[["Direction"]]))
+      colnames(bt) <- c("Gene biotype", "Direction", "count")
+      bt <- bt[bt$count > 0, , drop = FALSE]
+
+      biotype_plot <-
+        ggplot2::ggplot(bt, ggplot2::aes(
+          x = stats::reorder(`Gene biotype`, -count),
+          y = count,
+          fill = Direction
+        )) +
+        ggplot2::geom_bar(stat = "identity", position = ggplot2::position_dodge()) +
+        ggplot2::labs(
+          title = "Differentially Expressed Genes by Gene Biotype and Direction",
+          x = "Gene Biotype",
+          y = "Number of Differentially Expressed Genes"
+        ) +
+        ggplot2::theme_minimal() +
+        ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+
+      print(biotype_plot)
+      cat("\n")
+    } else {
+      cat("Column 'Gene biotype' does not exist. Skipping plot.\n")
+    }
+  }
+
+  cat("\n:::\n")
 }
 ```
 
