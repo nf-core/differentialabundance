@@ -776,7 +776,9 @@ A hierarchical clustering of `{r} params$meta$params$features_type`s was underta
 #| results: asis
 #| warning: false
 #| message: false
-for (assay_type in rev(names(assay_data))){
+#| fig-height: 10
+#| fig-width: 8
+for (assay_type in rev(names(assay_data))) {
     cat(paste0("\n##### ", prettifyVariablename(assay_type), "\n"))
 
     variable_genes <- selectVariableGenes(matrix = assay_data[[assay_type]], ntop = ifelse(params$meta$params$exploratory_n_features == -1, nrow(assay_data[[assay_type]]), params$meta$params$exploratory_n_features))
@@ -809,7 +811,7 @@ for (assay_type in rev(names(assay_data))){
     # Construct HeatmapAnnotation
     ha <- HeatmapAnnotation(
         df = observations[, informative_variables, drop = FALSE],
-        annotation_name_side = "right",
+        annotation_name_side = "left",
         col = ann_colors
     )
 
@@ -833,10 +835,14 @@ for (assay_type in rev(names(assay_data))){
         col = circlize::colorRamp2(
             c(min(heat_mat), 0, max(heat_mat)),
             c("blue", "white", "red")
+        ),
+        heatmap_legend_param = list(
+            direction = "horizontal",
+            title_position = "lefttop"
         )
     )
 
-    draw(p)
+    draw(p, heatmap_legend_side = "bottom", annotation_legend_side = "right", legend_grouping = "original")
     cat("\n\n")
 }
 cat(":::")
