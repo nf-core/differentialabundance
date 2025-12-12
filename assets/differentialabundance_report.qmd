@@ -940,7 +940,7 @@ for (i in 1:nrow(contrasts)) {
     } else {
         label_col <- params$meta$params$differential_feature_id_column
     }
-    
+
     p_value_types <- list(Adjusted = params$meta$params$differential_qval_column, Unadjusted = params$meta$params$differential_pval_column)
     p_value_thresholds <- list(Adjusted = params$meta$params$differential_max_qval, Unadjusted = params$meta$params$differential_max_pval)
 
