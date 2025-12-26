@@ -1004,34 +1004,17 @@ for (i in 1:nrow(contrasts)) {
         print(htmltools::tagList(p))
         cat("\n\n")
 
-        parts <- list()
+        # Filter full_de to get only significant features and add Direction column
+        de_fc_sig <- de_fc & de_pval  # Genes that meet BOTH criteria
 
-        up_tbl <- sig_differential[[pvt]][[i]][["up"]]
-        if (!is.null(up_tbl) && nrow(up_tbl) > 0) {
-            up_tbl$Direction <- "Up"
-            parts[["Up"]] <- up_tbl
-        }
-
-        down_tbl <- sig_differential[[pvt]][[i]][["down"]]
-        if (!is.null(down_tbl) && nrow(down_tbl) > 0) {
-            down_tbl$Direction <- "Down"
-            parts[["Down"]] <- down_tbl
-        }
-
-        if (length(parts) > 0) {
-            # Bind rows even if columns differ slightly
-            combined <- do.call(rbind, parts)
-
-            # Round common numeric columns if present
-            cols_to_round <- c(
-                params$meta$params$differential_fc_column,
-                params$meta$params$differential_pval_column,
-                params$meta$params$differential_qval_column
+        if (sum(de_fc_sig) > 0) {
+            combined <- full_de[de_fc_sig, ]  # Filter to only significant genes            
+            # Add Direction column based on fold-change
+            combined$Direction <- ifelse(
+                combined[[params$meta$params$differential_fc_column]] > 0,
+                "Up",      # Positive fold-change = Up-regulated
+                "Down"     # Negative fold-change = Down-regulated
             )
-            cols_present <- intersect(cols_to_round, colnames(combined))
-            if (length(cols_present)) {
-                combined[, cols_present] <- signif(combined[, cols_present, drop = FALSE], 8)
-            }
 
             # Put Direction first, prettify col names, then optional global rounding
             first_cols <- c("Direction", setdiff(colnames(combined), "Direction"))
@@ -1039,9 +1022,8 @@ for (i in 1:nrow(contrasts)) {
             colnames(combined) <- prettifyVariablename(colnames(combined))
             combined <- round_dataframe_columns(combined, digits = params$meta$params$round_digits)
 
-            # Show the single DT
-            print(htmltools::tagList(
-                datatable(
+            # Create the datatable
+            dt <- datatable(
                 combined,
                 caption = paste(
                     "Differential genes (Up + Down) in",
@@ -1049,8 +1031,23 @@ for (i in 1:nrow(contrasts)) {
                     "(check", differential_files[[i]], "for more detail)"
                 ),
                 rownames = FALSE
-                )
+            )
+            
+            # Now format the numeric columns for display
+            cols_to_format_pretty <- prettifyVariablename(c(
+                params$meta$params$differential_fc_column,
+                params$meta$params$differential_pval_column,
+                params$meta$params$differential_qval_column
             ))
+            
+            cols_present_pretty <- intersect(cols_to_format_pretty, colnames(combined))
+            
+            if (length(cols_present_pretty) > 0) {
+                dt <- formatRound(dt, cols_present_pretty, digits = 5)
+            }
+            
+            # Print the formatted table
+            print(htmltools::tagList(dt))
 
             # Optional biotype plot, now grouped by Direction
             if ("Gene biotype" %in% colnames(combined)) {
