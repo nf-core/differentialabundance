@@ -1008,7 +1008,7 @@ for (i in 1:nrow(contrasts)) {
         de_fc_sig <- de_fc & de_pval  # Genes that meet BOTH criteria
 
         if (sum(de_fc_sig) > 0) {
-            combined <- full_de[de_fc_sig, ]  # Filter to only significant genes            
+            combined <- full_de[de_fc_sig, ]  # Filter to only significant genes
             # Add Direction column based on fold-change
             combined$Direction <- ifelse(
                 combined[[params$meta$params$differential_fc_column]] > 0,
@@ -1032,20 +1032,20 @@ for (i in 1:nrow(contrasts)) {
                 ),
                 rownames = FALSE
             )
-            
+
             # Now format the numeric columns for display
             cols_to_format_pretty <- prettifyVariablename(c(
                 params$meta$params$differential_fc_column,
                 params$meta$params$differential_pval_column,
                 params$meta$params$differential_qval_column
             ))
-            
+
             cols_present_pretty <- intersect(cols_to_format_pretty, colnames(combined))
-            
+
             if (length(cols_present_pretty) > 0) {
                 dt <- formatRound(dt, cols_present_pretty, digits = 5)
             }
-            
+
             # Print the formatted table
             print(htmltools::tagList(dt))
 
