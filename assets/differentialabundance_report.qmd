@@ -797,10 +797,10 @@ for (assay_type in rev(names(assay_data))) {
             } else {
                 vals <- unique(na.omit(as.character(observations[[iv]])))
                 dendroColorScale <- makeColorScale(length(vals), palette = params$meta$params$exploratory_palette_name)
-                
+
                 # ensure the length matches number of categories
                 dendroColorScale <- rep(dendroColorScale, length.out = length(vals))
-                
+
                 # assign names matching the category labels
                 names(dendroColorScale) <- sort(vals)
                 ann_colors[[iv]] <- dendroColorScale
