@@ -919,7 +919,7 @@ if (length(warnings_list) > 0) {
 
 for (i in 1:nrow(contrasts)) {
     cat("\n#### ", contrast_descriptions[i], "\n")
-    cat("::: {.panel-tabset}", "\n\n")
+    cat('::: {.panel-tabset style="width: 1000px; min-width: 1000px;"}\n\n')
 
     ## Volcano inputs
     full_de <- differential_results[[i]]
@@ -1003,7 +1003,6 @@ for (i in 1:nrow(contrasts)) {
             layout(xaxis = list(range = list(-max_fc, max_fc)))
 
         print(htmltools::tagList(p))
-        cat("\n\n")
 
         cat("\n###### Differential Genes Table\n\n")
         # Filter full_de to get only significant features and add Direction column
