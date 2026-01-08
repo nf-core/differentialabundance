@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - [[#586](https://github.com/nf-core/differentialabundance/pull/586)] - Replace dendrogram with complex heatmap ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
+- [[#581](https://github.com/nf-core/differentialabundance/pull/581)] - Add pipeline-level nf-tests with numeric sample IDs ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila), [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#575](https://github.com/nf-core/differentialabundance/pull/575)] - Fix volcano plot tooltips by adding column existence check for gene name labels and add Gene name to DE table in HTML report ([@antoniasaracco](https://github.com/antoniasaracco), review by [@atrigila](https://github.com/atrigila), [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#567](https://github.com/nf-core/differentialabundance/pull/566)] - Fix `VARIANCEPARTITION_DREAM` output table ([@atrigila](https://github.com/atrigila), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@grst](https://github.com/grst)).
 - [[#566](https://github.com/nf-core/differentialabundance/pull/566)] - Add handling for complex contrasts in `deseq2/differential` ([@delfiterradas](https://github.com/delfiterradas), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@grst](https://github.com/grst)).
@@ -15,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#470](https://github.com/nf-core/differentialabundance/pull/470)] - Enable multi-config parallel running, shift paramsheet to yaml format, and merge profiles with paramsheet ([@suzannejin](https://github.com/suzannejin), review by [@pinin4fjords](https://github.com/pinin4fjords), [@grst](https://github.com/grst), [@SusiJo](https://github.com/SusiJo) and [@mirpedrol](https://github.com/mirpedrol)).
 - [[#523](https://github.com/nf-core/differentialabundance/pull/523)] - Add gene_name to differential and abundance tables. ([@antoniasaracco](https://github.com/antoniasaracco), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@grst](https://github.com/grst)).
 - [[#517](https://github.com/nf-core/differentialabundance/pull/473)] - Expose DREAM options as pipeline params. ([@atrigila](https://github.com/atrigila), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@grst](https://github.com/grst)).
--[[#510]](https://github.com/nf-core/differentialabundance/pull/510) - Add decoupler module to differential functional enrichment subworkflow. ([@antoniasaracco](https://github.com/antoniasaracco), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@grst](https://github.com/grst)).
+- [[#510]](https://github.com/nf-core/differentialabundance/pull/510) - Add decoupler module to differential functional enrichment subworkflow. ([@antoniasaracco](https://github.com/antoniasaracco), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@grst](https://github.com/grst)).
 - [[#473](https://github.com/nf-core/differentialabundance/pull/473)] - Allow formula-based contrasts in DESEQ2. ([@atrigila](https://github.com/atrigila), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@grst](https://github.com/grst)).
 - [[#443](https://github.com/nf-core/differentialabundance/pull/443)] - Add toolsheet-related implementations. ([@suzannejin](https://github.com/suzannejin), review by [@pinin4fjords](https://github.com/pinin4fjords), [@mirpedrol](https://github.com/mirpedrol) and [@JoseEspinosa](https://github.com/JoseEspinosa))
 - [[#450](https://github.com/nf-core/differentialabundance/pull/441)] - Allow usage of strings for makeContrasts in DREAM. ([@atrigila](https://github.com/atrigila), review by [@pinin4fjords](https://github.com/pinin4fjords), [@suzannejin](https://github.com/suzannejin) and [@grst](https://github.com/grst)).
@@ -34,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [[#582](https://github.com/nf-core/differentialabundance/pull/582)] - Allow `lfc_threshold` to be a float ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst))
 - [[#527](https://github.com/nf-core/differentialabundance/pull/513)] - Fix contrast schema to allow for random effects and other advanced formula features. ([@grst](https://github.com/grst), review by [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#513](https://github.com/nf-core/differentialabundance/pull/513)] - Fix contrast schema to allow for zero-intercept models. ([@grst](https://github.com/grst), review by [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#476](https://github.com/nf-core/differentialabundance/pull/476)] - Fixed null.csv and warning at top of report ([@SusiJo](https://github.com/SusiJo), reviewed by [@pinin4fjords](https://github.com/pinin4fjords), [@atrigila](https://github.com/atrigila), [@maxulysse](https://github.com/maxulysse))
@@ -52,6 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [[#581](https://github.com/nf-core/differentialabundance/pull/581)] - Update all modules and subworkflows, allowing differential analysis with numeric sample IDs ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila), [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#576](https://github.com/nf-core/differentialabundance/pull/576)] - Autoformat differential abundance report ([@delfiterradas](https://github.com/delfiterradas), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@grst](https://github.com/grst)).
 - [[#569](https://github.com/nf-core/differentialabundance/pull/569)] - Update shinyngs modules with fix in validator to allow using only fomula contrasts ([@delfiterradas](https://github.com/delfiterradas), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@grst](https://github.com/grst)).
 - [[#476](https://github.com/nf-core/differentialabundance/pull/476)] - Update documentation & report fixes ([@SusiJo](https://github.com/SusiJo), reviewed by [@pinin4fjords](https://github.com/pinin4fjords), [@atrigila](https://github.com/atrigila), [@maxulysse](https://github.com/maxulysse))
