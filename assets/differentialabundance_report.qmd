@@ -39,6 +39,7 @@ library(yaml)
 library(shinyngs)
 library(plotly)
 library(DT)
+library(dplyr)
 library(ggplot2)
 ```
 
@@ -1004,23 +1005,22 @@ for (i in 1:nrow(contrasts)) {
         print(htmltools::tagList(p))
         cat("\n\n")
 
+        cat("\n###### Differential Genes Table\n\n")
         # Filter full_de to get only significant features and add Direction column
         de_fc_sig <- de_fc & de_pval  # Genes that meet BOTH criteria
 
         if (sum(de_fc_sig) > 0) {
-            combined <- full_de[de_fc_sig, ]  # Filter to only significant genes
-            # Add Direction column based on fold-change
-            combined$Direction <- ifelse(
-                combined[[params$meta$params$differential_fc_column]] > 0,
-                "Up",      # Positive fold-change = Up-regulated
-                "Down"     # Negative fold-change = Down-regulated
-            )
-
-            # Put Direction first, prettify col names, then optional global rounding
-            first_cols <- c("Direction", setdiff(colnames(combined), "Direction"))
-            combined <- combined[, first_cols, drop = FALSE]
-            colnames(combined) <- prettifyVariablename(colnames(combined))
-            combined <- round_dataframe_columns(combined, digits = params$meta$params$round_digits)
+            combined <- full_de %>%
+            filter(de_fc_sig) %>%
+            mutate(
+                Direction = if_else(
+                    .data[[params$meta$params$differential_fc_column]] > 0,
+                    "Up",    # Positive fold-change = Up-regulated
+                    "Down"   # Negative fold-change = Down-regulated
+                )
+            ) %>%
+            relocate(Direction) %>%
+            rename_with(prettifyVariablename)
 
             # Create the datatable
             dt <- datatable(
