@@ -644,7 +644,7 @@
                     "fa_icon": "fas fa-filter"
                 },
                 "deseq2_lfc_threshold": {
-                    "type": "integer",
+                    "type": "number",
                     "default": 0,
                     "description": "`lfcThreshold` parameter passed to results()",
                     "help_text": "a non-negative value which specifies a log2 fold change threshold. The default value is 0, corresponding to a test that the log2 fold changes are equal to zero. The user can specify the alternative hypothesis using the altHypothesis argument, which defaults to testing for log2 fold changes greater in absolute value than a given threshold. If lfcThreshold is specified, the results are for Wald tests, and LRT p-values will be overwritten.",

@@ -108,6 +108,54 @@
   round_digits: 2
   skip_reports: true
 
+- paramset_name: deseq2_rnaseq_gsea_numeric_samples
+  include: paramsheet/deseq2_rnaseq_gsea,testdata/rnaseq_testdata_numeric_samples
+
+  # Exploratory plots
+  exploratory_main_variable: contrasts
+  deseq2_vst_nsub: 500
+
+  # Filtering
+  filtering_min_abundance: 10
+
+  # Report options
+  report_contributors: |-
+    Jane Doe
+    Director of Institute of Microbiology
+    University of Smallville;John Smith
+    PhD student
+    Institute of Microbiology
+    University of Smallville
+
+  # Other
+  round_digits: 3
+  gsea_rnd_seed: "10"
+
+- paramset_name: deseq2_rnaseq_gprofiler2_numeric_samples
+  include: paramsheet/deseq2_rnaseq_gprofiler2,testdata/rnaseq_testdata_numeric_samples
+
+  # Exploratory plots
+  exploratory_main_variable: contrasts
+  deseq2_vst_nsub: 500
+
+  # Filtering
+  filtering_min_abundance: 10
+
+  # gprofiler2 options
+  gprofiler2_organism: "mmusculus"
+
+  # Report options
+  report_contributors: |-
+    Jane Doe
+    Director of Institute of Microbiology
+    University of Smallville;John Smith
+    PhD student
+    Institute of Microbiology
+    University of Smallville
+
+  # Other
+  round_digits: 3
+
 - paramset_name: limma_rnaseq_gsea
   include: paramsheet/limma_rnaseq_gsea,testdata/rnaseq_testdata
 
@@ -197,6 +245,30 @@
   # Other
   round_digits: 3
 
+- paramset_name: limma_rnaseq_gsea_numeric_samples
+  include: paramsheet/limma_rnaseq_gsea,testdata/rnaseq_testdata_numeric_samples
+
+  # Filtering
+  filtering_min_abundance: 10
+
+  # Exploratory
+  exploratory_main_variable: contrasts
+
+  # GSEA
+  gsea_rnd_seed: "10"
+
+  # Report options
+  report_contributors: |-
+    Jane Doe
+    Director of Institute of Microbiology
+    University of Smallville;John Smith
+    PhD student
+    Institute of Microbiology
+    University of Smallville
+
+  # Other
+  round_digits: 3
+
 - paramset_name: dream_rnaseq
   include: paramsheet/dream_rnaseq,testdata/rnaseq_testdata_complex
 
@@ -205,6 +277,27 @@
 
   # Exploratory
   exploratory_main_variable: contrasts
+
+  # Report options
+  report_contributors: |-
+    Jane Doe
+    Director of Institute of Microbiology
+    University of Smallville;John Smith
+    PhD student
+    Institute of Microbiology
+    University of Smallville
+
+  # Other
+  round_digits: 3
+
+- paramset_name: dream_rnaseq_decoupler_numeric_samples
+  include: paramsheet/dream_rnaseq_decoupler,testdata/rnaseq_testdata_dream_numeric_samples
+
+  # Filtering
+  filtering_min_abundance: 10
+
+  # Functional analysis with decoupler
+  decoupler_min_n: 1
 
   # Report options
   report_contributors: |-

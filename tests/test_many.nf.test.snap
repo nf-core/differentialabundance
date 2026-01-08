@@ -1,7 +1,7 @@
 {
     "Test profile - many": {
         "content": [
-            66,
+            69,
             {
                 "AFFY_JUSTRMA_RAW": {
                     "r-base": "4.3.1",
@@ -279,6 +279,9 @@
                 "tables/differential/dream_rnaseq/interaction_genotype_treatment_SRP254919.dream.results.tsv",
                 "tables/differential/dream_rnaseq/interaction_genotype_treatment_SRP254919.dream.results_filtered.tsv",
                 "tables/differential/dream_rnaseq/interaction_genotype_treatment_SRP254919_dream.annotated.tsv",
+                "tables/differential/dream_rnaseq/treatment_effect_classic_comparison_SRP254919.dream.results.tsv",
+                "tables/differential/dream_rnaseq/treatment_effect_classic_comparison_SRP254919.dream.results_filtered.tsv",
+                "tables/differential/dream_rnaseq/treatment_effect_classic_comparison_SRP254919_dream.annotated.tsv",
                 "tables/differential/dream_rnaseq/treatment_plus_genotype_SRP254919.dream.results.tsv",
                 "tables/differential/dream_rnaseq/treatment_plus_genotype_SRP254919.dream.results_filtered.tsv",
                 "tables/differential/dream_rnaseq/treatment_plus_genotype_SRP254919_dream.annotated.tsv",
@@ -369,8 +372,8 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.04.2"
         },
-        "timestamp": "2025-12-10T14:54:55.683961698"
+        "timestamp": "2025-12-30T00:01:58.602998489"
     }
 }

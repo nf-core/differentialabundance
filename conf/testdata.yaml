@@ -1,3 +1,22 @@
+- paramset_name: rnaseq_testdata_numeric_samples
+  study_name: SRP254919
+  input: ${projectDir}/tests/assets/SRP254919.samplesheet.csv
+  matrix: ${projectDir}/tests/assets/SRP254919.salmon.merged.gene_counts.top1000cov.tsv
+  transcript_length_matrix: ${projectDir}/tests/assets/SRP254919.spoofed_lengths.tsv
+  contrasts_yml: https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/SRP254919.contrasts.yaml
+  gtf: https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz
+  gene_sets_files: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt
+  decoupler_network: https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/progeny/mouse_network.tsv
+
+- paramset_name: rnaseq_testdata_dream_numeric_samples
+  study_name: SRP254919
+  input: ${projectDir}/tests/assets/SRP254919.samplesheet.csv
+  matrix: ${projectDir}/tests/assets/SRP254919.salmon.merged.gene_counts.top1000cov.tsv
+  contrasts_yml: ${projectDir}/tests/assets/SRP254919_dream.contrasts.yaml
+  gtf: https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz
+  gene_sets_files: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt
+  decoupler_network: https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/progeny/mouse_network.tsv
+
 - paramset_name: rnaseq_testdata
   study_name: SRP254919
   input: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.samplesheet.csv
