@@ -654,9 +654,10 @@ workflow DIFFERENTIALABUNDANCE {
         .mix(
             ch_raw
                 .filter{meta, raw -> meta.params.study_type != 'geo_soft_file'}
-                .join(ch_processed_matrices)
+                .join(ch_processed_matrices, remainder: true)
                 .map { meta, raw, matrices ->
-                    [meta, [raw] + matrices]
+                def processed_matrices = matrices ?: []
+                    [meta, [raw] + processed_matrices]
                 }
         )
 
