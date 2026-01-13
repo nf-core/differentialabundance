@@ -926,7 +926,6 @@ for (i in 1:nrow(contrasts)) {
 
   full_de <- differential_results[[i]]
 
-  # Filter rows with required numeric fields present (robust; fixes current typo)
   needed <- c(
     params$meta$params$differential_fc_column,
     params$meta$params$differential_qval_column,
@@ -1096,6 +1095,8 @@ for (i in 1:nrow(contrasts)) {
       top_ids <- head(as.character(combined[[features_id_pretty]]), 10)
     }
 
+    cat("\n::: {.panel-tabset}\n\n")
+
     for (assay_type in rev(names(assay_data))) {
       cat(paste0("\n###### ", prettifyVariablename(assay_type), "\n\n"))
 
@@ -1188,6 +1189,7 @@ for (i in 1:nrow(contrasts)) {
 
       cat("<br><br><br><br><br><br><br><br><br>\n\n")
     }
+    cat("\n:::\n\n")
 
     if ("Gene biotype" %in% colnames(combined)) {
       bt <- as.data.frame(table(combined[["Gene biotype"]], combined[["Direction"]]))
