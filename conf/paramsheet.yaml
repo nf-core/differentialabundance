@@ -65,8 +65,8 @@
   differential_method: dream
   dream_use_voom: true
 
-  exploratory_assay_names: raw
-  exploratory_final_assay: raw
+  exploratory_assay_names: raw,normalised
+  exploratory_final_assay: normalised
   exploratory_log2_assays: raw
 
   differential_file_suffix: ".dream.results.tsv"

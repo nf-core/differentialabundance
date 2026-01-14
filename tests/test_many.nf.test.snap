@@ -1,7 +1,7 @@
 {
     "Test profile - many": {
         "content": [
-            69,
+            77,
             {
                 "AFFY_JUSTRMA_RAW": {
                     "r-base": "4.3.1",
@@ -35,7 +35,7 @@
                 "GPROFILER2_GOST\"": {
                     "r-ggplot2": "3.4.3",
                     "r-gprofiler2": "0.2.2",
-                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '113'\ndisplay_name: Mouse\ngenebuild: GRCm39\ngprofiler_version: e113_eg59_p19_f6a03c19\norganism: mmusculus\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 05.2025\n      classes: None\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2024-01-22\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2025-5-23\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2024.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20250510'\ntaxonomy_id: '10090'\n"
+                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '113'\ndisplay_name: Mouse\ngenebuild: GRCm39\ngprofiler_version: e113_eg59_p19_6ece67f5\norganism: mmusculus\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 05.2025\n      classes: None\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2024-01-22\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2025-5-23\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2024.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20250510'\ntaxonomy_id: '10090'\n"
                 },
                 "GSEA_GSEA": {
                     "gsea": "4.3.2"
@@ -114,6 +114,20 @@
                 "plots/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/png",
                 "plots/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/png/volcano.png",
                 "plots/differential/deseq2_rnaseq_gsea/versions.yml",
+                "plots/differential/dream_rnaseq",
+                "plots/differential/dream_rnaseq/full_model_with_interactions_SRP254919",
+                "plots/differential/dream_rnaseq/full_model_with_interactions_SRP254919/png",
+                "plots/differential/dream_rnaseq/full_model_with_interactions_SRP254919/png/volcano.png",
+                "plots/differential/dream_rnaseq/interaction_genotype_treatment_SRP254919",
+                "plots/differential/dream_rnaseq/interaction_genotype_treatment_SRP254919/png",
+                "plots/differential/dream_rnaseq/interaction_genotype_treatment_SRP254919/png/volcano.png",
+                "plots/differential/dream_rnaseq/treatment_effect_classic_comparison_SRP254919",
+                "plots/differential/dream_rnaseq/treatment_effect_classic_comparison_SRP254919/png",
+                "plots/differential/dream_rnaseq/treatment_effect_classic_comparison_SRP254919/png/volcano.png",
+                "plots/differential/dream_rnaseq/treatment_plus_genotype_SRP254919",
+                "plots/differential/dream_rnaseq/treatment_plus_genotype_SRP254919/png",
+                "plots/differential/dream_rnaseq/treatment_plus_genotype_SRP254919/png/volcano.png",
+                "plots/differential/dream_rnaseq/versions.yml",
                 "plots/differential/limma_affy_gprofiler2",
                 "plots/differential/limma_affy_gprofiler2/phenotype_uninvolved_lesional_GSE50790",
                 "plots/differential/limma_affy_gprofiler2/phenotype_uninvolved_lesional_GSE50790/png",
@@ -138,6 +152,16 @@
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/pca3d.png",
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/sample_dendrogram.png",
                 "plots/exploratory/deseq2_rnaseq_gsea/versions.yml",
+                "plots/exploratory/dream_rnaseq",
+                "plots/exploratory/dream_rnaseq/treatment",
+                "plots/exploratory/dream_rnaseq/treatment/png",
+                "plots/exploratory/dream_rnaseq/treatment/png/boxplot.png",
+                "plots/exploratory/dream_rnaseq/treatment/png/density.png",
+                "plots/exploratory/dream_rnaseq/treatment/png/mad_correlation.png",
+                "plots/exploratory/dream_rnaseq/treatment/png/pca2d.png",
+                "plots/exploratory/dream_rnaseq/treatment/png/pca3d.png",
+                "plots/exploratory/dream_rnaseq/treatment/png/sample_dendrogram.png",
+                "plots/exploratory/dream_rnaseq/versions.yml",
                 "plots/exploratory/limma_affy_gprofiler2",
                 "plots/exploratory/limma_affy_gprofiler2/phenotype",
                 "plots/exploratory/limma_affy_gprofiler2/phenotype/png",
@@ -174,6 +198,9 @@
                 "report/deseq2_rnaseq_gsea",
                 "report/deseq2_rnaseq_gsea/SRP254919.zip",
                 "report/deseq2_rnaseq_gsea/SRP254919_differentialabundance_report.html",
+                "report/dream_rnaseq",
+                "report/dream_rnaseq/SRP254919.zip",
+                "report/dream_rnaseq/SRP254919_differentialabundance_report.html",
                 "report/gsea",
                 "report/gsea/deseq2_rnaseq_gsea",
                 "report/gsea/deseq2_rnaseq_gsea/treatment_mCherry_hND6__SRP254919",
@@ -236,6 +263,11 @@
                 "shinyngs_app/deseq2_rnaseq_gsea/SRP254919/app.R",
                 "shinyngs_app/deseq2_rnaseq_gsea/SRP254919/data.rds",
                 "shinyngs_app/deseq2_rnaseq_gsea/versions.yml",
+                "shinyngs_app/dream_rnaseq",
+                "shinyngs_app/dream_rnaseq/SRP254919",
+                "shinyngs_app/dream_rnaseq/SRP254919/app.R",
+                "shinyngs_app/dream_rnaseq/SRP254919/data.rds",
+                "shinyngs_app/dream_rnaseq/versions.yml",
                 "shinyngs_app/limma_affy_gprofiler2",
                 "shinyngs_app/limma_affy_gprofiler2/GSE50790",
                 "shinyngs_app/limma_affy_gprofiler2/GSE50790/app.R",
@@ -326,6 +358,8 @@
                 "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
                 "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
                 "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
+                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
+                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
@@ -341,6 +375,8 @@
                 "treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.gsea_report_for_hND6.tsv:md5,a758fe7e37b971e2a836f28a57d7c3fc",
                 "treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.gsea_report_for_mCherry.tsv:md5,ce8792382ae299749445767ff16aaecc",
                 "treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.ranked_gene_list_hND6_versus_mCherry.tsv:md5,d71f1db7288800d611fbd623d57c1765",
+                "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
+                "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
@@ -374,6 +410,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-12-30T00:01:58.602998489"
+        "timestamp": "2026-01-14T16:18:29.318346699"
     }
 }
