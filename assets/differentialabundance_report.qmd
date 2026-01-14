@@ -776,7 +776,7 @@ A hierarchical clustering of `{r} params$meta$params$features_type`s was underta
 #| results: asis
 #| warning: false
 #| message: false
-#| fig-height: 10
+#| fig-height: 14
 #| fig-width: 8
 for (assay_type in rev(names(assay_data))) {
     cat(paste0("\n##### ", prettifyVariablename(assay_type), "\n"))
@@ -825,6 +825,7 @@ for (assay_type in rev(names(assay_data))) {
         clustering_method_columns = params$meta$params$exploratory_clustering_method,
         cluster_rows = FALSE,
         clustering_distance_columns = params$meta$params$exploratory_cor_method,
+        column_dend_height = grid::unit(35, "mm"),
         column_title = paste0(
             params$meta$params$observations_type, " clustering heatmap\n(",
             params$meta$params$exploratory_clustering_method, " clustering, ",
