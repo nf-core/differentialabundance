@@ -964,14 +964,11 @@ for (i in 1:nrow(contrasts)) {
         full_de$differential_status <- factor(full_de$differential_status, levels = c("Not significant", de_fc_label, de_pval_label, de_pval_fc_label), ordered = TRUE) # Factorize status so that non-significant is always first
         # Define the thresholds we'll draw
 
-        hline_thresholds <- list(
-            setNames(-log10(p_value_thresholds[[pvt]]), paste(pval_column, "=", p_value_thresholds[[pvt]]))
-        )
-        vline_thresholds <- list(
-            setNames(-log2(params$meta$params$differential_min_fold_change), paste(params$meta$params$differential_fc_column, "<=", log2(params$meta$params$differential_min_fold_change))),
-            setNames( log2(params$meta$params$differential_min_fold_change), paste(params$meta$params$differential_fc_column, ">=", log2(params$meta$params$differential_min_fold_change)))
-        )
-
+        # OLD (working)
+        hline_thresholds <- vline_thresholds <- list()
+        hline_thresholds[[paste(pval_column, "=", p_value_thresholds[[pvt]])]] <- -log10(p_value_thresholds[[pvt]])
+        vline_thresholds[[paste(params$meta$params$differential_fc_column, "<=", log2(params$meta$params$differential_min_fold_change))]] <- -log2(params$meta$params$differential_min_fold_change)
+        vline_thresholds[[paste(params$meta$params$differential_fc_column, ">=", log2(params$meta$params$differential_min_fold_change))]] <- log2(params$meta$params$differential_min_fold_change)
         palette_volcano <- append(c("#999999"), makeColorScale(3, params$meta$params$differential_palette_name)) # set non-significant to gray
 
         plot_args <- list(
