@@ -41,7 +41,7 @@
 
   exploratory_assay_names: raw,normalised
   exploratory_final_assay: normalised
-  exploratory_log2_assays: raw,normalised
+  exploratory_log2_assays: raw
 
   differential_file_suffix: ".limma.results.tsv"
   differential_fc_column: logFC
@@ -63,10 +63,11 @@
 - paramset_name: dream_rnaseq
   include: paramsheet/rnaseq
   differential_method: dream
+  dream_use_voom: true
 
   exploratory_assay_names: raw,normalised
   exploratory_final_assay: normalised
-  exploratory_log2_assays: raw,normalised
+  exploratory_log2_assays: raw
 
   differential_file_suffix: ".dream.results.tsv"
   differential_fc_column: logFC
