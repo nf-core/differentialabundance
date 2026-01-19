@@ -539,6 +539,7 @@ if (!is.null(params$filtering_tests)) {
 
             total_features <- nrow(test_values)
 
+            # treat NA as not passing (otherwise all() can return NA)
             pass_all <- apply(test_values, 1, function(r) {
                 r[is.na(r)] <- FALSE
                 all(r)
@@ -562,55 +563,6 @@ if (!is.null(params$filtering_tests)) {
             )
             rule_display <- ifelse(test_cols %in% names(rule_labels), rule_labels[test_cols], test_cols)
 
-            n_samples <- nrow(observations)
-
-            # minimum_samples (can be overridden by grouping_var or proportion, like the script)
-            min_samples_abundance <- params$meta$params$filtering_min_samples
-            if (is.null(min_samples_abundance)) min_samples_abundance <- 1
-
-            if (!is.null(params$meta$params$filtering_grouping_var) &&
-                params$meta$params$filtering_grouping_var %in% colnames(observations)) {
-
-                gv <- params$meta$params$filtering_grouping_var
-                min_samples_abundance <- min(table(observations[[gv]]))
-
-                if (!is.null(params$meta$params$filtering_min_proportion) &&
-                    params$meta$params$filtering_min_proportion > 0) {
-                    min_samples_abundance <- min_samples_abundance * params$meta$params$filtering_min_proportion
-                }
-
-            } else if (!is.null(params$meta$params$filtering_min_proportion) &&
-                       params$meta$params$filtering_min_proportion > 0) {
-
-                min_samples_abundance <- n_samples * params$meta$params$filtering_min_proportion
-            }
-
-            min_samples_abundance <- ceiling(min_samples_abundance)
-
-            # minimum_samples_not_na (uses min_samples_not_na if given, else proportion_not_na)
-            min_samples_not_na <- params$meta$params$filtering_min_samples_not_na
-            if (is.null(min_samples_not_na)) {
-                prop_not_na <- params$meta$params$filtering_min_proportion_not_na
-                if (is.null(prop_not_na)) prop_not_na <- 0.5
-                min_samples_not_na <- n_samples * prop_not_na
-            }
-            min_samples_not_na <- ceiling(min_samples_not_na)
-
-            threshold_used <- sapply(test_cols, function(col) {
-                if (col == "abundance") {
-                    paste0(
-                        "abundance ≥ ", params$meta$params$filtering_min_abundance,
-                        " in ≥ ", min_samples_abundance, " samples"
-                    )
-                } else if (col == "na") {
-                    paste0("non-NA ≥ ", min_samples_not_na, " samples")
-                } else if (col == "most_variant_vectors") {
-                    paste0("top ", params$meta$params$filtering_most_variant_features, " most-variant")
-                } else {
-                    NA
-                }
-            })
-
             summary_table <- data.frame(
                 Metric  = c("Total features", "Retained after filtering", "Removed by filtering"),
                 Count   = c(total_features, retained_n, removed_n),
@@ -621,7 +573,6 @@ if (!is.null(params$filtering_tests)) {
 
             rule_table <- data.frame(
                 Rule = rule_display,
-                Threshold = threshold_used,
                 `Failed (any)` = failure_any,
                 `Failed (only this rule)` = failure_only,
                 check.names = FALSE
@@ -657,7 +608,6 @@ if (!is.null(params$filtering_tests)) {
         cat("Filtering statistics were requested, but the filtering tests file was missing or empty.\n")
     }
 }
-
 ```
 
 ## Exploratory analysis
