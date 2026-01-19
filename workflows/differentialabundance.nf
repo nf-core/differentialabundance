@@ -461,6 +461,7 @@ workflow DIFFERENTIALABUNDANCE {
 
     ch_filtered_matrix = prepareModuleOutput(CUSTOM_MATRIXFILTER.out.filtered, ch_paramsets)
     ch_filter_tests = prepareModuleOutput(CUSTOM_MATRIXFILTER.out.tests, ch_paramsets)
+    ch_filter_thresholds = prepareModuleOutput(CUSTOM_MATRIXFILTER.out.thresholds, ch_paramsets)
     // ========================================================================
     // Differential analysis
     // ========================================================================
@@ -883,6 +884,7 @@ workflow DIFFERENTIALABUNDANCE {
         .combine(ch_collated_versions)   // [versions file]
         .join(ch_all_matrices)           // [meta, samplesheet, features, [matrices]]
         .join(ch_filter_tests)           // [meta, filtering tests]
+        .join(ch_filter_thresholds)      // [meta, filtering thresholds]
         .join(ch_contrasts_sorted)       // [meta, contrast file]
         .join(ch_differential_grouped)   // [meta, [differential results and models]]
         .join(ch_functional_grouped, remainder: true) // [meta, [functional results]]
@@ -906,7 +908,7 @@ workflow DIFFERENTIALABUNDANCE {
             def paramset = [paramset_name: meta.paramset_name] + meta.params.subMap('exploratory_assay_names') // flatten the map
             def report_file_names = ['logo','css','citations','versions_file','observations','features'] +
                 paramset.exploratory_assay_names.split(',').collect { "${it}_matrix".toString() } +
-                [ 'filtering_tests', 'contrasts_file' ]
+                [ 'filtering_tests', 'filtering_thresholds', 'contrasts_file' ]
             // Create a map from expected report file names to actual file names.
             // This is used to parameterize the report generation, ensuring each logical input (e.g. 'logo', 'css', assay matrices) is mapped to its corresponding file.
             [report_file_names, files.collect{ f -> f.name}].transpose().collectEntries()
