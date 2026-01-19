@@ -1046,6 +1046,7 @@ for (i in 1:nrow(contrasts)) {
         if (sum(de_fc_sig) > 0) {
             combined <- full_de %>%
             filter(de_fc_sig) %>%
+            select(-differential_status) %>%
             mutate(
                 Direction = if_else(
                     .data[[params$meta$params$differential_fc_column]] > 0,
