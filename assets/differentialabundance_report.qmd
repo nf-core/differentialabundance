@@ -1009,13 +1009,21 @@ for (i in 1:nrow(contrasts)) {
         vline_thresholds[[paste(params$meta$params$differential_fc_column, ">=", log2(params$meta$params$differential_min_fold_change))]] <- log2(params$meta$params$differential_min_fold_change)
         palette_volcano <- append(c("#999999"), makeColorScale(3, params$meta$params$differential_palette_name)) # set non-significant to gray
 
+        # label_col already set above (name col if available else id col)
+        hover_labels <- as.character(full_de[[label_col]])
+
+        # Fallback to ID where name is missing so all points get hover text
+        id_col <- params$meta$params$differential_feature_id_column
+        miss <- is.na(hover_labels) | hover_labels == ""
+        hover_labels[miss] <- as.character(full_de[[id_col]][miss])
+
         plot_args <- list(
             x = full_de[[params$meta$params$differential_fc_column]],
             y = -log10(full_de[[pval_column]]),
             colorby = full_de$differential_status,
             ylab = paste("-log(10)", pval_column),
-            xlab = xlabel <- paste("higher in", contrasts$reference[i], "<<", params$meta$params$differential_fc_column, ">>", "higher in", contrasts$target[i]),
-            labels = full_de[[label_col]],
+            xlab = xlabel <- paste("higher in", contrasts$reference[i], "          <<", params$meta$params$differential_fc_column, ">>           higher in", contrasts$target[i]),
+            labels = hover_labels,
             hline_thresholds = hline_thresholds,
             vline_thresholds = vline_thresholds,
             show_labels = FALSE,
