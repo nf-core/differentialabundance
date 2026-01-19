@@ -212,7 +212,7 @@
                     "type": "string",
                     "description": "Path to a paramsheet file",
                     "help_text": "A YAML file that defines 1+ nextflow config(s).",
-                    "pattern": "^\\S+\\.yaml$",
+                    "pattern": "^\\S+\\.(yaml|yml)$",
                     "format": "file-path",
                     "mimetype": "text/csv"
                 }
@@ -355,9 +355,12 @@
             "default": "",
             "properties": {
                 "filtering_min_abundance": {
-                    "type": "number",
-                    "default": 1,
-                    "description": "Minimum abundance value",
+                    "type": ["integer", "boolean"],
+                    "anyOf": [
+                        { "type": "integer", "default": 1 },
+                        { "type": "boolean", "const": false }
+                    ],
+                    "description": "Minimum abundance value. Set to false to disable abundance filtering.",
                     "fa_icon": "fas fa-compress-alt"
                 },
                 "filtering_min_samples": {

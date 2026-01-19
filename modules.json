@@ -27,7 +27,7 @@
                     },
                     "custom/matrixfilter": {
                         "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "git_sha": "04e555b3de9a6b5f4131df874edc101b7cb192e4",
                         "installed_by": ["modules"]
                     },
                     "custom/tabulartogseachip": {

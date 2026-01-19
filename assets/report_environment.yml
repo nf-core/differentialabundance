@@ -1,0 +1,14 @@
+name: differentialabundance-report
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - r-shinyngs=2.2.4
+  - jupyter=1.1.1
+  - matplotlib=3.10.3
+  - papermill=2.6.0
+  - quarto=1.7.31
+  - r-rmarkdown=2.29
+  - r-upsetr=1.4.0
+  - bioconductor-complexheatmap
