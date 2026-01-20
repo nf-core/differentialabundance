@@ -27,6 +27,7 @@ params:
     normalised_matrix: NULL
     variance_stabilised_matrix: NULL
     filtering_tests: NULL
+    filtering_thresholds: NULL
     contrasts_file: NULL
 
 ---
@@ -519,9 +520,8 @@ Input was a matrix of `{r} nrow(assay_data$raw)` `{r} params$meta$params$feature
 
 Filtering is applied to the input matrix according to the `--filtering_*` options, removing features that do not meet the specified criteria. This section summarizes the impact of each filtering rule, reporting how many genes were excluded per rule and how many passed all filters.
 
-```{r, echo=FALSE, results='asis'}
+```{r, echo=FALSE}
 #| echo: false
-#| results: asis
 
 tests_path <- file.path(params$input_dir, params$filtering_tests)
 thresholds_path <- file.path(params$input_dir, params$filtering_thresholds)
@@ -549,10 +549,11 @@ failure_count <- failures |>
   mutate(n = rowSums(across(everything(), as.integer))) |>
   pull(n)
 
-thresholds <- if (file.exists(thresholds_path) && file.size(thresholds_path) > 0)
+thresholds <- if (file.exists(thresholds_path) && file.size(thresholds_path) > 0) {
   readr::read_tsv(thresholds_path, show_col_types = FALSE)
-else
+} else {
   tibble(rule = character(), threshold = numeric())
+}
 
 rule_map <- tibble(
   column = names(test_results),
@@ -576,7 +577,7 @@ datatable(
   caption = "Filtering summary",
   rownames = FALSE,
   options = list(dom = "t")
-) |> print()
+) 
 
 cat("\n")
 
@@ -602,7 +603,7 @@ datatable(
   caption = "Filtering rule breakdown (counts may overlap)",
   rownames = FALSE,
   options = list(dom = "t")
-) |> print()
+) 
 
 ```
 
