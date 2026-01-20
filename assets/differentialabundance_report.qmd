@@ -41,6 +41,7 @@ library(shinyngs)
 library(plotly)
 library(DT)
 library(UpSetR)
+library(tidyverse)
 ```
 
 <!-- Define some functions -->
@@ -516,98 +517,93 @@ Input was a matrix of `{r} nrow(assay_data$raw)` `{r} params$meta$params$feature
 
 ### Filtering statistics
 
+Filtering is applied to the input matrix according to the `--filtering_*` options, removing features that do not meet the specified criteria. This section summarizes the impact of each filtering rule, reporting how many genes were excluded per rule and how many passed all filters.
+
 ```{r, echo=FALSE, results='asis'}
 #| echo: false
 #| results: asis
 
-if (!is.null(params$filtering_tests)) {
-    filtering_tests_path <- file.path(params$input_dir, params$filtering_tests)
+tests_path <- file.path(params$input_dir, params$filtering_tests)
+thresholds_path <- file.path(params$input_dir, params$filtering_thresholds)
 
-    if (file.exists(filtering_tests_path) && file.size(filtering_tests_path) > 0) {
-        filtering_tests <- read_metadata(filtering_tests_path)
+tests <- readr::read_tsv(tests_path, show_col_types = FALSE)
 
-        if (nrow(filtering_tests) > 0 && ncol(filtering_tests) > 1) {
-           test_cols <- colnames(filtering_tests)[-1]
+test_results <- tests |>
+  select(-1) |>
+  mutate(across(everything(), ~ as.logical(na_if(trimws(as.character(.x)), ""))))
 
-            test_values <- filtering_tests[, test_cols, drop = FALSE]
-            test_values <- data.frame(lapply(test_values, function(x) {
-                if (is.logical(x)) return(x)
-                x <- trimws(as.character(x))
-                x[x == ""] <- NA_character_
-                as.logical(x)
-            }), check.names = FALSE)
+total_features <- nrow(test_results)
 
-            total_features <- nrow(test_values)
+passed_all <- test_results |>
+  mutate(across(everything(), ~ replace_na(.x, FALSE))) |>
+  mutate(pass = rowSums(across(everything(), as.integer)) == ncol(test_results)) |>
+  pull(pass)
 
-            # treat NA as not passing (otherwise all() can return NA)
-            pass_all <- apply(test_values, 1, function(r) {
-                r[is.na(r)] <- FALSE
-                all(r)
-            })
+retained <- sum(passed_all)
+removed  <- total_features - retained
 
-            retained_n <- sum(pass_all)
-            removed_n  <- total_features - retained_n
+failures <- test_results |>
+  mutate(across(everything(), ~ .x %in% FALSE))
 
-            failure_matrix <- data.frame(!test_values, check.names = FALSE)
-            failure_matrix[is.na(failure_matrix)] <- FALSE
+failure_count <- failures |>
+  mutate(n = rowSums(across(everything(), as.integer))) |>
+  pull(n)
 
-            failure_any <- colSums(failure_matrix)
-            failure_only <- sapply(test_cols, function(col) {
-                sum(failure_matrix[, col] & rowSums(failure_matrix) == 1)
-            })
+thresholds <- if (file.exists(thresholds_path) && file.size(thresholds_path) > 0)
+  readr::read_tsv(thresholds_path, show_col_types = FALSE)
+else
+  tibble(rule = character(), threshold = numeric())
 
-            rule_labels <- c(
-                abundance = "Minimum abundance threshold",
-                na = "Minimum non-NA samples",
-                most_variant_vectors = "Top most variant features"
-            )
-            rule_display <- ifelse(test_cols %in% names(rule_labels), rule_labels[test_cols], test_cols)
+rule_map <- tibble(
+  column = names(test_results),
+  rule = recode(
+    names(test_results),
+    abundance = "minimum_abundance",
+    na = "minimum_samples_not_na",
+    most_variant_vectors = "most_variant_features",
+    .default = NA_character_
+  )
+)
 
-            summary_table <- data.frame(
-                Metric  = c("Total features", "Retained after filtering", "Removed by filtering"),
-                Count   = c(total_features, retained_n, removed_n),
-                Percent = c(100, retained_n / total_features * 100, removed_n / total_features * 100)
-            )
+cat("The following tables summarize retention and filtering failures.\n\n")
 
-            summary_table <- round_dataframe_columns(summary_table, digits = params$meta$params$round_digits)
+datatable(
+  tibble(
+    Metric  = c("Total features", "Retained after filtering", "Removed by filtering"),
+    Count   = c(total_features, retained, removed),
+    Percent = c(100, 100 * retained / total_features, 100 * removed / total_features)
+  ),
+  caption = "Filtering summary",
+  rownames = FALSE,
+  options = list(dom = "t")
+) |> print()
 
-            rule_table <- data.frame(
-                Rule = rule_display,
-                `Failed (any)` = failure_any,
-                `Failed (only this rule)` = failure_only,
-                check.names = FALSE
-            )
+cat("\n")
 
-            cat("The following tables summarize how many features were retained or removed and which filtering rules caused failures.\n\n")
+datatable(
+  tibble(
+    column = names(failures),
+    `Failed (any)` = colSums(failures),
+    `Failed (only this rule)` = colSums(failures & (failure_count == 1))
+  ) |>
+    left_join(rule_map, by = "column") |>
+    left_join(thresholds, by = "rule") |>
+    mutate(
+      Rule = recode(
+        column,
+        abundance = "Minimum abundance threshold",
+        na = "Minimum non-NA samples",
+        most_variant_vectors = "Top most variant features",
+        .default = column
+      ),
+      Threshold = threshold
+    ) |>
+    select(Rule, Threshold, `Failed (any)`, `Failed (only this rule)`),
+  caption = "Filtering rule breakdown (counts may overlap)",
+  rownames = FALSE,
+  options = list(dom = "t")
+) |> print()
 
-            print(htmltools::tagList(
-            datatable(
-                summary_table,
-                caption = "Filtering summary",
-                rownames = FALSE,
-                options = list(dom = "t")
-            )
-            ))
-
-            cat("\n")
-
-            print(htmltools::tagList(
-            datatable(
-                rule_table,
-                caption = "Filtering rule breakdown (counts may overlap)",
-                rownames = FALSE,
-                options = list(dom = "t")
-            )
-            ))
-
-
-        } else {
-            cat("Filtering statistics were requested, but no test columns were found in the filtering tests file.\n")
-        }
-    } else {
-        cat("Filtering statistics were requested, but the filtering tests file was missing or empty.\n")
-    }
-}
 ```
 
 ## Exploratory analysis
