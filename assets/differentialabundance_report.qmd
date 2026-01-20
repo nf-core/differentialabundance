@@ -40,6 +40,7 @@ library(shinyngs)
 library(plotly)
 library(DT)
 library(ComplexHeatmap)
+library(UpSetR)
 ```
 
 <!-- Define some functions -->
@@ -291,7 +292,7 @@ if (is.null(differential_file_suffix)) {
 differential_files <- lapply(contrasts$id, function(d) {
     file.path(params$input_dir, paste0(gsub(" |;", "_", d), differential_file_suffix))
 })
-differential_names <- paste0(contrasts$id, "_", params$meta$params$study_name)
+differential_names <- paste0(contrasts$id)
 
 # Initialize vector to store warning messages before merging tables
 warnings_list <- c()
@@ -915,6 +916,9 @@ cat(paste0(
 ```{r, echo=FALSE, results='asis', warning=FALSE}
 #| echo: false
 #| results: asis
+#| output: asis
+#| warning: false
+#| message: false
 
 cat("::: {.panel-tabset}")
 
@@ -922,9 +926,44 @@ foo <- lapply(names(p_value_types), function(pvt) {
     cat("\n#### ", pvt, "\n")
     print(htmltools::tagList(datatable(differential_tables[[pvt]], caption = paste0("Differential ", params$meta$params$features_type, " ", params$meta$params$abundance_type, " (target relative to reference)"), options = list(dom = "t"), rownames = TRUE)))
     cat("\n")
+
+    if (nrow(contrasts) > 1) {
+        cat("\n### Upset plot\n\n")
+
+        de_genes <- lapply(differential_results, function(de) {
+
+            # Determine which column to use for labels
+            if (!is.null(params$meta$params$features) &&
+                !is.null(params$meta$params$differential_feature_name_column) &&
+                (params$meta$params$differential_feature_name_column %in% colnames(differential_results[[1]]))) {
+                label_col <- params$meta$params$differential_feature_name_column
+            } else {
+                label_col <- params$meta$params$differential_feature_id_column
+            }
+
+            sig <- de[!is.na(de[[label_col]]) &
+                !is.na(de[[p_value_types[[pvt]]]]) &
+                abs(de[[params$meta$params$differential_fc_column]]) > log2(params$meta$params$differential_min_fold_change) &
+                de[[p_value_types[[pvt]]]] < p_value_thresholds[[pvt]], ]
+            return(sig[[label_col]])
+        })
+
+        names(de_genes) <- names(differential_results)
+
+        # Only plot if there are at least two contrasts with DE genes
+        de_con <- sum(!is.na(sapply(de_genes, function(x) x[2])))
+        if (de_con > 1) {
+            suppressWarnings(suppressMessages({
+                p <- upset(fromList(de_genes))
+                print(p)
+            }))
+        }
+
+        cat("\n\n")
+    }
 })
 
-cat(":::")
+cat("\n:::\n\n")
 ```
 
 ```{r, echo=FALSE, results='asis', eval = FALSE}
@@ -1012,13 +1051,21 @@ for (i in 1:nrow(contrasts)) {
 
         palette_volcano <- append(c("#999999"), makeColorScale(3, params$meta$params$differential_palette_name)) # set non-significant to gray
 
+        # label_col already set above (name col if available else id col)
+        hover_labels <- as.character(full_de[[label_col]])
+
+        # Fallback to ID where name is missing so all points get hover text
+        id_col <- params$meta$params$differential_feature_id_column
+        miss <- is.na(hover_labels) | hover_labels == ""
+        hover_labels[miss] <- as.character(full_de[[id_col]][miss])
+
         plot_args <- list(
             x = full_de[[params$meta$params$differential_fc_column]],
             y = -log10(full_de[[pval_column]]),
             colorby = full_de$differential_status,
             ylab = paste("-log(10)", pval_column),
             xlab = xlabel <- paste("higher in", contrasts$reference[i], "          <<", params$meta$params$differential_fc_column, ">>           higher in", contrasts$target[i]),
-            labels = full_de[[label_col]],
+            labels = hover_labels,
             hline_thresholds = hline_thresholds,
             vline_thresholds = vline_thresholds,
             show_labels = FALSE,
