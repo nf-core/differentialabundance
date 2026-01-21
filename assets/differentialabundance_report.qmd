@@ -577,7 +577,7 @@ datatable(
   caption = "Filtering summary",
   rownames = FALSE,
   options = list(dom = "t")
-) 
+)
 
 cat("\n")
 
@@ -603,7 +603,7 @@ datatable(
   caption = "Filtering rule breakdown (counts may overlap)",
   rownames = FALSE,
   options = list(dom = "t")
-) 
+)
 
 ```
 
