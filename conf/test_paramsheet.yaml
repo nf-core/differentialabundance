@@ -334,7 +334,7 @@
   round_digits: 3
 
 - paramset_name: dream_rnaseq2
-  include: paramsheet/dream_rnaseq,testdata/rnaseq_testdata_complex2
+  include: paramsheet/dream_rnaseq2,testdata/rnaseq_testdata_complex2
 
   # Filtering
   filtering_min_abundance: 10
