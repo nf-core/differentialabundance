@@ -671,7 +671,7 @@ workflow DIFFERENTIALABUNDANCE {
 
     ch_exploratory_input = ch_contrast_variables         // [meta, variable]
         .combine(ch_all_matrices, by:0)                  // [meta, samples, features, [matrices]]
-        .filter { meta, variable, samples, features, matrices -> samples.countLines() < 500 }
+        .filter { meta, variable, samples, features, matrices -> samples.countLines() < 175 }
         .map { meta, variable, samples, features, matrices ->
             // we need to add variable info into meta, otherwise the channel will have the same meta no
             // matter the variable information and prepareModuleInput will group them together.
