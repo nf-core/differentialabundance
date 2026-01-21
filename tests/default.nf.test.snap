@@ -33,7 +33,7 @@
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "IMMUNEDECONV": {
                     "r-immunedeconv": "2.1.0"
@@ -206,10 +206,10 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.0",
+            "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-12-29T22:01:55.169009191"
+        "timestamp": "2026-01-20T18:48:49.466307004"
     },
     "Test profile": {
         "content": [
@@ -245,7 +245,7 @@
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "IMMUNEDECONV": {
                     "r-immunedeconv": "2.1.0"
@@ -421,7 +421,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-12-03T18:16:06.603292725"
+        "timestamp": "2026-01-20T18:36:48.325171354"
     },
     "Test profile - csv contrasts": {
         "content": [
@@ -457,7 +457,7 @@
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "IMMUNEDECONV": {
                     "r-immunedeconv": "2.1.0"
@@ -633,7 +633,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-12-03T18:19:06.91649866"
+        "timestamp": "2026-01-20T18:39:54.343340132"
     },
     "Test profile - with formula": {
         "content": [
@@ -656,13 +656,13 @@
                 "GPROFILER2_GOST\"": {
                     "r-ggplot2": "3.4.3",
                     "r-gprofiler2": "0.2.2",
-                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '113'\ndisplay_name: Mouse\ngenebuild: GRCm39\ngprofiler_version: e113_eg59_p19_6ece67f5\norganism: mmusculus\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 05.2025\n      classes: None\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2024-01-22\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2025-5-23\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2024.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20250510'\ntaxonomy_id: '10090'\n"
+                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '113'\ndisplay_name: Mouse\ngenebuild: GRCm39\ngprofiler_version: e113_eg59_p19_6be52918\norganism: mmusculus\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 05.2025\n      classes: None\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2024-01-22\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2025-5-23\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2024.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20250510'\ntaxonomy_id: '10090'\n"
                 },
                 "GTF_TO_TABLE": {
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "PLOT_DIFFERENTIAL": {
                     "r-shinyngs": "2.3.0"
@@ -839,7 +839,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2026-01-14T15:52:45.71801637"
+        "timestamp": "2026-01-20T18:42:58.476322758"
     },
     "Test profile - multiple reports - csv contrasts": {
         "content": [
@@ -875,7 +875,7 @@
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "IMMUNEDECONV": {
                     "r-immunedeconv": "2.1.0"
@@ -1052,6 +1052,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-12-03T18:25:36.648446479"
+        "timestamp": "2026-01-20T18:45:46.721521113"
     }
 }

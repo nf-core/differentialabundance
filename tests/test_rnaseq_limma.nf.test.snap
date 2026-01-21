@@ -15,7 +15,7 @@
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "LIMMA_DIFFERENTIAL": {
                     "r-base": "4.3.3",
@@ -128,9 +128,9 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.04.2"
         },
-        "timestamp": "2025-12-10T15:38:56.633605671"
+        "timestamp": "2026-01-20T20:04:06.949539939"
     },
     "Test rnaseq limma profile - limma_rnaseq_gsea - Numeric sample IDs": {
         "content": [
@@ -158,7 +158,7 @@
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "LIMMA_DIFFERENTIAL": {
                     "r-base": "4.3.3",
@@ -319,7 +319,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2026-01-02T13:52:55.326782526"
+        "timestamp": "2026-01-20T20:06:45.668939922"
     },
     "Test rnaseq limma profile - limma_rnaseq_gsea": {
         "content": [
@@ -347,7 +347,7 @@
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "LIMMA_DIFFERENTIAL": {
                     "r-base": "4.3.3",
@@ -508,7 +508,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-12-03T19:06:50.667280945"
+        "timestamp": "2026-01-20T19:52:05.448784587"
     },
     "Test rnaseq limma profile - limma_rnaseq_gsea - with formula and complex contrasts": {
         "content": [
@@ -536,7 +536,7 @@
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "LIMMA_DIFFERENTIAL": {
                     "r-base": "4.3.3",
@@ -905,7 +905,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-12-03T19:13:50.868967618"
+        "timestamp": "2026-01-20T20:00:06.074782811"
     },
     "Test rnaseq limma profile - limma_rnaseq_gsea,limma_rnaseq_gprofiler2": {
         "content": [
@@ -929,7 +929,7 @@
                 "GPROFILER2_GOST\"": {
                     "r-ggplot2": "3.4.3",
                     "r-gprofiler2": "0.2.2",
-                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '113'\ndisplay_name: Mouse\ngenebuild: GRCm39\ngprofiler_version: e113_eg59_p19_6ece67f5\norganism: mmusculus\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 05.2025\n      classes: None\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2024-01-22\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2025-5-23\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2024.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20250510'\ntaxonomy_id: '10090'\n"
+                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '113'\ndisplay_name: Mouse\ngenebuild: GRCm39\ngprofiler_version: e113_eg59_p19_6be52918\norganism: mmusculus\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 05.2025\n      classes: None\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2024-01-22\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2025-5-23\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2024.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20250510'\ntaxonomy_id: '10090'\n"
                 },
                 "GSEA_GSEA": {
                     "gsea": "4.3.2"
@@ -938,7 +938,7 @@
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "LIMMA_DIFFERENTIAL": {
                     "r-base": "4.3.3",
@@ -1136,6 +1136,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2026-01-12T20:40:55.651336448"
+        "timestamp": "2026-01-20T19:55:18.922342163"
     }
 }
