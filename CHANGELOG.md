@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- [[#614](https://github.com/nf-core/differentialabundance/pull/614)] - Report filtered QC stats ([@atrigila](https://github.com/atrigila), review by  [@grst](https://github.com/grst)).
 - [[#595](https://github.com/nf-core/differentialabundance/pull/595)] - Add overlap between contrasts as upset plot ([@delfiterradas](https://github.com/delfiterradas), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@grst](https://github.com/grst)).
 - [[#583](https://github.com/nf-core/differentialabundance/pull/582)] - Add option to disable abundance filtering ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst))
 - [[#581](https://github.com/nf-core/differentialabundance/pull/581)] - Add pipeline-level nf-tests with numeric sample IDs ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila), [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
