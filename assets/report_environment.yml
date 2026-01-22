@@ -2,7 +2,6 @@ name: differentialabundance-report
 channels:
   - conda-forge
   - bioconda
-  - defaults
 dependencies:
   - r-shinyngs=2.2.4
   - jupyter=1.1.1
@@ -11,4 +10,5 @@ dependencies:
   - quarto=1.7.31
   - r-rmarkdown=2.29
   - r-upsetr=1.4.0
-  - bioconductor-complexheatmap
+  - bioconductor-complexheatmap=2.22.0
+  - r-tidyverse=2.0.0

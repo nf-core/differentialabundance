@@ -26,6 +26,8 @@ params:
     raw_matrix: NULL
     normalised_matrix: NULL
     variance_stabilised_matrix: NULL
+    filtering_tests: NULL
+    filtering_thresholds: NULL
     contrasts_file: NULL
 
 ---
@@ -40,6 +42,7 @@ library(shinyngs)
 library(plotly)
 library(DT)
 library(UpSetR)
+library(tidyverse)
 ```
 
 <!-- Define some functions -->
@@ -513,6 +516,97 @@ datatable(
 
 Input was a matrix of `{r} nrow(assay_data$raw)` `{r} params$meta$params$features_type`s for `{r} ncol(assay_data$raw)` `{r} params$meta$params$observations_type`s`{r} ifelse(nrow(assay_data$normalised) < nrow(assay_data$raw), paste0(', reduced to ', nrow(assay_data$normalised), ' ', params$meta$params$features_type, 's after filtering for low abundance'), '')`.
 
+### Filtering statistics
+
+Filtering is applied to the input matrix according to the `--filtering_*` options, removing features that do not meet the specified criteria. This section summarizes the impact of each filtering rule, reporting how many genes were excluded per rule and how many passed all filters.
+
+```{r, echo=FALSE}
+#| echo: false
+
+tests_path <- file.path(params$input_dir, params$filtering_tests)
+thresholds_path <- file.path(params$input_dir, params$filtering_thresholds)
+
+tests <- readr::read_tsv(tests_path, show_col_types = FALSE)
+
+test_results <- tests |>
+  select(-1) |>
+  mutate(across(everything(), ~ as.logical(na_if(trimws(as.character(.x)), ""))))
+
+total_features <- nrow(test_results)
+
+passed_all <- test_results |>
+  mutate(across(everything(), ~ replace_na(.x, FALSE))) |>
+  mutate(pass = rowSums(across(everything(), as.integer)) == ncol(test_results)) |>
+  pull(pass)
+
+retained <- sum(passed_all)
+removed  <- total_features - retained
+
+failures <- test_results |>
+  mutate(across(everything(), ~ .x %in% FALSE))
+
+failure_count <- failures |>
+  mutate(n = rowSums(across(everything(), as.integer))) |>
+  pull(n)
+
+thresholds <- if (file.exists(thresholds_path) && file.size(thresholds_path) > 0) {
+  readr::read_tsv(thresholds_path, show_col_types = FALSE)
+} else {
+  tibble(rule = character(), threshold = numeric())
+}
+
+rule_map <- tibble(
+  column = names(test_results),
+  rule = recode(
+    names(test_results),
+    abundance = "minimum_abundance",
+    na = "minimum_samples_not_na",
+    most_variant_vectors = "most_variant_features",
+    .default = NA_character_
+  )
+)
+
+cat("The following tables summarize retention and filtering failures.\n\n")
+
+datatable(
+  tibble(
+    Metric  = c("Total features", "Retained after filtering", "Removed by filtering"),
+    Count   = c(total_features, retained, removed),
+    Percent = c(100, 100 * retained / total_features, 100 * removed / total_features)
+  ),
+  caption = "Filtering summary",
+  rownames = FALSE,
+  options = list(dom = "t")
+)
+
+cat("\n")
+
+datatable(
+  tibble(
+    column = names(failures),
+    `Failed (any)` = colSums(failures),
+    `Failed (only this rule)` = colSums(failures & (failure_count == 1))
+  ) |>
+    left_join(rule_map, by = "column") |>
+    left_join(thresholds, by = "rule") |>
+    mutate(
+      Rule = recode(
+        column,
+        abundance = "Minimum abundance threshold",
+        na = "Minimum non-NA samples",
+        most_variant_vectors = "Top most variant features",
+        .default = column
+      ),
+      Threshold = threshold
+    ) |>
+    select(Rule, Threshold, `Failed (any)`, `Failed (only this rule)`),
+  caption = "Filtering rule breakdown (counts may overlap)",
+  rownames = FALSE,
+  options = list(dom = "t")
+)
+
+```
+
 ## Exploratory analysis
 
 ### Abundance value distributions
@@ -964,7 +1058,7 @@ for (i in 1:nrow(contrasts)) {
     # Get the full set of differential stats for this contrast, removing rows with
     # NAs in the fields we need.
     full_de <- differential_results[[i]]
-    full_de <- subset(full_de, (!is.na(full_de[[params$meta$params$differential_fc_column]])) & (!is.na(full_de[[params$meta$params$differential_qval_colum]])))
+    full_de <- subset(full_de, (!is.na(full_de[[params$meta$params$differential_fc_column]])) & (!is.na(full_de[[params$meta$params$differential_qval_column]])))
 
     # Label features with symbol as well as identifier
     if (!is.null(params$features) &&
