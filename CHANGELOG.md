@@ -56,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [[#619](https://github.com/nf-core/differentialabundance/pull/619/)] - Improve caching behaviour for processes using `VALIDATOR` outputs ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#615](https://github.com/nf-core/differentialabundance/pull/615/)] - Volcano plot now shows gene name when hovering over points, review by [@grst](https://github.com/grst).
 - [[#603](https://github.com/nf-core/differentialabundance/pull/603/)] - Update default parameters for limma and dream: use `voom` by default and treat corresponding normalised matrix as already log-transformed, review by [@pinin4fjords](https://github.com/pinin4fjords).
 - [[#581](https://github.com/nf-core/differentialabundance/pull/581)] - Update all modules and subworkflows, allowing differential analysis with numeric sample IDs ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila), [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
