@@ -26,6 +26,8 @@ params:
     raw_matrix: NULL
     normalised_matrix: NULL
     variance_stabilised_matrix: NULL
+    filtering_tests: NULL
+    filtering_thresholds: NULL
     contrasts_file: NULL
 
 ---
