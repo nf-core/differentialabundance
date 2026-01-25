@@ -1024,7 +1024,6 @@ for (i in 1:nrow(contrasts)) {
             ylab = paste("-log(10)", pval_column),
             xlab = xlabel <- paste("higher in", contrasts$reference[i], "          <<", params$meta$params$differential_fc_column, ">>           higher in", contrasts$target[i]),
             labels = hover_labels,
-            hline_thresholds = hline_thresholds,
             vline_thresholds = vline_thresholds,
             show_labels = FALSE,
             legend_title = "Differential status",
@@ -1043,7 +1042,17 @@ for (i in 1:nrow(contrasts)) {
         }
 
         p <- do.call(plotly_scatterplot, plot_args) %>%
-            layout(xaxis = list(range = list(-max_fc, max_fc)))
+            layout(xaxis = list(range = list(-max_fc, max_fc))) %>%
+            add_segments(
+                x = -max_fc, 
+                xend = max_fc,
+                y = -log10(p_value_thresholds[[pvt]]), 
+                yend = -log10(p_value_thresholds[[pvt]]),
+                line = list(color = "black", width = 2, dash = "dot"),
+                showlegend = TRUE,
+                inherit = FALSE,
+                name = paste(pval_column, "=", p_value_thresholds[[pvt]])
+            )
 
         print(htmltools::tagList(p))
 
