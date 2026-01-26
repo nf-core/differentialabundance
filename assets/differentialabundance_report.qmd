@@ -1184,9 +1184,9 @@ for (i in 1:nrow(contrasts)) {
         p <- do.call(plotly_scatterplot, plot_args) %>%
             layout(xaxis = list(range = list(-max_fc, max_fc))) %>%
             add_segments(
-                x = -max_fc, 
+                x = -max_fc,
                 xend = max_fc,
-                y = -log10(p_value_thresholds[[pvt]]), 
+                y = -log10(p_value_thresholds[[pvt]]),
                 yend = -log10(p_value_thresholds[[pvt]]),
                 line = list(color = "black", width = 2, dash = "dot"),
                 showlegend = TRUE,
