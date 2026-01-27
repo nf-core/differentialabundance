@@ -603,6 +603,8 @@ If `-profile` is not specified, the pipeline will run locally and expect all sof
   - A generic configuration profile to enable [Wave](https://seqera.io/wave/) containers. Use together with one of the above (requires Nextflow ` 24.03.0-edge` or later).
 - `conda`
   - A generic configuration profile to be used with [Conda](https://conda.io/docs/). Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity, Podman, Shifter, Charliecloud, or Apptainer.
+- `cache_default`
+  - The pipeline uses by default `cache = deep` for certain processes downstream `VALIDATOR`, which allows more efficient resuming by checking for input file content to be included in the cache keys. The profile `cache_default` provides users with a the default cache profile (`cache = true`) used in most Nextflow pipelines, in case the `deep` configuration causes issues. See the [Nextflow cache documentation](https://www.nextflow.io/docs/latest/reference/process.html#process-cache) for more information.
 
 ### `-resume`
 
