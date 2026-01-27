@@ -26,6 +26,8 @@ params:
     raw_matrix: NULL
     normalised_matrix: NULL
     variance_stabilised_matrix: NULL
+    filtering_tests: NULL
+    filtering_thresholds: NULL
     contrasts_file: NULL
 
 ---
@@ -39,11 +41,13 @@ library(yaml)
 library(shinyngs)
 library(plotly)
 library(DT)
-
 library(ggplot2)
 library(dplyr)
 library(tidyr)
 library(ggbeeswarm)
+library(ComplexHeatmap)
+library(UpSetR)
+library(tidyverse)
 ```
 
 <!-- Define some functions -->
@@ -295,7 +299,7 @@ if (is.null(differential_file_suffix)) {
 differential_files <- lapply(contrasts$id, function(d) {
     file.path(params$input_dir, paste0(gsub(" |;", "_", d), differential_file_suffix))
 })
-differential_names <- paste0(contrasts$id, "_", params$meta$params$study_name)
+differential_names <- paste0(contrasts$id)
 
 # Initialize vector to store warning messages before merging tables
 warnings_list <- c()
@@ -516,6 +520,97 @@ datatable(
 ## Counts
 
 Input was a matrix of `{r} nrow(assay_data$raw)` `{r} params$meta$params$features_type`s for `{r} ncol(assay_data$raw)` `{r} params$meta$params$observations_type`s`{r} ifelse(nrow(assay_data$normalised) < nrow(assay_data$raw), paste0(', reduced to ', nrow(assay_data$normalised), ' ', params$meta$params$features_type, 's after filtering for low abundance'), '')`.
+
+### Filtering statistics
+
+Filtering is applied to the input matrix according to the `--filtering_*` options, removing features that do not meet the specified criteria. This section summarizes the impact of each filtering rule, reporting how many genes were excluded per rule and how many passed all filters.
+
+```{r, echo=FALSE}
+#| echo: false
+
+tests_path <- file.path(params$input_dir, params$filtering_tests)
+thresholds_path <- file.path(params$input_dir, params$filtering_thresholds)
+
+tests <- readr::read_tsv(tests_path, show_col_types = FALSE)
+
+test_results <- tests |>
+  select(-1) |>
+  mutate(across(everything(), ~ as.logical(na_if(trimws(as.character(.x)), ""))))
+
+total_features <- nrow(test_results)
+
+passed_all <- test_results |>
+  mutate(across(everything(), ~ replace_na(.x, FALSE))) |>
+  mutate(pass = rowSums(across(everything(), as.integer)) == ncol(test_results)) |>
+  pull(pass)
+
+retained <- sum(passed_all)
+removed  <- total_features - retained
+
+failures <- test_results |>
+  mutate(across(everything(), ~ .x %in% FALSE))
+
+failure_count <- failures |>
+  mutate(n = rowSums(across(everything(), as.integer))) |>
+  pull(n)
+
+thresholds <- if (file.exists(thresholds_path) && file.size(thresholds_path) > 0) {
+  readr::read_tsv(thresholds_path, show_col_types = FALSE)
+} else {
+  tibble(rule = character(), threshold = numeric())
+}
+
+rule_map <- tibble(
+  column = names(test_results),
+  rule = recode(
+    names(test_results),
+    abundance = "minimum_abundance",
+    na = "minimum_samples_not_na",
+    most_variant_vectors = "most_variant_features",
+    .default = NA_character_
+  )
+)
+
+cat("The following tables summarize retention and filtering failures.\n\n")
+
+datatable(
+  tibble(
+    Metric  = c("Total features", "Retained after filtering", "Removed by filtering"),
+    Count   = c(total_features, retained, removed),
+    Percent = c(100, 100 * retained / total_features, 100 * removed / total_features)
+  ),
+  caption = "Filtering summary",
+  rownames = FALSE,
+  options = list(dom = "t")
+)
+
+cat("\n")
+
+datatable(
+  tibble(
+    column = names(failures),
+    `Failed (any)` = colSums(failures),
+    `Failed (only this rule)` = colSums(failures & (failure_count == 1))
+  ) |>
+    left_join(rule_map, by = "column") |>
+    left_join(thresholds, by = "rule") |>
+    mutate(
+      Rule = recode(
+        column,
+        abundance = "Minimum abundance threshold",
+        na = "Minimum non-NA samples",
+        most_variant_vectors = "Top most variant features",
+        .default = column
+      ),
+      Threshold = threshold
+    ) |>
+    select(Rule, Threshold, `Failed (any)`, `Failed (only this rule)`),
+  caption = "Filtering rule breakdown (counts may overlap)",
+  rownames = FALSE,
+  options = list(dom = "t")
+)
+
+```
 
 ## Exploratory analysis
 
@@ -770,40 +865,85 @@ for (variable in rownames(pca_vs_meta)) {
 }
 ```
 
-#### Clustering dendrograms
+#### Clustering heatmaps
 
 A hierarchical clustering of `{r} params$meta$params$features_type`s was undertaken based on `{r} ifelse(params$meta$params$exploratory_n_features == -1, paste0("all ", params$meta$params$features_type), paste0("the ", params$meta$params$exploratory_n_features, " most variable ", params$meta$params$features_type))`s. Distances between `r params$meta$params$features_type`s were estimated based on `{r} params$meta$params$exploratory_cor_method` correlation, which were then used to produce a clustering via the `{r} params$meta$params$exploratory_clustering_method` method with `hclust()` in R.
 
 ::: {.panel-tabset}
-```{r, echo=FALSE, results='asis'}
+```{r}
 #| echo: false
 #| results: asis
+#| warning: false
+#| message: false
+#| fig-height: 14
+#| fig-width: 8
 for (assay_type in rev(names(assay_data))) {
-    for (iv in informative_variables) {
-        cat(paste0("\n##### ", prettifyVariablename(assay_type), " (", iv, ")\n"))
-        variable_genes <- selectVariableGenes(matrix = assay_data[[assay_type]], ntop = ifelse(params$meta$params$exploratory_n_features == -1, nrow(assay_data[[assay_type]]), params$meta$params$exploratory_n_features))
+    cat(paste0("\n##### ", prettifyVariablename(assay_type), "\n"))
 
-        dendroColorScale <- makeColorScale(length(unique(observations[[iv]])), palette = params$meta$params$exploratory_palette_name)
-        p <- clusteringDendrogram(
-            2^assay_data[[assay_type]][variable_genes, ],
-            observations[, iv, drop = FALSE],
-            colorby = iv,
-            cor_method = params$meta$params$exploratory_cor_method,
-            plot_title = paste0(
-                paste0(params$meta$params$observations_type, " clustering dendrogram, "),
-                ifelse(params$meta$params$exploratory_n_features == -1, nrow(assay_data[[assay_type]]), paste0(params$meta$params$exploratory_n_features, " most variable")), " ",
-                params$meta$params$features_type,
-                "s\n(", params$meta$params$exploratory_clustering_method, " clustering, ", params$meta$params$exploratory_cor_method, " correlation)"
-            ),
-            cluster_method = params$meta$params$exploratory_clustering_method,
-            palette = dendroColorScale,
-            labelspace = 0.55
-        )
-        # Defaults in shinyngs make the text in this plot a bit big for the report, so
-        # scale it down a bit
-        print(p, vp = grid::viewport(gp = grid::gpar(cex = 0.7)))
-        cat("\n")
+    variable_genes <- selectVariableGenes(matrix = assay_data[[assay_type]], ntop = ifelse(params$meta$params$exploratory_n_features == -1, nrow(assay_data[[assay_type]]), params$meta$params$exploratory_n_features))
+    ann_colors <- list()
+    annotation_variables <- c()
+
+    for (iv in informative_variables) {
+         # Keep columns with no more than 10 levels
+        if (length(unique(observations[[iv]])) <= 10) {
+            annotation_variables <- c(annotation_variables, iv)
+            if (is.numeric(observations[[iv]])) {
+                ann_colors[[iv]] <- circlize::colorRamp2(
+                    c(min(observations[[iv]], na.rm = TRUE), max(observations[[iv]], na.rm = TRUE)),
+                    c("blue", "red")
+                )
+            } else {
+                vals <- unique(na.omit(as.character(observations[[iv]])))
+                dendroColorScale <- makeColorScale(length(vals), palette = params$meta$params$exploratory_palette_name)
+
+                # ensure the length matches number of categories
+                dendroColorScale <- rep(dendroColorScale, length.out = length(vals))
+
+                # assign names matching the category labels
+                names(dendroColorScale) <- sort(vals)
+                ann_colors[[iv]] <- dendroColorScale
+            }
+        }
     }
+
+    # Construct HeatmapAnnotation
+    ha <- HeatmapAnnotation(
+        df = observations[, informative_variables, drop = FALSE],
+        annotation_name_side = "left",
+        col = ann_colors
+    )
+
+    heat_mat <- assay_data[[assay_type]][variable_genes, ]
+    p <- Heatmap(
+        heat_mat,
+        name = "Expression",
+        top_annotation = ha,
+        show_row_names = FALSE,
+        show_column_names = ifelse(length(colnames(heat_mat)) < 20, TRUE, FALSE),
+        clustering_method_columns = params$meta$params$exploratory_clustering_method,
+        cluster_rows = FALSE,
+        clustering_distance_columns = params$meta$params$exploratory_cor_method,
+        column_dend_height = grid::unit(35, "mm"),
+        column_title = paste0(
+            params$meta$params$observations_type, " clustering heatmap\n(",
+            params$meta$params$exploratory_clustering_method, " clustering, ",
+            params$meta$params$exploratory_cor_method, " correlation)"
+        ),
+        column_names_gp = grid::gpar(fontsize = 8),
+        column_names_rot = 45,
+        col = circlize::colorRamp2(
+            c(min(heat_mat), 0, max(heat_mat)),
+            c("blue", "white", "red")
+        ),
+        heatmap_legend_param = list(
+            direction = "horizontal",
+            title_position = "lefttop"
+        )
+    )
+
+    draw(p, heatmap_legend_side = "bottom", annotation_legend_side = "right", legend_grouping = "original")
+    cat("\n\n")
 }
 cat(":::")
 ```
@@ -874,6 +1014,9 @@ cat(paste0(
 ```{r, echo=FALSE, results='asis', warning=FALSE}
 #| echo: false
 #| results: asis
+#| output: asis
+#| warning: false
+#| message: false
 
 cat("::: {.panel-tabset}")
 
@@ -881,9 +1024,44 @@ foo <- lapply(names(p_value_types), function(pvt) {
     cat("\n#### ", pvt, "\n")
     print(htmltools::tagList(datatable(differential_tables[[pvt]], caption = paste0("Differential ", params$meta$params$features_type, " ", params$meta$params$abundance_type, " (target relative to reference)"), options = list(dom = "t"), rownames = TRUE)))
     cat("\n")
+
+    if (nrow(contrasts) > 1) {
+        cat("\n### Upset plot\n\n")
+
+        de_genes <- lapply(differential_results, function(de) {
+
+            # Determine which column to use for labels
+            if (!is.null(params$meta$params$features) &&
+                !is.null(params$meta$params$differential_feature_name_column) &&
+                (params$meta$params$differential_feature_name_column %in% colnames(differential_results[[1]]))) {
+                label_col <- params$meta$params$differential_feature_name_column
+            } else {
+                label_col <- params$meta$params$differential_feature_id_column
+            }
+
+            sig <- de[!is.na(de[[label_col]]) &
+                !is.na(de[[p_value_types[[pvt]]]]) &
+                abs(de[[params$meta$params$differential_fc_column]]) > log2(params$meta$params$differential_min_fold_change) &
+                de[[p_value_types[[pvt]]]] < p_value_thresholds[[pvt]], ]
+            return(sig[[label_col]])
+        })
+
+        names(de_genes) <- names(differential_results)
+
+        # Only plot if there are at least two contrasts with DE genes
+        de_con <- sum(!is.na(sapply(de_genes, function(x) x[2])))
+        if (de_con > 1) {
+            suppressWarnings(suppressMessages({
+                p <- upset(fromList(de_genes))
+                print(p)
+            }))
+        }
+
+        cat("\n\n")
+    }
 })
 
-cat(":::")
+cat("\n:::\n\n")
 ```
 
 ```{r, echo=FALSE, results='asis', eval = FALSE}
