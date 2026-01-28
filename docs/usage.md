@@ -252,7 +252,7 @@ To run the pipeline with a specific config, you can use the `--paramset_name` pa
 You can also run multiple configs in parallel by providing a comma-separated list of config names. For example, `--paramset_name deseq2_rnaseq_gprofiler2,deseq2_rnaseq_gsea`.
 
 > [!WARNING]
-> Note that the arguments defined in the paramsheet have highest priority, meaning that they will overwrite any other arguments defined in the command line or in the configuration files. In other words, the priority of the parameters will follow this order: paramsheet > command line flags > nextflow configuration file
+> Note that command line arguments and parameters from `-params-file` now have the highest priority, followed by paramsheet parameters. This allows you to override specific paramsheet settings via the command line. In other words, the priority of the parameters follows this order: **command line flags / -params-file > paramsheet > nextflow configuration file**
 
 ### 1. Default paramsheet
 
