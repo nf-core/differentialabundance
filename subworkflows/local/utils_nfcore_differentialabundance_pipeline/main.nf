@@ -339,6 +339,12 @@ def methodsDescriptionText(mqc_methods_yaml) {
 
 // Get CLI parameters (from command line or -params-file)
 // These should have the highest priority
+//
+// IMPORTANT: This function accesses nextflow.Global.session.cliParams, which is
+// an internal Nextflow API that is not officially documented. While this approach
+// works with current Nextflow versions and includes a fallback mechanism, it may
+// change in future Nextflow versions. If this breaks, consider alternative approaches
+// such as parsing workflow.commandLine or using a null-based detection strategy.
 def getCliParams() {
     try {
         // Access CLI params from Nextflow's global session
