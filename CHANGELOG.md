@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Parameter priority updated to allow command line flags and `-params-file` to override paramsheet parameters. New priority order: command line flags / -params-file > paramsheet > nextflow.config defaults. ([@suzannejin](https://github.com/suzannejin), implementation by [@copilot](https://github.com/copilot))
 - [[#600](https://github.com/nf-core/differentialabundance/pull/600)] - Allow paramsheet with `.yml` extension ([@grst](https://github.com/grst)), review by [@atrigila](https://github.com/atrigila).
 - [[#582](https://github.com/nf-core/differentialabundance/pull/582)] - Allow `lfc_threshold` to be a float ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst))
 - [[#527](https://github.com/nf-core/differentialabundance/pull/513)] - Fix contrast schema to allow for random effects and other advanced formula features. ([@grst](https://github.com/grst), review by [@pinin4fjords](https://github.com/pinin4fjords)).
