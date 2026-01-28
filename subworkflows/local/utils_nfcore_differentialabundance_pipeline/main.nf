@@ -337,6 +337,22 @@ def methodsDescriptionText(mqc_methods_yaml) {
     return description_html.toString()
 }
 
+// Get CLI parameters (from command line or -params-file)
+// These should have the highest priority
+def getCliParams() {
+    try {
+        // Access CLI params from Nextflow's global session
+        // This includes both command line flags and params from -params-file
+        def cliParams = nextflow.Global.session.cliParams ?: [:]
+        return cliParams
+    } catch (Exception e) {
+        // If cliParams is not available (older Nextflow versions or other issues),
+        // fall back to empty map (no CLI params to override)
+        log.warn("Could not access CLI parameters: ${e.message}")
+        return [:]
+    }
+}
+
 // Get configurations based on whether use paramsheet or default params
 // and validate them against the schema.
 def getParamsetConfigurations() {
@@ -395,19 +411,27 @@ def getParamsheetConfigurations() {
         }
     }
 
+    // Get CLI params (from command line or -params-file)
+    def cliParams = getCliParams()
+
     return paramsheet
         .collect{ row ->
-            // Note that the paramsheet may not contain all the parameters
-            // defined in the pipeline, so we need to merge them
-            def fullparamset = params + row
+            // Priority: CLI params > paramsheet > default params
+            // Start with default params, merge paramsheet, then apply CLI params
+            def fullparamset = params + row + cliParams
             return fullparamset
         }
 }
 
 // Get default configurations from pipeline parameters
 def getDefaultConfigurations() {
+    // Get CLI params (from command line or -params-file)
+    def cliParams = getCliParams()
+    
+    // Priority: CLI params > default params
+    // Apply CLI params after default params
     // replace null by string 'contrasts' for paramset_name to avoid certain problems with null object
-    return [params + [paramset_name: 'contrasts']]
+    return [params + [paramset_name: 'contrasts'] + cliParams]
 }
 
 // Load configurations from yaml file
