@@ -9,11 +9,24 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+      - name: Setup Nextflow
+        uses: nf-core/setup-nextflow@v2
+
       - name: Install nf-test
         run: |
           mkdir -p $HOME/.local/bin
-          curl -fsSL https://github.com/askimed/nf-test/releases/download/v0.9.2/nf-test-0.9.2.tar.gz | tar -xz -C $HOME/.local/bin
+          LATEST_URL=$(curl -s https://api.github.com/repos/askimed/nf-test/releases/latest | jq -r '.assets[] | select(.name | test("^nf-test-[0-9.]+\\.tar\\.gz$")) | .browser_download_url')
+          echo "Downloading latest nf-test from $LATEST_URL"
+          curl -fsSL "$LATEST_URL" | tar -xz -C $HOME/.local/bin
           echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Install pre-commit (via nf-core tools)
+        run: |
+          pip install nf-core
+          # Validate installation
+          nf-core --version
+          pre-commit --version
+
       - name: Pre-download plugins
         run: |
           $HOME/.local/bin/nf-test update-plugins
