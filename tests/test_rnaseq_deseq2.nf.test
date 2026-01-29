@@ -100,7 +100,7 @@ nextflow_pipeline {
     test("Test CLI parameter override - round_digits") {
         // Test that CLI parameters override paramsheet values
         // The paramsheet sets round_digits: 3, but we override it to 5 via CLI
-        
+
         when {
             params {
                 outdir        = "$outputDir"

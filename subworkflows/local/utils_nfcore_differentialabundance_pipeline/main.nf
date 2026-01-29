@@ -433,7 +433,7 @@ def getParamsheetConfigurations() {
 def getDefaultConfigurations() {
     // Get CLI params (from command line or -params-file)
     def cliParams = getCliParams()
-    
+
     // Priority: CLI params > default params
     // Apply CLI params after default params
     // replace null by string 'contrasts' for paramset_name to avoid certain problems with null object
