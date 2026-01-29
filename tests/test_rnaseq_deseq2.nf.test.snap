@@ -38,7 +38,7 @@
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "PLOT_DIFFERENTIAL": {
                     "r-shinyngs": "2.3.0"
@@ -239,7 +239,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2026-01-20T17:01:46.982993089"
+        "timestamp": "2026-01-20T19:21:27.054418096"
     },
     "Test - Numeric sample IDs": {
         "content": [
@@ -280,7 +280,7 @@
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "PLOT_DIFFERENTIAL": {
                     "r-shinyngs": "2.3.0"
@@ -481,7 +481,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2026-01-20T17:04:45.598194504"
+        "timestamp": "2026-01-20T19:24:33.860516769"
     },
     "Test profile - deseq2_rnaseq_gsea": {
         "content": [
@@ -517,7 +517,7 @@
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "PLOT_DIFFERENTIAL": {
                     "r-shinyngs": "2.3.0"
@@ -682,6 +682,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-12-03T18:53:11.205040975"
+        "timestamp": "2026-01-20T19:18:21.119566042"
     }
 }

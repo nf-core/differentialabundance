@@ -15,7 +15,7 @@
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "LIMMA_DIFFERENTIAL": {
                     "r-base": "4.3.3",
@@ -128,9 +128,9 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.04.2"
         },
-        "timestamp": "2025-12-10T15:38:56.633605671"
+        "timestamp": "2026-01-20T20:04:06.949539939"
     },
     "Test rnaseq limma profile - limma_rnaseq_gsea - Numeric sample IDs": {
         "content": [
@@ -158,7 +158,7 @@
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "LIMMA_DIFFERENTIAL": {
                     "r-base": "4.3.3",
@@ -319,7 +319,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2026-01-02T13:52:55.326782526"
+        "timestamp": "2026-01-20T20:06:45.668939922"
     },
     "Test rnaseq limma profile - limma_rnaseq_gsea": {
         "content": [
@@ -347,7 +347,7 @@
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "LIMMA_DIFFERENTIAL": {
                     "r-base": "4.3.3",
@@ -508,7 +508,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-12-03T19:06:50.667280945"
+        "timestamp": "2026-01-20T19:52:05.448784587"
     },
     "Test rnaseq limma profile - limma_rnaseq_gsea - with formula and complex contrasts": {
         "content": [
@@ -536,7 +536,7 @@
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "LIMMA_DIFFERENTIAL": {
                     "r-base": "4.3.3",
@@ -905,7 +905,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-12-03T19:13:50.868967618"
+        "timestamp": "2026-01-20T20:00:06.074782811"
     },
     "Test rnaseq limma profile - limma_rnaseq_gsea,limma_rnaseq_gprofiler2": {
         "content": [
@@ -938,7 +938,7 @@
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "LIMMA_DIFFERENTIAL": {
                     "r-base": "4.3.3",
@@ -1136,6 +1136,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2026-01-20T17:19:47.353352052"
+        "timestamp": "2026-01-20T19:55:18.922342163"
     }
 }

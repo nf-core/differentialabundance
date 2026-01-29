@@ -41,7 +41,7 @@ nextflow_pipeline {
             params {
                 outdir              = "$outputDir"
                 paramsheet          = "${projectDir}/conf/test_paramsheet.yaml"
-                paramset_name       = "dream_rnaseq2"
+                paramset_name       = "dream_norm"
             }
         }
 

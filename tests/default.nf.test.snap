@@ -33,7 +33,7 @@
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "IMMUNEDECONV": {
                     "r-immunedeconv": "2.1.0"
@@ -206,10 +206,10 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.0",
+            "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-12-29T22:01:55.169009191"
+        "timestamp": "2026-01-20T18:48:49.466307004"
     },
     "Test profile": {
         "content": [
@@ -245,7 +245,7 @@
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "IMMUNEDECONV": {
                     "r-immunedeconv": "2.1.0"
@@ -421,7 +421,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2026-01-15T17:12:43.775705806"
+        "timestamp": "2026-01-20T18:36:48.325171354"
     },
     "Test profile - csv contrasts": {
         "content": [
@@ -457,7 +457,7 @@
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "IMMUNEDECONV": {
                     "r-immunedeconv": "2.1.0"
@@ -633,7 +633,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2026-01-15T17:15:39.035430833"
+        "timestamp": "2026-01-20T18:39:54.343340132"
     },
     "Test profile - with formula": {
         "content": [
@@ -662,7 +662,7 @@
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "PLOT_DIFFERENTIAL": {
                     "r-shinyngs": "2.3.0"
@@ -839,7 +839,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2026-01-20T16:24:39.337141223"
+        "timestamp": "2026-01-20T18:42:58.476322758"
     },
     "Test profile - multiple reports - csv contrasts": {
         "content": [
@@ -875,7 +875,7 @@
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "IMMUNEDECONV": {
                     "r-immunedeconv": "2.1.0"
@@ -1052,6 +1052,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2026-01-15T17:21:38.390355131"
+        "timestamp": "2026-01-20T18:45:46.721521113"
     }
 }

@@ -1,7 +1,7 @@
 {
     "Test profile - many": {
         "content": [
-            69,
+            78,
             {
                 "AFFY_JUSTRMA_RAW": {
                     "r-base": "4.3.1",
@@ -44,7 +44,7 @@
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
                 "GUNZIP_GTF": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
                 },
                 "LIMMA_DIFFERENTIAL": {
                     "r-base": "4.3.3",
@@ -114,6 +114,20 @@
                 "plots/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/png",
                 "plots/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/png/volcano.png",
                 "plots/differential/deseq2_rnaseq_gsea/versions.yml",
+                "plots/differential/dream_rnaseq",
+                "plots/differential/dream_rnaseq/full_model_with_interactions_SRP254919",
+                "plots/differential/dream_rnaseq/full_model_with_interactions_SRP254919/png",
+                "plots/differential/dream_rnaseq/full_model_with_interactions_SRP254919/png/volcano.png",
+                "plots/differential/dream_rnaseq/interaction_genotype_treatment_SRP254919",
+                "plots/differential/dream_rnaseq/interaction_genotype_treatment_SRP254919/png",
+                "plots/differential/dream_rnaseq/interaction_genotype_treatment_SRP254919/png/volcano.png",
+                "plots/differential/dream_rnaseq/treatment_effect_classic_comparison_SRP254919",
+                "plots/differential/dream_rnaseq/treatment_effect_classic_comparison_SRP254919/png",
+                "plots/differential/dream_rnaseq/treatment_effect_classic_comparison_SRP254919/png/volcano.png",
+                "plots/differential/dream_rnaseq/treatment_plus_genotype_SRP254919",
+                "plots/differential/dream_rnaseq/treatment_plus_genotype_SRP254919/png",
+                "plots/differential/dream_rnaseq/treatment_plus_genotype_SRP254919/png/volcano.png",
+                "plots/differential/dream_rnaseq/versions.yml",
                 "plots/differential/limma_affy_gprofiler2",
                 "plots/differential/limma_affy_gprofiler2/phenotype_uninvolved_lesional_GSE50790",
                 "plots/differential/limma_affy_gprofiler2/phenotype_uninvolved_lesional_GSE50790/png",
@@ -138,6 +152,16 @@
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/pca3d.png",
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/sample_dendrogram.png",
                 "plots/exploratory/deseq2_rnaseq_gsea/versions.yml",
+                "plots/exploratory/dream_rnaseq",
+                "plots/exploratory/dream_rnaseq/treatment",
+                "plots/exploratory/dream_rnaseq/treatment/png",
+                "plots/exploratory/dream_rnaseq/treatment/png/boxplot.png",
+                "plots/exploratory/dream_rnaseq/treatment/png/density.png",
+                "plots/exploratory/dream_rnaseq/treatment/png/mad_correlation.png",
+                "plots/exploratory/dream_rnaseq/treatment/png/pca2d.png",
+                "plots/exploratory/dream_rnaseq/treatment/png/pca3d.png",
+                "plots/exploratory/dream_rnaseq/treatment/png/sample_dendrogram.png",
+                "plots/exploratory/dream_rnaseq/versions.yml",
                 "plots/exploratory/limma_affy_gprofiler2",
                 "plots/exploratory/limma_affy_gprofiler2/phenotype",
                 "plots/exploratory/limma_affy_gprofiler2/phenotype/png",
@@ -174,6 +198,9 @@
                 "report/deseq2_rnaseq_gsea",
                 "report/deseq2_rnaseq_gsea/SRP254919.zip",
                 "report/deseq2_rnaseq_gsea/SRP254919_differentialabundance_report.html",
+                "report/dream_rnaseq",
+                "report/dream_rnaseq/SRP254919.zip",
+                "report/dream_rnaseq/SRP254919_differentialabundance_report.html",
                 "report/gsea",
                 "report/gsea/deseq2_rnaseq_gsea",
                 "report/gsea/deseq2_rnaseq_gsea/treatment_mCherry_hND6__SRP254919",
@@ -236,6 +263,11 @@
                 "shinyngs_app/deseq2_rnaseq_gsea/SRP254919/app.R",
                 "shinyngs_app/deseq2_rnaseq_gsea/SRP254919/data.rds",
                 "shinyngs_app/deseq2_rnaseq_gsea/versions.yml",
+                "shinyngs_app/dream_rnaseq",
+                "shinyngs_app/dream_rnaseq/SRP254919",
+                "shinyngs_app/dream_rnaseq/SRP254919/app.R",
+                "shinyngs_app/dream_rnaseq/SRP254919/data.rds",
+                "shinyngs_app/dream_rnaseq/versions.yml",
                 "shinyngs_app/limma_affy_gprofiler2",
                 "shinyngs_app/limma_affy_gprofiler2/GSE50790",
                 "shinyngs_app/limma_affy_gprofiler2/GSE50790/app.R",
@@ -304,6 +336,8 @@
                 "tables/processed_abundance/deseq2_rnaseq_gsea",
                 "tables/processed_abundance/deseq2_rnaseq_gsea/all.normalised_counts.tsv",
                 "tables/processed_abundance/deseq2_rnaseq_gsea/all.vst.tsv",
+                "tables/processed_abundance/dream_rnaseq",
+                "tables/processed_abundance/dream_rnaseq/all.normalised_counts.tsv",
                 "tables/processed_abundance/limma_affy_gprofiler2",
                 "tables/processed_abundance/limma_rnaseq_decoupler",
                 "tables/processed_abundance/limma_rnaseq_decoupler/all.normalised_counts.tsv",
@@ -326,6 +360,8 @@
                 "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
                 "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
                 "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
+                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
+                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
@@ -347,6 +383,8 @@
                 "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
+                "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
+                "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
                 "hgu133plus2.annotation.tsv:md5,f2b82ef12b2a2e8e575de06766583d96",
@@ -359,6 +397,7 @@
                 "phenotype_uninvolved_lesional_GSE50790.gprofiler2.all_enriched_pathways.tsv:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "all.normalised_counts.tsv:md5,f3ef0fb48f97afde2b5122b72dc4dcc4",
                 "all.vst.tsv:md5,ae82509f76ed01ad0d041d1a62aef703",
+                "all.normalised_counts.tsv:md5,a06f5e5c50938bb4d93991d7e314c7cf",
                 "all.normalised_counts.tsv:md5,534f0f37e10325163656cad95418f34a",
                 "GSM1229341_Gudjohnsson_001_6690_PP.CEL.gz:md5,259d0908211a071351450f366fd51cad",
                 "GSM1229342_Gudjohnsson_002_6690_PN.CEL.gz:md5,31cc2b8b26e210760b8ebd4b304b52ba",
@@ -374,6 +413,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2026-01-20T16:51:47.360543211"
+        "timestamp": "2026-01-20T19:10:19.244029169"
     }
 }
