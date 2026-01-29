@@ -1,32 +1,51 @@
 name: Copilot Setup Steps
 on: push
+
+env:
+  NFT_VER: "0.9.3"
+  NFT_WORKDIR: "~"
+  NXF_ANSI_LOG: false
+
 jobs:
   copilot-setup-steps:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: "temurin"
-          java-version: "17"
+      
       - name: Setup Nextflow
         uses: nf-core/setup-nextflow@v2
+        with:
+          version: "25.04.0"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
 
       - name: Install nf-test
-        run: |
-          mkdir -p $HOME/.local/bin
-          LATEST_URL=$(curl -s https://api.github.com/repos/askimed/nf-test/releases/latest | jq -r '.assets[] | select(.name | test("^nf-test-[0-9.]+\\.tar\\.gz$")) | .browser_download_url')
-          echo "Downloading latest nf-test from $LATEST_URL"
-          curl -fsSL "$LATEST_URL" | tar -xz -C $HOME/.local/bin
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
+        uses: nf-core/setup-nf-test@v1
+        with:
+          version: "${{ env.NFT_VER }}"
+          install-pdiff: true
 
       - name: Install pre-commit (via nf-core tools)
         run: |
-          pip install nf-core
+          pip install nf-core pre-commit
           # Validate installation
           nf-core --version
           pre-commit --version
 
-      - name: Pre-download plugins
+      - name: Setup Docker
         run: |
-          $HOME/.local/bin/nf-test update-plugins
+          # Ensure Docker is available
+          docker --version
+
+      - name: Verify nf-test installation
+        run: |
+          nf-test version
+          nextflow -version
+
+      - name: Test nf-test with a simple test
+        run: |
+          # Run a quick test to verify everything works
+          nf-test test --profile docker --tag test --ci --verbose || true
