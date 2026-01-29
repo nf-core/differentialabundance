@@ -68,6 +68,29 @@ round_dataframe_columns <- function(df, columns = NULL, digits = -1) {
     }
     df
 }
+
+plot_screeplot <- function(percentVarData) {
+    tick_step <- max(1, ceiling(nrow(percentVarData) / 10))
+    tick_vals <- seq(1, nrow(percentVarData), by = tick_step)
+    plotly::plot_ly(
+        percentVarData,
+        x = ~PCA,
+        y = ~var_explained,
+        type = "scatter",
+        mode = "lines+markers",
+        line = list(dash = "dash"),
+        hovertemplate = "PC %{x}<br>Variance explained %{y:.2f}%<extra></extra>"
+    ) %>%
+        layout(
+            xaxis = list(
+                title = "PC",
+                tickmode = "array",
+                tickvals = tick_vals,
+                ticktext = paste0("PC", tick_vals)
+            ),
+            yaxis = list(title = "Percent variance explained")
+        )
+}
 ```
 
 ```{r, warning=FALSE}
@@ -802,12 +825,7 @@ for (assay_type in names(percentVar_list)) {
     percentVarData$PCA <- as.numeric(rownames(percentVarData))
     cat(paste0("\n##### ", prettifyVariablename(assay_type), "\n"))
     print(
-        ggplot(percentVarData, aes(x = factor(PCA), y = var_explained, group = 1)) +
-            theme_bw() +
-            geom_point(size = 4) +
-            geom_line(linetype = "dashed") +
-            xlab("PC") +
-            ylab("Percent variance explained")
+        htmltools::tagList(plot_screeplot(percentVarData))
     )
     cat("\n")
 }
