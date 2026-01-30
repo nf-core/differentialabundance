@@ -402,8 +402,7 @@ def getParamsheetConfigurations() {
             // Priority: CLI params (+ params-file) > paramsheet > config defaults
             // Use nextflow session to distinguish CLI params from config defaults
             def cliParams = nextflow.Global.session.cliParams ?: [:]
-            def configParams = nextflow.Global.session.configParams ?: [:]
-            def fullparamset = configParams + row + cliParams
+            def fullparamset = params + row + cliParams
             return fullparamset
         }
 }
@@ -411,10 +410,7 @@ def getParamsheetConfigurations() {
 // Get default configurations from pipeline parameters
 def getDefaultConfigurations() {
     // replace null by string 'contrasts' for paramset_name to avoid certain problems with null object
-    // Priority: CLI params > defaults
-    def cliParams = nextflow.Global.session.cliParams ?: [:]
-    def configParams = nextflow.Global.session.configParams ?: [:]
-    return [configParams + cliParams + [paramset_name: 'contrasts']]
+    return [params + [paramset_name: 'contrasts']]
 }
 
 // Load configurations from yaml file
