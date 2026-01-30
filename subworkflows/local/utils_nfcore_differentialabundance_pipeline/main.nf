@@ -399,7 +399,8 @@ def getParamsheetConfigurations() {
         .collect{ row ->
             // Note that the paramsheet may not contain all the parameters
             // defined in the pipeline, so we need to merge them
-            def fullparamset = params + row
+            // Priority: command line params > paramsheet > defaults
+            def fullparamset = row + params
             return fullparamset
         }
 }
