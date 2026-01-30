@@ -1,0 +1,36 @@
+{
+    "Paramsheet value without CLI override - round_digits": {
+        "content": [
+            0,
+            null,
+            [
+                "pipeline_info"
+            ],
+            [
+                
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
+        },
+        "timestamp": "2026-01-30T15:08:05.135439103"
+    },
+    "CLI flag overrides paramsheet - round_digits": {
+        "content": [
+            0,
+            null,
+            [
+                "pipeline_info"
+            ],
+            [
+                
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
+        },
+        "timestamp": "2026-01-30T15:07:47.911940576"
+    }
+}
