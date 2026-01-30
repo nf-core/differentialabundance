@@ -401,8 +401,13 @@ def getParamsheetConfigurations() {
             // defined in the pipeline, so we need to merge them
             // Priority: CLI params (+ params-file) > paramsheet > config defaults
             // Use nextflow session to distinguish CLI params from config defaults
-            def cliParams = nextflow.Global.session.cliParams
-            def fullparamset = params + row + cliParams
+            // Get CLI parameters and filter out paramsheet-specific params
+            // that should not override per-row values (e.g., paramset_name)
+            def cliParams = nextflow.Global.session.cliParams ?: [:]
+            def filteredCliParams = cliParams.findAll { k, v ->
+                k != 'paramset_name' && k != 'paramsheet'
+            }
+            def fullparamset = params + row + filteredCliParams
             return fullparamset
         }
 }
