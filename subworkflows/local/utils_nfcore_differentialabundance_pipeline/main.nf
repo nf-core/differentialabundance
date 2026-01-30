@@ -399,8 +399,11 @@ def getParamsheetConfigurations() {
         .collect{ row ->
             // Note that the paramsheet may not contain all the parameters
             // defined in the pipeline, so we need to merge them
-            // Priority: command line params > paramsheet > defaults
-            def fullparamset = row + params
+            // Priority: CLI params (+ params-file) > paramsheet > config defaults
+            // Use nextflow session to distinguish CLI params from config defaults
+            def cliParams = nextflow.Global.session.cliParams ?: [:]
+            def configParams = nextflow.Global.session.configParams ?: [:]
+            def fullparamset = configParams + row + cliParams
             return fullparamset
         }
 }
@@ -408,7 +411,10 @@ def getParamsheetConfigurations() {
 // Get default configurations from pipeline parameters
 def getDefaultConfigurations() {
     // replace null by string 'contrasts' for paramset_name to avoid certain problems with null object
-    return [params + [paramset_name: 'contrasts']]
+    // Priority: CLI params > defaults
+    def cliParams = nextflow.Global.session.cliParams ?: [:]
+    def configParams = nextflow.Global.session.configParams ?: [:]
+    return [configParams + cliParams + [paramset_name: 'contrasts']]
 }
 
 // Load configurations from yaml file
