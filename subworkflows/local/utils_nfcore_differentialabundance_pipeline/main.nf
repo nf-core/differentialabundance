@@ -399,7 +399,10 @@ def getParamsheetConfigurations() {
         .collect{ row ->
             // Note that the paramsheet may not contain all the parameters
             // defined in the pipeline, so we need to merge them
-            def fullparamset = params + row
+            // Priority: CLI params (+ params-file) > paramsheet > config defaults
+            // Use nextflow session to distinguish CLI params from config defaults
+            def cliParams = nextflow.Global.session.cliParams
+            def fullparamset = params + row + cliParams
             return fullparamset
         }
 }
