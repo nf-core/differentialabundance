@@ -590,9 +590,8 @@
                 "differential_min_fold_change": {
                     "type": "number",
                     "default": 2,
-                    "description": "Minimum fold change used to calculate differential feature numbers",
-                    "fa_icon": "fas fa-angle-double-down",
-                    "help_text": "Note that this number will be log2 transformed"
+                    "description": "Minimum fold change used to calculate differential feature numbers. Note that this number will be log2 transformed",
+                    "fa_icon": "fas fa-angle-double-down"
                 },
                 "differential_max_pval": {
                     "type": "number",
