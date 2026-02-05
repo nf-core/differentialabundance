@@ -51,7 +51,8 @@ Stand-alone graphical outputs are placed in this directory. They may be useful i
     - `[contrast]/raw_distributions.png`: A plot of sample distributions without normalization.
   - `decoupler/`: Directory containing plots of decoupler results
     - `[differential_method]_[contrast_name]_[decoupler_method]_estimate_decoupler_plot.png`: contains the plot for the estimated activity scores for each regulator (rows) across all samples (columns).
-  </details>
+
+</details>
 
 Most plots are included in the HTML report (see above), but are also included in static files in this folder to facilitate use in external reporting.
 
