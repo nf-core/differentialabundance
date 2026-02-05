@@ -10,7 +10,13 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["study_name", "study_type", "input", "outdir", "study_abundance_type"],
+            "required": [
+                "study_name",
+                "study_type",
+                "input",
+                "outdir",
+                "study_abundance_type"
+            ],
             "properties": {
                 "study_name": {
                     "type": "string",
@@ -24,7 +30,12 @@
                     "default": "rnaseq",
                     "description": "A string identifying the technology used to produce the data",
                     "help_text": "Currently one of 'rnaseq', 'affy_array' (microarray), 'maxquant' (proteomics) or 'geo_soft_file' [GEO SOFT](https://www.ncbi.nlm.nih.gov/geo/info/soft.html) may be specified.",
-                    "enum": ["rnaseq", "affy_array", "maxquant", "geo_soft_file"],
+                    "enum": [
+                        "rnaseq",
+                        "affy_array",
+                        "maxquant",
+                        "geo_soft_file"
+                    ],
                     "fa_icon": "far fa-keyboard"
                 },
                 "input": {
@@ -50,7 +61,7 @@
                 "contrasts_yml": {
                     "type": "string",
                     "description": "A YAML file describing sample contrasts to compare groups.",
-                    "help_text": "This file defines sample contrasts for differential abundance analysis, with each contrast specifying an `id`, a `comparison` list (variable, reference, target), and optional `blocking_factors`.",
+                    "help_text": "This file defines sample contrasts for differential abundance analysis, with each contrast specifying an:\n  - `id`, a `comparison` list (variable, reference, target), and optional `blocking_factors`, or an\n  - `id`, a `formula`, and a `make_contrasts_str`",
                     "pattern": "^\\S+\\.(yaml|yml)$",
                     "schema": "assets/schema_contrasts.json",
                     "format": "file-path",
@@ -67,7 +78,10 @@
                     "type": "string",
                     "default": "counts",
                     "description": "Type of abundance measure used, platform-dependent.",
-                    "enum": ["counts", "intensities"],
+                    "enum": [
+                        "counts",
+                        "intensities"
+                    ],
                     "fa_icon": "fas fa-keyboard"
                 },
                 "round_digits": {
@@ -138,7 +152,10 @@
                     "fa_icon": "fas fa-file-signature"
                 }
             },
-            "required": ["observations_id_col", "observations_type"],
+            "required": [
+                "observations_id_col",
+                "observations_type"
+            ],
             "fa_icon": "fas fa-eye"
         },
         "base_features_options": {
@@ -195,7 +212,11 @@
                     "fa_icon": "fas fa-align-justify"
                 }
             },
-            "required": ["features_id_col", "features_name_col", "features_type"],
+            "required": [
+                "features_id_col",
+                "features_name_col",
+                "features_type"
+            ],
             "fa_icon": "fas fa-sitemap"
         },
         "base_paramsheet_options": {
@@ -214,7 +235,8 @@
                     "help_text": "A YAML file that defines 1+ nextflow config(s).",
                     "pattern": "^\\S+\\.(yaml|yml)$",
                     "format": "file-path",
-                    "mimetype": "text/csv"
+                    "mimetype": "text/csv",
+                    "default": "${projectDir}/conf/paramsheet.yaml"
                 }
             }
         },
@@ -324,14 +346,21 @@
                     "default": "normalizeMedian",
                     "description": "Normalization function to use on the MaxQuant intensities.",
                     "help_text": "'normalizeMedian' or 'normalizeQuantiles'",
-                    "enum": ["normalizeMedian", "normalizeQuantiles"]
+                    "enum": [
+                        "normalizeMedian",
+                        "normalizeQuantiles"
+                    ]
                 },
                 "proteus_plotsd_method": {
                     "type": "string",
                     "default": "violin",
                     "description": "Which method to use for plotting sample distributions of the MaxQuant intensities; one of 'violin', 'dist', 'box'.",
                     "help_text": "'violin', 'dist' or 'box'",
-                    "enum": ["violin", "dist", "box"]
+                    "enum": [
+                        "violin",
+                        "dist",
+                        "box"
+                    ]
                 },
                 "proteus_plotmv_loess": {
                     "type": "boolean",
@@ -355,13 +384,23 @@
             "default": "",
             "properties": {
                 "filtering_min_abundance": {
-                    "type": ["integer", "boolean"],
+                    "type": [
+                        "integer",
+                        "boolean"
+                    ],
                     "anyOf": [
-                        { "type": "integer", "default": 1 },
-                        { "type": "boolean", "const": false }
+                        {
+                            "type": "integer",
+                            "default": 1
+                        },
+                        {
+                            "type": "boolean",
+                            "const": false
+                        }
                     ],
                     "description": "Minimum abundance value. Set to false to disable abundance filtering.",
-                    "fa_icon": "fas fa-compress-alt"
+                    "fa_icon": "fas fa-compress-alt",
+                    "default": 1
                 },
                 "filtering_min_samples": {
                     "type": "number",
@@ -393,7 +432,9 @@
                 }
             },
             "fa_icon": "fas fa-filter",
-            "required": ["filtering_min_abundance"]
+            "required": [
+                "filtering_min_abundance"
+            ]
         },
         "preprocessing_immunedeconv": {
             "title": "[preprocessing] IMMUNEDECONV",
@@ -510,7 +551,11 @@
                 "differential_method": {
                     "type": "string",
                     "description": "Differential analysis method",
-                    "enum": ["deseq2", "limma", "dream"],
+                    "enum": [
+                        "deseq2",
+                        "limma",
+                        "dream"
+                    ],
                     "default": "deseq2"
                 },
                 "differential_file_suffix": {
@@ -546,7 +591,8 @@
                     "type": "number",
                     "default": 2,
                     "description": "Minimum fold change used to calculate differential feature numbers",
-                    "fa_icon": "fas fa-angle-double-down"
+                    "fa_icon": "fas fa-angle-double-down",
+                    "help_text": "Note that this number will be log2 transformed"
                 },
                 "differential_max_pval": {
                     "type": "number",
@@ -607,7 +653,10 @@
                     "default": "Wald",
                     "description": "`test` parameter passed to DESeq()",
                     "help_text": "either \"Wald\" or \"LRT\", which will then use either Wald significance tests (defined by nbinomWaldTest), or the likelihood ratio test on the difference in deviance between a full and reduced model formula (defined by nbinomLRT)",
-                    "enum": ["Wald", "LRT"],
+                    "enum": [
+                        "Wald",
+                        "LRT"
+                    ],
                     "fa_icon": "fas fa-vial"
                 },
                 "deseq2_fit_type": {
@@ -615,7 +664,12 @@
                     "default": "parametric",
                     "description": "`fitType` parameter passed to DESeq()",
                     "help_text": "either \"parametric\", \"local\", \"mean\", or \"glmGamPoi\" for the type of fitting of dispersions to the mean intensity. See estimateDispersions for description.",
-                    "enum": ["parametric", "local", "mean", "glmGamPoi"],
+                    "enum": [
+                        "parametric",
+                        "local",
+                        "mean",
+                        "glmGamPoi"
+                    ],
                     "fa_icon": "fas fa-keyboard"
                 },
                 "deseq2_sf_type": {
@@ -623,7 +677,11 @@
                     "default": "ratio",
                     "description": "`sfType` parameter passed to DESeq()",
                     "help_text": "either \"ratio\", \"poscounts\", or \"iterate\" for the type of size factor estimation. See estimateSizeFactors for description.",
-                    "enum": ["ratio", "poscounts", "iterate"],
+                    "enum": [
+                        "ratio",
+                        "poscounts",
+                        "iterate"
+                    ],
                     "fa_icon": "fas fa-keyboard"
                 },
                 "deseq2_min_replicates_for_replace": {
@@ -686,7 +744,11 @@
                     "default": "vst",
                     "description": "variance stabilisation method to use when making a variance stabilised matrix",
                     "help_text": "'rlog', 'vst' or 'rlog,vst'",
-                    "enum": ["rlog", "vst", "rlog,vst"],
+                    "enum": [
+                        "rlog",
+                        "vst",
+                        "rlog,vst"
+                    ],
                     "fa_icon": "fas fa-viruses"
                 },
                 "deseq2_shrink_lfc": {
@@ -755,7 +817,10 @@
                     "default": "ls",
                     "fa_icon": "fas fa-hammer",
                     "description": "passed to lmFit(), the fitting method",
-                    "enum": ["ls", "robust"],
+                    "enum": [
+                        "ls",
+                        "robust"
+                    ],
                     "help_text": " \"ls\" for least squares or \"robust\" for robust regression"
                 },
                 "limma_proportion": {
@@ -803,7 +868,16 @@
                     "type": "string",
                     "default": "BH",
                     "description": "passed to topTable(), method used to adjust the p-values for multiple testing.",
-                    "enum": ["holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "null"],
+                    "enum": [
+                        "holm",
+                        "hochberg",
+                        "hommel",
+                        "bonferroni",
+                        "BH",
+                        "BY",
+                        "fdr",
+                        "null"
+                    ],
                     "fa_icon": "fas fa-hammer"
                 },
                 "limma_p_value": {
@@ -880,7 +954,12 @@
                 "functional_method": {
                     "type": "string",
                     "description": "Functional analysis method",
-                    "enum": ["null", "gsea", "gprofiler2", "decoupler"]
+                    "enum": [
+                        "null",
+                        "gsea",
+                        "gprofiler2",
+                        "decoupler"
+                    ]
                 },
                 "gene_sets_files": {
                     "type": "string",
@@ -901,7 +980,10 @@
                     "default": "phenotype",
                     "description": "Permutation type",
                     "help_text": "Select the type of permutation to perform in assessing the statistical significance of the enrichment score. (See 'required fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page for more info)",
-                    "enum": ["phenotype", "gene_set"],
+                    "enum": [
+                        "phenotype",
+                        "gene_set"
+                    ],
                     "fa_icon": "fas fa-exchange-alt"
                 },
                 "gsea_nperm": {
@@ -915,14 +997,25 @@
                     "type": "string",
                     "default": "weighted",
                     "description": "Enrichment statistic",
-                    "enum": ["weighted", "weighted_p2", "weighted_p1.5", "classic"],
+                    "enum": [
+                        "weighted",
+                        "weighted_p2",
+                        "weighted_p1.5",
+                        "classic"
+                    ],
                     "help_text": "See 'basic fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page for a detailed explanation.",
                     "fa_icon": "fas fa-star"
                 },
                 "gsea_metric": {
                     "type": "string",
                     "default": "Signal2Noise",
-                    "enum": ["Signal2Noise", "tTest", "Ratio_of_Classes", "Diff_of_Classes", "log2_Ratio_of_Classes"],
+                    "enum": [
+                        "Signal2Noise",
+                        "tTest",
+                        "Ratio_of_Classes",
+                        "Diff_of_Classes",
+                        "log2_Ratio_of_Classes"
+                    ],
                     "description": "Metric for ranking genes",
                     "help_text": "See https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideTEXT.htm#_Metrics_for_Ranking for a detailed explanation.",
                     "fa_icon": "fas fa-temperature-high"
@@ -932,7 +1025,10 @@
                     "default": "real",
                     "description": "Gene list sorting mode",
                     "help_text": "GSEA ranks the genes in the expression dataset and then analyzes that ranked list of genes. Use this parameter to determine whether to sort the genes using the real (default) or absolute value of the ranking metric.\n\nSee 'basic fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page",
-                    "enum": ["real", "absolute"],
+                    "enum": [
+                        "real",
+                        "absolute"
+                    ],
                     "fa_icon": "fas fa-bars"
                 },
                 "gsea_order": {
@@ -940,7 +1036,10 @@
                     "default": "descending",
                     "description": "Gene list ordering mode",
                     "help_text": "GSEA ranks the genes in the expression dataset and then analyzes that ranked list of genes. Use this parameter to determine whether to sort the genes in descending (default) or ascending order. Ascending order is usually applicable when the ranking metric is a measure of nearness (how close the genes are to one another) rather than distance.\n\nSee 'basic fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page",
-                    "enum": ["descending", "ascending"],
+                    "enum": [
+                        "descending",
+                        "ascending"
+                    ],
                     "fa_icon": "fas fa-sort-alpha-down"
                 },
                 "gsea_set_max": {
@@ -961,7 +1060,10 @@
                     "type": "string",
                     "default": "meandiv",
                     "description": "Normalisation mode",
-                    "enum": ["meandiv", "null"],
+                    "enum": [
+                        "meandiv",
+                        "null"
+                    ],
                     "help_text": "Normalization mode. Method used to normalize the enrichment scores across analyzed gene sets: 'meandiv' (default, GSEA normalizes the enrichment scores as described in Normalized Enrichment Score (NES)) OR 'null' (GSEA does not normalize the enrichment scores).\n\nSee 'advanced fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page",
                     "fa_icon": "fas fa-align-justify"
                 },
@@ -969,7 +1071,10 @@
                     "type": "string",
                     "default": "no_balance",
                     "help_text": "Method used to randomly assign phenotype labels to samples for phenotype permutations. Not used for gene_set  permutations.\n\nSee 'advanced fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page",
-                    "enum": ["no_balance", "equalize_and_balance"],
+                    "enum": [
+                        "no_balance",
+                        "equalize_and_balance"
+                    ],
                     "description": "Randomization mode",
                     "fa_icon": "fas fa-random"
                 },
@@ -1047,7 +1152,14 @@
                     "type": "string",
                     "description": "The method that should be used for multiple testing correction.",
                     "help_text": "One of gSCS (synonyms: analytical, g_SCS), fdr (synonyms: false_discovery_rate), bonferroni.",
-                    "enum": ["gSCS", "analytical", "g_SCS", "fdr", "false_discovery_rate", "bonferroni"],
+                    "enum": [
+                        "gSCS",
+                        "analytical",
+                        "g_SCS",
+                        "fdr",
+                        "false_discovery_rate",
+                        "bonferroni"
+                    ],
                     "default": "gSCS"
                 },
                 "gprofiler2_sources": {
@@ -1087,7 +1199,12 @@
                     "default": "annotated",
                     "description": "How to calculate the statistical domain size.",
                     "help_text": "One of annotated (default), known, custom or custom_annotated; see https://rdrr.io/cran/gprofiler2/man/gost.html",
-                    "enum": ["annotated", "known", "custom", "custom_annotated"]
+                    "enum": [
+                        "annotated",
+                        "known",
+                        "custom",
+                        "custom_annotated"
+                    ]
                 },
                 "gprofiler2_min_diff": {
                     "type": "integer",
@@ -1168,7 +1285,7 @@
             "properties": {
                 "report_file": {
                     "type": "string",
-                    "default": "${projectDir}/assets/differentialabundance_report.Rmd",
+                    "default": "${projectDir}/assets/differentialabundance_report.qmd",
                     "description": "Rmd report template from which to create the pipeline report",
                     "help_text": "The pipeline will always generate a default report which gives a good overview of the analysis results. Should this default report not suit your needs, you can provide the path to a custom report instead.",
                     "format": "file-path",
@@ -1187,13 +1304,15 @@
                     "default": "${projectDir}/docs/images/nf-core-differentialabundance_logo_light.png",
                     "description": "A logo to display in the report instead of the generic pipeline logo.",
                     "help_text": "A logo to display in the report instead of the generic pipeline logo. It can accessed via the id 'logo' in the css_file.",
-                    "fa_icon": "far fa-font-awesome-logo-full"
+                    "fa_icon": "far fa-font-awesome-logo-full",
+                    "hidden": true
                 },
                 "css_file": {
                     "type": "string",
                     "default": "${projectDir}/assets/nf-core_style.css",
                     "description": "CSS to use to style the output, in lieu of the default nf-core styling",
-                    "fa_icon": "far fa-file-code"
+                    "fa_icon": "far fa-file-code",
+                    "hidden": true
                 },
                 "citations_file": {
                     "type": "string",
@@ -1228,11 +1347,14 @@
                 },
                 "skip_reports": {
                     "type": "boolean",
-                    "default": false,
                     "description": "Skip generation of reports"
                 }
             },
-            "required": ["report_file", "logo_file", "css_file"]
+            "required": [
+                "report_file",
+                "logo_file",
+                "css_file"
+            ]
         },
         "reference_genome_options": {
             "title": "Reference genome options",
@@ -1330,7 +1452,14 @@
                     "description": "Method used to save pipeline results to output directory.",
                     "help_text": "The Nextflow `publishDir` option specifies which intermediate files should be saved to the output directory. This option tells the pipeline what method should be used to move these files. See [Nextflow docs](https://www.nextflow.io/docs/latest/process.html#publishdir) for details.",
                     "fa_icon": "fas fa-copy",
-                    "enum": ["symlink", "rellink", "link", "copy", "copyNoFollow", "move"]
+                    "enum": [
+                        "symlink",
+                        "rellink",
+                        "link",
+                        "copy",
+                        "copyNoFollow",
+                        "move"
+                    ]
                 },
                 "email_on_fail": {
                     "type": "string",
@@ -1378,7 +1507,10 @@
                     "hidden": true
                 },
                 "help": {
-                    "type": ["boolean", "string"],
+                    "type": [
+                        "boolean",
+                        "string"
+                    ],
                     "description": "Display the help message."
                 },
                 "help_full": {
