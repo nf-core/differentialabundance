@@ -49,7 +49,7 @@ Stand-alone graphical outputs are placed in this directory. They may be useful i
     - `[contrast]/[norm_function].normalized_mean_variance_relationship.png`: Plots of log intensity vs mean log intensity after normalization of each contrast level.
     - `[contrast]/[norm_function].normalized_distributions.png`: A plot of sample distributions after normalization.
     - `[contrast]/raw_distributions.png`: A plot of sample distributions without normalization.
-  - `decoupler/`: Directory containing plots of decoupler results 
+  - `decoupler/`: Directory containing plots of decoupler results
     - `[differential_method]_[contrast_name]_[decoupler_method]_estimate_decoupler_plot.png`: contains the plot for the estimated activity scores for each regulator (rows) across all samples (columns).
   </details>
 
