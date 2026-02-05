@@ -181,7 +181,7 @@ The necessary fields in order are:
 - `blocking_factors` - Any additional variables (also observation columns) that should be modelled alongside the contrast variable
 - `exclude_samples_col` and `exclude_samples_values` - the former being a valid column in the samples sheet, the latter a list of values in that column which should be used to select samples prior to differential modelling. This is helpful where certain samples need to be excluded prior to analysis of a given contrast.
 
-Alternatively, the YAML contrasts also supports formula based model definitions for tools such as `VARIANCEPARTITION_DREAM`:
+Additionally, the YAML contrasts also supports formula based model definitions:
 
 ```yaml
 contrasts:
@@ -197,6 +197,11 @@ The necessary fields in order are:
 
 - `formula` - A string representation of the model formula. It is used to build the design matrix.
 - `make_contrasts_str` - An explicit literal contrast string (e.g., "treatmenthND6 - treatmentmCherry") that is passed directly to [`limma::makeContrasts()`](https://rdrr.io/bioc/limma/man/makeContrasts.html) in `VARIANCEPARTITION_DREAM`, `LIMMA_DIFFERENTIAL` and `DESEQ2_DIFFERENTIAL`. The parameter names must be syntactically valid variable names in R (see [`make.names`](https://stat.ethz.ch/R-manual/R-devel/library/base/html/make.names.html)). This field provides full control for complex designs. Requires `formula`.
+
+> [!IMPORTANT]
+>
+> - YAML contrast definitions using `comparison` **and** those using `formula` are both supported by all differential methods.
+> - They can be freely mixed within the same `contrasts:` list in a single YAML file (i.e. some contrasts may use `comparison` while others use `formula`).
 
 > [!NOTE]
 >
@@ -382,7 +387,7 @@ result <- immunedeconv::deconvolute(gene_expression_matrix, method = 'quantiseq'
 
 ## Gene set enrichment analysis
 
-Currently, two tools can be used to do gene set enrichment analysis.
+Currently, three tools can be used to do gene set enrichment analysis.
 
 ### GSEA
 

@@ -753,7 +753,7 @@
                 "deseq2_shrink_lfc": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Shink fold changes in results?",
+                    "description": "Shrink fold changes in results?",
                     "help_text": "'ashr' method is the only method currently implemented",
                     "fa_icon": "fas fa-microscope"
                 },
