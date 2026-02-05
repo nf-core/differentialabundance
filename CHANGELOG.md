@@ -60,6 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [[#625](https://github.com/nf-core/differentialabundance/pull/625)] - Sort genes by p-value by default in quarto report, ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#620](https://github.com/nf-core/differentialabundance/pull/620/)] - Improve scree plot by switching to plotly, ([@atrigila](https://github.com/atrigila) review by [@apeltzer](https://github.com/apeltzer)).
 - [[#619](https://github.com/nf-core/differentialabundance/pull/619/)] - Improve caching behaviour for processes using `VALIDATOR` outputs ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#615](https://github.com/nf-core/differentialabundance/pull/615/)] - Volcano plot now shows gene name when hovering over points, review by [@grst](https://github.com/grst).
