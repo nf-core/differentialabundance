@@ -272,34 +272,36 @@ To run a given combination of tools, you can use the `--paramset_name` parameter
 Optionally, one can also provide their own paramsheet YAML file using the `--paramsheet` flag.
 You will be also able to run a specific config from this custom file using `--paramset_name`.
 
-## Working with the output Quarto notebook file
+## Working with the output Quarto file
 
-The pipeline produces an Quarto notebook file which, if you're proficient in R, you can use to tweak the report after it's generated (**note**- if you need the same customisations repeatedly we would recommend you supply your own templates using the `report_file` parameter. Multiple templates can be supplied as a comma separated list).
+The pipeline produces an Quarto document file which, if you're proficient in R, you can use to tweak the report after it's generated.
 
-To work with Quarto notebook files you will need Rstudio/Posit Studio or an equivalent R environment. You will also need to have the ShinyNGS R module [installed](https://github.com/pinin4fjords/shinyngs#installation), since it supplies a lot of the accessory plotting functions etc that you will need. The exact way you will do this may depend on your exact systems, but for example
+> [!NOTE]
+>
+> If you need the same customisations repeatedly we would recommend you supply your own templates using the `report_file` parameter. Multiple templates can be supplied as a comma separated list.
+
+To work with Quarto document files you will need an R environment with the required packages installed, such as the ShinyNGS R module [installed](https://github.com/pinin4fjords/shinyngs#installation), since it supplies a lot of the accessory plotting functions etc that you will need. An editor such as VS Code is recommended for viewing and editing the files. The way you will do this may depend on your exact systems, but for example:
 
 ### 1. Create a conda environment with Shinyngs and activate it
 
 ```bash
-conda create -n shinyngs r-shinyngs
+conda create -f ./assets/report_environment.yml -n shinyngs
 conda activate shinyngs
 ```
 
-### 2. Open RStudio from this environment
+### 2. Unzip the report archive
 
-For example, on a Mac Terminal:
+Now, unzip the report archive, and change the directory to that location.
+
+### 3. Render Quarto report
+
+Once the environment is active, you should have everything required to execute the code chunks and render the HTML report.
+
+To render the report and open a live preview in your browser:
 
 ```bash
-open -na Rstudio
+quarto preview differentialabundance_report.qmd --execute-params params.yml
 ```
-
-Now, unzip the report archive, and in RStudio change directory to that location:
-
-```
-setwd("/path/to/unzipped/directory")
-```
-
-Now open the Quarto notebook file from the RStudio UI, and you should have everything you need to run the various code segments and render the whole document to HTML again if you wish.
 
 ## Shiny app generation
 
