@@ -368,8 +368,7 @@
                         }
                     ],
                     "description": "Minimum abundance value. Set to false to disable abundance filtering.",
-                    "fa_icon": "fas fa-compress-alt",
-                    "default": 1
+                    "fa_icon": "fas fa-compress-alt"
                 },
                 "filtering_min_samples": {
                     "type": "number",
