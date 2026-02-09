@@ -303,6 +303,8 @@ To render the report and open a live preview in your browser:
 quarto preview differentialabundance_report.qmd --execute-params params.yml
 ```
 
+For a better understanding of Quarto, you can go to the [comprehensive guide](https://quarto.org/docs/guide/).
+
 ## Shiny app generation
 
 The pipeline is capable of building, and even deploying (to [shinyapps.io](https://www.shinyapps.io/)) for you a Shiny app built with [ShinyNGS](https://github.com/pinin4fjords/shinyngs). There is a basic example running [here](https://pinin4fjords.shinyapps.io/tester/) which shows what this might look like.
