@@ -5,7 +5,7 @@
 // an example in this module's environment file.
 process QUARTONOTEBOOK {
     tag "${meta.id}"
-    label 'process_low'
+    label 'process_medium'
     conda "${moduleDir}/environment.yml"
     container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
         ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/28/28717ccd9ce22dbfc219f3db088d5a1fc2ca1f575b5c65621218596dcdbaac95/data'
