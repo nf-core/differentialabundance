@@ -354,6 +354,27 @@
   # Other
   round_digits: 3
 
+- paramset_name: dream_norm2
+  include: paramsheet/dream_norm,testdata/rnaseq_testdata_complex3
+
+  # Filtering
+  filtering_min_abundance: 10
+
+  # Exploratory
+  exploratory_main_variable: contrasts
+
+  # Report options
+  report_contributors: |-
+    Jane Doe
+    Director of Institute of Microbiology
+    University of Smallville;John Smith
+    PhD student
+    Institute of Microbiology
+    University of Smallville
+
+  # Other
+  round_digits: 3
+
 - paramset_name: limma_affy_gsea
   include: paramsheet/limma_affy_gsea,testdata/affy_testdata
 
