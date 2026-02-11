@@ -63,10 +63,24 @@
 - paramset_name: dream_rnaseq
   include: paramsheet/rnaseq
   differential_method: dream
-  dream_use_voom: true
+  dream_apply_voom: true
 
   exploratory_assay_names: raw,normalised
   exploratory_final_assay: normalised
+  exploratory_log2_assays: raw
+
+  differential_file_suffix: ".dream.results.tsv"
+  differential_fc_column: logFC
+  differential_pval_column: P.Value
+  differential_qval_column: adj.P.Val
+
+- paramset_name: dream_norm
+  include: paramsheet/rnaseq
+  differential_method: dream
+  dream_apply_voom: false
+
+  exploratory_assay_names: raw
+  exploratory_final_assay: raw
   exploratory_log2_assays: raw
 
   differential_file_suffix: ".dream.results.tsv"

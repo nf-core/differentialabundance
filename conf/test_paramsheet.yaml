@@ -271,6 +271,7 @@
 
 - paramset_name: dream_rnaseq
   include: paramsheet/dream_rnaseq,testdata/rnaseq_testdata_complex
+  dream_apply_voom: true
 
   # Filtering
   filtering_min_abundance: 10
@@ -332,8 +333,8 @@
   # Other
   round_digits: 3
 
-- paramset_name: dream_rnaseq2
-  include: paramsheet/dream_rnaseq,testdata/rnaseq_testdata_complex2
+- paramset_name: dream_norm
+  include: paramsheet/dream_norm,testdata/rnaseq_testdata_complex2
 
   # Filtering
   filtering_min_abundance: 10
