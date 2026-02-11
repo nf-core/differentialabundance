@@ -93,7 +93,7 @@
                     "pattern": "^\\S+\\.(tsv|csv)$|\\S*proteinGroups\\.txt$",
                     "fa_icon": "fas fa-border-all"
                 },
-                "transcript_length_matrix": {
+                "feature_length_matrix": {
                     "type": "string",
                     "fa_icon": "fas fa-border-all",
                     "description": "(RNA-seq only): optional transcript/gene length matrix with samples and transcript_ids/gene_ids as in the abundance matrix.",
