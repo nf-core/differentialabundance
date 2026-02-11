@@ -1266,7 +1266,7 @@ for (i in 1:nrow(contrasts)) {
             # Print the formatted table
             print(htmltools::tagList(dt))
 
-                        cat("\n**Box plots**\n\n")
+            cat("\n**Box plots**\n\n")
             cat("The following box plots show the distribution of expression levels for the top 10 genes ranked by significance.\n\n")
 
             qval_pretty <- prettifyVariablename(params$meta$params$differential_qval_column)
