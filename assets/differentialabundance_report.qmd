@@ -41,13 +41,13 @@ library(yaml)
 library(shinyngs)
 library(plotly)
 library(DT)
-library(ggplot2)
 library(dplyr)
-library(tidyr)
-library(ggbeeswarm)
+library(ggplot2)
 library(ComplexHeatmap)
 library(UpSetR)
 library(tidyverse)
+library(tidyr)
+library(ggbeeswarm)
 ```
 
 <!-- Define some functions -->
@@ -1105,14 +1105,15 @@ cat(differential_summary_string)
 
 ### Differential `{r} params$meta$params$features_type` details
 
-```{r}
+```{r, results='asis'}
 #| echo: false
 #| results: asis
 #| warning: false
 #| message: false
 
+# Display all warnings related to number of rows
 if (length(warnings_list) > 0) {
-  for (warning in warnings_list) cat(warning)
+    for (warning in warnings_list) cat(warning)
 }
 
 for (i in 1:nrow(contrasts)) {
@@ -1140,67 +1141,65 @@ for (i in 1:nrow(contrasts)) {
         label_col <- params$meta$params$differential_feature_id_column
     }
 
-    p_value_types <- list(
-        Adjusted   = params$meta$params$differential_qval_column,
-        Unadjusted = params$meta$params$differential_pval_column
-  )
-  p_value_thresholds <- list(
-    Adjusted   = params$meta$params$differential_max_qval,
-    Unadjusted = params$meta$params$differential_max_pval
-  )
+    p_value_types <- list(Adjusted = params$meta$params$differential_qval_column, Unadjusted = params$meta$params$differential_pval_column)
+    p_value_thresholds <- list(Adjusted = params$meta$params$differential_max_qval, Unadjusted = params$meta$params$differential_max_pval)
 
-  for (pvt in names(p_value_types)) {
+    for (pvt in names(p_value_types)) {
+        cat("\n##### ", pvt, " p values", "\n\n")
+        pval_column <- p_value_types[[pvt]]
 
-    cat("\n##### ", pvt, " p values\n\n")
+        de_fc <- abs(full_de[[params$meta$params$differential_fc_column]]) >= abs(log2(params$meta$params$differential_min_fold_change))
+        de_fc_label <- paste("abs(logFC) >=", log2(params$meta$params$differential_min_fold_change))
 
-    pval_column <- p_value_types[[pvt]]
+        de_pval <- full_de[[pval_column]] <= p_value_thresholds[[pvt]]
+        de_pval_label <- paste(pvt, "<=", p_value_thresholds[[pvt]])
 
-    de_fc <- abs(full_de[[params$meta$params$differential_fc_column]]) >=
-      abs(log2(params$meta$params$differential_min_fold_change))
-    de_fc_label <- paste("abs(logFC) >=", log2(params$meta$params$differential_min_fold_change))
+        de_pval_fc_label <- paste(de_fc_label, "&", de_pval_label)
 
-    de_pval <- full_de[[pval_column]] <= p_value_thresholds[[pvt]]
-    de_pval_label <- paste(pvt, "<=", p_value_thresholds[[pvt]])
-
-    de_pval_fc_label <- paste(de_fc_label, "&", de_pval_label)
-
-    full_de$differential_status <- "Not significant"
-    full_de$differential_status[de_fc] <- de_fc_label
-    full_de$differential_status[de_pval] <- de_pval_label
-    full_de$differential_status[de_fc & de_pval] <- de_pval_fc_label
-    full_de$differential_status <- factor(
-      full_de$differential_status,
-      levels = c("Not significant", de_fc_label, de_pval_label, de_pval_fc_label),
-      ordered = TRUE
-    )
+        full_de$differential_status <- "Not significant"
+        full_de$differential_status[de_fc] <- de_fc_label
+        full_de$differential_status[de_pval] <- de_pval_label
+        full_de$differential_status[de_fc & de_pval] <- de_pval_fc_label
+        full_de$differential_status <- factor(full_de$differential_status, levels = c("Not significant", de_fc_label, de_pval_label, de_pval_fc_label), ordered = TRUE) # Factorize status so that non-significant is always first
+        # Define the thresholds we'll draw
 
         hline_thresholds <- vline_thresholds <- list()
         hline_thresholds[[paste(pval_column, "=", p_value_thresholds[[pvt]])]] <- -log10(p_value_thresholds[[pvt]])
         vline_thresholds[[paste(params$meta$params$differential_fc_column, "<=", log2(params$meta$params$differential_min_fold_change))]] <- -log2(params$meta$params$differential_min_fold_change)
         vline_thresholds[[paste(params$meta$params$differential_fc_column, ">=", log2(params$meta$params$differential_min_fold_change))]] <- log2(params$meta$params$differential_min_fold_change)
-        palette_volcano <- append(c("#999999"), makeColorScale(3, params$meta$params$differential_palette_name))
+        palette_volcano <- append(c("#999999"), makeColorScale(3, params$meta$params$differential_palette_name)) # set non-significant to gray
 
-    plot_args <- list(
-      x = full_de[[params$meta$params$differential_fc_column]],
-      y = -log10(full_de[[pval_column]]),
-      colorby = full_de$differential_status,
-      ylab = paste("-log(10)", pval_column),
-      xlab = paste("higher in", contrasts$reference[i], "<<", params$meta$params$differential_fc_column, ">>", "higher in", contrasts$target[i]),
-      labels = full_de[[label_col]],
-      hline_thresholds = hline_thresholds,
-      vline_thresholds = vline_thresholds,
-      show_labels = FALSE,
-      legend_title = "Differential status",
-      palette = palette_volcano
-    )
+        # label_col already set above (name col if available else id col)
+        hover_labels <- as.character(full_de[[label_col]])
 
-    max_fc <- max(abs(full_de[[params$meta$params$differential_fc_column]])) * 1.1
+        # Fallback to ID where name is missing so all points get hover text
+        id_col <- params$meta$params$differential_feature_id_column
+        miss <- is.na(hover_labels) | hover_labels == ""
+        hover_labels[miss] <- as.character(full_de[[id_col]][miss])
 
-    zero_p <- sum(full_de[[pval_column]] == 0, na.rm = TRUE)
-    if (zero_p) {
-      cat(sprintf("<i>%d feature%s not shown because of p value = 0; please refer to the results tables.</i><br><br>",
-                  zero_p, ifelse(zero_p > 1, "s are", " is")))
-    }
+        plot_args <- list(
+            x = full_de[[params$meta$params$differential_fc_column]],
+            y = -log10(full_de[[pval_column]]),
+            colorby = full_de$differential_status,
+            ylab = paste("-log(10)", pval_column),
+            xlab = xlabel <- paste("higher in", contrasts$reference[i], "          <<", params$meta$params$differential_fc_column, ">>           higher in", contrasts$target[i]),
+            labels = hover_labels,
+            vline_thresholds = vline_thresholds,
+            show_labels = FALSE,
+            legend_title = "Differential status",
+            palette = palette_volcano
+        )
+
+        # Let's equalize the axes
+        max_fc <- max(abs(full_de[[params$meta$params$differential_fc_column]])) * 1.1
+
+        zero_p <- sum(full_de[[pval_column]] == 0, na.rm = TRUE)
+        if (zero_p) {
+            cat(sprintf(
+                "<i>%d feature%s not shown because of p value = 0; please refer to the results tables.</i><br><br>",
+                zero_p, ifelse(zero_p > 1, "s are", " is")
+            ))
+        }
 
         p <- do.call(plotly_scatterplot, plot_args) %>%
             layout(xaxis = list(range = list(-max_fc, max_fc))) %>%
@@ -1389,7 +1388,7 @@ for (i in 1:nrow(contrasts)) {
               cat("<br><br><br><br><br><br><br><br><br>\n\n")
             }
             cat("\n:::\n\n")
-
+            
             # Optional biotype plot, now grouped by Direction
             if ("Gene biotype" %in% colnames(combined)) {
                 # Count by biotype and direction without adding new deps
