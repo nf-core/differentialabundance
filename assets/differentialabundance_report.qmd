@@ -1229,6 +1229,10 @@ for (i in 1:nrow(contrasts)) {
                     "Down"   # Negative fold-change = Down-regulated
                 )
             ) %>%
+            arrange(
+                .data[[params$meta$params$differential_qval_column]],
+                .data[[params$meta$params$differential_pval_column]]
+            ) %>%
             relocate(Direction) %>%
             rename_with(prettifyVariablename)
 
