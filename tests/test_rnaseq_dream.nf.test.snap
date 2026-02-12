@@ -40,7 +40,6 @@
                 "plots/differential/dream_norm2/full_model_with_interactions_SRP254919",
                 "plots/differential/dream_norm2/full_model_with_interactions_SRP254919/png",
                 "plots/differential/dream_norm2/full_model_with_interactions_SRP254919/png/volcano.png",
-                "plots/differential/dream_norm2/versions.yml",
                 "plots/differential/dream_norm2/zero_intercept_model_1_SRP254919",
                 "plots/differential/dream_norm2/zero_intercept_model_1_SRP254919/png",
                 "plots/differential/dream_norm2/zero_intercept_model_1_SRP254919/png/volcano.png",
@@ -68,7 +67,6 @@
                 "tables/differential/dream_norm2/zero_intercept_model_2_SRP254919_dream.annotated.tsv"
             ],
             [
-                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb"
             ]
         ],
@@ -76,7 +74,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
         },
-        "timestamp": "2026-02-10T19:01:06.455827422"
+        "timestamp": "2026-02-12T16:24:52.163128056"
     },
     "Test rnaseq dream profile - complex contrast - with zero intercept - 1": {
         "content": [
@@ -131,7 +129,6 @@
                 "plots/differential/dream_norm/treatment_plus_genotype_SRP254919",
                 "plots/differential/dream_norm/treatment_plus_genotype_SRP254919/png",
                 "plots/differential/dream_norm/treatment_plus_genotype_SRP254919/png/volcano.png",
-                "plots/differential/dream_norm/versions.yml",
                 "plots/exploratory",
                 "plots/exploratory/dream_norm",
                 "plots/exploratory/dream_norm/treatment",
@@ -142,7 +139,6 @@
                 "plots/exploratory/dream_norm/treatment/png/pca2d.png",
                 "plots/exploratory/dream_norm/treatment/png/pca3d.png",
                 "plots/exploratory/dream_norm/treatment/png/sample_dendrogram.png",
-                "plots/exploratory/dream_norm/versions.yml",
                 "report",
                 "report/dream_norm",
                 "report/dream_norm/SRP254919.zip",
@@ -152,7 +148,6 @@
                 "shinyngs_app/dream_norm/SRP254919",
                 "shinyngs_app/dream_norm/SRP254919/app.R",
                 "shinyngs_app/dream_norm/SRP254919/data.rds",
-                "shinyngs_app/dream_norm/versions.yml",
                 "tables",
                 "tables/annotation",
                 "tables/annotation/dream_norm",
@@ -170,10 +165,7 @@
                 "tables/differential/dream_norm/treatment_plus_genotype_SRP254919_dream.annotated.tsv"
             ],
             [
-                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
-                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
-                "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb"
             ]
         ],
@@ -181,7 +173,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
         },
-        "timestamp": "2026-02-10T18:57:47.37908848"
+        "timestamp": "2026-02-12T16:21:43.811625735"
     },
     "Test - Numeric sample IDs - rnaseq dream profile - with decoupler": {
         "content": [
