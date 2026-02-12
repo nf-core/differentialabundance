@@ -1,4 +1,188 @@
 {
+    "Test rnaseq dream profile - complex contrast - with zero intercept - 2": {
+        "content": [
+            18,
+            {
+                "CSVTK_JOIN": {
+                    "csvtk": "0.31.0"
+                },
+                "CUSTOM_FILTERDIFFERENTIALTABLE": {
+                    "pandas": "1.5.2"
+                },
+                "GTF_TO_TABLE": {
+                    "atlas-gene-annotation-manipulation": "1.1.1"
+                },
+                "GUNZIP_GTF": {
+                    "gunzip": 1.13
+                },
+                "PLOT_DIFFERENTIAL": {
+                    "r-shinyngs": "2.3.0"
+                },
+                "VALIDATOR": {
+                    "r-shinyngs": "2.3.0"
+                },
+                "VARIANCEPARTITION_DREAM": {
+                    "r-base": "4.3.3",
+                    "bioconductor-edger": "4.0.16",
+                    "variancePartition": "1.32.2"
+                },
+                "Workflow": {
+                    "nf-core/differentialabundance": "v1.6.0dev"
+                }
+            },
+            [
+                "pipeline_info",
+                "pipeline_info/collated_versions.yml",
+                "pipeline_info/nf_core_differentialabundance_software_versions.yml",
+                "plots",
+                "plots/differential",
+                "plots/differential/dream_norm2",
+                "plots/differential/dream_norm2/full_model_with_interactions_SRP254919",
+                "plots/differential/dream_norm2/full_model_with_interactions_SRP254919/png",
+                "plots/differential/dream_norm2/full_model_with_interactions_SRP254919/png/volcano.png",
+                "plots/differential/dream_norm2/versions.yml",
+                "plots/differential/dream_norm2/zero_intercept_model_1_SRP254919",
+                "plots/differential/dream_norm2/zero_intercept_model_1_SRP254919/png",
+                "plots/differential/dream_norm2/zero_intercept_model_1_SRP254919/png/volcano.png",
+                "plots/differential/dream_norm2/zero_intercept_model_2_SRP254919",
+                "plots/differential/dream_norm2/zero_intercept_model_2_SRP254919/png",
+                "plots/differential/dream_norm2/zero_intercept_model_2_SRP254919/png/volcano.png",
+                "report",
+                "report/dream_norm2",
+                "report/dream_norm2/SRP254919.zip",
+                "report/dream_norm2/SRP254919_differentialabundance_report.html",
+                "tables",
+                "tables/annotation",
+                "tables/annotation/dream_norm2",
+                "tables/annotation/dream_norm2/SRP254919.anno.tsv",
+                "tables/differential",
+                "tables/differential/dream_norm2",
+                "tables/differential/dream_norm2/full_model_with_interactions_SRP254919.dream.results.tsv",
+                "tables/differential/dream_norm2/full_model_with_interactions_SRP254919.dream.results_filtered.tsv",
+                "tables/differential/dream_norm2/full_model_with_interactions_SRP254919_dream.annotated.tsv",
+                "tables/differential/dream_norm2/zero_intercept_model_1_SRP254919.dream.results.tsv",
+                "tables/differential/dream_norm2/zero_intercept_model_1_SRP254919.dream.results_filtered.tsv",
+                "tables/differential/dream_norm2/zero_intercept_model_1_SRP254919_dream.annotated.tsv",
+                "tables/differential/dream_norm2/zero_intercept_model_2_SRP254919.dream.results.tsv",
+                "tables/differential/dream_norm2/zero_intercept_model_2_SRP254919.dream.results_filtered.tsv",
+                "tables/differential/dream_norm2/zero_intercept_model_2_SRP254919_dream.annotated.tsv"
+            ],
+            [
+                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
+                "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
+        },
+        "timestamp": "2026-02-10T19:01:06.455827422"
+    },
+    "Test rnaseq dream profile - complex contrast - with zero intercept - 1": {
+        "content": [
+            20,
+            {
+                "CSVTK_JOIN": {
+                    "csvtk": "0.31.0"
+                },
+                "CUSTOM_FILTERDIFFERENTIALTABLE": {
+                    "pandas": "1.5.2"
+                },
+                "GTF_TO_TABLE": {
+                    "atlas-gene-annotation-manipulation": "1.1.1"
+                },
+                "GUNZIP_GTF": {
+                    "gunzip": 1.13
+                },
+                "PLOT_DIFFERENTIAL": {
+                    "r-shinyngs": "2.3.0"
+                },
+                "PLOT_EXPLORATORY": {
+                    "r-shinyngs": "2.3.0"
+                },
+                "SHINYNGS_APP": {
+                    "r-shinyngs": "2.3.0"
+                },
+                "VALIDATOR": {
+                    "r-shinyngs": "2.3.0"
+                },
+                "VARIANCEPARTITION_DREAM": {
+                    "r-base": "4.3.3",
+                    "bioconductor-edger": "4.0.16",
+                    "variancePartition": "1.32.2"
+                },
+                "Workflow": {
+                    "nf-core/differentialabundance": "v1.6.0dev"
+                }
+            },
+            [
+                "pipeline_info",
+                "pipeline_info/collated_versions.yml",
+                "pipeline_info/nf_core_differentialabundance_software_versions.yml",
+                "plots",
+                "plots/differential",
+                "plots/differential/dream_norm",
+                "plots/differential/dream_norm/interaction_genotype_treatment_SRP254919",
+                "plots/differential/dream_norm/interaction_genotype_treatment_SRP254919/png",
+                "plots/differential/dream_norm/interaction_genotype_treatment_SRP254919/png/volcano.png",
+                "plots/differential/dream_norm/treatment_effect_classic_comparison_SRP254919",
+                "plots/differential/dream_norm/treatment_effect_classic_comparison_SRP254919/png",
+                "plots/differential/dream_norm/treatment_effect_classic_comparison_SRP254919/png/volcano.png",
+                "plots/differential/dream_norm/treatment_plus_genotype_SRP254919",
+                "plots/differential/dream_norm/treatment_plus_genotype_SRP254919/png",
+                "plots/differential/dream_norm/treatment_plus_genotype_SRP254919/png/volcano.png",
+                "plots/differential/dream_norm/versions.yml",
+                "plots/exploratory",
+                "plots/exploratory/dream_norm",
+                "plots/exploratory/dream_norm/treatment",
+                "plots/exploratory/dream_norm/treatment/png",
+                "plots/exploratory/dream_norm/treatment/png/boxplot.png",
+                "plots/exploratory/dream_norm/treatment/png/density.png",
+                "plots/exploratory/dream_norm/treatment/png/mad_correlation.png",
+                "plots/exploratory/dream_norm/treatment/png/pca2d.png",
+                "plots/exploratory/dream_norm/treatment/png/pca3d.png",
+                "plots/exploratory/dream_norm/treatment/png/sample_dendrogram.png",
+                "plots/exploratory/dream_norm/versions.yml",
+                "report",
+                "report/dream_norm",
+                "report/dream_norm/SRP254919.zip",
+                "report/dream_norm/SRP254919_differentialabundance_report.html",
+                "shinyngs_app",
+                "shinyngs_app/dream_norm",
+                "shinyngs_app/dream_norm/SRP254919",
+                "shinyngs_app/dream_norm/SRP254919/app.R",
+                "shinyngs_app/dream_norm/SRP254919/data.rds",
+                "shinyngs_app/dream_norm/versions.yml",
+                "tables",
+                "tables/annotation",
+                "tables/annotation/dream_norm",
+                "tables/annotation/dream_norm/SRP254919.anno.tsv",
+                "tables/differential",
+                "tables/differential/dream_norm",
+                "tables/differential/dream_norm/interaction_genotype_treatment_SRP254919.dream.results.tsv",
+                "tables/differential/dream_norm/interaction_genotype_treatment_SRP254919.dream.results_filtered.tsv",
+                "tables/differential/dream_norm/interaction_genotype_treatment_SRP254919_dream.annotated.tsv",
+                "tables/differential/dream_norm/treatment_effect_classic_comparison_SRP254919.dream.results.tsv",
+                "tables/differential/dream_norm/treatment_effect_classic_comparison_SRP254919.dream.results_filtered.tsv",
+                "tables/differential/dream_norm/treatment_effect_classic_comparison_SRP254919_dream.annotated.tsv",
+                "tables/differential/dream_norm/treatment_plus_genotype_SRP254919.dream.results.tsv",
+                "tables/differential/dream_norm/treatment_plus_genotype_SRP254919.dream.results_filtered.tsv",
+                "tables/differential/dream_norm/treatment_plus_genotype_SRP254919_dream.annotated.tsv"
+            ],
+            [
+                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
+                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
+                "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
+                "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
+                "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
+        },
+        "timestamp": "2026-02-10T18:57:47.37908848"
+    },
     "Test - Numeric sample IDs - rnaseq dream profile - with decoupler": {
         "content": [
             19,
@@ -391,128 +575,5 @@
             "nextflow": "25.04.2"
         },
         "timestamp": "2026-01-20T19:28:50.877373953"
-    },
-    "Test rnaseq dream profile - complex contrast - with zero intercept": {
-        "content": [
-            32,
-            {
-                "CSVTK_JOIN": {
-                    "csvtk": "0.31.0"
-                },
-                "CUSTOM_FILTERDIFFERENTIALTABLE": {
-                    "pandas": "1.5.2"
-                },
-                "GTF_TO_TABLE": {
-                    "atlas-gene-annotation-manipulation": "1.1.1"
-                },
-                "GUNZIP_GTF": {
-                    "gunzip": 1.13
-                },
-                "PLOT_DIFFERENTIAL": {
-                    "r-shinyngs": "2.3.0"
-                },
-                "PLOT_EXPLORATORY": {
-                    "r-shinyngs": "2.3.0"
-                },
-                "SHINYNGS_APP": {
-                    "r-shinyngs": "2.3.0"
-                },
-                "VALIDATOR": {
-                    "r-shinyngs": "2.3.0"
-                },
-                "VARIANCEPARTITION_DREAM": {
-                    "r-base": "4.3.3",
-                    "bioconductor-edger": "4.0.16",
-                    "variancePartition": "1.32.2"
-                },
-                "Workflow": {
-                    "nf-core/differentialabundance": "v1.6.0dev"
-                }
-            },
-            [
-                "pipeline_info",
-                "pipeline_info/collated_versions.yml",
-                "pipeline_info/nf_core_differentialabundance_software_versions.yml",
-                "plots",
-                "plots/differential",
-                "plots/differential/dream_norm",
-                "plots/differential/dream_norm/full_model_with_interactions_SRP254919",
-                "plots/differential/dream_norm/full_model_with_interactions_SRP254919/png",
-                "plots/differential/dream_norm/full_model_with_interactions_SRP254919/png/volcano.png",
-                "plots/differential/dream_norm/interaction_genotype_treatment_SRP254919",
-                "plots/differential/dream_norm/interaction_genotype_treatment_SRP254919/png",
-                "plots/differential/dream_norm/interaction_genotype_treatment_SRP254919/png/volcano.png",
-                "plots/differential/dream_norm/treatment_effect_classic_comparison_SRP254919",
-                "plots/differential/dream_norm/treatment_effect_classic_comparison_SRP254919/png",
-                "plots/differential/dream_norm/treatment_effect_classic_comparison_SRP254919/png/volcano.png",
-                "plots/differential/dream_norm/treatment_plus_genotype_SRP254919",
-                "plots/differential/dream_norm/treatment_plus_genotype_SRP254919/png",
-                "plots/differential/dream_norm/treatment_plus_genotype_SRP254919/png/volcano.png",
-                "plots/differential/dream_norm/versions.yml",
-                "plots/differential/dream_norm/zero_intercept_model_1_SRP254919",
-                "plots/differential/dream_norm/zero_intercept_model_1_SRP254919/png",
-                "plots/differential/dream_norm/zero_intercept_model_1_SRP254919/png/volcano.png",
-                "plots/differential/dream_norm/zero_intercept_model_2_SRP254919",
-                "plots/differential/dream_norm/zero_intercept_model_2_SRP254919/png",
-                "plots/differential/dream_norm/zero_intercept_model_2_SRP254919/png/volcano.png",
-                "plots/exploratory",
-                "plots/exploratory/dream_norm",
-                "plots/exploratory/dream_norm/treatment",
-                "plots/exploratory/dream_norm/treatment/png",
-                "plots/exploratory/dream_norm/treatment/png/boxplot.png",
-                "plots/exploratory/dream_norm/treatment/png/density.png",
-                "plots/exploratory/dream_norm/treatment/png/mad_correlation.png",
-                "plots/exploratory/dream_norm/treatment/png/pca2d.png",
-                "plots/exploratory/dream_norm/treatment/png/pca3d.png",
-                "plots/exploratory/dream_norm/treatment/png/sample_dendrogram.png",
-                "plots/exploratory/dream_norm/versions.yml",
-                "report",
-                "report/dream_norm",
-                "report/dream_norm/SRP254919.zip",
-                "report/dream_norm/SRP254919_differentialabundance_report.html",
-                "shinyngs_app",
-                "shinyngs_app/dream_norm",
-                "shinyngs_app/dream_norm/SRP254919",
-                "shinyngs_app/dream_norm/SRP254919/app.R",
-                "shinyngs_app/dream_norm/SRP254919/data.rds",
-                "shinyngs_app/dream_norm/versions.yml",
-                "tables",
-                "tables/annotation",
-                "tables/annotation/dream_norm",
-                "tables/annotation/dream_norm/SRP254919.anno.tsv",
-                "tables/differential",
-                "tables/differential/dream_norm",
-                "tables/differential/dream_norm/full_model_with_interactions_SRP254919.dream.results.tsv",
-                "tables/differential/dream_norm/full_model_with_interactions_SRP254919.dream.results_filtered.tsv",
-                "tables/differential/dream_norm/full_model_with_interactions_SRP254919_dream.annotated.tsv",
-                "tables/differential/dream_norm/interaction_genotype_treatment_SRP254919.dream.results.tsv",
-                "tables/differential/dream_norm/interaction_genotype_treatment_SRP254919.dream.results_filtered.tsv",
-                "tables/differential/dream_norm/interaction_genotype_treatment_SRP254919_dream.annotated.tsv",
-                "tables/differential/dream_norm/treatment_effect_classic_comparison_SRP254919.dream.results.tsv",
-                "tables/differential/dream_norm/treatment_effect_classic_comparison_SRP254919.dream.results_filtered.tsv",
-                "tables/differential/dream_norm/treatment_effect_classic_comparison_SRP254919_dream.annotated.tsv",
-                "tables/differential/dream_norm/treatment_plus_genotype_SRP254919.dream.results.tsv",
-                "tables/differential/dream_norm/treatment_plus_genotype_SRP254919.dream.results_filtered.tsv",
-                "tables/differential/dream_norm/treatment_plus_genotype_SRP254919_dream.annotated.tsv",
-                "tables/differential/dream_norm/zero_intercept_model_1_SRP254919.dream.results.tsv",
-                "tables/differential/dream_norm/zero_intercept_model_1_SRP254919.dream.results_filtered.tsv",
-                "tables/differential/dream_norm/zero_intercept_model_1_SRP254919_dream.annotated.tsv",
-                "tables/differential/dream_norm/zero_intercept_model_2_SRP254919.dream.results.tsv",
-                "tables/differential/dream_norm/zero_intercept_model_2_SRP254919.dream.results_filtered.tsv",
-                "tables/differential/dream_norm/zero_intercept_model_2_SRP254919_dream.annotated.tsv"
-            ],
-            [
-                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
-                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
-                "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
-                "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
-                "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb"
-            ]
-        ],
-        "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.04.2"
-        },
-        "timestamp": "2026-01-22T14:06:46.658555468"
     }
 }
