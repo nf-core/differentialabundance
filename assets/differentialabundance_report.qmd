@@ -815,7 +815,7 @@ for (assay_type in rev(names(assay_data))) {
 cat(":::")
 ```
 
-```{r, echo=FALSE, results='asis', eval=params$meta$params$report_scree}
+```{r, echo=FALSE, results='asis'}
 cat(paste0("\n#### Scree plot\n"))
 cat("::: {.panel-tabset}")
 cat(paste0("\nThe following scree plot visualizes what percentage of total variation in the data can be explained by each of the principal components computed.\n"))

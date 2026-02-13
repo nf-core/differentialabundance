@@ -1221,11 +1221,6 @@
                     "fa_icon": "fas fa-feather",
                     "description": "A description for reporting outputs"
                 },
-                "report_scree": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Whether to generate a scree plot in the report"
-                },
                 "skip_reports": {
                     "type": "boolean",
                     "default": false,
