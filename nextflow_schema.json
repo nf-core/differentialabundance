@@ -93,7 +93,7 @@
                     "pattern": "^\\S+\\.(tsv|csv)$|\\S*proteinGroups\\.txt$",
                     "fa_icon": "fas fa-border-all"
                 },
-                "transcript_length_matrix": {
+                "feature_length_matrix": {
                     "type": "string",
                     "fa_icon": "fas fa-border-all",
                     "description": "(RNA-seq only): optional transcript/gene length matrix with samples and transcript_ids/gene_ids as in the abundance matrix.",
@@ -695,13 +695,6 @@
                     "description": "Shink fold changes in results?",
                     "help_text": "'ashr' method is the only method currently implemented",
                     "fa_icon": "fas fa-microscope"
-                },
-                "deseq2_cores": {
-                    "type": "integer",
-                    "default": 1,
-                    "description": "Number of cores",
-                    "help_text": "Number of cores to use with DESeq()",
-                    "fa_icon": "fab fa-centercode"
                 },
                 "deseq2_seed": {
                     "type": "integer",

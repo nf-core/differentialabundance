@@ -66,7 +66,7 @@ RNA-seq with deseq2:
 :::note
 If you are using the outputs of the nf-core rnaseq workflow as input here **either**:
 
-- supply the raw count matrices (file names like **gene_counts.tsv**) alongide the transcript length matrix via `--transcript_length_matrix` (rnaseq versions >=3.12.0, preferred)
+- supply the raw count matrices (file names like **gene_counts.tsv**) alongide the feature length matrix via `--feature_length_matrix` (rnaseq versions >=3.12.0, preferred)
 - **or** supply the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices.
 
 RNA-seq limma+voom:

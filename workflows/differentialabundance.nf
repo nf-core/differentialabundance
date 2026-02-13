@@ -95,7 +95,7 @@ workflow DIFFERENTIALABUNDANCE {
     // Create optional parameter channels based on ch_paramsets
     ch_transcript_lengths = ch_paramsets
         .map { meta ->
-            [ meta, meta.params.transcript_length_matrix ? file(meta.params.transcript_length_matrix, checkIfExists: true) : [] ]
+            [ meta, meta.params.feature_length_matrix ? file(meta.params.feature_length_matrix, checkIfExists: true) : [] ]
         }
 
     ch_control_features = ch_paramsets
