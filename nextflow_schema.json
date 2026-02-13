@@ -696,13 +696,6 @@
                     "help_text": "'ashr' method is the only method currently implemented",
                     "fa_icon": "fas fa-microscope"
                 },
-                "deseq2_cores": {
-                    "type": "integer",
-                    "default": 1,
-                    "description": "Number of cores",
-                    "help_text": "Number of cores to use with DESeq()",
-                    "fa_icon": "fab fa-centercode"
-                },
                 "deseq2_seed": {
                     "type": "integer",
                     "fa_icon": "fas fa-seedling"
