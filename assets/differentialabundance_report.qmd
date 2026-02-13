@@ -1388,7 +1388,7 @@ for (i in 1:nrow(contrasts)) {
               cat("<br><br><br><br><br><br><br><br><br>\n\n")
             }
             cat("\n:::\n\n")
-            
+
             # Optional biotype plot, now grouped by Direction
             if ("Gene biotype" %in% colnames(combined)) {
                 # Count by biotype and direction without adding new deps
