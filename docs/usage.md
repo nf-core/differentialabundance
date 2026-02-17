@@ -285,8 +285,8 @@ To work with Quarto document files you will need an R environment with the requi
 ### 1. Create a conda environment with Shinyngs and activate it
 
 ```bash
-conda create -f ./assets/report_environment.yml -n shinyngs
-conda activate shinyngs
+conda create -f ./assets/report_environment.yml -n report_environment
+conda activate report_environment
 ```
 
 ### 2. Unzip the report archive

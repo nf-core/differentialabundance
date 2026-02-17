@@ -937,7 +937,7 @@ workflow DIFFERENTIALABUNDANCE {
             QUARTONOTEBOOK.out.params_yaml
                 .groupTuple()
         )
-        .map { meta, input_files, all_notebooks , params_yaml->
+        .map { meta, input_files, all_notebooks, params_yaml->
             [meta, input_files + all_notebooks + params_yaml]
         }
     MAKE_REPORT_BUNDLE( ch_bundle_input )
