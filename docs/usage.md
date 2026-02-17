@@ -274,7 +274,7 @@ You will be also able to run a specific config from this custom file using `--pa
 
 ## Working with the output Quarto file
 
-The pipeline produces an Quarto document file which, if you're proficient in R, you can use to tweak the report after it's generated.
+The pipeline produces a Quarto document file which, if you're proficient in R, you can use to tweak the report after it's generated.
 
 > [!NOTE]
 >
