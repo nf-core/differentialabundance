@@ -787,11 +787,6 @@
                     "description": "passed to topTable(), minimum absolute log2-fold-change required",
                     "help_text": "topTable and topTableF include only genes with (at least one) absolute log-fold-change greater than lfc. topTreat does not remove genes but ranks genes by evidence that their log-fold-change exceeds lfc."
                 },
-                "limma_confint": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-temperature-low",
-                    "description": "passed to topTable(), logical, should confidence 95% intervals be output for logFC? Alternatively, can take a numeric value between zero and one specifying the confidence level required."
-                },
                 "limma_adjust_method": {
                     "type": "string",
                     "default": "BH",
