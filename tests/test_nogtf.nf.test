@@ -6,12 +6,26 @@ nextflow_pipeline {
     tag "pipeline"
 
     test("Test no gtf profile - rnaseq_nogtf") {
+        config "${projectDir}/conf/rnaseq/rnaseq_nogtf.config"
 
         when {
             params {
-                outdir              = "$outputDir"
-                paramsheet          = "${projectDir}/conf/test_paramsheet.yaml"
-                paramset_name       = "rnaseq_nogtf"
+                outdir = "$outputDir"
+
+                // Input data (rnaseq_testdata_nogtf - no GTF)
+                study_name    = 'SRP254919'
+                input         = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.samplesheet.csv'
+                matrix        = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.salmon.merged.gene_counts.top1000cov.tsv'
+                contrasts_yml = 'https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/SRP254919.contrasts.yaml'
+
+                // Exploratory
+                exploratory_main_variable = 'contrasts'
+
+                // Test dataset is too small for the nsub default value
+                deseq2_vst_nsub = 500
+
+                // Apply a higher filter to check that the filtering works
+                filtering_min_abundance = 10
             }
         }
 
