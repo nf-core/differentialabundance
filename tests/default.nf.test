@@ -92,6 +92,10 @@ nextflow_pipeline {
                 // gprofiler2
                 gprofiler2_organism = 'mmusculus'
 
+                // Skip immunedeconv - the formula test dataset has duplicate gene names
+                // which are incompatible with immunedeconv's row name requirement
+                immunedeconv_run = false
+
                 // Other
                 round_digits = 2
                 skip_reports = true
