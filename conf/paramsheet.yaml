@@ -7,7 +7,6 @@
   features_name_col: gene_name
   features_metadata_cols: gene_id,gene_name,gene_biotype
   differential_feature_id_column: gene_id
-  differential_feature_name_column: gene_name
 
   observations_id_col: sample
   observations_name_col: sample
@@ -111,7 +110,6 @@
   differential_pval_column: P.Value
   differential_qval_column: adj.P.Val
   differential_feature_id_column: PROBEID
-  differential_feature_name_column: SYMBOL
 
   shinyngs_build_app: true
 
@@ -145,7 +143,6 @@
   differential_pval_column: P.Value
   differential_qval_column: adj.P.Val
   differential_feature_id_column: ID
-  differential_feature_name_column: Symbol
 
 - paramset_name: limma_maxquant
   differential_method: limma
@@ -167,7 +164,6 @@
   differential_pval_column: P.Value
   differential_qval_column: adj.P.Val
   differential_feature_id_column: Majority protein IDs
-  differential_feature_name_column: Majority protein IDs
 
   proteus_measurecol_prefix: LFQ intensity
 

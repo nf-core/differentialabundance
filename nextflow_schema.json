@@ -560,12 +560,6 @@
                     "description": "Maximum q value used to calculate differential feature numbers",
                     "fa_icon": "fas fa-angle-double-up"
                 },
-                "differential_feature_name_column": {
-                    "type": "string",
-                    "default": "gene_name",
-                    "description": "Where a features file (GTF) has been provided, what attribute to use to name features",
-                    "fa_icon": "fas fa-signature"
-                },
                 "differential_foldchanges_logged": {
                     "type": "boolean",
                     "default": true,
