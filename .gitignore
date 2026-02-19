@@ -9,3 +9,11 @@ testing*
 null/
 .nf-test
 .nf-test.log
+testing/
+validate/
+test_Data/
+reports/
+log/*
+zero_contrasts/
+output/
+results_check/
