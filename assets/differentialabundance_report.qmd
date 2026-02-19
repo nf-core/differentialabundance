@@ -651,13 +651,13 @@ p <- ggplot_boxplot(
     colorby = main_grouping_variable,
     expressiontype = paste("count per", params$meta$params$features_type),
     palette = groupColorScale,
-    whisker_distance = params$meta$params$exploratory_whisker_distance,
+    whisker_distance = 1.5,
     base_size = 8
 )
 p
 ```
 
-Whiskers in the above boxplots show `{r} params$meta$params$exploratory_whisker_distance` times the inter-quartile range.
+Whiskers in the above boxplots show 1.5 times the inter-quartile range.
 
 #### Density plots
 
