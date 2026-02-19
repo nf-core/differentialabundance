@@ -566,12 +566,6 @@
                     "description": "Where a features file (GTF) has been provided, what attribute to use to name features",
                     "fa_icon": "fas fa-signature"
                 },
-                "differential_foldchanges_logged": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Indicate whether or not fold changes are on the log scale (default is to assume they are)",
-                    "fa_icon": "fas fa-calculator"
-                },
                 "differential_palette_name": {
                     "type": "string",
                     "default": "Set1",

@@ -337,11 +337,6 @@ results <- lapply(differential_files, function(diff_file) {
         qval_column = params$meta$params$differential_qval_column
     )
 
-    # Log transform fold changes if not already logged
-    if (!params$meta$params$differential_foldchanges_logged) {
-        diff[[params$meta$params$differential_fc_column]] <- log2(diff[[params$meta$params$differential_fc_column]])
-    }
-
     # Annotate differential table if features table is provided
     if (!is.null(params$features)) {
         ## Merge Differential expression table on features table
