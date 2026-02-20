@@ -375,7 +375,7 @@ There is also a [Shiny server application](https://posit.co/download/shiny-serve
 
 [Immunedeconv](https://omnideconv.org/immunedeconv/index.html) is a computational tool designed to estimate the proportions of immune cell types in bulk transcriptomic data. It leverages established deconvolution algorithms, such as CIBERSORT, EPIC, and xCell, to provide insights into the immune landscape of a given dataset.
 
-This tool is turned off by default, to turn it on set the parameter `--immunedeconv_run` to true. Also make sure that the parameters `--immunedeconv_method` and `--immunedeconv_function` are populated with the desired method and function to run this tool. Default values for these two are quantiseq and deconvolute, respectively. If you want to see the full list of available methods and functions, refer to the tool's [official guide]("https://omnideconv.org/immunedeconv/articles/immunedeconv.html").
+This tool is turned off by default, to turn it on set the parameter `--immunedeconv_run` to true. Also make sure that the parameters `--immunedeconv_method` and `--immunedeconv_function` are populated with the desired method and function to run this tool. Default values for these two are quantiseq and deconvolute, respectively. If you want to see the full list of available methods and functions, refer to the tool's [official guide](https://omnideconv.org/immunedeconv/articles/immunedeconv.html).
 
 For a better understanding on how these parameters affect the module's execution, this is how the parameters are used in the tool:
 
@@ -419,7 +419,7 @@ Check the [pipeline webpage](https://nf-co.re/differentialabundance/parameters#g
 
 ### Decoupler
 
-[Decoupler](https://decoupler-py.readthedocs.io/en/latest/index.html) is a Python function that infers biological regulator activities—such as transcription factor or pathway activity—from omics data using multiple statistical enrichment methods. It takes as input a gene expression matrix and a prior knowledge network linking regulators to target genes, and applies one or more methods (e.g., ULM, MLM, wsum) to estimate regulator activity scores across samples. The function supports optional consensus scoring and outputs method-specific activity estimates and p-values, making it a versatile tool for activity inference in both bulk and single-cell datasets. If you want to see the full list of available methods and functions, refer to the functions's [official guide]("https://decoupler-py.readthedocs.io/en/latest/generated/decoupler.decouple.html#decoupler.decouple").
+[Decoupler](https://decoupler-py.readthedocs.io/en/latest/index.html) is a Python function that infers biological regulator activities—such as transcription factor or pathway activity—from omics data using multiple statistical enrichment methods. It takes as input a gene expression matrix and a prior knowledge network linking regulators to target genes, and applies one or more methods (e.g., ULM, MLM, wsum) to estimate regulator activity scores across samples. The function supports optional consensus scoring and outputs method-specific activity estimates and p-values, making it a versatile tool for activity inference in both bulk and single-cell datasets. If you want to see the full list of available methods and functions, refer to the function's [official guide](https://decoupler.readthedocs.io/en/v1.9.2/generated/decoupler.decouple.html#decoupler.decouple).
 
 This tool is turned off by default, the following example shows how to enable it:
 
@@ -458,7 +458,7 @@ You can obtain regulatory networks from well-established databases and tools. Co
 
 - PROGENy – pathway-responsive gene signatures (pathways) [PROGENy](https://saezlab.github.io/progeny/)
 
-If you want to see the full list of available methods and functions, refer to the functions's [official guide](https://decoupler-py.readthedocs.io/en/latest/notebooks/benchmark.html#Multiple-networks).
+If you want to see the full list of available methods and functions, refer to the function's [official guide](https://decoupler-py.readthedocs.io/en/latest/notebooks/benchmark.html#Multiple-networks).
 
 **Note**: Then resources mentioned above are provided only for human or mouse datasets. Please ensure your organism is compatible before enabling this module or provide a custom, species-specific dataset.
 
