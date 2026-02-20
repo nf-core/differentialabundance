@@ -60,6 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [[#645](https://github.com/nf-core/differentialabundance/pull/645)] - Remove `--limma_confint` parameter and always output confidence 95% intervals for logFC ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#628](https://github.com/nf-core/differentialabundance/pull/628)] - Removed `--deseq2_cores` parameter and infer from task cpus instead,([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#633](https://github.com/nf-core/differentialabundance/pull/633)] - Rename transcript_length_matrix param to feature_length_matrix, ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#631](https://github.com/nf-core/differentialabundance/pull/631)] - Split zero intercept contrast dream test into two, ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
