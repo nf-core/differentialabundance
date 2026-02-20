@@ -77,10 +77,10 @@ To use this approach, include the corresponding lengths file with the **raw coun
 
 ```bash
 --matrix 'salmon.merged.gene_counts.tsv' \
---transcript_length_matrix 'salmon.merged.gene_lengths.tsv'
+--feature_length_matrix 'salmon.merged.gene_lengths.tsv'
 ```
 
-Without the transcript/gene lengths, for instance in earlier rnaseq workflow versions, follow the second recommendation in the [tximport documentation](https://bioconductor.org/packages/release/bioc/vignettes/tximport/inst/doc/tximport.html#Downstream_DGE_in_Bioconductor):
+Without the feature lengths, for instance in earlier rnaseq workflow versions, follow the second recommendation in the [tximport documentation](https://bioconductor.org/packages/release/bioc/vignettes/tximport/inst/doc/tximport.html#Downstream_DGE_in_Bioconductor):
 
 > "Use the tximport argument `countsFromAbundance='lengthScaledTPM'` or `'scaledTPM'`, then employ the gene-level count matrix `txi$counts` directly in downstream software, a method we call 'bias corrected counts without an offset'"
 
