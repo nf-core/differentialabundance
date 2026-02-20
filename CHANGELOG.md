@@ -60,6 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [[#626](https://github.com/nf-core/differentialabundance/pull/626)] - Update documentation, bump Nextflow version, `versions.yml` output cleanup and add params_yaml to report bundle ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila), [@apeltzer](https://github.com/apeltzer), [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#631](https://github.com/nf-core/differentialabundance/pull/631)] - Split zero intercept contrast dream test into two, ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#625](https://github.com/nf-core/differentialabundance/pull/625)] - Sort genes by p-value by default in quarto report, ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#620](https://github.com/nf-core/differentialabundance/pull/620/)] - Improve scree plot by switching to plotly, ([@atrigila](https://github.com/atrigila) review by [@apeltzer](https://github.com/apeltzer)).
