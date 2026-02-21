@@ -46,6 +46,8 @@ library(ggplot2)
 library(ComplexHeatmap)
 library(UpSetR)
 library(tidyverse)
+library(reactable)
+library(shiny)
 ```
 
 <!-- Define some functions -->
@@ -99,6 +101,7 @@ plot_screeplot <- function(percentVarData) {
 #| include: false
 # Load the datatables js
 datatable(NULL)
+reactable(data.frame(x = 1))
 ```
 
 ```{r, warning=FALSE}
@@ -1236,32 +1239,71 @@ for (i in 1:nrow(contrasts)) {
             relocate(Direction) %>%
             rename_with(prettifyVariablename)
 
-            # Create the datatable
-            dt <- datatable(
-                combined,
-                caption = paste(
-                    "Differential genes (Up + Down) in",
-                    contrast_descriptions[i],
-                    "(check", differential_files[[i]], "for more detail)"
-                ),
-                rownames = FALSE
-            )
-
-            # Now format the numeric columns for display
+            # Identify numeric columns that need formatting
             cols_to_format_pretty <- prettifyVariablename(c(
                 params$meta$params$differential_fc_column,
                 params$meta$params$differential_pval_column,
                 params$meta$params$differential_qval_column
             ))
-
+            
             cols_present_pretty <- intersect(cols_to_format_pretty, colnames(combined))
 
-            if (length(cols_present_pretty) > 0) {
-                dt <- formatRound(dt, cols_present_pretty, digits = 5)
-            }
+            no_filter_cols <- c("Pvalue", "Padj", "Log2FoldChange")
 
-            # Print the formatted table
-            print(htmltools::tagList(dt))
+            # Build column definitions for reactable
+            column_defs <- list()
+            for (col_name in colnames(combined)) {
+                if (col_name %in% cols_present_pretty) {
+                    # Format numeric columns with 5 digits
+                    column_defs[[col_name]] <- colDef(
+                        format = colFormat(digits = 5),
+                        filterable = !(col_name %in% no_filter_cols),
+                        align = "right"
+                    )
+                } else if (col_name == "Direction") {
+                    # Special formatting for Direction column
+                    column_defs[[col_name]] <- colDef(
+                        filterable = TRUE,
+                        align = "center"
+                    )
+                } else {
+                    # Default for other columns
+                    column_defs[[col_name]] <- colDef(
+                        filterable = TRUE
+                    )
+                }
+            }
+            
+            # Create the reactable with caption
+            rt <- reactable(
+                combined,
+                columns = column_defs,
+                filterable = TRUE,
+                sortable = TRUE,
+                bordered = TRUE,
+                striped = TRUE,
+                highlight = TRUE,
+                defaultPageSize = 20,
+                showPageSizeOptions = TRUE,
+                pageSizeOptions = c(10, 20, 50, 100),
+                defaultSorted = setNames(
+                    list("asc"),
+                    prettifyVariablename(params$meta$params$differential_qval_column)
+                )
+            )
+            
+            # Add caption as HTML wrapper
+            caption_html <- htmltools::tags$div(
+                style = "margin-bottom: 10px; font-style: italic; color: #666;",
+                paste(
+                    "Differential genes (Up + Down) in",
+                    contrast_descriptions[i],
+                    "(check", differential_files[[i]], "for more detail)"
+                )
+            )
+            
+            # Print the table with caption
+            print(htmltools::tagList(caption_html, rt))
 
             # Optional biotype plot, now grouped by Direction
             if ("Gene biotype" %in% colnames(combined)) {
