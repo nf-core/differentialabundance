@@ -1245,7 +1245,7 @@ for (i in 1:nrow(contrasts)) {
                 params$meta$params$differential_pval_column,
                 params$meta$params$differential_qval_column
             ))
-            
+
             cols_present_pretty <- intersect(cols_to_format_pretty, colnames(combined))
 
             no_filter_cols <- c("Pvalue", "Padj", "Log2FoldChange")
@@ -1273,7 +1273,7 @@ for (i in 1:nrow(contrasts)) {
                     )
                 }
             }
-            
+
             # Create the reactable with caption
             rt <- reactable(
                 combined,
@@ -1291,7 +1291,7 @@ for (i in 1:nrow(contrasts)) {
                     prettifyVariablename(params$meta$params$differential_qval_column)
                 )
             )
-            
+
             # Add caption as HTML wrapper
             caption_html <- htmltools::tags$div(
                 style = "margin-bottom: 10px; font-style: italic; color: #666;",
@@ -1301,7 +1301,7 @@ for (i in 1:nrow(contrasts)) {
                     "(check", differential_files[[i]], "for more detail)"
                 )
             )
-            
+
             # Print the table with caption
             print(htmltools::tagList(caption_html, rt))
 
