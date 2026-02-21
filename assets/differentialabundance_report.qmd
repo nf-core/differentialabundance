@@ -95,8 +95,8 @@ plot_screeplot <- function(percentVarData) {
         )
 }
 
-generate_boxplots <- function(combined, assay_data, observations, params, 
-                               contrast_variables, main_grouping_variable, 
+generate_boxplots <- function(combined, assay_data, observations, params,
+                               contrast_variables, main_grouping_variable,
                                groupColorScale, label_col) {
     qval_pretty <- prettifyVariablename(params$meta$params$differential_qval_column)
 
@@ -217,7 +217,7 @@ generate_boxplots <- function(combined, assay_data, observations, params,
 
         print(htmltools::tagList(p_box))
     }
-    cat("\n:::\n\n")  
+    cat("\n:::\n\n")
 }
 ```
 
@@ -1392,10 +1392,10 @@ for (i in 1:nrow(contrasts)) {
             cat("\n**Box plots**\n\n")
             cat("The following box plots show the distribution of expression levels for the top 10 genes ranked by significance.\n\n")
 
-            generate_boxplots(combined, assay_data, observations, params, 
-                  contrast_variables, main_grouping_variable, 
+            generate_boxplots(combined, assay_data, observations, params,
+                  contrast_variables, main_grouping_variable,
                   groupColorScale, label_col)
-            
+
             # Optional biotype plot, now grouped by Direction
             if ("Gene biotype" %in% colnames(combined)) {
                 # Count by biotype and direction without adding new deps
