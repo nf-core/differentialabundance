@@ -53,7 +53,6 @@
                 "plots/differential/rnaseq_nogtf/treatment_mCherry_hND6_sample_number_SRP254919",
                 "plots/differential/rnaseq_nogtf/treatment_mCherry_hND6_sample_number_SRP254919/png",
                 "plots/differential/rnaseq_nogtf/treatment_mCherry_hND6_sample_number_SRP254919/png/volcano.png",
-                "plots/differential/rnaseq_nogtf/versions.yml",
                 "plots/exploratory",
                 "plots/exploratory/rnaseq_nogtf",
                 "plots/exploratory/rnaseq_nogtf/treatment",
@@ -64,7 +63,6 @@
                 "plots/exploratory/rnaseq_nogtf/treatment/png/pca2d.png",
                 "plots/exploratory/rnaseq_nogtf/treatment/png/pca3d.png",
                 "plots/exploratory/rnaseq_nogtf/treatment/png/sample_dendrogram.png",
-                "plots/exploratory/rnaseq_nogtf/versions.yml",
                 "plots/qc",
                 "plots/qc/rnaseq_nogtf",
                 "plots/qc/rnaseq_nogtf/treatment_mCherry_hND6__SRP254919.deseq2.dispersion.png",
@@ -78,7 +76,6 @@
                 "shinyngs_app/rnaseq_nogtf/SRP254919",
                 "shinyngs_app/rnaseq_nogtf/SRP254919/app.R",
                 "shinyngs_app/rnaseq_nogtf/SRP254919/data.rds",
-                "shinyngs_app/rnaseq_nogtf/versions.yml",
                 "tables",
                 "tables/differential",
                 "tables/differential/rnaseq_nogtf",
@@ -96,10 +93,7 @@
             [
                 "treatment_mCherry_hND6__SRP254919.deseq2.sizefactors.tsv:md5,402909515e7ae8d53d091bf5ad9bc5fd",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.sizefactors.tsv:md5,402909515e7ae8d53d091bf5ad9bc5fd",
-                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
-                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
-                "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results.tsv:md5,083c15a96e86aa34751c779c261cef54",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results_filtered.tsv:md5,024da041c017d0539995aee55af83e26",
                 "treatment_mCherry_hND6__SRP254919_deseq2.annotated.tsv:md5,b792940ceeaaba5fc738eb0ff359ef77",
@@ -112,8 +106,8 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.04.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2025-12-03T18:49:46.931559239"
+        "timestamp": "2026-02-05T23:24:50.062015392"
     }
 }
