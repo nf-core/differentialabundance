@@ -13,7 +13,7 @@ This directory contains the main reporting output of the workflow.
 
 - `report/`
   - `*_[Quarto notebook name].html`: an HTML report file named according to the value of `params.study_name`, containing graphical and tabular summary results for the workflow run.
-  - `*.zip`: a zip file containing a Quarto notebook file with parameters set and all necessary input files to open and customise the reporting.
+  - `*.zip`: a zip file containing a Quarto notebook file, parameters set, and all necessary input files to open and customise the reporting.
   - `gsea/`: Directory containing graphical outputs from GSEA (where enabled). Plots are stored in directories named for the associated contrast.
     - `[contrast]/png/[gsea_plot_type].png`
 
@@ -49,8 +49,10 @@ Stand-alone graphical outputs are placed in this directory. They may be useful i
     - `[contrast]/[norm_function].normalized_mean_variance_relationship.png`: Plots of log intensity vs mean log intensity after normalization of each contrast level.
     - `[contrast]/[norm_function].normalized_distributions.png`: A plot of sample distributions after normalization.
     - `[contrast]/raw_distributions.png`: A plot of sample distributions without normalization.
-  - `decoupler/`: Directory containing plots of decoupler results - `[differential_method]_[contrast_name]_[decoupler_method]_estimate_decoupler_plot.png`: contains the plot for the estimated activity scores for each regulator (rows) across all samples (columns).
-  </details>
+  - `decoupler/`: Directory containing plots of decoupler results
+    - `[differential_method]_[contrast_name]_[decoupler_method]_estimate_decoupler_plot.png`: contains the plot for the estimated activity scores for each regulator (rows) across all samples (columns).
+
+</details>
 
 Most plots are included in the HTML report (see above), but are also included in static files in this folder to facilitate use in external reporting.
 

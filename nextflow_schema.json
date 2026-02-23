@@ -50,7 +50,7 @@
                 "contrasts_yml": {
                     "type": "string",
                     "description": "A YAML file describing sample contrasts to compare groups.",
-                    "help_text": "This file defines sample contrasts for differential abundance analysis, with each contrast specifying an `id`, a `comparison` list (variable, reference, target), and optional `blocking_factors`.",
+                    "help_text": "This file defines sample contrasts for differential abundance analysis, with each contrast specifying an:\n  - `id`, a `comparison` list (variable, reference, target), and optional `blocking_factors`, or an\n  - `id`, a `formula`, and a `make_contrasts_str`.",
                     "pattern": "^\\S+\\.(yaml|yml)$",
                     "schema": "assets/schema_contrasts.json",
                     "format": "file-path",
@@ -214,7 +214,8 @@
                     "help_text": "A YAML file that defines 1+ nextflow config(s).",
                     "pattern": "^\\S+\\.(yaml|yml)$",
                     "format": "file-path",
-                    "mimetype": "text/csv"
+                    "mimetype": "text/csv",
+                    "default": "${projectDir}/conf/paramsheet.yaml"
                 }
             }
         },
@@ -357,8 +358,14 @@
                 "filtering_min_abundance": {
                     "type": ["integer", "boolean"],
                     "anyOf": [
-                        { "type": "integer", "default": 1 },
-                        { "type": "boolean", "const": false }
+                        {
+                            "type": "integer",
+                            "default": 1
+                        },
+                        {
+                            "type": "boolean",
+                            "const": false
+                        }
                     ],
                     "description": "Minimum abundance value. Set to false to disable abundance filtering.",
                     "fa_icon": "fas fa-compress-alt"
@@ -545,7 +552,7 @@
                 "differential_min_fold_change": {
                     "type": "number",
                     "default": 2,
-                    "description": "Minimum fold change used to calculate differential feature numbers",
+                    "description": "Minimum fold change used to calculate differential feature numbers. Note that this number will be log2 transformed",
                     "fa_icon": "fas fa-angle-double-down"
                 },
                 "differential_max_pval": {
@@ -692,7 +699,7 @@
                 "deseq2_shrink_lfc": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Shink fold changes in results?",
+                    "description": "Shrink fold changes in results?",
                     "help_text": "'ashr' method is the only method currently implemented",
                     "fa_icon": "fas fa-microscope"
                 },
@@ -1161,8 +1168,8 @@
             "properties": {
                 "report_file": {
                     "type": "string",
-                    "default": "${projectDir}/assets/differentialabundance_report.Rmd",
-                    "description": "Rmd report template from which to create the pipeline report",
+                    "default": "${projectDir}/assets/differentialabundance_report.qmd",
+                    "description": "Qmd report template from which to create the pipeline report",
                     "help_text": "The pipeline will always generate a default report which gives a good overview of the analysis results. Should this default report not suit your needs, you can provide the path to a custom report instead.",
                     "format": "file-path",
                     "pattern": "^\\S+\\.(Rmd|qmd|ipynb)$",
@@ -1180,13 +1187,15 @@
                     "default": "${projectDir}/docs/images/nf-core-differentialabundance_logo_light.png",
                     "description": "A logo to display in the report instead of the generic pipeline logo.",
                     "help_text": "A logo to display in the report instead of the generic pipeline logo. It can accessed via the id 'logo' in the css_file.",
-                    "fa_icon": "far fa-font-awesome-logo-full"
+                    "fa_icon": "far fa-font-awesome-logo-full",
+                    "hidden": true
                 },
                 "css_file": {
                     "type": "string",
                     "default": "${projectDir}/assets/nf-core_style.css",
                     "description": "CSS to use to style the output, in lieu of the default nf-core styling",
-                    "fa_icon": "far fa-file-code"
+                    "fa_icon": "far fa-file-code",
+                    "hidden": true
                 },
                 "citations_file": {
                     "type": "string",
@@ -1221,7 +1230,6 @@
                 },
                 "skip_reports": {
                     "type": "boolean",
-                    "default": false,
                     "description": "Skip generation of reports"
                 }
             },

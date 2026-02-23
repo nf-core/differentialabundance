@@ -47,7 +47,6 @@
                 "plots/differential/limma_soft/phenotype_uninvolved_lesional_study",
                 "plots/differential/limma_soft/phenotype_uninvolved_lesional_study/png",
                 "plots/differential/limma_soft/phenotype_uninvolved_lesional_study/png/volcano.png",
-                "plots/differential/limma_soft/versions.yml",
                 "plots/exploratory",
                 "plots/exploratory/limma_soft",
                 "plots/exploratory/limma_soft/phenotype",
@@ -58,7 +57,6 @@
                 "plots/exploratory/limma_soft/phenotype/png/pca2d.png",
                 "plots/exploratory/limma_soft/phenotype/png/pca3d.png",
                 "plots/exploratory/limma_soft/phenotype/png/sample_dendrogram.png",
-                "plots/exploratory/limma_soft/versions.yml",
                 "plots/qc",
                 "plots/qc/limma_soft",
                 "plots/qc/limma_soft/phenotype_uninvolved_lesional_study.limma.mean_difference.png",
@@ -71,7 +69,6 @@
                 "shinyngs_app/limma_soft/study",
                 "shinyngs_app/limma_soft/study/app.R",
                 "shinyngs_app/limma_soft/study/data.rds",
-                "shinyngs_app/limma_soft/versions.yml",
                 "tables",
                 "tables/annotation",
                 "tables/annotation/limma_soft",
@@ -86,18 +83,15 @@
             ],
             [
                 "normalised.eset.rds:md5,ee83ece8b75d711163af9dd9300db49a",
-                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
-                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
-                "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
                 "normalised.annotation.tsv:md5,40300ae222ae35fa54daf10a1b86e830",
                 "normalised.matrix.tsv:md5,230f87f91c0c1a7e2ab354200c4b978c"
             ]
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.04.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2025-12-03T19:20:44.383305302"
+        "timestamp": "2026-02-06T00:04:14.635472519"
     }
 }
