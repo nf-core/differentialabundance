@@ -70,7 +70,6 @@
                 "plots/differential/limma_affy_gsea,limma_affy_gprofiler2/phenotype_uninvolved_lesional_GSE50790",
                 "plots/differential/limma_affy_gsea,limma_affy_gprofiler2/phenotype_uninvolved_lesional_GSE50790/png",
                 "plots/differential/limma_affy_gsea,limma_affy_gprofiler2/phenotype_uninvolved_lesional_GSE50790/png/volcano.png",
-                "plots/differential/limma_affy_gsea,limma_affy_gprofiler2/versions.yml",
                 "plots/exploratory",
                 "plots/exploratory/limma_affy_gsea,limma_affy_gprofiler2",
                 "plots/exploratory/limma_affy_gsea,limma_affy_gprofiler2/phenotype",
@@ -81,7 +80,6 @@
                 "plots/exploratory/limma_affy_gsea,limma_affy_gprofiler2/phenotype/png/pca2d.png",
                 "plots/exploratory/limma_affy_gsea,limma_affy_gprofiler2/phenotype/png/pca3d.png",
                 "plots/exploratory/limma_affy_gsea,limma_affy_gprofiler2/phenotype/png/sample_dendrogram.png",
-                "plots/exploratory/limma_affy_gsea,limma_affy_gprofiler2/versions.yml",
                 "plots/gprofiler2",
                 "plots/gprofiler2/limma_affy_gprofiler2",
                 "plots/gprofiler2/limma_affy_gprofiler2/phenotype_uninvolved_lesional_GSE50790",
@@ -186,12 +184,10 @@
                 "shinyngs_app/limma_affy_gprofiler2/GSE50790",
                 "shinyngs_app/limma_affy_gprofiler2/GSE50790/app.R",
                 "shinyngs_app/limma_affy_gprofiler2/GSE50790/data.rds",
-                "shinyngs_app/limma_affy_gprofiler2/versions.yml",
                 "shinyngs_app/limma_affy_gsea",
                 "shinyngs_app/limma_affy_gsea/GSE50790",
                 "shinyngs_app/limma_affy_gsea/GSE50790/app.R",
                 "shinyngs_app/limma_affy_gsea/GSE50790/data.rds",
-                "shinyngs_app/limma_affy_gsea/versions.yml",
                 "tables",
                 "tables/annotation",
                 "tables/annotation/limma_affy_gsea,limma_affy_gprofiler2",
@@ -221,8 +217,6 @@
             ],
             [
                 "raw._eset.rds:md5,8c6c7807ce6c5d8204bd681b941eeb0f",
-                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
-                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "gene_sets_phenotype_uninvolved_lesional_GSE50790.h.all.v2022.1.Hs.symbols.HALLMARK_ADIPOGENESIS.tsv:md5,6dcf05651f6b0386fe089eaa421c3127",
                 "gene_sets_phenotype_uninvolved_lesional_GSE50790.h.all.v2022.1.Hs.symbols.HALLMARK_ALLOGRAFT_REJECTION.tsv:md5,e9dd4c2530785273c996dbf8e989e4cb",
                 "gene_sets_phenotype_uninvolved_lesional_GSE50790.h.all.v2022.1.Hs.symbols.HALLMARK_ANDROGEN_RESPONSE.tsv:md5,ed31e69bedf9bfdef793db64f60e0e3d",
@@ -264,9 +258,7 @@
                 "phenotype_uninvolved_lesional_GSE50790.h.all.v2022.1.Hs.symbols.gsea_report_for_uninvolved.tsv:md5,0b7059fdccf5fc9be4b5a9f6f9e74759",
                 "phenotype_uninvolved_lesional_GSE50790.h.all.v2022.1.Hs.symbols.ranked_gene_list_lesional_versus_uninvolved.tsv:md5,72dfaeff534ba9a2b32f63524e835dc4",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
-                "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
-                "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
                 "hgu133plus2.annotation.tsv:md5,f2b82ef12b2a2e8e575de06766583d96",
                 "phenotype_uninvolved_lesional_GSE50790.gprofiler2.all_enriched_pathways.tsv:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "GSM1229341_Gudjohnsson_001_6690_PP.CEL.gz:md5,259d0908211a071351450f366fd51cad",
@@ -281,9 +273,9 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.04.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2026-01-20T19:02:34.446348919"
+        "timestamp": "2026-02-05T23:11:13.134263655"
     },
     "Test affy profile - limma_affy_gsea": {
         "content": [
@@ -348,7 +340,6 @@
                 "plots/differential/limma_affy_gsea/phenotype_uninvolved_lesional_GSE50790",
                 "plots/differential/limma_affy_gsea/phenotype_uninvolved_lesional_GSE50790/png",
                 "plots/differential/limma_affy_gsea/phenotype_uninvolved_lesional_GSE50790/png/volcano.png",
-                "plots/differential/limma_affy_gsea/versions.yml",
                 "plots/exploratory",
                 "plots/exploratory/limma_affy_gsea",
                 "plots/exploratory/limma_affy_gsea/phenotype",
@@ -359,7 +350,6 @@
                 "plots/exploratory/limma_affy_gsea/phenotype/png/pca2d.png",
                 "plots/exploratory/limma_affy_gsea/phenotype/png/pca3d.png",
                 "plots/exploratory/limma_affy_gsea/phenotype/png/sample_dendrogram.png",
-                "plots/exploratory/limma_affy_gsea/versions.yml",
                 "plots/qc",
                 "plots/qc/limma_affy_gsea",
                 "plots/qc/limma_affy_gsea/phenotype_uninvolved_lesional_GSE50790.limma.mean_difference.png",
@@ -458,7 +448,6 @@
                 "shinyngs_app/limma_affy_gsea/GSE50790",
                 "shinyngs_app/limma_affy_gsea/GSE50790/app.R",
                 "shinyngs_app/limma_affy_gsea/GSE50790/data.rds",
-                "shinyngs_app/limma_affy_gsea/versions.yml",
                 "tables",
                 "tables/annotation",
                 "tables/annotation/limma_affy_gsea",
@@ -484,8 +473,6 @@
             ],
             [
                 "raw._eset.rds:md5,8c6c7807ce6c5d8204bd681b941eeb0f",
-                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
-                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "gene_sets_phenotype_uninvolved_lesional_GSE50790.h.all.v2022.1.Hs.symbols.HALLMARK_ADIPOGENESIS.tsv:md5,6dcf05651f6b0386fe089eaa421c3127",
                 "gene_sets_phenotype_uninvolved_lesional_GSE50790.h.all.v2022.1.Hs.symbols.HALLMARK_ALLOGRAFT_REJECTION.tsv:md5,e9dd4c2530785273c996dbf8e989e4cb",
                 "gene_sets_phenotype_uninvolved_lesional_GSE50790.h.all.v2022.1.Hs.symbols.HALLMARK_ANDROGEN_RESPONSE.tsv:md5,ed31e69bedf9bfdef793db64f60e0e3d",
@@ -527,7 +514,6 @@
                 "phenotype_uninvolved_lesional_GSE50790.h.all.v2022.1.Hs.symbols.gsea_report_for_uninvolved.tsv:md5,0b7059fdccf5fc9be4b5a9f6f9e74759",
                 "phenotype_uninvolved_lesional_GSE50790.h.all.v2022.1.Hs.symbols.ranked_gene_list_lesional_versus_uninvolved.tsv:md5,72dfaeff534ba9a2b32f63524e835dc4",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
-                "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
                 "hgu133plus2.annotation.tsv:md5,f2b82ef12b2a2e8e575de06766583d96",
                 "GSM1229341_Gudjohnsson_001_6690_PP.CEL.gz:md5,259d0908211a071351450f366fd51cad",
                 "GSM1229342_Gudjohnsson_002_6690_PN.CEL.gz:md5,31cc2b8b26e210760b8ebd4b304b52ba",
@@ -541,8 +527,8 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.04.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2026-01-15T17:27:12.717437842"
+        "timestamp": "2026-02-05T23:06:21.987485787"
     }
 }

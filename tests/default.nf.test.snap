@@ -74,7 +74,6 @@
                 "plots/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919",
                 "plots/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/png",
                 "plots/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/png/volcano.png",
-                "plots/differential/deseq2_rnaseq_gsea/versions.yml",
                 "plots/exploratory",
                 "plots/exploratory/deseq2_rnaseq_gsea",
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment",
@@ -85,7 +84,6 @@
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/pca2d.png",
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/pca3d.png",
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/sample_dendrogram.png",
-                "plots/exploratory/deseq2_rnaseq_gsea/versions.yml",
                 "plots/immunedeconv",
                 "plots/immunedeconv/deseq2_rnaseq_gsea",
                 "plots/immunedeconv/deseq2_rnaseq_gsea/SRP254919.plot1_stacked_bar_chart.png",
@@ -153,7 +151,6 @@
                 "shinyngs_app/deseq2_rnaseq_gsea/SRP254919",
                 "shinyngs_app/deseq2_rnaseq_gsea/SRP254919/app.R",
                 "shinyngs_app/deseq2_rnaseq_gsea/SRP254919/data.rds",
-                "shinyngs_app/deseq2_rnaseq_gsea/versions.yml",
                 "tables",
                 "tables/annotation",
                 "tables/annotation/deseq2_rnaseq_gsea",
@@ -177,8 +174,6 @@
             [
                 "treatment_mCherry_hND6__SRP254919.deseq2.sizefactors.tsv:md5,69183b94202a806067962d0df0b9875b",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.sizefactors.tsv:md5,69183b94202a806067962d0df0b9875b",
-                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
-                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "gene_sets_treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.HALLMARK_KRAS_SIGNALING_DN.tsv:md5,4a06b356ec368ef53d1aec12275dff06",
                 "gene_sets_treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.Symbol_to_probe_set_mapping_details.tsv:md5,f866e9867df17d7c752edcda0012a769",
                 "treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.gene_set_sizes.tsv:md5,e3049abd72c25ff6d7cd75b14135d245",
@@ -192,7 +187,6 @@
                 "treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.gsea_report_for_mCherry.tsv:md5,ce8792382ae299749445767ff16aaecc",
                 "treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.ranked_gene_list_hND6_versus_mCherry.tsv:md5,743631dcbded4348cdff044d9fdee76f",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
-                "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results.tsv:md5,70697a5f2d06f36a1aa13f9d026bffa0",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results_filtered.tsv:md5,8ee88632bb1960094d1ad52d8929fd8c",
@@ -207,9 +201,9 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.04.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2026-01-20T18:48:49.466307004"
+        "timestamp": "2026-02-06T18:18:05.322734425"
     },
     "Test profile": {
         "content": [
@@ -286,7 +280,6 @@
                 "plots/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919",
                 "plots/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/png",
                 "plots/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/png/volcano.png",
-                "plots/differential/deseq2_rnaseq_gsea/versions.yml",
                 "plots/exploratory",
                 "plots/exploratory/deseq2_rnaseq_gsea",
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment",
@@ -297,7 +290,6 @@
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/pca2d.png",
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/pca3d.png",
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/sample_dendrogram.png",
-                "plots/exploratory/deseq2_rnaseq_gsea/versions.yml",
                 "plots/immunedeconv",
                 "plots/immunedeconv/deseq2_rnaseq_gsea",
                 "plots/immunedeconv/deseq2_rnaseq_gsea/SRP254919.plot1_stacked_bar_chart.png",
@@ -365,7 +357,6 @@
                 "shinyngs_app/deseq2_rnaseq_gsea/SRP254919",
                 "shinyngs_app/deseq2_rnaseq_gsea/SRP254919/app.R",
                 "shinyngs_app/deseq2_rnaseq_gsea/SRP254919/data.rds",
-                "shinyngs_app/deseq2_rnaseq_gsea/versions.yml",
                 "tables",
                 "tables/annotation",
                 "tables/annotation/deseq2_rnaseq_gsea",
@@ -389,8 +380,6 @@
             [
                 "treatment_mCherry_hND6__SRP254919.deseq2.sizefactors.tsv:md5,0703c421c53b260f91568dfc0436c054",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.sizefactors.tsv:md5,0703c421c53b260f91568dfc0436c054",
-                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
-                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "gene_sets_treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.HALLMARK_KRAS_SIGNALING_DN.tsv:md5,7d2a3a9dd7f39f93a091696c75e59c76",
                 "gene_sets_treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.Symbol_to_probe_set_mapping_details.tsv:md5,e000a1b93ebbb7eb347d9ce666fd5e26",
                 "treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.gene_set_sizes.tsv:md5,e3049abd72c25ff6d7cd75b14135d245",
@@ -404,7 +393,6 @@
                 "treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.gsea_report_for_mCherry.tsv:md5,ce8792382ae299749445767ff16aaecc",
                 "treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.ranked_gene_list_hND6_versus_mCherry.tsv:md5,d71f1db7288800d611fbd623d57c1765",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
-                "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results.tsv:md5,a6dde65d9e54e8e80e3abf3c14f72d34",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results_filtered.tsv:md5,fd803a83c641e843830057f3a43be27a",
@@ -419,9 +407,9 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.04.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2026-01-20T18:36:48.325171354"
+        "timestamp": "2026-02-05T20:36:08.800664214"
     },
     "Test profile - csv contrasts": {
         "content": [
@@ -498,7 +486,6 @@
                 "plots/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919",
                 "plots/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/png",
                 "plots/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/png/volcano.png",
-                "plots/differential/deseq2_rnaseq_gsea/versions.yml",
                 "plots/exploratory",
                 "plots/exploratory/deseq2_rnaseq_gsea",
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment",
@@ -509,7 +496,6 @@
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/pca2d.png",
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/pca3d.png",
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/sample_dendrogram.png",
-                "plots/exploratory/deseq2_rnaseq_gsea/versions.yml",
                 "plots/immunedeconv",
                 "plots/immunedeconv/deseq2_rnaseq_gsea",
                 "plots/immunedeconv/deseq2_rnaseq_gsea/SRP254919.plot1_stacked_bar_chart.png",
@@ -577,7 +563,6 @@
                 "shinyngs_app/deseq2_rnaseq_gsea/SRP254919",
                 "shinyngs_app/deseq2_rnaseq_gsea/SRP254919/app.R",
                 "shinyngs_app/deseq2_rnaseq_gsea/SRP254919/data.rds",
-                "shinyngs_app/deseq2_rnaseq_gsea/versions.yml",
                 "tables",
                 "tables/annotation",
                 "tables/annotation/deseq2_rnaseq_gsea",
@@ -601,8 +586,6 @@
             [
                 "treatment_mCherry_hND6__SRP254919.deseq2.sizefactors.tsv:md5,0703c421c53b260f91568dfc0436c054",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.sizefactors.tsv:md5,0703c421c53b260f91568dfc0436c054",
-                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
-                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "gene_sets_treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.HALLMARK_KRAS_SIGNALING_DN.tsv:md5,7d2a3a9dd7f39f93a091696c75e59c76",
                 "gene_sets_treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.Symbol_to_probe_set_mapping_details.tsv:md5,e000a1b93ebbb7eb347d9ce666fd5e26",
                 "treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.gene_set_sizes.tsv:md5,e3049abd72c25ff6d7cd75b14135d245",
@@ -616,7 +599,6 @@
                 "treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.gsea_report_for_mCherry.tsv:md5,ce8792382ae299749445767ff16aaecc",
                 "treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.ranked_gene_list_hND6_versus_mCherry.tsv:md5,d71f1db7288800d611fbd623d57c1765",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
-                "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results.tsv:md5,a6dde65d9e54e8e80e3abf3c14f72d34",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results_filtered.tsv:md5,fd803a83c641e843830057f3a43be27a",
@@ -631,9 +613,9 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.04.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2026-01-20T18:39:54.343340132"
+        "timestamp": "2026-02-05T20:38:12.222477377"
     },
     "Test profile - with formula": {
         "content": [
@@ -720,7 +702,6 @@
                 "plots/differential/deseq2_rnaseq_gprofiler2_complex/treatment_plus_genotype_SRP254919",
                 "plots/differential/deseq2_rnaseq_gprofiler2_complex/treatment_plus_genotype_SRP254919/png",
                 "plots/differential/deseq2_rnaseq_gprofiler2_complex/treatment_plus_genotype_SRP254919/png/volcano.png",
-                "plots/differential/deseq2_rnaseq_gprofiler2_complex/versions.yml",
                 "plots/exploratory",
                 "plots/exploratory/deseq2_rnaseq_gprofiler2_complex",
                 "plots/exploratory/deseq2_rnaseq_gprofiler2_complex/treatment",
@@ -731,7 +712,6 @@
                 "plots/exploratory/deseq2_rnaseq_gprofiler2_complex/treatment/png/pca2d.png",
                 "plots/exploratory/deseq2_rnaseq_gprofiler2_complex/treatment/png/pca3d.png",
                 "plots/exploratory/deseq2_rnaseq_gprofiler2_complex/treatment/png/sample_dendrogram.png",
-                "plots/exploratory/deseq2_rnaseq_gprofiler2_complex/versions.yml",
                 "plots/gprofiler2",
                 "plots/gprofiler2/deseq2_rnaseq_gprofiler2_complex",
                 "plots/gprofiler2/deseq2_rnaseq_gprofiler2_complex/full_model_with_interactions_SRP254919",
@@ -759,7 +739,6 @@
                 "shinyngs_app/deseq2_rnaseq_gprofiler2_complex/SRP254919",
                 "shinyngs_app/deseq2_rnaseq_gprofiler2_complex/SRP254919/app.R",
                 "shinyngs_app/deseq2_rnaseq_gprofiler2_complex/SRP254919/data.rds",
-                "shinyngs_app/deseq2_rnaseq_gprofiler2_complex/versions.yml",
                 "tables",
                 "tables/annotation",
                 "tables/annotation/deseq2_rnaseq_gprofiler2_complex",
@@ -804,10 +783,7 @@
                 "interaction_genotype_treatment_SRP254919.deseq2.sizefactors.tsv:md5,727aa118b484c9956c9abac80f09cafe",
                 "treatment_effect_classic_comparison_SRP254919.deseq2.sizefactors.tsv:md5,727aa118b484c9956c9abac80f09cafe",
                 "treatment_plus_genotype_SRP254919.deseq2.sizefactors.tsv:md5,727aa118b484c9956c9abac80f09cafe",
-                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
-                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
-                "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
                 "full_model_with_interactions_SRP254919.deseq2.results.tsv:md5,2445cb3e070e63b30979b8c0d672265d",
                 "full_model_with_interactions_SRP254919.deseq2.results_filtered.tsv:md5,24b3287c1e1162d047ced9dda147d54f",
@@ -837,9 +813,9 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.04.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2026-01-20T18:42:58.476322758"
+        "timestamp": "2026-02-06T18:13:19.245082284"
     },
     "Test profile - multiple reports - csv contrasts": {
         "content": [
@@ -916,7 +892,6 @@
                 "plots/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919",
                 "plots/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/png",
                 "plots/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/png/volcano.png",
-                "plots/differential/deseq2_rnaseq_gsea/versions.yml",
                 "plots/exploratory",
                 "plots/exploratory/deseq2_rnaseq_gsea",
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment",
@@ -927,7 +902,6 @@
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/pca2d.png",
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/pca3d.png",
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/sample_dendrogram.png",
-                "plots/exploratory/deseq2_rnaseq_gsea/versions.yml",
                 "plots/immunedeconv",
                 "plots/immunedeconv/deseq2_rnaseq_gsea",
                 "plots/immunedeconv/deseq2_rnaseq_gsea/SRP254919.plot1_stacked_bar_chart.png",
@@ -996,7 +970,6 @@
                 "shinyngs_app/deseq2_rnaseq_gsea/SRP254919",
                 "shinyngs_app/deseq2_rnaseq_gsea/SRP254919/app.R",
                 "shinyngs_app/deseq2_rnaseq_gsea/SRP254919/data.rds",
-                "shinyngs_app/deseq2_rnaseq_gsea/versions.yml",
                 "tables",
                 "tables/annotation",
                 "tables/annotation/deseq2_rnaseq_gsea",
@@ -1020,8 +993,6 @@
             [
                 "treatment_mCherry_hND6__SRP254919.deseq2.sizefactors.tsv:md5,0703c421c53b260f91568dfc0436c054",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.sizefactors.tsv:md5,0703c421c53b260f91568dfc0436c054",
-                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
-                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "gene_sets_treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.HALLMARK_KRAS_SIGNALING_DN.tsv:md5,7d2a3a9dd7f39f93a091696c75e59c76",
                 "gene_sets_treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.Symbol_to_probe_set_mapping_details.tsv:md5,e000a1b93ebbb7eb347d9ce666fd5e26",
                 "treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.gene_set_sizes.tsv:md5,e3049abd72c25ff6d7cd75b14135d245",
@@ -1035,7 +1006,6 @@
                 "treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.gsea_report_for_mCherry.tsv:md5,ce8792382ae299749445767ff16aaecc",
                 "treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.ranked_gene_list_hND6_versus_mCherry.tsv:md5,d71f1db7288800d611fbd623d57c1765",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
-                "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results.tsv:md5,a6dde65d9e54e8e80e3abf3c14f72d34",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results_filtered.tsv:md5,fd803a83c641e843830057f3a43be27a",
@@ -1050,8 +1020,8 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.04.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2026-01-20T18:45:46.721521113"
+        "timestamp": "2026-02-06T18:15:39.058646763"
     }
 }
