@@ -64,7 +64,6 @@
                 "plots/differential/limma_maxquant/genotype_celltype_t1_t2_PXD043349",
                 "plots/differential/limma_maxquant/genotype_celltype_t1_t2_PXD043349/png",
                 "plots/differential/limma_maxquant/genotype_celltype_t1_t2_PXD043349/png/volcano.png",
-                "plots/differential/limma_maxquant/versions.yml",
                 "plots/exploratory",
                 "plots/exploratory/limma_maxquant",
                 "plots/exploratory/limma_maxquant/Celltype",
@@ -83,7 +82,6 @@
                 "plots/exploratory/limma_maxquant/fakeBatch/png/pca2d.png",
                 "plots/exploratory/limma_maxquant/fakeBatch/png/pca3d.png",
                 "plots/exploratory/limma_maxquant/fakeBatch/png/sample_dendrogram.png",
-                "plots/exploratory/limma_maxquant/versions.yml",
                 "plots/proteus",
                 "plots/proteus/limma_maxquant",
                 "plots/proteus/limma_maxquant/Celltype",
@@ -132,8 +130,6 @@
                 "raw_proteingroups.rds:md5,0b38726c41e7b32213e5e15380c29612",
                 "normalizeMedian.normalized_proteingroups.rds:md5,6f7def9ce31c8ee07f649675db394848",
                 "raw_proteingroups.rds:md5,daef7d25977a1628870dee75e2977ee3",
-                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
-                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "normalizeMedian.normalized_proteingroups_tab.tsv:md5,154fcd8d23409981b897d153e7b7e34e",
                 "raw_proteingroups_tab.tsv:md5,33a8791f84c676ea1aea4842231acb6a",
                 "normalizeMedian.normalized_proteingroups_tab.tsv:md5,154fcd8d23409981b897d153e7b7e34e",
@@ -142,8 +138,8 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.04.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2025-12-03T18:47:18.916558421"
+        "timestamp": "2026-02-05T23:23:10.11109112"
     }
 }
