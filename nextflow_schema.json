@@ -214,7 +214,7 @@
                     "help_text": "A YAML file that defines 1+ nextflow config(s). When not set, the pipeline uses standard Nextflow config profiles (single-run mode) where CLI flags have highest priority.",
                     "pattern": "^\\S+\\.(yaml|yml)$",
                     "format": "file-path",
-                    "mimetype": "text/csv"
+                    "mimetype": "text/yaml"
                 }
             }
         },
