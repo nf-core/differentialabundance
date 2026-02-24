@@ -86,10 +86,7 @@
             ],
             [
                 "normalised.eset.rds:md5,ee83ece8b75d711163af9dd9300db49a",
-                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
-                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
-                "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
                 "normalised.annotation.tsv:md5,40300ae222ae35fa54daf10a1b86e830",
                 "normalised.matrix.tsv:md5,230f87f91c0c1a7e2ab354200c4b978c"
             ]

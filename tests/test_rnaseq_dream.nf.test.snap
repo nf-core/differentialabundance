@@ -68,7 +68,6 @@
                 "tables/differential/rnaseq_dream/zero_intercept_model_2_SRP254919_dream.annotated.tsv"
             ],
             [
-                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb"
             ]
         ],
@@ -170,10 +169,7 @@
                 "tables/differential/rnaseq_dream/treatment_plus_genotype_SRP254919_dream.annotated.tsv"
             ],
             [
-                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
-                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
-                "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb"
             ]
         ],
@@ -290,10 +286,7 @@
                 "tables/processed_abundance/rnaseq_dream_decoupler/all.normalised_counts.tsv"
             ],
             [
-                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
-                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
-                "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
                 "dream_treatment_mCherry_hND6__SRP254919_consensus_estimate_decoupler.tsv:md5,c009bf6bf8ed404a511c65b867b06149",
                 "dream_treatment_mCherry_hND6__SRP254919_consensus_pvals_decoupler.tsv:md5,8fbbda7c7f98e49b99985880ffcacea8",
@@ -443,10 +436,7 @@
                 "tables/processed_abundance/rnaseq_dream_decoupler/all.normalised_counts.tsv"
             ],
             [
-                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
-                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
-                "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
                 "dream_treatment_effect_classic_comparison_SRP254919_consensus_estimate_decoupler.tsv:md5,cf9355226fefb3a716c575c4526a4a09",
                 "dream_treatment_effect_classic_comparison_SRP254919_consensus_pvals_decoupler.tsv:md5,043df39b843da99761444f85a5f9bcd0",
@@ -562,10 +552,7 @@
                 "tables/processed_abundance/rnaseq_dream/all.normalised_counts.tsv"
             ],
             [
-                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
-                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
-                "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
                 "all.normalised_counts.tsv:md5,a06f5e5c50938bb4d93991d7e314c7cf"
             ]

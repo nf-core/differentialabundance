@@ -132,8 +132,6 @@
                 "raw_proteingroups.rds:md5,0b38726c41e7b32213e5e15380c29612",
                 "normalizeMedian.normalized_proteingroups.rds:md5,6f7def9ce31c8ee07f649675db394848",
                 "raw_proteingroups.rds:md5,daef7d25977a1628870dee75e2977ee3",
-                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
-                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "normalizeMedian.normalized_proteingroups_tab.tsv:md5,154fcd8d23409981b897d153e7b7e34e",
                 "raw_proteingroups_tab.tsv:md5,33a8791f84c676ea1aea4842231acb6a",
                 "normalizeMedian.normalized_proteingroups_tab.tsv:md5,154fcd8d23409981b897d153e7b7e34e",

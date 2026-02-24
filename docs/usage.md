@@ -181,7 +181,7 @@ The necessary fields in order are:
 - `blocking_factors` - Any additional variables (also observation columns) that should be modelled alongside the contrast variable
 - `exclude_samples_col` and `exclude_samples_values` - the former being a valid column in the samples sheet, the latter a list of values in that column which should be used to select samples prior to differential modelling. This is helpful where certain samples need to be excluded prior to analysis of a given contrast.
 
-Alternatively, the YAML contrasts also supports formula based model definitions for tools such as `VARIANCEPARTITION_DREAM`:
+Additionally, the YAML contrasts also supports formula based model definitions:
 
 ```yaml
 contrasts:
@@ -197,6 +197,11 @@ The necessary fields in order are:
 
 - `formula` - A string representation of the model formula. It is used to build the design matrix.
 - `make_contrasts_str` - An explicit literal contrast string (e.g., "treatmenthND6 - treatmentmCherry") that is passed directly to [`limma::makeContrasts()`](https://rdrr.io/bioc/limma/man/makeContrasts.html) in `VARIANCEPARTITION_DREAM`, `LIMMA_DIFFERENTIAL` and `DESEQ2_DIFFERENTIAL`. The parameter names must be syntactically valid variable names in R (see [`make.names`](https://stat.ethz.ch/R-manual/R-devel/library/base/html/make.names.html)). This field provides full control for complex designs. Requires `formula`.
+
+> [!IMPORTANT]
+>
+> - YAML contrast definitions using `comparison` **and** those using `formula` are both supported by all differential methods.
+> - They can be freely mixed within the same `contrasts:` list in a single YAML file (i.e. some contrasts may use `comparison` while others use `formula`).
 
 > [!NOTE]
 >
@@ -323,34 +328,38 @@ A paramsheet entry looks like this:
 
 Each entry must include a unique `paramset_name`. Entries can override any pipeline parameter.
 
-## Working with the output Quarto notebook file
+## Working with the output Quarto file
 
-The pipeline produces an Quarto notebook file which, if you're proficient in R, you can use to tweak the report after it's generated (**note**- if you need the same customisations repeatedly we would recommend you supply your own templates using the `report_file` parameter. Multiple templates can be supplied as a comma separated list).
+The pipeline produces a Quarto document file which, if you're proficient in R, you can use to tweak the report after it's generated.
 
-To work with Quarto notebook files you will need Rstudio/Posit Studio or an equivalent R environment. You will also need to have the ShinyNGS R module [installed](https://github.com/pinin4fjords/shinyngs#installation), since it supplies a lot of the accessory plotting functions etc that you will need. The exact way you will do this may depend on your exact systems, but for example
+> [!NOTE]
+>
+> If you need the same customisations repeatedly we would recommend you supply your own templates using the `report_file` parameter. Multiple templates can be supplied as a comma separated list.
+
+To work with Quarto document files you will need an R environment with the required packages installed, such as the ShinyNGS R module [installed](https://github.com/pinin4fjords/shinyngs#installation), since it supplies a lot of the accessory plotting functions etc that you will need. An editor such as VS Code is recommended for viewing and editing the files. The way you will do this may depend on your exact systems, but for example:
 
 ### 1. Create a conda environment with Shinyngs and activate it
 
 ```bash
-conda create -n shinyngs r-shinyngs
-conda activate shinyngs
+conda create -f ./assets/report_environment.yml -n report_environment
+conda activate report_environment
 ```
 
-### 2. Open RStudio from this environment
+### 2. Unzip the report archive
 
-For example, on a Mac Terminal:
+Now, unzip the report archive, and change the directory to that location.
+
+### 3. Render Quarto report
+
+Once the environment is active, you should have everything required to execute the code chunks and render the HTML report.
+
+To render the report and open a live preview in your browser:
 
 ```bash
-open -na Rstudio
+quarto preview differentialabundance_report.qmd --execute-params params.yml
 ```
 
-Now, unzip the report archive, and in RStudio change directory to that location:
-
-```
-setwd("/path/to/unzipped/directory")
-```
-
-Now open the Quarto notebook file from the RStudio UI, and you should have everything you need to run the various code segments and render the whole document to HTML again if you wish.
+For a better understanding of Quarto, you can go to the [comprehensive guide](https://quarto.org/docs/guide/).
 
 ## Shiny app generation
 
@@ -422,7 +431,7 @@ There is also a [Shiny server application](https://posit.co/download/shiny-serve
 
 [Immunedeconv](https://omnideconv.org/immunedeconv/index.html) is a computational tool designed to estimate the proportions of immune cell types in bulk transcriptomic data. It leverages established deconvolution algorithms, such as CIBERSORT, EPIC, and xCell, to provide insights into the immune landscape of a given dataset.
 
-This tool is turned off by default, to turn it on set the parameter `--immunedeconv_run` to true. Also make sure that the parameters `--immunedeconv_method` and `--immunedeconv_function` are populated with the desired method and function to run this tool. Default values for these two are quantiseq and deconvolute, respectively. If you want to see the full list of available methods and functions, refer to the tool's [official guide]("https://omnideconv.org/immunedeconv/articles/immunedeconv.html").
+This tool is turned off by default, to turn it on set the parameter `--immunedeconv_run` to true. Also make sure that the parameters `--immunedeconv_method` and `--immunedeconv_function` are populated with the desired method and function to run this tool. Default values for these two are quantiseq and deconvolute, respectively. If you want to see the full list of available methods and functions, refer to the tool's [official guide](https://omnideconv.org/immunedeconv/articles/immunedeconv.html).
 
 For a better understanding on how these parameters affect the module's execution, this is how the parameters are used in the tool:
 
@@ -438,7 +447,7 @@ result <- immunedeconv::deconvolute(gene_expression_matrix, method = 'quantiseq'
 
 ## Gene set enrichment analysis
 
-Currently, two tools can be used to do gene set enrichment analysis.
+Currently, three tools can be used to do gene set enrichment analysis.
 
 ### GSEA
 
@@ -460,15 +469,20 @@ The [gprofiler2](https://cran.r-project.org/web/packages/gprofiler2/vignettes/gp
 
 If gene sets have been specified to the workflow via `--gene_sets_files` these are used by default. Specifying `--gprofiler2_organism` (mmusculus for Mus musculus, hsapiens for Homo sapiens etc.) will override those gene sets with gprofiler's own for the relevant species. `--gprofiler2_token` will override both options and use gene sets from a previous gprofiler run.
 
-By default the analysis will be run with a background list of genes that passed the abundance filter (i.e. those genes that actually had some expression); see for example https://doi.org/10.1186/s13059-015-0761-7 for why this is advisable. You can provide your own background list with `--gprofiler2_background_file background.txt`or if you want to not use any background, set `--gprofiler2_background_file false`.
+By default the analysis will be run with a background list of genes that passed the abundance filter (i.e. those genes that actually had some expression); see for example ["Multiple sources of bias confound functional enrichment analysis of global -omics data"](https://doi.org/10.1186/s13059-015-0761-7) for why this is advisable. You can provide your own background list with `--gprofiler2_background_file background.txt`or if you want to not use any background, set `--gprofiler2_background_file false`.
 
 Check the [pipeline webpage](https://nf-co.re/differentialabundance/parameters#gprofiler2) for a full listing of the relevant parameters.
 
 ### Decoupler
 
-[Decoupler](https://decoupler-py.readthedocs.io/en/latest/index.html) `decoupler.decouple` is a Python function that infers biological regulator activities—such as transcription factor or pathway activity—from omics data using multiple statistical enrichment methods. It takes as input a gene expression matrix and a prior knowledge network linking regulators to target genes, and applies one or more methods (e.g., ULM, MLM, wsum) to estimate regulator activity scores across samples. The function supports optional consensus scoring and outputs method-specific activity estimates and p-values, making it a versatile tool for activity inference in both bulk and single-cell datasets. If you want to see the full list of available methods and functions, refer to the functions's [official guide]("https://decoupler-py.readthedocs.io/en/latest/generated/decoupler.decouple.html#decoupler.decouple").
+[Decoupler](https://decoupler-py.readthedocs.io/en/latest/index.html) is a Python function that infers biological regulator activities—such as transcription factor or pathway activity—from omics data using multiple statistical enrichment methods. It takes as input a gene expression matrix and a prior knowledge network linking regulators to target genes, and applies one or more methods (e.g., ULM, MLM, wsum) to estimate regulator activity scores across samples. The function supports optional consensus scoring and outputs method-specific activity estimates and p-values, making it a versatile tool for activity inference in both bulk and single-cell datasets. If you want to see the full list of available methods and functions, refer to the function's [official guide](https://decoupler.readthedocs.io/en/v1.9.2/generated/decoupler.decouple.html#decoupler.decouple).
 
-This tool is turned off by default, to turn it on set the parameter `functional_method` to `decoupler`.
+This tool is turned off by default, the following example shows how to enable it:
+
+```bash
+--functional_method decoupler \
+--decoupler_network network.tsv
+```
 
 #### Input Files
 
@@ -484,9 +498,7 @@ The Decoupler module includes a min_n parameter to fine-tune its behavior.
 
 - `--decoupler_min_n`: This parameter controls the minimum number of targets a regulator (source) must have in the network to be included in the analysis. Any regulator with fewer than min_n targets will be removed from the network before activity inference is performed.
 
-By default, `--decoupler_min_n` is set to 5, meaning all sources with at least one target will be evaluated. You can increase this value to filter out poorly supported regulators and reduce noise.
-
-Example: setting `--decoupler_min_n 5` will ensure that only regulators with at least 5 target genes are considered.
+By default, `--decoupler_min_n` is set to 5, meaning all sources with at least 5 target genes will be evaluated. You can increase this value to filter out poorly supported regulators and reduce noise.
 
 - `--decoupler_methods`: This parameter lets you specify which statistical methods decoupler will use to estimate regulator activities. Decoupler supports multiple methods, each using a different algorithm or statistical approach. You can specify one or more methods by passing them as a comma-separated list.
 
@@ -498,18 +510,13 @@ You can obtain regulatory networks from well-established databases and tools. Co
 
 - DoRothEA – transcription factor-target interactions (TFs) [DoRothEA](https://www.bioconductor.org/packages/release/data/experiment/html/dorothea.html)
 
-- CollecTRI – curated transcriptional regulatory interactions (TFs) [CollectTRI] (https://github.com/saezlab/CollecTRI)
+- CollecTRI – curated transcriptional regulatory interactions (TFs) [CollectTRI](https://github.com/saezlab/CollecTRI)
 
-- PROGENy – pathway-responsive gene signatures (pathways) [PROGENy] (https://saezlab.github.io/progeny/)
+- PROGENy – pathway-responsive gene signatures (pathways) [PROGENy](https://saezlab.github.io/progeny/)
 
-If you want to see the full list of available methods and functions, refer to the functions's [official guide] (https://decoupler-py.readthedocs.io/en/latest/notebooks/benchmark.html#Multiple-networks).
+If you want to see the full list of available methods and functions, refer to the function's [official guide](https://decoupler-py.readthedocs.io/en/latest/notebooks/benchmark.html#Multiple-networks).
 
 **Note**: Then resources mentioned above are provided only for human or mouse datasets. Please ensure your organism is compatible before enabling this module or provide a custom, species-specific dataset.
-
-```bash
---functional_method decoupler \
---decoupler_network network.tsv
-```
 
 ## Running the pipeline
 
@@ -586,7 +593,7 @@ process {
 
 You will not get the final reporting outcomes of the workflow, but you will get the differential tables produced by DESeq2, Limma, or DREAM, and the results of any gene sets analysis you have enabled.
 
-We have also added a dedicated pipeline parameter, `--skip_reports` that allows you to skip the Quarto notebook and bundled report while leaving other reporting processes active. The `QUARTONOTEBOOK` process assumes that every grouping variable you pass to it (from the contrasts file's variable column or PCA-derived informative_variables) exists as a valid, named column in your sample metadata. If you know your metadata or contrasts might be incomplete or non-standard (such as using formula-based yaml files), then you can use this flag to skip these steps.
+We have also added a dedicated pipeline parameter, `--skip_reports` that allows you to skip only the Quarto notebook and bundled report while leaving other reporting processes active. The `QUARTONOTEBOOK` process assumes that every grouping variable you pass to it (from the contrasts file’s variable column or PCA-derived informative_variables) exists as a valid, named column in your sample metadata. If you know your metadata or contrasts might be incomplete or non-standard (such as using formula-based yaml files), the you can use this flag to skip these steps.
 
 #### Restricting samples considered by DESeq2, Limma, or DREAM
 
