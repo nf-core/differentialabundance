@@ -86,7 +86,7 @@ nextflow_pipeline {
                 differential_min_fold_change = 1.5
 
                 // gprofiler2
-                gprofiler2_organism = 'mmusculus'
+                gprofiler2_organism = 'hsapiens'
             }
         }
 
