@@ -64,7 +64,6 @@
                 "plots/differential/maxquant/genotype_celltype_t1_t2_PXD043349",
                 "plots/differential/maxquant/genotype_celltype_t1_t2_PXD043349/png",
                 "plots/differential/maxquant/genotype_celltype_t1_t2_PXD043349/png/volcano.png",
-                "plots/differential/maxquant/versions.yml",
                 "plots/exploratory",
                 "plots/exploratory/maxquant",
                 "plots/exploratory/maxquant/Celltype",
@@ -83,7 +82,6 @@
                 "plots/exploratory/maxquant/fakeBatch/png/pca2d.png",
                 "plots/exploratory/maxquant/fakeBatch/png/pca3d.png",
                 "plots/exploratory/maxquant/fakeBatch/png/sample_dendrogram.png",
-                "plots/exploratory/maxquant/versions.yml",
                 "plots/proteus",
                 "plots/proteus/maxquant",
                 "plots/proteus/maxquant/Celltype",
@@ -140,8 +138,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.4"
         },
-        "timestamp": "2026-02-18T16:30:03.782516532"
+        "timestamp": "2026-02-24T15:00:28.334190187"
     }
 }

@@ -53,7 +53,6 @@
                 "plots/differential/rnaseq/treatment_mCherry_hND6_sample_number_SRP254919",
                 "plots/differential/rnaseq/treatment_mCherry_hND6_sample_number_SRP254919/png",
                 "plots/differential/rnaseq/treatment_mCherry_hND6_sample_number_SRP254919/png/volcano.png",
-                "plots/differential/rnaseq/versions.yml",
                 "plots/exploratory",
                 "plots/exploratory/rnaseq",
                 "plots/exploratory/rnaseq/treatment",
@@ -64,7 +63,6 @@
                 "plots/exploratory/rnaseq/treatment/png/pca2d.png",
                 "plots/exploratory/rnaseq/treatment/png/pca3d.png",
                 "plots/exploratory/rnaseq/treatment/png/sample_dendrogram.png",
-                "plots/exploratory/rnaseq/versions.yml",
                 "plots/qc",
                 "plots/qc/rnaseq",
                 "plots/qc/rnaseq/treatment_mCherry_hND6__SRP254919.deseq2.dispersion.png",
@@ -78,7 +76,6 @@
                 "shinyngs_app/rnaseq/SRP254919",
                 "shinyngs_app/rnaseq/SRP254919/app.R",
                 "shinyngs_app/rnaseq/SRP254919/data.rds",
-                "shinyngs_app/rnaseq/versions.yml",
                 "tables",
                 "tables/differential",
                 "tables/differential/rnaseq",
@@ -109,8 +106,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.4"
         },
-        "timestamp": "2026-02-18T16:26:32.386471901"
+        "timestamp": "2026-02-24T15:17:18.575097464"
     }
 }

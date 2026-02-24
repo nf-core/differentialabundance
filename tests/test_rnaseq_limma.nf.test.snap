@@ -65,7 +65,6 @@
                 "plots/differential/rnaseq_limma_decoupler/treatment_mCherry_hND6_sample_number_SRP254919",
                 "plots/differential/rnaseq_limma_decoupler/treatment_mCherry_hND6_sample_number_SRP254919/png",
                 "plots/differential/rnaseq_limma_decoupler/treatment_mCherry_hND6_sample_number_SRP254919/png/volcano.png",
-                "plots/differential/rnaseq_limma_decoupler/versions.yml",
                 "plots/exploratory",
                 "plots/exploratory/rnaseq_limma_decoupler",
                 "plots/exploratory/rnaseq_limma_decoupler/treatment",
@@ -76,7 +75,6 @@
                 "plots/exploratory/rnaseq_limma_decoupler/treatment/png/pca2d.png",
                 "plots/exploratory/rnaseq_limma_decoupler/treatment/png/pca3d.png",
                 "plots/exploratory/rnaseq_limma_decoupler/treatment/png/sample_dendrogram.png",
-                "plots/exploratory/rnaseq_limma_decoupler/versions.yml",
                 "plots/qc",
                 "plots/qc/rnaseq_limma_decoupler",
                 "plots/qc/rnaseq_limma_decoupler/treatment_mCherry_hND6__SRP254919.limma.mean_difference.png",
@@ -90,7 +88,6 @@
                 "shinyngs_app/rnaseq_limma_decoupler/SRP254919",
                 "shinyngs_app/rnaseq_limma_decoupler/SRP254919/app.R",
                 "shinyngs_app/rnaseq_limma_decoupler/SRP254919/data.rds",
-                "shinyngs_app/rnaseq_limma_decoupler/versions.yml",
                 "tables",
                 "tables/annotation",
                 "tables/annotation/rnaseq_limma_decoupler",
@@ -125,9 +122,9 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.4"
         },
-        "timestamp": "2026-02-18T17:06:29.655854176"
+        "timestamp": "2026-02-24T16:02:10.605606214"
     },
     "Test rnaseq limma profile - limma_rnaseq_gsea - Numeric sample IDs": {
         "content": [
@@ -199,7 +196,6 @@
                 "plots/differential/rnaseq_limma_gsea/treatment_mCherry_hND6_sample_number_SRP254919",
                 "plots/differential/rnaseq_limma_gsea/treatment_mCherry_hND6_sample_number_SRP254919/png",
                 "plots/differential/rnaseq_limma_gsea/treatment_mCherry_hND6_sample_number_SRP254919/png/volcano.png",
-                "plots/differential/rnaseq_limma_gsea/versions.yml",
                 "plots/exploratory",
                 "plots/exploratory/rnaseq_limma_gsea",
                 "plots/exploratory/rnaseq_limma_gsea/treatment",
@@ -210,7 +206,6 @@
                 "plots/exploratory/rnaseq_limma_gsea/treatment/png/pca2d.png",
                 "plots/exploratory/rnaseq_limma_gsea/treatment/png/pca3d.png",
                 "plots/exploratory/rnaseq_limma_gsea/treatment/png/sample_dendrogram.png",
-                "plots/exploratory/rnaseq_limma_gsea/versions.yml",
                 "plots/qc",
                 "plots/qc/rnaseq_limma_gsea",
                 "plots/qc/rnaseq_limma_gsea/treatment_mCherry_hND6__SRP254919.limma.mean_difference.png",
@@ -274,7 +269,6 @@
                 "shinyngs_app/rnaseq_limma_gsea/SRP254919",
                 "shinyngs_app/rnaseq_limma_gsea/SRP254919/app.R",
                 "shinyngs_app/rnaseq_limma_gsea/SRP254919/data.rds",
-                "shinyngs_app/rnaseq_limma_gsea/versions.yml",
                 "tables",
                 "tables/annotation",
                 "tables/annotation/rnaseq_limma_gsea",
@@ -311,9 +305,9 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.4"
         },
-        "timestamp": "2026-02-18T17:12:52.291991912"
+        "timestamp": "2026-02-24T16:08:38.376341185"
     },
     "Test rnaseq limma profile - limma_rnaseq_gsea": {
         "content": [
@@ -385,7 +379,6 @@
                 "plots/differential/rnaseq_limma_gsea/treatment_mCherry_hND6_sample_number_SRP254919",
                 "plots/differential/rnaseq_limma_gsea/treatment_mCherry_hND6_sample_number_SRP254919/png",
                 "plots/differential/rnaseq_limma_gsea/treatment_mCherry_hND6_sample_number_SRP254919/png/volcano.png",
-                "plots/differential/rnaseq_limma_gsea/versions.yml",
                 "plots/exploratory",
                 "plots/exploratory/rnaseq_limma_gsea",
                 "plots/exploratory/rnaseq_limma_gsea/treatment",
@@ -396,7 +389,6 @@
                 "plots/exploratory/rnaseq_limma_gsea/treatment/png/pca2d.png",
                 "plots/exploratory/rnaseq_limma_gsea/treatment/png/pca3d.png",
                 "plots/exploratory/rnaseq_limma_gsea/treatment/png/sample_dendrogram.png",
-                "plots/exploratory/rnaseq_limma_gsea/versions.yml",
                 "plots/qc",
                 "plots/qc/rnaseq_limma_gsea",
                 "plots/qc/rnaseq_limma_gsea/treatment_mCherry_hND6__SRP254919.limma.mean_difference.png",
@@ -460,7 +452,6 @@
                 "shinyngs_app/rnaseq_limma_gsea/SRP254919",
                 "shinyngs_app/rnaseq_limma_gsea/SRP254919/app.R",
                 "shinyngs_app/rnaseq_limma_gsea/SRP254919/data.rds",
-                "shinyngs_app/rnaseq_limma_gsea/versions.yml",
                 "tables",
                 "tables/annotation",
                 "tables/annotation/rnaseq_limma_gsea",
@@ -497,9 +488,9 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.4"
         },
-        "timestamp": "2026-02-18T16:37:38.043010729"
+        "timestamp": "2026-02-24T15:34:44.28474296"
     },
     "Test rnaseq limma profile - limma_rnaseq_gprofiler2": {
         "content": [
@@ -568,7 +559,6 @@
                 "plots/differential/rnaseq_limma_gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919",
                 "plots/differential/rnaseq_limma_gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919/png",
                 "plots/differential/rnaseq_limma_gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919/png/volcano.png",
-                "plots/differential/rnaseq_limma_gprofiler2/versions.yml",
                 "plots/exploratory",
                 "plots/exploratory/rnaseq_limma_gprofiler2",
                 "plots/exploratory/rnaseq_limma_gprofiler2/treatment",
@@ -579,7 +569,6 @@
                 "plots/exploratory/rnaseq_limma_gprofiler2/treatment/png/pca2d.png",
                 "plots/exploratory/rnaseq_limma_gprofiler2/treatment/png/pca3d.png",
                 "plots/exploratory/rnaseq_limma_gprofiler2/treatment/png/sample_dendrogram.png",
-                "plots/exploratory/rnaseq_limma_gprofiler2/versions.yml",
                 "plots/gprofiler2",
                 "plots/gprofiler2/rnaseq_limma_gprofiler2",
                 "plots/gprofiler2/rnaseq_limma_gprofiler2/treatment_mCherry_hND6__SRP254919",
@@ -597,7 +586,6 @@
                 "shinyngs_app/rnaseq_limma_gprofiler2/SRP254919",
                 "shinyngs_app/rnaseq_limma_gprofiler2/SRP254919/app.R",
                 "shinyngs_app/rnaseq_limma_gprofiler2/SRP254919/data.rds",
-                "shinyngs_app/rnaseq_limma_gprofiler2/versions.yml",
                 "tables",
                 "tables/annotation",
                 "tables/annotation/rnaseq_limma_gprofiler2",
@@ -621,10 +609,7 @@
                 "tables/processed_abundance/rnaseq_limma_gprofiler2/all.normalised_counts.tsv"
             ],
             [
-                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
-                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
-                "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
                 "treatment_mCherry_hND6__SRP254919.gprofiler2.all_enriched_pathways.tsv:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "treatment_mCherry_hND6_sample_number_SRP254919.gprofiler2.all_enriched_pathways.tsv:md5,d41d8cd98f00b204e9800998ecf8427e",
@@ -633,9 +618,9 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.4"
         },
-        "timestamp": "2026-02-18T16:44:30.671378058"
+        "timestamp": "2026-02-24T15:40:41.015488556"
     },
     "Test rnaseq limma profile - limma_rnaseq_gsea - with formula and complex contrasts": {
         "content": [
@@ -715,7 +700,6 @@
                 "plots/differential/rnaseq_limma_gsea/treatment_plus_genotype_SRP254919",
                 "plots/differential/rnaseq_limma_gsea/treatment_plus_genotype_SRP254919/png",
                 "plots/differential/rnaseq_limma_gsea/treatment_plus_genotype_SRP254919/png/volcano.png",
-                "plots/differential/rnaseq_limma_gsea/versions.yml",
                 "plots/exploratory",
                 "plots/exploratory/rnaseq_limma_gsea",
                 "plots/exploratory/rnaseq_limma_gsea/treatment",
@@ -726,7 +710,6 @@
                 "plots/exploratory/rnaseq_limma_gsea/treatment/png/pca2d.png",
                 "plots/exploratory/rnaseq_limma_gsea/treatment/png/pca3d.png",
                 "plots/exploratory/rnaseq_limma_gsea/treatment/png/sample_dendrogram.png",
-                "plots/exploratory/rnaseq_limma_gsea/versions.yml",
                 "plots/qc",
                 "plots/qc/rnaseq_limma_gsea",
                 "plots/qc/rnaseq_limma_gsea/full_model_with_interactions_SRP254919.limma.mean_difference.png",
@@ -953,7 +936,6 @@
                 "shinyngs_app/rnaseq_limma_gsea/SRP254919",
                 "shinyngs_app/rnaseq_limma_gsea/SRP254919/app.R",
                 "shinyngs_app/rnaseq_limma_gsea/SRP254919/data.rds",
-                "shinyngs_app/rnaseq_limma_gsea/versions.yml",
                 "tables",
                 "tables/annotation",
                 "tables/annotation/rnaseq_limma_gsea",
@@ -1027,9 +1009,9 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.4"
         },
-        "timestamp": "2026-02-18T16:54:34.048592317"
+        "timestamp": "2026-02-24T15:53:42.760510756"
     },
     "Test rnaseq limma profile - limma_rnaseq_gsea,limma_rnaseq_gprofiler2": {
         "content": [

@@ -47,7 +47,6 @@
                 "plots/differential/soft/phenotype_uninvolved_lesional_study",
                 "plots/differential/soft/phenotype_uninvolved_lesional_study/png",
                 "plots/differential/soft/phenotype_uninvolved_lesional_study/png/volcano.png",
-                "plots/differential/soft/versions.yml",
                 "plots/exploratory",
                 "plots/exploratory/soft",
                 "plots/exploratory/soft/phenotype",
@@ -58,7 +57,6 @@
                 "plots/exploratory/soft/phenotype/png/pca2d.png",
                 "plots/exploratory/soft/phenotype/png/pca3d.png",
                 "plots/exploratory/soft/phenotype/png/sample_dendrogram.png",
-                "plots/exploratory/soft/versions.yml",
                 "plots/qc",
                 "plots/qc/soft",
                 "plots/qc/soft/phenotype_uninvolved_lesional_study.limma.mean_difference.png",
@@ -71,7 +69,6 @@
                 "shinyngs_app/soft/study",
                 "shinyngs_app/soft/study/app.R",
                 "shinyngs_app/soft/study/data.rds",
-                "shinyngs_app/soft/versions.yml",
                 "tables",
                 "tables/annotation",
                 "tables/annotation/soft",
@@ -93,8 +90,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.4"
         },
-        "timestamp": "2026-02-18T16:43:05.887470495"
+        "timestamp": "2026-02-24T15:52:31.948295322"
     }
 }

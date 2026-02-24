@@ -70,7 +70,6 @@
                 "plots/differential/rnaseq_deseq2_gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919",
                 "plots/differential/rnaseq_deseq2_gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919/png",
                 "plots/differential/rnaseq_deseq2_gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919/png/volcano.png",
-                "plots/differential/rnaseq_deseq2_gprofiler2/versions.yml",
                 "plots/exploratory",
                 "plots/exploratory/rnaseq_deseq2_gprofiler2",
                 "plots/exploratory/rnaseq_deseq2_gprofiler2/treatment",
@@ -81,7 +80,6 @@
                 "plots/exploratory/rnaseq_deseq2_gprofiler2/treatment/png/pca2d.png",
                 "plots/exploratory/rnaseq_deseq2_gprofiler2/treatment/png/pca3d.png",
                 "plots/exploratory/rnaseq_deseq2_gprofiler2/treatment/png/sample_dendrogram.png",
-                "plots/exploratory/rnaseq_deseq2_gprofiler2/versions.yml",
                 "plots/gprofiler2",
                 "plots/gprofiler2/rnaseq_deseq2_gprofiler2",
                 "plots/gprofiler2/rnaseq_deseq2_gprofiler2/treatment_mCherry_hND6__SRP254919",
@@ -103,7 +101,6 @@
                 "shinyngs_app/rnaseq_deseq2_gprofiler2/SRP254919",
                 "shinyngs_app/rnaseq_deseq2_gprofiler2/SRP254919/app.R",
                 "shinyngs_app/rnaseq_deseq2_gprofiler2/SRP254919/data.rds",
-                "shinyngs_app/rnaseq_deseq2_gprofiler2/versions.yml",
                 "tables",
                 "tables/annotation",
                 "tables/annotation/rnaseq_deseq2_gprofiler2",
@@ -132,10 +129,7 @@
             [
                 "treatment_mCherry_hND6__SRP254919.deseq2.sizefactors.tsv:md5,bada5bf68f21ee9c6bfdf5fc0c5cf0ad",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.sizefactors.tsv:md5,bada5bf68f21ee9c6bfdf5fc0c5cf0ad",
-                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
-                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
-                "versions.yml:md5,ecfaf8bd98d719aecbb445e61e36c800",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results.tsv:md5,a6dde65d9e54e8e80e3abf3c14f72d34",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results_filtered.tsv:md5,fd803a83c641e843830057f3a43be27a",
@@ -153,9 +147,9 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.4"
         },
-        "timestamp": "2026-02-18T16:55:13.930557427"
+        "timestamp": "2026-02-24T15:53:52.26636873"
     },
     "Test profile - deseq2_rnaseq_gprofiler2": {
         "content": [
@@ -228,7 +222,6 @@
                 "plots/differential/rnaseq_deseq2_gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919",
                 "plots/differential/rnaseq_deseq2_gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919/png",
                 "plots/differential/rnaseq_deseq2_gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919/png/volcano.png",
-                "plots/differential/rnaseq_deseq2_gprofiler2/versions.yml",
                 "plots/exploratory",
                 "plots/exploratory/rnaseq_deseq2_gprofiler2",
                 "plots/exploratory/rnaseq_deseq2_gprofiler2/treatment",
@@ -239,7 +232,6 @@
                 "plots/exploratory/rnaseq_deseq2_gprofiler2/treatment/png/pca2d.png",
                 "plots/exploratory/rnaseq_deseq2_gprofiler2/treatment/png/pca3d.png",
                 "plots/exploratory/rnaseq_deseq2_gprofiler2/treatment/png/sample_dendrogram.png",
-                "plots/exploratory/rnaseq_deseq2_gprofiler2/versions.yml",
                 "plots/gprofiler2",
                 "plots/gprofiler2/rnaseq_deseq2_gprofiler2",
                 "plots/gprofiler2/rnaseq_deseq2_gprofiler2/treatment_mCherry_hND6__SRP254919",
@@ -261,7 +253,6 @@
                 "shinyngs_app/rnaseq_deseq2_gprofiler2/SRP254919",
                 "shinyngs_app/rnaseq_deseq2_gprofiler2/SRP254919/app.R",
                 "shinyngs_app/rnaseq_deseq2_gprofiler2/SRP254919/data.rds",
-                "shinyngs_app/rnaseq_deseq2_gprofiler2/versions.yml",
                 "tables",
                 "tables/annotation",
                 "tables/annotation/rnaseq_deseq2_gprofiler2",
@@ -290,8 +281,6 @@
             [
                 "treatment_mCherry_hND6__SRP254919.deseq2.sizefactors.tsv:md5,0703c421c53b260f91568dfc0436c054",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.sizefactors.tsv:md5,0703c421c53b260f91568dfc0436c054",
-                "versions.yml:md5,6f272b823a1be20b80a81cc01b70e1ed",
-                "versions.yml:md5,d5db8686bec50d4d783d486fc4c0899a",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results.tsv:md5,a6dde65d9e54e8e80e3abf3c14f72d34",
@@ -310,9 +299,9 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.4"
         },
-        "timestamp": "2026-02-18T16:39:25.978794092"
+        "timestamp": "2026-02-24T15:37:49.200666436"
     },
     "Test - Numeric sample IDs - deseq2_rnaseq_gsea": {
         "content": [
@@ -386,7 +375,6 @@
                 "plots/differential/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919",
                 "plots/differential/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919/png",
                 "plots/differential/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919/png/volcano.png",
-                "plots/differential/rnaseq_deseq2_gsea/versions.yml",
                 "plots/exploratory",
                 "plots/exploratory/rnaseq_deseq2_gsea",
                 "plots/exploratory/rnaseq_deseq2_gsea/treatment",
@@ -397,7 +385,6 @@
                 "plots/exploratory/rnaseq_deseq2_gsea/treatment/png/pca2d.png",
                 "plots/exploratory/rnaseq_deseq2_gsea/treatment/png/pca3d.png",
                 "plots/exploratory/rnaseq_deseq2_gsea/treatment/png/sample_dendrogram.png",
-                "plots/exploratory/rnaseq_deseq2_gsea/versions.yml",
                 "plots/qc",
                 "plots/qc/rnaseq_deseq2_gsea",
                 "plots/qc/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.deseq2.dispersion.png",
@@ -461,7 +448,6 @@
                 "shinyngs_app/rnaseq_deseq2_gsea/SRP254919",
                 "shinyngs_app/rnaseq_deseq2_gsea/SRP254919/app.R",
                 "shinyngs_app/rnaseq_deseq2_gsea/SRP254919/data.rds",
-                "shinyngs_app/rnaseq_deseq2_gsea/versions.yml",
                 "tables",
                 "tables/annotation",
                 "tables/annotation/rnaseq_deseq2_gsea",
@@ -508,9 +494,9 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.4"
         },
-        "timestamp": "2026-02-18T16:48:50.453634357"
+        "timestamp": "2026-02-24T15:45:22.547064172"
     },
     "Test profile - deseq2_rnaseq_gsea": {
         "content": [
@@ -584,7 +570,6 @@
                 "plots/differential/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919",
                 "plots/differential/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919/png",
                 "plots/differential/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919/png/volcano.png",
-                "plots/differential/rnaseq_deseq2_gsea/versions.yml",
                 "plots/exploratory",
                 "plots/exploratory/rnaseq_deseq2_gsea",
                 "plots/exploratory/rnaseq_deseq2_gsea/treatment",
@@ -595,7 +580,6 @@
                 "plots/exploratory/rnaseq_deseq2_gsea/treatment/png/pca2d.png",
                 "plots/exploratory/rnaseq_deseq2_gsea/treatment/png/pca3d.png",
                 "plots/exploratory/rnaseq_deseq2_gsea/treatment/png/sample_dendrogram.png",
-                "plots/exploratory/rnaseq_deseq2_gsea/versions.yml",
                 "plots/qc",
                 "plots/qc/rnaseq_deseq2_gsea",
                 "plots/qc/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.deseq2.dispersion.png",
@@ -659,7 +643,6 @@
                 "shinyngs_app/rnaseq_deseq2_gsea/SRP254919",
                 "shinyngs_app/rnaseq_deseq2_gsea/SRP254919/app.R",
                 "shinyngs_app/rnaseq_deseq2_gsea/SRP254919/data.rds",
-                "shinyngs_app/rnaseq_deseq2_gsea/versions.yml",
                 "tables",
                 "tables/annotation",
                 "tables/annotation/rnaseq_deseq2_gsea",
@@ -706,8 +689,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.4"
         },
-        "timestamp": "2026-02-18T16:33:05.278279455"
+        "timestamp": "2026-02-24T15:28:50.099910204"
     }
 }
