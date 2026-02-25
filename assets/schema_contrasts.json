@@ -3,45 +3,94 @@
     "$id": "https://example.com/schemas/schema_contrasts.json",
     "title": "nf-core/differentialabundance pipeline - params.contrasts schema",
     "description": "Schema for the file provided with params.contrasts",
-    "type": "object",
-    "properties": {
-        "contrasts": {
+    "anyOf": [
+        {
             "type": "array",
             "items": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "string"
+                "anyOf": [
+                    {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "variable": {
+                                "type": "string"
+                            },
+                            "reference": {
+                                "type": "string"
+                            },
+                            "target": {
+                                "type": "string"
+                            },
+                            "blocking": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "variable",
+                            "reference",
+                            "target"
+                        ]
                     },
-                    "formula": {
-                        "type": "string",
-                        "pattern": "^~\\s*(?:(?:[A-Za-z0-9_.]+(?:\\([^)]*\\))?|\\([^)]*\\))(?:\\s*[+*:|\\/-]\\s*(?:[A-Za-z0-9_.]+(?:\\([^)]*\\))?|\\([^)]*\\)))*)?(?:\\s*-\\s*1)?$"
-                    },
-                    "comparison": {
+                    {
                         "type": "array",
                         "items": {
                             "type": "string"
                         },
-                        "minItems": 2
-                    },
-                    "blocking_factors": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "minItems": 1,
-                        "uniqueItems": true
-                    },
-                    "make_contrasts_str": {
-                        "type": "string"
+                        "minItems": 4
                     }
-                },
-                "required": ["id"],
-                "additionalProperties": false
+                ]
             },
             "minItems": 1
+        },
+        {
+            "type": "object",
+            "properties": {
+                "contrasts": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "formula": {
+                                "type": "string",
+                                "pattern": "^~\\s*(?:(?:[A-Za-z0-9_.]+(?:\\([^)]*\\))?|\\([^)]*\\))(?:\\s*[+*:|\\/-]\\s*(?:[A-Za-z0-9_.]+(?:\\([^)]*\\))?|\\([^)]*\\)))*)?(?:\\s*-\\s*1)?$"
+                            },
+                            "comparison": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "minItems": 3
+                            },
+                            "blocking_factors": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "minItems": 1,
+                                "uniqueItems": true
+                            },
+                            "make_contrasts_str": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "id"
+                        ],
+                        "additionalProperties": false
+                    },
+                    "minItems": 1
+                }
+            },
+            "required": [
+                "contrasts"
+            ],
+            "additionalProperties": false
         }
-    },
-    "required": ["contrasts"],
-    "additionalProperties": false
+    ]
 }

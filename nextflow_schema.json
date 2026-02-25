@@ -44,6 +44,7 @@
                     "help_text": "This file is used to define groups of samples from 'input' to compare. CSV/TSV files must contain at least the columns 'variable', 'reference', 'target' and 'blocking', where 'variable' is a column in the input sample sheet, 'reference' and 'target' are values in that column, and blocking is a colon-separated list of additional 'blocking' variables (can be an empty string). YAML files should contain a top-level 'contrasts' list with either 'comparison' or formula-based contrast entries.",
                     "pattern": "^\\S+\\.(csv|tsv|yml|yaml)$",
                     "format": "file-path",
+                    "schema": "assets/schema_contrasts.json",
                     "fa_icon": "fas fa-adjust"
                 },
                 "outdir": {
