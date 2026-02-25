@@ -119,7 +119,7 @@ workflow DIFFERENTIALABUNDANCE {
     // Create contrasts channels
     ch_contrasts_file = ch_paramsets
         .map { meta ->
-            [ meta, file(meta.params.contrasts_yml ?: meta.params.contrasts, checkIfExists: true) ]
+            [ meta, file(meta.params.contrasts, checkIfExists: true) ]
         }
 
     ch_contrasts_file_with_extension = ch_contrasts_file

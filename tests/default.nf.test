@@ -41,7 +41,6 @@ nextflow_pipeline {
         when {
             params {
                 outdir        = "$outputDir"
-                contrasts_yml = null
                 contrasts     = "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.contrasts.csv"
             }
         }
@@ -104,7 +103,6 @@ nextflow_pipeline {
         when {
             params {
                 outdir        = "$outputDir"
-                contrasts_yml = null
                 contrasts     = "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.contrasts.csv"
                 report_file   = "$projectDir/tests/quarto.qmd,$projectDir/assets/differentialabundance_report.qmd"
             }
