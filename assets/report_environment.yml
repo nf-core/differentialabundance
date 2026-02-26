@@ -12,3 +12,4 @@ dependencies:
   - r-upsetr=1.4.0
   - bioconductor-complexheatmap=2.22.0
   - r-tidyverse=2.0.0
+  - r-ggbeeswarm=0.7.2
