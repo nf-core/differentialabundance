@@ -47,7 +47,7 @@ library(ComplexHeatmap)
 library(UpSetR)
 library(tidyverse)
 library(reactable)
-library(shiny)
+library(ggbeeswarm)
 ```
 
 <!-- Define some functions -->
