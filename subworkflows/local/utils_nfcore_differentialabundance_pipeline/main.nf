@@ -225,11 +225,8 @@ def validateInputParameters(paramsets) {
         }
 
         // Validate contrasts parameters
-        if (row.contrasts_yml && row.contrasts) {
-            error("Both '--contrasts' and '--contrasts_yml' parameters are set. Please specify only one of these options to define contrasts.")
-        }
-        if (!(row.contrasts_yml || row.contrasts)) {
-            error("Either '--contrasts' and '--contrasts_yml' must be set. Please specify one of these options to define contrasts.")
+        if (!row.contrasts) {
+            error("'--contrasts' must be set. Please provide a contrasts file in CSV, TSV, YML, or YAML format.")
         }
     }
 }

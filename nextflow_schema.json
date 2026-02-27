@@ -40,21 +40,11 @@
                 },
                 "contrasts": {
                     "type": "string",
-                    "description": "A CSV/TSV file describing sample contrasts to compare groups.",
-                    "help_text": "This file is used to define groups of samples from 'input' to compare. It must contain at least the columns 'variable', 'reference', 'target' and 'blocking', where 'variable' is a column in the input sample sheet, 'reference' and 'target' are values in that column, and blocking is a colon-separated list of additional 'blocking' variables (can be an empty string)",
-                    "pattern": "^\\S+\\.(csv|tsv)$",
+                    "description": "A CSV/TSV/YML/YAML file describing sample contrasts to compare groups.",
+                    "help_text": "This file is used to define groups of samples from 'input' to compare. CSV/TSV files must contain at least the columns 'variable', 'reference', 'target' and 'blocking', where 'variable' is a column in the input sample sheet, 'reference' and 'target' are values in that column, and blocking is a colon-separated list of additional 'blocking' variables (can be an empty string). YAML files should contain a top-level 'contrasts' list with either 'comparison' or formula-based contrast entries.",
+                    "pattern": "^\\S+\\.(csv|tsv|yml|yaml)$",
                     "format": "file-path",
-                    "mimetype": "text/csv",
-                    "fa_icon": "fas fa-adjust"
-                },
-                "contrasts_yml": {
-                    "type": "string",
-                    "description": "A YAML file describing sample contrasts to compare groups.",
-                    "help_text": "This file defines sample contrasts for differential abundance analysis, with each contrast specifying an:\n  - `id`, a `comparison` list (variable, reference, target), and optional `blocking_factors`, or an\n  - `id`, a `formula`, and a `make_contrasts_str`.",
-                    "pattern": "^\\S+\\.(yaml|yml)$",
                     "schema": "assets/schema_contrasts.json",
-                    "format": "file-path",
-                    "mimetype": "text/csv",
                     "fa_icon": "fas fa-adjust"
                 },
                 "outdir": {
