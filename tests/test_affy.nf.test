@@ -15,7 +15,7 @@ nextflow_pipeline {
                 // Input data (affy_testdata)
                 study_name              = 'GSE50790'
                 input                   = 'https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/GSE50790.csv'
-                contrasts_yml           = 'https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/GSE50790_contrasts.yaml'
+                contrasts           = 'https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/GSE50790_contrasts.yaml'
                 affy_cel_files_archive  = 'https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/GSE50790_RAW.tar'
                 gene_sets_files         = 'https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/h.all.v2022.1.Hs.symbols.gmt'
 
@@ -69,7 +69,7 @@ nextflow_pipeline {
                 // Input data (affy_testdata)
                 study_name              = 'GSE50790'
                 input                   = 'https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/GSE50790.csv'
-                contrasts_yml           = 'https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/GSE50790_contrasts.yaml'
+                contrasts           = 'https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/GSE50790_contrasts.yaml'
                 affy_cel_files_archive  = 'https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/GSE50790_RAW.tar'
                 gene_sets_files         = 'https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/h.all.v2022.1.Hs.symbols.gmt'
 

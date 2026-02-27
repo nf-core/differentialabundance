@@ -56,7 +56,7 @@ RNA-seq with DESeq2 (default):
 nextflow run nf-core/differentialabundance \
     -profile rnaseq,docker \
     --input samplesheet.csv \
-    --contrasts_yml contrasts.yaml \
+    --contrasts contrasts.yaml \
     --matrix assay_matrix.tsv \
     --gtf mouse.gtf \
     --outdir <OUTDIR>
@@ -74,7 +74,7 @@ RNA-seq with Limma (voom):
 nextflow run nf-core/differentialabundance \
     -profile rnaseq_limma,docker \
     --input samplesheet.csv \
-    --contrasts_yml contrasts.yaml \
+    --contrasts contrasts.yaml \
     --matrix assay_matrix.tsv \
     --gtf mouse.gtf \
     --outdir <OUTDIR>
@@ -91,7 +91,7 @@ RNA-seq with DESeq2 and GSEA:
 nextflow run nf-core/differentialabundance \
     -profile rnaseq_deseq2_gsea,docker \
     --input samplesheet.csv \
-    --contrasts_yml contrasts.yaml \
+    --contrasts contrasts.yaml \
     --matrix assay_matrix.tsv \
     --gtf mouse.gtf \
     --gene_sets_files gene_sets.gmt \
@@ -104,7 +104,7 @@ Affymetrix microarray:
 nextflow run nf-core/differentialabundance \
     -profile affy,docker \
     --input samplesheet.csv \
-    --contrasts_yml contrasts.yaml \
+    --contrasts contrasts.yaml \
     --affy_cel_files_archive cel_files.tar \
     --outdir <OUTDIR>
 ```

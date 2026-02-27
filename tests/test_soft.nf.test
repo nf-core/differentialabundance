@@ -15,7 +15,7 @@ nextflow_pipeline {
 
                 // Input data (soft_testdata)
                 input         = 'https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/GSE50790.csv'
-                contrasts_yml = 'https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/GSE50790_contrasts.yaml'
+                contrasts = 'https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/GSE50790_contrasts.yaml'
                 querygse      = 'GSE50790'
             }
         }

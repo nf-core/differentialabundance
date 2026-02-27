@@ -268,7 +268,7 @@ For example, to run an RNA-seq analysis with DESeq2:
 nextflow run nf-core/differentialabundance \
     -profile rnaseq,docker \
     --input samplesheet.csv \
-    --contrasts_yml contrasts.yaml \
+    --contrasts contrasts.yaml \
     --matrix counts.tsv \
     --gtf genes.gtf \
     --outdir results/
@@ -281,7 +281,7 @@ nextflow run nf-core/differentialabundance \
     -profile rnaseq,docker \
     --deseq2_vs_method rlog \
     --input samplesheet.csv \
-    --contrasts_yml contrasts.yaml \
+    --contrasts contrasts.yaml \
     --matrix counts.tsv \
     --gtf genes.gtf \
     --outdir results/
@@ -298,7 +298,7 @@ nextflow run nf-core/differentialabundance \
     -profile docker \
     --paramsheet my_configs.yaml \
     --input samplesheet.csv \
-    --contrasts_yml contrasts.yaml \
+    --contrasts contrasts.yaml \
     --matrix counts.tsv \
     --gtf genes.gtf \
     --outdir results/
@@ -526,7 +526,7 @@ The typical command for running the pipeline is as follows:
 nextflow run nf-core/differentialabundance \
     -profile rnaseq,docker \
     --input samplesheet.csv \
-    --contrasts_yml contrasts.yaml \
+    --contrasts contrasts.yaml \
     --matrix assay_matrix.tsv \
     --gtf mouse.gtf \
     --outdir <OUTDIR> \
@@ -542,7 +542,7 @@ For other data types, use the appropriate analysis profile:
 nextflow run nf-core/differentialabundance \
     -profile affy,docker \
     --input samplesheet.csv \
-    --contrasts_yml contrasts.yaml \
+    --contrasts contrasts.yaml \
     --affy_cel_files_archive cel_files.tar \
     --outdir <OUTDIR>
 
@@ -550,7 +550,7 @@ nextflow run nf-core/differentialabundance \
 nextflow run nf-core/differentialabundance \
     -profile maxquant,docker \
     --input samplesheet.csv \
-    --contrasts_yml contrasts.yaml \
+    --contrasts contrasts.yaml \
     --matrix proteinGroups.txt \
     --outdir <OUTDIR>
 
@@ -558,7 +558,7 @@ nextflow run nf-core/differentialabundance \
 nextflow run nf-core/differentialabundance \
     -profile soft,docker \
     --input samplesheet.csv \
-    --contrasts_yml contrasts.yaml \
+    --contrasts contrasts.yaml \
     --querygse GSE12345 \
     --outdir <OUTDIR>
 ```
