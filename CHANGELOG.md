@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- [[#613]](https://github.com/nf-core/differentialabundance/pull/613) - Add Box plots for differentially expressed genes. ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#580]](https://github.com/nf-core/differentialabundance/pull/580) - Do not split results table into up- and downregulated. ([@antoniasaracco](https://github.com/antoniasaracco), review by [@atrigila](https://github.com/atrigila), [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#586](https://github.com/nf-core/differentialabundance/pull/586)] - Replace dendrogram with complex heatmap ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#614](https://github.com/nf-core/differentialabundance/pull/614)] - Report filtered QC stats ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst)).
@@ -60,6 +61,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [[#652](https://github.com/nf-core/differentialabundance/pull/652)] - Harmonize `--contrasts` and `--contrasts_yml` ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
+- [[#626](https://github.com/nf-core/differentialabundance/pull/626)] - Update documentation, bump Nextflow version, `versions.yml` output cleanup and add params_yaml to report bundle ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila), [@apeltzer](https://github.com/apeltzer), [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
+- [[#628](https://github.com/nf-core/differentialabundance/pull/628)] - Removed `--deseq2_cores` parameter and infer from task cpus instead,([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
+- [[#633](https://github.com/nf-core/differentialabundance/pull/633)] - Rename transcript_length_matrix param to feature_length_matrix, ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
+- [[#631](https://github.com/nf-core/differentialabundance/pull/631)] - Split zero intercept contrast dream test into two, ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#625](https://github.com/nf-core/differentialabundance/pull/625)] - Sort genes by p-value by default in quarto report, ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#620](https://github.com/nf-core/differentialabundance/pull/620/)] - Improve scree plot by switching to plotly, ([@atrigila](https://github.com/atrigila) review by [@apeltzer](https://github.com/apeltzer)).
 - [[#619](https://github.com/nf-core/differentialabundance/pull/619/)] - Improve caching behaviour for processes using `VALIDATOR` outputs ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).

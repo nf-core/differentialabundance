@@ -45,6 +45,7 @@ h4 {
   background-color: #24b064;
   border-color: #24b064;
 }
+
 .list-group-item.active:hover {
   z-index: 2;
   color: #fff;
@@ -83,4 +84,8 @@ a {
 
 .nav-tabs > li > a {
   color: #24b064 !important;
+}
+
+.boxplot-container .tab-content {
+  min-height: 650px;
 }

@@ -95,6 +95,131 @@ plot_screeplot <- function(percentVarData) {
             yaxis = list(title = "Percent variance explained")
         )
 }
+
+generate_boxplots <- function(combined, assay_data, observations, params,
+                               contrast_variables, main_grouping_variable,
+                               groupColorScale, label_col) {
+    qval_pretty <- prettifyVariablename(params$meta$params$differential_qval_column)
+
+    # choose ID + display label columns in 'combined' after prettify
+    features_id_pretty <- prettifyVariablename(params$meta$params$features_id_col)
+
+    if (!is.null(params$meta$params$features_name_col) &&
+        prettifyVariablename(params$meta$params$features_name_col) %in% colnames(combined)) {
+        feature_label_pretty <- prettifyVariablename(params$meta$params$features_name_col)
+    } else {
+        feature_label_pretty <- prettifyVariablename(label_col)
+        if (!feature_label_pretty %in% colnames(combined)) {
+        feature_label_pretty <- features_id_pretty
+        }
+    }
+
+    # top 10 by qval
+    if (qval_pretty %in% colnames(combined)) {
+        ord <- order(combined[[qval_pretty]])
+        top_ids <- head(combined[[features_id_pretty]][ord], 10)
+        top_ids <- as.character(top_ids)
+    } else {
+        # fallback: take first 10
+        top_ids <- head(as.character(combined[[features_id_pretty]]), 10)
+    }
+
+    cat("\n::: {.panel-tabset .boxplot-container}\n\n")
+
+    for (assay_type in rev(names(assay_data))) {
+        cat(paste0("\n###### ", prettifyVariablename(assay_type), "\n\n"))
+
+        expr_mat <- assay_data[[assay_type]]
+        top_present <- intersect(top_ids, rownames(expr_mat))
+        if (length(top_present) == 0) {
+        cat("*No top genes found in this assay matrix.*\n\n")
+        next
+        }
+
+        # subset observations to samples in expr_mat
+        obs_sub <- observations[colnames(expr_mat), , drop = FALSE]
+
+        plot_df <- as.data.frame(expr_mat[top_present, , drop = FALSE])
+        plot_df[[prettifyVariablename(params$meta$params$features_type)]] <- rownames(plot_df)
+
+        features_pretty <- prettifyVariablename(params$meta$params$features_type)
+
+        plot_df <- tidyr::pivot_longer(
+        plot_df,
+        cols = -all_of(features_pretty),
+        names_to = "Sample",
+        values_to = "Expression"
+        )
+        plot_df <- dplyr::arrange(plot_df, .data[[features_pretty]])
+
+        # Condition: use first contrast variable if present; else use main grouping var
+        cond_var <- if (length(unique(contrast_variables)) > 0) unique(contrast_variables)[1] else main_grouping_variable
+        plot_df$Condition <- obs_sub[plot_df$Sample, cond_var]
+
+        # Map feature IDs -> display names (symbol if available)
+        feature_names <- combined[[feature_label_pretty]]
+        names(feature_names) <- combined[[features_id_pretty]]
+        plot_df$FeatureName <- unname(feature_names[plot_df[[features_pretty]]])
+
+        # Map feature IDs -> qvals for label
+        if (qval_pretty %in% colnames(combined)) {
+        pvals <- combined[[qval_pretty]]
+        names(pvals) <- combined[[features_id_pretty]]
+        plot_df$pval <- unname(pvals[plot_df[[features_pretty]]])
+        } else {
+        plot_df$pval <- NA_real_
+        }
+
+        pvals_grouped <- plot_df %>%
+        dplyr::group_by(FeatureName) %>%
+        dplyr::summarise(pval = dplyr::first(pval), .groups = "drop")
+
+        # Panel-specific y positions (avoid global max overlap)
+        y_pos <- plot_df %>%
+        dplyr::group_by(FeatureName) %>%
+        dplyr::summarise(y = max(Expression, na.rm = TRUE) * 1.03, .groups = "drop")
+
+        pvals_grouped <- dplyr::left_join(pvals_grouped, y_pos, by = "FeatureName")
+
+        p_box <- ggplot(plot_df, aes(x = Condition, y = Expression)) +
+        geom_boxplot(outlier.shape = NA) +
+        ggbeeswarm::geom_quasirandom(
+            width = 0.2,
+            aes(
+            color = Condition,
+            text = paste0("Sample: ", Sample, "<br>")
+            )
+        ) +
+        facet_wrap(~ FeatureName, scales = "free_y") +
+        scale_color_manual(values = groupColorScale) +
+        theme_light() +
+        theme(
+            axis.text.x = element_text(angle = 45, hjust = 1),
+            axis.title.x = element_text(margin = margin(t = 15)),
+            legend.position = "none",
+            strip.text = element_text(color = "black", size = 8),
+            strip.background = element_rect(linewidth = 0.1),
+            panel.spacing.y = unit(1.5, "lines"),
+            panel.spacing.x = unit(1.5, "lines"),
+            plot.margin = margin(t = 15, b = 20)
+        ) +
+        geom_text(
+            data = pvals_grouped,
+            aes(x = 1.6, y = y, label = paste0("Padj = ", signif(pval, 3))),
+            inherit.aes = FALSE,
+            size = 2,
+            color = "grey37",
+            fontface = "italic",
+            na.rm = TRUE
+        )
+
+        p_box <- ggplotly(p_box, tooltip = c("x", "y", "color", "text")) %>%
+        layout(height = 600)
+
+        print(htmltools::tagList(p_box))
+    }
+    cat("\n:::\n\n")
+}
 ```
 
 ```{r, warning=FALSE}
@@ -1406,6 +1531,13 @@ for (i in 1:nrow(contrasts)) {
 
             # Print the table with caption
             print(htmltools::tagList(caption_html, rt))
+
+            cat("\n**Box plots**\n\n")
+            cat("The following box plots show the distribution of expression levels for the top 10 genes ranked by significance.\n\n")
+
+            generate_boxplots(combined, assay_data, observations, params,
+                  contrast_variables, main_grouping_variable,
+                  groupColorScale, label_col)
 
             # Optional biotype plot, now grouped by Direction
             if ("Gene biotype" %in% colnames(combined)) {
