@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- [[#649]](https://github.com/nf-core/differentialabundance/pull/649) - Add per-column filters to differentially expressed genes table. ([@antoniasaracco](https://github.com/antoniasaracco), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#613]](https://github.com/nf-core/differentialabundance/pull/613) - Add Box plots for differentially expressed genes. ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#580]](https://github.com/nf-core/differentialabundance/pull/580) - Do not split results table into up- and downregulated. ([@antoniasaracco](https://github.com/antoniasaracco), review by [@atrigila](https://github.com/atrigila), [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#586](https://github.com/nf-core/differentialabundance/pull/586)] - Replace dendrogram with complex heatmap ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
