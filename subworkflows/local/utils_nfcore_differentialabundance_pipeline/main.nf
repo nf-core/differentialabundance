@@ -228,13 +228,14 @@ def validateInputParameters(paramsets) {
         if (!row.contrasts) {
             error("'--contrasts' must be set. Please provide a contrasts file in CSV, TSV, YML, or YAML format.")
         }
+
+        // Validate control-based size factor parameters
+        if (row.sizefactors_from_controls && row.differential_method != 'deseq2') {
+            error("'--sizefactors_from_controls' is only supported with '--differential_method deseq2'. Found differential_method='${row.differential_method}' in paramset={${row.paramset_name}}.")
+        }
     }
 }
 
-    // Validate control-based size factor parameters
-    if (row.sizefactors_from_controls && row.differential_method != 'deseq2') {
-        error("'--sizefactors_from_controls' is only supported with '--differential_method deseq2'. Found differential_method='${row.differential_method}' in paramset={${row.paramset_name}}.")
-    }
 
 //
 // Validate channels from input samplesheet
