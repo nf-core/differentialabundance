@@ -699,7 +699,7 @@ rt <- reactable(
   highlight = TRUE,
   columns = list(
     Id = reactable::colDef(
-      minWidth = 350,  
+      minWidth = 350,
       style = list(wordBreak = "break-word")
     )
   )
@@ -1593,8 +1593,8 @@ if (!is.null(params$meta$params$functional_method)) {
     rt <- reactable::reactable(
       df,
       fullWidth = TRUE,
-      showPageInfo = TRUE,        
-      showPageSizeOptions = TRUE, 
+      showPageInfo = TRUE,
+      showPageSizeOptions = TRUE,
       pageSizeOptions = c(10, 20, 50, 100),
       bordered = FALSE,
       striped = TRUE,
@@ -1821,7 +1821,7 @@ if (!is.null(params$meta$params$functional_method)) {
 #| echo: false
 #| results: asis
 rt <- reactable(
-  params_table,  
+  params_table,
   striped  = TRUE,
   highlight = TRUE,
   pagination = TRUE,
