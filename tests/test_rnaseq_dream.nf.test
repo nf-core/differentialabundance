@@ -6,7 +6,7 @@ nextflow_pipeline {
     tag "pipeline"
 
     test("Test rnaseq dream profile - dream_rnaseq") {
-        config "${projectDir}/conf/test/rnaseq/rnaseq_dream.config"
+        config "${projectDir}/conf/test/rnaseq/rnaseq_dream_complex.config"
 
         when {
             params {
@@ -36,7 +36,7 @@ nextflow_pipeline {
     }
 
     test("Test rnaseq dream profile - complex contrast - with zero intercept - 1") {
-        config "${projectDir}/conf/test/rnaseq/rnaseq_dream.config"
+        config "${projectDir}/conf/test/rnaseq/rnaseq_dream_complex.config"
 
         when {
             params {
@@ -75,7 +75,7 @@ nextflow_pipeline {
     }
 
     test("Test rnaseq dream profile - complex contrast - with zero intercept - 2") {
-        config "${projectDir}/conf/test/rnaseq/rnaseq_dream.config"
+        config "${projectDir}/conf/test/rnaseq/rnaseq_dream_complex.config"
 
         when {
             params {
@@ -114,7 +114,7 @@ nextflow_pipeline {
     }
 
     test("Test rnaseq dream profile - with decoupler") {
-        config "${projectDir}/conf/test/rnaseq/rnaseq_dream_decoupler.config"
+        config "${projectDir}/conf/test/rnaseq/rnaseq_dream_decoupler_complex.config"
 
         when {
             params {
@@ -144,7 +144,7 @@ nextflow_pipeline {
     }
 
     test("Test - Numeric sample IDs - rnaseq dream profile - with decoupler") {
-        config "${projectDir}/conf/test/rnaseq/rnaseq_dream_decoupler.config"
+        config "${projectDir}/conf/test/rnaseq/rnaseq_dream_decoupler_complex.config"
 
         when {
             params {
