@@ -93,7 +93,10 @@ workflow PIPELINE_INITIALISATION {
     //
     // Get paramsets based on paramsheet or default parameters
     //
-    paramsets = getParamsetConfigurations()
+    def configurations = params.paramsheet
+        ? getParamsheetConfigurations()
+        : getDefaultConfigurations()
+    paramsets = validateConfigurations(configurations)
     ch_paramsets = Channel.fromList(paramsets)
         .map { paramset -> [
             id: paramset.study_name,
@@ -334,13 +337,9 @@ def methodsDescriptionText(mqc_methods_yaml) {
     return description_html.toString()
 }
 
-// Get configurations based on whether use paramsheet or default params
-// and validate them against the schema.
-def getParamsetConfigurations() {
-    // Use paramsheet if --paramsheet is explicitly provided, otherwise use default params (profile mode)
-    def paramsets = (params.paramsheet) ? getParamsheetConfigurations() : getDefaultConfigurations()
-
-    return paramsets.collect { paramset ->
+// Validate configurations against the schema.
+def validateConfigurations(configurations) {
+    return configurations.collect { paramset ->
         // Some params are not useful through the pipeline run.
         // Remove them for cleaner meta
         def ignore = ['help', 'help_full', 'show_hidden', 'genomes']
