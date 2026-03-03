@@ -287,9 +287,12 @@ nextflow run nf-core/differentialabundance \
     --outdir results/
 ```
 
+> [!WARNING]
+> Do not override `--differential_method` on the command line when using an analysis profile. Each profile also sets method-specific parameters (e.g. logFC and p-value column names). To change methods, use the appropriate profile (e.g. `-profile rnaseq_limma`).
+
 See the [Profiles](#-profile) section for the full list of available analysis profiles.
 
-### 2. Multi-Run Mode (Paramsheet) — for benchmarking and exploration
+### 2. Multi-Run Mode (Paramsheet) — for exploration
 
 For running multiple analysis configurations in parallel (e.g. comparing DESeq2 vs Limma, or testing different enrichment tools), provide a custom **paramsheet** — a YAML file where each entry defines a set of parameter overrides:
 
@@ -700,6 +703,9 @@ These profiles configure the pipeline for specific study types, differential met
 
 - `maxquant` — MaxQuant proteomics with Limma
 - `soft` — GEO SOFT files with Limma
+
+> [!WARNING]
+> Do not override `--differential_method` on the command line when using an analysis profile. Each profile also sets method-specific parameters (e.g. logFC and p-value column names). To change methods, use the appropriate profile (e.g. `-profile rnaseq_limma`).
 
 #### Container profiles
 
