@@ -230,9 +230,9 @@ def validateInputParameters(paramsets) {
         }
 
         // Validate control-based size factor parameters
-        if (row.sizefactors_from_controls && row.differential_method != 'deseq2') { 
+        if (row.sizefactors_from_controls && row.differential_method != 'deseq2') {
             error("'--sizefactors_from_controls' is only supported with '--differential_method deseq2'. Found differential_method='${row.differential_method}' in paramset='${row.paramset_name}'.")
-        }                                                                           
+        }
 
         if (row.control_features && !row.sizefactors_from_controls && row.differential_method != 'deseq2') {
             log.warn("'--control_features' with '${row.differential_method}' will only strip control features from matrices. Normalization from controls is only supported with '--differential_method deseq2'.")
