@@ -145,12 +145,16 @@ nextflow_pipeline {
 
     test("Test - Numeric sample IDs - rnaseq dream profile - with decoupler") {
         config "${projectDir}/conf/test/rnaseq/rnaseq_dream_decoupler.config"
-        config "${projectDir}/conf/testdata/rnaseq_numeric_samples.config"
 
         when {
             params {
                 outdir = "$outputDir"
+
+                // change input data
                 contrasts = "${projectDir}/tests/assets/SRP254919_dream.contrasts.yaml"
+                input = "${projectDir}/tests/assets/SRP254919.samplesheet.csv"
+                matrix = "${projectDir}/tests/assets/SRP254919.salmon.merged.gene_counts.top1000cov.tsv"
+                feature_length_matrix = "${projectDir}/tests/assets/SRP254919.spoofed_lengths.tsv"
             }
         }
 

@@ -5,7 +5,8 @@ nextflow_pipeline {
     tag "rnaseq_limma"
     tag "pipeline"
 
-    test("Test rnaseq limma profile - limma_rnaseq_gsea") {
+    test("Test rnaseq limma profile - rnaseq_limma_gsea") {
+        tag "rnaseq_limma_gsea"
         config "${projectDir}/conf/test/rnaseq/rnaseq_limma_gsea.config"
 
         when {
@@ -35,7 +36,8 @@ nextflow_pipeline {
         }
     }
 
-    test("Test rnaseq limma profile - limma_rnaseq_gprofiler2") {
+    test("Test rnaseq limma profile - rnaseq_limma_gprofiler2") {
+        tag "rnaseq_limma_gprofiler2"
         config "${projectDir}/conf/test/rnaseq/rnaseq_limma_gprofiler2.config"
 
         when {
@@ -65,8 +67,8 @@ nextflow_pipeline {
         }
     }
 
-    test("Test rnaseq limma profile - limma_rnaseq_gsea - with formula and complex contrasts") {
-        tag "limma_rnaseq_gsea_complex"
+    test("Test rnaseq limma profile - rnaseq_limma_gsea - with formula and complex contrasts") {
+        tag "rnaseq_limma_gsea_complex"
         config "${projectDir}/conf/test/rnaseq/rnaseq_limma_gsea_complex.config"
 
         when {
@@ -97,7 +99,7 @@ nextflow_pipeline {
     }
 
     test("Test rnaseq limma profile - with decoupler") {
-        tag "limma_rnaseq_decoupler"
+        tag "rnaseq_limma_decoupler"
         config "${projectDir}/conf/test/rnaseq/rnaseq_limma_decoupler.config"
 
         when {
@@ -127,13 +129,18 @@ nextflow_pipeline {
         }
     }
 
-    test("Test rnaseq limma profile - limma_rnaseq_gsea - Numeric sample IDs") {
+    test("Test rnaseq limma profile - rnaseq_limma_gsea - Numeric sample IDs") {
+        tag "rnaseq_limma_gsea_numeric_samples"
         config "${projectDir}/conf/test/rnaseq/rnaseq_limma_gsea.config"
-        config "${projectDir}/conf/testdata/rnaseq_numeric_samples.config"
 
         when {
             params {
                 outdir = "$outputDir"
+
+                // change input data
+                input = "${projectDir}/tests/assets/SRP254919.samplesheet.csv"
+                matrix = "${projectDir}/tests/assets/SRP254919.salmon.merged.gene_counts.top1000cov.tsv"
+                feature_length_matrix = "${projectDir}/tests/assets/SRP254919.spoofed_lengths.tsv"
             }
         }
 

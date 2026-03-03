@@ -67,11 +67,15 @@ nextflow_pipeline {
 
     test("Test - Numeric sample IDs - deseq2_rnaseq_gsea") {
         config "${projectDir}/conf/test/rnaseq/rnaseq_deseq2_gsea.config"
-        config "${projectDir}/conf/testdata/rnaseq_numeric_samples.config"
 
         when {
             params {
                 outdir = "$outputDir"
+
+                // change input data
+                input = "${projectDir}/tests/assets/SRP254919.samplesheet.csv"
+                matrix = "${projectDir}/tests/assets/SRP254919.salmon.merged.gene_counts.top1000cov.tsv"
+                feature_length_matrix = "${projectDir}/tests/assets/SRP254919.spoofed_lengths.tsv"
             }
         }
 
@@ -98,11 +102,15 @@ nextflow_pipeline {
 
     test("Test - Numeric sample IDs - deseq2_rnaseq_gprofiler2") {
         config "${projectDir}/conf/test/rnaseq/rnaseq_deseq2_gprofiler2.config"
-        config "${projectDir}/conf/testdata/rnaseq_numeric_samples.config"
 
         when {
             params {
                 outdir = "$outputDir"
+
+                // change input data
+                input = "${projectDir}/tests/assets/SRP254919.samplesheet.csv"
+                matrix = "${projectDir}/tests/assets/SRP254919.salmon.merged.gene_counts.top1000cov.tsv"
+                feature_length_matrix = "${projectDir}/tests/assets/SRP254919.spoofed_lengths.tsv"
             }
         }
 
