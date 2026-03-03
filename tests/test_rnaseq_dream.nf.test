@@ -6,32 +6,11 @@ nextflow_pipeline {
     tag "pipeline"
 
     test("Test rnaseq dream profile - dream_rnaseq") {
-        config "${projectDir}/conf/rnaseq/rnaseq_dream.config"
+        config "${projectDir}/conf/test/rnaseq/rnaseq_dream.config"
 
         when {
             params {
                 outdir = "$outputDir"
-
-                // Input data (rnaseq_testdata_complex)
-                study_name        = 'SRP254919'
-                input             = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/metadata.tsv'
-                matrix            = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/counts.tsv'
-                contrasts     = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/testdata/formula_contrasts/rnaseq_complex_contrast.yaml'
-                gtf               = 'https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz'
-                gene_sets_files   = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt'
-                decoupler_network = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/progeny/mouse_network.tsv'
-
-                // Exploratory
-                exploratory_main_variable = 'contrasts'
-
-                // Apply a higher filter to check that the filtering works
-                filtering_min_abundance = 10
-
-                // Report options
-                report_contributors = 'Jane Doe\nDirector of Institute of Microbiology\nUniversity of Smallville;John Smith\nPhD student\nInstitute of Microbiology\nUniversity of Smallville'
-
-                // Other
-                round_digits = 3
             }
         }
 
@@ -57,37 +36,20 @@ nextflow_pipeline {
     }
 
     test("Test rnaseq dream profile - complex contrast - with zero intercept - 1") {
-        config "${projectDir}/conf/rnaseq/rnaseq_dream.config"
+        config "${projectDir}/conf/test/rnaseq/rnaseq_dream.config"
 
         when {
             params {
                 outdir = "$outputDir"
 
-                // Input data (rnaseq_testdata_complex2)
-                study_name        = 'SRP254919'
-                input             = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/metadata.tsv'
-                matrix            = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/counts.tsv'
-                contrasts     = "${projectDir}/tests/assets/zero_intercept_contrasts_1.yml"
-                gtf               = 'https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz'
-                gene_sets_files   = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt'
-                decoupler_network = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/progeny/mouse_network.tsv'
+                // Override contrasts for zero intercept test
+                contrasts = "${projectDir}/tests/assets/zero_intercept_contrasts_1.yml"
 
                 // DREAM without voom (dream_norm paramset)
                 dream_apply_voom        = false
                 exploratory_assay_names = 'raw'
                 exploratory_final_assay = 'raw'
 
-                // Exploratory
-                exploratory_main_variable = 'contrasts'
-
-                // Apply a higher filter to check that the filtering works
-                filtering_min_abundance = 10
-
-                // Report options
-                report_contributors = 'Jane Doe\nDirector of Institute of Microbiology\nUniversity of Smallville;John Smith\nPhD student\nInstitute of Microbiology\nUniversity of Smallville'
-
-                // Other
-                round_digits = 3
             }
         }
 
@@ -113,37 +75,20 @@ nextflow_pipeline {
     }
 
     test("Test rnaseq dream profile - complex contrast - with zero intercept - 2") {
-        config "${projectDir}/conf/rnaseq/rnaseq_dream.config"
+        config "${projectDir}/conf/test/rnaseq/rnaseq_dream.config"
 
         when {
             params {
                 outdir = "$outputDir"
 
-                // Input data (rnaseq_testdata_complex3)
-                study_name        = 'SRP254919'
-                input             = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/metadata.tsv'
-                matrix            = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/counts.tsv'
-                contrasts     = "${projectDir}/tests/assets/zero_intercept_contrasts_2.yml"
-                gtf               = 'https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz'
-                gene_sets_files   = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt'
-                decoupler_network = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/progeny/mouse_network.tsv'
+                // Override contrasts for zero intercept test
+                contrasts = "${projectDir}/tests/assets/zero_intercept_contrasts_2.yml"
 
                 // DREAM without voom (dream_norm paramset)
                 dream_apply_voom        = false
                 exploratory_assay_names = 'raw'
                 exploratory_final_assay = 'raw'
 
-                // Exploratory
-                exploratory_main_variable = 'contrasts'
-
-                // Apply a higher filter to check that the filtering works
-                filtering_min_abundance = 10
-
-                // Report options
-                report_contributors = 'Jane Doe\nDirector of Institute of Microbiology\nUniversity of Smallville;John Smith\nPhD student\nInstitute of Microbiology\nUniversity of Smallville'
-
-                // Other
-                round_digits = 3
             }
         }
 
@@ -169,32 +114,11 @@ nextflow_pipeline {
     }
 
     test("Test rnaseq dream profile - with decoupler") {
-        config "${projectDir}/conf/rnaseq/rnaseq_dream_decoupler.config"
+        config "${projectDir}/conf/test/rnaseq/rnaseq_dream_decoupler.config"
 
         when {
             params {
                 outdir = "$outputDir"
-
-                // Input data (rnaseq_testdata_complex)
-                study_name        = 'SRP254919'
-                input             = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/metadata.tsv'
-                matrix            = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/counts.tsv'
-                contrasts     = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/testdata/formula_contrasts/rnaseq_complex_contrast.yaml'
-                gtf               = 'https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz'
-                gene_sets_files   = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt'
-                decoupler_network = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/progeny/mouse_network.tsv'
-
-                // Apply a higher filter to check that the filtering works
-                filtering_min_abundance = 10
-
-                // Decoupler
-                decoupler_min_n = 1
-
-                // Report options
-                report_contributors = 'Jane Doe\nDirector of Institute of Microbiology\nUniversity of Smallville;John Smith\nPhD student\nInstitute of Microbiology\nUniversity of Smallville'
-
-                // Other
-                round_digits = 3
             }
         }
 
@@ -220,32 +144,13 @@ nextflow_pipeline {
     }
 
     test("Test - Numeric sample IDs - rnaseq dream profile - with decoupler") {
-        config "${projectDir}/conf/rnaseq/rnaseq_dream_decoupler.config"
+        config "${projectDir}/conf/test/rnaseq/rnaseq_dream_decoupler.config"
+        config "${projectDir}/conf/testdata/rnaseq_numeric_samples.config"
 
         when {
             params {
                 outdir = "$outputDir"
-
-                // Input data (rnaseq_testdata_dream_numeric_samples - local files with numeric sample IDs)
-                study_name        = 'SRP254919'
-                input             = "${projectDir}/tests/assets/SRP254919.samplesheet.csv"
-                matrix            = "${projectDir}/tests/assets/SRP254919.salmon.merged.gene_counts.top1000cov.tsv"
-                contrasts     = "${projectDir}/tests/assets/SRP254919_dream.contrasts.yaml"
-                gtf               = 'https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz'
-                gene_sets_files   = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt'
-                decoupler_network = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/progeny/mouse_network.tsv'
-
-                // Apply a higher filter to check that the filtering works
-                filtering_min_abundance = 10
-
-                // Decoupler
-                decoupler_min_n = 1
-
-                // Report options
-                report_contributors = 'Jane Doe\nDirector of Institute of Microbiology\nUniversity of Smallville;John Smith\nPhD student\nInstitute of Microbiology\nUniversity of Smallville'
-
-                // Other
-                round_digits = 3
+                contrasts = "${projectDir}/tests/assets/SRP254919_dream.contrasts.yaml"
             }
         }
 

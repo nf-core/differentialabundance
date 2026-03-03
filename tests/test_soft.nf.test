@@ -7,16 +7,11 @@ nextflow_pipeline {
 
 
     test("Test soft profile - limma_soft") {
-        config "${projectDir}/conf/soft/soft.config"
+        config "${projectDir}/conf/test/soft/soft.config"
 
         when {
             params {
                 outdir = "$outputDir"
-
-                // Input data (soft_testdata)
-                input         = 'https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/GSE50790.csv'
-                contrasts = 'https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/GSE50790_contrasts.yaml'
-                querygse      = 'GSE50790'
             }
         }
 

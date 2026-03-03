@@ -6,33 +6,11 @@ nextflow_pipeline {
     tag "pipeline"
 
     test("Test affy profile - limma_affy_gsea") {
-        config "${projectDir}/conf/affy/affy_limma_gsea.config"
+        config "${projectDir}/conf/test/affy/affy_limma_gsea.config"
 
         when {
             params {
                 outdir = "$outputDir"
-
-                // Input data (affy_testdata)
-                study_name              = 'GSE50790'
-                input                   = 'https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/GSE50790.csv'
-                contrasts           = 'https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/GSE50790_contrasts.yaml'
-                affy_cel_files_archive  = 'https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/GSE50790_RAW.tar'
-                gene_sets_files         = 'https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/h.all.v2022.1.Hs.symbols.gmt'
-
-                // Observations
-                observations_id_col   = 'name'
-                observations_name_col = 'name'
-
-                // Exploratory
-                exploratory_main_variable = 'contrasts'
-
-                // Differential analysis params
-                differential_max_pval        = 0.05
-                differential_max_qval        = 0.05
-                differential_min_fold_change = 1.5
-
-                // GSEA
-                gsea_rnd_seed = '10'
             }
         }
 
@@ -60,33 +38,11 @@ nextflow_pipeline {
     }
 
     test("Test affy profile - limma_affy_gprofiler2") {
-        config "${projectDir}/conf/affy/affy_limma_gprofiler2.config"
+        config "${projectDir}/conf/test/affy/affy_limma_gprofiler2.config"
 
         when {
             params {
                 outdir = "$outputDir"
-
-                // Input data (affy_testdata)
-                study_name              = 'GSE50790'
-                input                   = 'https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/GSE50790.csv'
-                contrasts           = 'https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/GSE50790_contrasts.yaml'
-                affy_cel_files_archive  = 'https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/GSE50790_RAW.tar'
-                gene_sets_files         = 'https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/h.all.v2022.1.Hs.symbols.gmt'
-
-                // Observations
-                observations_id_col   = 'name'
-                observations_name_col = 'name'
-
-                // Exploratory
-                exploratory_main_variable = 'contrasts'
-
-                // Differential analysis params
-                differential_max_pval        = 0.05
-                differential_max_qval        = 0.05
-                differential_min_fold_change = 1.5
-
-                // gprofiler2
-                gprofiler2_organism = 'mmusculus'
             }
         }
 

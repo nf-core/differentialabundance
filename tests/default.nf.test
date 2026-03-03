@@ -68,6 +68,7 @@ nextflow_pipeline {
 
     test("Test profile - with formula") {
         config "${projectDir}/conf/test.config"
+        config "${projectDir}/conf/testdata/rnaseq_complex.config"
 
         when {
             params {
@@ -76,10 +77,7 @@ nextflow_pipeline {
                 // Override to use gprofiler2 instead of GSEA
                 functional_method = 'gprofiler2'
 
-                // Override input data to use complex testdata with formula-based contrasts
-                input                 = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/metadata.tsv'
-                matrix                = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/counts.tsv'
-                contrasts         = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/testdata/formula_contrasts/rnaseq_complex_contrast.yaml'
+                // Override input data
                 feature_length_matrix = null
 
                 // DESeq2 overrides for complex data
