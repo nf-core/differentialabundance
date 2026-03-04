@@ -5,7 +5,7 @@ nextflow_pipeline {
     tag "nogtf"
     tag "pipeline"
 
-    test("Test no gtf profile - rnaseq_nogtf") {
+    test("Test no gtf profile") {
         config "${projectDir}/conf/test/rnaseq/rnaseq_nogtf.config"
 
         when {

@@ -1,5 +1,5 @@
 {
-    "Test - Numeric sample IDs - deseq2_rnaseq_gprofiler2": {
+    "Test - Numeric sample IDs - rnaseq_deseq2_gprofiler2": {
         "content": [
             19,
             {
@@ -151,7 +151,7 @@
         },
         "timestamp": "2026-02-24T15:53:52.26636873"
     },
-    "Test profile - deseq2_rnaseq_gprofiler2": {
+    "Test profile - rnaseq_deseq2_gprofiler2": {
         "content": [
             19,
             {
@@ -303,7 +303,7 @@
         },
         "timestamp": "2026-02-24T15:37:49.200666436"
     },
-        "Test profile - with formula": {
+    "Test profile - rnaseq_deseq2_gprofiler2 - with formula": {
         "content": [
             27,
             {
@@ -503,7 +503,7 @@
         },
         "timestamp": "2026-02-24T15:30:45.818552876"
     },
-    "Test - Numeric sample IDs - deseq2_rnaseq_gsea": {
+    "Test - Numeric sample IDs - rnaseq_deseq2_gsea": {
         "content": [
             24,
             {
@@ -698,7 +698,7 @@
         },
         "timestamp": "2026-02-24T15:45:22.547064172"
     },
-    "Test profile - deseq2_rnaseq_gsea": {
+    "Test profile - rnaseq_deseq2_gsea": {
         "content": [
             24,
             {

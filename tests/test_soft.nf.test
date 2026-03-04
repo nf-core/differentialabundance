@@ -6,7 +6,7 @@ nextflow_pipeline {
     tag "pipeline"
 
 
-    test("Test soft profile - limma_soft") {
+    test("Test soft profile") {
         config "${projectDir}/conf/test/soft/soft.config"
 
         when {

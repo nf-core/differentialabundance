@@ -5,7 +5,7 @@ nextflow_pipeline {
     tag "test_rnaseq_deseq2"
     tag "pipeline"
 
-    test("Test profile - deseq2_rnaseq_gsea") {
+    test("Test profile - rnaseq_deseq2_gsea") {
         config "${projectDir}/conf/test/rnaseq/rnaseq_deseq2_gsea.config"
 
         when {
@@ -35,7 +35,7 @@ nextflow_pipeline {
         }
     }
 
-    test("Test profile - deseq2_rnaseq_gprofiler2") {
+    test("Test profile - rnaseq_deseq2_gprofiler2") {
         config "${projectDir}/conf/test/rnaseq/rnaseq_deseq2_gprofiler2.config"
 
         when {
@@ -65,7 +65,7 @@ nextflow_pipeline {
         }
     }
 
-    test("Test profile - deseq2_rnaseq_gprofiler2_complex") {
+    test("Test profile - rnaseq_deseq2_gprofiler2 - with formula") {
         config "${projectDir}/conf/test/rnaseq/rnaseq_deseq2_gprofiler2_complex.config"
 
         when {
@@ -95,7 +95,7 @@ nextflow_pipeline {
         }
     }
 
-    test("Test - Numeric sample IDs - deseq2_rnaseq_gsea") {
+    test("Test - Numeric sample IDs - rnaseq_deseq2_gsea") {
         config "${projectDir}/conf/test/rnaseq/rnaseq_deseq2_gsea.config"
 
         when {
@@ -130,7 +130,7 @@ nextflow_pipeline {
         }
     }
 
-    test("Test - Numeric sample IDs - deseq2_rnaseq_gprofiler2") {
+    test("Test - Numeric sample IDs - rnaseq_deseq2_gprofiler2") {
         config "${projectDir}/conf/test/rnaseq/rnaseq_deseq2_gprofiler2.config"
 
         when {
