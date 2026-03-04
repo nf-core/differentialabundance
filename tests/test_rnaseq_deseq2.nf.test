@@ -66,6 +66,7 @@ nextflow_pipeline {
     }
 
     test("Test profile - rnaseq_deseq2_gprofiler2 - with formula") {
+        tag "rnaseq_deseq2_gprofiler2_complex"
         config "${projectDir}/conf/test/rnaseq/rnaseq_deseq2_gprofiler2_complex.config"
 
         when {
