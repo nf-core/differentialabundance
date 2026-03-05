@@ -1257,8 +1257,8 @@ foo <- lapply(names(p_value_types), function(pvt) {
 
     rt <- reactable(
     differential_tables[[pvt]],
-    pagination = FALSE,   # dom = "t"
-    sortable = FALSE,     # behaves more like static summary
+    pagination = FALSE,   
+    sortable = FALSE,     
     showSortable = FALSE
     )
 
@@ -1493,6 +1493,11 @@ for (i in 1:nrow(contrasts)) {
                         filterable = TRUE,
                         align = "center"
                     )
+                } else if (col_name == "Gene id") {
+                    column_defs[[col_name]] <- colDef(
+                        filterable = TRUE,
+                        minWidth = 180
+                    )
                 } else {
                     # Default for other columns
                     column_defs[[col_name]] <- colDef(
@@ -1530,7 +1535,15 @@ for (i in 1:nrow(contrasts)) {
             )
 
             # Print the table with caption
-            print(htmltools::tagList(caption_html, rt))
+            print(
+                htmltools::tagList(
+                    caption_html,
+                    htmltools::tags$div(
+                    style = "overflow-x:auto; max-width:100%;",
+                    rt
+                    )
+                )
+                )
 
             cat("\n**Box plots**\n\n")
             cat("The following box plots show the distribution of expression levels for the top 10 genes ranked by significance.\n\n")
