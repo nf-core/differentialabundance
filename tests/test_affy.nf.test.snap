@@ -1,5 +1,5 @@
 {
-    "Test affy profile - limma_affy_gprofiler2": {
+    "Test affy profile - affy_limma_gprofiler2": {
         "content": [
             14,
             {
@@ -131,7 +131,7 @@
         },
         "timestamp": "2026-02-24T15:23:40.39108008"
     },
-    "Test affy profile - limma_affy_gsea": {
+    "Test affy profile - affy_limma_gsea": {
         "content": [
             17,
             {

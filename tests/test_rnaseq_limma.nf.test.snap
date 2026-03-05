@@ -126,7 +126,7 @@
         },
         "timestamp": "2026-02-24T16:02:10.605606214"
     },
-    "Test rnaseq limma profile - limma_rnaseq_gsea - Numeric sample IDs": {
+    "Test rnaseq limma profile - rnaseq_limma_gsea - Numeric sample IDs": {
         "content": [
             24,
             {
@@ -309,7 +309,7 @@
         },
         "timestamp": "2026-02-24T16:08:38.376341185"
     },
-    "Test rnaseq limma profile - limma_rnaseq_gsea": {
+    "Test rnaseq limma profile - rnaseq_limma_gsea": {
         "content": [
             24,
             {
@@ -492,7 +492,7 @@
         },
         "timestamp": "2026-02-24T15:34:44.28474296"
     },
-    "Test rnaseq limma profile - limma_rnaseq_gprofiler2": {
+    "Test rnaseq limma profile - rnaseq_limma_gprofiler2": {
         "content": [
             19,
             {
@@ -622,7 +622,7 @@
         },
         "timestamp": "2026-02-24T15:40:41.015488556"
     },
-    "Test rnaseq limma profile - limma_rnaseq_gsea - with formula and complex contrasts": {
+    "Test rnaseq limma profile - rnaseq_limma_gsea - with formula and complex contrasts": {
         "content": [
             29,
             {
@@ -1012,226 +1012,5 @@
             "nextflow": "25.10.4"
         },
         "timestamp": "2026-02-24T15:53:42.760510756"
-    },
-    "Test rnaseq limma profile - limma_rnaseq_gsea,limma_rnaseq_gprofiler2": {
-        "content": [
-            30,
-            {
-                "CSVTK_JOIN": {
-                    "csvtk": "0.31.0"
-                },
-                "CUSTOM_FILTERDIFFERENTIALTABLE": {
-                    "pandas": "1.5.2"
-                },
-                "CUSTOM_TABULARTOGSEACHIP": {
-                    "gawk": "5.1.0"
-                },
-                "CUSTOM_TABULARTOGSEACLS": {
-                    "awk": "1.3.4"
-                },
-                "CUSTOM_TABULARTOGSEAGCT": {
-                    "awk": "1.3.4"
-                },
-                "GPROFILER2_GOST\"": {
-                    "r-ggplot2": "3.4.3",
-                    "r-gprofiler2": "0.2.2",
-                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '113'\ndisplay_name: Mouse\ngenebuild: GRCm39\ngprofiler_version: e113_eg59_p19_6be52918\norganism: mmusculus\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 05.2025\n      classes: None\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2024-01-22\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2025-5-23\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2024.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20250510'\ntaxonomy_id: '10090'\n"
-                },
-                "GSEA_GSEA": {
-                    "gsea": "4.3.2"
-                },
-                "GTF_TO_TABLE": {
-                    "atlas-gene-annotation-manipulation": "1.1.1"
-                },
-                "GUNZIP_GTF": {
-                    "gunzip": 1.13
-                },
-                "LIMMA_DIFFERENTIAL": {
-                    "r-base": "4.3.3",
-                    "bioconductor-limma": "3.58.1"
-                },
-                "LIMMA_NORM": {
-                    "r-base": "4.3.3",
-                    "bioconductor-limma": "3.58.1"
-                },
-                "PLOT_DIFFERENTIAL": {
-                    "r-shinyngs": "2.3.0"
-                },
-                "PLOT_EXPLORATORY": {
-                    "r-shinyngs": "2.3.0"
-                },
-                "SHINYNGS_APP": {
-                    "r-shinyngs": "2.3.0"
-                },
-                "VALIDATOR": {
-                    "r-shinyngs": "2.3.0"
-                },
-                "Workflow": {
-                    "nf-core/differentialabundance": "v1.6.0dev"
-                }
-            },
-            [
-                "other",
-                "other/gprofiler2",
-                "other/gprofiler2/limma_rnaseq_gprofiler2",
-                "other/gprofiler2/limma_rnaseq_gprofiler2/treatment_mCherry_hND6__SRP254919",
-                "other/gprofiler2/limma_rnaseq_gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919",
-                "other/limma",
-                "other/limma/limma_rnaseq_gsea,limma_rnaseq_gprofiler2",
-                "other/limma/limma_rnaseq_gsea,limma_rnaseq_gprofiler2/treatment_mCherry_hND6__SRP254919.MArrayLM.limma.rds",
-                "other/limma/limma_rnaseq_gsea,limma_rnaseq_gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919.MArrayLM.limma.rds",
-                "pipeline_info",
-                "pipeline_info/collated_versions.yml",
-                "pipeline_info/nf_core_differentialabundance_software_versions.yml",
-                "plots",
-                "plots/differential",
-                "plots/differential/limma_rnaseq_gsea,limma_rnaseq_gprofiler2",
-                "plots/differential/limma_rnaseq_gsea,limma_rnaseq_gprofiler2/treatment_mCherry_hND6__SRP254919",
-                "plots/differential/limma_rnaseq_gsea,limma_rnaseq_gprofiler2/treatment_mCherry_hND6__SRP254919/png",
-                "plots/differential/limma_rnaseq_gsea,limma_rnaseq_gprofiler2/treatment_mCherry_hND6__SRP254919/png/volcano.png",
-                "plots/differential/limma_rnaseq_gsea,limma_rnaseq_gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919",
-                "plots/differential/limma_rnaseq_gsea,limma_rnaseq_gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919/png",
-                "plots/differential/limma_rnaseq_gsea,limma_rnaseq_gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919/png/volcano.png",
-                "plots/exploratory",
-                "plots/exploratory/limma_rnaseq_gprofiler2",
-                "plots/exploratory/limma_rnaseq_gprofiler2/treatment",
-                "plots/exploratory/limma_rnaseq_gprofiler2/treatment/png",
-                "plots/exploratory/limma_rnaseq_gprofiler2/treatment/png/boxplot.png",
-                "plots/exploratory/limma_rnaseq_gprofiler2/treatment/png/density.png",
-                "plots/exploratory/limma_rnaseq_gprofiler2/treatment/png/mad_correlation.png",
-                "plots/exploratory/limma_rnaseq_gprofiler2/treatment/png/pca2d.png",
-                "plots/exploratory/limma_rnaseq_gprofiler2/treatment/png/pca3d.png",
-                "plots/exploratory/limma_rnaseq_gprofiler2/treatment/png/sample_dendrogram.png",
-                "plots/exploratory/limma_rnaseq_gsea",
-                "plots/exploratory/limma_rnaseq_gsea/treatment",
-                "plots/exploratory/limma_rnaseq_gsea/treatment/png",
-                "plots/exploratory/limma_rnaseq_gsea/treatment/png/boxplot.png",
-                "plots/exploratory/limma_rnaseq_gsea/treatment/png/density.png",
-                "plots/exploratory/limma_rnaseq_gsea/treatment/png/mad_correlation.png",
-                "plots/exploratory/limma_rnaseq_gsea/treatment/png/pca2d.png",
-                "plots/exploratory/limma_rnaseq_gsea/treatment/png/pca3d.png",
-                "plots/exploratory/limma_rnaseq_gsea/treatment/png/sample_dendrogram.png",
-                "plots/gprofiler2",
-                "plots/gprofiler2/limma_rnaseq_gprofiler2",
-                "plots/gprofiler2/limma_rnaseq_gprofiler2/treatment_mCherry_hND6__SRP254919",
-                "plots/gprofiler2/limma_rnaseq_gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919",
-                "plots/qc",
-                "plots/qc/limma_rnaseq_gsea,limma_rnaseq_gprofiler2",
-                "plots/qc/limma_rnaseq_gsea,limma_rnaseq_gprofiler2/treatment_mCherry_hND6__SRP254919.limma.mean_difference.png",
-                "plots/qc/limma_rnaseq_gsea,limma_rnaseq_gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919.limma.mean_difference.png",
-                "report",
-                "report/gsea",
-                "report/gsea/limma_rnaseq_gsea",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols/gene_sets_treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.HALLMARK_KRAS_SIGNALING_DN.html",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols/gene_sets_treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.HALLMARK_KRAS_SIGNALING_DN.tsv",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols/gene_sets_treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.HALLMARK_KRAS_SIGNALING_DN_4.png",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols/gene_sets_treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.Symbol_to_probe_set_mapping_details.tsv",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.Gsea.rpt",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.butterfly_plot.png",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.enplot_HALLMARK_KRAS_SIGNALING_DN_3.png",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.gene_set_sizes.tsv",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.global_es_histogram.png",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.gsea_report_for_hND6.html",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.gsea_report_for_hND6.tsv",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.gsea_report_for_mCherry.html",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.gsea_report_for_mCherry.tsv",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.gset_rnd_es_dist_5.png",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.heat_map_1.png",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.heat_map_corr_plot.html",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.index.html",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.neg_snapshot.html",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.pos_snapshot.html",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.pvalues_vs_nes_plot.png",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.ranked_gene_list_hND6_versus_mCherry.tsv",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6__SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.ranked_list_corr_2.png",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/mh.all.v2022.1.Mm.symbols",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/mh.all.v2022.1.Mm.symbols/gene_sets_treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.HALLMARK_KRAS_SIGNALING_DN.html",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/mh.all.v2022.1.Mm.symbols/gene_sets_treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.HALLMARK_KRAS_SIGNALING_DN.tsv",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/mh.all.v2022.1.Mm.symbols/gene_sets_treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.HALLMARK_KRAS_SIGNALING_DN_4.png",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/mh.all.v2022.1.Mm.symbols/gene_sets_treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.Symbol_to_probe_set_mapping_details.tsv",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.Gsea.rpt",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.butterfly_plot.png",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.enplot_HALLMARK_KRAS_SIGNALING_DN_3.png",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.gene_set_sizes.tsv",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.global_es_histogram.png",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.gsea_report_for_hND6.html",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.gsea_report_for_hND6.tsv",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.gsea_report_for_mCherry.html",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.gsea_report_for_mCherry.tsv",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.gset_rnd_es_dist_5.png",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.heat_map_1.png",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.heat_map_corr_plot.html",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.index.html",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.neg_snapshot.html",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.pos_snapshot.html",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.pvalues_vs_nes_plot.png",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.ranked_gene_list_hND6_versus_mCherry.tsv",
-                "report/gsea/limma_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919/mh.all.v2022.1.Mm.symbols/treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.ranked_list_corr_2.png",
-                "report/limma_rnaseq_gprofiler2",
-                "report/limma_rnaseq_gprofiler2/SRP254919.zip",
-                "report/limma_rnaseq_gprofiler2/SRP254919_differentialabundance_report.html",
-                "report/limma_rnaseq_gsea",
-                "report/limma_rnaseq_gsea/SRP254919.zip",
-                "report/limma_rnaseq_gsea/SRP254919_differentialabundance_report.html",
-                "shinyngs_app",
-                "shinyngs_app/limma_rnaseq_gprofiler2",
-                "shinyngs_app/limma_rnaseq_gprofiler2/SRP254919",
-                "shinyngs_app/limma_rnaseq_gprofiler2/SRP254919/app.R",
-                "shinyngs_app/limma_rnaseq_gprofiler2/SRP254919/data.rds",
-                "shinyngs_app/limma_rnaseq_gsea",
-                "shinyngs_app/limma_rnaseq_gsea/SRP254919",
-                "shinyngs_app/limma_rnaseq_gsea/SRP254919/app.R",
-                "shinyngs_app/limma_rnaseq_gsea/SRP254919/data.rds",
-                "tables",
-                "tables/annotation",
-                "tables/annotation/limma_rnaseq_gsea,limma_rnaseq_gprofiler2",
-                "tables/annotation/limma_rnaseq_gsea,limma_rnaseq_gprofiler2/SRP254919.anno.tsv",
-                "tables/differential",
-                "tables/differential/limma_rnaseq_gsea,limma_rnaseq_gprofiler2",
-                "tables/differential/limma_rnaseq_gsea,limma_rnaseq_gprofiler2/treatment_mCherry_hND6__SRP254919.limma.results.tsv",
-                "tables/differential/limma_rnaseq_gsea,limma_rnaseq_gprofiler2/treatment_mCherry_hND6__SRP254919.limma.results_filtered.tsv",
-                "tables/differential/limma_rnaseq_gsea,limma_rnaseq_gprofiler2/treatment_mCherry_hND6__SRP254919_limma.annotated.tsv",
-                "tables/differential/limma_rnaseq_gsea,limma_rnaseq_gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919.limma.results.tsv",
-                "tables/differential/limma_rnaseq_gsea,limma_rnaseq_gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919.limma.results_filtered.tsv",
-                "tables/differential/limma_rnaseq_gsea,limma_rnaseq_gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919_limma.annotated.tsv",
-                "tables/gprofiler2",
-                "tables/gprofiler2/limma_rnaseq_gprofiler2",
-                "tables/gprofiler2/limma_rnaseq_gprofiler2/treatment_mCherry_hND6__SRP254919",
-                "tables/gprofiler2/limma_rnaseq_gprofiler2/treatment_mCherry_hND6__SRP254919/treatment_mCherry_hND6__SRP254919.gprofiler2.all_enriched_pathways.tsv",
-                "tables/gprofiler2/limma_rnaseq_gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919",
-                "tables/gprofiler2/limma_rnaseq_gprofiler2/treatment_mCherry_hND6_sample_number_SRP254919/treatment_mCherry_hND6_sample_number_SRP254919.gprofiler2.all_enriched_pathways.tsv",
-                "tables/processed_abundance",
-                "tables/processed_abundance/limma_rnaseq_gsea,limma_rnaseq_gprofiler2",
-                "tables/processed_abundance/limma_rnaseq_gsea,limma_rnaseq_gprofiler2/all.normalised_counts.tsv"
-            ],
-            [
-                "gene_sets_treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.HALLMARK_KRAS_SIGNALING_DN.tsv:md5,95973aeca4524d8f53346f434f7f819a",
-                "gene_sets_treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.Symbol_to_probe_set_mapping_details.tsv:md5,e000a1b93ebbb7eb347d9ce666fd5e26",
-                "treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.gene_set_sizes.tsv:md5,e3049abd72c25ff6d7cd75b14135d245",
-                "treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.gsea_report_for_hND6.tsv:md5,89be43ef72d83fed4966a82b40540710",
-                "treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.gsea_report_for_mCherry.tsv:md5,ce8792382ae299749445767ff16aaecc",
-                "treatment_mCherry_hND6__SRP254919.mh.all.v2022.1.Mm.symbols.ranked_gene_list_hND6_versus_mCherry.tsv:md5,d03318a51f4742890c239f8119ea4040",
-                "gene_sets_treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.HALLMARK_KRAS_SIGNALING_DN.tsv:md5,95973aeca4524d8f53346f434f7f819a",
-                "gene_sets_treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.Symbol_to_probe_set_mapping_details.tsv:md5,e000a1b93ebbb7eb347d9ce666fd5e26",
-                "treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.gene_set_sizes.tsv:md5,e3049abd72c25ff6d7cd75b14135d245",
-                "treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.gsea_report_for_hND6.tsv:md5,89be43ef72d83fed4966a82b40540710",
-                "treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.gsea_report_for_mCherry.tsv:md5,ce8792382ae299749445767ff16aaecc",
-                "treatment_mCherry_hND6_sample_number_SRP254919.mh.all.v2022.1.Mm.symbols.ranked_gene_list_hND6_versus_mCherry.tsv:md5,d03318a51f4742890c239f8119ea4040",
-                "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
-                "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
-                "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
-                "treatment_mCherry_hND6__SRP254919.gprofiler2.all_enriched_pathways.tsv:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "treatment_mCherry_hND6_sample_number_SRP254919.gprofiler2.all_enriched_pathways.tsv:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "all.normalised_counts.tsv:md5,534f0f37e10325163656cad95418f34a"
-            ]
-        ],
-        "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
-        },
-        "timestamp": "2026-02-05T23:49:26.227102132"
     }
 }

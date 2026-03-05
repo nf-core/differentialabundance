@@ -50,7 +50,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 Select an **analysis profile** that bundles the correct study type, differential method, and output settings. Combine it with a container profile (e.g. `docker`, `singularity`).
 
-RNA-seq with DESeq2 (default):
+RNA-seq with DESeq2 (default method):
 
 ```bash
 nextflow run nf-core/differentialabundance \
@@ -62,13 +62,10 @@ nextflow run nf-core/differentialabundance \
     --outdir <OUTDIR>
 ```
 
-> [!NOTE]
-> If you are using the outputs of the nf-core rnaseq workflow as input here **either**:
->
-> - supply the raw count matrices (file names like **gene_counts.tsv**) alongside the feature length matrix via `--feature_length_matrix` (rnaseq versions >=3.12.0, preferred)
-> - **or** supply the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices.
+> [!WARNING]
+> Do not override `--differential_method` when using an analysis profile. Switch methods by using the appropriate profile (e.g. `-profile rnaseq_limma`).
 
-RNA-seq with Limma (voom):
+RNA-seq with limma-voom:
 
 ```bash
 nextflow run nf-core/differentialabundance \
@@ -109,14 +106,7 @@ nextflow run nf-core/differentialabundance \
     --outdir <OUTDIR>
 ```
 
-> [!WARNING]
-> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/usage/getting_started/configuration#custom-configuration-files).
-
-Available analysis profiles: `rnaseq`, `rnaseq_deseq2_gsea`, `rnaseq_deseq2_gprofiler2`, `rnaseq_limma`, `rnaseq_limma_gsea`, `rnaseq_limma_gprofiler2`, `rnaseq_limma_decoupler`, `rnaseq_dream`, `rnaseq_dream_decoupler`, `affy`, `affy_limma_gsea`, `affy_limma_gprofiler2`, `maxquant`, `soft`. CLI flags override profile parameters following standard Nextflow precedence.
-
-For benchmarking multiple configurations in parallel, you can provide a custom paramsheet via `--paramsheet`. See the [usage documentation](https://nf-co.re/differentialabundance/usage) for more details on the multi-run mode.
-
-For more details and further functionality, please refer to the [usage documentation](https://nf-co.re/differentialabundance/usage) and the [parameter documentation](https://nf-co.re/differentialabundance/parameters).
+For full usage examples, analysis profiles, paramsheet-based multi-run mode, and input specifics (rnaseq counts, Affymetrix, MaxQuant, GEO SOFT), see the [usage documentation](https://nf-co.re/differentialabundance/usage) and the [parameter documentation](https://nf-co.re/differentialabundance/parameters).
 
 ### Reporting
 

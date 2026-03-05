@@ -5,40 +5,12 @@ nextflow_pipeline {
     tag "test_rnaseq_deseq2"
     tag "pipeline"
 
-    test("Test profile - deseq2_rnaseq_gsea") {
-        config "${projectDir}/conf/rnaseq/rnaseq_deseq2_gsea.config"
+    test("Test profile - rnaseq_deseq2_gsea") {
+        config "${projectDir}/conf/test/rnaseq/rnaseq_deseq2_gsea.config"
 
         when {
             params {
                 outdir = "$outputDir"
-
-                // Input data (rnaseq_testdata)
-                study_name            = 'SRP254919'
-                input                 = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.samplesheet.csv'
-                matrix                = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.salmon.merged.gene_counts.top1000cov.tsv'
-                feature_length_matrix = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.spoofed_lengths.tsv'
-                contrasts         = 'https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/SRP254919.contrasts.yaml'
-                gtf                   = 'https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz'
-                gene_sets_files       = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt'
-                decoupler_network     = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/progeny/mouse_network.tsv'
-
-                // Exploratory
-                exploratory_main_variable = 'contrasts'
-
-                // Test dataset is too small for the nsub default value
-                deseq2_vst_nsub = 500
-
-                // Apply a higher filter to check that the filtering works
-                filtering_min_abundance = 10
-
-                // GSEA
-                gsea_rnd_seed = '10'
-
-                // Report options
-                report_contributors = 'Jane Doe\nDirector of Institute of Microbiology\nUniversity of Smallville;John Smith\nPhD student\nInstitute of Microbiology\nUniversity of Smallville'
-
-                // Other
-                round_digits = 3
             }
         }
 
@@ -63,40 +35,12 @@ nextflow_pipeline {
         }
     }
 
-    test("Test profile - deseq2_rnaseq_gprofiler2") {
-        config "${projectDir}/conf/rnaseq/rnaseq_deseq2_gprofiler2.config"
+    test("Test profile - rnaseq_deseq2_gprofiler2") {
+        config "${projectDir}/conf/test/rnaseq/rnaseq_deseq2_gprofiler2.config"
 
         when {
             params {
                 outdir = "$outputDir"
-
-                // Input data (rnaseq_testdata)
-                study_name            = 'SRP254919'
-                input                 = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.samplesheet.csv'
-                matrix                = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.salmon.merged.gene_counts.top1000cov.tsv'
-                feature_length_matrix = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.spoofed_lengths.tsv'
-                contrasts         = 'https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/SRP254919.contrasts.yaml'
-                gtf                   = 'https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz'
-                gene_sets_files       = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt'
-                decoupler_network     = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/progeny/mouse_network.tsv'
-
-                // Exploratory
-                exploratory_main_variable = 'contrasts'
-
-                // Test dataset is too small for the nsub default value
-                deseq2_vst_nsub = 500
-
-                // Apply a higher filter to check that the filtering works
-                filtering_min_abundance = 10
-
-                // gprofiler2
-                gprofiler2_organism = 'mmusculus'
-
-                // Report options
-                report_contributors = 'Jane Doe\nDirector of Institute of Microbiology\nUniversity of Smallville;John Smith\nPhD student\nInstitute of Microbiology\nUniversity of Smallville'
-
-                // Other
-                round_digits = 3
             }
         }
 
@@ -121,40 +65,48 @@ nextflow_pipeline {
         }
     }
 
-    test("Test - Numeric sample IDs - deseq2_rnaseq_gsea") {
-        config "${projectDir}/conf/rnaseq/rnaseq_deseq2_gsea.config"
+    test("Test profile - rnaseq_deseq2_gprofiler2 - with formula") {
+        tag "rnaseq_deseq2_gprofiler2_complex"
+        config "${projectDir}/conf/test/rnaseq/rnaseq_deseq2_gprofiler2_complex.config"
+
+        when {
+            params {
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            // stable_name: All files + folders in ${params.outdir}/ with a stable name
+            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in ${params.outdir}/ with stable content
+            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    // Number of successful tasks
+                    workflow.trace.succeeded().size(),
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_differentialabundance_software_versions.yml"),
+                    // All stable path name, with a relative path
+                    stable_name,
+                    // All files with stable contents
+                    stable_path
+                ).match() }
+                )
+        }
+    }
+
+    test("Test - Numeric sample IDs - rnaseq_deseq2_gsea") {
+        config "${projectDir}/conf/test/rnaseq/rnaseq_deseq2_gsea.config"
 
         when {
             params {
                 outdir = "$outputDir"
 
-                // Input data (rnaseq_testdata_numeric_samples - local files with numeric sample IDs)
-                study_name            = 'SRP254919'
-                input                 = "${projectDir}/tests/assets/SRP254919.samplesheet.csv"
-                matrix                = "${projectDir}/tests/assets/SRP254919.salmon.merged.gene_counts.top1000cov.tsv"
+                // change input data
+                input = "${projectDir}/tests/assets/SRP254919.samplesheet.csv"
+                matrix = "${projectDir}/tests/assets/SRP254919.salmon.merged.gene_counts.top1000cov.tsv"
                 feature_length_matrix = "${projectDir}/tests/assets/SRP254919.spoofed_lengths.tsv"
-                contrasts         = 'https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/SRP254919.contrasts.yaml'
-                gtf                   = 'https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz'
-                gene_sets_files       = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt'
-                decoupler_network     = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/progeny/mouse_network.tsv'
-
-                // Exploratory
-                exploratory_main_variable = 'contrasts'
-
-                // Test dataset is too small for the nsub default value
-                deseq2_vst_nsub = 500
-
-                // Apply a higher filter to check that the filtering works
-                filtering_min_abundance = 10
-
-                // GSEA
-                gsea_rnd_seed = '10'
-
-                // Report options
-                report_contributors = 'Jane Doe\nDirector of Institute of Microbiology\nUniversity of Smallville;John Smith\nPhD student\nInstitute of Microbiology\nUniversity of Smallville'
-
-                // Other
-                round_digits = 3
             }
         }
 
@@ -179,40 +131,17 @@ nextflow_pipeline {
         }
     }
 
-    test("Test - Numeric sample IDs - deseq2_rnaseq_gprofiler2") {
-        config "${projectDir}/conf/rnaseq/rnaseq_deseq2_gprofiler2.config"
+    test("Test - Numeric sample IDs - rnaseq_deseq2_gprofiler2") {
+        config "${projectDir}/conf/test/rnaseq/rnaseq_deseq2_gprofiler2.config"
 
         when {
             params {
                 outdir = "$outputDir"
 
-                // Input data (rnaseq_testdata_numeric_samples - local files with numeric sample IDs)
-                study_name            = 'SRP254919'
-                input                 = "${projectDir}/tests/assets/SRP254919.samplesheet.csv"
-                matrix                = "${projectDir}/tests/assets/SRP254919.salmon.merged.gene_counts.top1000cov.tsv"
+                // change input data
+                input = "${projectDir}/tests/assets/SRP254919.samplesheet.csv"
+                matrix = "${projectDir}/tests/assets/SRP254919.salmon.merged.gene_counts.top1000cov.tsv"
                 feature_length_matrix = "${projectDir}/tests/assets/SRP254919.spoofed_lengths.tsv"
-                contrasts         = 'https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/SRP254919.contrasts.yaml'
-                gtf                   = 'https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz'
-                gene_sets_files       = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt'
-                decoupler_network     = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/progeny/mouse_network.tsv'
-
-                // Exploratory
-                exploratory_main_variable = 'contrasts'
-
-                // Test dataset is too small for the nsub default value
-                deseq2_vst_nsub = 500
-
-                // Apply a higher filter to check that the filtering works
-                filtering_min_abundance = 10
-
-                // gprofiler2
-                gprofiler2_organism = 'mmusculus'
-
-                // Report options
-                report_contributors = 'Jane Doe\nDirector of Institute of Microbiology\nUniversity of Smallville;John Smith\nPhD student\nInstitute of Microbiology\nUniversity of Smallville'
-
-                // Other
-                round_digits = 3
             }
         }
 
