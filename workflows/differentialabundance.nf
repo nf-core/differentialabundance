@@ -424,23 +424,6 @@ workflow DIFFERENTIALABUNDANCE {
     // Single cell deconvolution
     // =======================================================================
 
-    ch_immunedeconv_input = ch_in_raw
-        .filter{meta, raw -> meta.params.immunedeconv_run}
-
-    ch_immunedeconv_input = prepareModuleInput(ch_immunedeconv_input, 'preprocessing')
-        .multiMap{meta, raw ->
-            input: [meta, raw, meta.params.immunedeconv_method, meta.params.immunedeconv_function]
-            name_col: meta.params.features_name_col
-        }
-
-    IMMUNEDECONV(
-        ch_immunedeconv_input.input,
-        ch_immunedeconv_input.name_col
-    )
-
-    ch_versions = ch_versions
-        .mix(IMMUNEDECONV.out.versions)
-
     // ========================================================================
     // Filter matrix
     // ========================================================================
@@ -582,6 +565,7 @@ workflow DIFFERENTIALABUNDANCE {
     // - use normalized matrix, if method is gsea
     // - use filtered differential results, if method is gprofiler2
     // - use unfiltered differential results, if method is decoupler
+
     ch_functional_analysis_matrices = ch_norm
         .filter{meta, matrix -> meta.params.functional_method == 'gsea'}
         .map{ meta, matrix -> [meta, meta, matrix]}
@@ -596,6 +580,12 @@ workflow DIFFERENTIALABUNDANCE {
             ch_differential_results
                 // For decoupler, use unfiltered differential results
                 .filter{meta, meta_with_contrast, results -> meta.params.functional_method == 'decoupler'}
+        )
+        .mix(
+            // Should immunedeconv continue using the raw matrix or should it be normalized?
+            ch_in_raw
+                .filter{meta, matrix -> meta.params.functional_method == 'immunedeconv'}
+                .map { meta, matrix -> [meta, meta, matrix] }
         )
 
     ch_functional_input = ch_functional_analysis_matrices  // meta, meta with contrast, file
