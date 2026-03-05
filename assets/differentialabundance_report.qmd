@@ -1257,8 +1257,8 @@ foo <- lapply(names(p_value_types), function(pvt) {
 
     rt <- reactable(
     differential_tables[[pvt]],
-    pagination = FALSE,   
-    sortable = FALSE,     
+    pagination = FALSE,
+    sortable = FALSE,
     showSortable = FALSE
     )
 

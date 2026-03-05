@@ -59,9 +59,9 @@ h4 {
   background-repeat: no-repeat;
 }
 
-.nav-pills>li.active>a,
-.nav-pills>li.active>a:hover,
-.nav-pills>li.active>a:focus {
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
   color: #fff !important;
   background-color: #24b064 !important;
 }
@@ -82,7 +82,7 @@ a {
   box-sizing: border-box;
 }
 
-.nav-tabs>li>a {
+.nav-tabs > li > a {
   color: #24b064 !important;
 }
 
