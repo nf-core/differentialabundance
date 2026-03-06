@@ -870,7 +870,7 @@
                 "functional_method": {
                     "type": "string",
                     "description": "Functional analysis method",
-                    "enum": ["null", "gsea", "gprofiler2", "decoupler"]
+                    "enum": ["null", "gsea", "gprofiler2", "decoupler", "immunedeconv"]
                 },
                 "gene_sets_files": {
                     "type": "string",

@@ -28,7 +28,7 @@
 
 - paramset_name: deseq2_rnaseq_gsea
   include: paramsheet/deseq2_rnaseq
-  functional_method: gsea
+  functional_method: immunedeconv
 
 - paramset_name: deseq2_rnaseq_gprofiler2
   include: paramsheet/deseq2_rnaseq

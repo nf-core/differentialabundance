@@ -8,7 +8,8 @@ include { CUSTOM_TABULARTOGSEACLS  } from '../../../modules/nf-core/custom/tabul
 include { CUSTOM_TABULARTOGSEACHIP } from '../../../modules/nf-core/custom/tabulartogseachip/main.nf'
 include { GSEA_GSEA                } from '../../../modules/nf-core/gsea/gsea/main.nf'
 include { PROPR_GREA               } from "../../../modules/nf-core/propr/grea/main.nf"
-include { DECOUPLER_DECOUPLER                } from '../../../modules/nf-core/decoupler/decoupler/main'
+include { DECOUPLER_DECOUPLER      } from '../../../modules/nf-core/decoupler/decoupler/main'
+include { IMMUNEDECONV             } from '../../../modules/nf-core/immunedeconv/main'
 
 // Combine meta maps, including merging non-identical values of shared keys (e.g. 'id')
 def mergeMaps(meta, meta2){
@@ -139,6 +140,16 @@ workflow DIFFERENTIAL_FUNCTIONAL_ENRICHMENT {
         ch_input_for_other.genesets.filter{ it[0].functional_method == 'grea' }
     )
 
+    IMMUNEDECONV(
+        ch_input_for_other.input.filter{ it[0].functional_method == 'immunedeconv' }
+            .map {meta, raw -> [meta, raw, meta.params.immunedeconv_method, meta.params.immunedeconv_function]},
+        ch_input_for_other.input.filter{ it[0].functional_method == 'immunedeconv' }
+            .map { meta, matrix ->
+                [meta.params.features_name_col]
+            }
+    )
+
+
     // collect versions info
     ch_versions = ch_versions
         .mix(GPROFILER2_GOST.out.versions)
@@ -148,6 +159,7 @@ workflow DIFFERENTIAL_FUNCTIONAL_ENRICHMENT {
         .mix(GSEA_GSEA.out.versions)
         .mix(DECOUPLER_DECOUPLER.out.versions)
         .mix(PROPR_GREA.out.versions)
+        .mix(IMMUNEDECONV.out.versions)
 
     emit:
     // here we emit the outputs that will be useful afterwards in the

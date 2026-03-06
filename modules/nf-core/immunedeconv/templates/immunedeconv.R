@@ -12,12 +12,69 @@ prefix = ifelse('$task.ext.prefix' == 'null', '$meta.id', '$task.ext.prefix')
 
 # Load the TSV file and keep only $gene_symbol_col column + counts
 gene_expression_matrix <- readr::read_tsv('$input_file') %>%
-    as.data.frame() %>%
+    as.data.frame()
+
+# Check if provided column name is in matrix
+if ('$gene_symbol_col' %in% colnames(gene_expression_matrix)) {
+    message("Using provided gene_symbol_col: $gene_symbol_col")
+    gene_col <- '$gene_symbol_col'
+} else {
+    message("gene_symbol_col ($gene_symbol_col) not found — using first column instead")
+    gene_col <- colnames(gene_expression_matrix)[1]
+}
+
+gene_ids <- gene_expression_matrix[[gene_col]]
+
+# Detect gene nomenclature
+gene_ids <- gene_expression_matrix[[gene_col]]
+human_ensembl  <- mean(grepl("^ENSG", gene_ids), na.rm = TRUE)
+mouse_ensembl  <- mean(grepl("^ENSMUSG", gene_ids), na.rm = TRUE)
+
+# Attempt conversion of ENSEMBL IDS to gene symbols
+if (human_ensembl > 0.5) {
+    message("Detected human ENSEMBL IDs — converting to gene symbols")
+
+    library(AnnotationDbi)
+    library(org.Hs.eg.db)
+
+    symbols <- AnnotationDbi::mapIds(
+        org.Hs.eg.db,
+        keys = gene_ids,
+        column = "SYMBOL",
+        keytype = "ENSEMBL",
+        multiVals = "first"
+    )
+
+    gene_expression_matrix[[gene_col]] <- symbols
+
+} else if (mouse_ensembl > 0.5) {
+
+    message("Detected mouse ENSEMBL IDs — converting to gene symbols")
+
+    library(AnnotationDbi)
+    library(org.Mm.eg.db)
+
+    symbols <- AnnotationDbi::mapIds(
+        org.Mm.eg.db,
+        keys = gene_ids,
+        column = "SYMBOL",
+        keytype = "ENSEMBL",
+        multiVals = "first"
+    )
+
+    gene_expression_matrix[[gene_col]] <- symbols
+
+} else {
+    message("Assuming input already contains gene symbols — no conversion performed")
+}
+
+gene_expression_matrix <- gene_expression_matrix %>%
     dplyr::select(
-        dplyr::all_of('$gene_symbol_col'), # Keep the '$gene_symbol_col' column
+        dplyr::all_of(gene_col), # Keep the gene symbol col column
         where(~ !is.character(.))    # Include all non-string columns
     ) %>%
-    tibble::column_to_rownames('$gene_symbol_col')
+    dplyr::filter(!is.na(.data[[gene_col]])) %>%
+    tibble::column_to_rownames(gene_col)
 
 # Check if the data is log-transformed or TPM-transformed
 # Check range of values
