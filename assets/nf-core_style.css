@@ -89,3 +89,7 @@ a {
 .boxplot-container .tab-content {
   min-height: 650px;
 }
+
+.reactable {
+  margin-bottom: 25px;
+}

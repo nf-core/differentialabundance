@@ -158,14 +158,14 @@
                 },
                 "sizefactors_from_controls": {
                     "type": "boolean",
-                    "help_text": "When set, use supplied control features in normalization/ scaling operations",
-                    "description": "When set, use the control features in scaling/ normalization.",
+                    "help_text": "When set, use supplied control features in normalization/ scaling operations (currently only supported for differential_method deseq2)",
+                    "description": "When set, use the control features in scaling/ normalization (currently only supported for differential_method deseq2)",
                     "fa_icon": "fas fa-expand-arrows-alt"
                 },
                 "control_features": {
                     "type": "string",
                     "description": "A text file listing technical features (e.g. spikes)",
-                    "help_text": "One feature per row. Note that by default these features will just be stripped from matrices prior to internal processing. To actually use them in e.g. normalization, set `--sizefactors_from_controls`",
+                    "help_text": "One feature per row. Note that by default these features will just be stripped from matrices prior to internal processing. To actually use them in e.g. normalization, set `--sizefactors_from_controls` (currently only supported for differential_method deseq2)",
                     "format": "file-path",
                     "mimetype": "text/plain",
                     "fa_icon": "fas fa-gamepad"
@@ -732,12 +732,12 @@
                 "limma_block": {
                     "type": "string",
                     "fa_icon": "fas fa-cube",
-                    "description": "Sample sheet column to be used to derive a vector or factor specifying a blocking variable on the arrays"
+                    "description": "Sample sheet column to be used to derive a vector or factor specifying a blocking variable on the arrays for limma::lmFit(); however, for random effects models, DREAM is the recommended approach in this pipeline"
                 },
                 "limma_correlation": {
                     "type": "string",
                     "fa_icon": "fas fa-chart-line",
-                    "description": "passed to lmFit(), the inter-duplicate or inter-technical replicate correlation"
+                    "description": "passed to limma::lmFit(), the inter-duplicate or inter-technical replicate correlation; however for random effects models, DREAM is the recommended approach in this pipeline"
                 },
                 "limma_method": {
                     "type": "string",
