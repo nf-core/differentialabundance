@@ -1,7 +1,7 @@
 {
     "Test profile - filtering_min_abundance false": {
         "content": [
-            25,
+            24,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -34,9 +34,6 @@
                 },
                 "GUNZIP_GTF": {
                     "gunzip": 1.13
-                },
-                "IMMUNEDECONV": {
-                    "r-immunedeconv": "2.1.0"
                 },
                 "PLOT_DIFFERENTIAL": {
                     "r-shinyngs": "2.3.0"
@@ -84,10 +81,6 @@
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/pca2d.png",
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/pca3d.png",
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/sample_dendrogram.png",
-                "plots/immunedeconv",
-                "plots/immunedeconv/deseq2_rnaseq_gsea",
-                "plots/immunedeconv/deseq2_rnaseq_gsea/SRP254919.plot1_stacked_bar_chart.png",
-                "plots/immunedeconv/deseq2_rnaseq_gsea/SRP254919.plot2_points_with_facets.png",
                 "plots/qc",
                 "plots/qc/deseq2_rnaseq_gsea",
                 "plots/qc/deseq2_rnaseq_gsea/treatment_mCherry_hND6__SRP254919.deseq2.dispersion.png",
@@ -163,9 +156,6 @@
                 "tables/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results.tsv",
                 "tables/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv",
                 "tables/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919_deseq2.annotated.tsv",
-                "tables/immunedeconv",
-                "tables/immunedeconv/deseq2_rnaseq_gsea",
-                "tables/immunedeconv/deseq2_rnaseq_gsea/SRP254919.deconvolution_results.tsv",
                 "tables/processed_abundance",
                 "tables/processed_abundance/deseq2_rnaseq_gsea",
                 "tables/processed_abundance/deseq2_rnaseq_gsea/all.normalised_counts.tsv",
@@ -194,7 +184,6 @@
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results.tsv:md5,2fce8c4c78ede2256f79dea7bfc3c515",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv:md5,d46d4bb485aba4aac3a76384d5d8a9d8",
                 "treatment_mCherry_hND6_sample_number_SRP254919_deseq2.annotated.tsv:md5,0b1f1df6cb30424db76230cfa2b8be97",
-                "SRP254919.deconvolution_results.tsv:md5,3d7ed4550a0da2f63fcfd2e74605e7a3",
                 "all.normalised_counts.tsv:md5,17a6464080b266b679b645ff1011bb89",
                 "all.vst.tsv:md5,cba6236668ad089ba9bbaa9801d5b329"
             ]
@@ -203,11 +192,11 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
         },
-        "timestamp": "2026-02-06T18:18:05.322734425"
+        "timestamp": "2026-03-06T19:12:21.730208033"
     },
     "Test profile": {
         "content": [
-            25,
+            24,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -240,9 +229,6 @@
                 },
                 "GUNZIP_GTF": {
                     "gunzip": 1.13
-                },
-                "IMMUNEDECONV": {
-                    "r-immunedeconv": "2.1.0"
                 },
                 "PLOT_DIFFERENTIAL": {
                     "r-shinyngs": "2.3.0"
@@ -290,10 +276,6 @@
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/pca2d.png",
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/pca3d.png",
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/sample_dendrogram.png",
-                "plots/immunedeconv",
-                "plots/immunedeconv/deseq2_rnaseq_gsea",
-                "plots/immunedeconv/deseq2_rnaseq_gsea/SRP254919.plot1_stacked_bar_chart.png",
-                "plots/immunedeconv/deseq2_rnaseq_gsea/SRP254919.plot2_points_with_facets.png",
                 "plots/qc",
                 "plots/qc/deseq2_rnaseq_gsea",
                 "plots/qc/deseq2_rnaseq_gsea/treatment_mCherry_hND6__SRP254919.deseq2.dispersion.png",
@@ -369,9 +351,6 @@
                 "tables/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results.tsv",
                 "tables/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv",
                 "tables/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919_deseq2.annotated.tsv",
-                "tables/immunedeconv",
-                "tables/immunedeconv/deseq2_rnaseq_gsea",
-                "tables/immunedeconv/deseq2_rnaseq_gsea/SRP254919.deconvolution_results.tsv",
                 "tables/processed_abundance",
                 "tables/processed_abundance/deseq2_rnaseq_gsea",
                 "tables/processed_abundance/deseq2_rnaseq_gsea/all.normalised_counts.tsv",
@@ -400,7 +379,6 @@
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results.tsv:md5,3c827ffb53fe7dab8f13f0ef89a3da06",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv:md5,c88d36f46f7d8a4dd8c169c249f50540",
                 "treatment_mCherry_hND6_sample_number_SRP254919_deseq2.annotated.tsv:md5,7925ca370d660117878fb5132a106f47",
-                "SRP254919.deconvolution_results.tsv:md5,3d7ed4550a0da2f63fcfd2e74605e7a3",
                 "all.normalised_counts.tsv:md5,f3ef0fb48f97afde2b5122b72dc4dcc4",
                 "all.vst.tsv:md5,ae82509f76ed01ad0d041d1a62aef703"
             ]
@@ -409,11 +387,11 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
         },
-        "timestamp": "2026-02-05T20:36:08.800664214"
+        "timestamp": "2026-03-06T16:21:49.272730822"
     },
     "Test profile - csv contrasts": {
         "content": [
-            25,
+            24,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -446,9 +424,6 @@
                 },
                 "GUNZIP_GTF": {
                     "gunzip": 1.13
-                },
-                "IMMUNEDECONV": {
-                    "r-immunedeconv": "2.1.0"
                 },
                 "PLOT_DIFFERENTIAL": {
                     "r-shinyngs": "2.3.0"
@@ -496,10 +471,6 @@
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/pca2d.png",
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/pca3d.png",
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/sample_dendrogram.png",
-                "plots/immunedeconv",
-                "plots/immunedeconv/deseq2_rnaseq_gsea",
-                "plots/immunedeconv/deseq2_rnaseq_gsea/SRP254919.plot1_stacked_bar_chart.png",
-                "plots/immunedeconv/deseq2_rnaseq_gsea/SRP254919.plot2_points_with_facets.png",
                 "plots/qc",
                 "plots/qc/deseq2_rnaseq_gsea",
                 "plots/qc/deseq2_rnaseq_gsea/treatment_mCherry_hND6__SRP254919.deseq2.dispersion.png",
@@ -575,9 +546,6 @@
                 "tables/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results.tsv",
                 "tables/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv",
                 "tables/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919_deseq2.annotated.tsv",
-                "tables/immunedeconv",
-                "tables/immunedeconv/deseq2_rnaseq_gsea",
-                "tables/immunedeconv/deseq2_rnaseq_gsea/SRP254919.deconvolution_results.tsv",
                 "tables/processed_abundance",
                 "tables/processed_abundance/deseq2_rnaseq_gsea",
                 "tables/processed_abundance/deseq2_rnaseq_gsea/all.normalised_counts.tsv",
@@ -606,7 +574,6 @@
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results.tsv:md5,3c827ffb53fe7dab8f13f0ef89a3da06",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv:md5,c88d36f46f7d8a4dd8c169c249f50540",
                 "treatment_mCherry_hND6_sample_number_SRP254919_deseq2.annotated.tsv:md5,7925ca370d660117878fb5132a106f47",
-                "SRP254919.deconvolution_results.tsv:md5,3d7ed4550a0da2f63fcfd2e74605e7a3",
                 "all.normalised_counts.tsv:md5,f3ef0fb48f97afde2b5122b72dc4dcc4",
                 "all.vst.tsv:md5,ae82509f76ed01ad0d041d1a62aef703"
             ]
@@ -615,7 +582,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
         },
-        "timestamp": "2026-02-25T17:53:27.030432104"
+        "timestamp": "2026-03-06T16:24:29.34474573"
     },
     "Test profile - with formula": {
         "content": [
@@ -819,7 +786,7 @@
     },
     "Test profile - multiple reports - csv contrasts": {
         "content": [
-            27,
+            26,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -852,9 +819,6 @@
                 },
                 "GUNZIP_GTF": {
                     "gunzip": 1.13
-                },
-                "IMMUNEDECONV": {
-                    "r-immunedeconv": "2.1.0"
                 },
                 "PLOT_DIFFERENTIAL": {
                     "r-shinyngs": "2.3.0"
@@ -902,10 +866,6 @@
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/pca2d.png",
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/pca3d.png",
                 "plots/exploratory/deseq2_rnaseq_gsea/treatment/png/sample_dendrogram.png",
-                "plots/immunedeconv",
-                "plots/immunedeconv/deseq2_rnaseq_gsea",
-                "plots/immunedeconv/deseq2_rnaseq_gsea/SRP254919.plot1_stacked_bar_chart.png",
-                "plots/immunedeconv/deseq2_rnaseq_gsea/SRP254919.plot2_points_with_facets.png",
                 "plots/qc",
                 "plots/qc/deseq2_rnaseq_gsea",
                 "plots/qc/deseq2_rnaseq_gsea/treatment_mCherry_hND6__SRP254919.deseq2.dispersion.png",
@@ -982,9 +942,6 @@
                 "tables/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results.tsv",
                 "tables/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv",
                 "tables/differential/deseq2_rnaseq_gsea/treatment_mCherry_hND6_sample_number_SRP254919_deseq2.annotated.tsv",
-                "tables/immunedeconv",
-                "tables/immunedeconv/deseq2_rnaseq_gsea",
-                "tables/immunedeconv/deseq2_rnaseq_gsea/SRP254919.deconvolution_results.tsv",
                 "tables/processed_abundance",
                 "tables/processed_abundance/deseq2_rnaseq_gsea",
                 "tables/processed_abundance/deseq2_rnaseq_gsea/all.normalised_counts.tsv",
@@ -1013,7 +970,6 @@
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results.tsv:md5,3c827ffb53fe7dab8f13f0ef89a3da06",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv:md5,c88d36f46f7d8a4dd8c169c249f50540",
                 "treatment_mCherry_hND6_sample_number_SRP254919_deseq2.annotated.tsv:md5,7925ca370d660117878fb5132a106f47",
-                "SRP254919.deconvolution_results.tsv:md5,3d7ed4550a0da2f63fcfd2e74605e7a3",
                 "all.normalised_counts.tsv:md5,f3ef0fb48f97afde2b5122b72dc4dcc4",
                 "all.vst.tsv:md5,ae82509f76ed01ad0d041d1a62aef703"
             ]
@@ -1022,6 +978,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
         },
-        "timestamp": "2026-02-25T18:01:55.128717287"
+        "timestamp": "2026-03-06T19:30:10.063885072"
     }
 }
