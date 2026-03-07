@@ -62,6 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [[#644](https://github.com/nf-core/differentialabundance/pull/644)] - Reverted back to use profiles by default, and use paramsheet only when provided, ([@suzannejin](https://github.com/suzannejin)), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@grst](https://github.com/grst).
 - [[#653](https://github.com/nf-core/differentialabundance/pull/653)] - Update description of parameters for clarity ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#652](https://github.com/nf-core/differentialabundance/pull/652)] - Harmonize `--contrasts` and `--contrasts_yml` ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#626](https://github.com/nf-core/differentialabundance/pull/626)] - Update documentation, bump Nextflow version, `versions.yml` output cleanup and add params_yaml to report bundle ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila), [@apeltzer](https://github.com/apeltzer), [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
