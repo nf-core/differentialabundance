@@ -6,13 +6,12 @@ nextflow_pipeline {
     tag "pipeline"
 
 
-    test("Test maxquant profile - limma_maxquant") {
+    test("Test maxquant profile") {
+        config "${projectDir}/conf/test/maxquant/maxquant.config"
 
         when {
             params {
-                outdir              = "$outputDir"
-                paramsheet          = "${projectDir}/conf/test_paramsheet.yaml"
-                paramset_name       = "limma_maxquant"
+                outdir = "$outputDir"
             }
 
         }

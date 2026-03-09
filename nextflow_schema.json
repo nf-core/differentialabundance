@@ -196,16 +196,15 @@
             "properties": {
                 "paramset_name": {
                     "type": "string",
-                    "description": "Name of the paramset (as specified in assets/paramsheet) to run specific analyses"
+                    "description": "Name of the paramset to run. In profile mode, set by the analysis profile for output directory naming. In paramsheet mode, selects which paramset(s) to run (comma-separated)."
                 },
                 "paramsheet": {
                     "type": "string",
-                    "description": "Path to a paramsheet file",
-                    "help_text": "A YAML file that defines 1+ nextflow config(s).",
+                    "description": "Path to a paramsheet YAML file. Setting this activates multi-run (paramsheet) mode where paramsheet values take priority over CLI flags.",
+                    "help_text": "A YAML file that defines 1+ nextflow config(s). When not set, the pipeline uses standard Nextflow config profiles (single-run mode) where CLI flags have highest priority.",
                     "pattern": "^\\S+\\.(yaml|yml)$",
                     "format": "file-path",
-                    "mimetype": "text/csv",
-                    "default": "${projectDir}/conf/paramsheet.yaml"
+                    "mimetype": "text/yaml"
                 }
             }
         },
