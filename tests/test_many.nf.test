@@ -11,7 +11,7 @@ nextflow_pipeline {
             params {
                 outdir        = "$outputDir"
                 paramsheet    = "${projectDir}/conf/test_paramsheet.yaml"
-                paramset_name = "deseq2_rnaseq_gsea,limma_rnaseq_decoupler,dream_rnaseq,limma_affy_gprofiler2"
+                paramset_name = "test_rnaseq_deseq2_gsea,test_rnaseq_limma_decoupler,test_rnaseq_dream,test_affy_limma_gprofiler2"
             }
         }
 

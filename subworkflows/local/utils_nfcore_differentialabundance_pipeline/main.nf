@@ -93,7 +93,10 @@ workflow PIPELINE_INITIALISATION {
     //
     // Get paramsets based on paramsheet or default parameters
     //
-    paramsets = getParamsetConfigurations()
+    def configurations = params.paramsheet
+        ? getParamsheetConfigurations()
+        : getDefaultConfigurations()
+    paramsets = validateConfigurations(configurations)
     ch_paramsets = Channel.fromList(paramsets)
         .map { paramset -> [
             id: paramset.study_name,
@@ -225,14 +228,21 @@ def validateInputParameters(paramsets) {
         }
 
         // Validate contrasts parameters
-        if (row.contrasts_yml && row.contrasts) {
-            error("Both '--contrasts' and '--contrasts_yml' parameters are set. Please specify only one of these options to define contrasts.")
+        if (!row.contrasts) {
+            error("'--contrasts' must be set. Please provide a contrasts file in CSV, TSV, YML, or YAML format.")
         }
-        if (!(row.contrasts_yml || row.contrasts)) {
-            error("Either '--contrasts' and '--contrasts_yml' must be set. Please specify one of these options to define contrasts.")
+
+        // Validate control-based size factor parameters
+        if (row.sizefactors_from_controls && row.differential_method != 'deseq2') {
+            error("'--sizefactors_from_controls' is only supported with '--differential_method deseq2'. Found differential_method='${row.differential_method}' in paramset='${row.paramset_name}'.")
+        }
+
+        if (row.control_features && !row.sizefactors_from_controls && row.differential_method != 'deseq2') {
+            log.warn("'--control_features' with '${row.differential_method}' will only strip control features from matrices. Normalization from controls is only supported with '--differential_method deseq2'.")
         }
     }
 }
+
 
 //
 // Validate channels from input samplesheet
@@ -337,13 +347,9 @@ def methodsDescriptionText(mqc_methods_yaml) {
     return description_html.toString()
 }
 
-// Get configurations based on whether use paramsheet or default params
-// and validate them against the schema.
-def getParamsetConfigurations() {
-    // Use paramsheet if paramset_name is provided, otherwise use default params
-    def paramsets = (params.paramset_name) ? getParamsheetConfigurations() : getDefaultConfigurations()
-
-    return paramsets.collect { paramset ->
+// Validate configurations against the schema.
+def validateConfigurations(configurations) {
+    return configurations.collect { paramset ->
         // Some params are not useful through the pipeline run.
         // Remove them for cleaner meta
         def ignore = ['help', 'help_full', 'show_hidden', 'genomes']
@@ -379,7 +385,7 @@ def getParamsheetConfigurations() {
 
     def paramsheet = raw_paramsheet
         .findAll { row ->
-            if (params.paramset_name == 'all') {
+            if (!params.paramset_name || params.paramset_name == 'all') {
                 return true
             } else {
                 // Only keep row matching with paramset name(s)
@@ -404,10 +410,11 @@ def getParamsheetConfigurations() {
         }
 }
 
-// Get default configurations from pipeline parameters
+// Get default configurations from pipeline parameters (profile mode)
 def getDefaultConfigurations() {
-    // replace null by string 'contrasts' for paramset_name to avoid certain problems with null object
-    return [params + [paramset_name: 'contrasts']]
+    // Use paramset_name from profile if set, otherwise fall back to 'contrasts'
+    def pname = params.paramset_name ?: 'contrasts'
+    return [params + [paramset_name: pname]]
 }
 
 // Load configurations from yaml file

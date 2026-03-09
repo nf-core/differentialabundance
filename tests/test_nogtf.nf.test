@@ -5,13 +5,12 @@ nextflow_pipeline {
     tag "nogtf"
     tag "pipeline"
 
-    test("Test no gtf profile - rnaseq_nogtf") {
+    test("Test no gtf profile") {
+        config "${projectDir}/conf/test/rnaseq/rnaseq_nogtf.config"
 
         when {
             params {
-                outdir              = "$outputDir"
-                paramsheet          = "${projectDir}/conf/test_paramsheet.yaml"
-                paramset_name       = "rnaseq_nogtf"
+                outdir = "$outputDir"
             }
         }
 

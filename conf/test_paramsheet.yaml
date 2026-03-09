@@ -1,438 +1,183 @@
-- paramset_name: deseq2_rnaseq_gsea
-  include: paramsheet/deseq2_rnaseq_gsea,testdata/rnaseq_testdata
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Test paramsheet for nf-core/differentialabundance
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# This file merges test data definitions, analysis configurations, and
+# test-specific overrides into a single self-contained paramsheet.
+#
+# Structure:
+#   1. Data block        - test dataset URLs and paths
+#   2. Config block      - fully resolved analysis parameter bundles
+#   3. Test config block - combines data + config + test-specific overrides
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # Exploratory plots
-  exploratory_main_variable: contrasts
-  deseq2_vst_nsub: 500
+# ============================================================================
+# 1. Data block
+# ============================================================================
 
-  # Filtering
-  filtering_min_abundance: 10
+- paramset_name: rnaseq_testdata
+  study_name: SRP254919
+  input: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.samplesheet.csv
+  matrix: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.salmon.merged.gene_counts.top1000cov.tsv
+  feature_length_matrix: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.spoofed_lengths.tsv
+  contrasts: https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/SRP254919.contrasts.yaml
+  gtf: https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz
+  gene_sets_files: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt
+  decoupler_network: https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/progeny/mouse_network.tsv
 
-  # Report options
-  report_contributors: |-
-    Jane Doe
-    Director of Institute of Microbiology
-    University of Smallville;John Smith
-    PhD student
-    Institute of Microbiology
-    University of Smallville
+- paramset_name: rnaseq_testdata_complex
+  study_name: SRP254919
+  input: https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/metadata.tsv
+  matrix: https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/counts.tsv
+  contrasts: https://github.com/nf-core/test-datasets/raw/differentialabundance/testdata/formula_contrasts/rnaseq_complex_contrast.yaml
+  gtf: https://ftp.ensembl.org/pub/release-81/gtf/mus_musculus/Mus_musculus.GRCm38.81.gtf.gz
+  gene_sets_files: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/gene_set_analysis/mh.all.v2022.1.Mm.symbols.gmt
+  decoupler_network: https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/progeny/mouse_network.tsv
 
-  # Other
-  round_digits: 3
-  gsea_rnd_seed: "10"
+- paramset_name: affy_testdata
+  study_name: GSE50790
+  input: https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/GSE50790.csv
+  contrasts: https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/differentialabundance/testdata/GSE50790_contrasts.yaml
+  affy_cel_files_archive: https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/GSE50790_RAW.tar
+  gene_sets_files: https://raw.githubusercontent.com/nf-core/test-datasets/differentialabundance/testdata/h.all.v2022.1.Hs.symbols.gmt
 
-- paramset_name: deseq2_rnaseq_gsea_complex
-  include: paramsheet/deseq2_rnaseq_gsea,testdata/rnaseq_testdata_complex
+# ============================================================================
+# 2. Config block
+# ============================================================================
 
-  # Exploratory plots
-  exploratory_main_variable: contrasts
+- paramset_name: rnaseq_deseq2_gsea
+  study_type: rnaseq
+  study_abundance_type: counts
+  features_type: gene
+  features_id_col: gene_id
+  features_name_col: gene_name
+  features_metadata_cols: gene_id,gene_name,gene_biotype
+  differential_feature_id_column: gene_id
+  differential_feature_name_column: gene_name
+  observations_id_col: sample
+  observations_name_col: sample
+  differential_method: deseq2
+  functional_method: gsea
+  exploratory_assay_names: raw,normalised,variance_stabilised
+  exploratory_final_assay: variance_stabilised
+  exploratory_log2_assays: raw,normalised
+  differential_file_suffix: ".deseq2.results.tsv"
+  differential_fc_column: log2FoldChange
+  differential_pval_column: pvalue
+  differential_qval_column: padj
+
+- paramset_name: rnaseq_limma_decoupler
+  study_type: rnaseq
+  study_abundance_type: counts
+  features_type: gene
+  features_id_col: gene_id
+  features_name_col: gene_name
+  features_metadata_cols: gene_id,gene_name,gene_biotype
+  differential_feature_id_column: gene_id
+  differential_feature_name_column: gene_name
+  observations_id_col: sample
+  observations_name_col: sample
+  differential_method: limma
+  limma_use_voom: true
+  functional_method: decoupler
+  exploratory_assay_names: raw,normalised
+  exploratory_final_assay: normalised
   exploratory_log2_assays: raw
+  differential_file_suffix: ".limma.results.tsv"
+  differential_fc_column: logFC
+  differential_pval_column: P.Value
+  differential_qval_column: adj.P.Val
 
-  # DESeq2
-  deseq2_vst_nsub: 500
-  deseq2_seed: 1
-  deseq2_vs_method: rlog
-  deseq2_shrink_lfc: false
-
-  # Filtering
-  filtering_min_abundance: 10
-
-  # Report options
-  report_contributors: |-
-    Jane Doe
-    Director of Institute of Microbiology
-    University of Smallville;John Smith
-    PhD student
-    Institute of Microbiology
-    University of Smallville
-
-  # Other
-  round_digits: 2
-  gsea_rnd_seed: "10"
-  skip_reports: true
-
-- paramset_name: deseq2_rnaseq_gprofiler2
-  include: paramsheet/deseq2_rnaseq_gprofiler2,testdata/rnaseq_testdata
-
-  # Exploratory plots
-  exploratory_main_variable: contrasts
-  deseq2_vst_nsub: 500
-
-  # Filtering
-  filtering_min_abundance: 10
-
-  # gprofiler2 options
-  gprofiler2_organism: "mmusculus"
-
-  # Report options
-  report_contributors: |-
-    Jane Doe
-    Director of Institute of Microbiology
-    University of Smallville;John Smith
-    PhD student
-    Institute of Microbiology
-    University of Smallville
-
-  # Other
-  round_digits: 3
-
-- paramset_name: deseq2_rnaseq_gprofiler2_complex
-  include: paramsheet/deseq2_rnaseq_gprofiler2,testdata/rnaseq_testdata_complex
-
-  # Exploratory plots
-  exploratory_main_variable: contrasts
-  exploratory_log2_assays: raw
-
-  # DESeq2
-  deseq2_vst_nsub: 500
-  deseq2_seed: 1
-  deseq2_vs_method: rlog
-  deseq2_shrink_lfc: false
-
-  # gprofiler2 options
-  gprofiler2_organism: "mmusculus"
-
-  # Filtering
-  filtering_min_abundance: 10
-
-  # Report options
-  report_contributors: |-
-    Jane Doe
-    Director of Institute of Microbiology
-    University of Smallville;John Smith
-    PhD student
-    Institute of Microbiology
-    University of Smallville
-
-  # Other
-  round_digits: 2
-  skip_reports: true
-
-- paramset_name: deseq2_rnaseq_gsea_numeric_samples
-  include: paramsheet/deseq2_rnaseq_gsea,testdata/rnaseq_testdata_numeric_samples
-
-  # Exploratory plots
-  exploratory_main_variable: contrasts
-  deseq2_vst_nsub: 500
-
-  # Filtering
-  filtering_min_abundance: 10
-
-  # Report options
-  report_contributors: |-
-    Jane Doe
-    Director of Institute of Microbiology
-    University of Smallville;John Smith
-    PhD student
-    Institute of Microbiology
-    University of Smallville
-
-  # Other
-  round_digits: 3
-  gsea_rnd_seed: "10"
-
-- paramset_name: deseq2_rnaseq_gprofiler2_numeric_samples
-  include: paramsheet/deseq2_rnaseq_gprofiler2,testdata/rnaseq_testdata_numeric_samples
-
-  # Exploratory plots
-  exploratory_main_variable: contrasts
-  deseq2_vst_nsub: 500
-
-  # Filtering
-  filtering_min_abundance: 10
-
-  # gprofiler2 options
-  gprofiler2_organism: "mmusculus"
-
-  # Report options
-  report_contributors: |-
-    Jane Doe
-    Director of Institute of Microbiology
-    University of Smallville;John Smith
-    PhD student
-    Institute of Microbiology
-    University of Smallville
-
-  # Other
-  round_digits: 3
-
-- paramset_name: limma_rnaseq_gsea
-  include: paramsheet/limma_rnaseq_gsea,testdata/rnaseq_testdata
-
-  # Filtering
-  filtering_min_abundance: 10
-
-  # Exploratory
-  exploratory_main_variable: contrasts
-
-  # GSEA
-  gsea_rnd_seed: "10"
-
-  # Report options
-  report_contributors: |-
-    Jane Doe
-    Director of Institute of Microbiology
-    University of Smallville;John Smith
-    PhD student
-    Institute of Microbiology
-    University of Smallville
-
-  # Other
-  round_digits: 3
-
-- paramset_name: limma_rnaseq_gsea_complex
-  include: paramsheet/limma_rnaseq_gsea,testdata/rnaseq_testdata_complex
-
-  # Filtering
-  filtering_min_abundance: 10
-
-  # Exploratory
-  exploratory_main_variable: contrasts
-  exploratory_log2_assays: raw
-
-  # GSEA
-  gsea_rnd_seed: "10"
-
-  # Report options
-  report_contributors: |-
-    Jane Doe
-    Director of Institute of Microbiology
-    University of Smallville;John Smith
-    PhD student
-    Institute of Microbiology
-    University of Smallville
-
-  # Other
-  round_digits: 3
-  report_grouping_variable: treatment
-
-- paramset_name: limma_rnaseq_gprofiler2
-  include: paramsheet/limma_rnaseq_gprofiler2,testdata/rnaseq_testdata
-
-  # Filtering
-  filtering_min_abundance: 10
-
-  # gprofiler2 options
-  gprofiler2_organism: "mmusculus"
-
-  # Report options
-  report_contributors: |-
-    Jane Doe
-    Director of Institute of Microbiology
-    University of Smallville;John Smith
-    PhD student
-    Institute of Microbiology
-    University of Smallville
-
-  # Other
-  round_digits: 3
-
-- paramset_name: limma_rnaseq_decoupler
-  include: paramsheet/limma_rnaseq_decoupler,testdata/rnaseq_testdata
-
-  # Filtering
-  filtering_min_abundance: 10
-
-  # Report options
-  report_contributors: |-
-    Jane Doe
-    Director of Institute of Microbiology
-    University of Smallville;John Smith
-    PhD student
-    Institute of Microbiology
-    University of Smallville
-
-  # Other
-  round_digits: 3
-
-- paramset_name: limma_rnaseq_gsea_numeric_samples
-  include: paramsheet/limma_rnaseq_gsea,testdata/rnaseq_testdata_numeric_samples
-
-  # Filtering
-  filtering_min_abundance: 10
-
-  # Exploratory
-  exploratory_main_variable: contrasts
-
-  # GSEA
-  gsea_rnd_seed: "10"
-
-  # Report options
-  report_contributors: |-
-    Jane Doe
-    Director of Institute of Microbiology
-    University of Smallville;John Smith
-    PhD student
-    Institute of Microbiology
-    University of Smallville
-
-  # Other
-  round_digits: 3
-
-- paramset_name: dream_rnaseq
-  include: paramsheet/dream_rnaseq,testdata/rnaseq_testdata_complex
+- paramset_name: rnaseq_dream
+  study_type: rnaseq
+  study_abundance_type: counts
+  features_type: gene
+  features_id_col: gene_id
+  features_name_col: gene_name
+  features_metadata_cols: gene_id,gene_name,gene_biotype
+  differential_feature_id_column: gene_id
+  differential_feature_name_column: gene_name
+  observations_id_col: sample
+  observations_name_col: sample
+  differential_method: dream
   dream_apply_voom: true
+  exploratory_assay_names: raw,normalised
+  exploratory_final_assay: normalised
+  exploratory_log2_assays: raw
+  differential_file_suffix: ".dream.results.tsv"
+  differential_fc_column: logFC
+  differential_pval_column: P.Value
+  differential_qval_column: adj.P.Val
 
-  # Filtering
-  filtering_min_abundance: 10
+- paramset_name: affy_limma_gprofiler2
+  study_type: affy_array
+  study_abundance_type: intensities
+  differential_method: limma
+  functional_method: gprofiler2
+  features_id_col: PROBEID
+  features_metadata_cols: PROBEID,ENSEMBL,SYMBOL,GENETYPE
+  features_name_col: SYMBOL
+  differential_feature_id_column: PROBEID
+  differential_feature_name_column: SYMBOL
+  exploratory_assay_names: raw,normalised
+  exploratory_final_assay: normalised
+  exploratory_log2_assays: null
+  differential_file_suffix: ".limma.results.tsv"
+  differential_fc_column: logFC
+  differential_pval_column: P.Value
+  differential_qval_column: adj.P.Val
+  shinyngs_build_app: true
 
-  # Exploratory
-  exploratory_main_variable: contrasts
+# ============================================================================
+# 3. Test config block
+# ============================================================================
 
-  # Report options
-  report_contributors: |-
-    Jane Doe
-    Director of Institute of Microbiology
-    University of Smallville;John Smith
-    PhD student
-    Institute of Microbiology
-    University of Smallville
-
-  # Other
-  round_digits: 3
-
-- paramset_name: dream_rnaseq_decoupler_numeric_samples
-  include: paramsheet/dream_rnaseq_decoupler,testdata/rnaseq_testdata_dream_numeric_samples
-
-  # Filtering
-  filtering_min_abundance: 10
-
-  # Functional analysis with decoupler
-  decoupler_min_n: 1
-
-  # Report options
-  report_contributors: |-
-    Jane Doe
-    Director of Institute of Microbiology
-    University of Smallville;John Smith
-    PhD student
-    Institute of Microbiology
-    University of Smallville
-
-  # Other
-  round_digits: 3
-
-- paramset_name: dream_rnaseq_decoupler
-  include: paramsheet/dream_rnaseq_decoupler,testdata/rnaseq_testdata_complex
-
-  # Filtering
-  filtering_min_abundance: 10
-
-  # Functional analysis with decoupler
-  decoupler_min_n: 1
-
-  # Report options
-  report_contributors: |-
-    Jane Doe
-    Director of Institute of Microbiology
-    University of Smallville;John Smith
-    PhD student
-    Institute of Microbiology
-    University of Smallville
-
-  # Other
-  round_digits: 3
-
-- paramset_name: dream_norm
-  include: paramsheet/dream_norm,testdata/rnaseq_testdata_complex2
-
-  # Filtering
-  filtering_min_abundance: 10
-
-  # Exploratory
-  exploratory_main_variable: contrasts
-
-  # Report options
-  report_contributors: |-
-    Jane Doe
-    Director of Institute of Microbiology
-    University of Smallville;John Smith
-    PhD student
-    Institute of Microbiology
-    University of Smallville
-
-  # Other
-  round_digits: 3
-
-- paramset_name: dream_norm2
-  include: paramsheet/dream_norm,testdata/rnaseq_testdata_complex3
-
-  # Filtering
-  filtering_min_abundance: 10
-
-  # Exploratory
-  exploratory_main_variable: contrasts
-
-  # Report options
-  report_contributors: |-
-    Jane Doe
-    Director of Institute of Microbiology
-    University of Smallville;John Smith
-    PhD student
-    Institute of Microbiology
-    University of Smallville
-
-  # Other
-  round_digits: 3
-
-- paramset_name: limma_affy_gsea
-  include: paramsheet/limma_affy_gsea,testdata/affy_testdata
-
-  # Observations
-  observations_id_col: name
-  observations_name_col: name
-
-  # Exploratory
-  exploratory_main_variable: contrasts
-
-  # Differential analysis params
-  differential_max_pval: 0.05
-  differential_max_qval: 0.05
-  differential_min_fold_change: 1.5
-
-  # GSEA
-  gsea_rnd_seed: "10"
-
-- paramset_name: limma_affy_gprofiler2
-  include: paramsheet/limma_affy_gprofiler2,testdata/affy_testdata
-
-  # Observations
-  observations_id_col: name
-  observations_name_col: name
-
-  # Exploratory
-  exploratory_main_variable: contrasts
-
-  # Differential analysis params
-  differential_max_pval: 0.05
-  differential_max_qval: 0.05
-  differential_min_fold_change: 1.5
-
-  # gprofiler2 options
-  gprofiler2_organism: "mmusculus"
-
-- paramset_name: limma_soft
-  include: paramsheet/limma_soft,testdata/soft_testdata
-
-- paramset_name: limma_maxquant
-  include: paramsheet/limma_maxquant,testdata/maxquant_testdata
-  # Observations
-  observations_id_col: Experiment
-  observations_name_col: Name
-
-  # Exploratory
-  exploratory_main_variable: Celltype
-  exploratory_n_features: -1
-
-  # Proteus
-  proteus_measurecol_prefix: LFQ intensity
-
-- paramset_name: rnaseq_nogtf
-  include: paramsheet/deseq2_rnaseq,testdata/rnaseq_testdata_nogtf
-
-  # Exploratory plots
+- paramset_name: test_rnaseq_deseq2_gsea
+  include: test_paramsheet/rnaseq_deseq2_gsea,test_paramsheet/rnaseq_testdata
   exploratory_main_variable: contrasts
   deseq2_vst_nsub: 500
-
-  # Filtering
   filtering_min_abundance: 10
+  report_contributors: |-
+    Jane Doe
+    Director of Institute of Microbiology
+    University of Smallville;John Smith
+    PhD student
+    Institute of Microbiology
+    University of Smallville
+  round_digits: 3
+  gsea_rnd_seed: "10"
+
+- paramset_name: test_rnaseq_limma_decoupler
+  include: test_paramsheet/rnaseq_limma_decoupler,test_paramsheet/rnaseq_testdata
+  filtering_min_abundance: 10
+  report_contributors: |-
+    Jane Doe
+    Director of Institute of Microbiology
+    University of Smallville;John Smith
+    PhD student
+    Institute of Microbiology
+    University of Smallville
+  round_digits: 3
+
+- paramset_name: test_rnaseq_dream
+  include: test_paramsheet/rnaseq_dream,test_paramsheet/rnaseq_testdata_complex
+  dream_apply_voom: true
+  filtering_min_abundance: 10
+  exploratory_main_variable: contrasts
+  report_contributors: |-
+    Jane Doe
+    Director of Institute of Microbiology
+    University of Smallville;John Smith
+    PhD student
+    Institute of Microbiology
+    University of Smallville
+  round_digits: 3
+
+- paramset_name: test_affy_limma_gprofiler2
+  include: test_paramsheet/affy_limma_gprofiler2,test_paramsheet/affy_testdata
+  observations_id_col: name
+  observations_name_col: name
+  exploratory_main_variable: contrasts
+  differential_max_pval: 0.05
+  differential_max_qval: 0.05
+  differential_min_fold_change: 1.5
+  gprofiler2_organism: "mmusculus"

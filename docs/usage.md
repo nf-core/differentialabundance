@@ -126,7 +126,7 @@ Full list of features metadata are available on GEO platform pages.
 
 ## Contrasts file
 
-The contrasts file references the observations file to define groups of samples to compare. It can be provided in **either** CSV/TSV or YAML format using the parameters `--contrasts` or `--contrasts_yml`, respectively.
+The contrasts file references the observations file to define groups of samples to compare. It can be provided in **either** CSV/TSV or YAML format using a single `--contrasts` parameter. The file format is inferred from the extension (`.csv`, `.tsv`, `.yml`, `.yaml`).
 
 ### CSV/TSV contrasts file
 
@@ -157,7 +157,7 @@ You can optionally supply:
 ### YAML contrasts file format
 
 ```bash
---contrasts_yml '[path to YAML contrasts file]'
+--contrasts '[path to YAML contrasts file]'
 ```
 
 Based on the sample sheet above we could define YAML contrasts like:
@@ -250,27 +250,86 @@ To override the above options, you may also supply your own features table as a 
 
 By default, if you don't provide features, for non-array data the workflow will fall back to attempting to use the matrix itself as a source of feature annotations. For this to work you must make sure to set the `features_id_col`, `features_name_col` and `features_metadata_cols` parameters to the appropriate values, for example by setting them to 'gene_id' if that is the identifier column on the matrix. This will cause the gene ID to be used everywhere rather than more accessible gene symbols (as can be derived from the GTF), but the workflow should run. Please use this option for MaxQuant analysis, i.e. do not provide features.
 
-## Paramsheet
+## Analysis modes
 
-In essence, the paramsheet is a YAML file with multiple nextflow configs.
-To run the pipeline with a specific config, you can use the `--paramset_name` parameter.
-You can also run multiple configs in parallel by providing a comma-separated list of config names. For example, `--paramset_name deseq2_rnaseq_gprofiler2,deseq2_rnaseq_gsea`.
+The pipeline supports two modes of operation, each with well-defined parameter precedence rules:
+
+### 1. Single-Run Mode (Config Profiles) — recommended for production
+
+For standard production use, select an **analysis profile** that bundles the correct study type, differential method, and output settings. CLI flags override profile parameters, following standard Nextflow precedence:
+
+```
+CLI flags / -params-file > profile > defaults
+```
+
+For example, to run an RNA-seq analysis with DESeq2:
+
+```bash
+nextflow run nf-core/differentialabundance \
+    -profile rnaseq,docker \
+    --input samplesheet.csv \
+    --contrasts contrasts.yaml \
+    --matrix counts.tsv \
+    --gtf genes.gtf \
+    --outdir results/
+```
+
+You can override any profile parameter from the command line. For example, to switch from DESeq2's default variance-stabilising transform to rlog:
+
+```bash
+nextflow run nf-core/differentialabundance \
+    -profile rnaseq,docker \
+    --deseq2_vs_method rlog \
+    --input samplesheet.csv \
+    --contrasts contrasts.yaml \
+    --matrix counts.tsv \
+    --gtf genes.gtf \
+    --outdir results/
+```
 
 > [!WARNING]
-> Note that the arguments defined in the paramsheet have highest priority, meaning that they will overwrite any other arguments defined in the command line or in the configuration files. In other words, the priority of the parameters will follow this order: paramsheet > command line flags > nextflow configuration file
+> Do not override `--differential_method` on the command line when using an analysis profile. Each profile also sets method-specific parameters (e.g. logFC and p-value column names). To change methods, use the appropriate profile (e.g. `-profile rnaseq_limma`).
 
-### 1. Default paramsheet
+See the [Profiles](#-profile) section for the full list of available analysis profiles.
 
-We provide a `paramsheet.yaml` file in the `conf` directory that defines the parameter sets and tool parameters that make sense to run together, for specific study types.
+### 2. Multi-Run Mode (Paramsheet) — for exploration
 
-Each config defines a combination of differential analysis tools and functional analysis tools (optional), with the respective arguments.
+For running multiple analysis configurations in parallel (e.g. comparing DESeq2 vs Limma, or testing different enrichment tools), provide a custom **paramsheet** — a YAML file where each entry defines a set of parameter overrides:
 
-To run a given combination of tools, you can use the `--paramset_name` parameter.
+```bash
+nextflow run nf-core/differentialabundance \
+    -profile docker \
+    --paramsheet my_configs.yaml \
+    --input samplesheet.csv \
+    --contrasts contrasts.yaml \
+    --matrix counts.tsv \
+    --gtf genes.gtf \
+    --outdir results/
+```
 
-### 2. Custom paramsheet
+> [!WARNING]
+> In multi-run mode, paramsheet parameters take precedence over CLI flags. The priority order is: `paramsheet > CLI flags > defaults`. This is by design — each paramsheet entry fully defines its configuration. CLI parameters are still used for values not specified in the paramsheet (e.g. `--input`, `--outdir`).
 
-Optionally, one can also provide their own paramsheet YAML file using the `--paramsheet` flag.
-You will be also able to run a specific config from this custom file using `--paramset_name`.
+To run only a subset of configurations from your paramsheet, use `--paramset_name` with a comma-separated list:
+
+```bash
+--paramset_name deseq2_rnaseq,limma_rnaseq
+```
+
+> [!NOTE]
+> The pipeline does **not** ship a default paramsheet. Users provide their own when using multi-run mode.
+
+A paramsheet entry looks like this:
+
+```yaml
+- paramset_name: my_deseq2_run
+  study_type: rnaseq
+  study_abundance_type: counts
+  differential_method: deseq2
+  # ... additional parameter overrides
+```
+
+Each entry must include a unique `paramset_name`. Entries can override any pipeline parameter.
 
 ## Working with the output Quarto file
 
@@ -468,17 +527,44 @@ The typical command for running the pipeline is as follows:
 
 ```bash
 nextflow run nf-core/differentialabundance \
+    -profile rnaseq,docker \
     --input samplesheet.csv \
     --contrasts contrasts.yaml \
-    [--matrix assay_matrix.tsv OR --affy_cel_files_archive cel_files.tar] \
-    [--gtf mouse.gtf OR --features features.tsv] \
-    --outdir <OUTDIR>  \
-    -profile docker \
-    [--paramset_name <paramset_name>] \
+    --matrix assay_matrix.tsv \
+    --gtf mouse.gtf \
+    --outdir <OUTDIR> \
     --report_contributors $'Jane Doe\nDirector of Institute of Microbiology\nUniversity of Smallville;John Smith\nPhD student\nInstitute of Microbiology\nUniversity of Smallville'
 ```
 
-This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
+This will launch the pipeline with the `rnaseq` analysis profile (DESeq2 by default) and `docker` for container execution. See below for more information about profiles.
+
+For other data types, use the appropriate analysis profile:
+
+```bash
+# Affymetrix microarrays
+nextflow run nf-core/differentialabundance \
+    -profile affy,docker \
+    --input samplesheet.csv \
+    --contrasts contrasts.yaml \
+    --affy_cel_files_archive cel_files.tar \
+    --outdir <OUTDIR>
+
+# MaxQuant proteomics
+nextflow run nf-core/differentialabundance \
+    -profile maxquant,docker \
+    --input samplesheet.csv \
+    --contrasts contrasts.yaml \
+    --matrix proteinGroups.txt \
+    --outdir <OUTDIR>
+
+# GEO SOFT files
+nextflow run nf-core/differentialabundance \
+    -profile soft,docker \
+    --input samplesheet.csv \
+    --contrasts contrasts.yaml \
+    --querygse GSE12345 \
+    --outdir <OUTDIR>
+```
 
 Note that the pipeline will create the following files in your working directory:
 
@@ -508,13 +594,13 @@ process {
 }
 ```
 
-You will not get the final reporting outcomes of the workflow, but you will get the differential tables produced by DESeq2 or Limma, and the results of any gene sets analysis you have enabled.
+You will not get the final reporting outcomes of the workflow, but you will get the differential tables produced by DESeq2, Limma, or DREAM, and the results of any gene sets analysis you have enabled.
 
 We have also added a dedicated pipeline parameter, `--skip_reports` that allows you to skip only the Quarto notebook and bundled report while leaving other reporting processes active. The `QUARTONOTEBOOK` process assumes that every grouping variable you pass to it (from the contrasts file’s variable column or PCA-derived informative_variables) exists as a valid, named column in your sample metadata. If you know your metadata or contrasts might be incomplete or non-standard (such as using formula-based yaml files), the you can use this flag to skip these steps.
 
-#### Restricting samples considered by DESeq2 or Limma
+#### Restricting samples considered by DESeq2, Limma, or DREAM
 
-By default, the DESeq2 or Limma differential modules model all samples at once, rather than just the samples involved in the contrast. This is usually the correct thing to do, but when there are are large numbers of samples involved in each contrast it may be unnecessary, and things can be sped up significantly by setting `--differential_subset_to_contrast_samples`. This will remove any samples not relevant to the contrast before the main differential analysis routines are called.
+By default, the DESeq2, Limma, or DREAM differential modules model all samples at once, rather than just the samples involved in the contrast. This is usually the correct thing to do, but when there are large numbers of samples involved in each contrast it may be unnecessary, and things can be sped up significantly by setting `--differential_subset_to_contrast_samples`. This will remove any samples not relevant to the contrast before the main differential analysis routines are called.
 
 ### Params files
 
@@ -586,14 +672,43 @@ Several generic profiles are bundled with the pipeline which instruct the pipeli
 
 The pipeline also dynamically loads configurations from [https://github.com/nf-core/configs](https://github.com/nf-core/configs) when it runs, making multiple config profiles for various institutional clusters available at run time. For more information and to check if your system is supported, please see the [nf-core/configs documentation](https://github.com/nf-core/configs#documentation).
 
-Note that multiple profiles can be loaded, for example: `-profile test,docker` - the order of arguments is important!
+Note that multiple profiles can be loaded, for example: `-profile rnaseq,docker` - the order of arguments is important!
 They are loaded in sequence, so later profiles can overwrite earlier profiles.
 
 If `-profile` is not specified, the pipeline will run locally and expect all software to be installed and available on the `PATH`. This is _not_ recommended, since it can lead to different results on different machines dependent on the computer environment.
 
-- `test`
-  - A profile with a complete configuration for automated testing
-  - Includes links to test data so needs no other parameters
+#### Analysis profiles
+
+These profiles configure the pipeline for specific study types, differential methods, and optional functional enrichment. Combine one analysis profile with a container profile (e.g. `-profile rnaseq,docker`).
+
+**RNA-seq profiles:**
+
+- `rnaseq` — RNA-seq with DESeq2 (default)
+- `rnaseq_deseq2_gsea` — RNA-seq with DESeq2 + GSEA enrichment
+- `rnaseq_deseq2_gprofiler2` — RNA-seq with DESeq2 + g:Profiler2 enrichment
+- `rnaseq_limma` — RNA-seq with Limma (voom)
+- `rnaseq_limma_gsea` — RNA-seq with Limma + GSEA enrichment
+- `rnaseq_limma_gprofiler2` — RNA-seq with Limma + g:Profiler2 enrichment
+- `rnaseq_limma_decoupler` — RNA-seq with Limma + Decoupler enrichment
+- `rnaseq_dream` — RNA-seq with DREAM (mixed-effects models)
+- `rnaseq_dream_decoupler` — RNA-seq with DREAM + Decoupler enrichment
+
+**Affymetrix profiles:**
+
+- `affy` — Affymetrix microarrays with Limma
+- `affy_limma_gsea` — Affymetrix with Limma + GSEA enrichment
+- `affy_limma_gprofiler2` — Affymetrix with Limma + g:Profiler2 enrichment
+
+**Other profiles:**
+
+- `maxquant` — MaxQuant proteomics with Limma
+- `soft` — GEO SOFT files with Limma
+
+> [!WARNING]
+> Do not override `--differential_method` on the command line when using an analysis profile. Each profile also sets method-specific parameters (e.g. logFC and p-value column names). To change methods, use the appropriate profile (e.g. `-profile rnaseq_limma`).
+
+#### Container profiles
+
 - `docker`
   - A generic configuration profile to be used with [Docker](https://docker.com/)
 - `singularity`
@@ -610,6 +725,12 @@ If `-profile` is not specified, the pipeline will run locally and expect all sof
   - A generic configuration profile to enable [Wave](https://seqera.io/wave/) containers. Use together with one of the above (requires Nextflow ` 24.03.0-edge` or later).
 - `conda`
   - A generic configuration profile to be used with [Conda](https://conda.io/docs/). Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity, Podman, Shifter, Charliecloud, or Apptainer.
+
+#### Other profiles
+
+- `test`
+  - A profile with a complete configuration for automated testing
+  - Includes links to test data so needs no other parameters
 - `cache_default`
   - The pipeline uses by default `cache = deep` for certain processes downstream `VALIDATOR`, which allows more efficient resuming by checking for input file content to be included in the cache keys. The profile `cache_default` provides users with a the default cache profile (`cache = true`) used in most Nextflow pipelines, in case the `deep` configuration causes issues. See the [Nextflow cache documentation](https://www.nextflow.io/docs/latest/reference/process.html#process-cache) for more information.
 
