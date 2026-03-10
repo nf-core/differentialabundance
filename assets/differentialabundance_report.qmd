@@ -93,6 +93,15 @@ plot_screeplot <- function(percentVarData) {
             yaxis = list(title = "Percent variance explained")
         )
 }
+
+module_disabled <- function(x) {
+  mods <- params$meta$params$disable_report_modules
+  if (is.null(mods) || mods == "") {
+    return(FALSE)
+  } else {
+    x %in% simpleSplit(mods)
+  }
+}
 ```
 
 ```{r, warning=FALSE}
@@ -641,7 +650,7 @@ The following plots show the abundance value distributions of input matrices. A 
 
 #### Box plots
 
-```{r, echo=FALSE, fig.height=8}
+```{r, echo=FALSE, fig.height=8, eval=!module_disabled("boxplot")}
 #| echo: false
 
 
@@ -661,7 +670,7 @@ Whiskers in the above boxplots show `{r} params$meta$params$exploratory_whisker_
 
 #### Density plots
 
-```{r, echo=FALSE, fig.height=8}
+```{r, echo=FALSE, fig.height=8, eval=!module_disabled("density")}
 #| echo: false
 p <- plotly_densityplot(
     assay_data,
@@ -680,13 +689,13 @@ cat(paste0("\n### ", ucfirst(params$meta$params$observations_type), " relationsh
 ```
 
 #### Principal components plots
-::: {.panel-tabset}
 
 Principal components analysis was conducted based on the `{r} params$meta$params$exploratory_n_features` most variable `{r} params$meta$params$features_type`s. Each component was annotated with its percent contribution to variance.
 
-```{r, echo=FALSE, results='asis'}
+```{r, echo=FALSE, results='asis', eval=!module_disabled("pca")}
 #| echo: false
 
+cat("::: {.panel-tabset}")
 # Create nested list to save the percentVars for reusing in the scree plot
 percentVar_list <- list()
 for (assay_type in rev(names(assay_data))) {
@@ -815,7 +824,7 @@ for (assay_type in rev(names(assay_data))) {
 cat(":::")
 ```
 
-```{r, echo=FALSE, results='asis'}
+```{r, echo=FALSE, results='asis', eval=!module_disabled("scree")}
 cat(paste0("\n#### Scree plot\n"))
 cat("::: {.panel-tabset}")
 cat(paste0("\nThe following scree plot visualizes what percentage of total variation in the data can be explained by each of the principal components computed.\n"))
@@ -840,7 +849,7 @@ For the variance stabilised matrix, an ANOVA test was used to determine assocati
 
 The resulting p values are illustrated below.
 
-```{r, echo=FALSE, results='asis'}
+```{r, echo=FALSE, results='asis',  eval=!module_disabled("pca")}
 #| echo: false
 #| results: asis
 
@@ -885,14 +894,14 @@ for (variable in rownames(pca_vs_meta)) {
 
 A hierarchical clustering of `{r} params$meta$params$features_type`s was undertaken based on `{r} ifelse(params$meta$params$exploratory_n_features == -1, paste0("all ", params$meta$params$features_type), paste0("the ", params$meta$params$exploratory_n_features, " most variable ", params$meta$params$features_type))`s. Distances between `r params$meta$params$features_type`s were estimated based on `{r} params$meta$params$exploratory_cor_method` correlation, which were then used to produce a clustering via the `{r} params$meta$params$exploratory_clustering_method` method with `hclust()` in R.
 
-::: {.panel-tabset}
-```{r}
+```{r, eval=!module_disabled("heatmap")}
 #| echo: false
 #| results: asis
 #| warning: false
 #| message: false
 #| fig-height: 14
 #| fig-width: 8
+cat("::: {.panel-tabset}")
 for (assay_type in rev(names(assay_data))) {
     cat(paste0("\n##### ", prettifyVariablename(assay_type), "\n"))
 
@@ -964,7 +973,7 @@ for (assay_type in rev(names(assay_data))) {
 cat(":::")
 ```
 
-```{r, echo=FALSE, results='asis', warning=FALSE}
+```{r, echo=FALSE, results='asis', warning=FALSE, eval=!module_disabled("outlier")}
 
 # We can't look for ouliers in sets of less than 3 samples, so exclude variables
 # unless the minimum group size is larger than that
@@ -1041,7 +1050,7 @@ foo <- lapply(names(p_value_types), function(pvt) {
     print(htmltools::tagList(datatable(differential_tables[[pvt]], caption = paste0("Differential ", params$meta$params$features_type, " ", params$meta$params$abundance_type, " (target relative to reference)"), options = list(dom = "t"), rownames = TRUE)))
     cat("\n")
 
-    if (nrow(contrasts) > 1) {
+    if (nrow(contrasts) > 1  && !module_disabled("upset_plot")) {
         cat("\n### Upset plot\n\n")
 
         de_genes <- lapply(differential_results, function(de) {
@@ -1211,8 +1220,9 @@ for (i in 1:nrow(contrasts)) {
                 inherit = FALSE,
                 name = paste(pval_column, "=", p_value_thresholds[[pvt]])
             )
-
-        print(htmltools::tagList(p))
+        if (!module_disabled("volcano")) {
+            print(htmltools::tagList(p))
+        }
 
         cat("\n###### Differential Genes Table\n\n")
         # Filter full_de to get only significant features and add Direction column
@@ -1261,10 +1271,12 @@ for (i in 1:nrow(contrasts)) {
             }
 
             # Print the formatted table
-            print(htmltools::tagList(dt))
+            if (!module_disabled("de_table")) {
+                print(htmltools::tagList(dt))
+            }
 
             # Optional biotype plot, now grouped by Direction
-            if ("Gene biotype" %in% colnames(combined)) {
+            if ("Gene biotype" %in% colnames(combined) && !module_disabled("biotype_plot")) {
                 # Count by biotype and direction without adding new deps
                 bt <- as.data.frame(table(
                     combined[["Gene biotype"]],
@@ -1303,7 +1315,7 @@ for (i in 1:nrow(contrasts)) {
 
 <!-- Gene set analysis results -->
 
-```{r, warning=FALSE, results='asis'}
+```{r, warning=FALSE, results='asis', eval=!module_disabled("gsea")}
 #| echo: false
 #| results: asis
 #| warning: false

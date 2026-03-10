@@ -1218,6 +1218,12 @@
                     "type": "boolean",
                     "default": false,
                     "description": "Skip generation of reports"
+                },
+                "disable_param_modules": {
+                    "type": "string",
+                    "hidden": true,
+                    "description": "Comma-separated list of sections that should not be included in the final Quarto report",
+                    "help_text": "Allowed values are: boxplot, density, pca, scree, heatmap, outlier, upset_plot, volcano, de_table, biotype_plot, gsea."
                 }
             },
             "required": ["report_file", "logo_file", "css_file"]
