@@ -119,7 +119,7 @@ workflow DIFFERENTIALABUNDANCE {
     // Create contrasts channels
     ch_contrasts_file = ch_paramsets
         .map { meta ->
-            [ meta, file(meta.params.contrasts_yml ?: meta.params.contrasts, checkIfExists: true) ]
+            [ meta, file(meta.params.contrasts, checkIfExists: true) ]
         }
 
     ch_contrasts_file_with_extension = ch_contrasts_file
@@ -933,9 +933,12 @@ workflow DIFFERENTIALABUNDANCE {
         .join(
             QUARTONOTEBOOK.out.notebook
                 .groupTuple() // [ meta, [notebooks] ]
+        ).join(
+            QUARTONOTEBOOK.out.params_yaml
+                .groupTuple()
         )
-        .map { meta, input_files, all_notebooks ->
-            [meta, input_files + all_notebooks]
+        .map { meta, input_files, all_notebooks, params_yaml->
+            [meta, input_files + all_notebooks + params_yaml]
         }
     MAKE_REPORT_BUNDLE( ch_bundle_input )
 }

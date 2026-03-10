@@ -46,6 +46,8 @@ library(ggplot2)
 library(ComplexHeatmap)
 library(UpSetR)
 library(tidyverse)
+library(reactable)
+library(ggbeeswarm)
 ```
 
 <!-- Define some functions -->
@@ -102,12 +104,138 @@ module_disabled <- function(x) {
     x %in% simpleSplit(mods)
   }
 }
+
+generate_boxplots <- function(combined, assay_data, observations, params,
+                               contrast_variables, main_grouping_variable,
+                               groupColorScale, label_col) {
+    qval_pretty <- prettifyVariablename(params$meta$params$differential_qval_column)
+
+    # choose ID + display label columns in 'combined' after prettify
+    features_id_pretty <- prettifyVariablename(params$meta$params$features_id_col)
+
+    if (!is.null(params$meta$params$features_name_col) &&
+        prettifyVariablename(params$meta$params$features_name_col) %in% colnames(combined)) {
+        feature_label_pretty <- prettifyVariablename(params$meta$params$features_name_col)
+    } else {
+        feature_label_pretty <- prettifyVariablename(label_col)
+        if (!feature_label_pretty %in% colnames(combined)) {
+        feature_label_pretty <- features_id_pretty
+        }
+    }
+
+    # top 10 by qval
+    if (qval_pretty %in% colnames(combined)) {
+        ord <- order(combined[[qval_pretty]])
+        top_ids <- head(combined[[features_id_pretty]][ord], 10)
+        top_ids <- as.character(top_ids)
+    } else {
+        # fallback: take first 10
+        top_ids <- head(as.character(combined[[features_id_pretty]]), 10)
+    }
+
+    cat("\n::: {.panel-tabset .boxplot-container}\n\n")
+
+    for (assay_type in rev(names(assay_data))) {
+        cat(paste0("\n###### ", prettifyVariablename(assay_type), "\n\n"))
+
+        expr_mat <- assay_data[[assay_type]]
+        top_present <- intersect(top_ids, rownames(expr_mat))
+        if (length(top_present) == 0) {
+        cat("*No top genes found in this assay matrix.*\n\n")
+        next
+        }
+
+        # subset observations to samples in expr_mat
+        obs_sub <- observations[colnames(expr_mat), , drop = FALSE]
+
+        plot_df <- as.data.frame(expr_mat[top_present, , drop = FALSE])
+        plot_df[[prettifyVariablename(params$meta$params$features_type)]] <- rownames(plot_df)
+
+        features_pretty <- prettifyVariablename(params$meta$params$features_type)
+
+        plot_df <- tidyr::pivot_longer(
+        plot_df,
+        cols = -all_of(features_pretty),
+        names_to = "Sample",
+        values_to = "Expression"
+        )
+        plot_df <- dplyr::arrange(plot_df, .data[[features_pretty]])
+
+        # Condition: use first contrast variable if present; else use main grouping var
+        cond_var <- if (length(unique(contrast_variables)) > 0) unique(contrast_variables)[1] else main_grouping_variable
+        plot_df$Condition <- obs_sub[plot_df$Sample, cond_var]
+
+        # Map feature IDs -> display names (symbol if available)
+        feature_names <- combined[[feature_label_pretty]]
+        names(feature_names) <- combined[[features_id_pretty]]
+        plot_df$FeatureName <- unname(feature_names[plot_df[[features_pretty]]])
+
+        # Map feature IDs -> qvals for label
+        if (qval_pretty %in% colnames(combined)) {
+        pvals <- combined[[qval_pretty]]
+        names(pvals) <- combined[[features_id_pretty]]
+        plot_df$pval <- unname(pvals[plot_df[[features_pretty]]])
+        } else {
+        plot_df$pval <- NA_real_
+        }
+
+        pvals_grouped <- plot_df %>%
+        dplyr::group_by(FeatureName) %>%
+        dplyr::summarise(pval = dplyr::first(pval), .groups = "drop")
+
+        # Panel-specific y positions (avoid global max overlap)
+        y_pos <- plot_df %>%
+        dplyr::group_by(FeatureName) %>%
+        dplyr::summarise(y = max(Expression, na.rm = TRUE) * 1.03, .groups = "drop")
+
+        pvals_grouped <- dplyr::left_join(pvals_grouped, y_pos, by = "FeatureName")
+
+        p_box <- ggplot(plot_df, aes(x = Condition, y = Expression)) +
+        geom_boxplot(outlier.shape = NA) +
+        ggbeeswarm::geom_quasirandom(
+            width = 0.2,
+            aes(
+            color = Condition,
+            text = paste0("Sample: ", Sample, "<br>")
+            )
+        ) +
+        facet_wrap(~ FeatureName, scales = "free_y") +
+        scale_color_manual(values = groupColorScale) +
+        theme_light() +
+        theme(
+            axis.text.x = element_text(angle = 45, hjust = 1),
+            axis.title.x = element_text(margin = margin(t = 15)),
+            legend.position = "none",
+            strip.text = element_text(color = "black", size = 8),
+            strip.background = element_rect(linewidth = 0.1),
+            panel.spacing.y = unit(1.5, "lines"),
+            panel.spacing.x = unit(1.5, "lines"),
+            plot.margin = margin(t = 15, b = 20)
+        ) +
+        geom_text(
+            data = pvals_grouped,
+            aes(x = 1.6, y = y, label = paste0("Padj = ", signif(pval, 3))),
+            inherit.aes = FALSE,
+            size = 2,
+            color = "grey37",
+            fontface = "italic",
+            na.rm = TRUE
+        )
+
+        p_box <- ggplotly(p_box, tooltip = c("x", "y", "color", "text")) %>%
+        layout(height = 600)
+
+        print(htmltools::tagList(p_box))
+    }
+    cat("\n:::\n\n")
+}
 ```
 
 ```{r, warning=FALSE}
 #| include: false
 # Load the datatables js
 datatable(NULL)
+reactable(data.frame(x = 1))
 ```
 
 ```{r, warning=FALSE}
@@ -127,21 +255,34 @@ params_table <- data.frame(Parameter = sub("^meta\\.(params\\.)?", "", names(unl
 
 # We'll subset the params table for different report sections
 make_params_table <- function(name, pattern = NULL, remove_pattern = FALSE) {
-    subparams <- params_table
-    if (!is.null(pattern)) {
-        subparams <- subparams[grep(pattern, subparams$Parameter), ]
-    }
-    if (remove_pattern) {
-        subparams$Parameter <- sub(pattern, "", subparams$Parameter)
-    }
+  subparams <- params_table
+  if (!is.null(pattern)) {
+    subparams <- subparams[grep(pattern, subparams$Parameter), ]
+  }
+  if (remove_pattern) {
+    subparams$Parameter <- sub(pattern, "", subparams$Parameter)
+  }
 
-    if (nrow(subparams) > 10) {
-        dom <- "tp"
-    } else {
-        dom <- "t"
-    }
+  caption_text <- paste("Parameters used for", name)
 
-    print(htmltools::tagList(datatable(subparams, caption = paste("Parameters used for", name), rownames = FALSE, options = list(dom = dom))))
+  rt <- reactable(
+    subparams,
+    striped  = TRUE,
+    highlight = TRUE,
+    pagination = TRUE,
+    fullWidth = TRUE,
+    sortable = TRUE
+  )
+
+    print(
+    htmltools::tagList(
+        rt,
+        htmltools::tags$div(
+        caption_text,
+        style = "text-align: center; margin-top: 10px; color: #5a677a;"
+        )
+    )
+    )
 }
 
 report_title <- paste0("Differential ", params$meta$params$features_type, " abundance report", ifelse(is.null(params$meta$params$report_title), "", paste0(": ", params$meta$params$report_title)))
@@ -508,7 +649,30 @@ display_columns <- head(union(display_columns, additional_useful_cols), 5)
 display_columns <- unique(c(display_columns, informative_variables))
 observations_to_print <- observations[, unique(display_columns)]
 colnames(observations_to_print) <- prettifyVariablename(colnames(observations_to_print))
-print(htmltools::tagList(datatable(observations_to_print, caption = paste(ucfirst(params$meta$params$observations_type), "metadata"), rownames = FALSE, options = list(dom = "tp"))))
+rownames(observations_to_print) <- NULL
+caption_text <- paste(
+  ucfirst(params$meta$params$observations_type),
+  "metadata"
+)
+
+rt <- reactable(
+  observations_to_print,
+  striped  = TRUE,
+  highlight = TRUE,
+  pagination = TRUE,
+  fullWidth = TRUE,
+  sortable = TRUE
+)
+
+print(
+  htmltools::tagList(
+    rt,
+    htmltools::tags$div(
+      caption_text,
+      style = "text-align: center; margin-top: 10px; color: #5a677a;"
+    )
+  )
+)
 ```
 
 ## Contrasts
@@ -534,14 +698,28 @@ contrasts_to_print$model <- sapply(contrasts_to_print$Id, function(id) {
     }
 })
 
-datatable(
-    contrasts_to_print,
-    caption = "Table of contrasts",
-    rownames = FALSE,
-    options = list(
-        dom = ifelse(nrow(contrasts_to_print) > 10, "tp", "t"),
-        ordering = FALSE
+caption_text <- "Table of contrasts"
+
+rt <- reactable(
+  contrasts_to_print,
+  pagination = nrow(contrasts_to_print) > 10,
+  striped = TRUE,
+  fullWidth = FALSE,
+  highlight = TRUE,
+  columns = list(
+    Id = reactable::colDef(
+      minWidth = 350,
+      style = list(wordBreak = "break-word")
     )
+  )
+)
+
+htmltools::tagList(
+  rt,
+  htmltools::tags$div(
+    caption_text,
+    style = "text-align: center; margin-top: 10px; color: #5a677a;"
+  )
 )
 ```
 
@@ -603,41 +781,73 @@ rule_map <- tibble(
 
 cat("The following tables summarize retention and filtering failures.\n\n")
 
-datatable(
-  tibble(
-    Metric  = c("Total features", "Retained after filtering", "Removed by filtering"),
-    Count   = c(total_features, retained, removed),
-    Percent = c(100, 100 * retained / total_features, 100 * removed / total_features)
-  ),
-  caption = "Filtering summary",
-  rownames = FALSE,
-  options = list(dom = "t")
+summary_tbl <- tibble(
+  Metric  = c("Total features", "Retained after filtering", "Removed by filtering"),
+  Count   = c(total_features, retained, removed),
+  Percent = c(
+    100,
+    100 * retained / total_features,
+    100 * removed / total_features
+  )
+)
+
+rt <- reactable(
+  summary_tbl,
+  striped  = TRUE,
+  highlight = TRUE,
+  pagination = TRUE,
+  fullWidth = TRUE,
+  sortable = TRUE
+)
+
+caption_text <- "Filtering summary"
+
+htmltools::tagList(
+  rt,
+  htmltools::tags$div(
+    caption_text,
+    style = "text-align: center; margin-top: 10px; color: #5a677a;"
+  )
 )
 
 cat("\n")
 
-datatable(
-  tibble(
-    column = names(failures),
-    `Failed (any)` = colSums(failures),
-    `Failed (only this rule)` = colSums(failures & (failure_count == 1))
+tbl <- tibble(
+  column = names(failures),
+  `Failed (any)` = colSums(failures),
+  `Failed (only this rule)` = colSums(failures & (failure_count == 1))
+) |>
+  left_join(rule_map, by = "column") |>
+  left_join(thresholds, by = "rule") |>
+  mutate(
+    Rule = recode(
+      column,
+      abundance = "Minimum abundance threshold",
+      na = "Minimum non-NA samples",
+      most_variant_vectors = "Top most variant features",
+      .default = column
+    ),
+    Threshold = threshold
   ) |>
-    left_join(rule_map, by = "column") |>
-    left_join(thresholds, by = "rule") |>
-    mutate(
-      Rule = recode(
-        column,
-        abundance = "Minimum abundance threshold",
-        na = "Minimum non-NA samples",
-        most_variant_vectors = "Top most variant features",
-        .default = column
-      ),
-      Threshold = threshold
-    ) |>
-    select(Rule, Threshold, `Failed (any)`, `Failed (only this rule)`),
-  caption = "Filtering rule breakdown (counts may overlap)",
-  rownames = FALSE,
-  options = list(dom = "t")
+  select(Rule, Threshold, `Failed (any)`, `Failed (only this rule)`)
+
+rt <- reactable(
+  tbl,
+  striped  = TRUE,
+  highlight = TRUE,
+  pagination = TRUE,
+  fullWidth = TRUE,
+  sortable = TRUE
+)
+
+caption_text <- "Filtering rule breakdown (counts may overlap)"
+
+htmltools::tagList(
+  rt,
+  htmltools::tags$div(
+    caption_text,
+    style = "text-align: center; margin-top: 10px; color: #5a677a;"
+  )
 )
 
 ```
@@ -1047,7 +1257,27 @@ cat("::: {.panel-tabset}")
 
 foo <- lapply(names(p_value_types), function(pvt) {
     cat("\n#### ", pvt, "\n")
-    print(htmltools::tagList(datatable(differential_tables[[pvt]], caption = paste0("Differential ", params$meta$params$features_type, " ", params$meta$params$abundance_type, " (target relative to reference)"), options = list(dom = "t"), rownames = TRUE)))
+    caption_text <- paste0(
+    "Differential ",
+    params$meta$params$features_type, " ",
+    params$meta$params$abundance_type,
+    " (target relative to reference)"
+    )
+
+    rt <- reactable(
+    differential_tables[[pvt]],
+    pagination = FALSE,
+    sortable = FALSE,
+    showSortable = FALSE
+    )
+
+    htmltools::tagList(
+    htmltools::tags$p(
+        caption_text,
+        style = "font-weight: bold; margin-bottom: 6px;"
+    ),
+    rt
+    )
     cat("\n")
 
     if (nrow(contrasts) > 1  && !module_disabled("upset_plot")) {
@@ -1246,18 +1476,7 @@ for (i in 1:nrow(contrasts)) {
             relocate(Direction) %>%
             rename_with(prettifyVariablename)
 
-            # Create the datatable
-            dt <- datatable(
-                combined,
-                caption = paste(
-                    "Differential genes (Up + Down) in",
-                    contrast_descriptions[i],
-                    "(check", differential_files[[i]], "for more detail)"
-                ),
-                rownames = FALSE
-            )
-
-            # Now format the numeric columns for display
+            # Identify numeric columns that need formatting
             cols_to_format_pretty <- prettifyVariablename(c(
                 params$meta$params$differential_fc_column,
                 params$meta$params$differential_pval_column,
@@ -1266,14 +1485,84 @@ for (i in 1:nrow(contrasts)) {
 
             cols_present_pretty <- intersect(cols_to_format_pretty, colnames(combined))
 
-            if (length(cols_present_pretty) > 0) {
-                dt <- formatRound(dt, cols_present_pretty, digits = 5)
+            no_filter_cols <- c("Pvalue", "Padj", "Log2FoldChange")
+
+            # Build column definitions for reactable
+            column_defs <- list()
+            for (col_name in colnames(combined)) {
+                if (col_name %in% cols_present_pretty) {
+                    # Format numeric columns with 5 digits
+                    column_defs[[col_name]] <- colDef(
+                        format = colFormat(digits = 5),
+                        filterable = !(col_name %in% no_filter_cols),
+                        align = "right"
+                    )
+                } else if (col_name == "Direction") {
+                    # Special formatting for Direction column
+                    column_defs[[col_name]] <- colDef(
+                        filterable = TRUE,
+                        align = "center"
+                    )
+                } else if (col_name == "Gene id") {
+                    column_defs[[col_name]] <- colDef(
+                        filterable = TRUE,
+                        minWidth = 180
+                    )
+                } else {
+                    # Default for other columns
+                    column_defs[[col_name]] <- colDef(
+                        filterable = TRUE
+                    )
+                }
             }
 
-            # Print the formatted table
+            # Create the reactable with caption
+            rt <- reactable(
+                combined,
+                columns = column_defs,
+                filterable = TRUE,
+                sortable = TRUE,
+                bordered = TRUE,
+                striped = TRUE,
+                highlight = TRUE,
+                defaultPageSize = 20,
+                showPageSizeOptions = TRUE,
+                pageSizeOptions = c(10, 20, 50, 100),
+                defaultSorted = setNames(
+                    list("asc"),
+                    prettifyVariablename(params$meta$params$differential_qval_column)
+                )
+            )
+
+            # Add caption as HTML wrapper
+            caption_html <- htmltools::tags$div(
+                style = "margin-bottom: 10px; font-style: italic; color: #666;",
+                paste(
+                    "Differential genes (Up + Down) in",
+                    contrast_descriptions[i],
+                    "(check", differential_files[[i]], "for more detail)"
+                )
+            )
+
+            # Print the table with caption
             if (!module_disabled("de_table")) {
-                print(htmltools::tagList(dt))
+                print(
+                    htmltools::tagList(
+                        caption_html,
+                        htmltools::tags$div(
+                        style = "overflow-x:auto; max-width:100%;",
+                        rt
+                        )
+                    )
+                )
             }
+
+            cat("\n**Box plots**\n\n")
+            cat("The following box plots show the distribution of expression levels for the top 10 genes ranked by significance.\n\n")
+
+            generate_boxplots(combined, assay_data, observations, params,
+                  contrast_variables, main_grouping_variable,
+                  groupColorScale, label_col)
 
             # Optional biotype plot, now grouped by Direction
             if ("Gene biotype" %in% colnames(combined) && !module_disabled("biotype_plot")) {
@@ -1321,98 +1610,159 @@ for (i in 1:nrow(contrasts)) {
 #| warning: false
 
 if (!is.null(params$meta$params$functional_method)) {
-    cat("\n### Gene set analysis\n")
-    cat("\n#### ", toupper(params$meta$params$functional_method), "\n", "\n")
+  cat("\n### Gene set analysis\n")
+  cat("\n#### ", toupper(params$meta$params$functional_method), "\n", "\n")
 
-    if (params$meta$params$functional_method == "gsea") {
-        # Only keep contrasts that have both reference and target
-        gsea_contrasts <- contrasts[
-            !is.na(contrasts$reference) & contrasts$reference != "" &
-                !is.na(contrasts$target) & contrasts$target != "",
-        ]
+  # Helper to render reactable inside tabsets without breaking layout
+  render_reactable <- function(df, caption_text, page_size = 10) {
+    rt <- reactable::reactable(
+      df,
+      fullWidth = TRUE,
+      showPageInfo = TRUE,
+      showPageSizeOptions = TRUE,
+      pageSizeOptions = c(10, 20, 50, 100),
+      bordered = FALSE,
+      striped = TRUE,
+      highlight = FALSE,
+      searchable = TRUE,
+      sortable = TRUE,
+      pagination = TRUE,
+      defaultPageSize = page_size
+    )
 
-        if (nrow(gsea_contrasts) == 0) {
-            warning("No contrasts with reference and target defined. Skipping GSEA report section.")
-        } else {
-            cat("::: {.panel-tabset}\n")
-            for (gmt_file in simpleSplit(params$meta$params$gene_sets_files)) {
-                gmt_name <- basename(tools::file_path_sans_ext(gmt_file))
-                cat("\n##### ", gmt_name, "\n")
-                cat("::: {.panel-tabset}", "\n")
+    htmltools::tagList(
+      # table container: prevents panel/tabset overflow issues
+      htmltools::tags$div(
+        style = "overflow-x: auto; max-width: 100%;",
+        rt
+      ),
+      # caption below, centered (DT-like)
+      htmltools::tags$div(
+        caption_text,
+        style = "text-align: center; margin-top: 10px; color: #5a677a;"
+      )
+    )
+  }
 
-                reference_gsea_tables <- paste0(gsea_contrasts$id, ".", gmt_name, ".gsea_report_for_", gsea_contrasts$reference, ".tsv")
-                target_gsea_tables <- paste0(gsea_contrasts$id, ".", gmt_name, ".gsea_report_for_", gsea_contrasts$target, ".tsv")
+  if (params$meta$params$functional_method == "gsea") {
+    # Only keep contrasts that have both reference and target
+    gsea_contrasts <- contrasts[
+      !is.na(contrasts$reference) & contrasts$reference != "" &
+        !is.na(contrasts$target) & contrasts$target != "",
+    ]
 
-                for (i in seq_len(nrow(gsea_contrasts))) {
-                    cat("\n###### ", contrast_descriptions[i], "\n")
-
-                    if (file.exists(target_gsea_tables[i])) {
-                        target_gsea_results <- read_metadata(target_gsea_tables[i])[, c(-2, -3)]
-                        target_gsea_results <- round_dataframe_columns(target_gsea_results, digits = params$meta$params$round_digits)
-                        print(htmltools::tagList(
-                            datatable(target_gsea_results,
-                                caption = paste0("\nTarget (", gsea_contrasts$target[i], ")\n"),
-                                rownames = FALSE,
-                                options = list(
-                                    scrollX = TRUE # enables horizontal scrolling
-                                )
-                            )
-                        ))
-                    } else {
-                        cat("\n*Target GSEA file missing: ", target_gsea_tables[i], "*\n")
-                    }
-
-                    if (file.exists(reference_gsea_tables[i])) {
-                        ref_gsea_results <- read_metadata(reference_gsea_tables[i])[, c(-2, -3)]
-                        ref_gsea_results <- round_dataframe_columns(ref_gsea_results, digits = params$meta$params$round_digits)
-                        print(htmltools::tagList(
-                            datatable(ref_gsea_results,
-                                caption = paste0("\nReference (", gsea_contrasts$reference[i], ")\n"),
-                                rownames = FALSE,
-                                options = list(
-                                    scrollX = TRUE # enables horizontal scrolling
-                                )
-                            )
-                        ))
-                    } else {
-                        cat("\n*Reference GSEA file missing: ", reference_gsea_tables[i], "*\n")
-                    }
-                }
-                cat(":::\n")
-            }
-            cat(":::\n")
-        }
-    } else if (params$meta$params$functional_method == "gprofiler2") {
+    if (nrow(gsea_contrasts) == 0) {
+      warning("No contrasts with reference and target defined. Skipping GSEA report section.")
+    } else {
+      cat("::: {.panel-tabset}\n")
+      for (gmt_file in simpleSplit(params$meta$params$gene_sets_files)) {
+        gmt_name <- basename(tools::file_path_sans_ext(gmt_file))
+        cat("\n##### ", gmt_name, "\n")
         cat("::: {.panel-tabset}\n")
-        cat(paste0(
-            "\nThis section contains the results tables of the pathway analysis which was done with the R package gprofiler2. The differential fraction is the number of differential genes in a pathway divided by that pathway's size, i.e. the number of genes annotated for the pathway.",
-            ifelse(params$meta$params$gprofiler2_significant, paste0(" Enrichment was only considered if significant, i.e. adjusted p-value <= ", params$meta$params$gprofiler2_max_qval, "."), "Enrichment was also considered if not significant."), "\n"
-        ))
 
-        # Make sure to grab only non-empty files
-        for (i in seq_along(differential_names)) {
-            name <- differential_names[i]
-            cat(paste0("\n##### ", name, "\n"))
+        reference_gsea_tables <- paste0(gsea_contrasts$id, ".", gmt_name, ".gsea_report_for_", gsea_contrasts$reference, ".tsv")
+        target_gsea_tables <- paste0(gsea_contrasts$id, ".", gmt_name, ".gsea_report_for_", gsea_contrasts$target, ".tsv")
 
-            table <- paste0(contrasts$id[i], ".gprofiler2.all_enriched_pathways.tsv")
-            table_path <- file.path(params$input_dir, table)
-            if (!file.exists(table_path) || file.size(table_path) == 0) {
-                cat(paste0("No ", ifelse(params$meta$params$gprofiler2_significant, "significantly", ""), " enriched pathways were found for this contrast."))
-            } else {
-                all_enriched <- read.table(table_path, header = T, sep = "\t", quote = "\"")
-                all_enriched <- data.frame(
-                    "Pathway name" = all_enriched$term_name, "Pathway code" = all_enriched$term_id,
-                    "Differential features" = all_enriched$intersection_size, "Pathway size" = all_enriched$term_size,
-                    "Differential fraction" = (all_enriched$intersection_size / all_enriched$term_size),
-                    "Adjusted p value" = all_enriched$p_value, check.names = FALSE
-                )
-                all_enriched <- round_dataframe_columns(all_enriched, digits = params$meta$params$round_digits)
-                print(htmltools::tagList(datatable(all_enriched, caption = paste("Enriched pathways in", name, " (check", table, "for more detail)"), rownames = FALSE)))
-            }
-            cat("\n")
+        for (i in seq_len(nrow(gsea_contrasts))) {
+          cat("\n###### ", contrast_descriptions[i], "\n")
+
+          # Target table
+          if (file.exists(target_gsea_tables[i])) {
+            target_gsea_results <- read_metadata(target_gsea_tables[i])[, c(-2, -3)]
+            target_gsea_results <- round_dataframe_columns(target_gsea_results, digits = params$meta$params$round_digits)
+
+            print(
+              render_reactable(
+                target_gsea_results,
+                paste0("Target (", gsea_contrasts$target[i], ")")
+              )
+            )
+          } else {
+            cat("\n*Target GSEA file missing: ", target_gsea_tables[i], "*\n")
+          }
+
+          cat("\n\n")
+
+          # Reference table
+          if (file.exists(reference_gsea_tables[i])) {
+            ref_gsea_results <- read_metadata(reference_gsea_tables[i])[, c(-2, -3)]
+            ref_gsea_results <- round_dataframe_columns(ref_gsea_results, digits = params$meta$params$round_digits)
+
+            print(
+              render_reactable(
+                ref_gsea_results,
+                paste0("Reference (", gsea_contrasts$reference[i], ")")
+              )
+            )
+          } else {
+            cat("\n*Reference GSEA file missing: ", reference_gsea_tables[i], "*\n")
+          }
+
+          cat("\n")
         }
-        cat(":::\n")
+
+        cat(":::\n") # close inner panel-tabset (contrasts)
+      }
+      cat(":::\n") # close outer panel-tabset (gmt files)
     }
+
+  } else if (params$meta$params$functional_method == "gprofiler2") {
+    cat("::: {.panel-tabset}\n")
+    cat(paste0(
+      "\nThis section contains the results tables of the pathway analysis which was done with the R package gprofiler2. The differential fraction is the number of differential genes in a pathway divided by that pathway's size, i.e. the number of genes annotated for the pathway.",
+      ifelse(
+        params$meta$params$gprofiler2_significant,
+        paste0(" Enrichment was only considered if significant, i.e. adjusted p-value <= ", params$meta$params$gprofiler2_max_qval, "."),
+        "Enrichment was also considered if not significant."
+      ),
+      "\n"
+    ))
+
+    # Make sure to grab only non-empty files
+    for (i in seq_along(differential_names)) {
+      name <- differential_names[i]
+      cat(paste0("\n##### ", name, "\n"))
+
+      table <- paste0(contrasts$id[i], ".gprofiler2.all_enriched_pathways.tsv")
+      table_path <- file.path(params$input_dir, table)
+
+      if (!file.exists(table_path) || file.size(table_path) == 0) {
+        cat(paste0(
+          "No ",
+          ifelse(params$meta$params$gprofiler2_significant, "significantly", ""),
+          " enriched pathways were found for this contrast."
+        ))
+      } else {
+        all_enriched <- read.table(table_path, header = TRUE, sep = "\t", quote = "\"")
+        all_enriched <- data.frame(
+          "Pathway name" = all_enriched$term_name,
+          "Pathway code" = all_enriched$term_id,
+          "Differential features" = all_enriched$intersection_size,
+          "Pathway size" = all_enriched$term_size,
+          "Differential fraction" = (all_enriched$intersection_size / all_enriched$term_size),
+          "Adjusted p value" = all_enriched$p_value,
+          check.names = FALSE
+        )
+        all_enriched <- round_dataframe_columns(all_enriched, digits = params$meta$params$round_digits)
+
+        caption_text <- paste(
+          "Enriched pathways in", name,
+          "(check", table, "for more detail)"
+        )
+
+        print(
+          render_reactable(
+            all_enriched,
+            caption_text
+          )
+        )
+      }
+
+      cat("\n")
+    }
+
+    cat(":::\n")
+  }
 }
 ```
 
@@ -1495,7 +1845,24 @@ if (!is.null(params$meta$params$functional_method)) {
 ```{r, echo=FALSE, results='asis'}
 #| echo: false
 #| results: asis
-print(htmltools::tagList(datatable(params_table, caption = "All parameters", rownames = FALSE)))
+rt <- reactable(
+  params_table,
+  striped  = TRUE,
+  highlight = TRUE,
+  pagination = TRUE,
+  fullWidth = TRUE,
+  sortable = TRUE
+)
+
+print(
+  htmltools::tagList(
+    rt,
+    htmltools::tags$div(
+      caption_text,
+      style = "text-align: center; margin-top: 10px; color: #5a677a;"
+    )
+  )
+)
 ```
 
 ## Software versions
@@ -1507,7 +1874,27 @@ print(htmltools::tagList(datatable(params_table, caption = "All parameters", row
 #| results: asis
 versions_table <- data.frame(do.call(rbind, strsplit(names(versions), split = "\\.")), unlist(versions))
 colnames(versions_table) <- c("Component", "Software", "Version")
-print(htmltools::tagList(datatable(versions_table, caption = "Software versions", rownames = FALSE, options = list(dom = "ft", paging = FALSE))))
+caption_text <- "Software versions"
+rownames(versions_table) <- NULL
+
+rt <- reactable(
+  versions_table,
+  striped  = TRUE,
+  highlight = TRUE,
+  pagination = TRUE,
+  fullWidth = TRUE,
+  sortable = TRUE
+)
+
+print(
+  htmltools::tagList(
+    rt,
+    htmltools::tags$div(
+      caption_text,
+      style = "text-align: center; margin-top: 10px; color: #5a677a;"
+    )
+  )
+)
 ```
 
 ```{r, echo=FALSE, results='asis'}
