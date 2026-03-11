@@ -520,10 +520,10 @@ workflow DIFFERENTIALABUNDANCE {
     // We do not need to define an extra key based on meta for later join/combine.
     ch_differential_norm = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.normalised_matrix, ch_paramsets, meta_keys_to_remove=['differential_method']) // meta, norm file
     ch_differential_varstab = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.variance_stabilised_matrix, ch_paramsets, meta_keys_to_remove=['differential_method']) // meta, varstab file
-    ch_differential_qc_plots = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.qc_plots, ch_paramsets, meta_keys_to_remove=['differential_method'])
-    ch_differential_other_deseq2 = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.other_deseq2, ch_paramsets, meta_keys_to_remove=['differential_method'])
-    ch_differential_other_limma = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.other_limma, ch_paramsets, meta_keys_to_remove=['differential_method'])
 
+    // organize output channels
+    ch_differential_plots = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.plots, ch_paramsets, meta_keys_to_remove=['differential_method'])
+    ch_differential_other = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.other, ch_paramsets, meta_keys_to_remove=['differential_method'])
     ch_differential_tables = ch_differential_results
         .map { _key, meta, results -> [meta, results] }
         .mix(ch_differential_results_filtered.map { _key, meta, results -> [meta, results] })

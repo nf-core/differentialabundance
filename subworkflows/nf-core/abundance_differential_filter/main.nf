@@ -191,19 +191,18 @@ workflow ABUNDANCE_DIFFERENTIAL_FILTER {
         .mix(LIMMA_DIFFERENTIAL.out.model)
         .mix(VARIANCEPARTITION_DREAM.out.model)
 
-    ch_qc_plots = DESEQ2_DIFFERENTIAL.out.dispersion_plot_png
-        .mix(LIMMA_DIFFERENTIAL.out.md_plot)
-
-    ch_other_deseq2 = DESEQ2_DIFFERENTIAL.out.rdata
-        .mix(DESEQ2_DIFFERENTIAL.out.size_factors)
-        .mix(DESEQ2_DIFFERENTIAL.out.session_info)
-
-    ch_other_limma = LIMMA_DIFFERENTIAL.out.rdata
-        .mix(LIMMA_DIFFERENTIAL.out.session_info)
-
     ch_variance_stabilised_matrix = DESEQ2_NORM.out.rlog_counts
         .mix(DESEQ2_NORM.out.vst_counts)
         .groupTuple()
+
+    ch_plots = DESEQ2_DIFFERENTIAL.out.dispersion_plot_png
+        .mix(LIMMA_DIFFERENTIAL.out.md_plot)
+
+    ch_other = DESEQ2_DIFFERENTIAL.out.rdata
+        .mix(DESEQ2_DIFFERENTIAL.out.size_factors)
+        .mix(DESEQ2_DIFFERENTIAL.out.session_info)
+        .mix(LIMMA_DIFFERENTIAL.out.rdata)
+        .mix(LIMMA_DIFFERENTIAL.out.session_info)
 
     // ----------------------------------------------------
     // Filter DE results
@@ -263,8 +262,7 @@ workflow ABUNDANCE_DIFFERENTIAL_FILTER {
     normalised_matrix          = ch_normalised_matrix
     variance_stabilised_matrix = ch_variance_stabilised_matrix
     model                      = ch_model
-    qc_plots                   = ch_qc_plots
-    other_deseq2               = ch_other_deseq2
-    other_limma                = ch_other_limma
+    plots                      = ch_plots
+    other                      = ch_other
     versions                   = ch_versions
 }
