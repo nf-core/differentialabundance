@@ -160,11 +160,37 @@ workflow DIFFERENTIAL_FUNCTIONAL_ENRICHMENT {
 
     // gsea-specific outputs
     gsea_report           = GSEA_GSEA.out.report_tsvs_ref.join(GSEA_GSEA.out.report_tsvs_target)
+    gsea_artifacts        = GSEA_GSEA.out.rpt
+        .mix(GSEA_GSEA.out.index_html)
+        .mix(GSEA_GSEA.out.heat_map_corr_plot)
+        .mix(GSEA_GSEA.out.report_tsvs_ref)
+        .mix(GSEA_GSEA.out.report_htmls_ref)
+        .mix(GSEA_GSEA.out.report_tsvs_target)
+        .mix(GSEA_GSEA.out.report_htmls_target)
+        .mix(GSEA_GSEA.out.ranked_gene_list)
+        .mix(GSEA_GSEA.out.gene_set_sizes)
+        .mix(GSEA_GSEA.out.histogram)
+        .mix(GSEA_GSEA.out.heatmap)
+        .mix(GSEA_GSEA.out.pvalues_vs_nes_plot)
+        .mix(GSEA_GSEA.out.ranked_list_corr)
+        .mix(GSEA_GSEA.out.butterfly_plot)
+        .mix(GSEA_GSEA.out.gene_set_tsv)
+        .mix(GSEA_GSEA.out.gene_set_html)
+        .mix(GSEA_GSEA.out.gene_set_heatmap)
+        .mix(GSEA_GSEA.out.snapshot)
+        .mix(GSEA_GSEA.out.gene_set_enplot)
+        .mix(GSEA_GSEA.out.gene_set_dist)
+        .mix(GSEA_GSEA.out.archive)
 
     // decoupler-specific outputs
     decoupler_dc_estimate = DECOUPLER_DECOUPLER.out.dc_estimate
     decoupler_dc_pvals = DECOUPLER_DECOUPLER.out.dc_pvals
     decoupler_png = DECOUPLER_DECOUPLER.out.png
+    gprofiler2_plot_png = GPROFILER2_GOST.out.plot_png
+    gprofiler2_sub_plot = GPROFILER2_GOST.out.sub_plot
+    gprofiler2_other = GPROFILER2_GOST.out.rds
+        .mix(GPROFILER2_GOST.out.filtered_gmt)
+        .mix(GPROFILER2_GOST.out.session_info)
 
 
     // grea-specific outputs

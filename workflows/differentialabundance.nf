@@ -215,6 +215,15 @@ workflow DIFFERENTIALABUNDANCE {
         .first()
     ch_proteus_norm = prepareModuleOutput(PROTEUS.out.norm_tab, ch_paramsets, meta_keys_to_remove=['contrast'])
         .first()
+    ch_proteus_tables = PROTEUS.out.raw_tab
+        .mix(PROTEUS.out.norm_tab)
+    ch_proteus_plots = PROTEUS.out.dendro_plot
+        .mix(PROTEUS.out.mean_var_plot)
+        .mix(PROTEUS.out.raw_dist_plot)
+        .mix(PROTEUS.out.norm_dist_plot)
+    ch_proteus_other = PROTEUS.out.raw_rdata
+        .mix(PROTEUS.out.norm_rdata)
+        .mix(PROTEUS.out.session_info)
 
     ch_versions = ch_versions.mix(PROTEUS.out.versions)
 
@@ -378,6 +387,10 @@ workflow DIFFERENTIALABUNDANCE {
     ch_validated_samplemeta = prepareModuleOutput(VALIDATOR.out.sample_meta, ch_paramsets)
     ch_validated_featuremeta = prepareModuleOutput(VALIDATOR.out.feature_meta, ch_paramsets)
 
+    ch_annotation_tables = ch_affy_platform_features
+        .mix(ch_soft_features)
+        .mix(ch_gtf_features)
+
     // For Affy, we've validated multiple input matrices for raw and norm,
     // we'll separate them out again here
 
@@ -507,6 +520,13 @@ workflow DIFFERENTIALABUNDANCE {
     // We do not need to define an extra key based on meta for later join/combine.
     ch_differential_norm = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.normalised_matrix, ch_paramsets, meta_keys_to_remove=['differential_method']) // meta, norm file
     ch_differential_varstab = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.variance_stabilised_matrix, ch_paramsets, meta_keys_to_remove=['differential_method']) // meta, varstab file
+    ch_differential_qc_plots = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.qc_plots, ch_paramsets, meta_keys_to_remove=['differential_method'])
+    ch_differential_other_deseq2 = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.other_deseq2, ch_paramsets, meta_keys_to_remove=['differential_method'])
+    ch_differential_other_limma = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.other_limma, ch_paramsets, meta_keys_to_remove=['differential_method'])
+
+    ch_differential_tables = ch_differential_results
+        .map { _key, meta, results -> [meta, results] }
+        .mix(ch_differential_results_filtered.map { _key, meta, results -> [meta, results] })
 
     ch_versions = ch_versions
         .mix(ABUNDANCE_DIFFERENTIAL_FILTER.out.versions)
@@ -533,6 +553,9 @@ workflow DIFFERENTIALABUNDANCE {
     CSVTK_JOIN(
         prepareModuleInput(ch_final_annotation_input, 'differential')
     )
+
+    ch_differential_tables = ch_differential_tables
+        .mix(CSVTK_JOIN.out.csv)
 
     ch_versions = ch_versions
         .mix(CSVTK_JOIN.out.versions)
@@ -632,6 +655,18 @@ workflow DIFFERENTIALABUNDANCE {
         .join(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_sub_enrich, remainder: true)
         .mix(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_report)
 
+    ch_gsea_artifacts = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_artifacts, ch_paramsets, meta_keys_to_remove=['functional_method'])
+    ch_gprofiler2_tables = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_all_enrich, ch_paramsets, meta_keys_to_remove=['functional_method'])
+        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_sub_enrich, ch_paramsets, meta_keys_to_remove=['functional_method']))
+    ch_gprofiler2_plots = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_plot_html, ch_paramsets, meta_keys_to_remove=['functional_method'])
+        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_plot_png, ch_paramsets, meta_keys_to_remove=['functional_method']))
+        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_sub_plot, ch_paramsets, meta_keys_to_remove=['functional_method']))
+    ch_gprofiler2_other = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_other, ch_paramsets, meta_keys_to_remove=['functional_method'])
+
+    ch_decoupler_tables = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_dc_estimate, ch_paramsets, meta_keys_to_remove=['functional_method'])
+        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_dc_pvals, ch_paramsets, meta_keys_to_remove=['functional_method']))
+    ch_decoupler_plots = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_png, ch_paramsets, meta_keys_to_remove=['functional_method'])
+
     // Note that 'functional_method' is additionally added to the meta in the functional subworkflow.
     // Remove it to keep a consistent meta structure (needed for join/combine).
     // Also note that these channels, the meta contain other info apart from the base paramset meta.
@@ -684,6 +719,13 @@ workflow DIFFERENTIALABUNDANCE {
         prepareModuleInput(ch_exploratory_input, 'exploratory')
     )
 
+    ch_plots_exploratory = PLOT_EXPLORATORY.out.boxplots_png
+        .mix(PLOT_EXPLORATORY.out.densities_png)
+        .mix(PLOT_EXPLORATORY.out.pca2d_png)
+        .mix(PLOT_EXPLORATORY.out.pca3d_png)
+        .mix(PLOT_EXPLORATORY.out.mad_png)
+        .mix(PLOT_EXPLORATORY.out.dendro)
+
     // Plot differential analysis results
 
     ch_plot_differential_input = ch_differential_results  // [meta, meta with contrast, results]
@@ -701,6 +743,8 @@ workflow DIFFERENTIALABUNDANCE {
         ch_plot_differential_input.differential_results,
         ch_plot_differential_input.samples_features_matrices
     )
+
+    ch_plots_differential = PLOT_DIFFERENTIAL.out.volcanos_png
 
     // Gather software versions
 
@@ -810,6 +854,8 @@ workflow DIFFERENTIALABUNDANCE {
         ch_shinyngs_input.contrast_stats_assay
     )
 
+    ch_shinyngs_app = SHINYNGS_APP.out.app
+
     ch_versions = ch_versions.mix(SHINYNGS_APP.out.versions)
 
     // ========================================================================
@@ -838,16 +884,14 @@ workflow DIFFERENTIALABUNDANCE {
     softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
         .mix(topic_versions_string)
         .collectFile(
-            storeDir: "${params.outdir}/pipeline_info",
             name: 'nf_core_'  +  'differentialabundance_software_'  + 'versions.yml',
             sort: true,
             newLine: true
-        )
+        ).set { ch_nfcore_versions }
 
     softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
         .mix(topic_versions_string)
         .collectFile(
-            storeDir: "${params.outdir}/pipeline_info",
             name: 'collated_versions.yml',
             sort: true,
             newLine: true
@@ -941,6 +985,87 @@ workflow DIFFERENTIALABUNDANCE {
             [meta, input_files + all_notebooks + params_yaml]
         }
     MAKE_REPORT_BUNDLE( ch_bundle_input )
+
+    // ========================================================================
+    // sort output channels
+    // ========================================================================
+
+    // we sort the output channels by meta.paramset_name and subdirectories
+
+    ch_tables = ch_annotation_tables
+        .map { meta, file -> ["annotation/${meta.paramset_name ?: meta.paramset_names.join(',')}", file] }
+        .mix(
+            ch_affy_raw
+                .mix(ch_affy_norm)
+                .mix(ch_soft_norm)
+                .mix(ch_differential_norm)
+                .mix(ch_differential_varstab)
+                .map { meta, file -> ["processed_abundance/${meta.paramset_name ?: meta.paramset_names.join(',')}", file] }
+        )
+        .mix(ch_proteus_tables.map { meta, file -> ["proteus/${meta.paramset_name ?: meta.paramset_names.join(',')}/${meta.contrast}", file] })
+        .mix(ch_differential_tables.map { meta, file -> ["differential/${meta.paramset_name ?: meta.paramset_names.join(',')}", file] })
+        .mix(IMMUNEDECONV.out.deconv_table.map { meta, file -> ["immunedeconv/${meta.paramset_name ?: meta.paramset_names.join(',')}", file] })
+        .mix(ch_gprofiler2_tables.map { meta, file -> ["gprofiler2/${meta.paramset_name ?: meta.paramset_names.join(',')}/${meta.id}", file] })
+        .mix(ch_decoupler_tables.map { meta, file -> ["decoupler/${meta.paramset_name ?: meta.paramset_names.join(',')}", file] })
+
+    ch_plots = ch_proteus_plots
+        .map { meta, file -> ["proteus/${meta.paramset_name ?: meta.paramset_names.join(',')}/${meta.contrast}", file] }
+        .mix(ch_differential_qc_plots.map { meta, file -> ["qc/${meta.paramset_name ?: meta.paramset_names.join(',')}", file] })
+        .mix(ch_plots_exploratory.map { meta, file -> ["exploratory/${meta.paramset_name ?: meta.paramset_names.join(',')}/${meta.id}/png", file] })
+        .mix(ch_plots_differential.map { meta, file -> ["differential/${meta.paramset_name ?: meta.paramset_names.join(',')}/${meta.id}/png", file] })
+        .mix(IMMUNEDECONV.out.deconv_plots.map { meta, file -> ["immunedeconv/${meta.paramset_name ?: meta.paramset_names.join(',')}", file] })
+        .mix(ch_gprofiler2_plots.map { meta, file -> ["gprofiler2/${meta.paramset_name ?: meta.paramset_names.join(',')}/${meta.id}", file] })
+        .mix(ch_decoupler_plots.map { meta, file -> ["decoupler/${meta.paramset_name ?: meta.paramset_names.join(',')}", file] })
+
+    ch_report = ch_gsea_artifacts
+        .flatMap { meta, artifact ->
+            def files = artifact instanceof Collection ? artifact : [artifact]
+            files.collect { file ->
+                def gset = file.name.startsWith("${meta.id}.") ? file.name.substring(meta.id.size() + 1).tokenize('.')[0] : 'gene_sets'
+                ["gsea/${meta.paramset_name ?: meta.paramset_names.join(',')}/${meta.id}/${gset}", file]
+            }
+        }
+        .mix(QUARTONOTEBOOK.out.html.map { meta, file -> ["${meta.paramset_name}", file] })
+        .mix(MAKE_REPORT_BUNDLE.out.zipped_archive.map { meta, file -> ["${meta.paramset_name}", file] })
+
+    ch_shinyngs = ch_shinyngs_app
+        .map { meta, data_rds, app_r -> ["${meta.paramset_name}/${meta.id}", data_rds] }
+        .mix(ch_shinyngs_app.map { meta, data_rds, app_r -> ["${meta.paramset_name}/${meta.id}", app_r] })
+
+    ch_other = AFFY_JUSTRMA_RAW.out.rds
+        .map { meta, file -> ["affy/${meta.paramset_name ?: meta.paramset_names.join(',')}", file] }
+        .mix(
+            ch_proteus_other.map { meta, file ->
+                if (file.name.endsWith('sessionInfo.log')) {
+                    ['proteus', file]
+                } else {
+                    ["proteus/${meta.paramset_name ?: meta.paramset_names.join(',')}/${meta.contrast}", file]
+                }
+            }
+        )
+        .mix(ch_differential_other_deseq2.map { meta, file -> ["deseq2/${meta.paramset_name ?: meta.paramset_names.join(',')}", file] })
+        .mix(ch_differential_other_limma.map { meta, file -> ["limma/${meta.paramset_name ?: meta.paramset_names.join(',')}", file] })
+        .mix(
+            ch_gprofiler2_other.map { meta, file ->
+                if (file.name.endsWith('sessionInfo.log')) {
+                    ["gprofiler2/${meta.paramset_name ?: meta.paramset_names.join(',')}", file]
+                } else {
+                    ["gprofiler2/${meta.paramset_name ?: meta.paramset_names.join(',')}/${meta.id}", file]
+                }
+            }
+        )
+
+    ch_pipeline_info = ch_nfcore_versions
+        .map { file -> ['pipeline_info', file] }
+        .mix(ch_collated_versions.map { file -> ['pipeline_info', file] })
+
+    emit:
+    tables        = ch_tables
+    plots         = ch_plots
+    report        = ch_report
+    shinyngs_app  = ch_shinyngs
+    other         = ch_other
+    pipeline_info = ch_pipeline_info
 }
 
 /*

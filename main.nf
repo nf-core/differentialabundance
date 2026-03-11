@@ -30,29 +30,6 @@ params.gtf = getGenomeAttribute('gtf')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    NAMED WORKFLOWS FOR PIPELINE
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-//
-// WORKFLOW: Run main analysis pipeline depending on type of input
-//
-workflow NFCORE_DIFFERENTIALABUNDANCE {
-
-    take:
-    paramsets
-
-    main:
-
-    //
-    // WORKFLOW: Run pipeline
-    //
-    DIFFERENTIALABUNDANCE (
-        paramsets
-    )
-}
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
@@ -80,7 +57,7 @@ workflow {
     // WORKFLOW: Run main workflow
     //
 
-    NFCORE_DIFFERENTIALABUNDANCE (
+    DIFFERENTIALABUNDANCE (
         PIPELINE_INITIALISATION.out.paramsets
     )
 
@@ -95,6 +72,40 @@ workflow {
         params.monochrome_logs,
         params.hook_url,
     )
+
+    publish:
+    tables = DIFFERENTIALABUNDANCE.out.tables
+    plots = DIFFERENTIALABUNDANCE.out.plots
+    report = DIFFERENTIALABUNDANCE.out.report
+    shinyngs_app = DIFFERENTIALABUNDANCE.out.shinyngs_app
+    other = DIFFERENTIALABUNDANCE.out.other
+    pipeline_info = DIFFERENTIALABUNDANCE.out.pipeline_info
+}
+
+output {
+    tables {
+        path { subdir, file -> "tables/${subdir}/${file.name}" }
+    }
+
+    plots {
+        path { subdir, file -> "plots/${subdir}/${file.name}" }
+    }
+
+    report {
+        path { subdir, file -> "report/${subdir}/${file.name}" }
+    }
+
+    shinyngs_app {
+        path { subdir, file -> "shinyngs_app/${subdir}/${file.name}" }
+    }
+
+    other {
+        path { subdir, file -> "other/${subdir}/${file.name}" }
+    }
+
+    pipeline_info {
+        path { subdir, file -> "${subdir}/${file.name}" }
+    }
 }
 
 /*
