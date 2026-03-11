@@ -30,6 +30,38 @@ params.gtf = getGenomeAttribute('gtf')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    NAMED WORKFLOWS FOR PIPELINE
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+//
+// WORKFLOW: Run main analysis pipeline depending on type of input
+//
+workflow NFCORE_DIFFERENTIALABUNDANCE {
+
+    take:
+    paramsets
+
+    main:
+
+    //
+    // WORKFLOW: Run pipeline
+    //
+    DIFFERENTIALABUNDANCE (
+        paramsets
+    )
+
+    emit:
+    tables = DIFFERENTIALABUNDANCE.out.tables
+    plots = DIFFERENTIALABUNDANCE.out.plots
+    report = DIFFERENTIALABUNDANCE.out.report
+    shinyngs_app = DIFFERENTIALABUNDANCE.out.shinyngs_app
+    other = DIFFERENTIALABUNDANCE.out.other
+    pipeline_info = DIFFERENTIALABUNDANCE.out.pipeline_info
+}
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
@@ -57,7 +89,7 @@ workflow {
     // WORKFLOW: Run main workflow
     //
 
-    DIFFERENTIALABUNDANCE (
+    NFCORE_DIFFERENTIALABUNDANCE (
         PIPELINE_INITIALISATION.out.paramsets
     )
 
@@ -74,12 +106,12 @@ workflow {
     )
 
     publish:
-    tables = DIFFERENTIALABUNDANCE.out.tables
-    plots = DIFFERENTIALABUNDANCE.out.plots
-    report = DIFFERENTIALABUNDANCE.out.report
-    shinyngs_app = DIFFERENTIALABUNDANCE.out.shinyngs_app
-    other = DIFFERENTIALABUNDANCE.out.other
-    pipeline_info = DIFFERENTIALABUNDANCE.out.pipeline_info
+    tables = NFCORE_DIFFERENTIALABUNDANCE.out.tables
+    plots = NFCORE_DIFFERENTIALABUNDANCE.out.plots
+    report = NFCORE_DIFFERENTIALABUNDANCE.out.report
+    shinyngs_app = NFCORE_DIFFERENTIALABUNDANCE.out.shinyngs_app
+    other = NFCORE_DIFFERENTIALABUNDANCE.out.other
+    pipeline_info = NFCORE_DIFFERENTIALABUNDANCE.out.pipeline_info
 }
 
 output {
