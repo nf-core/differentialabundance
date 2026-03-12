@@ -116,22 +116,34 @@ workflow {
 
 output {
     tables {
-        path { subdir, file -> "tables/${subdir}/${file.name}" }
+        path { subdir, file ->
+                file >> "tables/${subdir}/"
+        }
     }
     plots {
-        path { subdir, file -> "plots/${subdir}/${file.name}" }
+        path { subdir, file ->
+            file >> "plots/${subdir}/"
+        }
     }
     report {
-        path { subdir, file -> "report/${subdir}/${file.name}" }
+        path { subdir, file ->
+            file >> "report/${subdir}/"
+        }
     }
     shinyngs_app {
-        path { subdir, file -> "shinyngs_app/${subdir}/${file.name}" }
+        path { subdir, file ->
+            file >> "shinyngs_app/${subdir}/"
+        }
     }
     other {
-        path { subdir, file -> "other/${subdir}/${file.name}" }
+        path { subdir, file ->
+            file >> "other/${subdir}/"
+        }
     }
     pipeline_info {
-        path { subdir, file -> "${subdir}/${file.name}" }
+        path { subdir, file ->
+            file >> "${subdir}/"
+        }
     }
 }
 

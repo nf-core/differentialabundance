@@ -105,6 +105,7 @@ workflow DIFFERENTIAL_FUNCTIONAL_ENRICHMENT {
 
     CUSTOM_TABULARTOGSEACLS(ch_input_for_gsea.contrasts_and_samples)
 
+    // TODO do not use first for multi run
     CUSTOM_TABULARTOGSEACHIP(
         ch_input_for_gsea.features.first(),
         ch_input_for_gsea.features_cols.first()

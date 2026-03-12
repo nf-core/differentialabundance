@@ -416,12 +416,10 @@ workflow DIFFERENTIALABUNDANCE {
     ch_validated_samplemeta = prepareModuleOutput(VALIDATOR.out.sample_meta, ch_paramsets)
     ch_validated_featuremeta = prepareModuleOutput(VALIDATOR.out.feature_meta, ch_paramsets)
 
-    ch_annotation_tables = ch_affy_platform_features
-        .mix(ch_soft_features)
-        .mix(ch_gtf_features)
-
     ch_tables = ch_tables
-        .mix(ch_annotation_tables.map { meta, file -> ["annotation/${paramsetSubdir(meta)}", file] })
+        .mix(AFFY_JUSTRMA_RAW.out.annotation.map { meta, file -> ["annotation/${paramsetSubdir(meta)}", file] })
+        .mix(GEOQUERY_GETGEO.out.annotation.map { meta, file -> ["annotation/${paramsetSubdir(meta)}", file] })
+        .mix(GTF_TO_TABLE.out.feature_annotation.map { meta, file -> ["annotation/${paramsetSubdir(meta)}", file] })
 
     // For Affy, we've validated multiple input matrices for raw and norm,
     // we'll separate them out again here
@@ -591,8 +589,8 @@ workflow DIFFERENTIALABUNDANCE {
         .mix(ABUNDANCE_DIFFERENTIAL_FILTER.out.results_genewise_filtered)
         .mix(CSVTK_JOIN.out.csv)
     ch_tables = ch_tables
-        .mix(ch_differential_norm.map { meta, file -> ["processed_abundance/${paramsetSubdir(meta)}", file] })
-        .mix(ch_differential_varstab.map { meta, file -> ["processed_abundance/${paramsetSubdir(meta)}", file] })
+        .mix(ABUNDANCE_DIFFERENTIAL_FILTER.out.normalised_matrix.map { meta, file -> ["processed_abundance/${paramsetSubdir(meta)}", file] })
+        .mix(ABUNDANCE_DIFFERENTIAL_FILTER.out.variance_stabilised_matrix.map { meta, file -> ["processed_abundance/${paramsetSubdir(meta)}", file] })
         .mix(ch_differential_tables.map { meta, file -> ["differential/${paramsetSubdir(meta)}", file] })
     ch_versions = ch_versions
         .mix(CSVTK_JOIN.out.versions)
@@ -692,18 +690,6 @@ workflow DIFFERENTIALABUNDANCE {
         .join(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_sub_enrich, remainder: true)
         .mix(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_report)
 
-    ch_gsea_artifacts = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_artifacts, ch_paramsets, meta_keys_to_remove=['functional_method'])
-    ch_gprofiler2_tables = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_all_enrich, ch_paramsets, meta_keys_to_remove=['functional_method'])
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_sub_enrich, ch_paramsets, meta_keys_to_remove=['functional_method']))
-    ch_gprofiler2_plots = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_plot_html, ch_paramsets, meta_keys_to_remove=['functional_method'])
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_plot_png, ch_paramsets, meta_keys_to_remove=['functional_method']))
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_sub_plot, ch_paramsets, meta_keys_to_remove=['functional_method']))
-    ch_gprofiler2_other = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_other, ch_paramsets, meta_keys_to_remove=['functional_method'])
-
-    ch_decoupler_tables = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_dc_estimate, ch_paramsets, meta_keys_to_remove=['functional_method'])
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_dc_pvals, ch_paramsets, meta_keys_to_remove=['functional_method']))
-    ch_decoupler_plots = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_png, ch_paramsets, meta_keys_to_remove=['functional_method'])
-
     // Note that 'functional_method' is additionally added to the meta in the functional subworkflow.
     // Remove it to keep a consistent meta structure (needed for join/combine).
     // Also note that these channels, the meta contain other info apart from the base paramset meta.
@@ -711,20 +697,33 @@ workflow DIFFERENTIALABUNDANCE {
     // by setting 'use_meta_key' to true. This will facilitate later on to join/combine channels.
     ch_functional_results = prepareModuleOutput(ch_functional_results, ch_paramsets, meta_keys_to_remove=['functional_method'], use_meta_key=true) // key, meta, [ functional results ]
 
-    ch_versions = ch_versions
-        .mix(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.versions)
-
     ch_tables = ch_tables
-        .mix(ch_gprofiler2_tables.map { meta, file -> ["gprofiler2/${paramsetSubdir(meta)}/${meta.id}", file] })
-        .mix(ch_decoupler_tables.map { meta, file -> ["decoupler/${paramsetSubdir(meta)}", file] })
+        .mix(
+            DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_all_enrich
+            .mix(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_sub_enrich)
+            .map { meta, file -> ["gprofiler2/${paramsetSubdir(meta)}/${meta.id}", file] }
+        )
+        .mix(
+            DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_dc_estimate
+            .mix(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_dc_pvals)
+            .map { meta, file -> ["decoupler/${paramsetSubdir(meta)}", file] }
+        )
 
     ch_plots = ch_plots
-        .mix(ch_gprofiler2_plots.map { meta, file -> ["gprofiler2/${paramsetSubdir(meta)}/${meta.id}", file] })
-        .mix(ch_decoupler_plots.map { meta, file -> ["decoupler/${paramsetSubdir(meta)}", file] })
+        .mix(
+            DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_plot_html
+            .mix(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_plot_png)
+            .mix(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_sub_plot)
+            .map { meta, file -> ["gprofiler2/${paramsetSubdir(meta)}/${meta.id}", file] }
+        )
+        .mix(
+            DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_png
+            .map { meta, file -> ["decoupler/${paramsetSubdir(meta)}", file] }
+        )
 
     ch_other = ch_other
         .mix(
-            ch_gprofiler2_other.map { meta, file ->
+            DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_other.map { meta, file ->
                 if (file.name.endsWith('sessionInfo.log')) {
                     ["gprofiler2/${paramsetSubdir(meta)}", file]
                 } else {
@@ -735,7 +734,12 @@ workflow DIFFERENTIALABUNDANCE {
 
     ch_report = ch_report
         .mix(
-            ch_gsea_artifacts.flatMap { meta, artifact ->
+            DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_plot_html
+            .map { meta, file -> ["gprofiler2/${paramsetSubdir(meta)}/${meta.id}", file] }
+        )
+        .mix(
+            DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_artifacts
+            .flatMap { meta, artifact ->
                 def files = artifact instanceof Collection ? artifact : [artifact]
                 files.collect { file ->
                     def gset = file.name.startsWith("${meta.id}.") ? file.name.substring(meta.id.size() + 1).tokenize('.')[0] : 'gene_sets'
@@ -743,6 +747,9 @@ workflow DIFFERENTIALABUNDANCE {
                 }
             }
         )
+
+    ch_versions = ch_versions
+        .mix(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.versions)
 
 
     // ========================================================================
