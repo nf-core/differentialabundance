@@ -118,23 +118,18 @@ output {
     tables {
         path { subdir, file -> "tables/${subdir}/${file.name}" }
     }
-
     plots {
         path { subdir, file -> "plots/${subdir}/${file.name}" }
     }
-
     report {
         path { subdir, file -> "report/${subdir}/${file.name}" }
     }
-
     shinyngs_app {
         path { subdir, file -> "shinyngs_app/${subdir}/${file.name}" }
     }
-
     other {
         path { subdir, file -> "other/${subdir}/${file.name}" }
     }
-
     pipeline_info {
         path { subdir, file -> "${subdir}/${file.name}" }
     }
