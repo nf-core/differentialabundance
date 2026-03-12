@@ -52,11 +52,11 @@ workflow NFCORE_DIFFERENTIALABUNDANCE {
     )
 
     emit:
-    tables = DIFFERENTIALABUNDANCE.out.tables
-    plots = DIFFERENTIALABUNDANCE.out.plots
-    report = DIFFERENTIALABUNDANCE.out.report
-    shinyngs_app = DIFFERENTIALABUNDANCE.out.shinyngs_app
-    other = DIFFERENTIALABUNDANCE.out.other
+    tables        = DIFFERENTIALABUNDANCE.out.tables
+    plots         = DIFFERENTIALABUNDANCE.out.plots
+    report        = DIFFERENTIALABUNDANCE.out.report
+    shinyngs_app  = DIFFERENTIALABUNDANCE.out.shinyngs_app
+    other         = DIFFERENTIALABUNDANCE.out.other
     pipeline_info = DIFFERENTIALABUNDANCE.out.pipeline_info
 }
 
@@ -106,11 +106,11 @@ workflow {
     )
 
     publish:
-    tables = NFCORE_DIFFERENTIALABUNDANCE.out.tables
-    plots = NFCORE_DIFFERENTIALABUNDANCE.out.plots
-    report = NFCORE_DIFFERENTIALABUNDANCE.out.report
-    shinyngs_app = NFCORE_DIFFERENTIALABUNDANCE.out.shinyngs_app
-    other = NFCORE_DIFFERENTIALABUNDANCE.out.other
+    tables        = NFCORE_DIFFERENTIALABUNDANCE.out.tables
+    plots         = NFCORE_DIFFERENTIALABUNDANCE.out.plots
+    report        = NFCORE_DIFFERENTIALABUNDANCE.out.report
+    shinyngs_app  = NFCORE_DIFFERENTIALABUNDANCE.out.shinyngs_app
+    other         = NFCORE_DIFFERENTIALABUNDANCE.out.other
     pipeline_info = NFCORE_DIFFERENTIALABUNDANCE.out.pipeline_info
 }
 

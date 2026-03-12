@@ -53,12 +53,12 @@ workflow DIFFERENTIALABUNDANCE {
 
     main:
 
-    ch_versions = channel.empty()
-    ch_tables = Channel.empty()
-    ch_plots = Channel.empty()
-    ch_report = Channel.empty()
+    ch_versions     = channel.empty()
+    ch_tables       = Channel.empty()
+    ch_plots        = Channel.empty()
+    ch_report       = Channel.empty()
     ch_shinyngs_app = Channel.empty()
-    ch_other = Channel.empty()
+    ch_other        = Channel.empty()
 
     def paramsetSubdir = { meta -> meta.paramset_names.join(',') }
 
