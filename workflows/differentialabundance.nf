@@ -263,6 +263,7 @@ workflow DIFFERENTIALABUNDANCE {
 
     ch_tables = ch_tables
         .mix(GEOQUERY_GETGEO.out.expression.map { meta, file -> ["processed_abundance/${paramsetSubdir(meta)}", file] })
+        .mix(GEOQUERY_GETGEO.out.annotation.map { meta, file -> ["annotation/${paramsetSubdir(meta)}", file] })
     ch_other = ch_other
         .mix(GEOQUERY_GETGEO.out.rds.map { meta, file -> ["affy/${paramsetSubdir(meta)}", file] })
     ch_versions = ch_versions
@@ -342,6 +343,9 @@ workflow DIFFERENTIALABUNDANCE {
         [tuple('id':""), []]
     )
     ch_gtf_features = prepareModuleOutput(GTF_TO_TABLE.out.feature_annotation, ch_paramsets)
+
+    ch_tables = ch_tables
+        .mix(GTF_TO_TABLE.out.feature_annotation.map { meta, file -> ["annotation/${paramsetSubdir(meta)}", file] })
     ch_versions = ch_versions.mix(GTF_TO_TABLE.out.versions)
 
     // Extract features from matrix
@@ -415,11 +419,6 @@ workflow DIFFERENTIALABUNDANCE {
     ch_validated_contrast = prepareModuleOutput(VALIDATOR.out.contrasts, ch_paramsets)
     ch_validated_samplemeta = prepareModuleOutput(VALIDATOR.out.sample_meta, ch_paramsets)
     ch_validated_featuremeta = prepareModuleOutput(VALIDATOR.out.feature_meta, ch_paramsets)
-
-    ch_tables = ch_tables
-        .mix(AFFY_JUSTRMA_RAW.out.annotation.map { meta, file -> ["annotation/${paramsetSubdir(meta)}", file] })
-        .mix(GEOQUERY_GETGEO.out.annotation.map { meta, file -> ["annotation/${paramsetSubdir(meta)}", file] })
-        .mix(GTF_TO_TABLE.out.feature_annotation.map { meta, file -> ["annotation/${paramsetSubdir(meta)}", file] })
 
     // For Affy, we've validated multiple input matrices for raw and norm,
     // we'll separate them out again here
@@ -555,6 +554,17 @@ workflow DIFFERENTIALABUNDANCE {
     ch_differential_norm = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.normalised_matrix, ch_paramsets, meta_keys_to_remove=['differential_method']) // meta, norm file
     ch_differential_varstab = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.variance_stabilised_matrix, ch_paramsets, meta_keys_to_remove=['differential_method']) // meta, varstab file
 
+    ch_tables = ch_tables
+        .mix(
+            ABUNDANCE_DIFFERENTIAL_FILTER.out.results_genewise
+            .mix(ABUNDANCE_DIFFERENTIAL_FILTER.out.results_genewise_filtered)
+            .map { meta, file -> ["differential/${paramsetSubdir(meta)}", file] }
+        )
+        .mix(
+            ABUNDANCE_DIFFERENTIAL_FILTER.out.normalised_matrix
+            .mix(ABUNDANCE_DIFFERENTIAL_FILTER.out.variance_stabilised_matrix)
+            .map { meta, file -> ["processed_abundance/${paramsetSubdir(meta)}", file] }
+        )
     ch_plots = ch_plots
         .mix(ABUNDANCE_DIFFERENTIAL_FILTER.out.plots.map { meta, file -> ["qc/${paramsetSubdir(meta)}", file] })
     ch_other = ch_other
@@ -585,13 +595,8 @@ workflow DIFFERENTIALABUNDANCE {
         prepareModuleInput(ch_final_annotation_input, 'differential')
     )
 
-    ch_differential_tables = ABUNDANCE_DIFFERENTIAL_FILTER.out.results_genewise
-        .mix(ABUNDANCE_DIFFERENTIAL_FILTER.out.results_genewise_filtered)
-        .mix(CSVTK_JOIN.out.csv)
     ch_tables = ch_tables
-        .mix(ABUNDANCE_DIFFERENTIAL_FILTER.out.normalised_matrix.map { meta, file -> ["processed_abundance/${paramsetSubdir(meta)}", file] })
-        .mix(ABUNDANCE_DIFFERENTIAL_FILTER.out.variance_stabilised_matrix.map { meta, file -> ["processed_abundance/${paramsetSubdir(meta)}", file] })
-        .mix(ch_differential_tables.map { meta, file -> ["differential/${paramsetSubdir(meta)}", file] })
+        .mix(CSVTK_JOIN.out.csv.map { meta, file -> ["differential/${paramsetSubdir(meta)}", file] })
     ch_versions = ch_versions
         .mix(CSVTK_JOIN.out.versions)
 
@@ -739,13 +744,7 @@ workflow DIFFERENTIALABUNDANCE {
         )
         .mix(
             DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_artifacts
-            .flatMap { meta, artifact ->
-                def files = artifact instanceof Collection ? artifact : [artifact]
-                files.collect { file ->
-                    def gset = file.name.startsWith("${meta.id}.") ? file.name.substring(meta.id.size() + 1).tokenize('.')[0] : 'gene_sets'
-                    ["gsea/${paramsetSubdir(meta)}/${meta.id}/${gset}", file]
-                }
-            }
+            .map{ meta, file -> ["gsea/${paramsetSubdir(meta)}/${meta.id}", file] }
         )
 
     ch_versions = ch_versions
@@ -799,9 +798,8 @@ workflow DIFFERENTIALABUNDANCE {
         .mix(PLOT_EXPLORATORY.out.pca3d_png)
         .mix(PLOT_EXPLORATORY.out.mad_png)
         .mix(PLOT_EXPLORATORY.out.dendro)
-
     ch_plots = ch_plots
-        .mix(ch_plots_exploratory.map { meta, file -> ["exploratory/${paramsetSubdir(meta)}/${meta.id}/png", file] })
+        .mix(ch_plots_exploratory.map { meta, file -> ["exploratory/${paramsetSubdir(meta)}/", file] })
 
     // Plot differential analysis results
 
@@ -822,9 +820,8 @@ workflow DIFFERENTIALABUNDANCE {
     )
 
     ch_plots_differential = PLOT_DIFFERENTIAL.out.volcanos_png
-
     ch_plots = ch_plots
-        .mix(ch_plots_differential.map { meta, file -> ["differential/${paramsetSubdir(meta)}/${meta.id}/png", file] })
+        .mix(ch_plots_differential.map { meta, file -> ["differential/${paramsetSubdir(meta)}/", file] })
 
     // Gather software versions
 
@@ -935,8 +932,8 @@ workflow DIFFERENTIALABUNDANCE {
     )
 
     ch_shinyngs_app = ch_shinyngs_app
-        .mix(SHINYNGS_APP.out.app.map { meta, data_rds, app_r -> ["${meta.paramset_name}/${meta.id}", data_rds] })
-        .mix(SHINYNGS_APP.out.app.map { meta, data_rds, app_r -> ["${meta.paramset_name}/${meta.id}", app_r] })
+        .mix(SHINYNGS_APP.out.app.map { meta, data_rds, app_r -> ["${meta.paramset_name}", data_rds] })
+        .mix(SHINYNGS_APP.out.app.map { meta, data_rds, app_r -> ["${meta.paramset_name}", app_r] })
 
     ch_versions = ch_versions.mix(SHINYNGS_APP.out.versions)
 
