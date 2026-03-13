@@ -116,33 +116,82 @@ workflow {
 
 output {
     tables {
-        path { subdir, file ->
-                file >> "tables/${subdir}/"
+        path { name, meta, file ->
+            def folder = [
+                affy_raw_expression    : 'processed_abundance',
+                affy_norm_expression   : 'processed_abundance',
+                affy_annotation        : 'annotation',
+                proteus_raw            : 'proteus',
+                proteus_norm           : 'proteus',
+                geo_expression         : 'processed_abundance',
+                geo_annotation         : 'annotation',
+                gtf_annotation         : 'annotation',
+                immunedeconv           : 'immunedeconv',
+                differential_results          : 'differential',
+                differential_results_filtered : 'differential',
+                normalised_matrix             : 'processed_abundance',
+                variance_stabilised_matrix    : 'processed_abundance',
+                differential_annotated        : 'differential',
+                gprofiler2_all_enrichment     : 'gprofiler2',
+                gprofiler2_sub_enrichment     : 'gprofiler2',
+                decoupler_estimate            : 'decoupler',
+                decoupler_pvals               : 'decoupler',
+            ][name] ?: name
+            file >> "${meta.paramset_name}/tables/${folder}/"
         }
     }
     plots {
-        path { subdir, file ->
-            file >> "plots/${subdir}/"
-        }
-    }
-    report {
-        path { subdir, file ->
-            file >> "report/${subdir}/"
+        path { name, meta, file ->
+            def folder = [
+                proteus_dendrogram              : 'proteus',
+                proteus_mean_variance           : 'proteus',
+                proteus_raw_distributions       : 'proteus',
+                proteus_normalized_distributions: 'proteus',
+                immunedeconv                    : 'immunedeconv',
+                differential_qc                 : 'qc',
+                gprofiler2_plot                 : 'gprofiler2',
+                gprofiler2_sub_plot             : 'gprofiler2',
+                decoupler                       : 'decoupler',
+                exploratory                     : 'exploratory',
+                differential_volcanos           : 'differential',
+            ][name] ?: name
+            file >> "${meta.paramset_name}/plots/${folder}/"
         }
     }
     shinyngs_app {
-        path { subdir, file ->
-            file >> "shinyngs_app/${subdir}/"
+        path { name, meta, file ->
+            file >> "${meta.paramset_name}/shinyngs_app/"
         }
     }
     other {
-        path { subdir, file ->
-            file >> "other/${subdir}/"
+        path { name, meta, file ->
+            def folder = [
+                affy_raw_rds          : 'affy',
+                proteus_raw_rdata     : 'proteus',
+                proteus_norm_rdata    : 'proteus',
+                proteus_session_info  : 'proteus',
+                differential_other    : 'differential',
+                gprofiler2_other      : 'gprofiler2',
+                geo_rds               : 'geo',
+            ][name] ?: name
+            file >> "${meta.paramset_name}/other/${folder}/"
+        }
+    }
+    report {
+        path { name, meta, file ->
+            def folder = [
+                gprofiler2    : 'gprofiler2',
+                gsea          : 'gsea',
+                report_html   : '',
+                report_bundle : '',
+            ][name] ?: name
+            def subpath = folder ? "${meta.paramset_name}/report/${folder}/" : "${meta.paramset_name}/report/"
+            file >> subpath
         }
     }
     pipeline_info {
-        path { subdir, file ->
-            file >> "${subdir}/"
+        path { name, meta, file ->
+            file >> "pipeline_info/"
         }
     }
 }
