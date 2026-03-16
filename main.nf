@@ -129,9 +129,9 @@ output {
                 // PROTEUS
                 proteus_raw                     : 'tables/proteus',
                 proteus_norm                    : 'tables/proteus',
-                proteus_plots                   : 'plots/proteus',
-                proteus_raw_rdata               : 'other/proteus',
-                proteus_norm_rdata              : 'other/proteus',
+                proteus_plots                   : "plots/proteus/${meta.contrast}",
+                proteus_raw_rdata               : "other/proteus/${meta.contrast}",
+                proteus_norm_rdata              : "other/proteus/${meta.contrast}",
                 proteus_session_info            : 'other/proteus',
 
                 // GEO SOFT

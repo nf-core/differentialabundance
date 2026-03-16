@@ -222,23 +222,24 @@ workflow DIFFERENTIALABUNDANCE {
 
     // Note that the tables are the same across contrasts, only one table will be necessary
     // that is why here we take the first one and remove the contrast variable from meta
-    // TODO remove first()
     ch_proteus_raw = prepareModuleOutput(PROTEUS.out.raw_tab, ch_paramsets, meta_keys_to_remove=['contrast'])
-        .first()
+        .groupTuple()
+        .map { meta, files -> [ meta, files[0] ] }
     ch_proteus_norm = prepareModuleOutput(PROTEUS.out.norm_tab, ch_paramsets, meta_keys_to_remove=['contrast'])
-        .first()
+        .groupTuple()
+        .map { meta, files -> [ meta, files[0] ] }
 
-    ch_proteus_plot = prepareModuleOutput(
+    ch_proteus_plots = prepareModuleOutput(
         PROTEUS.out.dendro_plot
             .mix(PROTEUS.out.mean_var_plot)
             .mix(PROTEUS.out.raw_dist_plot)
             .mix(PROTEUS.out.norm_dist_plot)
-        , ch_paramsets, meta_keys_to_remove=['contrast']
+        , ch_paramsets // here we keep contrast, as the plots are different across contrasts, and we can use it for output folder naming later
     )
     ch_preprocessing = ch_preprocessing
         .mix(ch_proteus_raw.map { meta, file -> ['proteus_raw', meta, file] })
         .mix(ch_proteus_norm.map { meta, file -> ['proteus_norm', meta, file] })
-        .mix(ch_proteus_plot.map { meta, file -> ['proteus_plots', meta, file] })
+        .mix(ch_proteus_plots.map { meta, file -> ['proteus_plots', meta, file] })
         .mix(prepareModuleOutput(PROTEUS.out.raw_rdata, ch_paramsets).map { meta, file -> ['proteus_raw_rdata', meta, file] })
         .mix(prepareModuleOutput(PROTEUS.out.norm_rdata, ch_paramsets).map { meta, file -> ['proteus_norm_rdata', meta, file] })
         .mix(prepareModuleOutput(PROTEUS.out.session_info, ch_paramsets).map { meta, file -> ['proteus_session_info', meta, file] })
