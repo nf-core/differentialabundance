@@ -158,6 +158,11 @@ workflow DIFFERENTIAL_FUNCTIONAL_ENRICHMENT {
     gprofiler2_all_enrich = GPROFILER2_GOST.out.all_enrich
     gprofiler2_sub_enrich = GPROFILER2_GOST.out.sub_enrich
     gprofiler2_plot_html  = GPROFILER2_GOST.out.plot_html
+    gprofiler2_plot_png = GPROFILER2_GOST.out.plot_png
+    gprofiler2_sub_plot = GPROFILER2_GOST.out.sub_plot
+    gprofiler2_other = GPROFILER2_GOST.out.rds
+        .mix(GPROFILER2_GOST.out.filtered_gmt)
+        .mix(GPROFILER2_GOST.out.session_info)
 
     // gsea-specific outputs
     gsea_report           = GSEA_GSEA.out.report_tsvs_ref.join(GSEA_GSEA.out.report_tsvs_target)
@@ -187,12 +192,6 @@ workflow DIFFERENTIAL_FUNCTIONAL_ENRICHMENT {
     decoupler_dc_estimate = DECOUPLER_DECOUPLER.out.dc_estimate
     decoupler_dc_pvals = DECOUPLER_DECOUPLER.out.dc_pvals
     decoupler_png = DECOUPLER_DECOUPLER.out.png
-    gprofiler2_plot_png = GPROFILER2_GOST.out.plot_png
-    gprofiler2_sub_plot = GPROFILER2_GOST.out.sub_plot
-    gprofiler2_other = GPROFILER2_GOST.out.rds
-        .mix(GPROFILER2_GOST.out.filtered_gmt)
-        .mix(GPROFILER2_GOST.out.session_info)
-
 
     // grea-specific outputs
     grea_results          = PROPR_GREA.out.results
