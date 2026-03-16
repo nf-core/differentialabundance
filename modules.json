@@ -75,11 +75,6 @@
                         "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
                         "installed_by": ["modules"]
                     },
-                    "immunedeconv": {
-                        "branch": "master",
-                        "git_sha": "e753770db613ce014b3c4bc94f6cba443427b726",
-                        "installed_by": ["modules"]
-                    },
                     "limma/differential": {
                         "branch": "master",
                         "git_sha": "c18b11e98ac602d61d841120f97eb0c396a4834a",

@@ -36,9 +36,8 @@ On release, automated continuous integration tests run the pipeline on a full-si
 3. Run differential analysis over all contrasts specified.
 4. Optionally run a differential gene set analysis.
 5. Generate exploratory and differential analysis plots for interpretation.
-6. Run immunedeconv to estimate immune cell fractions using established deconvolution methods.
-7. Optionally build and (if specified) deploy a Shiny app for fully interactive mining of results.
-8. Build an HTML report based on Quarto markdown, with interactive plots (where possible) and tables.
+6. Optionally build and (if specified) deploy a Shiny app for fully interactive mining of results.
+7. Build an HTML report based on Quarto markdown, with interactive plots (where possible) and tables.
 
 > [!NOTE]
 > The pipeline supports two modes: **single-run mode** using analysis profiles (e.g. `-profile rnaseq,docker`) for production use, and **multi-run mode** using a custom paramsheet (`--paramsheet`) for comparing multiple configurations in parallel. See the [usage documentation](https://nf-co.re/differentialabundance/usage) for more information.
