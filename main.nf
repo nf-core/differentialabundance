@@ -57,7 +57,7 @@ workflow NFCORE_DIFFERENTIALABUNDANCE {
     report        = DIFFERENTIALABUNDANCE.out.report
     shinyngs_app  = DIFFERENTIALABUNDANCE.out.shinyngs_app
     other         = DIFFERENTIALABUNDANCE.out.other
-    pipeline_info = DIFFERENTIALABUNDANCE.out.pipeline_info
+    versions      = DIFFERENTIALABUNDANCE.out.versions
 }
 
 /*
@@ -111,9 +111,11 @@ workflow {
     report        = NFCORE_DIFFERENTIALABUNDANCE.out.report
     shinyngs_app  = NFCORE_DIFFERENTIALABUNDANCE.out.shinyngs_app
     other         = NFCORE_DIFFERENTIALABUNDANCE.out.other
-    pipeline_info = NFCORE_DIFFERENTIALABUNDANCE.out.pipeline_info
+    versions      = NFCORE_DIFFERENTIALABUNDANCE.out.versions
 }
 
+// TODO organize output folders to meta.paramset_name/tables/folder instead later on,
+// but for now we do this so that snapshots are comparable.
 output {
     tables {
         path { name, meta, file ->
@@ -137,7 +139,7 @@ output {
                 decoupler_estimate            : 'decoupler',
                 decoupler_pvals               : 'decoupler',
             ][name] ?: name
-            file >> "${meta.paramset_name}/tables/${folder}/"
+            file >> "tables/${folder}/${meta.paramset_name}/"
         }
     }
     plots {
@@ -155,12 +157,12 @@ output {
                 exploratory                     : 'exploratory',
                 differential_volcanos           : 'differential',
             ][name] ?: name
-            file >> "${meta.paramset_name}/plots/${folder}/"
+            file >> "plots/${folder}/${meta.paramset_name}/"
         }
     }
     shinyngs_app {
         path { name, meta, file ->
-            file >> "${meta.paramset_name}/shinyngs_app/"
+            file >> "shinyngs_app/${meta.paramset_name}/"
         }
     }
     other {
@@ -170,11 +172,11 @@ output {
                 proteus_raw_rdata     : 'proteus',
                 proteus_norm_rdata    : 'proteus',
                 proteus_session_info  : 'proteus',
-                differential_other    : 'differential',
+                differential_other    : meta.method_differential,
                 gprofiler2_other      : 'gprofiler2',
                 geo_rds               : 'geo',
             ][name] ?: name
-            file >> "${meta.paramset_name}/other/${folder}/"
+            file >> "other/${folder}/${meta.paramset_name}/"
         }
     }
     report {
@@ -185,11 +187,11 @@ output {
                 report_html   : '',
                 report_bundle : '',
             ][name] ?: name
-            def subpath = folder ? "${meta.paramset_name}/report/${folder}/" : "${meta.paramset_name}/report/"
+            def subpath = folder ? "report/${folder}/${meta.paramset_name}/" : "report/${meta.paramset_name}/"
             file >> subpath
         }
     }
-    pipeline_info {
+    versions {
         path { name, meta, file ->
             file >> "pipeline_info/"
         }

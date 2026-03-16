@@ -499,6 +499,7 @@ workflow DIFFERENTIALABUNDANCE {
     ch_filtered_matrix = prepareModuleOutput(CUSTOM_MATRIXFILTER.out.filtered, ch_paramsets)
     ch_filter_tests = prepareModuleOutput(CUSTOM_MATRIXFILTER.out.tests, ch_paramsets)
     ch_filter_thresholds = prepareModuleOutput(CUSTOM_MATRIXFILTER.out.thresholds, ch_paramsets)
+
     // ========================================================================
     // Differential analysis
     // ========================================================================
@@ -560,6 +561,7 @@ workflow DIFFERENTIALABUNDANCE {
     // ========================================================================
     // Annotate differential results with feature metadata using csvtk_join
     // ========================================================================
+
     // Prepare input for annotation - combine differential results with feature metadata
     ch_annotation_input = ch_differential_results
         .filter { tuple ->
@@ -1028,17 +1030,16 @@ workflow DIFFERENTIALABUNDANCE {
         .mix(QUARTONOTEBOOK.out.html.map { meta, file -> ['report_html', meta, file] })
         .mix(MAKE_REPORT_BUNDLE.out.zipped_archive.map { meta, file -> ['report_bundle', meta, file] })
 
-    ch_pipeline_info = ch_nfcore_versions
-        .map { file -> ['versions', [:], file] }
-        .mix(ch_collated_versions.map { file -> ['collated_versions', [:], file] })
-
     emit:
     tables        = ch_tables
     plots         = ch_plots
     report        = ch_report
     shinyngs_app  = ch_shinyngs_app
     other         = ch_other
-    pipeline_info = ch_pipeline_info
+    versions      = ch_nfcore_versions
+        .map { file -> ['versions', [:], file] }
+        .mix(ch_collated_versions.map { file -> ['collated_versions', [:], file] })
+
 }
 
 /*
