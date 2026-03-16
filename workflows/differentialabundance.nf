@@ -30,7 +30,6 @@ include { AFFY_JUSTRMA as AFFY_JUSTRMA_NORM                 } from '../modules/n
 include { PROTEUS_READPROTEINGROUPS as PROTEUS              } from '../modules/nf-core/proteus/readproteingroups/main'
 include { GEOQUERY_GETGEO                                   } from '../modules/nf-core/geoquery/getgeo/main'
 include { ZIP as MAKE_REPORT_BUNDLE                         } from '../modules/nf-core/zip/main'
-include { IMMUNEDECONV                                      } from '../modules/nf-core/immunedeconv/main'
 include { CSVTK_JOIN                                        } from '../modules/nf-core/csvtk/join/main'
 include { softwareVersionsToYAML                            } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 
@@ -419,27 +418,6 @@ workflow DIFFERENTIALABUNDANCE {
             return [meta, contrast, contrast.variable, contrast.reference, contrast.target, contrast.formula, contrast.make_contrasts_str]
         }
         .groupTuple() // [meta, [contrast], [variable], [reference], [target], [formula], [comparison]]
-
-    // =======================================================================
-    // Single cell deconvolution
-    // =======================================================================
-
-    ch_immunedeconv_input = ch_in_raw
-        .filter{meta, raw -> meta.params.immunedeconv_run}
-
-    ch_immunedeconv_input = prepareModuleInput(ch_immunedeconv_input, 'preprocessing')
-        .multiMap{meta, raw ->
-            input: [meta, raw, meta.params.immunedeconv_method, meta.params.immunedeconv_function]
-            name_col: meta.params.features_name_col
-        }
-
-    IMMUNEDECONV(
-        ch_immunedeconv_input.input,
-        ch_immunedeconv_input.name_col
-    )
-
-    ch_versions = ch_versions
-        .mix(IMMUNEDECONV.out.versions)
 
     // ========================================================================
     // Filter matrix
