@@ -38,8 +38,6 @@ Stand-alone graphical outputs are placed in this directory. They may be useful i
     - `[coloring variable]/png/mad_correlation.png`: Outlier prediction plots using median absolute deviation (MAD)
   - `differential/`: Directory containing standalone plots from differential analysis. Plots are stored in directories named for the associated contrast.
     - `[contrast]/png/volcano.png`: Volcano plots of -log(10) p value agains log(2) fold changes
-  - `immunedeconv/`: Directory containing graphical outputs of immunedeconv results
-    - `${prefix}.plot1_stacked_bar_chart.png`
   - `gprofiler2/`: Directory containing graphical outputs from gprofiler2 (where enabled). Plots are stored in directories named for the associated contrast.
     - `[contrast]/[contrast].gprofiler2.[source].gostplot.html`: An interactive gprofiler2 Manhattan plot of enriched pathways from one specific source/database, e.g. REAC
     - `[contrast]/[contrast].gprofiler2.[source].gostplot.png`: A static gprofiler2 Manhattan plot of enriched pathways from one specific source/database, e.g. REAC
@@ -74,8 +72,6 @@ Most plots are included in the HTML report (see above), but are also included in
     - `[contrast_name].[deseq2|dream|limma].results.tsv`: Results of DESeq2 differential analyis (RNA-seq), DREAM differential analysis (RNA-seq for mixed linear models) OR Limma differential analysis (Affymetrix arrays, GEO studies, Maxquant proteomics studies)
     - `[contrast_name].[deseq2|limma].results_filtered.tsv`: Results of DESeq2 differential analyis (RNA-seq) OR Limma differential analysis (Affymetrix arrays, GEO studies, Maxquant proteomics studies); filtered for differentially abundant entries
     - `[contrast_name]_[deseq2|dream|limma].annotated.tsv`: Results of annotated DESeq2 differential analyis (RNA-seq), DREAM differential analysis (RNA-seq for mixed linear models) OR Limma differential analysis (Affymetrix arrays, GEO studies)
-  - `immunedeconv/`: Directory containing table of immunedeconv results
-    - `${prefix}.deconvolution_results.tsv`: TSV output that contains estimated proportions of immune cell types for each sample
   - `gsea/`: Directory containing tables of differential gene set analyis from GSEA (where enabled)
     - `[contrast]/[contrast].gsea_report_for_[condition].tsv`: A GSEA report table for each side of each contrast
   - `gprofiler2/`: Directory containing tables of differential gene set analyis from gprofiler2 (where enabled)
