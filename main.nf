@@ -125,6 +125,7 @@ output {
                 affy_norm_expression            : 'tables/processed_abundance',
                 affy_annotation                 : 'tables/annotation',
                 affy_raw_rds                    : 'other/affy',
+                affy_cel_files                  : 'untar',
 
                 // PROTEUS
                 proteus_raw                     : 'tables/proteus',
