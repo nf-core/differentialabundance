@@ -96,7 +96,18 @@
                 "tables/processed_abundance",
                 "tables/processed_abundance/affy_limma_gprofiler2",
                 "tables/processed_abundance/affy_limma_gprofiler2/normalised._matrix.tsv",
-                "tables/processed_abundance/affy_limma_gprofiler2/raw._matrix.tsv"
+                "tables/processed_abundance/affy_limma_gprofiler2/raw._matrix.tsv",
+                "untar",
+                "untar/affy_limma_gprofiler2",
+                "untar/affy_limma_gprofiler2/GSE50790",
+                "untar/affy_limma_gprofiler2/GSE50790/GSM1229341_Gudjohnsson_001_6690_PP.CEL.gz",
+                "untar/affy_limma_gprofiler2/GSE50790/GSM1229342_Gudjohnsson_002_6690_PN.CEL.gz",
+                "untar/affy_limma_gprofiler2/GSE50790/GSM1229343_Gudjohnsson_003_7450_PN.CEL.gz",
+                "untar/affy_limma_gprofiler2/GSE50790/GSM1229344_Gudjohnsson_004_7450_PP.CEL.gz",
+                "untar/affy_limma_gprofiler2/GSE50790/GSM1229345_Gudjohnsson_005_7912_PP.CEL.gz",
+                "untar/affy_limma_gprofiler2/GSE50790/GSM1229346_Gudjohnsson_006_7912_PN.CEL.gz",
+                "untar/affy_limma_gprofiler2/GSE50790/GSM1229347_Gudjohnsson_007_8470_PP.CEL.gz",
+                "untar/affy_limma_gprofiler2/GSE50790/GSM1229348_Gudjohnsson_008_8470_PN.CEL.gz"
             ],
             [
                 "raw._eset.rds:md5,8c6c7807ce6c5d8204bd681b941eeb0f",
@@ -106,14 +117,22 @@
                 "hgu133plus2.annotation.tsv:md5,f2b82ef12b2a2e8e575de06766583d96",
                 "phenotype_uninvolved_lesional_GSE50790.gprofiler2.all_enriched_pathways.tsv:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "normalised._matrix.tsv:md5,68d849e627d86095cfb48eba81c09853",
-                "raw._matrix.tsv:md5,ea5cccce75c3a9a5d2aab3e3a19910ad"
+                "raw._matrix.tsv:md5,ea5cccce75c3a9a5d2aab3e3a19910ad",
+                "GSM1229341_Gudjohnsson_001_6690_PP.CEL.gz:md5,259d0908211a071351450f366fd51cad",
+                "GSM1229342_Gudjohnsson_002_6690_PN.CEL.gz:md5,31cc2b8b26e210760b8ebd4b304b52ba",
+                "GSM1229343_Gudjohnsson_003_7450_PN.CEL.gz:md5,713a3ca75a883cbff6da0be7bd251422",
+                "GSM1229344_Gudjohnsson_004_7450_PP.CEL.gz:md5,6f9b8815282bd0fd51c575145acf08cb",
+                "GSM1229345_Gudjohnsson_005_7912_PP.CEL.gz:md5,69c709ce4ede2b85c931a903b3805d60",
+                "GSM1229346_Gudjohnsson_006_7912_PN.CEL.gz:md5,e05ae9fab96c299416878c4cbbd74327",
+                "GSM1229347_Gudjohnsson_007_8470_PP.CEL.gz:md5,951ce488dd3baf0141e6eabc233bd8c7",
+                "GSM1229348_Gudjohnsson_008_8470_PN.CEL.gz:md5,ec5129e035badf3b670178d53e24f0cc"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-03-16T17:27:35.253511509"
+        "timestamp": "2026-03-16T18:48:18.752399304"
     },
     "Test affy profile - affy_limma_gsea": {
         "content": [
@@ -407,7 +426,18 @@
                 "tables/processed_abundance",
                 "tables/processed_abundance/affy_limma_gsea",
                 "tables/processed_abundance/affy_limma_gsea/normalised._matrix.tsv",
-                "tables/processed_abundance/affy_limma_gsea/raw._matrix.tsv"
+                "tables/processed_abundance/affy_limma_gsea/raw._matrix.tsv",
+                "untar",
+                "untar/affy_limma_gsea",
+                "untar/affy_limma_gsea/GSE50790",
+                "untar/affy_limma_gsea/GSE50790/GSM1229341_Gudjohnsson_001_6690_PP.CEL.gz",
+                "untar/affy_limma_gsea/GSE50790/GSM1229342_Gudjohnsson_002_6690_PN.CEL.gz",
+                "untar/affy_limma_gsea/GSE50790/GSM1229343_Gudjohnsson_003_7450_PN.CEL.gz",
+                "untar/affy_limma_gsea/GSE50790/GSM1229344_Gudjohnsson_004_7450_PP.CEL.gz",
+                "untar/affy_limma_gsea/GSE50790/GSM1229345_Gudjohnsson_005_7912_PP.CEL.gz",
+                "untar/affy_limma_gsea/GSE50790/GSM1229346_Gudjohnsson_006_7912_PN.CEL.gz",
+                "untar/affy_limma_gsea/GSE50790/GSM1229347_Gudjohnsson_007_8470_PP.CEL.gz",
+                "untar/affy_limma_gsea/GSE50790/GSM1229348_Gudjohnsson_008_8470_PN.CEL.gz"
             ],
             [
                 "raw._eset.rds:md5,8c6c7807ce6c5d8204bd681b941eeb0f",
@@ -455,13 +485,21 @@
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "hgu133plus2.annotation.tsv:md5,f2b82ef12b2a2e8e575de06766583d96",
                 "normalised._matrix.tsv:md5,68d849e627d86095cfb48eba81c09853",
-                "raw._matrix.tsv:md5,ea5cccce75c3a9a5d2aab3e3a19910ad"
+                "raw._matrix.tsv:md5,ea5cccce75c3a9a5d2aab3e3a19910ad",
+                "GSM1229341_Gudjohnsson_001_6690_PP.CEL.gz:md5,259d0908211a071351450f366fd51cad",
+                "GSM1229342_Gudjohnsson_002_6690_PN.CEL.gz:md5,31cc2b8b26e210760b8ebd4b304b52ba",
+                "GSM1229343_Gudjohnsson_003_7450_PN.CEL.gz:md5,713a3ca75a883cbff6da0be7bd251422",
+                "GSM1229344_Gudjohnsson_004_7450_PP.CEL.gz:md5,6f9b8815282bd0fd51c575145acf08cb",
+                "GSM1229345_Gudjohnsson_005_7912_PP.CEL.gz:md5,69c709ce4ede2b85c931a903b3805d60",
+                "GSM1229346_Gudjohnsson_006_7912_PN.CEL.gz:md5,e05ae9fab96c299416878c4cbbd74327",
+                "GSM1229347_Gudjohnsson_007_8470_PP.CEL.gz:md5,951ce488dd3baf0141e6eabc233bd8c7",
+                "GSM1229348_Gudjohnsson_008_8470_PN.CEL.gz:md5,ec5129e035badf3b670178d53e24f0cc"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-03-16T17:19:13.890971561"
+        "timestamp": "2026-03-16T18:40:24.448697419"
     }
 }

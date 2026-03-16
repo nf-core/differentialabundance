@@ -178,6 +178,9 @@ workflow DIFFERENTIALABUNDANCE {
     UNTAR ( prepareModuleInput(ch_celfiles, 'preprocessing') )
     ch_untar_out = prepareModuleOutput(UNTAR.out.untar, ch_paramsets)
 
+    ch_preprocessing = ch_preprocessing
+        .mix(ch_untar_out.map { it -> ['affy_cel_files', it[0], it[1..-1]] })
+
     // Run affy
 
     ch_affy_input = prepareModuleInput(ch_input.affy_array.join(ch_untar_out), 'preprocessing')
