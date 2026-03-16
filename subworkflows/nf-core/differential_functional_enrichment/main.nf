@@ -155,9 +155,9 @@ workflow DIFFERENTIAL_FUNCTIONAL_ENRICHMENT {
     // nf-core/differentialabundance pipeline
 
     // gprofiler2-specific outputs
+    gprofiler2_plot_html  = GPROFILER2_GOST.out.plot_html
     gprofiler2_all_enrich = GPROFILER2_GOST.out.all_enrich
     gprofiler2_sub_enrich = GPROFILER2_GOST.out.sub_enrich
-    gprofiler2_plot_html  = GPROFILER2_GOST.out.plot_html
     gprofiler2_plot_png = GPROFILER2_GOST.out.plot_png
     gprofiler2_sub_plot = GPROFILER2_GOST.out.sub_plot
     gprofiler2_other = GPROFILER2_GOST.out.rds

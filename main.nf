@@ -52,11 +52,12 @@ workflow NFCORE_DIFFERENTIALABUNDANCE {
     )
 
     emit:
-    tables        = DIFFERENTIALABUNDANCE.out.tables
-    plots         = DIFFERENTIALABUNDANCE.out.plots
+    preprocessing = DIFFERENTIALABUNDANCE.out.preprocessing
+    differential  = DIFFERENTIALABUNDANCE.out.differential
+    functional    = DIFFERENTIALABUNDANCE.out.functional
+    plotting      = DIFFERENTIALABUNDANCE.out.plotting
+    shinyngs      = DIFFERENTIALABUNDANCE.out.shinyngs
     report        = DIFFERENTIALABUNDANCE.out.report
-    shinyngs_app  = DIFFERENTIALABUNDANCE.out.shinyngs_app
-    other         = DIFFERENTIALABUNDANCE.out.other
     versions      = DIFFERENTIALABUNDANCE.out.versions
 }
 
@@ -106,84 +107,104 @@ workflow {
     )
 
     publish:
-    tables        = NFCORE_DIFFERENTIALABUNDANCE.out.tables
-    plots         = NFCORE_DIFFERENTIALABUNDANCE.out.plots
+    preprocessing = NFCORE_DIFFERENTIALABUNDANCE.out.preprocessing
+    differential  = NFCORE_DIFFERENTIALABUNDANCE.out.differential
+    functional    = NFCORE_DIFFERENTIALABUNDANCE.out.functional
+    plotting      = NFCORE_DIFFERENTIALABUNDANCE.out.plotting
+    shinyngs      = NFCORE_DIFFERENTIALABUNDANCE.out.shinyngs
     report        = NFCORE_DIFFERENTIALABUNDANCE.out.report
-    shinyngs_app  = NFCORE_DIFFERENTIALABUNDANCE.out.shinyngs_app
-    other         = NFCORE_DIFFERENTIALABUNDANCE.out.other
     versions      = NFCORE_DIFFERENTIALABUNDANCE.out.versions
 }
 
-// TODO organize output folders to meta.paramset_name/tables/folder instead later on,
-// but for now we do this so that snapshots are comparable.
 output {
-    tables {
+    preprocessing {
         path { name, meta, file ->
             def folder = [
-                affy_raw_expression    : 'processed_abundance',
-                affy_norm_expression   : 'processed_abundance',
-                affy_annotation        : 'annotation',
-                proteus_raw            : 'proteus',
-                proteus_norm           : 'proteus',
-                geo_expression         : 'processed_abundance',
-                geo_annotation         : 'annotation',
-                gtf_annotation         : 'annotation',
-                immunedeconv           : 'immunedeconv',
-                differential_results          : 'differential',
-                differential_results_filtered : 'differential',
-                normalised_matrix             : 'processed_abundance',
-                variance_stabilised_matrix    : 'processed_abundance',
-                differential_annotated        : 'differential',
-                gprofiler2_all_enrichment     : 'gprofiler2',
-                gprofiler2_sub_enrichment     : 'gprofiler2',
-                decoupler_estimate            : 'decoupler',
-                decoupler_pvals               : 'decoupler',
+                // AFFY
+                affy_raw_expression             : 'tables/processed_abundance',
+                affy_norm_expression            : 'tables/processed_abundance',
+                affy_annotation                 : 'tables/annotation',
+                affy_raw_rds                    : 'other/affy',
+
+                // PROTEUS
+                proteus_raw                     : 'tables/proteus',
+                proteus_norm                    : 'tables/proteus',
+                proteus_plots                   : 'plots/proteus',
+                proteus_raw_rdata               : 'other/proteus',
+                proteus_norm_rdata              : 'other/proteus',
+                proteus_session_info            : 'other/proteus',
+
+                // GEO SOFT
+                geo_expression                  : 'tables/processed_abundance',
+                geo_annotation                  : 'tables/annotation',
+                geo_rds                         : 'other/geo',
+
+                // GTF
+                gtf_annotation                  : 'tables/annotation',
+
+                // IMMMUNEDECONV
+                immunedeconv_table              : 'tables/immunedeconv',
+                immunedeconv_plot               : 'plots/immunedeconv',
+
             ][name] ?: name
-            file >> "tables/${folder}/${meta.paramset_name}/"
+            file >> "preprocessing/${folder}/${meta.paramset_name}/"
         }
     }
-    plots {
+    differential {
         path { name, meta, file ->
             def folder = [
-                proteus_dendrogram              : 'proteus',
-                proteus_mean_variance           : 'proteus',
-                proteus_raw_distributions       : 'proteus',
-                proteus_normalized_distributions: 'proteus',
-                immunedeconv                    : 'immunedeconv',
-                differential_qc                 : 'qc',
-                gprofiler2_plot                 : 'gprofiler2',
-                gprofiler2_sub_plot             : 'gprofiler2',
-                decoupler                       : 'decoupler',
-                exploratory                     : 'exploratory',
-                differential_volcanos           : 'differential',
+                differential_results          : 'tables/differential',
+                differential_results_filtered : 'tables/differential',
+                normalised_matrix             : 'tables/processed_abundance',
+                variance_stabilised_matrix    : 'tables/processed_abundance',
+                differential_annotated        : 'tables/differential',
+                differential_qc               : 'plots/qc',
+                differential_other            : "other/${meta.method_differential}",
             ][name] ?: name
-            file >> "plots/${folder}/${meta.paramset_name}/"
+            file >> "differential/${folder}/${meta.paramset_name}/"
         }
     }
-    shinyngs_app {
-        path { name, meta, file ->
-            file >> "shinyngs_app/${meta.paramset_name}/"
-        }
-    }
-    other {
+    functional {
         path { name, meta, file ->
             def folder = [
-                affy_raw_rds          : 'affy',
-                proteus_raw_rdata     : 'proteus',
-                proteus_norm_rdata    : 'proteus',
-                proteus_session_info  : 'proteus',
-                differential_other    : meta.method_differential,
-                gprofiler2_other      : 'gprofiler2',
-                geo_rds               : 'geo',
+                // GSEA
+                gsea_report               : 'report/gsea',
+                gsea_artifacts            : 'report/gsea',
+
+                // GPROFILER2
+                gprofiler2_html           : 'report/gprofiler2',
+                gprofiler2_all_enrichment : 'tables/gprofiler2',
+                gprofiler2_sub_enrichment : 'tables/gprofiler2',
+                gprofiler2_plot           : 'plots/gprofiler2',
+                gprofiler2_sub_plot       : 'plots/gprofiler2',
+                gprofiler2_other          : 'other/gprofiler2',
+
+                // DECOUPLER
+                decoupler_estimate        : 'tables/decoupler',
+                decoupler_pvals           : 'tables/decoupler',
+                decoupler_png             : 'plots/decoupler',
+
             ][name] ?: name
-            file >> "other/${folder}/${meta.paramset_name}/"
+            file >> "functional/${folder}/${meta.paramset_name}/"
+        }
+    }
+    plotting {
+        path { name, meta, file ->
+            def folder = [
+                exploratory           : 'exploratory',
+                differential_volcanos : 'differential',
+            ][name] ?: name
+            file >> "plotting/${folder}/${meta.paramset_name}/"
+        }
+    }
+    shinyngs {
+        path { name, meta, file ->
+            file >> "shinyngs/${meta.paramset_name}/"
         }
     }
     report {
         path { name, meta, file ->
             def folder = [
-                gprofiler2    : 'gprofiler2',
-                gsea          : 'gsea',
                 report_html   : '',
                 report_bundle : '',
             ][name] ?: name
