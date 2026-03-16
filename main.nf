@@ -137,7 +137,7 @@ output {
                 // GEO SOFT
                 geo_expression                  : 'tables/processed_abundance',
                 geo_annotation                  : 'tables/annotation',
-                geo_rds                         : 'other/geo',
+                geo_rds                         : 'other/affy',
 
                 // GTF
                 gtf_annotation                  : 'tables/annotation',
@@ -147,7 +147,7 @@ output {
                 immunedeconv_plot               : 'plots/immunedeconv',
 
             ][name] ?: name
-            file >> "preprocessing/${folder}/${meta.paramset_name}/"
+            file >> "${folder}/${meta.paramset_name}/"
         }
     }
     differential {
@@ -159,9 +159,9 @@ output {
                 variance_stabilised_matrix    : 'tables/processed_abundance',
                 differential_annotated        : 'tables/differential',
                 differential_qc               : 'plots/qc',
-                differential_other            : "other/${meta.method_differential}",
+                differential_other            : "other/${meta.params.differential_method}",
             ][name] ?: name
-            file >> "differential/${folder}/${meta.paramset_name}/"
+            file >> "${folder}/${meta.paramset_name}/"
         }
     }
     functional {
@@ -185,31 +185,26 @@ output {
                 decoupler_png             : 'plots/decoupler',
 
             ][name] ?: name
-            file >> "functional/${folder}/${meta.paramset_name}/"
+            file >> "${folder}/${meta.paramset_name}/"
         }
     }
     plotting {
         path { name, meta, file ->
             def folder = [
-                exploratory           : 'exploratory',
-                differential_volcanos : 'differential',
+                exploratory           : 'plots/exploratory',
+                differential_volcanos : 'plots/differential',
             ][name] ?: name
-            file >> "plotting/${folder}/${meta.paramset_name}/"
+            file >> "${folder}/${meta.paramset_name}/"
         }
     }
     shinyngs {
         path { name, meta, file ->
-            file >> "shinyngs/${meta.paramset_name}/"
+            file >> "shinyngs_app/${meta.paramset_name}/"
         }
     }
     report {
         path { name, meta, file ->
-            def folder = [
-                report_html   : '',
-                report_bundle : '',
-            ][name] ?: name
-            def subpath = folder ? "report/${folder}/${meta.paramset_name}/" : "report/${meta.paramset_name}/"
-            file >> subpath
+            file >> "report/${meta.paramset_name}/"
         }
     }
     versions {

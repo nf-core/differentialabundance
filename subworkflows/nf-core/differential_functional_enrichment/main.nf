@@ -33,7 +33,7 @@ workflow DIFFERENTIAL_FUNCTIONAL_ENRICHMENT {
 
     main:
 
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     // Add method information into meta map of ch_input
     // This information is used later to determine which method to run for each input
@@ -165,8 +165,8 @@ workflow DIFFERENTIAL_FUNCTIONAL_ENRICHMENT {
         .mix(GPROFILER2_GOST.out.session_info)
 
     // gsea-specific outputs
-    gsea_report           = GSEA_GSEA.out.report_tsvs_ref.join(GSEA_GSEA.out.report_tsvs_target)
-    gsea_artifacts        = GSEA_GSEA.out.rpt
+    gsea_report = GSEA_GSEA.out.report_tsvs_ref.join(GSEA_GSEA.out.report_tsvs_target)
+    gsea_artifacts = GSEA_GSEA.out.rpt
         .mix(GSEA_GSEA.out.index_html)
         .mix(GSEA_GSEA.out.heat_map_corr_plot)
         .mix(GSEA_GSEA.out.report_tsvs_ref)
