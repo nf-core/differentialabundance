@@ -8,7 +8,7 @@ include { CUSTOM_TABULARTOGSEACLS  } from '../../../modules/nf-core/custom/tabul
 include { CUSTOM_TABULARTOGSEACHIP } from '../../../modules/nf-core/custom/tabulartogseachip/main.nf'
 include { GSEA_GSEA                } from '../../../modules/nf-core/gsea/gsea/main.nf'
 include { PROPR_GREA               } from "../../../modules/nf-core/propr/grea/main.nf"
-include { DECOUPLER_DECOUPLER                } from '../../../modules/nf-core/decoupler/decoupler/main'
+include { DECOUPLER_DECOUPLER      } from '../../../modules/nf-core/decoupler/decoupler/main'
 
 // Combine meta maps, including merging non-identical values of shared keys (e.g. 'id')
 def mergeMaps(meta, meta2){
@@ -65,7 +65,7 @@ workflow DIFFERENTIAL_FUNCTIONAL_ENRICHMENT {
         contrasts_and_samples:
             [ meta_with_contrast, samplesheet ]
         features:
-            [ meta_with_method, featuresheet ]
+            [ meta_with_contrast, featuresheet ]
         features_cols:
             [ features_id, features_symbol ]
     }
@@ -97,29 +97,32 @@ workflow DIFFERENTIAL_FUNCTIONAL_ENRICHMENT {
     // Perform enrichment analysis with GSEA
     // ----------------------------------------------------
 
-    // NOTE that GCT input can be more than 1, if they come from different tools (eg. limma, deseq2).
-    // CLS input can be as many as combinations of input x contrasts
-    // Whereas features can be only one file.
-
     CUSTOM_TABULARTOGSEAGCT(ch_input_for_gsea.input)
-
     CUSTOM_TABULARTOGSEACLS(ch_input_for_gsea.contrasts_and_samples)
-
-    // TODO do not use first for multi run
     CUSTOM_TABULARTOGSEACHIP(
-        ch_input_for_gsea.features.first(),
-        ch_input_for_gsea.features_cols.first()
+        ch_input_for_gsea.features,
+        ch_input_for_gsea.features_cols
     )
 
-    ch_input_for_gsea = CUSTOM_TABULARTOGSEAGCT.out.gct
+    ch_in_gsea = CUSTOM_TABULARTOGSEAGCT.out.gct
         .join(CUSTOM_TABULARTOGSEACLS.out.cls)
         .join( ch_input_for_gsea.genesets )
+        .join( CUSTOM_TABULARTOGSEACHIP.out.chip )
+        .multiMap { meta, gct, cls, genesets, chip ->
+            input:
+            [meta, gct, cls, genesets]
+            ref_target:
+            [meta.reference, meta.target]
+            chip:
+            [meta, chip]
+        }
 
     GSEA_GSEA(
-        ch_input_for_gsea,
-        ch_input_for_gsea.map{ tuple(it[0].reference, it[0].target) },
-        CUSTOM_TABULARTOGSEACHIP.out.chip.first()
+        ch_in_gsea.input,
+        ch_in_gsea.ref_target,
+        ch_in_gsea.chip
     )
+
     // ----------------------------------------------------
     // Perform enrichment analysis with DECOUPLER
     // ----------------------------------------------------
