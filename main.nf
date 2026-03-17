@@ -130,9 +130,9 @@ output {
                 // PROTEUS
                 proteus_raw                     : 'tables/proteus',
                 proteus_norm                    : 'tables/proteus',
-                proteus_plots                   : "plots/proteus/${meta.contrast}",
-                proteus_raw_rdata               : "other/proteus/${meta.contrast}",
-                proteus_norm_rdata              : "other/proteus/${meta.contrast}",
+                proteus_plots                   : 'plots/proteus',
+                proteus_raw_rdata               : 'other/proteus',
+                proteus_norm_rdata              : 'other/proteus',
                 proteus_session_info            : 'other/proteus',
 
                 // GEO SOFT
@@ -148,7 +148,10 @@ output {
                 immunedeconv_plot               : 'plots/immunedeconv',
 
             ][name] ?: name
-            file >> "${folder}/${meta.paramset_name}/"
+            def target = (name in ['proteus_plots', 'proteus_raw_rdata', 'proteus_norm_rdata']) \
+                ? "${folder}/${meta.paramset_name}/${meta.contrast}/" \
+                : "${folder}/${meta.paramset_name}/"
+            file >> target
         }
     }
     differential {
@@ -173,9 +176,9 @@ output {
                 gsea_artifacts            : 'report/gsea',
 
                 // GPROFILER2
-                gprofiler2_html           : 'report/gprofiler2',
                 gprofiler2_all_enrichment : 'tables/gprofiler2',
                 gprofiler2_sub_enrichment : 'tables/gprofiler2',
+                gprofiler2_html           : 'plots/gprofiler2',
                 gprofiler2_plot           : 'plots/gprofiler2',
                 gprofiler2_sub_plot       : 'plots/gprofiler2',
                 gprofiler2_other          : 'other/gprofiler2',
@@ -186,7 +189,10 @@ output {
                 decoupler_png             : 'plots/decoupler',
 
             ][name] ?: name
-            file >> "${folder}/${meta.paramset_name}/"
+            def target = (meta.params.functional_method in ['gsea','gprofiler2']) \
+                ? "${folder}/${meta.paramset_name}/${meta.id}/" \
+                : "${folder}/${meta.paramset_name}/"
+            file >> target
         }
     }
     plotting {
