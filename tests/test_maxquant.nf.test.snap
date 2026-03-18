@@ -34,10 +34,13 @@
                 "other/limma",
                 "other/limma/maxquant",
                 "other/limma/maxquant/fakebatch_fakeBatch_b1_b2_PXD043349.MArrayLM.limma.rds",
+                "other/limma/maxquant/fakebatch_fakeBatch_b1_b2_PXD043349.R_sessionInfo.log",
                 "other/limma/maxquant/genotype_celltype_t1_FoB_PXD043349.MArrayLM.limma.rds",
                 "other/limma/maxquant/genotype_celltype_t1_FoB_PXD043349.R_sessionInfo.log",
                 "other/limma/maxquant/genotype_celltype_t1_MZ_fakeBatch_PXD043349.MArrayLM.limma.rds",
+                "other/limma/maxquant/genotype_celltype_t1_MZ_fakeBatch_PXD043349.R_sessionInfo.log",
                 "other/limma/maxquant/genotype_celltype_t1_t2_PXD043349.MArrayLM.limma.rds",
+                "other/limma/maxquant/genotype_celltype_t1_t2_PXD043349.R_sessionInfo.log",
                 "other/proteus",
                 "other/proteus/maxquant",
                 "other/proteus/maxquant/Celltype",
@@ -122,7 +125,10 @@
                 "tables/proteus/maxquant/raw_proteingroups_tab.tsv"
             ],
             [
+                "fakebatch_fakeBatch_b1_b2_PXD043349.R_sessionInfo.log:md5,982cd8eabfb9617c83a635eba927fb91",
                 "genotype_celltype_t1_FoB_PXD043349.R_sessionInfo.log:md5,982cd8eabfb9617c83a635eba927fb91",
+                "genotype_celltype_t1_MZ_fakeBatch_PXD043349.R_sessionInfo.log:md5,982cd8eabfb9617c83a635eba927fb91",
+                "genotype_celltype_t1_t2_PXD043349.R_sessionInfo.log:md5,982cd8eabfb9617c83a635eba927fb91",
                 "normalizeMedian.normalized_proteingroups.rds:md5,da660b225f066a1e87bf8bb4196adcc6",
                 "raw_proteingroups.rds:md5,0b38726c41e7b32213e5e15380c29612",
                 "R_sessionInfo.log:md5,411badddf7904da0ed1de02b544109d2",
@@ -136,6 +142,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-03-17T18:33:24.677956791"
+        "timestamp": "2026-03-18T10:13:39.95120586"
     }
 }
