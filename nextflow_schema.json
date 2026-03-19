@@ -391,31 +391,6 @@
             "fa_icon": "fas fa-filter",
             "required": ["filtering_min_abundance"]
         },
-        "preprocessing_immunedeconv": {
-            "title": "[preprocessing] IMMUNEDECONV",
-            "type": "object",
-            "description": "",
-            "default": "",
-            "properties": {
-                "immunedeconv_run": {
-                    "type": "boolean",
-                    "description": "Set to run IMMUNEDECONV",
-                    "fa_icon": "fas fa-running"
-                },
-                "immunedeconv_method": {
-                    "type": "string",
-                    "description": "Set method to run with IMMUNEDECONV. Available options can be found in 'https://omnideconv.org/immunedeconv/articles/immunedeconv.html'",
-                    "default": "quantiseq",
-                    "fa_icon": "fas fa-running"
-                },
-                "immunedeconv_function": {
-                    "type": "string",
-                    "description": "Set function to run with IMMUNEDECONV. Available options can be found in 'https://omnideconv.org/immunedeconv/articles/immunedeconv.html'",
-                    "default": "deconvolute",
-                    "fa_icon": "fas fa-running"
-                }
-            }
-        },
         "exploratory_exploratory_analysis": {
             "title": "[exploratory] Exploratory analysis",
             "type": "object",
@@ -1403,9 +1378,6 @@
         },
         {
             "$ref": "#/$defs/preprocessing_filtering"
-        },
-        {
-            "$ref": "#/$defs/preprocessing_immunedeconv"
         },
         {
             "$ref": "#/$defs/exploratory_exploratory_analysis"
