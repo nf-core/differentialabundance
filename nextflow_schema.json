@@ -40,21 +40,11 @@
                 },
                 "contrasts": {
                     "type": "string",
-                    "description": "A CSV/TSV file describing sample contrasts to compare groups.",
-                    "help_text": "This file is used to define groups of samples from 'input' to compare. It must contain at least the columns 'variable', 'reference', 'target' and 'blocking', where 'variable' is a column in the input sample sheet, 'reference' and 'target' are values in that column, and blocking is a colon-separated list of additional 'blocking' variables (can be an empty string)",
-                    "pattern": "^\\S+\\.(csv|tsv)$",
+                    "description": "A CSV/TSV/YML/YAML file describing sample contrasts to compare groups.",
+                    "help_text": "This file is used to define groups of samples from 'input' to compare. CSV/TSV files must contain at least the columns 'variable', 'reference', 'target' and 'blocking', where 'variable' is a column in the input sample sheet, 'reference' and 'target' are values in that column, and blocking is a colon-separated list of additional 'blocking' variables (can be an empty string). YAML files should contain a top-level 'contrasts' list with either 'comparison' or formula-based contrast entries.",
+                    "pattern": "^\\S+\\.(csv|tsv|yml|yaml)$",
                     "format": "file-path",
-                    "mimetype": "text/csv",
-                    "fa_icon": "fas fa-adjust"
-                },
-                "contrasts_yml": {
-                    "type": "string",
-                    "description": "A YAML file describing sample contrasts to compare groups.",
-                    "help_text": "This file defines sample contrasts for differential abundance analysis, with each contrast specifying an `id`, a `comparison` list (variable, reference, target), and optional `blocking_factors`.",
-                    "pattern": "^\\S+\\.(yaml|yml)$",
                     "schema": "assets/schema_contrasts.json",
-                    "format": "file-path",
-                    "mimetype": "text/csv",
                     "fa_icon": "fas fa-adjust"
                 },
                 "outdir": {
@@ -93,7 +83,7 @@
                     "pattern": "^\\S+\\.(tsv|csv)$|\\S*proteinGroups\\.txt$",
                     "fa_icon": "fas fa-border-all"
                 },
-                "transcript_length_matrix": {
+                "feature_length_matrix": {
                     "type": "string",
                     "fa_icon": "fas fa-border-all",
                     "description": "(RNA-seq only): optional transcript/gene length matrix with samples and transcript_ids/gene_ids as in the abundance matrix.",
@@ -168,14 +158,14 @@
                 },
                 "sizefactors_from_controls": {
                     "type": "boolean",
-                    "help_text": "When set, use supplied control features in normalization/ scaling operations",
-                    "description": "When set, use the control features in scaling/ normalization.",
+                    "help_text": "When set, use supplied control features in normalization/ scaling operations (currently only supported for differential_method deseq2)",
+                    "description": "When set, use the control features in scaling/ normalization (currently only supported for differential_method deseq2)",
                     "fa_icon": "fas fa-expand-arrows-alt"
                 },
                 "control_features": {
                     "type": "string",
                     "description": "A text file listing technical features (e.g. spikes)",
-                    "help_text": "One feature per row. Note that by default these features will just be stripped from matrices prior to internal processing. To actually use them in e.g. normalization, set `--sizefactors_from_controls`",
+                    "help_text": "One feature per row. Note that by default these features will just be stripped from matrices prior to internal processing. To actually use them in e.g. normalization, set `--sizefactors_from_controls` (currently only supported for differential_method deseq2)",
                     "format": "file-path",
                     "mimetype": "text/plain",
                     "fa_icon": "fas fa-gamepad"
@@ -206,15 +196,15 @@
             "properties": {
                 "paramset_name": {
                     "type": "string",
-                    "description": "Name of the paramset (as specified in assets/paramsheet) to run specific analyses"
+                    "description": "Name of the paramset to run. In profile mode, set by the analysis profile for output directory naming. In paramsheet mode, selects which paramset(s) to run (comma-separated)."
                 },
                 "paramsheet": {
                     "type": "string",
-                    "description": "Path to a paramsheet file",
-                    "help_text": "A CSV file that defines a nextflow config per row.",
-                    "pattern": "^\\S+\\.csv$",
+                    "description": "Path to a paramsheet YAML file. Setting this activates multi-run (paramsheet) mode where paramsheet values take priority over CLI flags.",
+                    "help_text": "A YAML file that defines 1+ nextflow config(s). When not set, the pipeline uses standard Nextflow config profiles (single-run mode) where CLI flags have highest priority.",
+                    "pattern": "^\\S+\\.(yaml|yml)$",
                     "format": "file-path",
-                    "mimetype": "text/csv"
+                    "mimetype": "text/yaml"
                 }
             }
         },
@@ -355,9 +345,18 @@
             "default": "",
             "properties": {
                 "filtering_min_abundance": {
-                    "type": "number",
-                    "default": 1,
-                    "description": "Minimum abundance value",
+                    "type": ["integer", "boolean"],
+                    "anyOf": [
+                        {
+                            "type": "integer",
+                            "default": 1
+                        },
+                        {
+                            "type": "boolean",
+                            "const": false
+                        }
+                    ],
+                    "description": "Minimum abundance value. Set to false to disable abundance filtering.",
                     "fa_icon": "fas fa-compress-alt"
                 },
                 "filtering_min_samples": {
@@ -391,31 +390,6 @@
             },
             "fa_icon": "fas fa-filter",
             "required": ["filtering_min_abundance"]
-        },
-        "preprocessing_immunedeconv": {
-            "title": "[preprocessing] IMMUNEDECONV",
-            "type": "object",
-            "description": "",
-            "default": "",
-            "properties": {
-                "immunedeconv_run": {
-                    "type": "boolean",
-                    "description": "Set to run IMMUNEDECONV",
-                    "fa_icon": "fas fa-running"
-                },
-                "immunedeconv_method": {
-                    "type": "string",
-                    "description": "Set method to run with IMMUNEDECONV. Available options can be found in 'https://omnideconv.org/immunedeconv/articles/immunedeconv.html'",
-                    "default": "quantiseq",
-                    "fa_icon": "fas fa-running"
-                },
-                "immunedeconv_function": {
-                    "type": "string",
-                    "description": "Set function to run with IMMUNEDECONV. Available options can be found in 'https://omnideconv.org/immunedeconv/articles/immunedeconv.html'",
-                    "default": "deconvolute",
-                    "fa_icon": "fas fa-running"
-                }
-            }
         },
         "exploratory_exploratory_analysis": {
             "title": "[exploratory] Exploratory analysis",
@@ -542,7 +516,7 @@
                 "differential_min_fold_change": {
                     "type": "number",
                     "default": 2,
-                    "description": "Minimum fold change used to calculate differential feature numbers",
+                    "description": "Minimum fold change used to calculate differential feature numbers. Note that this number will be log2 transformed",
                     "fa_icon": "fas fa-angle-double-down"
                 },
                 "differential_max_pval": {
@@ -644,7 +618,7 @@
                     "fa_icon": "fas fa-filter"
                 },
                 "deseq2_lfc_threshold": {
-                    "type": "integer",
+                    "type": "number",
                     "default": 0,
                     "description": "`lfcThreshold` parameter passed to results()",
                     "help_text": "a non-negative value which specifies a log2 fold change threshold. The default value is 0, corresponding to a test that the log2 fold changes are equal to zero. The user can specify the alternative hypothesis using the altHypothesis argument, which defaults to testing for log2 fold changes greater in absolute value than a given threshold. If lfcThreshold is specified, the results are for Wald tests, and LRT p-values will be overwritten.",
@@ -689,16 +663,9 @@
                 "deseq2_shrink_lfc": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Shink fold changes in results?",
+                    "description": "Shrink fold changes in results?",
                     "help_text": "'ashr' method is the only method currently implemented",
                     "fa_icon": "fas fa-microscope"
-                },
-                "deseq2_cores": {
-                    "type": "integer",
-                    "default": 1,
-                    "description": "Number of cores",
-                    "help_text": "Number of cores to use with DESeq()",
-                    "fa_icon": "fab fa-centercode"
                 },
                 "deseq2_seed": {
                     "type": "integer",
@@ -740,12 +707,12 @@
                 "limma_block": {
                     "type": "string",
                     "fa_icon": "fas fa-cube",
-                    "description": "Sample sheet column to be used to derive a vector or factor specifying a blocking variable on the arrays"
+                    "description": "Sample sheet column to be used to derive a vector or factor specifying a blocking variable on the arrays for limma::lmFit(); however, for random effects models, DREAM is the recommended approach in this pipeline"
                 },
                 "limma_correlation": {
                     "type": "string",
                     "fa_icon": "fas fa-chart-line",
-                    "description": "passed to lmFit(), the inter-duplicate or inter-technical replicate correlation"
+                    "description": "passed to limma::lmFit(), the inter-duplicate or inter-technical replicate correlation; however for random effects models, DREAM is the recommended approach in this pipeline"
                 },
                 "limma_method": {
                     "type": "string",
@@ -1165,8 +1132,8 @@
             "properties": {
                 "report_file": {
                     "type": "string",
-                    "default": "${projectDir}/assets/differentialabundance_report.Rmd",
-                    "description": "Rmd report template from which to create the pipeline report",
+                    "default": "${projectDir}/assets/differentialabundance_report.qmd",
+                    "description": "Qmd report template from which to create the pipeline report",
                     "help_text": "The pipeline will always generate a default report which gives a good overview of the analysis results. Should this default report not suit your needs, you can provide the path to a custom report instead.",
                     "format": "file-path",
                     "pattern": "^\\S+\\.(Rmd|qmd|ipynb)$",
@@ -1184,13 +1151,15 @@
                     "default": "${projectDir}/docs/images/nf-core-differentialabundance_logo_light.png",
                     "description": "A logo to display in the report instead of the generic pipeline logo.",
                     "help_text": "A logo to display in the report instead of the generic pipeline logo. It can accessed via the id 'logo' in the css_file.",
-                    "fa_icon": "far fa-font-awesome-logo-full"
+                    "fa_icon": "far fa-font-awesome-logo-full",
+                    "hidden": true
                 },
                 "css_file": {
                     "type": "string",
                     "default": "${projectDir}/assets/nf-core_style.css",
                     "description": "CSS to use to style the output, in lieu of the default nf-core styling",
-                    "fa_icon": "far fa-file-code"
+                    "fa_icon": "far fa-file-code",
+                    "hidden": true
                 },
                 "citations_file": {
                     "type": "string",
@@ -1225,7 +1194,6 @@
                 },
                 "skip_reports": {
                     "type": "boolean",
-                    "default": false,
                     "description": "Skip generation of reports"
                 }
             },
@@ -1373,6 +1341,18 @@
                     "fa_icon": "far calendar",
                     "description": "Suffix to add to the trace report filename. Default is the date and time in the format yyyy-MM-dd_HH-mm-ss.",
                     "hidden": true
+                },
+                "help": {
+                    "type": ["boolean", "string"],
+                    "description": "Display the help message."
+                },
+                "help_full": {
+                    "type": "boolean",
+                    "description": "Display the full detailed help message."
+                },
+                "show_hidden": {
+                    "type": "boolean",
+                    "description": "Display hidden parameters in the help message (only works when --help or --help_full are provided)."
                 }
             }
         }
@@ -1404,9 +1384,6 @@
         },
         {
             "$ref": "#/$defs/preprocessing_filtering"
-        },
-        {
-            "$ref": "#/$defs/preprocessing_immunedeconv"
         },
         {
             "$ref": "#/$defs/exploratory_exploratory_analysis"

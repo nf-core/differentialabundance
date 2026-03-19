@@ -77,10 +77,10 @@ To use this approach, include the corresponding lengths file with the **raw coun
 
 ```bash
 --matrix 'salmon.merged.gene_counts.tsv' \
---transcript_length_matrix 'salmon.merged.gene_lengths.tsv'
+--feature_length_matrix 'salmon.merged.gene_lengths.tsv'
 ```
 
-Without the transcript/gene lengths, for instance in earlier rnaseq workflow versions, follow the second recommendation in the [tximport documentation](https://bioconductor.org/packages/release/bioc/vignettes/tximport/inst/doc/tximport.html#Downstream_DGE_in_Bioconductor):
+Without the feature lengths, for instance in earlier rnaseq workflow versions, follow the second recommendation in the [tximport documentation](https://bioconductor.org/packages/release/bioc/vignettes/tximport/inst/doc/tximport.html#Downstream_DGE_in_Bioconductor):
 
 > "Use the tximport argument `countsFromAbundance='lengthScaledTPM'` or `'scaledTPM'`, then employ the gene-level count matrix `txi$counts` directly in downstream software, a method we call 'bias corrected counts without an offset'"
 
@@ -126,7 +126,7 @@ Full list of features metadata are available on GEO platform pages.
 
 ## Contrasts file
 
-The contrasts file references the observations file to define groups of samples to compare. It can be provided in **either** CSV/TSV or YAML format using the parameters `--contrasts` or `--contrasts_yml`, respectively.
+The contrasts file references the observations file to define groups of samples to compare. It can be provided in **either** CSV/TSV or YAML format using a single `--contrasts` parameter. The file format is inferred from the extension (`.csv`, `.tsv`, `.yml`, `.yaml`).
 
 ### CSV/TSV contrasts file
 
@@ -157,7 +157,7 @@ You can optionally supply:
 ### YAML contrasts file format
 
 ```bash
---contrasts_yml '[path to YAML contrasts file]'
+--contrasts '[path to YAML contrasts file]'
 ```
 
 Based on the sample sheet above we could define YAML contrasts like:
@@ -181,7 +181,7 @@ The necessary fields in order are:
 - `blocking_factors` - Any additional variables (also observation columns) that should be modelled alongside the contrast variable
 - `exclude_samples_col` and `exclude_samples_values` - the former being a valid column in the samples sheet, the latter a list of values in that column which should be used to select samples prior to differential modelling. This is helpful where certain samples need to be excluded prior to analysis of a given contrast.
 
-Alternatively, the YAML contrasts also supports formula based model definitions for tools such as `VARIANCEPARTITION_DREAM`:
+Additionally, the YAML contrasts also supports formula based model definitions:
 
 ```yaml
 contrasts:
@@ -197,6 +197,11 @@ The necessary fields in order are:
 
 - `formula` - A string representation of the model formula. It is used to build the design matrix.
 - `make_contrasts_str` - An explicit literal contrast string (e.g., "treatmenthND6 - treatmentmCherry") that is passed directly to [`limma::makeContrasts()`](https://rdrr.io/bioc/limma/man/makeContrasts.html) in `VARIANCEPARTITION_DREAM`, `LIMMA_DIFFERENTIAL` and `DESEQ2_DIFFERENTIAL`. The parameter names must be syntactically valid variable names in R (see [`make.names`](https://stat.ethz.ch/R-manual/R-devel/library/base/html/make.names.html)). This field provides full control for complex designs. Requires `formula`.
+
+> [!IMPORTANT]
+>
+> - YAML contrast definitions using `comparison` **and** those using `formula` are both supported by all differential methods.
+> - They can be freely mixed within the same `contrasts:` list in a single YAML file (i.e. some contrasts may use `comparison` while others use `formula`).
 
 > [!NOTE]
 >
@@ -245,58 +250,119 @@ To override the above options, you may also supply your own features table as a 
 
 By default, if you don't provide features, for non-array data the workflow will fall back to attempting to use the matrix itself as a source of feature annotations. For this to work you must make sure to set the `features_id_col`, `features_name_col` and `features_metadata_cols` parameters to the appropriate values, for example by setting them to 'gene_id' if that is the identifier column on the matrix. This will cause the gene ID to be used everywhere rather than more accessible gene symbols (as can be derived from the GTF), but the workflow should run. Please use this option for MaxQuant analysis, i.e. do not provide features.
 
-## Paramsheet
+## Analysis modes
 
-In essence, the paramsheet is a compact file with multiple nextflow configs, being each row one config.
-To run the pipeline with a specific config row, you can use the `--paramset_name` parameter.
+The pipeline supports two modes of operation, each with well-defined parameter precedence rules:
+
+### 1. Single-Run Mode (Config Profiles) — recommended for production
+
+For standard production use, select an **analysis profile** that bundles the correct study type, differential method, and output settings. CLI flags override profile parameters, following standard Nextflow precedence:
+
+```
+CLI flags / -params-file > profile > defaults
+```
+
+For example, to run an RNA-seq analysis with DESeq2:
+
+```bash
+nextflow run nf-core/differentialabundance \
+    -profile rnaseq,docker \
+    --input samplesheet.csv \
+    --contrasts contrasts.yaml \
+    --matrix counts.tsv \
+    --gtf genes.gtf \
+    --outdir results/
+```
+
+You can override any profile parameter from the command line. For example, to switch from DESeq2's default variance-stabilising transform to rlog:
+
+```bash
+nextflow run nf-core/differentialabundance \
+    -profile rnaseq,docker \
+    --deseq2_vs_method rlog \
+    --input samplesheet.csv \
+    --contrasts contrasts.yaml \
+    --matrix counts.tsv \
+    --gtf genes.gtf \
+    --outdir results/
+```
 
 > [!WARNING]
-> Note that the arguments defined in the paramsheet have highest priority, meaning that they will overwrite any other arguments defined in the command line or in the configuration files. In other words, the priority of the parameters will follow this order: paramsheet > command line flags > nextflow configuration file
+> Do not override `--differential_method` on the command line when using an analysis profile. Each profile also sets method-specific parameters (e.g. logFC and p-value column names). To change methods, use the appropriate profile (e.g. `-profile rnaseq_limma`).
+
+See the [Profiles](#-profile) section for the full list of available analysis profiles.
+
+### 2. Multi-Run Mode (Paramsheet) — for exploration
+
+For running multiple analysis configurations in parallel (e.g. comparing DESeq2 vs Limma, or testing different enrichment tools), provide a custom **paramsheet** — a YAML file where each entry defines a set of parameter overrides:
+
+```bash
+nextflow run nf-core/differentialabundance \
+    -profile docker \
+    --paramsheet my_configs.yaml \
+    --input samplesheet.csv \
+    --contrasts contrasts.yaml \
+    --matrix counts.tsv \
+    --gtf genes.gtf \
+    --outdir results/
+```
 
 > [!WARNING]
-> For the moment, the pipeline only allows to run one config at a time through `--paramset_name`, but soon iterating multi configs through one pipeline run would be possible.
+> In multi-run mode, paramsheet parameters take precedence over CLI flags. The priority order is: `paramsheet > CLI flags > defaults`. This is by design — each paramsheet entry fully defines its configuration. CLI parameters are still used for values not specified in the paramsheet (e.g. `--input`, `--outdir`).
 
-### 1. Default paramsheet
+To run only a subset of configurations from your paramsheet, use `--paramset_name` with a comma-separated list:
 
-We provide a `paramsheet.csv` file in the `assets` directory that defines the parameter sets and tool parameters that make sense to run together, for specific study types.
+```bash
+--paramset_name deseq2_rnaseq,limma_rnaseq
+```
 
-Each row defines a combination of a differential analysis tool and a functional analysis tool (optional), with the respective arguments.
+> [!NOTE]
+> The pipeline does **not** ship a default paramsheet. Users provide their own when using multi-run mode.
 
-To run a given combination of tools, you can use the `--paramset_name` parameter.
+A paramsheet entry looks like this:
 
-### 2. Custom paramsheet
+```yaml
+- paramset_name: my_deseq2_run
+  study_type: rnaseq
+  study_abundance_type: counts
+  differential_method: deseq2
+  # ... additional parameter overrides
+```
 
-Optionally, one can also provide their own paramsheet CSV file using the `--paramsheet` flag.
-You will be also able to run a specific config row from this custom file using `--paramset_name`.
+Each entry must include a unique `paramset_name`. Entries can override any pipeline parameter.
 
-## Working with the output Quarto notebook file
+## Working with the output Quarto file
 
-The pipeline produces an Quarto notebook file which, if you're proficient in R, you can use to tweak the report after it's generated (**note**- if you need the same customisations repeatedly we would recommend you supply your own templates using the `report_file` parameter. Multiple templates can be supplied as a comma separated list).
+The pipeline produces a Quarto document file which, if you're proficient in R, you can use to tweak the report after it's generated.
 
-To work with Quarto notebook files you will need Rstudio/Posit Studio or an equivalent R environment. You will also need to have the ShinyNGS R module [installed](https://github.com/pinin4fjords/shinyngs#installation), since it supplies a lot of the accessory plotting functions etc that you will need. The exact way you will do this may depend on your exact systems, but for example
+> [!NOTE]
+>
+> If you need the same customisations repeatedly we would recommend you supply your own templates using the `report_file` parameter. Multiple templates can be supplied as a comma separated list.
+
+To work with Quarto document files you will need an R environment with the required packages installed, such as the ShinyNGS R module [installed](https://github.com/pinin4fjords/shinyngs#installation), since it supplies a lot of the accessory plotting functions etc that you will need. An editor such as VS Code is recommended for viewing and editing the files. The way you will do this may depend on your exact systems, but for example:
 
 ### 1. Create a conda environment with Shinyngs and activate it
 
 ```bash
-conda create -n shinyngs r-shinyngs
-conda activate shinyngs
+conda create -f ./assets/report_environment.yml -n report_environment
+conda activate report_environment
 ```
 
-### 2. Open RStudio from this environment
+### 2. Unzip the report archive
 
-For example, on a Mac Terminal:
+Now, unzip the report archive, and change the directory to that location.
+
+### 3. Render Quarto report
+
+Once the environment is active, you should have everything required to execute the code chunks and render the HTML report.
+
+To render the report and open a live preview in your browser:
 
 ```bash
-open -na Rstudio
+quarto preview differentialabundance_report.qmd --execute-params params.yml
 ```
 
-Now, unzip the report archive, and in RStudio change directory to that location:
-
-```
-setwd("/path/to/unzipped/directory")
-```
-
-Now open the Quarto notebook file from the RStudio UI, and you should have everything you need to run the various code segments and render the whole document to HTML again if you wish.
+For a better understanding of Quarto, you can go to the [comprehensive guide](https://quarto.org/docs/guide/).
 
 ## Shiny app generation
 
@@ -364,27 +430,9 @@ With this configuration in place deployment should happen automatically every ti
 
 There is also a [Shiny server application](https://posit.co/download/shiny-server/), which you can install on your own infrastruture and use to host applications yourself.
 
-## Immunedeconv
-
-[Immunedeconv](https://omnideconv.org/immunedeconv/index.html) is a computational tool designed to estimate the proportions of immune cell types in bulk transcriptomic data. It leverages established deconvolution algorithms, such as CIBERSORT, EPIC, and xCell, to provide insights into the immune landscape of a given dataset.
-
-This tool is turned off by default, to turn it on set the parameter `--immunedeconv_run` to true. Also make sure that the parameters `--immunedeconv_method` and `--immunedeconv_function` are populated with the desired method and function to run this tool. Default values for these two are quantiseq and deconvolute, respectively. If you want to see the full list of available methods and functions, refer to the tool's [official guide]("https://omnideconv.org/immunedeconv/articles/immunedeconv.html").
-
-For a better understanding on how these parameters affect the module's execution, this is how the parameters are used in the tool:
-
-```bash
-result <- immunedeconv::${function}(gene_expression_matrix, method = '$method')
-```
-
-The default parameters will produce a line that looks like this:
-
-```bash
-result <- immunedeconv::deconvolute(gene_expression_matrix, method = 'quantiseq')
-```
-
 ## Gene set enrichment analysis
 
-Currently, two tools can be used to do gene set enrichment analysis.
+Currently, three tools can be used to do gene set enrichment analysis.
 
 ### GSEA
 
@@ -406,15 +454,20 @@ The [gprofiler2](https://cran.r-project.org/web/packages/gprofiler2/vignettes/gp
 
 If gene sets have been specified to the workflow via `--gene_sets_files` these are used by default. Specifying `--gprofiler2_organism` (mmusculus for Mus musculus, hsapiens for Homo sapiens etc.) will override those gene sets with gprofiler's own for the relevant species. `--gprofiler2_token` will override both options and use gene sets from a previous gprofiler run.
 
-By default the analysis will be run with a background list of genes that passed the abundance filter (i.e. those genes that actually had some expression); see for example https://doi.org/10.1186/s13059-015-0761-7 for why this is advisable. You can provide your own background list with `--gprofiler2_background_file background.txt`or if you want to not use any background, set `--gprofiler2_background_file false`.
+By default the analysis will be run with a background list of genes that passed the abundance filter (i.e. those genes that actually had some expression); see for example ["Multiple sources of bias confound functional enrichment analysis of global -omics data"](https://doi.org/10.1186/s13059-015-0761-7) for why this is advisable. You can provide your own background list with `--gprofiler2_background_file background.txt`or if you want to not use any background, set `--gprofiler2_background_file false`.
 
 Check the [pipeline webpage](https://nf-co.re/differentialabundance/parameters#gprofiler2) for a full listing of the relevant parameters.
 
 ### Decoupler
 
-[Decoupler](https://decoupler-py.readthedocs.io/en/latest/index.html) `decoupler.decouple` is a Python function that infers biological regulator activities—such as transcription factor or pathway activity—from omics data using multiple statistical enrichment methods. It takes as input a gene expression matrix and a prior knowledge network linking regulators to target genes, and applies one or more methods (e.g., ULM, MLM, wsum) to estimate regulator activity scores across samples. The function supports optional consensus scoring and outputs method-specific activity estimates and p-values, making it a versatile tool for activity inference in both bulk and single-cell datasets. If you want to see the full list of available methods and functions, refer to the functions's [official guide]("https://decoupler-py.readthedocs.io/en/latest/generated/decoupler.decouple.html#decoupler.decouple").
+[Decoupler](https://decoupler-py.readthedocs.io/en/latest/index.html) is a Python function that infers biological regulator activities—such as transcription factor or pathway activity—from omics data using multiple statistical enrichment methods. It takes as input a gene expression matrix and a prior knowledge network linking regulators to target genes, and applies one or more methods (e.g., ULM, MLM, wsum) to estimate regulator activity scores across samples. The function supports optional consensus scoring and outputs method-specific activity estimates and p-values, making it a versatile tool for activity inference in both bulk and single-cell datasets. If you want to see the full list of available methods and functions, refer to the function's [official guide](https://decoupler.readthedocs.io/en/v1.9.2/generated/decoupler.decouple.html#decoupler.decouple).
 
-This tool is turned off by default, to turn it on set the parameter `functional_method` to `decoupler`.
+This tool is turned off by default, the following example shows how to enable it:
+
+```bash
+--functional_method decoupler \
+--decoupler_network network.tsv
+```
 
 #### Input Files
 
@@ -430,9 +483,7 @@ The Decoupler module includes a min_n parameter to fine-tune its behavior.
 
 - `--decoupler_min_n`: This parameter controls the minimum number of targets a regulator (source) must have in the network to be included in the analysis. Any regulator with fewer than min_n targets will be removed from the network before activity inference is performed.
 
-By default, `--decoupler_min_n` is set to 5, meaning all sources with at least one target will be evaluated. You can increase this value to filter out poorly supported regulators and reduce noise.
-
-Example: setting `--decoupler_min_n 5` will ensure that only regulators with at least 5 target genes are considered.
+By default, `--decoupler_min_n` is set to 5, meaning all sources with at least 5 target genes will be evaluated. You can increase this value to filter out poorly supported regulators and reduce noise.
 
 - `--decoupler_methods`: This parameter lets you specify which statistical methods decoupler will use to estimate regulator activities. Decoupler supports multiple methods, each using a different algorithm or statistical approach. You can specify one or more methods by passing them as a comma-separated list.
 
@@ -444,18 +495,13 @@ You can obtain regulatory networks from well-established databases and tools. Co
 
 - DoRothEA – transcription factor-target interactions (TFs) [DoRothEA](https://www.bioconductor.org/packages/release/data/experiment/html/dorothea.html)
 
-- CollecTRI – curated transcriptional regulatory interactions (TFs) [CollectTRI] (https://github.com/saezlab/CollecTRI)
+- CollecTRI – curated transcriptional regulatory interactions (TFs) [CollectTRI](https://github.com/saezlab/CollecTRI)
 
-- PROGENy – pathway-responsive gene signatures (pathways) [PROGENy] (https://saezlab.github.io/progeny/)
+- PROGENy – pathway-responsive gene signatures (pathways) [PROGENy](https://saezlab.github.io/progeny/)
 
-If you want to see the full list of available methods and functions, refer to the functions's [official guide] (https://decoupler-py.readthedocs.io/en/latest/notebooks/benchmark.html#Multiple-networks).
+If you want to see the full list of available methods and functions, refer to the function's [official guide](https://decoupler-py.readthedocs.io/en/latest/notebooks/benchmark.html#Multiple-networks).
 
 **Note**: Then resources mentioned above are provided only for human or mouse datasets. Please ensure your organism is compatible before enabling this module or provide a custom, species-specific dataset.
-
-```bash
---functional_method decoupler \
---decoupler_network network.tsv
-```
 
 ## Running the pipeline
 
@@ -463,18 +509,44 @@ The typical command for running the pipeline is as follows:
 
 ```bash
 nextflow run nf-core/differentialabundance \
-    [-profile rnaseq OR -profile rnaseq_limma OR -profile affy] \
+    -profile rnaseq,docker \
     --input samplesheet.csv \
     --contrasts contrasts.yaml \
-    [--matrix assay_matrix.tsv OR --affy_cel_files_archive cel_files.tar] \
-    [--gtf mouse.gtf OR --features features.tsv] \
-    --outdir <OUTDIR>  \
-    -profile docker \
-    [--paramset_name <paramset_name>] \
+    --matrix assay_matrix.tsv \
+    --gtf mouse.gtf \
+    --outdir <OUTDIR> \
     --report_contributors $'Jane Doe\nDirector of Institute of Microbiology\nUniversity of Smallville;John Smith\nPhD student\nInstitute of Microbiology\nUniversity of Smallville'
 ```
 
-This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
+This will launch the pipeline with the `rnaseq` analysis profile (DESeq2 by default) and `docker` for container execution. See below for more information about profiles.
+
+For other data types, use the appropriate analysis profile:
+
+```bash
+# Affymetrix microarrays
+nextflow run nf-core/differentialabundance \
+    -profile affy,docker \
+    --input samplesheet.csv \
+    --contrasts contrasts.yaml \
+    --affy_cel_files_archive cel_files.tar \
+    --outdir <OUTDIR>
+
+# MaxQuant proteomics
+nextflow run nf-core/differentialabundance \
+    -profile maxquant,docker \
+    --input samplesheet.csv \
+    --contrasts contrasts.yaml \
+    --matrix proteinGroups.txt \
+    --outdir <OUTDIR>
+
+# GEO SOFT files
+nextflow run nf-core/differentialabundance \
+    -profile soft,docker \
+    --input samplesheet.csv \
+    --contrasts contrasts.yaml \
+    --querygse GSE12345 \
+    --outdir <OUTDIR>
+```
 
 Note that the pipeline will create the following files in your working directory:
 
@@ -498,19 +570,19 @@ A number of workflow steps are not optimised to deal with large sample numbers a
 
 ```
 process {
-    withName:'PLOT_EXPLORATORY|PLOT_DIFFERENTIAL|RMARKDOWNNOTEBOOK|MAKE_REPORT_BUNDLE|SHINYNGS_APP'{
+    withName:'PLOT_EXPLORATORY|PLOT_DIFFERENTIAL|QUARTONOTEBOOK|MAKE_REPORT_BUNDLE|SHINYNGS_APP'{
         ext.when = false
     }
 }
 ```
 
-You will not get the final reporting outcomes of the workflow, but you will get the differential tables produced by DESeq2 or Limma, and the results of any gene sets analysis you have enabled.
+You will not get the final reporting outcomes of the workflow, but you will get the differential tables produced by DESeq2, Limma, or DREAM, and the results of any gene sets analysis you have enabled.
 
-We have also added a dedicated pipeline parameter, `--skip_reports` that allows you to skip only the RMarkdown notebook and bundled report while leaving other reporting processes active. The `RMARKDOWNNOTEBOOK` process assumes that every grouping variable you pass to it (from the contrasts file’s variable column or PCA-derived informative_variables) exists as a valid, named column in your sample metadata. If you know your metadata or contrasts might be incomplete or non-standard (such as using formula-based yaml files), the you can use this flag to skip these steps.
+We have also added a dedicated pipeline parameter, `--skip_reports` that allows you to skip only the Quarto notebook and bundled report while leaving other reporting processes active. The `QUARTONOTEBOOK` process assumes that every grouping variable you pass to it (from the contrasts file’s variable column or PCA-derived informative_variables) exists as a valid, named column in your sample metadata. If you know your metadata or contrasts might be incomplete or non-standard (such as using formula-based yaml files), the you can use this flag to skip these steps.
 
-#### Restricting samples considered by DESeq2 or Limma
+#### Restricting samples considered by DESeq2, Limma, or DREAM
 
-By default, the DESeq2 or Limma differential modules model all samples at once, rather than just the samples involved in the contrast. This is usually the correct thing to do, but when there are are large numbers of samples involved in each contrast it may be unnecessary, and things can be sped up significantly by setting `--differential_subset_to_contrast_samples`. This will remove any samples not relevant to the contrast before the main differential analysis routines are called.
+By default, the DESeq2, Limma, or DREAM differential modules model all samples at once, rather than just the samples involved in the contrast. This is usually the correct thing to do, but when there are large numbers of samples involved in each contrast it may be unnecessary, and things can be sped up significantly by setting `--differential_subset_to_contrast_samples`. This will remove any samples not relevant to the contrast before the main differential analysis routines are called.
 
 ### Params files
 
@@ -582,14 +654,43 @@ Several generic profiles are bundled with the pipeline which instruct the pipeli
 
 The pipeline also dynamically loads configurations from [https://github.com/nf-core/configs](https://github.com/nf-core/configs) when it runs, making multiple config profiles for various institutional clusters available at run time. For more information and to check if your system is supported, please see the [nf-core/configs documentation](https://github.com/nf-core/configs#documentation).
 
-Note that multiple profiles can be loaded, for example: `-profile test,docker` - the order of arguments is important!
+Note that multiple profiles can be loaded, for example: `-profile rnaseq,docker` - the order of arguments is important!
 They are loaded in sequence, so later profiles can overwrite earlier profiles.
 
 If `-profile` is not specified, the pipeline will run locally and expect all software to be installed and available on the `PATH`. This is _not_ recommended, since it can lead to different results on different machines dependent on the computer environment.
 
-- `test`
-  - A profile with a complete configuration for automated testing
-  - Includes links to test data so needs no other parameters
+#### Analysis profiles
+
+These profiles configure the pipeline for specific study types, differential methods, and optional functional enrichment. Combine one analysis profile with a container profile (e.g. `-profile rnaseq,docker`).
+
+**RNA-seq profiles:**
+
+- `rnaseq` — RNA-seq with DESeq2 (default)
+- `rnaseq_deseq2_gsea` — RNA-seq with DESeq2 + GSEA enrichment
+- `rnaseq_deseq2_gprofiler2` — RNA-seq with DESeq2 + g:Profiler2 enrichment
+- `rnaseq_limma` — RNA-seq with Limma (voom)
+- `rnaseq_limma_gsea` — RNA-seq with Limma + GSEA enrichment
+- `rnaseq_limma_gprofiler2` — RNA-seq with Limma + g:Profiler2 enrichment
+- `rnaseq_limma_decoupler` — RNA-seq with Limma + Decoupler enrichment
+- `rnaseq_dream` — RNA-seq with DREAM (mixed-effects models)
+- `rnaseq_dream_decoupler` — RNA-seq with DREAM + Decoupler enrichment
+
+**Affymetrix profiles:**
+
+- `affy` — Affymetrix microarrays with Limma
+- `affy_limma_gsea` — Affymetrix with Limma + GSEA enrichment
+- `affy_limma_gprofiler2` — Affymetrix with Limma + g:Profiler2 enrichment
+
+**Other profiles:**
+
+- `maxquant` — MaxQuant proteomics with Limma
+- `soft` — GEO SOFT files with Limma
+
+> [!WARNING]
+> Do not override `--differential_method` on the command line when using an analysis profile. Each profile also sets method-specific parameters (e.g. logFC and p-value column names). To change methods, use the appropriate profile (e.g. `-profile rnaseq_limma`).
+
+#### Container profiles
+
 - `docker`
   - A generic configuration profile to be used with [Docker](https://docker.com/)
 - `singularity`
@@ -599,13 +700,21 @@ If `-profile` is not specified, the pipeline will run locally and expect all sof
 - `shifter`
   - A generic configuration profile to be used with [Shifter](https://nersc.gitlab.io/development/shifter/how-to-use/)
 - `charliecloud`
-  - A generic configuration profile to be used with [Charliecloud](https://hpc.github.io/charliecloud/)
+  - A generic configuration profile to be used with [Charliecloud](https://charliecloud.io/)
 - `apptainer`
   - A generic configuration profile to be used with [Apptainer](https://apptainer.org/)
 - `wave`
   - A generic configuration profile to enable [Wave](https://seqera.io/wave/) containers. Use together with one of the above (requires Nextflow ` 24.03.0-edge` or later).
 - `conda`
   - A generic configuration profile to be used with [Conda](https://conda.io/docs/). Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity, Podman, Shifter, Charliecloud, or Apptainer.
+
+#### Other profiles
+
+- `test`
+  - A profile with a complete configuration for automated testing
+  - Includes links to test data so needs no other parameters
+- `cache_default`
+  - The pipeline uses by default `cache = deep` for certain processes downstream `VALIDATOR`, which allows more efficient resuming by checking for input file content to be included in the cache keys. The profile `cache_default` provides users with a the default cache profile (`cache = true`) used in most Nextflow pipelines, in case the `deep` configuration causes issues. See the [Nextflow cache documentation](https://www.nextflow.io/docs/latest/reference/process.html#process-cache) for more information.
 
 ### `-resume`
 

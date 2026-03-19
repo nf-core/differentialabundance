@@ -13,7 +13,7 @@ This directory contains the main reporting output of the workflow.
 
 - `report/`
   - `*_[Quarto notebook name].html`: an HTML report file named according to the value of `params.study_name`, containing graphical and tabular summary results for the workflow run.
-  - `*.zip`: a zip file containing a Quarto notebook file with parameters set and all necessary input files to open and customise the reporting.
+  - `*.zip`: a zip file containing a Quarto notebook file, parameters set, and all necessary input files to open and customise the reporting.
   - `gsea/`: Directory containing graphical outputs from GSEA (where enabled). Plots are stored in directories named for the associated contrast.
     - `[contrast]/png/[gsea_plot_type].png`
 
@@ -38,8 +38,6 @@ Stand-alone graphical outputs are placed in this directory. They may be useful i
     - `[coloring variable]/png/mad_correlation.png`: Outlier prediction plots using median absolute deviation (MAD)
   - `differential/`: Directory containing standalone plots from differential analysis. Plots are stored in directories named for the associated contrast.
     - `[contrast]/png/volcano.png`: Volcano plots of -log(10) p value agains log(2) fold changes
-  - `immunedeconv/`: Directory containing graphical outputs of immunedeconv results
-    - `${prefix}.plot1_stacked_bar_chart.png`
   - `gprofiler2/`: Directory containing graphical outputs from gprofiler2 (where enabled). Plots are stored in directories named for the associated contrast.
     - `[contrast]/[contrast].gprofiler2.[source].gostplot.html`: An interactive gprofiler2 Manhattan plot of enriched pathways from one specific source/database, e.g. REAC
     - `[contrast]/[contrast].gprofiler2.[source].gostplot.png`: A static gprofiler2 Manhattan plot of enriched pathways from one specific source/database, e.g. REAC
@@ -49,8 +47,10 @@ Stand-alone graphical outputs are placed in this directory. They may be useful i
     - `[contrast]/[norm_function].normalized_mean_variance_relationship.png`: Plots of log intensity vs mean log intensity after normalization of each contrast level.
     - `[contrast]/[norm_function].normalized_distributions.png`: A plot of sample distributions after normalization.
     - `[contrast]/raw_distributions.png`: A plot of sample distributions without normalization.
-  - `decoupler/`: Directory containing plots of decoupler results - `[differential_method]_[contrast_name]_[decoupler_method]_estimate_decoupler_plot.png`: contains the plot for the estimated activity scores for each regulator (rows) across all samples (columns).
-  </details>
+  - `decoupler/`: Directory containing plots of decoupler results
+    - `[differential_method]_[contrast_name]_[decoupler_method]_estimate_decoupler_plot.png`: contains the plot for the estimated activity scores for each regulator (rows) across all samples (columns).
+
+</details>
 
 Most plots are included in the HTML report (see above), but are also included in static files in this folder to facilitate use in external reporting.
 
@@ -72,8 +72,6 @@ Most plots are included in the HTML report (see above), but are also included in
     - `[contrast_name].[deseq2|dream|limma].results.tsv`: Results of DESeq2 differential analyis (RNA-seq), DREAM differential analysis (RNA-seq for mixed linear models) OR Limma differential analysis (Affymetrix arrays, GEO studies, Maxquant proteomics studies)
     - `[contrast_name].[deseq2|limma].results_filtered.tsv`: Results of DESeq2 differential analyis (RNA-seq) OR Limma differential analysis (Affymetrix arrays, GEO studies, Maxquant proteomics studies); filtered for differentially abundant entries
     - `[contrast_name]_[deseq2|dream|limma].annotated.tsv`: Results of annotated DESeq2 differential analyis (RNA-seq), DREAM differential analysis (RNA-seq for mixed linear models) OR Limma differential analysis (Affymetrix arrays, GEO studies)
-  - `immunedeconv/`: Directory containing table of immunedeconv results
-    - `${prefix}.deconvolution_results.tsv`: TSV output that contains estimated proportions of immune cell types for each sample
   - `gsea/`: Directory containing tables of differential gene set analyis from GSEA (where enabled)
     - `[contrast]/[contrast].gsea_report_for_[condition].tsv`: A GSEA report table for each side of each contrast
   - `gprofiler2/`: Directory containing tables of differential gene set analyis from gprofiler2 (where enabled)

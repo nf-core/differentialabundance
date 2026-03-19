@@ -8,7 +8,7 @@
         "type": "object",
         "properties": {
             "sample": {
-                "type": "string",
+                "anyOf": [{ "type": "integer" }, { "type": "string" }],
                 "pattern": "^\\S+$",
                 "errorMessage": "Sample name must be provided and cannot contain spaces"
             }

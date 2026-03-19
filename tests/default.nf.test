@@ -4,16 +4,13 @@ nextflow_pipeline {
     script "../main.nf"
     tag "test"
     tag "pipeline"
-    profile "test"
 
-    test("Test profile - with toolsheet") {
+    test("Test profile") {
+        config "${projectDir}/conf/test.config"
 
         when {
             params {
-                outdir              = "$outputDir"
-                paramset_name       = "deseq2_rnaseq_gsea"
-                differential_method = null
-                functional_method   = null
+                outdir        = "$outputDir"
             }
         }
 
@@ -39,11 +36,11 @@ nextflow_pipeline {
     }
 
     test("Test profile - csv contrasts") { // make sure we keep backwards compatibility with csv contrasts
+        config "${projectDir}/conf/test.config"
 
         when {
             params {
                 outdir        = "$outputDir"
-                contrasts_yml = null
                 contrasts     = "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.contrasts.csv"
             }
         }
@@ -60,78 +57,6 @@ nextflow_pipeline {
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
                     removeNextflowVersion("$outputDir/pipeline_info/nf_core_differentialabundance_software_versions.yml"),
-                    // All stable path name, with a relative path
-                    stable_name,
-                    // All files with stable contents
-                    stable_path
-                ).match() }
-                )
-        }
-    }
-
-    test("Test profile - yml no formula") { // make sure we keep backwards compatibility with yaml contrasts that don't use formula
-
-        when {
-            params {
-                outdir        = "$outputDir"
-            }
-        }
-
-        then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
-            assertAll(
-                { assert workflow.success},
-                { assert snapshot(
-                    // Number of successful tasks
-                    workflow.trace.succeeded().size(),
-                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_differentialabundance_software_versions.yml"),
-                    // All stable path name, with a relative path
-                    stable_name,
-                    // All files with stable contents
-                    stable_path
-                ).match() }
-                )
-        }
-    }
-
-        test("Test profile - with toolsheet and formula") {
-
-        when {
-            params {
-                outdir              = "$outputDir"
-                differential_method = 'deseq2'
-                functional_method   = 'gprofiler2'
-                gprofiler2_organism = 'mmusculus'
-                input               = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/metadata.tsv'
-                matrix              = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/counts.tsv'
-                contrasts_yml       = 'https://github.com/nf-core/test-datasets/raw/differentialabundance/testdata/formula_contrasts/rnaseq_complex_contrast.yaml'
-                immunedeconv_run    = false
-                exploratory_log2_assays = "raw"
-                skip_reports        = true
-                transcript_length_matrix = null
-                deseq2_seed         = 1
-                round_digits        = 2
-                deseq2_vs_method    = 'rlog'
-                deseq2_shrink_lfc   = false
-            }
-        }
-
-        then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
-            assertAll(
-                { assert workflow.success},
-                { assert snapshot(
-                    // Number of successful tasks
-                    workflow.trace.succeeded().size(),
-                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/collated_versions.yml"),
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -142,13 +67,44 @@ nextflow_pipeline {
     }
 
     test("Test profile - multiple reports - csv contrasts") { // make sure we keep backwards compatibility with csv contrasts
+        config "${projectDir}/conf/test.config"
 
         when {
             params {
                 outdir        = "$outputDir"
-                contrasts_yml = null
                 contrasts     = "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.contrasts.csv"
                 report_file   = "$projectDir/tests/quarto.qmd,$projectDir/assets/differentialabundance_report.qmd"
+            }
+        }
+
+        then {
+            // stable_name: All files + folders in ${params.outdir}/ with a stable name
+            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in ${params.outdir}/ with stable content
+            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    // Number of successful tasks
+                    workflow.trace.succeeded().size(),
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_differentialabundance_software_versions.yml"),
+                    // All stable path name, with a relative path
+                    stable_name,
+                    // All files with stable contents
+                    stable_path
+                ).match() }
+                )
+        }
+    }
+    test("Test profile - filtering_min_abundance false") {
+        tag "abundance_false"
+        config "${projectDir}/conf/test.config"
+
+        when {
+            params {
+                outdir        = "$outputDir"
+                filtering_min_abundance = false
             }
         }
 

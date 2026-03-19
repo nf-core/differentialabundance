@@ -4,45 +4,13 @@ nextflow_pipeline {
     script "../main.nf"
     tag "rnaseq_dream"
     tag "pipeline"
-    profile "test_rnaseq_dream"
 
-    test("Test rnaseq dream profile - with toolsheet") {
+    test("Test rnaseq dream profile") {
+        config "${projectDir}/conf/test/rnaseq/rnaseq_dream_complex.config"
 
         when {
             params {
-                outdir              = "$outputDir"
-                paramset_name       = "dream_rnaseq"
-                differential_method = null
-                functional_method   = null
-           }
-        }
-
-        then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
-            assertAll(
-                { assert workflow.success},
-                { assert snapshot(
-                    // Number of successful tasks
-                    workflow.trace.succeeded().size(),
-                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_differentialabundance_software_versions.yml"),
-                    // All stable path name, with a relative path
-                    stable_name,
-                    // All files with stable contents
-                    stable_path
-                ).match() }
-                )
-        }
-    }
-
-
-    test("Test rnaseq dream profile - complex contrast") {
-        when {
-            params {
-                outdir        = "$outputDir"
+                outdir = "$outputDir"
             }
         }
 
@@ -67,11 +35,60 @@ nextflow_pipeline {
         }
     }
 
-    test("Test rnaseq dream profile - complex contrast - with zero intercept") {
+    test("Test rnaseq dream profile - complex contrast - with zero intercept - 1") {
+        config "${projectDir}/conf/test/rnaseq/rnaseq_dream_complex.config"
+
         when {
             params {
-                outdir        = "$outputDir"
-                contrasts_yml = "$projectDir/tests/assets/zero_intercept_contrasts.yml"
+                outdir = "$outputDir"
+
+                // Override contrasts for zero intercept test
+                contrasts = "${projectDir}/tests/assets/zero_intercept_contrasts_1.yml"
+
+                // DREAM without voom (dream_norm paramset)
+                dream_apply_voom        = false
+                exploratory_assay_names = 'raw'
+                exploratory_final_assay = 'raw'
+
+            }
+        }
+
+        then {
+            // stable_name: All files + folders in ${params.outdir}/ with a stable name
+            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in ${params.outdir}/ with stable content
+            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    // Number of successful tasks
+                    workflow.trace.succeeded().size(),
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_differentialabundance_software_versions.yml"),
+                    // All stable path name, with a relative path
+                    stable_name,
+                    // All files with stable contents
+                    stable_path
+                ).match() }
+                )
+        }
+    }
+
+    test("Test rnaseq dream profile - complex contrast - with zero intercept - 2") {
+        config "${projectDir}/conf/test/rnaseq/rnaseq_dream_complex.config"
+
+        when {
+            params {
+                outdir = "$outputDir"
+
+                // Override contrasts for zero intercept test
+                contrasts = "${projectDir}/tests/assets/zero_intercept_contrasts_2.yml"
+
+                // DREAM without voom (dream_norm paramset)
+                dream_apply_voom        = false
+                exploratory_assay_names = 'raw'
+                exploratory_final_assay = 'raw'
+
             }
         }
 
@@ -97,12 +114,47 @@ nextflow_pipeline {
     }
 
     test("Test rnaseq dream profile - with decoupler") {
+        config "${projectDir}/conf/test/rnaseq/rnaseq_dream_decoupler_complex.config"
 
         when {
             params {
-                outdir              = "$outputDir"
-                functional_method   = "decoupler"
-                decoupler_min_n     = 1
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            // stable_name: All files + folders in ${params.outdir}/ with a stable name
+            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in ${params.outdir}/ with stable content
+            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    // Number of successful tasks
+                    workflow.trace.succeeded().size(),
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_differentialabundance_software_versions.yml"),
+                    // All stable path name, with a relative path
+                    stable_name,
+                    // All files with stable contents
+                    stable_path
+                ).match() }
+                )
+        }
+    }
+
+    test("Test - Numeric sample IDs - rnaseq dream profile - with decoupler") {
+        config "${projectDir}/conf/test/rnaseq/rnaseq_dream_decoupler_complex.config"
+
+        when {
+            params {
+                outdir = "$outputDir"
+
+                // change input data
+                contrasts = "${projectDir}/tests/assets/SRP254919_dream.contrasts.yaml"
+                input = "${projectDir}/tests/assets/SRP254919.samplesheet.csv"
+                matrix = "${projectDir}/tests/assets/SRP254919.salmon.merged.gene_counts.top1000cov.tsv"
+                feature_length_matrix = "${projectDir}/tests/assets/SRP254919.spoofed_lengths.tsv"
             }
         }
 

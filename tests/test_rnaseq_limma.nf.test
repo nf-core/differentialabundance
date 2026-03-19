@@ -4,13 +4,14 @@ nextflow_pipeline {
     script "../main.nf"
     tag "rnaseq_limma"
     tag "pipeline"
-    profile "test_rnaseq_limma"
 
-    test("Test rnaseq limma profile") {
+    test("Test rnaseq limma profile - rnaseq_limma_gsea") {
+        tag "rnaseq_limma_gsea"
+        config "${projectDir}/conf/test/rnaseq/rnaseq_limma_gsea.config"
 
         when {
             params {
-                outdir        = "$outputDir"
+                outdir = "$outputDir"
             }
         }
 
@@ -35,14 +36,13 @@ nextflow_pipeline {
         }
     }
 
-    test("Test rnaseq limma profile - with toolsheet") {
+    test("Test rnaseq limma profile - rnaseq_limma_gprofiler2") {
+        tag "rnaseq_limma_gprofiler2"
+        config "${projectDir}/conf/test/rnaseq/rnaseq_limma_gprofiler2.config"
 
         when {
             params {
-                outdir              = "$outputDir"
-                paramset_name       = "limma_rnaseq_gsea"
-                differential_method = null
-                functional_method   = null
+                outdir = "$outputDir"
             }
         }
 
@@ -67,16 +67,13 @@ nextflow_pipeline {
         }
     }
 
-    test("Test rnaseq limma profile - with formula and complex contrasts") {
+    test("Test rnaseq limma profile - rnaseq_limma_gsea - with formula and complex contrasts") {
+        tag "rnaseq_limma_gsea_complex"
+        config "${projectDir}/conf/test/rnaseq/rnaseq_limma_gsea_complex.config"
 
         when {
             params {
-                outdir          = "$outputDir"
-                input           = "https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/metadata.tsv"
-                matrix          = "https://github.com/nf-core/test-datasets/raw/differentialabundance/modules_testdata/variancepartition_dream/counts.tsv"
-                contrasts_yml   = "https://github.com/nf-core/test-datasets/raw/differentialabundance/testdata/formula_contrasts/rnaseq_complex_contrast.yaml"
-                exploratory_log2_assays = "raw"
-                report_grouping_variable = 'treatment'
+                outdir = "$outputDir"
             }
         }
 
@@ -91,7 +88,7 @@ nextflow_pipeline {
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/collated_versions.yml"),
+                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_differentialabundance_software_versions.yml"),
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
@@ -102,11 +99,48 @@ nextflow_pipeline {
     }
 
     test("Test rnaseq limma profile - with decoupler") {
+        tag "rnaseq_limma_decoupler"
+        config "${projectDir}/conf/test/rnaseq/rnaseq_limma_decoupler.config"
 
         when {
             params {
-                outdir              = "$outputDir"
-                functional_method   = "decoupler"
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            // stable_name: All files + folders in ${params.outdir}/ with a stable name
+            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in ${params.outdir}/ with stable content
+            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    // Number of successful tasks
+                    workflow.trace.succeeded().size(),
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_differentialabundance_software_versions.yml"),
+                    // All stable path name, with a relative path
+                    stable_name,
+                    // All files with stable contents
+                    stable_path
+                ).match() }
+                )
+        }
+    }
+
+    test("Test rnaseq limma profile - rnaseq_limma_gsea - Numeric sample IDs") {
+        tag "rnaseq_limma_gsea_numeric_samples"
+        config "${projectDir}/conf/test/rnaseq/rnaseq_limma_gsea.config"
+
+        when {
+            params {
+                outdir = "$outputDir"
+
+                // change input data
+                input = "${projectDir}/tests/assets/SRP254919.samplesheet.csv"
+                matrix = "${projectDir}/tests/assets/SRP254919.salmon.merged.gene_counts.top1000cov.tsv"
+                feature_length_matrix = "${projectDir}/tests/assets/SRP254919.spoofed_lengths.tsv"
             }
         }
 

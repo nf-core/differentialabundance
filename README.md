@@ -5,12 +5,13 @@
   </picture>
 </h1>
 
-[![GitHub Actions CI Status](https://github.com/nf-core/differentialabundance/actions/workflows/ci.yml/badge.svg)](https://github.com/nf-core/differentialabundance/actions/workflows/ci.yml)
-[![GitHub Actions Linting Status](https://github.com/nf-core/differentialabundance/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/differentialabundance/actions/workflows/linting.yml)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/differentialabundance/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.7568000-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.7568000)
+[![Open in GitHub Codespaces](https://img.shields.io/badge/Open_In_GitHub_Codespaces-black?labelColor=grey&logo=github)](https://github.com/codespaces/new/nf-core/differentialabundance)
+[![GitHub Actions CI Status](https://github.com/nf-core/differentialabundance/actions/workflows/nf-test.yml/badge.svg)](https://github.com/nf-core/differentialabundance/actions/workflows/nf-test.yml)
+[![GitHub Actions Linting Status](https://github.com/nf-core/differentialabundance/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/differentialabundance/actions/workflows/linting.yml)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/differentialabundance/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
 [![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
-
-[![Nextflow](https://img.shields.io/badge/version-%E2%89%A524.04.2-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
-[![nf-core template version](https://img.shields.io/badge/nf--core_template-3.3.1-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/3.3.1)
+[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.7568000-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.7568000)
+[![Nextflow](https://img.shields.io/badge/version-%E2%89%A525.10.3-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
+[![nf-core template version](https://img.shields.io/badge/nf--core_template-3.5.1-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/3.5.1)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
@@ -35,83 +36,76 @@ On release, automated continuous integration tests run the pipeline on a full-si
 3. Run differential analysis over all contrasts specified.
 4. Optionally run a differential gene set analysis.
 5. Generate exploratory and differential analysis plots for interpretation.
-6. Run immunedeconv to estimate immune cell fractions using established deconvolution methods.
-7. Optionally build and (if specified) deploy a Shiny app for fully interactive mining of results.
-8. Build an HTML report based on Quarto markdown, with interactive plots (where possible) and tables.
+6. Optionally build and (if specified) deploy a Shiny app for fully interactive mining of results.
+7. Build an HTML report based on Quarto markdown, with interactive plots (where possible) and tables.
+
+> [!NOTE]
+> The pipeline supports two modes: **single-run mode** using analysis profiles (e.g. `-profile rnaseq,docker`) for production use, and **multi-run mode** using a custom paramsheet (`--paramsheet`) for comparing multiple configurations in parallel. See the [usage documentation](https://nf-co.re/differentialabundance/usage) for more information.
 
 ## Usage
 
 > [!NOTE]
 > If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
-RNA-seq with deseq2:
+Select an **analysis profile** that bundles the correct study type, differential method, and output settings. Combine it with a container profile (e.g. `docker`, `singularity`).
+
+RNA-seq with DESeq2 (default method):
 
 ```bash
- nextflow run nf-core/differentialabundance \
-     --input samplesheet.csv \
-     --contrasts contrasts.yaml \
-     --matrix assay_matrix.tsv \
-     --gtf mouse.gtf \
-     --outdir <OUTDIR>  \
-     -profile rnaseq,<docker/singularity/podman/shifter/charliecloud/conda/institute>
+nextflow run nf-core/differentialabundance \
+    -profile rnaseq,docker \
+    --input samplesheet.csv \
+    --contrasts contrasts.yaml \
+    --matrix assay_matrix.tsv \
+    --gtf mouse.gtf \
+    --outdir <OUTDIR>
 ```
 
-:::note
-If you are using the outputs of the nf-core rnaseq workflow as input here **either**:
+> [!WARNING]
+> Do not override `--differential_method` when using an analysis profile. Switch methods by using the appropriate profile (e.g. `-profile rnaseq_limma`).
 
-- supply the raw count matrices (file names like **gene_counts.tsv**) alongide the transcript length matrix via `--transcript_length_matrix` (rnaseq versions >=3.12.0, preferred)
-- **or** supply the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices.
-
-RNA-seq limma+voom:
+RNA-seq with limma-voom:
 
 ```bash
- nextflow run nf-core/differentialabundance \
-     --input samplesheet.csv \
-     --contrasts contrasts.yaml \
-     --matrix assay_matrix.tsv \
-     --gtf mouse.gtf \
-     --outdir <OUTDIR>  \
-     -profile rnaseq_limma,<docker/singularity/podman/shifter/charliecloud/conda/institute>
+nextflow run nf-core/differentialabundance \
+    -profile rnaseq_limma,docker \
+    --input samplesheet.csv \
+    --contrasts contrasts.yaml \
+    --matrix assay_matrix.tsv \
+    --gtf mouse.gtf \
+    --outdir <OUTDIR>
 ```
 
-:::note
-If you are using the outputs of the nf-core rnaseq workflow as input here you should provide either the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices. This follows the [recommendation from the tximport documentation](https://bioconductor.org/packages/devel/bioc/vignettes/tximport/inst/doc/tximport.html#limma-voom):
-
+> [!NOTE]
+> If you are using the outputs of the nf-core rnaseq workflow as input here you should provide either the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices. This follows the [recommendation from the tximport documentation](https://bioconductor.org/packages/devel/bioc/vignettes/tximport/inst/doc/tximport.html#limma-voom):
+>
 > "Because limma-voom does not use the offset matrix stored in `y$offset`, we recommend using scaled counts generated from abundances, either 'scaledTPM' or 'lengthScaledTPM'."
 
-See the [usage documentation](https://nf-co.re/differentialabundance/usage) for more information.
-:::
+RNA-seq with DESeq2 and GSEA:
+
+```bash
+nextflow run nf-core/differentialabundance \
+    -profile rnaseq_deseq2_gsea,docker \
+    --input samplesheet.csv \
+    --contrasts contrasts.yaml \
+    --matrix assay_matrix.tsv \
+    --gtf mouse.gtf \
+    --gene_sets_files gene_sets.gmt \
+    --outdir <OUTDIR>
+```
 
 Affymetrix microarray:
 
 ```bash
- nextflow run nf-core/differentialabundance \
-     --input samplesheet.csv \
-     --contrasts contrasts.yaml \
-     --affy_cel_files_archive cel_files.tar \
-     --outdir <OUTDIR>  \
-     -profile affy,<docker/singularity/podman/shifter/charliecloud/conda/institute>
+nextflow run nf-core/differentialabundance \
+    -profile affy,docker \
+    --input samplesheet.csv \
+    --contrasts contrasts.yaml \
+    --affy_cel_files_archive cel_files.tar \
+    --outdir <OUTDIR>
 ```
 
-> [!WARNING]
-> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/usage/getting_started/configuration#custom-configuration-files).
-
-The paramsheet file (ie. `paramsheet.csv`) stored in the `assets` directory defines the combination of tools and parameters that make sense to run for a given study type. You can use the flag `--paramset_name` to specify which set of tools to run. For example:
-
-```bash
- nextflow run nf-core/differentialabundance \
-     --input samplesheet.csv \
-     --contrasts contrasts.yaml \
-     --matrix assay_matrix.tsv \
-     --gtf mouse.gtf \
-     --outdir <OUTDIR>  \
-     -profile rnaseq,<docker/singularity/podman/shifter/charliecloud/conda/institute> \
-     --paramset_name deseq2_rnaseq_gprofiler2
-```
-
-You could also provide your own paramsheet through the `--paramsheet` parameter.
-
-For more details and further functionality, please refer to the [usage documentation](https://nf-co.re/differentialabundance/usage) and the [parameter documentation](https://nf-co.re/differentialabundance/parameters).
+For full usage examples, analysis profiles, paramsheet-based multi-run mode, and input specifics (rnaseq counts, Affymetrix, MaxQuant, GEO SOFT), see the [usage documentation](https://nf-co.re/differentialabundance/usage) and the [parameter documentation](https://nf-co.re/differentialabundance/parameters).
 
 ### Reporting
 

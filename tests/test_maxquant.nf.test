@@ -4,47 +4,14 @@ nextflow_pipeline {
     script "../main.nf"
     tag "maxquant"
     tag "pipeline"
-    profile "test_maxquant"
+
 
     test("Test maxquant profile") {
+        config "${projectDir}/conf/test/maxquant/maxquant.config"
 
         when {
             params {
-                outdir                     = "$outputDir"
-                study_name                 = 'PXD043349'
-                config_profile_name        = 'MaxQuant test profile'
-                config_profile_description = 'MaxQuant test dataset to check pipeline function'
-            }
-        }
-
-        then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
-            assertAll(
-                { assert workflow.success},
-                { assert snapshot(
-                    // Number of successful tasks
-                    workflow.trace.succeeded().size(),
-                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_differentialabundance_software_versions.yml"),
-                    // All stable path name, with a relative path
-                    stable_name,
-                    // All files with stable contents
-                    stable_path
-                ).match() }
-                )
-        }
-    }
-
-    test("Test maxquant profile - with toolsheet") {
-
-        when {
-            params {
-                outdir              = "$outputDir"
-                paramset_name       = "limma_maxquant"
-                differential_method = null
+                outdir = "$outputDir"
             }
 
         }

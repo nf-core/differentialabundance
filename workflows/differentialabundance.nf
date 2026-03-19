@@ -30,7 +30,6 @@ include { AFFY_JUSTRMA as AFFY_JUSTRMA_NORM                 } from '../modules/n
 include { PROTEUS_READPROTEINGROUPS as PROTEUS              } from '../modules/nf-core/proteus/readproteingroups/main'
 include { GEOQUERY_GETGEO                                   } from '../modules/nf-core/geoquery/getgeo/main'
 include { ZIP as MAKE_REPORT_BUNDLE                         } from '../modules/nf-core/zip/main'
-include { IMMUNEDECONV                                      } from '../modules/nf-core/immunedeconv/main'
 include { CSVTK_JOIN                                        } from '../modules/nf-core/csvtk/join/main'
 include { softwareVersionsToYAML                            } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 
@@ -53,7 +52,7 @@ workflow DIFFERENTIALABUNDANCE {
 
     main:
 
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     // ========================================================================
     // Handle input
@@ -95,7 +94,7 @@ workflow DIFFERENTIALABUNDANCE {
     // Create optional parameter channels based on ch_paramsets
     ch_transcript_lengths = ch_paramsets
         .map { meta ->
-            [ meta, meta.params.transcript_length_matrix ? file(meta.params.transcript_length_matrix, checkIfExists: true) : [] ]
+            [ meta, meta.params.feature_length_matrix ? file(meta.params.feature_length_matrix, checkIfExists: true) : [] ]
         }
 
     ch_control_features = ch_paramsets
@@ -119,7 +118,7 @@ workflow DIFFERENTIALABUNDANCE {
     // Create contrasts channels
     ch_contrasts_file = ch_paramsets
         .map { meta ->
-            [ meta, file(meta.params.contrasts_yml ?: meta.params.contrasts, checkIfExists: true) ]
+            [ meta, file(meta.params.contrasts, checkIfExists: true) ]
         }
 
     ch_contrasts_file_with_extension = ch_contrasts_file
@@ -420,27 +419,6 @@ workflow DIFFERENTIALABUNDANCE {
         }
         .groupTuple() // [meta, [contrast], [variable], [reference], [target], [formula], [comparison]]
 
-    // =======================================================================
-    // Single cell deconvolution
-    // =======================================================================
-
-    ch_immunedeconv_input = ch_in_raw
-        .filter{meta, raw -> meta.params.immunedeconv_run}
-
-    ch_immunedeconv_input = prepareModuleInput(ch_immunedeconv_input, 'preprocessing')
-        .multiMap{meta, raw ->
-            input: [meta, raw, meta.params.immunedeconv_method, meta.params.immunedeconv_function]
-            name_col: meta.params.features_name_col
-        }
-
-    IMMUNEDECONV(
-        ch_immunedeconv_input.input,
-        ch_immunedeconv_input.name_col
-    )
-
-    ch_versions = ch_versions
-        .mix(IMMUNEDECONV.out.versions)
-
     // ========================================================================
     // Filter matrix
     // ========================================================================
@@ -460,7 +438,8 @@ workflow DIFFERENTIALABUNDANCE {
     )
 
     ch_filtered_matrix = prepareModuleOutput(CUSTOM_MATRIXFILTER.out.filtered, ch_paramsets)
-
+    ch_filter_tests = prepareModuleOutput(CUSTOM_MATRIXFILTER.out.tests, ch_paramsets)
+    ch_filter_thresholds = prepareModuleOutput(CUSTOM_MATRIXFILTER.out.thresholds, ch_paramsets)
     // ========================================================================
     // Differential analysis
     // ========================================================================
@@ -529,7 +508,9 @@ workflow DIFFERENTIALABUNDANCE {
         }
         .set { ch_final_annotation_input }
 
-    CSVTK_JOIN(ch_final_annotation_input)
+    CSVTK_JOIN(
+        prepareModuleInput(ch_final_annotation_input, 'differential')
+    )
 
     ch_versions = ch_versions
         .mix(CSVTK_JOIN.out.versions)
@@ -652,9 +633,10 @@ workflow DIFFERENTIALABUNDANCE {
         .mix(
             ch_raw
                 .filter{meta, raw -> meta.params.study_type != 'geo_soft_file'}
-                .join(ch_processed_matrices)
+                .join(ch_processed_matrices, remainder: true)
                 .map { meta, raw, matrices ->
-                    [meta, [raw] + matrices]
+                def processed_matrices = matrices ?: []
+                    [meta, [raw] + processed_matrices]
                 }
         )
 
@@ -725,7 +707,6 @@ workflow DIFFERENTIALABUNDANCE {
     // the contrast entries
     differential_with_contrast = ch_paramsets
         .join( ch_differential_results
-            .filter { meta, contrast, results -> contrast.variable?.trim() }
             .groupTuple()
         )   // [meta, [meta with contrast], [differential results]]
         .join( ch_contrasts )   // [meta, [contrast], [variable], [reference], [target], [formula], [comparison]]
@@ -756,9 +737,41 @@ workflow DIFFERENTIALABUNDANCE {
             [meta, contrast_file]
         }
 
+    // For shinyngs: filter to keep only simple contrasts (non-empty variable)
+    differential_with_contrast_shinyngs = differential_with_contrast.differential_results
+        .transpose()
+        .filter { meta, contrast, results -> contrast.variable?.trim() }
+        .groupTuple()
+        .join( ch_contrasts )
+        .map { meta, meta_with_contrast, results, contrast, variable, reference, target, formula, comparison ->
+            def paramset_contrast_keys = contrast[0].keySet()
+            def contrast_maps = meta_with_contrast.collect { it.subMap(paramset_contrast_keys) }
+            [meta, meta_with_contrast, results, contrast_maps]
+        }
+        .multiMap { meta, meta_with_contrast, results, contrast_maps ->
+            differential_results: [meta, meta_with_contrast, results]
+            contrast_maps: [meta, contrast_maps]
+        }
+
+    // Create filtered contrast file for shinyngs
+    ch_contrasts_sorted_shinyngs = differential_with_contrast_shinyngs.contrast_maps
+        .collectFile { meta, contrast_map ->
+            def header = contrast_map[0].keySet().join(',')
+            def content = contrast_map.collect { it.values().collect { val ->
+                    val ? val.toString() : ''
+                }.join(',') }.sort().reverse()
+            def lines = header + '\n' + content.join('\n') + '\n'
+            ["${meta.paramset_name}_shinyngs.csv", lines]
+        }
+        .map { [it.baseName.replaceAll('_shinyngs$', ''), it] }
+        .join( ch_paramsets.map { [it.paramset_name, it] } )
+        .map { paramset_name, contrast_file, meta ->
+            [meta, contrast_file]
+        }
+
     // Parse input for shinyngs app
-    ch_shinyngs_input = differential_with_contrast.differential_results
-        .join(ch_contrasts_sorted)
+    ch_shinyngs_input = differential_with_contrast_shinyngs.differential_results
+        .join(ch_contrasts_sorted_shinyngs)
         .join(ch_all_matrices)
         .filter { row ->
             row[0].params.shinyngs_build_app
@@ -768,6 +781,7 @@ workflow DIFFERENTIALABUNDANCE {
             contrasts_and_differential: [meta, contrast_file, differential_results]
             contrast_stats_assay: meta.params.exploratory_assay_names.split(',').findIndexOf { it == meta.params.exploratory_final_assay } + 1
         }
+
     SHINYNGS_APP(
         ch_shinyngs_input.matrices,    // meta, samples, features, [  matrices ]
         ch_shinyngs_input.contrasts_and_differential,   // meta, contrast file, [ differential results ]
@@ -782,16 +796,40 @@ workflow DIFFERENTIALABUNDANCE {
 
     // Collate and save software versions
 
-    softwareVersionsToYAML(ch_versions)
+    def topic_versions = Channel.topic("versions")
+        .distinct()
+        .branch { entry ->
+            versions_file: entry instanceof Path
+            versions_tuple: true
+        }
+
+    def topic_versions_string = topic_versions.versions_tuple
+        .map { process, tool, version ->
+            [ process[process.lastIndexOf(':')+1..-1], "  ${tool}: ${version}" ]
+        }
+        .groupTuple(by:0)
+        .map { process, tool_versions ->
+            tool_versions.unique().sort()
+            "${process}:\n${tool_versions.join('\n')}"
+        }
+
+    softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
+        .mix(topic_versions_string)
         .collectFile(
             storeDir: "${params.outdir}/pipeline_info",
             name: 'nf_core_'  +  'differentialabundance_software_'  + 'versions.yml',
             sort: true,
             newLine: true
-        ).set { ch_collated_versions }
+        )
 
-    ch_collated_versions = softwareVersionsToYAML(ch_versions)
-        .collectFile(storeDir: "${params.outdir}/pipeline_info", name: 'collated_versions.yml', sort: true, newLine: true)
+    softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
+        .mix(topic_versions_string)
+        .collectFile(
+            storeDir: "${params.outdir}/pipeline_info",
+            name: 'collated_versions.yml',
+            sort: true,
+            newLine: true
+        ).set { ch_collated_versions }
 
     // Get the report file, logo, css, and citations
 
@@ -824,6 +862,8 @@ workflow DIFFERENTIALABUNDANCE {
     ch_report_input = ch_report_files    // [meta, [report_file, logo_file, css_file, citations_file]]
         .combine(ch_collated_versions)   // [versions file]
         .join(ch_all_matrices)           // [meta, samplesheet, features, [matrices]]
+        .join(ch_filter_tests)           // [meta, filtering tests]
+        .join(ch_filter_thresholds)      // [meta, filtering thresholds]
         .join(ch_contrasts_sorted)       // [meta, contrast file]
         .join(ch_differential_grouped)   // [meta, [differential results and models]]
         .join(ch_functional_grouped, remainder: true) // [meta, [functional results]]
@@ -837,50 +877,48 @@ workflow DIFFERENTIALABUNDANCE {
             }
         }
         .multiMap { meta, report_file, files ->
+            // add report_file base name
+            def new_meta = meta + [ report_file_name: report_file.baseName ]
+
             report_file:
-            [meta, report_file]
+            [new_meta, report_file]
 
             report_params:
             def paramset = [paramset_name: meta.paramset_name] + meta.params.subMap('exploratory_assay_names') // flatten the map
             def report_file_names = ['logo','css','citations','versions_file','observations','features'] +
                 paramset.exploratory_assay_names.split(',').collect { "${it}_matrix".toString() } +
-                [ 'contrasts_file' ]
+                [ 'filtering_tests', 'filtering_thresholds', 'contrasts_file' ]
             // Create a map from expected report file names to actual file names.
             // This is used to parameterize the report generation, ensuring each logical input (e.g. 'logo', 'css', assay matrices) is mapped to its corresponding file.
             [report_file_names, files.collect{ f -> f.name}].transpose().collectEntries()
 
             input_files:
-            [meta, files]
+            [new_meta, files]
         }
 
     // Render the final report
-    if (!params.skip_reports) {
-        QUARTONOTEBOOK(
-            ch_report_input.report_file.map { meta, report_file ->
-                def new_meta = meta + [ report_file_name: report_file.baseName ]
-                [new_meta, report_file]
-            },
-            ch_report_input.report_params.first(),
-            ch_report_input.input_files.map{ meta, files -> files }.first(),
-            Channel.value([])
+    // One report per paramset will be created
+    QUARTONOTEBOOK(
+        ch_report_input.report_file,
+        ch_report_input.report_params,
+        ch_report_input.input_files.map{ meta, files -> files },
+        Channel.value([])
+    )
+
+    // Make a report bundle comprising the markdown document and all necessary
+    // input files
+    ch_bundle_input = ch_report_input.input_files
+        .join(
+            QUARTONOTEBOOK.out.notebook
+                .groupTuple() // [ meta, [notebooks] ]
+        ).join(
+            QUARTONOTEBOOK.out.params_yaml
+                .groupTuple()
         )
-
-        // Make a report bundle comprising the markdown document and all necessary
-        // input files
-        ch_bundle_input = ch_bundle_input = ch_report_input.input_files
-            .first()  // Take only the first meta/input_files pair
-            .combine(
-                QUARTONOTEBOOK.out.notebook
-                    .map { meta, notebook -> notebook }
-                    .collect()
-                    .map { notebooks -> [notebooks] }   // Wrap all notebooks in list to prevent flattening during combine
-            )
-            .map { meta, input_files, all_notebooks ->
-                [meta, input_files + all_notebooks]
-            }
-
-        MAKE_REPORT_BUNDLE( ch_bundle_input )
-    }
+        .map { meta, input_files, all_notebooks, params_yaml->
+            [meta, input_files + all_notebooks + params_yaml]
+        }
+    MAKE_REPORT_BUNDLE( ch_bundle_input )
 }
 
 /*

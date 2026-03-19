@@ -4,22 +4,20 @@ nextflow_pipeline {
     script "../main.nf"
     tag "affy"
     tag "pipeline"
-    profile "test_affy"
 
-    test("Test affy profile") {
-
+    test("Test affy profile - affy_limma_gsea") {
+        config "${projectDir}/conf/test/affy/affy_limma_gsea.config"
 
         when {
             params {
-                outdir                     = "$outputDir"
-                study_name                 = 'GSE50790'
+                outdir = "$outputDir"
             }
         }
 
         then {
             // stable_name: All files + folders in ${params.outdir}/ with a stable name
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}',
-                    'report/gsea/phenotype_uninvolved_lesional*/**/*.png'
+                    'report/gsea/*/phenotype_uninvolved_lesional*/**/*.png'
             ])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
@@ -39,21 +37,19 @@ nextflow_pipeline {
         }
     }
 
-    test("Test affy profile - with toolsheet") {
+    test("Test affy profile - affy_limma_gprofiler2") {
+        config "${projectDir}/conf/test/affy/affy_limma_gprofiler2.config"
 
         when {
             params {
-                outdir              = "$outputDir"
-                paramset_name       = "limma_affy_gsea"
-                differential_method = null
-                functional_method   = null
+                outdir = "$outputDir"
             }
         }
 
         then {
             // stable_name: All files + folders in ${params.outdir}/ with a stable name
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}',
-                    'report/gsea/phenotype_uninvolved_lesional*/**/*.png'
+                    'report/gsea/*/phenotype_uninvolved_lesional*/**/*.png'
             ])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')

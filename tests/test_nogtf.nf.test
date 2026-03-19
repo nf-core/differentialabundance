@@ -4,44 +4,13 @@ nextflow_pipeline {
     script "../main.nf"
     tag "nogtf"
     tag "pipeline"
-    profile "test_nogtf"
 
     test("Test no gtf profile") {
+        config "${projectDir}/conf/test/rnaseq/rnaseq_nogtf.config"
 
         when {
             params {
-                outdir        = "$outputDir"
-            }
-        }
-
-        then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
-            assertAll(
-                { assert workflow.success},
-                { assert snapshot(
-                    // Number of successful tasks
-                    workflow.trace.succeeded().size(),
-                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_differentialabundance_software_versions.yml"),
-                    // All stable path name, with a relative path
-                    stable_name,
-                    // All files with stable contents
-                    stable_path
-                ).match() }
-                )
-        }
-    }
-
-    test("Test no gtf profile - with toolsheet") {
-
-        when {
-            params {
-                outdir              = "$outputDir"
-                paramset_name       = "deseq2_rnaseq"
-                differential_method = null
+                outdir = "$outputDir"
             }
         }
 
