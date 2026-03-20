@@ -666,7 +666,6 @@ workflow DIFFERENTIALABUNDANCE {
     // by setting 'use_meta_key' to true. This will facilitate later on to join/combine channels.
     ch_functional_results = prepareModuleOutput(ch_functional_results, ch_paramsets, meta_keys_to_remove=['functional_method'], use_meta_key=true) // key, meta, [ functional results ]
 
-    // TODO gsea_report provides a list of files. Need to check if I can save list of files in output block.
     // TODO simplify the output of this subworkflow (like for the differential subworkflow)
     ch_functional = ch_functional
         .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_report, ch_paramsets).map { meta, ref, target -> ['gsea_report', meta, [ref, target]] })
