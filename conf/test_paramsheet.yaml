@@ -144,7 +144,7 @@
     Institute of Microbiology
     University of Smallville
   round_digits: 3
-  gsea_rnd_seed: "10"
+  seed: 10
 
 - paramset_name: test_rnaseq_limma_decoupler
   include: test_paramsheet/rnaseq_limma_decoupler,test_paramsheet/rnaseq_testdata

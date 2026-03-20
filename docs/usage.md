@@ -250,6 +250,18 @@ To override the above options, you may also supply your own features table as a 
 
 By default, if you don't provide features, for non-array data the workflow will fall back to attempting to use the matrix itself as a source of feature annotations. For this to work you must make sure to set the `features_id_col`, `features_name_col` and `features_metadata_cols` parameters to the appropriate values, for example by setting them to 'gene_id' if that is the identifier column on the matrix. This will cause the gene ID to be used everywhere rather than more accessible gene symbols (as can be derived from the GTF), but the workflow should run. Please use this option for MaxQuant analysis, i.e. do not provide features.
 
+## Reproducibility and random seeds
+
+Some supported methods have stochastic components. You can now set a pipeline-wide seed with:
+
+```bash
+--seed 1234
+```
+
+When provided, this value is passed to supported stochastic methods, currently including DESeq2, limma, DREAM and GSEA, so reruns can be reproduced consistently across the pipeline.
+
+If `--seed` is left unset (the default), the pipeline does not set a seed for these methods, so stochastic steps may remain non-deterministic.
+
 ## Analysis modes
 
 The pipeline supports two modes of operation, each with well-defined parameter precedence rules:
