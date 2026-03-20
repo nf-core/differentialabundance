@@ -143,10 +143,6 @@ output {
                 // GTF
                 gtf_annotation                  : 'tables/annotation',
 
-                // IMMMUNEDECONV
-                immunedeconv_table              : 'tables/immunedeconv',
-                immunedeconv_plot               : 'plots/immunedeconv',
-
             ][name] ?: name
             def target = (name in ['proteus_plots', 'proteus_raw_rdata', 'proteus_norm_rdata']) \
                 ? "${folder}/${meta.paramset_name}/${meta.contrast}/" \
