@@ -93,9 +93,7 @@
                 "tables/processed_abundance/rnaseq/all.vst.tsv"
             ],
             [
-                "treatment_mCherry_hND6__SRP254919.R_sessionInfo.log:md5,872c1229f603a00e6432b2f44b4d7fa6",
                 "treatment_mCherry_hND6__SRP254919.deseq2.sizefactors.tsv:md5,402909515e7ae8d53d091bf5ad9bc5fd",
-                "treatment_mCherry_hND6_sample_number_SRP254919.R_sessionInfo.log:md5,872c1229f603a00e6432b2f44b4d7fa6",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.sizefactors.tsv:md5,402909515e7ae8d53d091bf5ad9bc5fd",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results.tsv:md5,083c15a96e86aa34751c779c261cef54",
@@ -112,6 +110,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-03-16T17:13:25.904095722"
+        "timestamp": "2026-03-20T16:54:02.039687703"
     }
 }

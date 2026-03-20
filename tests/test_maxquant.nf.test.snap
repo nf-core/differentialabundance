@@ -125,13 +125,8 @@
                 "tables/proteus/maxquant/raw_proteingroups_tab.tsv"
             ],
             [
-                "fakebatch_fakeBatch_b1_b2_PXD043349.R_sessionInfo.log:md5,982cd8eabfb9617c83a635eba927fb91",
-                "genotype_celltype_t1_FoB_PXD043349.R_sessionInfo.log:md5,982cd8eabfb9617c83a635eba927fb91",
-                "genotype_celltype_t1_MZ_fakeBatch_PXD043349.R_sessionInfo.log:md5,982cd8eabfb9617c83a635eba927fb91",
-                "genotype_celltype_t1_t2_PXD043349.R_sessionInfo.log:md5,982cd8eabfb9617c83a635eba927fb91",
                 "normalizeMedian.normalized_proteingroups.rds:md5,da660b225f066a1e87bf8bb4196adcc6",
                 "raw_proteingroups.rds:md5,0b38726c41e7b32213e5e15380c29612",
-                "R_sessionInfo.log:md5,411badddf7904da0ed1de02b544109d2",
                 "normalizeMedian.normalized_proteingroups.rds:md5,6f7def9ce31c8ee07f649675db394848",
                 "raw_proteingroups.rds:md5,daef7d25977a1628870dee75e2977ee3",
                 "normalizeMedian.normalized_proteingroups_tab.tsv:md5,154fcd8d23409981b897d153e7b7e34e",
@@ -142,6 +137,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-03-18T10:13:39.95120586"
+        "timestamp": "2026-03-20T16:45:14.541300629"
     }
 }

@@ -147,7 +147,7 @@ output {
             def target = (name in ['proteus_plots', 'proteus_raw_rdata', 'proteus_norm_rdata']) \
                 ? "${folder}/${meta.paramset_name}/${meta.contrast}/" \
                 : "${folder}/${meta.paramset_name}/"
-            file >> target
+            return target
         }
     }
     differential {
@@ -185,10 +185,13 @@ output {
                 decoupler_png             : 'plots/decoupler',
 
             ][name] ?: name
-            def target = (meta.params.functional_method in ['gsea','gprofiler2']) \
-                ? "${folder}/${meta.paramset_name}/${meta.id}/" \
+            def gene_set_name = (meta.params.functional_method == 'gsea' && meta.params.gene_sets_files) \
+                ? meta.params.gene_sets_files.tokenize('/')[-1].replaceFirst(/\.[^.]+$/, '') \
+                : null
+            def target = (meta.params.functional_method == 'gsea') ? "${folder}/${meta.paramset_name}/${meta.id}/${gene_set_name}" \
+                : (meta.params.functional_method == 'gprofiler2') ? "${folder}/${meta.paramset_name}/${meta.id}/" \
                 : "${folder}/${meta.paramset_name}/"
-            file >> target
+            return target
         }
     }
     plotting {
