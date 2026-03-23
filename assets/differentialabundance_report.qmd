@@ -1271,49 +1271,66 @@ foo <- lapply(names(p_value_types), function(pvt) {
     showSortable = FALSE
     )
 
-    htmltools::tagList(
-    htmltools::tags$p(
-        caption_text,
-        style = "font-weight: bold; margin-bottom: 6px;"
-    ),
-    rt
+    print(
+        htmltools::tagList(
+            htmltools::tags$p(
+                caption_text,
+                style = "font-weight: bold; margin-bottom: 6px;"
+            ),
+            rt
+        )
     )
     cat("\n")
+})
 
-    if (nrow(contrasts) > 1  && !module_disabled("upset_plot")) {
-        cat("\n### Upset plot\n\n")
+cat("\n:::\n\n")
+```
 
-        de_genes <- lapply(differential_results, function(de) {
+```{r, echo=FALSE, results='asis', warning=FALSE, eval=!module_disabled("upset_plot")}
+#| echo: false
+#| results: asis
+#| output: asis
+#| warning: false
+#| message: false
 
-            # Determine which column to use for labels
-            if (!is.null(params$meta$params$features) &&
-                !is.null(params$meta$params$differential_feature_name_column) &&
-                (params$meta$params$differential_feature_name_column %in% colnames(differential_results[[1]]))) {
-                label_col <- params$meta$params$differential_feature_name_column
-            } else {
-                label_col <- params$meta$params$differential_feature_id_column
+cat("::: {.panel-tabset}")
+
+foo <- lapply(names(p_value_types), function(pvt) {
+    cat("\n#### ", pvt, "\n")
+    if (nrow(contrasts) > 1) {
+            cat("\n### Upset plot\n\n")
+
+            de_genes <- lapply(differential_results, function(de) {
+
+                # Determine which column to use for labels
+                if (!is.null(params$meta$params$features) &&
+                    !is.null(params$meta$params$differential_feature_name_column) &&
+                    (params$meta$params$differential_feature_name_column %in% colnames(differential_results[[1]]))) {
+                    label_col <- params$meta$params$differential_feature_name_column
+                } else {
+                    label_col <- params$meta$params$differential_feature_id_column
+                }
+
+                sig <- de[!is.na(de[[label_col]]) &
+                    !is.na(de[[p_value_types[[pvt]]]]) &
+                    abs(de[[params$meta$params$differential_fc_column]]) > log2(params$meta$params$differential_min_fold_change) &
+                    de[[p_value_types[[pvt]]]] < p_value_thresholds[[pvt]], ]
+                return(sig[[label_col]])
+            })
+
+            names(de_genes) <- names(differential_results)
+
+            # Only plot if there are at least two contrasts with DE genes
+            de_con <- sum(!is.na(sapply(de_genes, function(x) x[2])))
+            if (de_con > 1) {
+                suppressWarnings(suppressMessages({
+                    p <- upset(fromList(de_genes))
+                    print(p)
+                }))
             }
 
-            sig <- de[!is.na(de[[label_col]]) &
-                !is.na(de[[p_value_types[[pvt]]]]) &
-                abs(de[[params$meta$params$differential_fc_column]]) > log2(params$meta$params$differential_min_fold_change) &
-                de[[p_value_types[[pvt]]]] < p_value_thresholds[[pvt]], ]
-            return(sig[[label_col]])
-        })
-
-        names(de_genes) <- names(differential_results)
-
-        # Only plot if there are at least two contrasts with DE genes
-        de_con <- sum(!is.na(sapply(de_genes, function(x) x[2])))
-        if (de_con > 1) {
-            suppressWarnings(suppressMessages({
-                p <- upset(fromList(de_genes))
-                print(p)
-            }))
+            cat("\n\n")
         }
-
-        cat("\n\n")
-    }
 })
 
 cat("\n:::\n\n")
