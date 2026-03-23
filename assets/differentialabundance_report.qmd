@@ -1455,19 +1455,20 @@ for (i in 1:nrow(contrasts)) {
             ))
         }
 
-        p <- do.call(plotly_scatterplot, plot_args) %>%
-            layout(xaxis = list(range = list(-max_fc, max_fc))) %>%
-            add_segments(
-                x = -max_fc,
-                xend = max_fc,
-                y = -log10(p_value_thresholds[[pvt]]),
-                yend = -log10(p_value_thresholds[[pvt]]),
-                line = list(color = "black", width = 2, dash = "dot"),
-                showlegend = TRUE,
-                inherit = FALSE,
-                name = paste(pval_column, "=", p_value_thresholds[[pvt]])
-            )
         if (!module_disabled("volcano")) {
+            p <- do.call(plotly_scatterplot, plot_args) %>%
+                layout(xaxis = list(range = list(-max_fc, max_fc))) %>%
+                add_segments(
+                    x = -max_fc,
+                    xend = max_fc,
+                    y = -log10(p_value_thresholds[[pvt]]),
+                    yend = -log10(p_value_thresholds[[pvt]]),
+                    line = list(color = "black", width = 2, dash = "dot"),
+                    showlegend = TRUE,
+                    inherit = FALSE,
+                    name = paste(pval_column, "=", p_value_thresholds[[pvt]])
+                )
+
             print(htmltools::tagList(p))
         }
 
@@ -1533,36 +1534,37 @@ for (i in 1:nrow(contrasts)) {
                 }
             }
 
-            # Create the reactable with caption
-            rt <- reactable(
-                combined,
-                columns = column_defs,
-                filterable = TRUE,
-                sortable = TRUE,
-                bordered = TRUE,
-                striped = TRUE,
-                highlight = TRUE,
-                defaultPageSize = 20,
-                showPageSizeOptions = TRUE,
-                pageSizeOptions = c(10, 20, 50, 100),
-                defaultSorted = setNames(
-                    list("asc"),
-                    prettifyVariablename(params$meta$params$differential_qval_column)
-                )
-            )
-
-            # Add caption as HTML wrapper
-            caption_html <- htmltools::tags$div(
-                style = "margin-bottom: 10px; font-style: italic; color: #666;",
-                paste(
-                    "Differential genes (Up + Down) in",
-                    contrast_descriptions[i],
-                    "(check", differential_files[[i]], "for more detail)"
-                )
-            )
-
-            # Print the table with caption
             if (!module_disabled("de_table")) {
+
+                # Create the reactable with caption
+                rt <- reactable(
+                    combined,
+                    columns = column_defs,
+                    filterable = TRUE,
+                    sortable = TRUE,
+                    bordered = TRUE,
+                    striped = TRUE,
+                    highlight = TRUE,
+                    defaultPageSize = 20,
+                    showPageSizeOptions = TRUE,
+                    pageSizeOptions = c(10, 20, 50, 100),
+                    defaultSorted = setNames(
+                        list("asc"),
+                        prettifyVariablename(params$meta$params$differential_qval_column)
+                    )
+                )
+
+                # Add caption as HTML wrapper
+                caption_html <- htmltools::tags$div(
+                    style = "margin-bottom: 10px; font-style: italic; color: #666;",
+                    paste(
+                        "Differential genes (Up + Down) in",
+                        contrast_descriptions[i],
+                        "(check", differential_files[[i]], "for more detail)"
+                    )
+                )
+
+                # Print the table with caption
                 print(
                     htmltools::tagList(
                         caption_html,
