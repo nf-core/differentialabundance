@@ -175,21 +175,28 @@ output {
                 gprofiler2_all_enrichment : 'tables/gprofiler2',
                 gprofiler2_sub_enrichment : 'tables/gprofiler2',
                 gprofiler2_html           : 'plots/gprofiler2',
-                gprofiler2_plot           : 'plots/gprofiler2',
-                gprofiler2_sub_plot       : 'plots/gprofiler2',
-                gprofiler2_other          : 'other/gprofiler2',
 
                 // DECOUPLER
                 decoupler_estimate        : 'tables/decoupler',
                 decoupler_pvals           : 'tables/decoupler',
                 decoupler_png             : 'plots/decoupler',
+            ][name]
 
-            ][name] ?: name
-            def gene_set_name = (meta.params.functional_method == 'gsea' && meta.params.gene_sets_files) \
+            // Evaluated lazily to avoid Groovy eager map evaluation calling .name on an ArrayList
+            // as file can be a list of files
+            if (!folder && name == 'gprofiler2_artifacts') {
+                def fileName = (file instanceof List) ? file[0].name : file.name
+                folder = fileName.toLowerCase().endsWith('.png') ? 'plots/gprofiler2' : 'other/gprofiler2'
+            }
+
+            folder = folder ?: name
+
+            def method = meta.params.functional_method
+            def gene_set_name = (method == 'gsea' && meta.params.gene_sets_files) \
                 ? meta.params.gene_sets_files.tokenize('/')[-1].replaceFirst(/\.[^.]+$/, '') \
                 : null
-            def target = (meta.params.functional_method == 'gsea') ? "${folder}/${meta.paramset_name}/${meta.id}/${gene_set_name}" \
-                : (meta.params.functional_method == 'gprofiler2') ? "${folder}/${meta.paramset_name}/${meta.id}/" \
+            def target = (method == 'gsea') ? "${folder}/${meta.paramset_name}/${meta.id}/${gene_set_name}" \
+                : (method == 'gprofiler2') ? "${folder}/${meta.paramset_name}/${meta.id}/" \
                 : "${folder}/${meta.paramset_name}/"
             return target
         }
