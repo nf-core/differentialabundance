@@ -1302,14 +1302,14 @@ foo <- lapply(names(p_value_types), function(pvt) {
 
             de_genes <- lapply(differential_results, function(de) {
 
-                # Determine which column to use for labels
-                if (!is.null(params$meta$params$features) &&
-                    !is.null(params$meta$params$differential_feature_name_column) &&
-                    (params$meta$params$differential_feature_name_column %in% colnames(differential_results[[1]]))) {
-                    label_col <- params$meta$params$differential_feature_name_column
-                } else {
-                    label_col <- params$meta$params$differential_feature_id_column
-                }
+            # Determine which column to use for labels
+            if (!is.null(params$meta$params$features) &&
+                !is.null(params$meta$params$features_name_col) &&
+                (params$meta$params$features_name_col %in% colnames(differential_results[[1]]))) {
+                label_col <- params$meta$params$features_name_col
+            } else {
+                label_col <- params$meta$params$differential_feature_id_column
+            }
 
                 sig <- de[!is.na(de[[label_col]]) &
                     !is.na(de[[p_value_types[[pvt]]]]) &
@@ -1388,9 +1388,9 @@ for (i in 1:nrow(contrasts)) {
 
     # Labels: prefer feature name if present
     if (!is.null(params$features) &&
-        !is.null(params$meta$params$differential_feature_name_column) &&
-        (params$meta$params$differential_feature_name_column %in% colnames(full_de))) {
-        label_col <- params$meta$params$differential_feature_name_column
+        !is.null(params$meta$params$features_name_col) &&
+        (params$meta$params$features_name_col %in% colnames(full_de))) {
+        label_col <- params$meta$params$features_name_col
     } else {
         label_col <- params$meta$params$differential_feature_id_column
     }
