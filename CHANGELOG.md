@@ -41,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [[#675](https://github.com/nf-core/differentialabundance/pull/675)] - Fix `study_type` rnaseq description for each method in quarto report ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst)).
 - [[#607](https://github.com/nf-core/differentialabundance/pull/607)] - Fix limma and dream modules to work with special characters and render report without a normalised matrix. Update all modules and subworkflows ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila), [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#600](https://github.com/nf-core/differentialabundance/pull/600)] - Allow paramsheet with `.yml` extension ([@grst](https://github.com/grst)), review by [@atrigila](https://github.com/atrigila).
 - [[#582](https://github.com/nf-core/differentialabundance/pull/582)] - Allow `lfc_threshold` to be a float ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst))
