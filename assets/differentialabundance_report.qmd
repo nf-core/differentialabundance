@@ -1229,10 +1229,35 @@ cat(":::")
 ```{r, echo=FALSE, results='asis', eval=params$meta$params$study_type %in% c('rnaseq')}
 #| echo: false
 #| results: asis
-# For DESeq2, add some more explanation to the report
-cat(paste0(
-    "The `DESeq2 R` package was used for differential analysis. p-values were adjusted with the ", params$meta$params$deseq2_p_adjust_method, " method to reduce the number of false positives. ", ucfirst(params$meta$params$features_type), "s were considered differential if, for the respective contrast, the adjusted p-value was equal to or lower than ", params$meta$params$deseq2_alpha, " and the absolute log2 fold change was equal to or higher than ", params$meta$params$deseq2_lfc_threshold, "."
-))
+# Add method-specific differential analysis details to the report
+method_description <- switch(
+    params$meta$params$differential_method,
+    "deseq2" = paste0(
+        "The `DESeq2 R` package was used for differential analysis. p-values were adjusted with the ", params$meta$params$deseq2_p_adjust_method,
+        " method to reduce the number of false positives. ", ucfirst(params$meta$params$features_type),
+        "s were considered differential if, for the respective contrast, the adjusted p-value was equal to or lower than ", params$meta$params$deseq2_alpha,
+        " and the absolute log2 fold change was equal to or higher than ", params$meta$params$deseq2_lfc_threshold, "."
+    ),
+    "limma" = paste0(
+        "The `limma R` package", ifelse(isTRUE(params$meta$params$limma_use_voom), " with `voom` transformation", ""),
+        " was used for differential analysis. p-values were adjusted with the ", params$meta$params$limma_adjust_method,
+        " method to reduce the number of false positives. ", ucfirst(params$meta$params$features_type),
+        "s were considered differential if, for the respective contrast, the adjusted p-value was equal to or lower than ", params$meta$params$limma_p_value,
+        " and the absolute log2 fold change was equal to or higher than ", params$meta$params$limma_lfc, "."
+    ),
+    "dream" = paste0(
+        "The `variancePartition` `dream` workflow", ifelse(isTRUE(params$meta$params$dream_apply_voom), " with `voom` transformation", ""),
+        " was used for differential analysis. p-values were adjusted with the ", params$meta$params$dream_adjust_method,
+        " method to reduce the number of false positives. ", ucfirst(params$meta$params$features_type),
+        "s were considered differential if, for the respective contrast, the adjusted p-value was equal to or lower than ", params$meta$params$dream_p_value,
+        " and the absolute log2 fold change was equal to or higher than ", params$meta$params$dream_lfc, "."
+    ),
+    paste0(
+        "The `", params$meta$params$differential_method, "` method was used for differential analysis."
+    )
+)
+
+cat(method_description)
 ```
 
 ### Differential `{r} params$meta$params$features_type` `{r} params$meta$params$study_abundance_type`
