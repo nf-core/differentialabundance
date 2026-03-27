@@ -63,6 +63,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [[#681](https://github.com/nf-core/differentialabundance/pull/681)] - Remove the nextflow config default `--round_digits 4` parameter and change it for `-1` ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#646](https://github.com/nf-core/differentialabundance/pull/646)] - Remove the `--differential_feature_name_column` parameter and consolidate its functionality into `--features_name_col` ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#659](https://github.com/nf-core/differentialabundance/pull/659)] - Remove `immunedeconv` module ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#644](https://github.com/nf-core/differentialabundance/pull/644)] - Reverted back to use profiles by default, and use paramsheet only when provided, ([@suzannejin](https://github.com/suzannejin)), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@grst](https://github.com/grst).
