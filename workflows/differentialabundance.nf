@@ -702,6 +702,8 @@ workflow DIFFERENTIALABUNDANCE {
         .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_dc_estimate, ch_paramsets).map { meta, file -> ['decoupler_estimate', meta, file] })
         .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_dc_pvals, ch_paramsets).map { meta, file -> ['decoupler_pvals', meta, file] })
         .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_png, ch_paramsets).map { meta, file -> ['decoupler_png', meta, file] })
+        // common outputs
+        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.session_info, ch_paramsets).map { meta, file -> ['session_info', meta, file] })
 
     ch_versions = ch_versions
         .mix(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.versions)

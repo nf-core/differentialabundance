@@ -169,6 +169,7 @@ output {
     }
     functional {
         path { name, meta, file ->
+            def method = meta.params.functional_method
             def folder = [
                 // GSEA
                 gsea_report_tsv           : 'report/gsea',
@@ -195,6 +196,7 @@ output {
                 gprofiler2_all_enrichment : 'tables/gprofiler2',
                 gprofiler2_sub_enrichment : 'tables/gprofiler2',
                 gprofiler2_html           : 'plots/gprofiler2',
+                gprofiler2_plot_png       : 'plots/gprofiler2',
                 gprofiler2_sub_plot       : 'plots/gprofiler2',
                 gprofiler2_rds            : 'other/gprofiler2',
                 gprofiler2_filtered_gmt   : 'other/gprofiler2',
@@ -203,9 +205,10 @@ output {
                 decoupler_estimate        : 'tables/decoupler',
                 decoupler_pvals           : 'tables/decoupler',
                 decoupler_png             : 'plots/decoupler',
-            ][name] ?: name
 
-            def method = meta.params.functional_method
+                // common outputs
+                session_info               : "other/${method}"
+            ][name] ?: name
             def gene_set_name = (method == 'gsea' && meta.params.gene_sets_files) \
                 ? meta.params.gene_sets_files.tokenize('/')[-1].replaceFirst(/\.[^.]+$/, '') \
                 : null
