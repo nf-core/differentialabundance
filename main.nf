@@ -121,27 +121,27 @@ output {
         path { name, meta, file ->
             def folder = [
                 // AFFY
-                affy_raw_expression             : 'tables/processed_abundance',
-                affy_norm_expression            : 'tables/processed_abundance',
-                affy_annotation                 : 'tables/annotation',
-                affy_raw_rds                    : 'other/affy',
-                affy_cel_files                  : 'untar',
+                affy_raw_expression        : 'tables/processed_abundance',
+                affy_norm_expression       : 'tables/processed_abundance',
+                affy_annotation            : 'tables/annotation',
+                affy_raw_rds               : 'other/affy',
+                affy_cel_files             : 'untar',
 
                 // PROTEUS
-                proteus_raw                     : 'tables/proteus',
-                proteus_norm                    : 'tables/proteus',
-                proteus_plots                   : 'plots/proteus',
-                proteus_raw_rdata               : 'other/proteus',
-                proteus_norm_rdata              : 'other/proteus',
-                proteus_session_info            : 'other/proteus',
+                proteus_raw                : 'tables/proteus',
+                proteus_norm               : 'tables/proteus',
+                proteus_plots              : 'plots/proteus',
+                proteus_raw_rdata          : 'other/proteus',
+                proteus_norm_rdata         : 'other/proteus',
+                proteus_session_info       : 'other/proteus',
 
                 // GEO SOFT
-                geo_expression                  : 'tables/processed_abundance',
-                geo_annotation                  : 'tables/annotation',
-                geo_rds                         : 'other/affy',
+                geo_expression             : 'tables/processed_abundance',
+                geo_annotation             : 'tables/annotation',
+                geo_rds                    : 'other/affy',
 
                 // GTF
-                gtf_annotation                  : 'tables/annotation',
+                gtf_annotation             : 'tables/annotation',
 
             ][name] ?: name
             def target = (name in ['proteus_plots', 'proteus_raw_rdata', 'proteus_norm_rdata']) \
@@ -153,13 +153,16 @@ output {
     differential {
         path { name, meta, file ->
             def folder = [
-                differential_results          : 'tables/differential',
-                differential_results_filtered : 'tables/differential',
-                normalised_matrix             : 'tables/processed_abundance',
-                variance_stabilised_matrix    : 'tables/processed_abundance',
-                differential_annotated        : 'tables/differential',
-                differential_qc               : 'plots/qc',
-                differential_other            : "other/${meta.params.differential_method}",
+                results                    : 'tables/differential',
+                results_filtered           : 'tables/differential',
+                annotated                  : 'tables/differential',
+                normalised_matrix          : 'tables/processed_abundance',
+                variance_stabilised_matrix : 'tables/processed_abundance',
+                size_factors               : "other/${meta.params.differential_method}",
+                dispersion_plot            : 'plots/qc',
+                md_plot                    : 'plots/qc',
+                rdata                      : "other/${meta.params.differential_method}",
+                session_info               : "other/${meta.params.differential_method}"
             ][name] ?: name
             file >> "${folder}/${meta.paramset_name}/"
         }
@@ -168,28 +171,39 @@ output {
         path { name, meta, file ->
             def folder = [
                 // GSEA
-                gsea_report               : 'report/gsea',
-                gsea_artifacts            : 'report/gsea',
+                gsea_report_tsv           : 'report/gsea',
+                gsea_report_html          : 'report/gsea',
+                gsea_index_html           : 'report/gsea',
+                gsea_heat_map_corr_plot   : 'report/gsea',
+                gsea_ranked_gene_list     : 'report/gsea',
+                gsea_gene_set_sizes       : 'report/gsea',
+                gsea_histogram            : 'report/gsea',
+                gsea_heatmap              : 'report/gsea',
+                gsea_pvalues_vs_nes_plot  : 'report/gsea',
+                gsea_ranked_list_corr     : 'report/gsea',
+                gsea_butterfly_plot       : 'report/gsea',
+                gsea_gene_set_tsv         : 'report/gsea',
+                gsea_gene_set_html        : 'report/gsea',
+                gsea_gene_set_heatmap     : 'report/gsea',
+                gsea_gene_set_enplot      : 'report/gsea',
+                gsea_gene_set_dist        : 'report/gsea',
+                gsea_snapshot             : 'report/gsea',
+                gsea_archive              : 'report/gsea',
+                gsea_rpt                  : 'report/gsea',
 
                 // GPROFILER2
                 gprofiler2_all_enrichment : 'tables/gprofiler2',
                 gprofiler2_sub_enrichment : 'tables/gprofiler2',
                 gprofiler2_html           : 'plots/gprofiler2',
+                gprofiler2_sub_plot       : 'plots/gprofiler2',
+                gprofiler2_rds            : 'other/gprofiler2',
+                gprofiler2_filtered_gmt   : 'other/gprofiler2',
 
                 // DECOUPLER
                 decoupler_estimate        : 'tables/decoupler',
                 decoupler_pvals           : 'tables/decoupler',
                 decoupler_png             : 'plots/decoupler',
-            ][name]
-
-            // Evaluated lazily to avoid Groovy eager map evaluation calling .name on an ArrayList
-            // as file can be a list of files
-            if (!folder && name == 'gprofiler2_artifacts') {
-                def fileName = (file instanceof List) ? file[0].name : file.name
-                folder = fileName.toLowerCase().endsWith('.png') ? 'plots/gprofiler2' : 'other/gprofiler2'
-            }
-
-            folder = folder ?: name
+            ][name] ?: name
 
             def method = meta.params.functional_method
             def gene_set_name = (method == 'gsea' && meta.params.gene_sets_files) \
