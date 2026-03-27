@@ -62,7 +62,7 @@
                 },
                 "round_digits": {
                     "type": "integer",
-                    "default": 4,
+                    "default": -1,
                     "description": "To how many digits should numeric output in different modules be rounded? If -1 or null, will not round.",
                     "help_text": "This affects output from the following modules (both their tabular output and their result sections in the report): proteus, limma, deseq2, gprofiler2."
                 }
