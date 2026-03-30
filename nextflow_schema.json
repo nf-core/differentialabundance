@@ -10,7 +10,7 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["study_name", "study_type", "input", "outdir", "study_abundance_type"],
+            "required": ["study_name", "study_type", "input", "outdir"],
             "properties": {
                 "study_name": {
                     "type": "string",
@@ -56,9 +56,10 @@
                 "study_abundance_type": {
                     "type": "string",
                     "default": "counts",
-                    "description": "Type of abundance measure used, platform-dependent.",
-                    "enum": ["counts", "intensities"],
-                    "fa_icon": "fas fa-keyboard"
+                    "description": "Label describing the abundance values in the report heading.",
+                    "help_text": "Optional display label used in report text (for example 'counts', 'intensities', or any custom term). This does not alter statistical method selection.",
+                    "fa_icon": "fas fa-keyboard",
+                    "hidden": true
                 },
                 "round_digits": {
                     "type": "integer",

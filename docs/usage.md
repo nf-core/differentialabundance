@@ -336,7 +336,6 @@ A paramsheet entry looks like this:
 ```yaml
 - paramset_name: my_deseq2_run
   study_type: rnaseq
-  study_abundance_type: counts
   differential_method: deseq2
   # ... additional parameter overrides
 ```

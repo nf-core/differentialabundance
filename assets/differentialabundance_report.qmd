@@ -1260,7 +1260,7 @@ method_description <- switch(
 cat(method_description)
 ```
 
-### Differential `{r} params$meta$params$features_type` `{r} params$meta$params$study_abundance_type`
+### Differential `{r} params$meta$params$features_type` `{r} ifelse(is.null(params$meta$params$study_abundance_type) || params$meta$params$study_abundance_type == "", "abundance", params$meta$params$study_abundance_type)}`
 
 ```{r, echo=FALSE, results='asis', warning=FALSE}
 #| echo: false
@@ -1276,7 +1276,7 @@ foo <- lapply(names(p_value_types), function(pvt) {
     caption_text <- paste0(
     "Differential ",
     params$meta$params$features_type, " ",
-    params$meta$params$abundance_type,
+    ifelse(is.null(params$meta$params$study_abundance_type) || params$meta$params$study_abundance_type == "", "abundance", params$meta$params$study_abundance_type),
     " (target relative to reference)"
     )
 
