@@ -254,6 +254,14 @@ By default, if you don't provide features, for non-array data the workflow will 
 
 The pipeline supports two modes of operation, each with well-defined parameter precedence rules:
 
+> [!NOTE]
+> The `study_type` parameter describes the input data format category only (for example matrix input, Affymetrix CEL archives, MaxQuant tables, or GEO SOFT retrieval). It is used for input validation and routing of format-specific preprocessing steps. It does not configure which statistical methods are run.
+
+Method selection is configured through analysis profiles (for example `-profile rnaseq`, `-profile rnaseq_limma`, `-profile rnaseq_dream`) or explicit method parameters. Because of this separation, an RNA-seq profile and `study_type: rnaseq` are related defaults but conceptually different settings.
+
+For matrix-style tabular data that is not RNA-seq, you can use `study_type: generic_matrix` (equivalent to `study_type: rnaseq` in pipeline behaviour). The `rnaseq` name is retained for backwards compatibility.
+
+
 ### 1. Single-Run Mode (Config Profiles) — recommended for production
 
 For standard production use, select an **analysis profile** that bundles the correct study type, differential method, and output settings. CLI flags override profile parameters, following standard Nextflow precedence:
@@ -323,7 +331,7 @@ A paramsheet entry looks like this:
 
 ```yaml
 - paramset_name: my_deseq2_run
-  study_type: rnaseq
+  study_type: generic_matrix
   study_abundance_type: counts
   differential_method: deseq2
   # ... additional parameter overrides

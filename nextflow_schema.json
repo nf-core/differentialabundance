@@ -22,9 +22,15 @@
                 "study_type": {
                     "type": "string",
                     "default": "rnaseq",
-                    "description": "A string identifying the technology used to produce the data",
-                    "help_text": "Currently one of 'rnaseq', 'affy_array' (microarray), 'maxquant' (proteomics) or 'geo_soft_file' [GEO SOFT](https://www.ncbi.nlm.nih.gov/geo/info/soft.html) may be specified.",
-                    "enum": ["rnaseq", "affy_array", "maxquant", "geo_soft_file"],
+                    "description": "Input data format category used for input validation and routing (not for selecting analysis methods).",
+                    "help_text": "Use this to tell the pipeline what kind of input files you are providing. It controls format-specific validation and preprocessing (for example, TSV/CSV matrix input, CEL archive handling, MaxQuant parsing, or GEO SOFT retrieval). It does not choose the differential or functional analysis methods. Method choices come from analysis profiles (e.g. '-profile rnaseq', '-profile rnaseq_limma') or explicit method parameters. Allowed values: 'rnaseq' (matrix-style input, historically named; includes generic non-RNA-seq matrices), 'generic_matrix' (alias of 'rnaseq' for non-RNA-seq matrix data), 'affy_array' (microarray), 'maxquant' (proteomics), or 'geo_soft_file' ([GEO SOFT](https://www.ncbi.nlm.nih.gov/geo/info/soft.html)).",
+                    "enum": [
+                        "rnaseq",
+                        "generic_matrix",
+                        "affy_array",
+                        "maxquant",
+                        "geo_soft_file"
+                    ],
                     "fa_icon": "far fa-keyboard"
                 },
                 "input": {
