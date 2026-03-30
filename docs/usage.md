@@ -261,7 +261,6 @@ Method selection is configured through analysis profiles (for example `-profile 
 
 For matrix-style tabular data that is not RNA-seq, you can use `study_type: generic_matrix` (equivalent to `study_type: rnaseq` in pipeline behaviour). The `rnaseq` name is retained for backwards compatibility.
 
-
 ### 1. Single-Run Mode (Config Profiles) — recommended for production
 
 For standard production use, select an **analysis profile** that bundles the correct study type, differential method, and output settings. CLI flags override profile parameters, following standard Nextflow precedence:
