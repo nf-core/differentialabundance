@@ -65,6 +65,12 @@
                     "default": 4,
                     "description": "To how many digits should numeric output in different modules be rounded? If -1 or null, will not round.",
                     "help_text": "This affects output from the following modules (both their tabular output and their result sections in the report): proteus, limma, deseq2, gprofiler2."
+                },
+                "seed": {
+                    "type": "integer",
+                    "description": "Global seed for stochastic methods",
+                    "help_text": "Optional global seed for methods with stochastic components. When set, the same value is passed to supported methods such as DESeq2, limma, DREAM and GSEA to make reruns reproducible.",
+                    "fa_icon": "fas fa-seedling"
                 }
             }
         },
@@ -661,10 +667,6 @@
                     "help_text": "'ashr' method is the only method currently implemented",
                     "fa_icon": "fas fa-microscope"
                 },
-                "deseq2_seed": {
-                    "type": "integer",
-                    "fa_icon": "fas fa-seedling"
-                },
                 "deseq2_vs_blind": {
                     "type": "boolean",
                     "default": true,
@@ -956,13 +958,6 @@
                     "description": "Plot graphs for the top sets of each phenotype",
                     "help_text": "Generates summary plots and detailed analysis results for the top x genes in each phenotype, where x is 20 by default. The top genes are those with the largest normalized enrichment scores.\n\nSee 'advanced fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page. ",
                     "fa_icon": "fas fa-angle-up"
-                },
-                "gsea_rnd_seed": {
-                    "type": "string",
-                    "default": "timestamp",
-                    "description": "Seed for permutation",
-                    "help_text": "Seed used to generate a random number for phenotype and gene_set  permutations: timestamp (default), 149, or user input. The specific seed value (149) generates consistent results, which is useful when testing software.",
-                    "fa_icon": "fas fa-random"
                 },
                 "gsea_save_rnd_lists": {
                     "type": "boolean",
