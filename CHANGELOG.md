@@ -65,6 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [[#686](https://github.com/nf-core/differentialabundance/pull/686)] - Improve `study_abundance_type` docs and schema description ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#681](https://github.com/nf-core/differentialabundance/pull/681)] - Remove the nextflow config default `--round_digits 4` parameter and change it for `-1` ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#672](https://github.com/nf-core/differentialabundance/pull/672)] - Add universal seed parameter ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#646](https://github.com/nf-core/differentialabundance/pull/646)] - Remove the `--differential_feature_name_column` parameter and consolidate its functionality into `--features_name_col` ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
