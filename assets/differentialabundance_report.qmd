@@ -96,6 +96,15 @@ plot_screeplot <- function(percentVarData) {
         )
 }
 
+module_disabled <- function(x) {
+  mods <- params$meta$params$disable_report_modules
+  if (is.null(mods) || mods == "") {
+    return(FALSE)
+  } else {
+    x %in% simpleSplit(mods)
+  }
+}
+
 generate_boxplots <- function(combined, assay_data, observations, params,
                                contrast_variables, main_grouping_variable,
                                groupColorScale, label_col) {
@@ -851,7 +860,7 @@ The following plots show the abundance value distributions of input matrices. A 
 
 #### Box plots
 
-```{r, echo=FALSE, fig.height=8}
+```{r, echo=FALSE, fig.height=8, eval=!module_disabled("boxplot")}
 #| echo: false
 
 
@@ -871,7 +880,7 @@ Whiskers in the above boxplots show `{r} params$meta$params$exploratory_whisker_
 
 #### Density plots
 
-```{r, echo=FALSE, fig.height=8}
+```{r, echo=FALSE, fig.height=8, eval=!module_disabled("density")}
 #| echo: false
 p <- plotly_densityplot(
     assay_data,
@@ -890,13 +899,13 @@ cat(paste0("\n### ", ucfirst(params$meta$params$observations_type), " relationsh
 ```
 
 #### Principal components plots
-::: {.panel-tabset}
 
 Principal components analysis was conducted based on the `{r} params$meta$params$exploratory_n_features` most variable `{r} params$meta$params$features_type`s. Each component was annotated with its percent contribution to variance.
 
-```{r, echo=FALSE, results='asis'}
+```{r, echo=FALSE, results='asis', eval=!module_disabled("pca")}
 #| echo: false
 
+cat("::: {.panel-tabset}")
 # Create nested list to save the percentVars for reusing in the scree plot
 percentVar_list <- list()
 for (assay_type in rev(names(assay_data))) {
@@ -1025,7 +1034,7 @@ for (assay_type in rev(names(assay_data))) {
 cat(":::")
 ```
 
-```{r, echo=FALSE, results='asis', eval=params$meta$params$report_scree}
+```{r, echo=FALSE, results='asis', eval=!module_disabled("scree")}
 cat(paste0("\n#### Scree plot\n"))
 cat("::: {.panel-tabset}")
 cat(paste0("\nThe following scree plot visualizes what percentage of total variation in the data can be explained by each of the principal components computed.\n"))
@@ -1050,7 +1059,7 @@ For the variance stabilised matrix, an ANOVA test was used to determine assocati
 
 The resulting p values are illustrated below.
 
-```{r, echo=FALSE, results='asis'}
+```{r, echo=FALSE, results='asis',  eval=!module_disabled("pca")}
 #| echo: false
 #| results: asis
 
@@ -1095,14 +1104,14 @@ for (variable in rownames(pca_vs_meta)) {
 
 A hierarchical clustering of `{r} params$meta$params$features_type`s was undertaken based on `{r} ifelse(params$meta$params$exploratory_n_features == -1, paste0("all ", params$meta$params$features_type), paste0("the ", params$meta$params$exploratory_n_features, " most variable ", params$meta$params$features_type))`s. Distances between `r params$meta$params$features_type`s were estimated based on `{r} params$meta$params$exploratory_cor_method` correlation, which were then used to produce a clustering via the `{r} params$meta$params$exploratory_clustering_method` method with `hclust()` in R.
 
-::: {.panel-tabset}
-```{r}
+```{r, eval=!module_disabled("heatmap")}
 #| echo: false
 #| results: asis
 #| warning: false
 #| message: false
 #| fig-height: 14
 #| fig-width: 8
+cat("::: {.panel-tabset}")
 for (assay_type in rev(names(assay_data))) {
     cat(paste0("\n##### ", prettifyVariablename(assay_type), "\n"))
 
@@ -1174,7 +1183,7 @@ for (assay_type in rev(names(assay_data))) {
 cat(":::")
 ```
 
-```{r, echo=FALSE, results='asis', warning=FALSE}
+```{r, echo=FALSE, results='asis', warning=FALSE, eval=!module_disabled("outlier")}
 
 # We can't look for ouliers in sets of less than 3 samples, so exclude variables
 # unless the minimum group size is larger than that
@@ -1287,19 +1296,36 @@ foo <- lapply(names(p_value_types), function(pvt) {
     showSortable = FALSE
     )
 
-    htmltools::tagList(
-    htmltools::tags$p(
-        caption_text,
-        style = "font-weight: bold; margin-bottom: 6px;"
-    ),
-    rt
+    print(
+        htmltools::tagList(
+            htmltools::tags$p(
+                caption_text,
+                style = "font-weight: bold; margin-bottom: 6px;"
+            ),
+            rt
+        )
     )
     cat("\n")
+})
 
+cat("\n:::\n\n")
+```
+
+```{r, echo=FALSE, results='asis', warning=FALSE, eval=!module_disabled("upset_plot")}
+#| echo: false
+#| results: asis
+#| output: asis
+#| warning: false
+#| message: false
+
+cat("::: {.panel-tabset}")
+
+foo <- lapply(names(p_value_types), function(pvt) {
+    cat("\n#### ", pvt, "\n")
     if (nrow(contrasts) > 1) {
-        cat("\n### Upset plot\n\n")
+            cat("\n### Upset plot\n\n")
 
-        de_genes <- lapply(differential_results, function(de) {
+            de_genes <- lapply(differential_results, function(de) {
 
             # Determine which column to use for labels
             if (!is.null(params$meta$params$features) &&
@@ -1310,26 +1336,26 @@ foo <- lapply(names(p_value_types), function(pvt) {
                 label_col <- params$meta$params$differential_feature_id_column
             }
 
-            sig <- de[!is.na(de[[label_col]]) &
-                !is.na(de[[p_value_types[[pvt]]]]) &
-                abs(de[[params$meta$params$differential_fc_column]]) > log2(params$meta$params$differential_min_fold_change) &
-                de[[p_value_types[[pvt]]]] < p_value_thresholds[[pvt]], ]
-            return(sig[[label_col]])
-        })
+                sig <- de[!is.na(de[[label_col]]) &
+                    !is.na(de[[p_value_types[[pvt]]]]) &
+                    abs(de[[params$meta$params$differential_fc_column]]) > log2(params$meta$params$differential_min_fold_change) &
+                    de[[p_value_types[[pvt]]]] < p_value_thresholds[[pvt]], ]
+                return(sig[[label_col]])
+            })
 
-        names(de_genes) <- names(differential_results)
+            names(de_genes) <- names(differential_results)
 
-        # Only plot if there are at least two contrasts with DE genes
-        de_con <- sum(!is.na(sapply(de_genes, function(x) x[2])))
-        if (de_con > 1) {
-            suppressWarnings(suppressMessages({
-                p <- upset(fromList(de_genes))
-                print(p)
-            }))
+            # Only plot if there are at least two contrasts with DE genes
+            de_con <- sum(!is.na(sapply(de_genes, function(x) x[2])))
+            if (de_con > 1) {
+                suppressWarnings(suppressMessages({
+                    p <- upset(fromList(de_genes))
+                    print(p)
+                }))
+            }
+
+            cat("\n\n")
         }
-
-        cat("\n\n")
-    }
 })
 
 cat("\n:::\n\n")
@@ -1454,20 +1480,22 @@ for (i in 1:nrow(contrasts)) {
             ))
         }
 
-        p <- do.call(plotly_scatterplot, plot_args) %>%
-            layout(xaxis = list(range = list(-max_fc, max_fc))) %>%
-            add_segments(
-                x = -max_fc,
-                xend = max_fc,
-                y = -log10(p_value_thresholds[[pvt]]),
-                yend = -log10(p_value_thresholds[[pvt]]),
-                line = list(color = "black", width = 2, dash = "dot"),
-                showlegend = TRUE,
-                inherit = FALSE,
-                name = paste(pval_column, "=", p_value_thresholds[[pvt]])
-            )
+        if (!module_disabled("volcano")) {
+            p <- do.call(plotly_scatterplot, plot_args) %>%
+                layout(xaxis = list(range = list(-max_fc, max_fc))) %>%
+                add_segments(
+                    x = -max_fc,
+                    xend = max_fc,
+                    y = -log10(p_value_thresholds[[pvt]]),
+                    yend = -log10(p_value_thresholds[[pvt]]),
+                    line = list(color = "black", width = 2, dash = "dot"),
+                    showlegend = TRUE,
+                    inherit = FALSE,
+                    name = paste(pval_column, "=", p_value_thresholds[[pvt]])
+                )
 
-        print(htmltools::tagList(p))
+            print(htmltools::tagList(p))
+        }
 
         cat("\n###### Differential Genes Table\n\n")
         # Filter full_de to get only significant features and add Direction column
@@ -1531,44 +1559,47 @@ for (i in 1:nrow(contrasts)) {
                 }
             }
 
-            # Create the reactable with caption
-            rt <- reactable(
-                combined,
-                columns = column_defs,
-                filterable = TRUE,
-                sortable = TRUE,
-                bordered = TRUE,
-                striped = TRUE,
-                highlight = TRUE,
-                defaultPageSize = 20,
-                showPageSizeOptions = TRUE,
-                pageSizeOptions = c(10, 20, 50, 100),
-                defaultSorted = setNames(
-                    list("asc"),
-                    prettifyVariablename(params$meta$params$differential_qval_column)
-                )
-            )
+            if (!module_disabled("de_table")) {
 
-            # Add caption as HTML wrapper
-            caption_html <- htmltools::tags$div(
-                style = "margin-bottom: 10px; font-style: italic; color: #666;",
-                paste(
-                    "Differential genes (Up + Down) in",
-                    contrast_descriptions[i],
-                    "(check", differential_files[[i]], "for more detail)"
-                )
-            )
-
-            # Print the table with caption
-            print(
-                htmltools::tagList(
-                    caption_html,
-                    htmltools::tags$div(
-                    style = "overflow-x:auto; max-width:100%;",
-                    rt
+                # Create the reactable with caption
+                rt <- reactable(
+                    combined,
+                    columns = column_defs,
+                    filterable = TRUE,
+                    sortable = TRUE,
+                    bordered = TRUE,
+                    striped = TRUE,
+                    highlight = TRUE,
+                    defaultPageSize = 20,
+                    showPageSizeOptions = TRUE,
+                    pageSizeOptions = c(10, 20, 50, 100),
+                    defaultSorted = setNames(
+                        list("asc"),
+                        prettifyVariablename(params$meta$params$differential_qval_column)
                     )
                 )
+
+                # Add caption as HTML wrapper
+                caption_html <- htmltools::tags$div(
+                    style = "margin-bottom: 10px; font-style: italic; color: #666;",
+                    paste(
+                        "Differential genes (Up + Down) in",
+                        contrast_descriptions[i],
+                        "(check", differential_files[[i]], "for more detail)"
+                    )
                 )
+
+                # Print the table with caption
+                print(
+                    htmltools::tagList(
+                        caption_html,
+                        htmltools::tags$div(
+                        style = "overflow-x:auto; max-width:100%;",
+                        rt
+                        )
+                    )
+                )
+            }
 
             cat("\n**Box plots**\n\n")
             cat("The following box plots show the distribution of expression levels for the top 10 genes ranked by significance.\n\n")
@@ -1578,7 +1609,7 @@ for (i in 1:nrow(contrasts)) {
                   groupColorScale, label_col)
 
             # Optional biotype plot, now grouped by Direction
-            if ("Gene biotype" %in% colnames(combined)) {
+            if ("Gene biotype" %in% colnames(combined) && !module_disabled("biotype_plot")) {
                 # Count by biotype and direction without adding new deps
                 bt <- as.data.frame(table(
                     combined[["Gene biotype"]],
@@ -1617,7 +1648,7 @@ for (i in 1:nrow(contrasts)) {
 
 <!-- Gene set analysis results -->
 
-```{r, warning=FALSE, results='asis'}
+```{r, warning=FALSE, results='asis', eval=!module_disabled("gsea")}
 #| echo: false
 #| results: asis
 #| warning: false
