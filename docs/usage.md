@@ -250,9 +250,28 @@ To override the above options, you may also supply your own features table as a 
 
 By default, if you don't provide features, for non-array data the workflow will fall back to attempting to use the matrix itself as a source of feature annotations. For this to work you must make sure to set the `features_id_col`, `features_name_col` and `features_metadata_cols` parameters to the appropriate values, for example by setting them to 'gene_id' if that is the identifier column on the matrix. This will cause the gene ID to be used everywhere rather than more accessible gene symbols (as can be derived from the GTF), but the workflow should run. Please use this option for MaxQuant analysis, i.e. do not provide features.
 
+## Reproducibility and random seeds
+
+Some supported methods have stochastic components. You can now set a pipeline-wide seed with:
+
+```bash
+--seed 1234
+```
+
+When provided, this value is passed to supported stochastic methods, currently including DESeq2, limma, DREAM and GSEA, so reruns can be reproduced consistently across the pipeline.
+
+If `--seed` is left unset (the default), the pipeline does not set a seed for these methods, so stochastic steps may remain non-deterministic.
+
 ## Analysis modes
 
 The pipeline supports two modes of operation, each with well-defined parameter precedence rules:
+
+> [!NOTE]
+> The `study_type` parameter describes the input data format category only (for example matrix input, Affymetrix CEL archives, MaxQuant tables, or GEO SOFT retrieval). It is used for input validation and routing of format-specific preprocessing steps. It does not configure which statistical methods are run.
+
+Method selection is configured through analysis profiles (for example `-profile rnaseq`, `-profile rnaseq_limma`, `-profile rnaseq_dream`) or explicit method parameters. Because of this separation, an RNA-seq profile and `study_type: rnaseq` are related defaults but conceptually different settings.
+
+For matrix-style tabular data that is not RNA-seq, you can use `study_type: generic_matrix` (equivalent to `study_type: rnaseq` in pipeline behaviour). The `rnaseq` name is retained for backwards compatibility.
 
 ### 1. Single-Run Mode (Config Profiles) — recommended for production
 
@@ -323,7 +342,7 @@ A paramsheet entry looks like this:
 
 ```yaml
 - paramset_name: my_deseq2_run
-  study_type: rnaseq
+  study_type: generic_matrix
   study_abundance_type: counts
   differential_method: deseq2
   # ... additional parameter overrides
@@ -561,6 +580,7 @@ work                # Directory containing the nextflow working files
 
 - If you don't like the colors used in the report, try a different `RColorBrewer` palette by changing the `exploratory_palette_name` and/or `differential_palette_name` parameters.
 - In rare cases, some users have reported issues with DESeq2 using all available cores on a machine, rather than those specified in the process configuration. This can be prevented by setting the `OPENBLAS_NUM_THREADS` environment variable.
+- By default, `--round_digits` is disabled (`-1`) to avoid unintentional information loss in small numeric values. Enable it only when you explicitly want rounded report tables.
 
 ### Scaling up to large sample numbers
 

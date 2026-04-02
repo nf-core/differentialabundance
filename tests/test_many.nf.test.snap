@@ -1,7 +1,7 @@
 {
     "Test profile - many": {
         "content": [
-            79,
+            83,
             {
                 "AFFY_JUSTRMA_RAW": {
                     "r-base": "4.3.1",
@@ -399,6 +399,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-03-20T17:01:49.370707291"
+        "timestamp": "2026-04-02T14:43:03.594449677"
     }
 }

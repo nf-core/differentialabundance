@@ -196,7 +196,7 @@ def validateInputParameters(paramsets) {
             if (!row.querygse || !row.features_metadata_cols) {
                 error("Query GSE not specified or features metadata columns not specified for paramset={${row.paramset_name}}")
             }
-        } else if (row.study_type == "rnaseq") {
+        } else if (row.study_type in ["rnaseq", "generic_matrix"]) {
             if (!row.matrix) {
                 error("Input matrix not specified for paramset={${row.paramset_name}}!")
             }
