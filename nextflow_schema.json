@@ -55,7 +55,7 @@
                 },
                 "study_abundance_type": {
                     "type": "string",
-                    "default": "counts",
+                    "default": "abundance",
                     "description": "Label describing the abundance values in the report heading.",
                     "help_text": "Optional display label used in report text (for example 'counts', 'intensities', or any custom term). This does not alter statistical method selection. Typically set internally when choosing a profile.",
                     "fa_icon": "fas fa-keyboard",
