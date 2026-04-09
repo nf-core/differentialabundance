@@ -74,8 +74,9 @@ nextflow_pipeline {
         }
     }
 
-    test("Test rnaseq dream profile - complex contrast - with zero intercept - 2") {
-        config "${projectDir}/conf/test/rnaseq/rnaseq_dream_complex.config"
+    test("Test generic_matrix dream profile - complex contrast - with zero intercept - 2") {
+        tag "generic_matrix_dream"
+        config "${projectDir}/conf/test/generic_matrix/generic_matrix_dream.config"
 
         when {
             params {
@@ -83,9 +84,6 @@ nextflow_pipeline {
 
                 // Override contrasts for zero intercept test
                 contrasts = "${projectDir}/tests/assets/zero_intercept_contrasts_2.yml"
-
-                // DREAM without voom (dream_norm paramset)
-                dream_apply_voom        = false
                 exploratory_assay_names = 'raw'
                 exploratory_final_assay = 'raw'
 
