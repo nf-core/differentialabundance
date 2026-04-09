@@ -586,13 +586,6 @@ nextflow run nf-core/differentialabundance \
     --matrix my_matrix.tsv \
     --outdir <OUTDIR>
 
-# Generic pre-scaled matrix (DREAM mixed-effects model)
-nextflow run nf-core/differentialabundance \
-    -profile generic_matrix_dream,docker \
-    --input samplesheet.csv \
-    --contrasts contrasts.yaml \
-    --matrix my_matrix.tsv \
-    --outdir <OUTDIR>
 ```
 
 Note that the pipeline will create the following files in your working directory:
