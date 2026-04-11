@@ -53,12 +53,6 @@ workflow DIFFERENTIALABUNDANCE {
     main:
 
     ch_versions      = channel.empty()
-    ch_preprocessing = channel.empty()
-    ch_differential  = channel.empty()
-    ch_functional    = channel.empty()
-    ch_plotting      = channel.empty()
-    ch_shinyngs      = channel.empty()
-    ch_report        = channel.empty()
 
     // ========================================================================
     // Handle input
@@ -178,9 +172,6 @@ workflow DIFFERENTIALABUNDANCE {
     UNTAR ( prepareModuleInput(ch_celfiles, 'preprocessing') )
     ch_untar_out = prepareModuleOutput(UNTAR.out.untar, ch_paramsets)
 
-    ch_preprocessing = ch_preprocessing
-        .mix(ch_untar_out.map { it -> ['affy_cel_files', it[0], it[1..-1]] })
-
     // Run affy
 
     ch_affy_input = prepareModuleInput(ch_input.affy_array.join(ch_untar_out), 'preprocessing')
@@ -198,11 +189,6 @@ workflow DIFFERENTIALABUNDANCE {
     ch_affy_norm = prepareModuleOutput(AFFY_JUSTRMA_NORM.out.expression, ch_paramsets)
     ch_affy_platform_features = prepareModuleOutput(AFFY_JUSTRMA_RAW.out.annotation, ch_paramsets)
 
-    ch_preprocessing = ch_preprocessing
-        .mix(ch_affy_raw.map { meta, file -> ['affy_raw_expression', meta, file] })
-        .mix(ch_affy_norm.map { meta, file -> ['affy_norm_expression', meta, file] })
-        .mix(ch_affy_platform_features.map { meta, file -> ['affy_annotation', meta, file] })
-        .mix(prepareModuleOutput(AFFY_JUSTRMA_RAW.out.rds, ch_paramsets).map { meta, file -> ['affy_raw_rds', meta, file] })
     ch_versions = ch_versions
         .mix(AFFY_JUSTRMA_RAW.out.versions)
 
@@ -238,13 +224,6 @@ workflow DIFFERENTIALABUNDANCE {
             .mix(PROTEUS.out.norm_dist_plot)
         , ch_paramsets // here we keep contrast, as the plots are different across contrasts, and we can use it for output folder naming later
     )
-    ch_preprocessing = ch_preprocessing
-        .mix(ch_proteus_raw.map { meta, file -> ['proteus_raw', meta, file] })
-        .mix(ch_proteus_norm.map { meta, file -> ['proteus_norm', meta, file] })
-        .mix(ch_proteus_plots.map { meta, file -> ['proteus_plots', meta, file] })
-        .mix(prepareModuleOutput(PROTEUS.out.raw_rdata, ch_paramsets).map { meta, file -> ['proteus_raw_rdata', meta, file] })
-        .mix(prepareModuleOutput(PROTEUS.out.norm_rdata, ch_paramsets).map { meta, file -> ['proteus_norm_rdata', meta, file] })
-        .mix(prepareModuleOutput(PROTEUS.out.session_info, ch_paramsets).map { meta, file -> ['proteus_session_info', meta, file] })
     ch_versions = ch_versions.mix(PROTEUS.out.versions)
 
     //
@@ -257,10 +236,6 @@ workflow DIFFERENTIALABUNDANCE {
     ch_soft_norm = prepareModuleOutput(GEOQUERY_GETGEO.out.expression, ch_paramsets)
     ch_soft_features = prepareModuleOutput(GEOQUERY_GETGEO.out.annotation, ch_paramsets)
 
-    ch_preprocessing = ch_preprocessing
-        .mix(ch_soft_norm.map { meta, file -> ['geo_expression', meta, file] })
-        .mix(ch_soft_features.map { meta, file -> ['geo_annotation', meta, file] })
-        .mix(prepareModuleOutput(GEOQUERY_GETGEO.out.rds, ch_paramsets).map { meta, file -> ['geo_rds', meta, file] })
     ch_versions = ch_versions
         .mix(GEOQUERY_GETGEO.out.versions)
 
@@ -339,8 +314,6 @@ workflow DIFFERENTIALABUNDANCE {
     )
     ch_gtf_features = prepareModuleOutput(GTF_TO_TABLE.out.feature_annotation, ch_paramsets)
 
-    ch_preprocessing = ch_preprocessing
-        .mix(ch_gtf_features.map { meta, file -> ['gtf_annotation', meta, file] })
     ch_versions = ch_versions.mix(GTF_TO_TABLE.out.versions)
 
     // Extract features from matrix
@@ -525,16 +498,6 @@ workflow DIFFERENTIALABUNDANCE {
     ch_differential_norm = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.normalised_matrix, ch_paramsets, meta_keys_to_remove=['differential_method']) // meta, norm file
     ch_differential_varstab = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.variance_stabilised_matrix, ch_paramsets, meta_keys_to_remove=['differential_method']) // meta, varstab file
 
-    ch_differential = ch_differential
-        .mix(ch_differential_results.map { key, meta, file -> ['results', meta, file] })
-        .mix(ch_differential_results_filtered.map { key, meta, file -> ['results_filtered', meta, file] })
-        .mix(ch_differential_norm.map { meta, file -> ['normalised_matrix', meta, file] })
-        .mix(ch_differential_varstab.map { meta, file -> ['variance_stabilised_matrix', meta, file] })
-        .mix(prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.size_factors, ch_paramsets).map { meta, file -> ['size_factors', meta, file] })
-        .mix(prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.dispersion_plot, ch_paramsets).map { meta, file -> ['dispersion_plot', meta, file] })
-        .mix(prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.md_plot, ch_paramsets).map { meta, file -> ['md_plot', meta, file] })
-        .mix(prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.rdata, ch_paramsets).map { meta, file -> ['rdata', meta, file] })
-        .mix(prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.session_info, ch_paramsets).map { meta, file -> ['session_info', meta, file] })
     ch_versions = ch_versions
         .mix(ABUNDANCE_DIFFERENTIAL_FILTER.out.versions)
 
@@ -562,8 +525,6 @@ workflow DIFFERENTIALABUNDANCE {
         prepareModuleInput(ch_final_annotation_input, 'differential')
     )
 
-    ch_differential = ch_differential
-        .mix(prepareModuleOutput(CSVTK_JOIN.out.csv, ch_paramsets).map { meta, file -> ['annotated', meta, file] })
     ch_versions = ch_versions
         .mix(CSVTK_JOIN.out.versions)
 
@@ -669,42 +630,6 @@ workflow DIFFERENTIALABUNDANCE {
     // by setting 'use_meta_key' to true. This will facilitate later on to join/combine channels.
     ch_functional_results = prepareModuleOutput(ch_functional_results, ch_paramsets, meta_keys_to_remove=['functional_method'], use_meta_key=true) // key, meta, [ functional results ]
 
-    ch_functional = ch_functional
-        // GSEA outputs
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_report_tsv, ch_paramsets).map { meta, ref, target -> ['gsea_report_tsv', meta, [ref, target]] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_report_html, ch_paramsets).map { meta, ref, target -> ['gsea_report_html', meta, [ref, target]] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_index_html, ch_paramsets).map { meta, file -> ['gsea_index_html', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_heat_map_corr_plot, ch_paramsets).map { meta, file -> ['gsea_heat_map_corr_plot', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_ranked_gene_list, ch_paramsets).map { meta, file -> ['gsea_ranked_gene_list', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_gene_set_sizes, ch_paramsets).map { meta, file -> ['gsea_gene_set_sizes', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_histogram, ch_paramsets).map { meta, file -> ['gsea_histogram', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_heatmap, ch_paramsets).map { meta, file -> ['gsea_heatmap', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_pvalues_vs_nes_plot, ch_paramsets).map { meta, file -> ['gsea_pvalues_vs_nes_plot', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_ranked_list_corr, ch_paramsets).map { meta, file -> ['gsea_ranked_list_corr', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_butterfly_plot, ch_paramsets).map { meta, file -> ['gsea_butterfly_plot', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_gene_set_tsv, ch_paramsets).map { meta, file -> ['gsea_gene_set_tsv', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_gene_set_html, ch_paramsets).map { meta, file -> ['gsea_gene_set_html', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_gene_set_heatmap, ch_paramsets).map { meta, file -> ['gsea_gene_set_heatmap', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_gene_set_enplot, ch_paramsets).map { meta, file -> ['gsea_gene_set_enplot', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_gene_set_dist, ch_paramsets).map { meta, file -> ['gsea_gene_set_dist', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_snapshot, ch_paramsets).map { meta, file -> ['gsea_snapshot', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_archive, ch_paramsets).map { meta, file -> ['gsea_archive', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_rpt, ch_paramsets).map { meta, file -> ['gsea_rpt', meta, file] })
-        // GPROFILER2 outputs
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_plot_html, ch_paramsets).map { meta, file -> ['gprofiler2_html', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_all_enrich, ch_paramsets).map { meta, file -> ['gprofiler2_all_enrichment', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_sub_enrich, ch_paramsets).map { meta, file -> ['gprofiler2_sub_enrichment', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_artifacts, ch_paramsets).map { meta, file -> ['gprofiler2_plot_png', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_sub_plot, ch_paramsets).map { meta, file -> ['gprofiler2_sub_plot', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_rds, ch_paramsets).map { meta, file -> ['gprofiler2_rds', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_filtered_gmt, ch_paramsets).map { meta, file -> ['gprofiler2_filtered_gmt', meta, file] })
-        // DECOUPLER outputs
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_dc_estimate, ch_paramsets).map { meta, file -> ['decoupler_estimate', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_dc_pvals, ch_paramsets).map { meta, file -> ['decoupler_pvals', meta, file] })
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_png, ch_paramsets).map { meta, file -> ['decoupler_png', meta, file] })
-        // common outputs
-        .mix(prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.session_info, ch_paramsets).map { meta, file -> ['session_info', meta, file] })
-
     ch_versions = ch_versions
         .mix(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.versions)
 
@@ -750,15 +675,6 @@ workflow DIFFERENTIALABUNDANCE {
         prepareModuleInput(ch_exploratory_input, 'exploratory')
     )
 
-    ch_plots_exploratory = PLOT_EXPLORATORY.out.boxplots_png
-        .mix(PLOT_EXPLORATORY.out.densities_png)
-        .mix(PLOT_EXPLORATORY.out.pca2d_png)
-        .mix(PLOT_EXPLORATORY.out.pca3d_png)
-        .mix(PLOT_EXPLORATORY.out.mad_png)
-        .mix(PLOT_EXPLORATORY.out.dendro)
-    ch_plotting = ch_plotting
-        .mix(prepareModuleOutput(ch_plots_exploratory, ch_paramsets).map { meta, file -> ['exploratory', meta, file] })
-
     // Plot differential analysis results
 
     ch_plot_differential_input = ch_differential_results  // [meta, meta with contrast, results]
@@ -776,10 +692,6 @@ workflow DIFFERENTIALABUNDANCE {
         ch_plot_differential_input.differential_results,
         ch_plot_differential_input.samples_features_matrices
     )
-
-    ch_plots_differential = PLOT_DIFFERENTIAL.out.volcanos_png
-    ch_plotting = ch_plotting
-        .mix(prepareModuleOutput(PLOT_DIFFERENTIAL.out.volcanos_png, ch_paramsets).map { meta, file -> ['differential_volcanos', meta, file] })
 
     // Gather software versions
 
@@ -888,10 +800,6 @@ workflow DIFFERENTIALABUNDANCE {
         ch_shinyngs_input.contrasts_and_differential,   // meta, contrast file, [ differential results ]
         ch_shinyngs_input.contrast_stats_assay
     )
-
-    ch_shinyngs = ch_shinyngs
-        .mix(SHINYNGS_APP.out.app.map { meta, data_rds, app_r -> ['shinyngs_data', meta, data_rds] })
-        .mix(SHINYNGS_APP.out.app.map { meta, data_rds, app_r -> ['shinyngs_app', meta, app_r] })
 
     ch_versions = ch_versions.mix(SHINYNGS_APP.out.versions)
 
@@ -1023,20 +931,104 @@ workflow DIFFERENTIALABUNDANCE {
         }
     MAKE_REPORT_BUNDLE( ch_bundle_input )
 
-    ch_report = ch_report
-        .mix(QUARTONOTEBOOK.out.html.map { meta, file -> ['report_html', meta, file] })
-        .mix(MAKE_REPORT_BUNDLE.out.zipped_archive.map { meta, file -> ['report_bundle', meta, file] })
-
     emit:
-    preprocessing = ch_preprocessing
-    differential  = ch_differential
-    functional    = ch_functional
-    plotting      = ch_plotting
-    shinyngs      = ch_shinyngs
-    report        = ch_report
-    versions      = ch_nfcore_versions
-        .map { file -> ['versions', [:], file] }
-        .mix(ch_collated_versions.map { file -> ['collated_versions', [:], file] })
+
+    // --- Preprocessing: Affy ---
+    affy_cel_files             = ch_untar_out
+    affy_raw_expression        = ch_affy_raw
+    affy_norm_expression       = ch_affy_norm
+    affy_annotation            = ch_affy_platform_features
+    affy_raw_rds               = prepareModuleOutput(AFFY_JUSTRMA_RAW.out.rds, ch_paramsets)
+
+    // --- Preprocessing: Proteus ---
+    proteus_raw                = ch_proteus_raw
+    proteus_norm               = ch_proteus_norm
+    proteus_plots              = ch_proteus_plots
+    proteus_raw_rdata          = prepareModuleOutput(PROTEUS.out.raw_rdata, ch_paramsets)
+    proteus_norm_rdata         = prepareModuleOutput(PROTEUS.out.norm_rdata, ch_paramsets)
+    proteus_session_info       = prepareModuleOutput(PROTEUS.out.session_info, ch_paramsets)
+
+    // --- Preprocessing: GEO ---
+    geo_expression             = ch_soft_norm
+    geo_annotation             = ch_soft_features
+    geo_rds                    = prepareModuleOutput(GEOQUERY_GETGEO.out.rds, ch_paramsets)
+
+    // --- Preprocessing: GTF ---
+    gtf_annotation             = ch_gtf_features
+
+    // --- Differential ---
+    diff_results               = ch_differential_results
+    diff_results_filtered      = ch_differential_results_filtered
+    diff_normalised_matrix     = ch_differential_norm
+    diff_variance_stabilised   = ch_differential_varstab
+    diff_size_factors          = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.size_factors, ch_paramsets)
+    diff_dispersion_plot       = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.dispersion_plot, ch_paramsets)
+    diff_md_plot               = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.md_plot, ch_paramsets)
+    diff_rdata                 = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.rdata, ch_paramsets)
+    diff_session_info          = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.session_info, ch_paramsets)
+    diff_annotated             = prepareModuleOutput(CSVTK_JOIN.out.csv, ch_paramsets)
+
+    // --- Functional: GSEA ---
+    gsea_report_tsv            = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_report_tsv, ch_paramsets)
+    gsea_report_html           = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_report_html, ch_paramsets)
+    gsea_index_html            = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_index_html, ch_paramsets)
+    gsea_heat_map_corr_plot    = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_heat_map_corr_plot, ch_paramsets)
+    gsea_ranked_gene_list      = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_ranked_gene_list, ch_paramsets)
+    gsea_gene_set_sizes        = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_gene_set_sizes, ch_paramsets)
+    gsea_histogram             = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_histogram, ch_paramsets)
+    gsea_heatmap               = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_heatmap, ch_paramsets)
+    gsea_pvalues_vs_nes_plot   = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_pvalues_vs_nes_plot, ch_paramsets)
+    gsea_ranked_list_corr      = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_ranked_list_corr, ch_paramsets)
+    gsea_butterfly_plot        = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_butterfly_plot, ch_paramsets)
+    gsea_gene_set_tsv          = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_gene_set_tsv, ch_paramsets)
+    gsea_gene_set_html         = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_gene_set_html, ch_paramsets)
+    gsea_gene_set_heatmap      = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_gene_set_heatmap, ch_paramsets)
+    gsea_gene_set_enplot       = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_gene_set_enplot, ch_paramsets)
+    gsea_gene_set_dist         = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_gene_set_dist, ch_paramsets)
+    gsea_snapshot              = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_snapshot, ch_paramsets)
+    gsea_archive               = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_archive, ch_paramsets)
+    gsea_rpt                   = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_rpt, ch_paramsets)
+
+    // --- Functional: gprofiler2 ---
+    gprofiler2_html            = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_plot_html, ch_paramsets)
+    gprofiler2_all_enrichment  = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_all_enrich, ch_paramsets)
+    gprofiler2_sub_enrichment  = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_sub_enrich, ch_paramsets)
+    gprofiler2_plot_png        = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_artifacts, ch_paramsets)
+    gprofiler2_sub_plot        = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_sub_plot, ch_paramsets)
+    gprofiler2_rds             = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_rds, ch_paramsets)
+    gprofiler2_filtered_gmt    = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_filtered_gmt, ch_paramsets)
+
+    // --- Functional: decoupler ---
+    decoupler_estimate         = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_dc_estimate, ch_paramsets)
+    decoupler_pvals            = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_dc_pvals, ch_paramsets)
+    decoupler_png              = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_png, ch_paramsets)
+
+    // --- Functional: common ---
+    functional_session_info    = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.session_info, ch_paramsets)
+
+    // --- Plotting ---
+    plot_exploratory           = prepareModuleOutput(
+        PLOT_EXPLORATORY.out.boxplots_png
+            .mix(PLOT_EXPLORATORY.out.densities_png)
+            .mix(PLOT_EXPLORATORY.out.pca2d_png)
+            .mix(PLOT_EXPLORATORY.out.pca3d_png)
+            .mix(PLOT_EXPLORATORY.out.mad_png)
+            .mix(PLOT_EXPLORATORY.out.dendro),
+        ch_paramsets
+    )
+    plot_volcanos              = prepareModuleOutput(PLOT_DIFFERENTIAL.out.volcanos_png, ch_paramsets)
+
+    // --- ShinyNGS ---
+    shinyngs_data              = SHINYNGS_APP.out.app.map { meta, data_rds, _app_r -> [meta, data_rds] }
+    shinyngs_app_file          = SHINYNGS_APP.out.app.map { meta, _data_rds, app_r -> [meta, app_r] }
+
+    // --- Report ---
+    report_html                = QUARTONOTEBOOK.out.html
+    report_bundle              = MAKE_REPORT_BUNDLE.out.zipped_archive
+
+    // --- Versions ---
+    nfcore_versions            = ch_nfcore_versions
+    collated_versions          = ch_collated_versions
 
 }
 
