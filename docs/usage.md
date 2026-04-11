@@ -100,6 +100,19 @@ So we **do not recommend** raw counts files such as `salmon.merged.gene_counts.t
 
 This is the proteinGroups.txt file produced by MaxQuant. It is a tab-separated matrix file with a column for every observation (plus additional columns for other types of measurements and information); each row contains these data for a set of proteins. The parameters `--observations_id_col` and `--features_id_col` define which of the associated fields should be matched in those inputs. The parameter `--proteus_measurecol_prefix` defines which prefix is used to extract those matrix columns which contain the measurements to be used. For example, the default `LFQ intensity ` will indicate that columns like LFQ intensity S1, LFQ intensity S2, LFQ intensity S3 etc. are used (one whitespace is automatically added if necessary).
 
+### Generic pre-scaled matrix
+
+```bash
+-profile generic_matrix
+--matrix '[path to matrix file].(csv|tsv)'
+```
+
+Use this profile when you already have an abundance matrix on the appropriate scale (e.g. log-transformed microarray intensities, log-CPM values, or any other pre-normalised data) and do not need RNA-seq-specific preprocessing such as DESeq2's VST/rlog or voom. The matrix is passed directly to Limma for differential analysis without any additional transformation.
+
+As with RNA-seq input, the matrix should have features as rows and observations as columns. Set `--observations_id_col` and `--features_id_col` to match the relevant identifier columns in the samplesheet and matrix, respectively. Feature annotations can be provided via `--features` or, if omitted, the workflow will fall back to using the matrix row identifiers directly.
+
+For mixed-effects models, use `-profile generic_matrix_dream` instead, which runs DREAM rather than Limma.
+
 ### Affymetrix microarrays
 
 ```bash
@@ -342,8 +355,7 @@ A paramsheet entry looks like this:
 
 ```yaml
 - paramset_name: my_deseq2_run
-  study_type: generic_matrix
-  study_abundance_type: counts
+  study_type: rnaseq
   differential_method: deseq2
   # ... additional parameter overrides
 ```
@@ -565,6 +577,15 @@ nextflow run nf-core/differentialabundance \
     --contrasts contrasts.yaml \
     --querygse GSE12345 \
     --outdir <OUTDIR>
+
+# Generic pre-scaled matrix (Limma)
+nextflow run nf-core/differentialabundance \
+    -profile generic_matrix,docker \
+    --input samplesheet.csv \
+    --contrasts contrasts.yaml \
+    --matrix my_matrix.tsv \
+    --outdir <OUTDIR>
+
 ```
 
 Note that the pipeline will create the following files in your working directory:
@@ -705,6 +726,8 @@ These profiles configure the pipeline for specific study types, differential met
 
 - `maxquant` — MaxQuant proteomics with Limma
 - `soft` — GEO SOFT files with Limma
+- `generic_matrix` — Generic pre-scaled matrix with Limma
+- `generic_matrix_dream` — Generic pre-scaled matrix with DREAM (mixed-effects models)
 
 > [!WARNING]
 > Do not override `--differential_method` on the command line when using an analysis profile. Each profile also sets method-specific parameters (e.g. logFC and p-value column names). To change methods, use the appropriate profile (e.g. `-profile rnaseq_limma`).
