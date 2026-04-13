@@ -47,7 +47,7 @@
                     },
                     "decoupler/decoupler": {
                         "branch": "master",
-                        "git_sha": "a5aa81bb22e4585dfe4eba842af53e76833d69ab",
+                        "git_sha": "5e748ff2b0f990949081c9e49792622eb3fe9ee9",
                         "installed_by": ["differential_functional_enrichment"]
                     },
                     "deseq2/differential": {
@@ -67,7 +67,7 @@
                     },
                     "gsea/gsea": {
                         "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "git_sha": "c247cd4be17130562774d0714d3f068bddcff90c",
                         "installed_by": ["differential_functional_enrichment"]
                     },
                     "gunzip": {
@@ -141,12 +141,12 @@
                 "nf-core": {
                     "abundance_differential_filter": {
                         "branch": "master",
-                        "git_sha": "5cd9200ba33c96d47ecd744aa0b33f0f64a054d3",
+                        "git_sha": "2f1b98c884d1f2e0c2b84e111f02372d0ecfe9da",
                         "installed_by": ["subworkflows"]
                     },
                     "differential_functional_enrichment": {
                         "branch": "master",
-                        "git_sha": "a4d65df1dfc6c2d88f9bd09a67235177872ff6a7",
+                        "git_sha": "2f1b98c884d1f2e0c2b84e111f02372d0ecfe9da",
                         "installed_by": ["subworkflows"]
                     },
                     "utils_nextflow_pipeline": {

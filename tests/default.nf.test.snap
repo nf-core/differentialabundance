@@ -1,7 +1,7 @@
 {
     "Test profile - filtering_min_abundance false": {
         "content": [
-            24,
+            25,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -55,8 +55,10 @@
                 "other",
                 "other/deseq2",
                 "other/deseq2/rnaseq_deseq2_gsea",
+                "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.R_sessionInfo.log",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.dds.rld.rds",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.deseq2.sizefactors.tsv",
+                "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.R_sessionInfo.log",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.dds.rld.rds",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.sizefactors.tsv",
                 "pipeline_info",
@@ -189,14 +191,14 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nf-test": "0.9.2",
+            "nextflow": "25.10.4"
         },
-        "timestamp": "2026-03-09T13:54:16.868332422"
+        "timestamp": "2026-03-20T17:17:04.307254579"
     },
     "Test profile": {
         "content": [
-            24,
+            25,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -250,8 +252,10 @@
                 "other",
                 "other/deseq2",
                 "other/deseq2/rnaseq_deseq2_gsea",
+                "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.R_sessionInfo.log",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.dds.rld.rds",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.deseq2.sizefactors.tsv",
+                "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.R_sessionInfo.log",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.dds.rld.rds",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.sizefactors.tsv",
                 "pipeline_info",
@@ -384,14 +388,14 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nf-test": "0.9.2",
+            "nextflow": "25.10.4"
         },
-        "timestamp": "2026-03-09T13:49:35.902655936"
+        "timestamp": "2026-03-20T16:55:32.532506326"
     },
     "Test profile - csv contrasts": {
         "content": [
-            24,
+            25,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -445,8 +449,10 @@
                 "other",
                 "other/deseq2",
                 "other/deseq2/rnaseq_deseq2_gsea",
+                "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.R_sessionInfo.log",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.dds.rld.rds",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.deseq2.sizefactors.tsv",
+                "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.R_sessionInfo.log",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.dds.rld.rds",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.sizefactors.tsv",
                 "pipeline_info",
@@ -579,10 +585,10 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nf-test": "0.9.2",
+            "nextflow": "25.10.4"
         },
-        "timestamp": "2026-03-09T13:51:56.049746867"
+        "timestamp": "2026-03-20T17:02:29.714526954"
     },
     "Test profile - with formula": {
         "content": [
@@ -786,7 +792,7 @@
     },
     "Test profile - multiple reports - csv contrasts": {
         "content": [
-            26,
+            27,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -840,8 +846,10 @@
                 "other",
                 "other/deseq2",
                 "other/deseq2/rnaseq_deseq2_gsea",
+                "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.R_sessionInfo.log",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.dds.rld.rds",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.deseq2.sizefactors.tsv",
+                "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.R_sessionInfo.log",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.dds.rld.rds",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.sizefactors.tsv",
                 "pipeline_info",
@@ -975,9 +983,9 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nf-test": "0.9.2",
+            "nextflow": "25.10.4"
         },
-        "timestamp": "2026-03-09T13:57:35.480137088"
+        "timestamp": "2026-03-20T17:09:26.940514838"
     }
 }

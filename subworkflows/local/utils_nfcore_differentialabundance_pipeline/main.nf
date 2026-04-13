@@ -490,7 +490,7 @@ def resolveIncludes(config) {
 // @param category: the category in which the module belong to
 // @return a channel with [simplified meta, files ...]
 // the simplified meta would have the following structure:
-// [paramset_names: [list of paramset names], params: [relevant params map], ...other k,v]
+// [params: [relevant params map], ...other k,v]
 def prepareModuleInput(channel, category) {
     return channel
         .map {
@@ -498,67 +498,57 @@ def prepareModuleInput(channel, category) {
             def simplifiedparams = getRelevantParams(it[0].params, category)
             // replace meta.params by simplified params
             def simplifiedmeta = it[0] + [params: simplifiedparams]
-            // remove paramset_name from meta, and use as key
-            def key = simplifiedmeta.findAll { k, v -> k != 'paramset_name' }
 
-            // use simplified meta as key
-            [key, it[0].paramset_name, it[1..-1]]  // [ key, paramset_name, [files] ]
+            // remove paramset_name from meta, and use as key
+            // This avoids the paramset_name id being considered as a parameter that can interfere with caching and resume
+            def key = simplifiedmeta.findAll { k, v -> k != 'paramset_name' }
+            [key, it[1..-1]]  // [ key, [files] ]
         }
         .groupTuple()
-        .map { simplifiedmeta, paramset_names, file_lists ->
-            // replace paramset_name by paramset_names
-            def meta = [paramset_names: paramset_names] + simplifiedmeta.findAll{ k,v -> k != 'paramset_name'}
+        .map { simplifiedmeta, file_lists ->
             // the list files are the same for the same simplified meta,
             // thus the list of files generated from grouping are just a repetition of the same files
-        [meta] + file_lists[0]
+            [simplifiedmeta] + file_lists[0]
         }
 }
 
 // prepare the output for the module by adding back the full paramsets
-// to the meta. This is done by matching with paramset_name.
-// When provided, it will also remove the unnecesary keys from meta.
+// to the meta. This is done by making sure all the k,v from the
+// channel meta match with those from the full paramset; if so we add
+// back the rest of params from the full paramset.
 // @param channel: the output channel from module
 // @param paramsets: the channel containing all the parameter sets
-// @param meta_keys_to_remove: a list of meta keys to remove. null if not
-// provided.
-// @param use_meta_key: use the base meta structure as key. So
-// [id: study_name, paramset_name: paramset_name, params: [:]]
+// @param meta_keys_to_remove: (optional) a list of meta keys to remove.
+// @param use_meta_key: (optional) use the base meta structure as key. So
+// [id: study_name, paramset_name: paramset_name, params: [:]] without other
+// k,v from the meta.
 def prepareModuleOutput(channel, paramsets, List meta_keys_to_remove = null, Boolean use_meta_key = false) {
-    // Prepare the channel to have paramset_name as key
-    channel_by_name = channel
-        // First parse the channel to have paramset_names as key
-        .map { [it[0].paramset_names] + it }
-        // Transpose the list of paramset_names
-        .transpose(by:0)
-        .map {
-            def paramset_name = it[0]
-            // Replace paramset_names by paramset_name in the meta
-            def meta = [paramset_name: paramset_name] + it[1].findAll{ k,v -> k != 'paramset_names' }   // [paramset_name, params, ...]
-            // Put paramset name as key
-            [paramset_name, meta] + it[2..-1]  // [paramset_name, meta, files ...]
+    return paramsets
+        .combine(channel)  // [ meta_paramset, meta_out, files ... ]
+        .filter { it ->
+            def meta_paramset = it[0]
+            def meta_out = it[1]
+            // check if all the k,v in meta_out.params match with those in meta_paramset.params
+            meta_out.params.every { key, value -> meta_paramset.params[key] == value }
         }
-    // Add back the full paramset by matching with paramsets channel with paramset_name as key
-    channel_with_updated_paramsets = paramsets
-        .map { [it.paramset_name, it] }
-        // We use combine instead of join, because for the same paramset_name,
-        // different meta and files may have been generated because of the different contrasts
-        .combine(channel_by_name, by:0)
-        .map {
-            def meta_paramset = it[1]
-            def meta_out = it[2]
+        .map { it ->
+            def meta_paramset = it[0]
+            def meta_out = it[1]
+
             // Remove unnecessary keys from meta, when asked
-            def meta_cleaned = (meta_keys_to_remove) ? meta_out.findAll{ k,v -> !meta_keys_to_remove.contains(k) } : meta_out
+            def meta_cleaned = meta_keys_to_remove ? meta_out.findAll { k, v -> !meta_keys_to_remove.contains(k) } : meta_out
+
             // Replace output meta simplified params by full params from paramset
-            def meta = meta_cleaned + [params: meta_paramset.params]
+            def meta = meta_cleaned + [paramset_name: meta_paramset.paramset_name, params: meta_paramset.params]
 
             if (use_meta_key) {
                 // Define a key using the basic meta structure: only containing id, paramset_name and params, when asked.
                 // Note that all the channels in the pipeline have study_name as id, except those containing contrast info.
                 // Hence, we need to use the study_name as id in the key.
                 def key = [id: meta.params.study_name, paramset_name: meta.paramset_name, params: meta.params]
-                [key, meta] + it[3..-1] // [key, meta with full paramset, files ...]
+                [key, meta] + it[2..-1] // [key, meta with full paramset, files ...]
             } else {
-                [meta] + it[3..-1]      // [meta with full paramset, files ...]
+                [meta] + it[2..-1]      // [meta with full paramset, files ...]
             }
         }
 }
