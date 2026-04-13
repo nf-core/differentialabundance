@@ -70,7 +70,7 @@ workflow DIFFERENTIALABUNDANCE {
             affy_array: meta.params.study_type == 'affy_array'
             maxquant: meta.params.study_type == 'maxquant'
             geo_soft_file: meta.params.study_type == 'geo_soft_file'
-            rnaseq: meta.params.study_type == 'rnaseq'
+            rnaseq: meta.params.study_type in ['rnaseq', 'generic_matrix']
         }
 
     // Handle Affy array inputs
@@ -391,7 +391,7 @@ workflow DIFFERENTIALABUNDANCE {
     // Get raw matrices from the validation
 
     ch_raw = ch_multi_validated_assays.raw
-        .mix(ch_validated_assays.filter{meta, assay -> meta.params.study_type == 'rnaseq'})
+        .mix(ch_validated_assays.filter{meta, assay -> meta.params.study_type in ['rnaseq', 'generic_matrix']})
 
     // For RNASeq and GEO soft file we've validated a single matrix, raw in the
     // case of RNASeq and norm in the case of GEO soft file, and these are the
@@ -399,7 +399,7 @@ workflow DIFFERENTIALABUNDANCE {
     // we'll use the normalised matrices.
 
     ch_matrix_for_differential = ch_multi_validated_assays.normalised
-        .mix(ch_validated_assays.filter{meta, assay -> meta.params.study_type == 'rnaseq' || meta.params.study_type == 'geo_soft_file'})
+        .mix(ch_validated_assays.filter{meta, assay -> meta.params.study_type in ['rnaseq', 'generic_matrix'] || meta.params.study_type == 'geo_soft_file'})
 
     // Split the contrasts up so we can run differential analyses and
     // downstream plots separately.
@@ -497,7 +497,7 @@ workflow DIFFERENTIALABUNDANCE {
         .filter { tuple ->
             def meta = tuple[0]
             def study_type = meta?.params?.study_type
-            return study_type == 'rnaseq' || study_type == 'affy_array'
+            return study_type in ['rnaseq', 'generic_matrix'] || study_type == 'affy_array'
         }
 
     ch_annotation_input
@@ -521,7 +521,7 @@ workflow DIFFERENTIALABUNDANCE {
     // - from validated assays for GEO soft file
 
     ch_norm = ch_differential_norm
-        .filter{meta, matrix -> meta.params.study_type == 'rnaseq'}
+        .filter{meta, matrix -> meta.params.study_type in ['rnaseq', 'generic_matrix']}
         .mix(ch_multi_validated_assays.normalised)
         .mix(ch_validated_assays.filter{meta, assay -> meta.params.study_type == 'geo_soft_file'})
 

@@ -70,11 +70,11 @@
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb"
             ]
         ],
+        "timestamp": "2026-02-24T15:47:26.037232274",
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-02-24T15:47:26.037232274"
+        }
     },
     "Test rnaseq dream profile - complex contrast - with zero intercept - 1": {
         "content": [
@@ -169,11 +169,11 @@
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb"
             ]
         ],
+        "timestamp": "2026-02-24T15:38:59.431295467",
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-02-24T15:38:59.431295467"
+        }
     },
     "Test - Numeric sample IDs - rnaseq dream profile - with decoupler": {
         "content": [
@@ -292,11 +292,11 @@
                 "all.normalised_counts.tsv:md5,7a2dc10c76784a7621437af839bcde42"
             ]
         ],
+        "timestamp": "2026-02-24T16:08:01.562489919",
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-02-24T16:08:01.562489919"
+        }
     },
     "Test rnaseq dream profile - with decoupler": {
         "content": [
@@ -435,11 +435,11 @@
                 "all.normalised_counts.tsv:md5,a06f5e5c50938bb4d93991d7e314c7cf"
             ]
         ],
+        "timestamp": "2026-02-24T15:58:29.363732935",
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-02-24T15:58:29.363732935"
+        }
     },
     "Test rnaseq dream profile": {
         "content": [
@@ -544,10 +544,87 @@
                 "all.normalised_counts.tsv:md5,a06f5e5c50938bb4d93991d7e314c7cf"
             ]
         ],
+        "timestamp": "2026-02-24T15:27:22.020093417",
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-02-24T15:27:22.020093417"
+        }
+    },
+    "Test generic_matrix dream profile - complex contrast - with zero intercept - 2": {
+        "content": [
+            18,
+            {
+                "CSVTK_JOIN": {
+                    "csvtk": "0.31.0"
+                },
+                "CUSTOM_FILTERDIFFERENTIALTABLE": {
+                    "pandas": "1.5.2"
+                },
+                "GTF_TO_TABLE": {
+                    "atlas-gene-annotation-manipulation": "1.1.1"
+                },
+                "GUNZIP_GTF": {
+                    "gunzip": 1.13
+                },
+                "PLOT_DIFFERENTIAL": {
+                    "r-shinyngs": "2.3.0"
+                },
+                "VALIDATOR": {
+                    "r-shinyngs": "2.3.0"
+                },
+                "VARIANCEPARTITION_DREAM": {
+                    "r-base": "4.3.3",
+                    "bioconductor-edger": "4.0.16",
+                    "variancePartition": "1.32.2"
+                },
+                "Workflow": {
+                    "nf-core/differentialabundance": "v1.6.0dev"
+                }
+            },
+            [
+                "pipeline_info",
+                "pipeline_info/collated_versions.yml",
+                "pipeline_info/nf_core_differentialabundance_software_versions.yml",
+                "plots",
+                "plots/differential",
+                "plots/differential/generic_matrix_dream",
+                "plots/differential/generic_matrix_dream/full_model_with_interactions_SRP254919",
+                "plots/differential/generic_matrix_dream/full_model_with_interactions_SRP254919/png",
+                "plots/differential/generic_matrix_dream/full_model_with_interactions_SRP254919/png/volcano.png",
+                "plots/differential/generic_matrix_dream/zero_intercept_model_1_SRP254919",
+                "plots/differential/generic_matrix_dream/zero_intercept_model_1_SRP254919/png",
+                "plots/differential/generic_matrix_dream/zero_intercept_model_1_SRP254919/png/volcano.png",
+                "plots/differential/generic_matrix_dream/zero_intercept_model_2_SRP254919",
+                "plots/differential/generic_matrix_dream/zero_intercept_model_2_SRP254919/png",
+                "plots/differential/generic_matrix_dream/zero_intercept_model_2_SRP254919/png/volcano.png",
+                "report",
+                "report/generic_matrix_dream",
+                "report/generic_matrix_dream/SRP254919.zip",
+                "report/generic_matrix_dream/SRP254919_differentialabundance_report.html",
+                "tables",
+                "tables/annotation",
+                "tables/annotation/generic_matrix_dream",
+                "tables/annotation/generic_matrix_dream/SRP254919.anno.tsv",
+                "tables/differential",
+                "tables/differential/generic_matrix_dream",
+                "tables/differential/generic_matrix_dream/full_model_with_interactions_SRP254919.dream.results.tsv",
+                "tables/differential/generic_matrix_dream/full_model_with_interactions_SRP254919.dream.results_filtered.tsv",
+                "tables/differential/generic_matrix_dream/full_model_with_interactions_SRP254919_dream.annotated.tsv",
+                "tables/differential/generic_matrix_dream/zero_intercept_model_1_SRP254919.dream.results.tsv",
+                "tables/differential/generic_matrix_dream/zero_intercept_model_1_SRP254919.dream.results_filtered.tsv",
+                "tables/differential/generic_matrix_dream/zero_intercept_model_1_SRP254919_dream.annotated.tsv",
+                "tables/differential/generic_matrix_dream/zero_intercept_model_2_SRP254919.dream.results.tsv",
+                "tables/differential/generic_matrix_dream/zero_intercept_model_2_SRP254919.dream.results_filtered.tsv",
+                "tables/differential/generic_matrix_dream/zero_intercept_model_2_SRP254919_dream.annotated.tsv"
+            ],
+            [
+                "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb"
+            ]
+        ],
+        "timestamp": "2026-04-09T13:16:47.084371477",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
     }
 }
