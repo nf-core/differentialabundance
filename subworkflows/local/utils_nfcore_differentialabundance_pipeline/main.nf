@@ -97,6 +97,7 @@ workflow PIPELINE_INITIALISATION {
         ? getParamsheetConfigurations()
         : getDefaultConfigurations()
     paramsets = validateConfigurations(configurations)
+        .collect { paramset -> addDifferentialRuntimeParams(paramset) }
     ch_paramsets = Channel.fromList(paramsets)
         .map { paramset -> [
             id: paramset.study_name,
@@ -166,6 +167,49 @@ workflow PIPELINE_COMPLETION {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 //
+def getDifferentialMethodRuntimeParams(differential_method) {
+    def runtime_params = [
+        'deseq2': [
+            differential_fc_column         : 'log2FoldChange',
+            differential_pval_column       : 'pvalue',
+            differential_qval_column       : 'padj',
+            differential_foldchanges_logged: true
+        ],
+        'limma' : [
+            differential_fc_column         : 'logFC',
+            differential_pval_column       : 'P.Value',
+            differential_qval_column       : 'adj.P.Val',
+            differential_foldchanges_logged: true
+        ],
+        'propd' : [
+            differential_fc_column         : 'LFC',
+            differential_pval_column       : 'rcDdis',
+            differential_qval_column       : 'rcDdis',
+            differential_foldchanges_logged: true
+        ],
+        'dream' : [
+            differential_fc_column         : 'logFC',
+            differential_pval_column       : 'P.Value',
+            differential_qval_column       : 'adj.P.Val',
+            differential_foldchanges_logged: true
+        ]
+    ][differential_method]
+
+    if (!runtime_params) {
+        return [:]
+    }
+
+    runtime_params
+}
+
+def addDifferentialRuntimeParams(paramset) {
+    def runtime_params = getDifferentialMethodRuntimeParams(paramset.differential_method)
+    def missing_runtime_params = runtime_params.findAll { key, _value ->
+        !paramset.containsKey(key)
+    }
+    paramset + missing_runtime_params
+}
+
 // Check and validate pipeline parameters
 //
 def validateInputParameters(paramsets) {
