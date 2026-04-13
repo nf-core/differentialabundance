@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- [[#692]](https://github.com/nf-core/differentialabundance/pull/692) - Add separate profile for generic, pre-scaled input matrices. ([@grst](https://github.com/grst), review by [@atrigila](https://github.com/atrigila) and [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#683]](https://github.com/nf-core/differentialabundance/pull/683) - Improve documentation around `study_type` parameter. ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst)).
 - [[#649]](https://github.com/nf-core/differentialabundance/pull/649) - Add per-column filters to differentially expressed genes table. ([@antoniasaracco](https://github.com/antoniasaracco), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#613]](https://github.com/nf-core/differentialabundance/pull/613) - Add Box plots for differentially expressed genes. ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#580]](https://github.com/nf-core/differentialabundance/pull/580) - Do not split results table into up- and downregulated. ([@antoniasaracco](https://github.com/antoniasaracco), review by [@atrigila](https://github.com/atrigila), [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
@@ -41,6 +43,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [[#689](https://github.com/nf-core/differentialabundance/pull/689)] - Normalize coefficient names in `variancepartition/dream` before building contrasts ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
+- [[#684](https://github.com/nf-core/differentialabundance/pull/684)] - Fix intercept getting added automatically in `deseq2` ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst)).
+- [[#675](https://github.com/nf-core/differentialabundance/pull/675)] - Fix `study_type` rnaseq description for each method in quarto report ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst)).
 - [[#607](https://github.com/nf-core/differentialabundance/pull/607)] - Fix limma and dream modules to work with special characters and render report without a normalised matrix. Update all modules and subworkflows ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila), [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#600](https://github.com/nf-core/differentialabundance/pull/600)] - Allow paramsheet with `.yml` extension ([@grst](https://github.com/grst)), review by [@atrigila](https://github.com/atrigila).
 - [[#582](https://github.com/nf-core/differentialabundance/pull/582)] - Allow `lfc_threshold` to be a float ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst))
@@ -62,6 +67,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [[#686](https://github.com/nf-core/differentialabundance/pull/686)] - Improve `study_abundance_type` docs and schema description ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
+- [[#681](https://github.com/nf-core/differentialabundance/pull/681)] - Remove the nextflow config default `--round_digits 4` parameter and change it for `-1` ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
+- [[#672](https://github.com/nf-core/differentialabundance/pull/672)] - Add universal seed parameter ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
+- [[#646](https://github.com/nf-core/differentialabundance/pull/646)] - Remove the `--differential_feature_name_column` parameter and consolidate its functionality into `--features_name_col` ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
+- [[#638](https://github.com/nf-core/differentialabundance/pull/638)] - Remove `--report_scree` parameter and replace with `--disable_report_modules` to make report more customizable ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#659](https://github.com/nf-core/differentialabundance/pull/659)] - Remove `immunedeconv` module ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#644](https://github.com/nf-core/differentialabundance/pull/644)] - Reverted back to use profiles by default, and use paramsheet only when provided, ([@suzannejin](https://github.com/suzannejin)), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@grst](https://github.com/grst).
 - [[#653](https://github.com/nf-core/differentialabundance/pull/653)] - Update description of parameters for clarity ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).

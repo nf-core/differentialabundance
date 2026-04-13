@@ -10,7 +10,7 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["study_name", "study_type", "input", "outdir", "study_abundance_type"],
+            "required": ["study_name", "study_type", "input", "outdir"],
             "properties": {
                 "study_name": {
                     "type": "string",
@@ -22,9 +22,9 @@
                 "study_type": {
                     "type": "string",
                     "default": "rnaseq",
-                    "description": "A string identifying the technology used to produce the data",
-                    "help_text": "Currently one of 'rnaseq', 'affy_array' (microarray), 'maxquant' (proteomics) or 'geo_soft_file' [GEO SOFT](https://www.ncbi.nlm.nih.gov/geo/info/soft.html) may be specified.",
-                    "enum": ["rnaseq", "affy_array", "maxquant", "geo_soft_file"],
+                    "description": "Input data format category used for input validation and routing (not for selecting analysis methods).",
+                    "help_text": "Use this to tell the pipeline what kind of input files you are providing. It controls format-specific validation and preprocessing (for example, TSV/CSV matrix input, CEL archive handling, MaxQuant parsing, or GEO SOFT retrieval). It does not choose the differential or functional analysis methods. Method choices come from analysis profiles (e.g. '-profile rnaseq', '-profile rnaseq_limma') or explicit method parameters. Allowed values: 'rnaseq' (matrix-style input, historically named; includes generic non-RNA-seq matrices), 'generic_matrix' (alias of 'rnaseq' for non-RNA-seq matrix data), 'affy_array' (microarray), 'maxquant' (proteomics), or 'geo_soft_file' ([GEO SOFT](https://www.ncbi.nlm.nih.gov/geo/info/soft.html)).",
+                    "enum": ["rnaseq", "generic_matrix", "affy_array", "maxquant", "geo_soft_file"],
                     "fa_icon": "far fa-keyboard"
                 },
                 "input": {
@@ -55,16 +55,23 @@
                 },
                 "study_abundance_type": {
                     "type": "string",
-                    "default": "counts",
-                    "description": "Type of abundance measure used, platform-dependent.",
-                    "enum": ["counts", "intensities"],
-                    "fa_icon": "fas fa-keyboard"
+                    "default": "abundance",
+                    "description": "Label describing the abundance values in the report heading.",
+                    "help_text": "Optional display label used in report text (for example 'counts', 'intensities', or any custom term). This does not alter statistical method selection. Typically set internally when choosing a profile.",
+                    "fa_icon": "fas fa-keyboard",
+                    "hidden": true
                 },
                 "round_digits": {
                     "type": "integer",
-                    "default": 4,
+                    "default": -1,
                     "description": "To how many digits should numeric output in different modules be rounded? If -1 or null, will not round.",
                     "help_text": "This affects output from the following modules (both their tabular output and their result sections in the report): proteus, limma, deseq2, gprofiler2."
+                },
+                "seed": {
+                    "type": "integer",
+                    "description": "Global seed for stochastic methods",
+                    "help_text": "Optional global seed for methods with stochastic components. When set, the same value is passed to supported methods such as DESeq2, limma, DREAM and GSEA to make reruns reproducible.",
+                    "fa_icon": "fas fa-seedling"
                 }
             }
         },
@@ -531,12 +538,6 @@
                     "description": "Maximum q value used to calculate differential feature numbers",
                     "fa_icon": "fas fa-angle-double-up"
                 },
-                "differential_feature_name_column": {
-                    "type": "string",
-                    "default": "gene_name",
-                    "description": "Where a features file (GTF) has been provided, what attribute to use to name features",
-                    "fa_icon": "fas fa-signature"
-                },
                 "differential_foldchanges_logged": {
                     "type": "boolean",
                     "default": true,
@@ -666,10 +667,6 @@
                     "description": "Shrink fold changes in results?",
                     "help_text": "'ashr' method is the only method currently implemented",
                     "fa_icon": "fas fa-microscope"
-                },
-                "deseq2_seed": {
-                    "type": "integer",
-                    "fa_icon": "fas fa-seedling"
                 },
                 "deseq2_vs_blind": {
                     "type": "boolean",
@@ -963,13 +960,6 @@
                     "help_text": "Generates summary plots and detailed analysis results for the top x genes in each phenotype, where x is 20 by default. The top genes are those with the largest normalized enrichment scores.\n\nSee 'advanced fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page. ",
                     "fa_icon": "fas fa-angle-up"
                 },
-                "gsea_rnd_seed": {
-                    "type": "string",
-                    "default": "timestamp",
-                    "description": "Seed for permutation",
-                    "help_text": "Seed used to generate a random number for phenotype and gene_set  permutations: timestamp (default), 149, or user input. The specific seed value (149) generates consistent results, which is useful when testing software.",
-                    "fa_icon": "fas fa-random"
-                },
                 "gsea_save_rnd_lists": {
                     "type": "boolean",
                     "description": "Save random ranked lists",
@@ -1187,14 +1177,16 @@
                     "fa_icon": "fas fa-feather",
                     "description": "A description for reporting outputs"
                 },
-                "report_scree": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Whether to generate a scree plot in the report"
-                },
                 "skip_reports": {
                     "type": "boolean",
                     "description": "Skip generation of reports"
+                },
+                "disable_report_modules": {
+                    "type": "string",
+                    "hidden": true,
+                    "default": null,
+                    "description": "Comma-separated list of sections that should not be included in the final Quarto report",
+                    "help_text": "Allowed values are: boxplot, density, pca, scree, heatmap, outlier, upset_plot, volcano, de_table, biotype_plot, gsea."
                 }
             },
             "required": ["report_file", "logo_file", "css_file"]
