@@ -195,11 +195,7 @@ def getDifferentialMethodRuntimeParams(differential_method) {
         ]
     ][differential_method]
 
-    if (!runtime_params) {
-        return [:]
-    }
-
-    runtime_params
+    runtime_params ?: [:]
 }
 
 def addDifferentialRuntimeParams(paramset) {
@@ -651,6 +647,17 @@ def getRelevantParams(paramset, category) {
                     }
                 }
             }
+        }
+    }
+
+    [
+        'differential_fc_column',
+        'differential_pval_column',
+        'differential_qval_column',
+        'differential_foldchanges_logged'
+    ].each { paramName ->
+        if (paramset.containsKey(paramName)) {
+            relevantParams[paramName] = paramset[paramName]
         }
     }
 

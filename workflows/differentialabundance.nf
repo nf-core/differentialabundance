@@ -777,9 +777,8 @@ workflow DIFFERENTIALABUNDANCE {
             row[0].params.shinyngs_build_app
         }
         .multiMap { meta, meta_with_contrast, differential_results, contrast_file, samplesheet, features, matrices ->
-            def meta_with_relevant_params = meta + [params: getRelevantParams(meta.params, 'shiny')]
-            matrices: [meta_with_relevant_params, samplesheet, features, matrices]
-            contrasts_and_differential: [meta_with_relevant_params, contrast_file, differential_results]
+            matrices: [meta, samplesheet, features, matrices]
+            contrasts_and_differential: [meta, contrast_file, differential_results]
             contrast_stats_assay: meta.params.exploratory_assay_names.split(',').findIndexOf { it == meta.params.exploratory_final_assay } + 1
         }
 
@@ -868,10 +867,7 @@ workflow DIFFERENTIALABUNDANCE {
         .join(ch_contrasts_sorted)       // [meta, contrast file]
         .join(ch_differential_grouped)   // [meta, [differential results and models]]
         .join(ch_functional_grouped, remainder: true) // [meta, [functional results]]
-        .map { row ->
-            def meta = row[0] + [params: getRelevantParams(row[0].params, 'report')]
-            [meta, row[1..-1].flatten().grep()]
-        }  // [meta, [files]]   // note that grep() would remove null files from join with remainder true
+        .map { [it[0], it.tail().flatten().grep()] }  // [meta, [files]]   // note that grep() would remove null files from join with remainder true
         .map { meta, files -> [meta, files[0], files.tail()] }   // [meta, report_file, [files]]
         .flatMap { meta, report_file, files ->
             // Split comma-separated report files and create separate entries for each
