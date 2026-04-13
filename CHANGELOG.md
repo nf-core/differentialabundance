@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [[#694](https://github.com/nf-core/differentialabundance/pull/694)] - Fix data flow for `generic_matrix` study type ([@grst](https://github.com/grst) and [@atrigila](https://github.com/atrigila), review by [@delfiterradas](https://github.com/delfiterradas)).
 - [[#684](https://github.com/nf-core/differentialabundance/pull/684)] - Fix intercept getting added automatically in `deseq2` ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst)).
 - [[#675](https://github.com/nf-core/differentialabundance/pull/675)] - Fix `study_type` rnaseq description for each method in quarto report ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst)).
 - [[#607](https://github.com/nf-core/differentialabundance/pull/607)] - Fix limma and dream modules to work with special characters and render report without a normalised matrix. Update all modules and subworkflows ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila), [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
