@@ -60,9 +60,6 @@
   exploratory_final_assay: variance_stabilised
   exploratory_log2_assays: raw,normalised
   differential_file_suffix: ".deseq2.results.tsv"
-  differential_fc_column: log2FoldChange
-  differential_pval_column: pvalue
-  differential_qval_column: padj
 
 - paramset_name: rnaseq_limma_decoupler
   study_type: rnaseq
@@ -81,9 +78,6 @@
   exploratory_final_assay: normalised
   exploratory_log2_assays: raw
   differential_file_suffix: ".limma.results.tsv"
-  differential_fc_column: logFC
-  differential_pval_column: P.Value
-  differential_qval_column: adj.P.Val
 
 - paramset_name: rnaseq_dream
   study_type: rnaseq
@@ -101,9 +95,6 @@
   exploratory_final_assay: normalised
   exploratory_log2_assays: raw
   differential_file_suffix: ".dream.results.tsv"
-  differential_fc_column: logFC
-  differential_pval_column: P.Value
-  differential_qval_column: adj.P.Val
 
 - paramset_name: affy_limma_gprofiler2
   study_type: affy_array
@@ -118,9 +109,6 @@
   exploratory_final_assay: normalised
   exploratory_log2_assays: null
   differential_file_suffix: ".limma.results.tsv"
-  differential_fc_column: logFC
-  differential_pval_column: P.Value
-  differential_qval_column: adj.P.Val
   shinyngs_build_app: true
 
 # ============================================================================
