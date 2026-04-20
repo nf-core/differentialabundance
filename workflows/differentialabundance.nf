@@ -693,13 +693,6 @@ workflow DIFFERENTIALABUNDANCE {
         ch_plot_differential_input.samples_features_matrices
     )
 
-    // Gather software versions
-
-    ch_versions = ch_versions
-        .mix(VALIDATOR.out.versions)
-        .mix(PLOT_EXPLORATORY.out.versions)
-        .mix(PLOT_DIFFERENTIAL.out.versions)
-
     // ========================================================================
     // ShinyNGS app
     // ========================================================================
@@ -800,8 +793,6 @@ workflow DIFFERENTIALABUNDANCE {
         ch_shinyngs_input.contrasts_and_differential,   // meta, contrast file, [ differential results ]
         ch_shinyngs_input.contrast_stats_assay
     )
-
-    ch_versions = ch_versions.mix(SHINYNGS_APP.out.versions)
 
     // ========================================================================
     // Generate report
