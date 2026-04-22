@@ -401,27 +401,142 @@
     },
     "Test rnaseq dream profile - with decoupler": {
         "content": [
-            4,
-            null,
+            29,
+            {
+                "CSVTK_JOIN": {
+                    "csvtk": "0.31.0"
+                },
+                "CUSTOM_FILTERDIFFERENTIALTABLE": {
+                    "pandas": "1.5.2"
+                },
+                "DECOUPLER_DECOUPLER": null,
+                "decoupler-py": "1.8.0",
+                "GTF_TO_TABLE": {
+                    "atlas-gene-annotation-manipulation": "1.1.1"
+                },
+                "GUNZIP_GTF": {
+                    "gunzip": 1.13
+                },
+                "PLOT_DIFFERENTIAL": {
+                    "shinyngs": "2.4.0"
+                },
+                "PLOT_EXPLORATORY": {
+                    "shinyngs": "2.4.0"
+                },
+                "SHINYNGS_APP": {
+                    "shinyngs": "2.4.0"
+                },
+                "VALIDATOR": {
+                    "shinyngs": "2.4.0"
+                },
+                "VARIANCEPARTITION_DREAM": {
+                    "r-base": "4.3.3",
+                    "bioconductor-edger": "4.0.16",
+                    "variancePartition": "1.32.2"
+                },
+                "Workflow": {
+                    "nf-core/differentialabundance": "v1.6.0dev"
+                }
+            },
             [
                 "pipeline_info",
+                "pipeline_info/collated_versions.yml",
+                "pipeline_info/nf_core_differentialabundance_software_versions.yml",
+                "plots",
+                "plots/decoupler",
+                "plots/decoupler/rnaseq_dream_decoupler",
+                "plots/decoupler/rnaseq_dream_decoupler/dream_full_model_with_interactions_SRP254919_consensus_estimate_decoupler_plot.png",
+                "plots/decoupler/rnaseq_dream_decoupler/dream_full_model_with_interactions_SRP254919_ulm_estimate_decoupler_plot.png",
+                "plots/decoupler/rnaseq_dream_decoupler/dream_interaction_genotype_treatment_SRP254919_consensus_estimate_decoupler_plot.png",
+                "plots/decoupler/rnaseq_dream_decoupler/dream_interaction_genotype_treatment_SRP254919_ulm_estimate_decoupler_plot.png",
+                "plots/decoupler/rnaseq_dream_decoupler/dream_treatment_effect_classic_comparison_SRP254919_consensus_estimate_decoupler_plot.png",
+                "plots/decoupler/rnaseq_dream_decoupler/dream_treatment_effect_classic_comparison_SRP254919_ulm_estimate_decoupler_plot.png",
+                "plots/decoupler/rnaseq_dream_decoupler/dream_treatment_plus_genotype_SRP254919_consensus_estimate_decoupler_plot.png",
+                "plots/decoupler/rnaseq_dream_decoupler/dream_treatment_plus_genotype_SRP254919_ulm_estimate_decoupler_plot.png",
+                "plots/differential",
+                "plots/differential/rnaseq_dream_decoupler",
+                "plots/differential/rnaseq_dream_decoupler/full_model_with_interactions_SRP254919",
+                "plots/differential/rnaseq_dream_decoupler/full_model_with_interactions_SRP254919/png",
+                "plots/differential/rnaseq_dream_decoupler/full_model_with_interactions_SRP254919/png/volcano.png",
+                "plots/differential/rnaseq_dream_decoupler/interaction_genotype_treatment_SRP254919",
+                "plots/differential/rnaseq_dream_decoupler/interaction_genotype_treatment_SRP254919/png",
+                "plots/differential/rnaseq_dream_decoupler/interaction_genotype_treatment_SRP254919/png/volcano.png",
+                "plots/differential/rnaseq_dream_decoupler/treatment_effect_classic_comparison_SRP254919",
+                "plots/differential/rnaseq_dream_decoupler/treatment_effect_classic_comparison_SRP254919/png",
+                "plots/differential/rnaseq_dream_decoupler/treatment_effect_classic_comparison_SRP254919/png/volcano.png",
+                "plots/differential/rnaseq_dream_decoupler/treatment_plus_genotype_SRP254919",
+                "plots/differential/rnaseq_dream_decoupler/treatment_plus_genotype_SRP254919/png",
+                "plots/differential/rnaseq_dream_decoupler/treatment_plus_genotype_SRP254919/png/volcano.png",
+                "plots/exploratory",
+                "plots/exploratory/rnaseq_dream_decoupler",
+                "plots/exploratory/rnaseq_dream_decoupler/treatment",
+                "plots/exploratory/rnaseq_dream_decoupler/treatment/png",
+                "plots/exploratory/rnaseq_dream_decoupler/treatment/png/boxplot.png",
+                "plots/exploratory/rnaseq_dream_decoupler/treatment/png/density.png",
+                "plots/exploratory/rnaseq_dream_decoupler/treatment/png/mad_correlation.png",
+                "plots/exploratory/rnaseq_dream_decoupler/treatment/png/pca2d.png",
+                "plots/exploratory/rnaseq_dream_decoupler/treatment/png/pca3d.png",
+                "plots/exploratory/rnaseq_dream_decoupler/treatment/png/sample_dendrogram.png",
+                "report",
+                "report/rnaseq_dream_decoupler",
+                "report/rnaseq_dream_decoupler/SRP254919.zip",
+                "report/rnaseq_dream_decoupler/SRP254919_differentialabundance_report.html",
+                "shinyngs_app",
+                "shinyngs_app/rnaseq_dream_decoupler",
+                "shinyngs_app/rnaseq_dream_decoupler/SRP254919",
+                "shinyngs_app/rnaseq_dream_decoupler/SRP254919/app.R",
+                "shinyngs_app/rnaseq_dream_decoupler/SRP254919/data.rds",
                 "tables",
                 "tables/annotation",
                 "tables/annotation/rnaseq_dream_decoupler",
                 "tables/annotation/rnaseq_dream_decoupler/SRP254919.anno.tsv",
+                "tables/decoupler",
+                "tables/decoupler/rnaseq_dream_decoupler",
+                "tables/decoupler/rnaseq_dream_decoupler/dream_full_model_with_interactions_SRP254919_consensus_estimate_decoupler.tsv",
+                "tables/decoupler/rnaseq_dream_decoupler/dream_full_model_with_interactions_SRP254919_consensus_pvals_decoupler.tsv",
+                "tables/decoupler/rnaseq_dream_decoupler/dream_full_model_with_interactions_SRP254919_ulm_estimate_decoupler.tsv",
+                "tables/decoupler/rnaseq_dream_decoupler/dream_full_model_with_interactions_SRP254919_ulm_pvals_decoupler.tsv",
+                "tables/decoupler/rnaseq_dream_decoupler/dream_interaction_genotype_treatment_SRP254919_consensus_estimate_decoupler.tsv",
+                "tables/decoupler/rnaseq_dream_decoupler/dream_interaction_genotype_treatment_SRP254919_consensus_pvals_decoupler.tsv",
+                "tables/decoupler/rnaseq_dream_decoupler/dream_interaction_genotype_treatment_SRP254919_ulm_estimate_decoupler.tsv",
+                "tables/decoupler/rnaseq_dream_decoupler/dream_interaction_genotype_treatment_SRP254919_ulm_pvals_decoupler.tsv",
+                "tables/decoupler/rnaseq_dream_decoupler/dream_treatment_effect_classic_comparison_SRP254919_consensus_estimate_decoupler.tsv",
+                "tables/decoupler/rnaseq_dream_decoupler/dream_treatment_effect_classic_comparison_SRP254919_consensus_pvals_decoupler.tsv",
+                "tables/decoupler/rnaseq_dream_decoupler/dream_treatment_effect_classic_comparison_SRP254919_ulm_estimate_decoupler.tsv",
+                "tables/decoupler/rnaseq_dream_decoupler/dream_treatment_effect_classic_comparison_SRP254919_ulm_pvals_decoupler.tsv",
+                "tables/decoupler/rnaseq_dream_decoupler/dream_treatment_plus_genotype_SRP254919_consensus_estimate_decoupler.tsv",
+                "tables/decoupler/rnaseq_dream_decoupler/dream_treatment_plus_genotype_SRP254919_consensus_pvals_decoupler.tsv",
+                "tables/decoupler/rnaseq_dream_decoupler/dream_treatment_plus_genotype_SRP254919_ulm_estimate_decoupler.tsv",
+                "tables/decoupler/rnaseq_dream_decoupler/dream_treatment_plus_genotype_SRP254919_ulm_pvals_decoupler.tsv",
                 "tables/differential",
                 "tables/differential/rnaseq_dream_decoupler",
+                "tables/differential/rnaseq_dream_decoupler/full_model_with_interactions_SRP254919.dream.results.tsv",
+                "tables/differential/rnaseq_dream_decoupler/full_model_with_interactions_SRP254919.dream.results_filtered.tsv",
+                "tables/differential/rnaseq_dream_decoupler/full_model_with_interactions_SRP254919_dream.annotated.tsv",
+                "tables/differential/rnaseq_dream_decoupler/interaction_genotype_treatment_SRP254919.dream.results.tsv",
+                "tables/differential/rnaseq_dream_decoupler/interaction_genotype_treatment_SRP254919.dream.results_filtered.tsv",
+                "tables/differential/rnaseq_dream_decoupler/interaction_genotype_treatment_SRP254919_dream.annotated.tsv",
                 "tables/differential/rnaseq_dream_decoupler/treatment_effect_classic_comparison_SRP254919.dream.results.tsv",
+                "tables/differential/rnaseq_dream_decoupler/treatment_effect_classic_comparison_SRP254919.dream.results_filtered.tsv",
+                "tables/differential/rnaseq_dream_decoupler/treatment_effect_classic_comparison_SRP254919_dream.annotated.tsv",
+                "tables/differential/rnaseq_dream_decoupler/treatment_plus_genotype_SRP254919.dream.results.tsv",
+                "tables/differential/rnaseq_dream_decoupler/treatment_plus_genotype_SRP254919.dream.results_filtered.tsv",
+                "tables/differential/rnaseq_dream_decoupler/treatment_plus_genotype_SRP254919_dream.annotated.tsv",
                 "tables/processed_abundance",
                 "tables/processed_abundance/rnaseq_dream_decoupler",
                 "tables/processed_abundance/rnaseq_dream_decoupler/all.normalised_counts.tsv"
             ],
             [
+                "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
-                "all.normalised_counts.tsv:md5,6f6d9c0c908104673287d27d0e4a05e2"
+                "dream_treatment_effect_classic_comparison_SRP254919_consensus_estimate_decoupler.tsv:md5,50df43446518611cbca7480af790a7e6",
+                "dream_treatment_effect_classic_comparison_SRP254919_consensus_pvals_decoupler.tsv:md5,7302e1c6a9b232c66cd27a766adee3ce",
+                "dream_treatment_effect_classic_comparison_SRP254919_ulm_estimate_decoupler.tsv:md5,6c51704d97989068a7edfa382ac993fe",
+                "dream_treatment_effect_classic_comparison_SRP254919_ulm_pvals_decoupler.tsv:md5,f8a593bef2735cbf1366d5a8f9997153",
+                "all.normalised_counts.tsv:md5,a06f5e5c50938bb4d93991d7e314c7cf"
             ]
         ],
-        "timestamp": "2026-04-22T15:55:50.457397262",
+        "timestamp": "2026-04-22T16:11:59.205348748",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
