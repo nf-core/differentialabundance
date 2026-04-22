@@ -122,11 +122,11 @@
                 "all.normalised_counts.tsv:md5,534f0f37e10325163656cad95418f34a"
             ]
         ],
-        "timestamp": "2026-04-20T16:43:24.896680957",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-04-20T16:43:24.896680957"
     },
     "Test rnaseq limma profile - rnaseq_limma_gsea - with formula and complex contrasts": {
         "content": [
@@ -517,11 +517,11 @@
                 "all.normalised_counts.tsv:md5,ebe30cc05e93aea1f04ee8598ec62c94"
             ]
         ],
-        "timestamp": "2026-04-20T16:39:29.870981774",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-04-20T16:39:29.870981774"
     },
     "Test rnaseq limma profile - rnaseq_limma_gsea - Numeric sample IDs": {
         "content": [
@@ -702,11 +702,11 @@
                 "all.normalised_counts.tsv:md5,fd122dfc7ebc8d468075092f5cecb523"
             ]
         ],
-        "timestamp": "2026-04-20T16:45:10.079666849",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-04-20T16:45:10.079666849"
     },
     "Test rnaseq limma profile - rnaseq_limma_gprofiler2": {
         "content": [
@@ -721,7 +721,7 @@
                 "GPROFILER2_GOST\"": {
                     "r-ggplot2": "3.4.3",
                     "r-gprofiler2": "0.2.2",
-                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '113'\ndisplay_name: Mouse\ngenebuild: GRCm39\ngprofiler_version: e113_eg59_p19_6be52918\norganism: mmusculus\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 05.2025\n      classes: None\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2024-01-22\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2025-5-23\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2024.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20250510'\ntaxonomy_id: '10090'\n"
+                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '114'\ndisplay_name: Mouse\ngenebuild: GRCm39\ngprofiler_version: e114_eg62_p19_2fe5c4c1\norganism: mmusculus\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 03.2026\n      classes: None\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2026-03-15\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2026-3-20\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2025.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20260310'\ntaxonomy_id: '10090'\n"
                 },
                 "GTF_TO_TABLE": {
                     "atlas-gene-annotation-manipulation": "1.1.1"
@@ -832,11 +832,11 @@
                 "all.normalised_counts.tsv:md5,534f0f37e10325163656cad95418f34a"
             ]
         ],
-        "timestamp": "2026-04-20T16:24:03.193721457",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.3",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-04-22T20:34:59.612803045"
     },
     "Test rnaseq limma profile - rnaseq_limma_gsea": {
         "content": [
@@ -1017,10 +1017,10 @@
                 "all.normalised_counts.tsv:md5,534f0f37e10325163656cad95418f34a"
             ]
         ],
-        "timestamp": "2026-04-20T16:22:24.997602128",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-04-20T16:22:24.997602128"
     }
 }
