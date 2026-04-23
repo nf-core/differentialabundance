@@ -77,7 +77,7 @@
                     },
                     "limma/differential": {
                         "branch": "master",
-                        "git_sha": "48f50904ac6770bc6969a0618a2bf3598df1c823",
+                        "git_sha": "72348f04b265fb310f87db1c8d12e2151cbabe14",
                         "installed_by": ["abundance_differential_filter", "modules"]
                     },
                     "propr/grea": {
@@ -127,7 +127,7 @@
                     },
                     "variancepartition/dream": {
                         "branch": "master",
-                        "git_sha": "9ac1dfd203c4c6aa7a61b8ce3a6c6b09facf1265",
+                        "git_sha": "72348f04b265fb310f87db1c8d12e2151cbabe14",
                         "installed_by": ["abundance_differential_filter", "modules"]
                     },
                     "zip": {
