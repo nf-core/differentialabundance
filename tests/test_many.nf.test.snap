@@ -1,7 +1,7 @@
 {
     "Test profile - many": {
         "content": [
-            82,
+            83,
             {
                 "AFFY_JUSTRMA_RAW": {
                     "r-base": "4.3.1",
@@ -35,7 +35,7 @@
                 "GPROFILER2_GOST\"": {
                     "r-ggplot2": "3.4.3",
                     "r-gprofiler2": "0.2.2",
-                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '113'\ndisplay_name: Mouse\ngenebuild: GRCm39\ngprofiler_version: e113_eg59_p19_6be52918\norganism: mmusculus\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2025-03-16\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 05.2025\n      classes: None\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2024-01-22\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2025-5-23\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2024.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20250510'\ntaxonomy_id: '10090'\n"
+                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '114'\ndisplay_name: Mouse\ngenebuild: GRCm39\ngprofiler_version: e114_eg62_p19_2fe5c4c1\norganism: mmusculus\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 03.2026\n      classes: None\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2026-03-15\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2026-3-20\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2025.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20260310'\ntaxonomy_id: '10090'\n"
                 },
                 "GSEA_GSEA": {
                     "gsea": "4.3.2"
@@ -55,16 +55,16 @@
                     "bioconductor-limma": "3.58.1"
                 },
                 "PLOT_DIFFERENTIAL": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "PLOT_EXPLORATORY": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "SHINYNGS_APP": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "VALIDATOR": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "VARIANCEPARTITION_DREAM": {
                     "r-base": "4.3.3",
@@ -82,19 +82,25 @@
                 "other/affy/test_affy_limma_gprofiler2/raw._eset.rds",
                 "other/deseq2",
                 "other/deseq2/test_rnaseq_deseq2_gsea",
+                "other/deseq2/test_rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.R_sessionInfo.log",
                 "other/deseq2/test_rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.dds.rld.rds",
                 "other/deseq2/test_rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.deseq2.sizefactors.tsv",
+                "other/deseq2/test_rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.R_sessionInfo.log",
                 "other/deseq2/test_rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.dds.rld.rds",
                 "other/deseq2/test_rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.sizefactors.tsv",
                 "other/gprofiler2",
                 "other/gprofiler2/test_affy_limma_gprofiler2",
                 "other/gprofiler2/test_affy_limma_gprofiler2/phenotype_uninvolved_lesional_GSE50790",
+                "other/gprofiler2/test_affy_limma_gprofiler2/phenotype_uninvolved_lesional_GSE50790/R_sessionInfo.log",
                 "other/limma",
                 "other/limma/test_affy_limma_gprofiler2",
                 "other/limma/test_affy_limma_gprofiler2/phenotype_uninvolved_lesional_GSE50790.MArrayLM.limma.rds",
+                "other/limma/test_affy_limma_gprofiler2/phenotype_uninvolved_lesional_GSE50790.R_sessionInfo.log",
                 "other/limma/test_rnaseq_limma_decoupler",
                 "other/limma/test_rnaseq_limma_decoupler/treatment_mCherry_hND6__SRP254919.MArrayLM.limma.rds",
+                "other/limma/test_rnaseq_limma_decoupler/treatment_mCherry_hND6__SRP254919.R_sessionInfo.log",
                 "other/limma/test_rnaseq_limma_decoupler/treatment_mCherry_hND6_sample_number_SRP254919.MArrayLM.limma.rds",
+                "other/limma/test_rnaseq_limma_decoupler/treatment_mCherry_hND6_sample_number_SRP254919.R_sessionInfo.log",
                 "pipeline_info",
                 "pipeline_info/collated_versions.yml",
                 "pipeline_info/nf_core_differentialabundance_software_versions.yml",
@@ -174,9 +180,6 @@
                 "plots/exploratory/test_rnaseq_limma_decoupler/treatment/png/pca2d.png",
                 "plots/exploratory/test_rnaseq_limma_decoupler/treatment/png/pca3d.png",
                 "plots/exploratory/test_rnaseq_limma_decoupler/treatment/png/sample_dendrogram.png",
-                "plots/gprofiler2",
-                "plots/gprofiler2/test_affy_limma_gprofiler2",
-                "plots/gprofiler2/test_affy_limma_gprofiler2/phenotype_uninvolved_lesional_GSE50790",
                 "plots/qc",
                 "plots/qc/test_affy_limma_gprofiler2",
                 "plots/qc/test_affy_limma_gprofiler2/phenotype_uninvolved_lesional_GSE50790.limma.mean_difference.png",
@@ -324,6 +327,8 @@
                 "tables/gprofiler2/test_affy_limma_gprofiler2/phenotype_uninvolved_lesional_GSE50790/phenotype_uninvolved_lesional_GSE50790.gprofiler2.all_enriched_pathways.tsv",
                 "tables/processed_abundance",
                 "tables/processed_abundance/test_affy_limma_gprofiler2",
+                "tables/processed_abundance/test_affy_limma_gprofiler2/normalised._matrix.tsv",
+                "tables/processed_abundance/test_affy_limma_gprofiler2/raw._matrix.tsv",
                 "tables/processed_abundance/test_rnaseq_deseq2_gsea",
                 "tables/processed_abundance/test_rnaseq_deseq2_gsea/all.normalised_counts.tsv",
                 "tables/processed_abundance/test_rnaseq_deseq2_gsea/all.vst.tsv",
@@ -374,6 +379,8 @@
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv:md5,c88d36f46f7d8a4dd8c169c249f50540",
                 "treatment_mCherry_hND6_sample_number_SRP254919_deseq2.annotated.tsv:md5,7925ca370d660117878fb5132a106f47",
                 "phenotype_uninvolved_lesional_GSE50790.gprofiler2.all_enriched_pathways.tsv:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "normalised._matrix.tsv:md5,68d849e627d86095cfb48eba81c09853",
+                "raw._matrix.tsv:md5,ea5cccce75c3a9a5d2aab3e3a19910ad",
                 "all.normalised_counts.tsv:md5,f3ef0fb48f97afde2b5122b72dc4dcc4",
                 "all.vst.tsv:md5,ae82509f76ed01ad0d041d1a62aef703",
                 "all.normalised_counts.tsv:md5,a06f5e5c50938bb4d93991d7e314c7cf",
@@ -390,8 +397,8 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.4"
         },
-        "timestamp": "2026-03-20T19:15:21.795439605"
+        "timestamp": "2026-04-22T20:00:14.104445687"
     }
 }

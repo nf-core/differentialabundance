@@ -1,7 +1,7 @@
 {
     "Test profile - filtering_min_abundance false": {
         "content": [
-            24,
+            25,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -36,16 +36,16 @@
                     "gunzip": 1.13
                 },
                 "PLOT_DIFFERENTIAL": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "PLOT_EXPLORATORY": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "SHINYNGS_APP": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "VALIDATOR": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "Workflow": {
                     "nf-core/differentialabundance": "v1.6.0dev"
@@ -55,8 +55,10 @@
                 "other",
                 "other/deseq2",
                 "other/deseq2/rnaseq_deseq2_gsea",
+                "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.R_sessionInfo.log",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.dds.rld.rds",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.deseq2.sizefactors.tsv",
+                "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.R_sessionInfo.log",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.dds.rld.rds",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.sizefactors.tsv",
                 "pipeline_info",
@@ -188,15 +190,15 @@
                 "all.vst.tsv:md5,cba6236668ad089ba9bbaa9801d5b329"
             ]
         ],
+        "timestamp": "2026-04-20T15:45:21.462385152",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
-        },
-        "timestamp": "2026-03-09T13:54:16.868332422"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
     },
     "Test profile": {
         "content": [
-            24,
+            25,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -231,16 +233,16 @@
                     "gunzip": 1.13
                 },
                 "PLOT_DIFFERENTIAL": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "PLOT_EXPLORATORY": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "SHINYNGS_APP": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "VALIDATOR": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "Workflow": {
                     "nf-core/differentialabundance": "v1.6.0dev"
@@ -250,8 +252,10 @@
                 "other",
                 "other/deseq2",
                 "other/deseq2/rnaseq_deseq2_gsea",
+                "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.R_sessionInfo.log",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.dds.rld.rds",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.deseq2.sizefactors.tsv",
+                "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.R_sessionInfo.log",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.dds.rld.rds",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.sizefactors.tsv",
                 "pipeline_info",
@@ -383,15 +387,15 @@
                 "all.vst.tsv:md5,ae82509f76ed01ad0d041d1a62aef703"
             ]
         ],
+        "timestamp": "2026-04-20T15:39:06.422469975",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
-        },
-        "timestamp": "2026-03-09T13:49:35.902655936"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
     },
     "Test profile - csv contrasts": {
         "content": [
-            24,
+            25,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -426,16 +430,16 @@
                     "gunzip": 1.13
                 },
                 "PLOT_DIFFERENTIAL": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "PLOT_EXPLORATORY": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "SHINYNGS_APP": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "VALIDATOR": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "Workflow": {
                     "nf-core/differentialabundance": "v1.6.0dev"
@@ -445,8 +449,10 @@
                 "other",
                 "other/deseq2",
                 "other/deseq2/rnaseq_deseq2_gsea",
+                "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.R_sessionInfo.log",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.dds.rld.rds",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.deseq2.sizefactors.tsv",
+                "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.R_sessionInfo.log",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.dds.rld.rds",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.sizefactors.tsv",
                 "pipeline_info",
@@ -578,11 +584,11 @@
                 "all.vst.tsv:md5,ae82509f76ed01ad0d041d1a62aef703"
             ]
         ],
+        "timestamp": "2026-04-20T15:41:10.899256936",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
-        },
-        "timestamp": "2026-03-09T13:51:56.049746867"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
     },
     "Test profile - with formula": {
         "content": [
@@ -778,15 +784,15 @@
                 "all.rlog.tsv:md5,bce2521996537372c72f4083f66c5d3b"
             ]
         ],
+        "timestamp": "2026-02-06T18:13:19.245082284",
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
-        },
-        "timestamp": "2026-02-06T18:13:19.245082284"
+        }
     },
     "Test profile - multiple reports - csv contrasts": {
         "content": [
-            26,
+            27,
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
@@ -821,16 +827,16 @@
                     "gunzip": 1.13
                 },
                 "PLOT_DIFFERENTIAL": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "PLOT_EXPLORATORY": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "SHINYNGS_APP": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "VALIDATOR": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "Workflow": {
                     "nf-core/differentialabundance": "v1.6.0dev"
@@ -840,8 +846,10 @@
                 "other",
                 "other/deseq2",
                 "other/deseq2/rnaseq_deseq2_gsea",
+                "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.R_sessionInfo.log",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.dds.rld.rds",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6__SRP254919.deseq2.sizefactors.tsv",
+                "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.R_sessionInfo.log",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.dds.rld.rds",
                 "other/deseq2/rnaseq_deseq2_gsea/treatment_mCherry_hND6_sample_number_SRP254919.deseq2.sizefactors.tsv",
                 "pipeline_info",
@@ -974,10 +982,10 @@
                 "all.vst.tsv:md5,ae82509f76ed01ad0d041d1a62aef703"
             ]
         ],
+        "timestamp": "2026-04-20T15:43:16.252754029",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
-        },
-        "timestamp": "2026-03-09T13:57:35.480137088"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
     }
 }

@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [[#694](https://github.com/nf-core/differentialabundance/pull/694)] - Fix data flow for `generic_matrix` study type ([@grst](https://github.com/grst) and [@atrigila](https://github.com/atrigila), review by [@delfiterradas](https://github.com/delfiterradas)).
 - [[#689](https://github.com/nf-core/differentialabundance/pull/689)] - Normalize coefficient names in `variancepartition/dream` before building contrasts ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#684](https://github.com/nf-core/differentialabundance/pull/684)] - Fix intercept getting added automatically in `deseq2` ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst)).
 - [[#675](https://github.com/nf-core/differentialabundance/pull/675)] - Fix `study_type` rnaseq description for each method in quarto report ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst)).
@@ -67,6 +68,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [[#704](https://github.com/nf-core/differentialabundance/pull/704)] - Bump shinyngs modules to improve validation of contrasts and update subworkflows ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila), [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
+- [[#702](https://github.com/nf-core/differentialabundance/pull/702)] - Update limma and dream modules to put variable of interest first in zero intercept constrasts ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila), [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
+- [[#662](https://github.com/nf-core/differentialabundance/pull/662)] - Migrate to new workflow output format ([@suzannejin](https://github.com/suzannejin), review by [@pinin4fjords](https://github.com/pinin4fjords) and [@grst](https://github.com/grst)).
 - [[#686](https://github.com/nf-core/differentialabundance/pull/686)] - Improve `study_abundance_type` docs and schema description ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#681](https://github.com/nf-core/differentialabundance/pull/681)] - Remove the nextflow config default `--round_digits 4` parameter and change it for `-1` ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#672](https://github.com/nf-core/differentialabundance/pull/672)] - Add universal seed parameter ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
