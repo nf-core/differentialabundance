@@ -11,10 +11,10 @@
                     "bioconductor-limma": "3.58.1"
                 },
                 "PLOT_DIFFERENTIAL": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "PLOT_EXPLORATORY": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "PROTEUS": {
                     "r-base": "4.2.1",
@@ -23,7 +23,7 @@
                     "bioconductor-limma": "3.54.0"
                 },
                 "VALIDATOR": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "Workflow": {
                     "nf-core/differentialabundance": "v1.6.0dev"
@@ -133,10 +133,10 @@
                 "raw_proteingroups_tab.tsv:md5,33a8791f84c676ea1aea4842231acb6a"
             ]
         ],
+        "timestamp": "2026-04-20T15:48:37.971490714",
         "meta": {
-            "nf-test": "0.9.2",
+            "nf-test": "0.9.4",
             "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-03-20T16:45:14.541300629"
+        }
     }
 }
