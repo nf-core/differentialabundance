@@ -189,9 +189,6 @@ workflow DIFFERENTIALABUNDANCE {
     ch_affy_norm = prepareModuleOutput(AFFY_JUSTRMA_NORM.out.expression, ch_paramsets)
     ch_affy_platform_features = prepareModuleOutput(AFFY_JUSTRMA_RAW.out.annotation, ch_paramsets)
 
-    ch_versions = ch_versions
-        .mix(AFFY_JUSTRMA_RAW.out.versions)
-
     //
     // 2. Deal with maxquant data
     // We'll be running Proteus once per unique contrast variable to generate plots
@@ -301,8 +298,6 @@ workflow DIFFERENTIALABUNDANCE {
     GUNZIP_GTF( prepareModuleInput(ch_gtf_for_processing.compressed, 'preprocessing') )
     ch_gunzip_out = prepareModuleOutput(GUNZIP_GTF.out.gunzip, ch_paramsets)
 
-    ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
-
     // Combine compressed and uncompressed GTF files
     ch_gtf_processed = ch_gtf_for_processing.uncompressed
         .mix(ch_gunzip_out)
@@ -313,8 +308,6 @@ workflow DIFFERENTIALABUNDANCE {
         [tuple('id':""), []]
     )
     ch_gtf_features = prepareModuleOutput(GTF_TO_TABLE.out.feature_annotation, ch_paramsets)
-
-    ch_versions = ch_versions.mix(GTF_TO_TABLE.out.versions)
 
     // Extract features from matrix
     // Note that in the case of maxquant we use the normalised matrix
@@ -525,9 +518,6 @@ workflow DIFFERENTIALABUNDANCE {
         prepareModuleInput(ch_final_annotation_input, 'differential')
     )
 
-    ch_versions = ch_versions
-        .mix(CSVTK_JOIN.out.versions)
-
     // Derive a channel of normalised matrices
     // - from differential analysis for RNASeq
     // - from normalisedvalidated assays for Affy and MaxQuant
@@ -693,13 +683,6 @@ workflow DIFFERENTIALABUNDANCE {
         ch_plot_differential_input.samples_features_matrices
     )
 
-    // Gather software versions
-
-    ch_versions = ch_versions
-        .mix(VALIDATOR.out.versions)
-        .mix(PLOT_EXPLORATORY.out.versions)
-        .mix(PLOT_DIFFERENTIAL.out.versions)
-
     // ========================================================================
     // ShinyNGS app
     // ========================================================================
@@ -800,8 +783,6 @@ workflow DIFFERENTIALABUNDANCE {
         ch_shinyngs_input.contrasts_and_differential,   // meta, contrast file, [ differential results ]
         ch_shinyngs_input.contrast_stats_assay
     )
-
-    ch_versions = ch_versions.mix(SHINYNGS_APP.out.versions)
 
     // ========================================================================
     // Generate report
