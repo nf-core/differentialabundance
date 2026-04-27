@@ -721,7 +721,7 @@
                 "GPROFILER2_GOST\"": {
                     "r-ggplot2": "3.4.3",
                     "r-gprofiler2": "0.2.2",
-                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '114'\ndisplay_name: Mouse\ngenebuild: GRCm39\ngprofiler_version: e114_eg62_p19_cfae47ae\norganism: mmusculus\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 03.2026\n      classes: None\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2026-03-15\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2026-3-20\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2025.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20260310'\ntaxonomy_id: '10090'\n"
+                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '114'\ndisplay_name: Mouse\ngenebuild: GRCm39\ngprofiler_version: e114_eg62_p19_fa3a7d2c\norganism: mmusculus\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 03.2026\n      classes: None\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2026-03-15\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2026-3-20\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2025.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20260310'\ntaxonomy_id: '10090'\n"
                 },
                 "GTF_TO_TABLE": {
                     "atlas-gene-annotation-manipulation": "1.1.1"
@@ -836,7 +836,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-04-24T20:58:05.862657243"
+        "timestamp": "2026-04-27T14:24:41.908599615"
     },
     "Test rnaseq limma profile - rnaseq_limma_gsea": {
         "content": [
