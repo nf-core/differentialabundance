@@ -15,16 +15,16 @@
                     "bioconductor-limma": "3.58.1"
                 },
                 "PLOT_DIFFERENTIAL": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "PLOT_EXPLORATORY": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "SHINYNGS_APP": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "VALIDATOR": {
-                    "r-shinyngs": "2.3.0"
+                    "shinyngs": "2.4.0"
                 },
                 "Workflow": {
                     "nf-core/differentialabundance": "v1.6.0dev"
@@ -89,10 +89,10 @@
                 "normalised.matrix.tsv:md5,230f87f91c0c1a7e2ab354200c4b978c"
             ]
         ],
+        "timestamp": "2026-04-20T16:47:45.526121185",
         "meta": {
-            "nf-test": "0.9.2",
+            "nf-test": "0.9.4",
             "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-03-20T17:22:48.92960888"
+        }
     }
 }
