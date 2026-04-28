@@ -51,7 +51,8 @@ workflow NFCORE_DIFFERENTIALABUNDANCE {
     // WORKFLOW: Run pipeline
     //
     DIFFERENTIALABUNDANCE (
-        samplesheet
+        samplesheet,
+        params.outdir,
     )
 }
 /*
@@ -93,7 +94,6 @@ workflow {
         params.plaintext_email,
         params.outdir,
         params.monochrome_logs,
-        params.hook_url,
     )
 }
 
