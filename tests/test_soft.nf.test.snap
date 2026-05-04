@@ -3,9 +3,6 @@
         "content": [
             10,
             {
-                "CUSTOM_FILTERDIFFERENTIALTABLE": {
-                    "pandas": "1.5.2"
-                },
                 "GEOQUERY_GETGEO": {
                     "r-base": "4.3.2",
                     "bioconductor-geoquery": "2.70.0"
@@ -89,10 +86,10 @@
                 "normalised.matrix.tsv:md5,230f87f91c0c1a7e2ab354200c4b978c"
             ]
         ],
-        "timestamp": "2026-04-20T16:47:45.526121185",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.3",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-05-04T00:13:48.491822859"
     }
 }

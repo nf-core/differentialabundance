@@ -10,9 +10,6 @@
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
                 },
-                "CUSTOM_FILTERDIFFERENTIALTABLE": {
-                    "pandas": "1.5.2"
-                },
                 "CUSTOM_TABULARTOGSEACHIP": {
                     "gawk": "5.1.0"
                 },
@@ -399,6 +396,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-04-27T12:44:59.022256733"
+        "timestamp": "2026-04-29T21:11:33.389730509"
     }
 }

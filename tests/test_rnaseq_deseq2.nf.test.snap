@@ -6,9 +6,6 @@
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
                 },
-                "CUSTOM_FILTERDIFFERENTIALTABLE": {
-                    "pandas": "1.5.2"
-                },
                 "CUSTOM_TABULARTOGSEACHIP": {
                     "gawk": "5.1.0"
                 },
@@ -191,10 +188,10 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.3",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-04-20T15:52:10.734050552"
+        "timestamp": "2026-04-29T21:43:14.519467981"
     },
     "Test profile - rnaseq_deseq2_gprofiler2 - with formula": {
         "content": [
@@ -202,9 +199,6 @@
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
-                },
-                "CUSTOM_FILTERDIFFERENTIALTABLE": {
-                    "pandas": "1.5.2"
                 },
                 "DESEQ2_DIFFERENTIAL": {
                     "r-base": "4.1.3",
@@ -407,7 +401,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-04-27T13:24:58.318271897"
+        "timestamp": "2026-04-29T21:49:59.756953806"
     },
     "Test - Numeric sample IDs - rnaseq_deseq2_gprofiler2": {
         "content": [
@@ -415,9 +409,6 @@
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
-                },
-                "CUSTOM_FILTERDIFFERENTIALTABLE": {
-                    "pandas": "1.5.2"
                 },
                 "DESEQ2_DIFFERENTIAL": {
                     "r-base": "4.1.3",
@@ -558,7 +549,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-04-27T13:28:50.938691093"
+        "timestamp": "2026-04-29T21:53:58.360374329"
     },
     "Test - Numeric sample IDs - rnaseq_deseq2_gsea": {
         "content": [
@@ -566,9 +557,6 @@
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
-                },
-                "CUSTOM_FILTERDIFFERENTIALTABLE": {
-                    "pandas": "1.5.2"
                 },
                 "CUSTOM_TABULARTOGSEACHIP": {
                     "gawk": "5.1.0"
@@ -752,10 +740,10 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.3",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-04-20T16:00:53.142301046"
+        "timestamp": "2026-04-29T21:52:02.637964999"
     },
     "Test profile - rnaseq_deseq2_gprofiler2": {
         "content": [
@@ -763,9 +751,6 @@
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
-                },
-                "CUSTOM_FILTERDIFFERENTIALTABLE": {
-                    "pandas": "1.5.2"
                 },
                 "DESEQ2_DIFFERENTIAL": {
                     "r-base": "4.1.3",
@@ -906,6 +891,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-04-27T13:20:00.067419544"
+        "timestamp": "2026-04-29T21:45:09.042760743"
     }
 }

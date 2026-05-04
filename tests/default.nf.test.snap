@@ -6,9 +6,6 @@
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
                 },
-                "CUSTOM_FILTERDIFFERENTIALTABLE": {
-                    "pandas": "1.5.2"
-                },
                 "CUSTOM_TABULARTOGSEACHIP": {
                     "gawk": "5.1.0"
                 },
@@ -190,11 +187,11 @@
                 "all.vst.tsv:md5,cba6236668ad089ba9bbaa9801d5b329"
             ]
         ],
-        "timestamp": "2026-04-20T15:45:21.462385152",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.3",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-04-29T20:38:23.748749137"
     },
     "Test profile": {
         "content": [
@@ -203,9 +200,6 @@
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
                 },
-                "CUSTOM_FILTERDIFFERENTIALTABLE": {
-                    "pandas": "1.5.2"
-                },
                 "CUSTOM_TABULARTOGSEACHIP": {
                     "gawk": "5.1.0"
                 },
@@ -387,11 +381,11 @@
                 "all.vst.tsv:md5,ae82509f76ed01ad0d041d1a62aef703"
             ]
         ],
-        "timestamp": "2026-04-20T15:39:06.422469975",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.3",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-04-29T20:32:19.619669103"
     },
     "Test profile - csv contrasts": {
         "content": [
@@ -400,9 +394,6 @@
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
                 },
-                "CUSTOM_FILTERDIFFERENTIALTABLE": {
-                    "pandas": "1.5.2"
-                },
                 "CUSTOM_TABULARTOGSEACHIP": {
                     "gawk": "5.1.0"
                 },
@@ -584,11 +575,11 @@
                 "all.vst.tsv:md5,ae82509f76ed01ad0d041d1a62aef703"
             ]
         ],
-        "timestamp": "2026-04-20T15:41:10.899256936",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.3",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-04-29T20:34:21.086698735"
     },
     "Test profile - with formula": {
         "content": [
@@ -784,11 +775,11 @@
                 "all.rlog.tsv:md5,bce2521996537372c72f4083f66c5d3b"
             ]
         ],
-        "timestamp": "2026-02-06T18:13:19.245082284",
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
-        }
+        },
+        "timestamp": "2026-02-06T18:13:19.245082284"
     },
     "Test profile - multiple reports - csv contrasts": {
         "content": [
@@ -796,9 +787,6 @@
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
-                },
-                "CUSTOM_FILTERDIFFERENTIALTABLE": {
-                    "pandas": "1.5.2"
                 },
                 "CUSTOM_TABULARTOGSEACHIP": {
                     "gawk": "5.1.0"
@@ -982,10 +970,10 @@
                 "all.vst.tsv:md5,ae82509f76ed01ad0d041d1a62aef703"
             ]
         ],
-        "timestamp": "2026-04-20T15:43:16.252754029",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.3",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-04-29T20:36:21.59236643"
     }
 }

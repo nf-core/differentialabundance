@@ -6,9 +6,6 @@
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
                 },
-                "CUSTOM_FILTERDIFFERENTIALTABLE": {
-                    "pandas": "1.5.2"
-                },
                 "DECOUPLER_DECOUPLER": null,
                 "decoupler-py": "1.8.0",
                 "GTF_TO_TABLE": {
@@ -123,10 +120,10 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.3",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-04-20T16:43:24.896680957"
+        "timestamp": "2026-05-03T23:53:56.154403837"
     },
     "Test rnaseq limma profile - rnaseq_limma_gsea - with formula and complex contrasts": {
         "content": [
@@ -134,9 +131,6 @@
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
-                },
-                "CUSTOM_FILTERDIFFERENTIALTABLE": {
-                    "pandas": "1.5.2"
                 },
                 "CUSTOM_TABULARTOGSEACHIP": {
                     "gawk": "5.1.0"
@@ -518,10 +512,10 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.3",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-04-20T16:39:29.870981774"
+        "timestamp": "2026-05-03T23:50:14.571783814"
     },
     "Test rnaseq limma profile - rnaseq_limma_gsea - Numeric sample IDs": {
         "content": [
@@ -529,9 +523,6 @@
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
-                },
-                "CUSTOM_FILTERDIFFERENTIALTABLE": {
-                    "pandas": "1.5.2"
                 },
                 "CUSTOM_TABULARTOGSEACHIP": {
                     "gawk": "5.1.0"
@@ -703,10 +694,10 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.3",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-04-20T16:45:10.079666849"
+        "timestamp": "2026-05-03T23:55:46.246446241"
     },
     "Test rnaseq limma profile - rnaseq_limma_gprofiler2": {
         "content": [
@@ -714,9 +705,6 @@
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
-                },
-                "CUSTOM_FILTERDIFFERENTIALTABLE": {
-                    "pandas": "1.5.2"
                 },
                 "GPROFILER2_GOST\"": {
                     "r-ggplot2": "3.4.3",
@@ -836,7 +824,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-04-27T14:24:41.908599615"
+        "timestamp": "2026-05-03T23:38:54.360161383"
     },
     "Test rnaseq limma profile - rnaseq_limma_gsea": {
         "content": [
@@ -844,9 +832,6 @@
             {
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
-                },
-                "CUSTOM_FILTERDIFFERENTIALTABLE": {
-                    "pandas": "1.5.2"
                 },
                 "CUSTOM_TABULARTOGSEACHIP": {
                     "gawk": "5.1.0"
@@ -1018,9 +1003,9 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.3",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-04-20T16:22:24.997602128"
+        "timestamp": "2026-05-03T23:37:13.495123492"
     }
 }

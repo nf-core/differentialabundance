@@ -6,9 +6,6 @@
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
                 },
-                "CUSTOM_FILTERDIFFERENTIALTABLE": {
-                    "pandas": "1.5.2"
-                },
                 "DESEQ2_DIFFERENTIAL": {
                     "r-base": "4.1.3",
                     "bioconductor-deseq2": "1.34.0"
@@ -106,10 +103,10 @@
                 "all.vst.tsv:md5,f25a3a95044074ed2164d155fbdb9571"
             ]
         ],
-        "timestamp": "2026-04-20T15:50:07.773021289",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.3",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-04-29T21:37:40.418146418"
     }
 }

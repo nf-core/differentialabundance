@@ -3,9 +3,6 @@
         "content": [
             20,
             {
-                "CUSTOM_FILTERDIFFERENTIALTABLE": {
-                    "pandas": "1.5.2"
-                },
                 "LIMMA_DIFFERENTIAL": {
                     "r-base": "4.3.3",
                     "bioconductor-limma": "3.58.1"
@@ -133,10 +130,10 @@
                 "raw_proteingroups_tab.tsv:md5,33a8791f84c676ea1aea4842231acb6a"
             ]
         ],
-        "timestamp": "2026-04-20T15:48:37.971490714",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.3",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-04-29T21:32:52.305641346"
     }
 }

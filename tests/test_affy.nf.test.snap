@@ -10,9 +10,6 @@
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
                 },
-                "CUSTOM_FILTERDIFFERENTIALTABLE": {
-                    "pandas": "1.5.2"
-                },
                 "GPROFILER2_GOST\"": {
                     "r-ggplot2": "3.4.3",
                     "r-gprofiler2": "0.2.2",
@@ -132,7 +129,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-04-27T15:18:28.63638637"
+        "timestamp": "2026-04-29T21:01:19.757417479"
     },
     "Test affy profile - affy_limma_gsea": {
         "content": [
@@ -144,9 +141,6 @@
                 },
                 "CSVTK_JOIN": {
                     "csvtk": "0.31.0"
-                },
-                "CUSTOM_FILTERDIFFERENTIALTABLE": {
-                    "pandas": "1.5.2"
                 },
                 "CUSTOM_TABULARTOGSEACHIP": {
                     "gawk": "5.1.0"
@@ -391,6 +385,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-04-20T18:21:17.098337917"
+        "timestamp": "2026-04-29T20:54:28.019478341"
     }
 }
