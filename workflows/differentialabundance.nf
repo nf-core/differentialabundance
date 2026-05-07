@@ -133,6 +133,16 @@ workflow DIFFERENTIALABUNDANCE {
             tsv: extension == 'tsv'
         }
 
+    ch_variable_definitions = ch_contrasts_file_with_extension
+        .map { meta, contrasts_file, extension ->
+            def variable_defs = ''
+            if (extension == 'yml' || extension == 'yaml') {
+                def yaml_data = new groovy.yaml.YamlSlurper().parse(contrasts_file)
+                variable_defs = encodeVariableDefinitions(yaml_data.variables ?: [:])
+            }
+            [ meta, variable_defs ]
+        }
+
     ch_contrasts_variables_from_yml = ch_contrast_variables_input.yml
         .flatMap { meta, yaml_file, ext ->
             def yaml_data = new groovy.yaml.YamlSlurper().parse(yaml_file)
@@ -418,13 +428,15 @@ workflow DIFFERENTIALABUNDANCE {
 
     ch_contrasts = ch_validated_contrast
         .splitCsv ( header:true, sep:'\t' )
-        .map{meta, contrast ->
+        .join(ch_variable_definitions)
+        .map{meta, contrast, variable_definitions ->
             contrast.blocking = contrast.blocking.replaceAll('^NA$', '')
             if (!contrast.id){
                 contrast.id = contrast.values().join('_')
             }
             contrast.formula = contrast.formula?.trim() ? contrast.formula.trim() : null
             contrast.make_contrasts_str = contrast.make_contrasts_str?.trim() ? contrast.make_contrasts_str.trim() : null
+            contrast.variable_definitions = variable_definitions
 
             return [meta, contrast, contrast.variable, contrast.reference, contrast.target, contrast.formula, contrast.make_contrasts_str]
         }
@@ -1021,6 +1033,34 @@ workflow DIFFERENTIALABUNDANCE {
     nfcore_versions            = ch_nfcore_versions
     collated_versions          = ch_collated_versions
 
+}
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    FUNCTIONS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+def encodeVariableDefinitions(variables) {
+    if (!variables) {
+        return ''
+    }
+
+    variables.collect { name, spec ->
+        def type = spec.type ?: ''
+        def enum_values = spec.enum ?: spec.categories ?: []
+        def minimum = spec.containsKey('minimum') ? spec.minimum : ''
+        [
+            encodeVariableDefinitionValue(name),
+            encodeVariableDefinitionValue(type),
+            enum_values.collect { encodeVariableDefinitionValue(it) }.join(','),
+            encodeVariableDefinitionValue(minimum)
+        ].join('|')
+    }.join(';')
+}
+
+def encodeVariableDefinitionValue(value) {
+    java.net.URLEncoder.encode(value.toString(), 'UTF-8').replace('+', '%20')
 }
 
 /*

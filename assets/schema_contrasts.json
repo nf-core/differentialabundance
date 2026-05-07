@@ -78,6 +78,33 @@
                         "additionalProperties": false
                     },
                     "minItems": 1
+                },
+                "variables": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "type": "string",
+                                "enum": ["string", "integer", "number", "numeric"]
+                            },
+                            "description": {
+                                "type": "string"
+                            },
+                            "enum": {
+                                "type": "array",
+                                "items": {
+                                    "type": ["string", "number", "integer"]
+                                },
+                                "minItems": 1,
+                                "uniqueItems": true
+                            },
+                            "minimum": {
+                                "type": "number"
+                            }
+                        },
+                        "additionalProperties": false
+                    }
                 }
             },
             "required": ["contrasts"],

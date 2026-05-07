@@ -41,7 +41,7 @@
                 "contrasts": {
                     "type": "string",
                     "description": "A CSV/TSV/YML/YAML file describing sample contrasts to compare groups.",
-                    "help_text": "This file is used to define groups of samples from 'input' to compare. CSV/TSV files must contain at least the columns 'variable', 'reference', 'target' and 'blocking', where 'variable' is a column in the input sample sheet, 'reference' and 'target' are values in that column, and blocking is a colon-separated list of additional 'blocking' variables (can be an empty string). YAML files should contain a top-level 'contrasts' list with either 'comparison' or formula-based contrast entries.",
+                    "help_text": "This file is used to define groups of samples from 'input' to compare. CSV/TSV files must contain at least the columns 'variable', 'reference', 'target' and 'blocking', where 'variable' is a column in the input sample sheet, 'reference' and 'target' are values in that column, and blocking is a colon-separated list of additional 'blocking' variables (can be an empty string). YAML files should contain a top-level 'contrasts' list with either 'comparison' or formula-based contrast entries. YAML files may also contain an optional top-level 'variables' object to define metadata column types and categorical enum ordering.",
                     "pattern": "^\\S+\\.(csv|tsv|yml|yaml)$",
                     "format": "file-path",
                     "schema": "assets/schema_contrasts.json",
