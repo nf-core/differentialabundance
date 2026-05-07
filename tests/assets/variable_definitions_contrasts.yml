@@ -1,9 +1,10 @@
-variables:
-  treatment:
-    type: string
-    description: treatment group with explicit baseline ordering
-    enum: ["mCherry", "hND6"]
-contrasts:
-  - id: treatment_hND6_vs_mCherry
-    formula: "~ treatment"
-    make_contrasts_str: "treatmenthND6"
+  variables:
+    treatment:
+      type: string
+      description: treatment group with explicit ordering
+      enum: ["Control", "Treated"]
+
+  contrasts:
+    - id: treatment_Treated_vs_Control
+      formula: "~ treatment"
+      make_contrasts_str: "treatmentTreated"
