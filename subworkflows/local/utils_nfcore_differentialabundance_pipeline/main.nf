@@ -167,6 +167,11 @@ workflow PIPELINE_COMPLETION {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 //
+// Per-method DISPLAY columns stamped into meta.params at paramset-parse
+// time, used downstream by report.qmd, shinyngs and the output DSL.
+// FILTER columns are owned separately by the abundance_differential_filter
+// subworkflow's getDifferentialMethodParams (deliberately different for
+// propd: `significant` is the filter column, `rcDdis` is the display score).
 def getDifferentialMethodRuntimeParams(differential_method) {
     def runtime_params = [
         'deseq2': [
