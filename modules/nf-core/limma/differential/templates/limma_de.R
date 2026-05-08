@@ -63,6 +63,82 @@ nullify <- function(x) {
   if (is.character(x) && (tolower(x) == "null" || x == "")) NULL else x
 }
 
+#' Parse encoded variable definitions from the YAML contrasts file.
+parse_variable_definitions <- function(definitions) {
+    if (is.null(definitions) || !nzchar(definitions) || definitions == "null") {
+        return(list())
+    }
+
+    entries <- strsplit(definitions, ";", fixed = TRUE)[[1]]
+    defs <- list()
+
+    for (entry in entries) {
+        fields <- strsplit(entry, "|", fixed = TRUE)[[1]]
+        if (length(fields) < 2) {
+            next
+        }
+        name <- utils::URLdecode(fields[[1]])
+        type <- utils::URLdecode(fields[[2]])
+        enum <- character()
+        if (length(fields) >= 3 && nzchar(fields[[3]])) {
+            enum <- vapply(strsplit(fields[[3]], ",", fixed = TRUE)[[1]], utils::URLdecode, character(1))
+        }
+        minimum <- NULL
+        if (length(fields) >= 4 && nzchar(fields[[4]])) {
+            minimum <- as.numeric(utils::URLdecode(fields[[4]]))
+        }
+        defs[[name]] <- list(type = type, enum = enum, minimum = minimum)
+    }
+
+    defs
+}
+
+#' Apply variable definitions to sample metadata before modelling.
+apply_variable_definitions <- function(metadata, definitions) {
+    defs <- parse_variable_definitions(definitions)
+
+    for (name in names(defs)) {
+        column <- if (name %in% colnames(metadata)) name else make.names(name)
+        if (!column %in% colnames(metadata)) {
+            stop(paste0("Variable definition provided for '", name, "', but no matching sample metadata column was found."))
+        }
+
+        values <- as.character(metadata[[column]])
+        type <- tolower(defs[[name]]\$type)
+        enum <- defs[[name]]\$enum
+
+        if (length(enum) > 0) {
+            unexpected <- setdiff(unique(values[!is.na(values) & nzchar(values)]), enum)
+            if (length(unexpected) > 0) {
+                stop(paste0("Column '", column, "' contains values not present in variables enum: ", paste(unexpected, collapse = ", ")))
+            }
+            metadata[[column]] <- factor(values, levels = enum)
+        } else if (type == "string") {
+            metadata[[column]] <- values
+        } else if (type == "integer") {
+            converted <- suppressWarnings(as.integer(values))
+            if (any(is.na(converted) & !is.na(values) & nzchar(values))) {
+                stop(paste0("Column '", column, "' could not be converted to integer."))
+            }
+            if (!is.null(defs[[name]]\$minimum) && any(converted < defs[[name]]\$minimum, na.rm = TRUE)) {
+                stop(paste0("Column '", column, "' contains values below minimum ", defs[[name]]\$minimum, "."))
+            }
+            metadata[[column]] <- converted
+        } else if (type %in% c("number", "numeric")) {
+            converted <- suppressWarnings(as.numeric(values))
+            if (any(is.na(converted) & !is.na(values) & nzchar(values))) {
+                stop(paste0("Column '", column, "' could not be converted to numeric."))
+            }
+            if (!is.null(defs[[name]]\$minimum) && any(converted < defs[[name]]\$minimum, na.rm = TRUE)) {
+                stop(paste0("Column '", column, "' contains values below minimum ", defs[[name]]\$minimum, "."))
+            }
+            metadata[[column]] <- converted
+        }
+    }
+
+    metadata
+}
+
 ################################################
 ################################################
 ## PARSE PARAMETERS FROM NEXTFLOW             ##
@@ -107,7 +183,8 @@ opt <- list(
     lfc = 0,                     # topTable
     confint = FALSE ,            # topTable
     round_digits = NULL,
-    seed = NULL
+    seed = NULL,
+    variable_definitions = '$meta.variable_definitions'
 )
 opt_types <- lapply(opt, class)
 
@@ -185,6 +262,7 @@ intensities.table <-
         row.names = opt\$probe_id_col
     )
 sample.sheet <- read_delim_flexible(file = opt\$sample_file)
+sample.sheet <- apply_variable_definitions(sample.sheet, opt\$variable_definitions)
 
 # Deal with spaces that may be in sample column
 opt\$sample_id_col <- make.names(opt\$sample_id_col)

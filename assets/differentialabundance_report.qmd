@@ -467,10 +467,51 @@ differential_file_suffix <- params$meta$params$differential_file_suffix
 if (is.null(differential_file_suffix)) {
     differential_file_suffix <- paste0(".", params$meta$params$differential_method, ".results.tsv")
 }
-differential_files <- lapply(contrasts$id, function(d) {
-    file.path(params$input_dir, paste0(gsub(" |;", "_", d), differential_file_suffix))
-})
+resolve_differential_file <- function(contrast_id, contrast_index) {
+    candidate_id <- as.character(contrast_id)
+
+    if (!is.na(candidate_id) && nzchar(candidate_id)) {
+        candidate_file <- file.path(params$input_dir, paste0(gsub(" |;", "_", candidate_id), differential_file_suffix))
+        if (file.exists(candidate_file)) {
+            return(candidate_file)
+        }
+    }
+
+    available_files <- list.files(
+        params$input_dir,
+        pattern = paste0(gsub("\\.", "\\\\.", differential_file_suffix), "$"),
+        full.names = TRUE
+    )
+
+    if (length(available_files) == nrow(contrasts)) {
+        return(sort(available_files)[contrast_index])
+    }
+
+    stop(
+        "Could not resolve differential file for contrast row ",
+        contrast_index,
+        " with id '",
+        candidate_id,
+        "'. Available differential files: ",
+        paste(basename(available_files), collapse = ", ")
+    )
+}
+
+differential_files <- mapply(
+    resolve_differential_file,
+    contrasts$id,
+    seq_len(nrow(contrasts)),
+    SIMPLIFY = FALSE
+)
 differential_names <- paste0(contrasts$id)
+missing_differential_names <- is.na(differential_names) | !nzchar(differential_names)
+if (any(missing_differential_names)) {
+    differential_names[missing_differential_names] <- sub(
+        paste0(gsub("\\.", "\\\\.", differential_file_suffix), "$"),
+        "",
+        basename(unlist(differential_files)[missing_differential_names])
+    )
+}
 
 # Initialize vector to store warning messages before merging tables
 warnings_list <- c()

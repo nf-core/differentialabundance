@@ -211,6 +211,22 @@ The necessary fields in order are:
 - `formula` - A string representation of the model formula. It is used to build the design matrix.
 - `make_contrasts_str` - An explicit literal contrast string (e.g., "treatmenthND6 - treatmentmCherry") that is passed directly to [`limma::makeContrasts()`](https://rdrr.io/bioc/limma/man/makeContrasts.html) in `VARIANCEPARTITION_DREAM`, `LIMMA_DIFFERENTIAL` and `DESEQ2_DIFFERENTIAL`. The parameter names must be syntactically valid variable names in R (see [`make.names`](https://stat.ethz.ch/R-manual/R-devel/library/base/html/make.names.html)). This field provides full control for complex designs. Requires `formula`.
 
+YAML contrast files can also include optional variable definitions. In the prototype implementation, `enum` values are used to set factor levels in the listed order before model matrices and contrast strings are evaluated:
+
+```yaml
+variables:
+  condition:
+    type: string
+    description: treatment group
+    enum: ["treated", "control"]
+contrasts:
+  - id: condition_treated_control
+    formula: "~ condition"
+    make_contrasts_str: "conditioncontrol"
+```
+
+Supported prototype fields are `type`, `description`, `enum`, and `minimum`. `enum` is the important field for categorical variables because its first value becomes the model baseline for intercept-style formulas.
+
 > [!IMPORTANT]
 >
 > - YAML contrast definitions using `comparison` **and** those using `formula` are both supported by all differential methods.
