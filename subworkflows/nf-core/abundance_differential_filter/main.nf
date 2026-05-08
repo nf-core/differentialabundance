@@ -18,6 +18,11 @@ def mergeMaps(meta, meta2){
     }
 }
 
+// Per-method column mapping for FILTERING. The pipeline-side report/shiny
+// columns are stamped into meta.params separately by
+// utils_nfcore_differentialabundance_pipeline::getDifferentialMethodRuntimeParams;
+// for propd these are deliberately distinct (`significant` here vs `rcDdis`
+// in the pipeline map).
 def getDifferentialMethodParams(differential_method) {
     def method_params = [
         'deseq2': [
