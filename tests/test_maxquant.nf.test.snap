@@ -3,6 +3,13 @@
         "content": [
             20,
             {
+                "CUSTOM_FILTERDIFFERENTIALTABLE": {
+                    "pandas": "1.5.2",
+                    "python": "3.11.15"
+                },
+                "CUSTOM_MATRIXFILTER": {
+                    "r-base": "4.2.1"
+                },
                 "LIMMA_DIFFERENTIAL": {
                     "r-base": "4.3.3",
                     "bioconductor-limma": "3.58.1"
@@ -122,16 +129,17 @@
                 "tables/proteus/maxquant/raw_proteingroups_tab.tsv"
             ],
             [
-                "normalizeMedian.normalized_proteingroups.rds:md5,da660b225f066a1e87bf8bb4196adcc6",
-                "raw_proteingroups.rds:md5,0b38726c41e7b32213e5e15380c29612",
-                "normalizeMedian.normalized_proteingroups.rds:md5,6f7def9ce31c8ee07f649675db394848",
-                "raw_proteingroups.rds:md5,daef7d25977a1628870dee75e2977ee3",
+                "normalizeMedian.normalized_proteingroups.rds:md5,4463faf22fe79b9cbda4f660a835498e",
+                "raw_proteingroups.rds:md5,43ce6f39dada44045324f93cdac859e0",
+                "normalizeMedian.normalized_proteingroups.rds:md5,87ddc57c2abbc10be4eda0caafdf0bb9",
+                "raw_proteingroups.rds:md5,98055b82ff3b0674487cb2fbde06bb18",
                 "normalizeMedian.normalized_proteingroups_tab.tsv:md5,154fcd8d23409981b897d153e7b7e34e",
                 "raw_proteingroups_tab.tsv:md5,33a8791f84c676ea1aea4842231acb6a"
             ]
         ],
+        "timestamp": "2026-05-04T21:31:18.840749912",
         "meta": {
-            "nf-test": "0.9.3",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         },
         "timestamp": "2026-04-29T21:32:52.305641346"

@@ -4,16 +4,23 @@
             25,
             {
                 "CSVTK_JOIN": {
-                    "csvtk": "0.31.0"
+                    "csvtk": "0.37.0"
+                },
+                "CUSTOM_FILTERDIFFERENTIALTABLE": {
+                    "pandas": "1.5.2",
+                    "python": "3.11.15"
+                },
+                "CUSTOM_MATRIXFILTER": {
+                    "r-base": "4.2.1"
                 },
                 "CUSTOM_TABULARTOGSEACHIP": {
                     "gawk": "5.1.0"
                 },
                 "CUSTOM_TABULARTOGSEACLS": {
-                    "awk": "1.3.4"
+                    "mawk": "1.3.4"
                 },
                 "CUSTOM_TABULARTOGSEAGCT": {
-                    "awk": "1.3.4"
+                    "mawk": "1.3.4"
                 },
                 "DESEQ2_DIFFERENTIAL": {
                     "r-base": "4.1.3",
@@ -187,18 +194,25 @@
                 "all.vst.tsv:md5,ae82509f76ed01ad0d041d1a62aef703"
             ]
         ],
+        "timestamp": "2026-05-04T21:38:59.876847649",
         "meta": {
-            "nf-test": "0.9.3",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-04-29T21:43:14.519467981"
+        }
     },
     "Test profile - rnaseq_deseq2_gprofiler2 - with formula": {
         "content": [
             27,
             {
                 "CSVTK_JOIN": {
-                    "csvtk": "0.31.0"
+                    "csvtk": "0.37.0"
+                },
+                "CUSTOM_FILTERDIFFERENTIALTABLE": {
+                    "pandas": "1.5.2",
+                    "python": "3.11.15"
+                },
+                "CUSTOM_MATRIXFILTER": {
+                    "r-base": "4.2.1"
                 },
                 "DESEQ2_DIFFERENTIAL": {
                     "r-base": "4.1.3",
@@ -209,9 +223,10 @@
                     "bioconductor-deseq2": "1.34.0"
                 },
                 "GPROFILER2_GOST\"": {
+                    "r-base": "4.3.3",
                     "r-ggplot2": "3.4.3",
                     "r-gprofiler2": "0.2.2",
-                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '114'\ndisplay_name: Mouse\ngenebuild: GRCm39\ngprofiler_version: e114_eg62_p19_fa3a7d2c\norganism: mmusculus\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 03.2026\n      classes: None\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2026-03-15\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2026-3-20\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2025.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20260310'\ntaxonomy_id: '10090'\n"
+                    "gprofiler-data": "e114_eg62_p19_fa3a7d2c"
                 },
                 "GTF_TO_TABLE": {
                     "atlas-gene-annotation-manipulation": "1.1.1"
@@ -397,18 +412,25 @@
                 "all.rlog.tsv:md5,bce2521996537372c72f4083f66c5d3b"
             ]
         ],
+        "timestamp": "2026-05-04T21:46:16.945550395",
         "meta": {
-            "nf-test": "0.9.3",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-04-29T21:49:59.756953806"
+        }
     },
     "Test - Numeric sample IDs - rnaseq_deseq2_gprofiler2": {
         "content": [
             19,
             {
                 "CSVTK_JOIN": {
-                    "csvtk": "0.31.0"
+                    "csvtk": "0.37.0"
+                },
+                "CUSTOM_FILTERDIFFERENTIALTABLE": {
+                    "pandas": "1.5.2",
+                    "python": "3.11.15"
+                },
+                "CUSTOM_MATRIXFILTER": {
+                    "r-base": "4.2.1"
                 },
                 "DESEQ2_DIFFERENTIAL": {
                     "r-base": "4.1.3",
@@ -419,9 +441,10 @@
                     "bioconductor-deseq2": "1.34.0"
                 },
                 "GPROFILER2_GOST\"": {
+                    "r-base": "4.3.3",
                     "r-ggplot2": "3.4.3",
                     "r-gprofiler2": "0.2.2",
-                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '114'\ndisplay_name: Mouse\ngenebuild: GRCm39\ngprofiler_version: e114_eg62_p19_fa3a7d2c\norganism: mmusculus\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 03.2026\n      classes: None\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2026-03-15\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2026-3-20\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2025.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20260310'\ntaxonomy_id: '10090'\n"
+                    "gprofiler-data": "e114_eg62_p19_fa3a7d2c"
                 },
                 "GTF_TO_TABLE": {
                     "atlas-gene-annotation-manipulation": "1.1.1"
@@ -545,27 +568,34 @@
                 "all.vst.tsv:md5,e47e97c11a3d8a980765dd2fd5d45c66"
             ]
         ],
+        "timestamp": "2026-05-04T21:54:19.529083527",
         "meta": {
-            "nf-test": "0.9.3",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-04-29T21:53:58.360374329"
+        }
     },
     "Test - Numeric sample IDs - rnaseq_deseq2_gsea": {
         "content": [
             25,
             {
                 "CSVTK_JOIN": {
-                    "csvtk": "0.31.0"
+                    "csvtk": "0.37.0"
+                },
+                "CUSTOM_FILTERDIFFERENTIALTABLE": {
+                    "pandas": "1.5.2",
+                    "python": "3.11.15"
+                },
+                "CUSTOM_MATRIXFILTER": {
+                    "r-base": "4.2.1"
                 },
                 "CUSTOM_TABULARTOGSEACHIP": {
                     "gawk": "5.1.0"
                 },
                 "CUSTOM_TABULARTOGSEACLS": {
-                    "awk": "1.3.4"
+                    "mawk": "1.3.4"
                 },
                 "CUSTOM_TABULARTOGSEAGCT": {
-                    "awk": "1.3.4"
+                    "mawk": "1.3.4"
                 },
                 "DESEQ2_DIFFERENTIAL": {
                     "r-base": "4.1.3",
@@ -739,18 +769,25 @@
                 "all.vst.tsv:md5,e47e97c11a3d8a980765dd2fd5d45c66"
             ]
         ],
+        "timestamp": "2026-05-04T21:50:23.494792686",
         "meta": {
-            "nf-test": "0.9.3",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-04-29T21:52:02.637964999"
+        }
     },
     "Test profile - rnaseq_deseq2_gprofiler2": {
         "content": [
             19,
             {
                 "CSVTK_JOIN": {
-                    "csvtk": "0.31.0"
+                    "csvtk": "0.37.0"
+                },
+                "CUSTOM_FILTERDIFFERENTIALTABLE": {
+                    "pandas": "1.5.2",
+                    "python": "3.11.15"
+                },
+                "CUSTOM_MATRIXFILTER": {
+                    "r-base": "4.2.1"
                 },
                 "DESEQ2_DIFFERENTIAL": {
                     "r-base": "4.1.3",
@@ -761,9 +798,10 @@
                     "bioconductor-deseq2": "1.34.0"
                 },
                 "GPROFILER2_GOST\"": {
+                    "r-base": "4.3.3",
                     "r-ggplot2": "3.4.3",
                     "r-gprofiler2": "0.2.2",
-                    "gprofiler-data": "biomart: Ensembl\nbiomart_version: '114'\ndisplay_name: Mouse\ngenebuild: GRCm39\ngprofiler_version: e114_eg62_p19_fa3a7d2c\norganism: mmusculus\nsources:\n  CORUM:\n    name: CORUM protein complexes\n    version: 28.11.2022 Corum 4.1\n  GO:BP:\n    name: biological process\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:CC:\n    name: cellular component\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  GO:MF:\n    name: molecular function\n    version: |-\n      annotations: BioMart\n      classes: releases/2026-01-23\n  HP:\n    name: Human Phenotype Ontology\n    version: |-\n      annotations: 03.2026\n      classes: None\n  KEGG:\n    name: Kyoto Encyclopedia of Genes and Genomes\n    version: KEGG FTP Release 2026-03-15\n  REAC:\n    name: Reactome\n    version: |-\n      annotations: BioMart\n      classes: 2026-3-20\n  TF:\n    name: Transfac\n    version: |-\n      annotations: TRANSFAC Release 2025.2\n      classes: v2\n  WP:\n    name: WikiPathways\n    version: '20260310'\ntaxonomy_id: '10090'\n"
+                    "gprofiler-data": "e114_eg62_p19_fa3a7d2c"
                 },
                 "GTF_TO_TABLE": {
                     "atlas-gene-annotation-manipulation": "1.1.1"
@@ -887,10 +925,10 @@
                 "all.vst.tsv:md5,ae82509f76ed01ad0d041d1a62aef703"
             ]
         ],
+        "timestamp": "2026-05-04T21:42:33.183620686",
         "meta": {
-            "nf-test": "0.9.3",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-04-29T21:45:09.042760743"
+        }
     }
 }

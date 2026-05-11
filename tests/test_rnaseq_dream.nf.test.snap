@@ -70,18 +70,25 @@
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb"
             ]
         ],
+        "timestamp": "2026-02-24T15:47:26.037232274",
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-02-24T15:47:26.037232274"
+        }
     },
     "Test rnaseq dream profile - complex contrast - with zero intercept - 1": {
         "content": [
             20,
             {
                 "CSVTK_JOIN": {
-                    "csvtk": "0.31.0"
+                    "csvtk": "0.37.0"
+                },
+                "CUSTOM_FILTERDIFFERENTIALTABLE": {
+                    "pandas": "1.5.2",
+                    "python": "3.11.15"
+                },
+                "CUSTOM_MATRIXFILTER": {
+                    "r-base": "4.2.1"
                 },
                 "GTF_TO_TABLE": {
                     "atlas-gene-annotation-manipulation": "1.1.1"
@@ -166,18 +173,25 @@
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb"
             ]
         ],
+        "timestamp": "2026-05-04T22:03:48.911112031",
         "meta": {
-            "nf-test": "0.9.3",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-05-02T00:17:17.071852966"
+        }
     },
     "Test rnaseq dream profile": {
         "content": [
             25,
             {
                 "CSVTK_JOIN": {
-                    "csvtk": "0.31.0"
+                    "csvtk": "0.37.0"
+                },
+                "CUSTOM_FILTERDIFFERENTIALTABLE": {
+                    "pandas": "1.5.2",
+                    "python": "3.11.15"
+                },
+                "CUSTOM_MATRIXFILTER": {
+                    "r-base": "4.2.1"
                 },
                 "GTF_TO_TABLE": {
                     "atlas-gene-annotation-manipulation": "1.1.1"
@@ -272,21 +286,33 @@
                 "all.normalised_counts.tsv:md5,a06f5e5c50938bb4d93991d7e314c7cf"
             ]
         ],
+        "timestamp": "2026-05-04T21:59:09.178321728",
         "meta": {
-            "nf-test": "0.9.3",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-05-02T00:14:34.919602568"
+        }
     },
     "Test - Numeric sample IDs - rnaseq dream profile - with decoupler": {
         "content": [
             19,
             {
                 "CSVTK_JOIN": {
-                    "csvtk": "0.31.0"
+                    "csvtk": "0.37.0"
                 },
-                "DECOUPLER_DECOUPLER": null,
-                "decoupler-py": "1.8.0",
+                "CUSTOM_FILTERDIFFERENTIALTABLE": {
+                    "pandas": "1.5.2",
+                    "python": "3.11.15"
+                },
+                "CUSTOM_MATRIXFILTER": {
+                    "r-base": "4.2.1"
+                },
+                "DECOUPLER_DECOUPLER": {
+                    "decoupler-py": "1.8.0",
+                    "matplotlib": "3.10.1",
+                    "pandas": "2.2.3",
+                    "python": "3.12.9",
+                    "scanpy": "1.11.0"
+                },
                 "GTF_TO_TABLE": {
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
@@ -384,21 +410,33 @@
                 "all.normalised_counts.tsv:md5,7a2dc10c76784a7621437af839bcde42"
             ]
         ],
+        "timestamp": "2026-05-04T22:18:27.057319854",
         "meta": {
-            "nf-test": "0.9.3",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-05-02T00:28:34.938759852"
+        }
     },
     "Test rnaseq dream profile - with decoupler": {
         "content": [
             29,
             {
                 "CSVTK_JOIN": {
-                    "csvtk": "0.31.0"
+                    "csvtk": "0.37.0"
                 },
-                "DECOUPLER_DECOUPLER": null,
-                "decoupler-py": "1.8.0",
+                "CUSTOM_FILTERDIFFERENTIALTABLE": {
+                    "pandas": "1.5.2",
+                    "python": "3.11.15"
+                },
+                "CUSTOM_MATRIXFILTER": {
+                    "r-base": "4.2.1"
+                },
+                "DECOUPLER_DECOUPLER": {
+                    "decoupler-py": "1.8.0",
+                    "matplotlib": "3.10.1",
+                    "pandas": "2.2.3",
+                    "python": "3.12.9",
+                    "scanpy": "1.11.0"
+                },
                 "GTF_TO_TABLE": {
                     "atlas-gene-annotation-manipulation": "1.1.1"
                 },
@@ -520,18 +558,25 @@
                 "all.normalised_counts.tsv:md5,a06f5e5c50938bb4d93991d7e314c7cf"
             ]
         ],
+        "timestamp": "2026-05-04T22:14:19.612244557",
         "meta": {
-            "nf-test": "0.9.3",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-05-02T00:24:54.291243517"
+        }
     },
     "Test generic_matrix dream profile - complex contrast - with zero intercept - 2": {
         "content": [
             18,
             {
                 "CSVTK_JOIN": {
-                    "csvtk": "0.31.0"
+                    "csvtk": "0.37.0"
+                },
+                "CUSTOM_FILTERDIFFERENTIALTABLE": {
+                    "pandas": "1.5.2",
+                    "python": "3.11.15"
+                },
+                "CUSTOM_MATRIXFILTER": {
+                    "r-base": "4.2.1"
                 },
                 "GTF_TO_TABLE": {
                     "atlas-gene-annotation-manipulation": "1.1.1"
@@ -594,10 +639,10 @@
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb"
             ]
         ],
+        "timestamp": "2026-05-04T22:08:32.030926873",
         "meta": {
-            "nf-test": "0.9.3",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-05-02T00:19:58.632820072"
+        }
     }
 }

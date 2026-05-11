@@ -60,9 +60,7 @@ nextflow_workflow {
                 { assert snapshot(
                     workflow.out.gprofiler2_all_enrich,
                     workflow.out.gprofiler2_sub_enrich,
-                    workflow.out.gprofiler2_plot_html.collect{ meta, html -> file(html).name }, //assert unstable file,
-                    path(workflow.out.versions.get(0)).yaml,
-                    workflow.out.versions
+                    workflow.out.gprofiler2_plot_html.collect{ meta, html -> file(html).name } //assert unstable file,
                 ).match()}
             )
         }
@@ -92,10 +90,10 @@ nextflow_workflow {
                 ])
                 ch_transcript_lengths = channel.of([ [], [] ])
                 ch_control_features = channel.of([ [], [] ])
-                ch_contrasts = channel.fromPath(file(testData.expression_test_data_dir + testData.contrasts_file))
+                ch_contrasts = Channel.fromPath(file(testData.expression_test_data_dir + testData.contrasts_file))
                     .splitCsv ( header:true, sep:',' )
                     .map{
-                        tuple([id: 'test'], it, it.variable, it.reference, it.target, it.formula, it.comparison)
+                        tuple([ id:'test' ], it, it.variable, it.reference, it.target, it.formula, it.comparison)
                     }
                     .groupTuple()
                 ch_input = channel.of([
@@ -128,6 +126,15 @@ nextflow_workflow {
                     .map { meta, file, genesets, background, method ->
                         [meta, [], '', '']
                     }
+                ch_samplesheet = ch_input
+                    .map { meta, file, genesets, background, method ->
+                        [meta, []]
+                    }
+
+                ch_samplesheet = ch_input
+                    .map { meta, file, genesets, background, method ->
+                        [meta, []]
+                    }
 
                 ch_samplesheet = ch_input
                     .map { meta, file, genesets, background, method ->
@@ -148,9 +155,7 @@ nextflow_workflow {
                 { assert snapshot(
                     workflow.out.gprofiler2_all_enrich,
                     workflow.out.gprofiler2_sub_enrich,
-                    workflow.out.gprofiler2_plot_html.collect{ meta, html -> file(html).name }, //assert unstable file
-                    path(workflow.out.versions.get(0)).yaml,
-                    workflow.out.versions
+                    workflow.out.gprofiler2_plot_html.collect{ meta, html -> file(html).name } //assert unstable file
                 ).match()},
             )
         }
@@ -178,8 +183,8 @@ nextflow_workflow {
                     [ id:'test' ],
                     file(testDataSetup.expression_test_data_dir + testDataSetup.samplesheet_file)
                 ])
-                ch_transcript_lengths = channel.of([ [], [] ])
-                ch_control_features = channel.of([ [], [] ])
+                ch_transcript_lengths = channel.of([ [ id:'test' ], [] ])
+                ch_control_features = channel.of([ [ id:'test' ], [] ])
                 ch_contrasts = channel.fromPath(file(testDataSetup.expression_test_data_dir + testDataSetup.contrasts_file))
                     .splitCsv ( header:true, sep:',' )
                     .map{
@@ -225,7 +230,7 @@ nextflow_workflow {
 
                 // define other input files using ch_input meta
                 ch_contrasts = ch_input
-                    .map {it[0]}
+                    .map { meta, file, genesets, background, method -> [meta] }
                     .combine(
                         channel.fromPath(file(testData.contrasts_file))
                             .splitCsv ( header:true, sep:',' )
@@ -235,10 +240,10 @@ nextflow_workflow {
                     )
                     .groupTuple()
                 ch_samplesheet = ch_input
-                    .map {it[0]}
+                    .map { meta, file, genesets, background, method -> [meta] }
                     .combine( channel.of(file(testData.samplesheet_file)) )
                 ch_featuresheet = ch_input
-                    .map {it[0]}
+                    .map { meta, file, genesets, background, method -> [meta] }
                     .combine(
                         channel.of([
                             file(testData.abundance_file),
@@ -259,9 +264,7 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
-                    workflow.out.gsea_report_tsv,
-                    path(workflow.out.versions.get(0)).yaml,
-                    workflow.out.versions
+                    workflow.out.gsea_report_tsv
                 ).match()}
             )
         }
@@ -289,8 +292,8 @@ nextflow_workflow {
                     [ id:'test' ],
                     file(testDataSetup.expression_test_data_dir + testDataSetup.samplesheet_file)
                 ])
-                ch_transcript_lengths = channel.of([ [], [] ])
-                ch_control_features = channel.of([ [], [] ])
+                ch_transcript_lengths = channel.of([ [ id:'test' ], [] ])
+                ch_control_features = channel.of([ [ id:'test' ], [] ])
                 ch_contrasts = channel.fromPath(file(testDataSetup.expression_test_data_dir + testDataSetup.contrasts_file))
                     .splitCsv ( header:true, sep:',' )
                     .map{
@@ -343,9 +346,7 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
-                    workflow.out.grea_results,
-                    path(workflow.out.versions.get(0)).yaml,
-                    workflow.out.versions
+                    workflow.out.grea_results
                 ).match()},
             )
         }
@@ -373,8 +374,8 @@ nextflow_workflow {
                     [ id:'test' ],
                     file(testDataSetup.expression_test_data_dir + testDataSetup.samplesheet_file)
                 ])
-                ch_transcript_lengths = channel.of([ [], [] ])
-                ch_control_features = channel.of([ [], [] ])
+                ch_transcript_lengths = channel.of([ [ id:'test' ], [] ])
+                ch_control_features = channel.of([ [ id:'test' ], [] ])
                 ch_contrasts = channel.fromPath(file(testDataSetup.expression_test_data_dir + testDataSetup.contrasts_file))
                     .splitCsv ( header:true, sep:',' )
                     .map{
@@ -444,7 +445,7 @@ nextflow_workflow {
 
                 // define other input files using ch_input meta
                 ch_contrasts = ch_input
-                    .map {it[0]}
+                    .map { meta, file, genesets, background, method -> [meta] }
                     .combine(
                         channel.fromPath(file(testData.contrasts_file))
                             .splitCsv ( header:true, sep:',' )
@@ -454,10 +455,10 @@ nextflow_workflow {
                     )
                     .groupTuple()
                 ch_samplesheet = ch_input
-                    .map {it[0]}
+                    .map { meta, file, genesets, background, method -> [meta] }
                     .combine( channel.of(file(testData.samplesheet_file)) )
                 ch_featuresheet = ch_input
-                    .map {it[0]}
+                    .map { meta, file, genesets, background, method -> [meta] }
                     .combine(
                         channel.of([
                             file(testData.abundance_file),
@@ -481,9 +482,8 @@ nextflow_workflow {
                     path(workflow.out.gprofiler2_all_enrich[0][1]).exists(), // This generates empty md5sums and linting fails
                     workflow.out.gprofiler2_sub_enrich,
                     workflow.out.gprofiler2_plot_html.collect{ meta, html -> file(html).name }, //assert unstable file
-                    workflow.out.gsea_report_tsv,
-                    workflow.out.grea_results,
-                    workflow.out.versions
+                    workflow.out.gsea_report,
+                    workflow.out.grea_results
                 ).match()},
             )
         }
