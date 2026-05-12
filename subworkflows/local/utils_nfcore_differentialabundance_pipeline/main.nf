@@ -97,6 +97,7 @@ workflow PIPELINE_INITIALISATION {
         ? getParamsheetConfigurations()
         : getDefaultConfigurations()
     paramsets = validateConfigurations(configurations)
+        .collect { paramset -> addDifferentialRuntimeParams(paramset) }
     ch_paramsets = Channel.fromList(paramsets)
         .map { paramset -> [
             id: paramset.study_name,
@@ -166,6 +167,50 @@ workflow PIPELINE_COMPLETION {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 //
+// Per-method DISPLAY columns stamped into meta.params at paramset-parse
+// time, used downstream by report.qmd, shinyngs and the output DSL.
+// FILTER columns are owned separately by the abundance_differential_filter
+// subworkflow's getDifferentialMethodParams (deliberately different for
+// propd: `significant` is the filter column, `rcDdis` is the display score).
+def getDifferentialMethodRuntimeParams(differential_method) {
+    def runtime_params = [
+        'deseq2': [
+            differential_fc_column         : 'log2FoldChange',
+            differential_pval_column       : 'pvalue',
+            differential_qval_column       : 'padj',
+            differential_foldchanges_logged: true
+        ],
+        'limma' : [
+            differential_fc_column         : 'logFC',
+            differential_pval_column       : 'P.Value',
+            differential_qval_column       : 'adj.P.Val',
+            differential_foldchanges_logged: true
+        ],
+        'propd' : [
+            differential_fc_column         : 'LFC',
+            differential_pval_column       : 'rcDdis',
+            differential_qval_column       : 'rcDdis',
+            differential_foldchanges_logged: true
+        ],
+        'dream' : [
+            differential_fc_column         : 'logFC',
+            differential_pval_column       : 'P.Value',
+            differential_qval_column       : 'adj.P.Val',
+            differential_foldchanges_logged: true
+        ]
+    ][differential_method]
+
+    runtime_params ?: [:]
+}
+
+def addDifferentialRuntimeParams(paramset) {
+    def runtime_params = getDifferentialMethodRuntimeParams(paramset.differential_method)
+    def missing_runtime_params = runtime_params.findAll { key, _value ->
+        !paramset.containsKey(key)
+    }
+    paramset + missing_runtime_params
+}
+
 // Check and validate pipeline parameters
 //
 def validateInputParameters(paramsets) {
@@ -597,6 +642,17 @@ def getRelevantParams(paramset, category) {
                     }
                 }
             }
+        }
+    }
+
+    [
+        'differential_fc_column',
+        'differential_pval_column',
+        'differential_qval_column',
+        'differential_foldchanges_logged'
+    ].each { paramName ->
+        if (paramset.containsKey(paramName)) {
+            relevantParams[paramName] = paramset[paramName]
         }
     }
 
