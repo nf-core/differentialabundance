@@ -411,8 +411,8 @@ def validateConfigurations(configurations) {
             // Validate against schema
             validate(notnullparams, "${projectDir}/nextflow_schema.json")
         } catch (e) {
-            // if validation fails, print error message and exit
-            println("Validation failed for paramsheet row: ${paramset.paramset_name}. Error: ${e.message}")
+            // Surface the paramset name; nf-schema will then produce a detailed error.
+            log.error "Validation failed for paramsheet row: ${paramset.paramset_name}"
             validate(notnullparams, "${projectDir}/nextflow_schema.json")
         }
 
