@@ -10,6 +10,10 @@
 
 ## Pipeline tools
 
+- [decoupler-py](https://pubmed.ncbi.nlm.nih.gov/36699385/)
+
+  > Badia-i-Mompel P, Vélez Santiago J, Braunger J, Geiss C, Dimitrov D, Müller-Dott S, Taus P, Dugourd A, Holland CH, Ramirez Flores RO, Saez-Rodriguez J. decoupleR: ensemble of computational methods to infer biological activities from omics data. Bioinform Adv. 2022 Mar 8;2(1):vbac016. doi: 10.1093/bioadv/vbac016. PubMed PMID: 36699385; PubMed Central PMCID: PMC9710656.
+
 - [GSEA](https://www.gsea-msigdb.org/gsea/index.jsp)
 
   > Subramanian A, Tamayo P, Mootha VK, et al. Gene set enrichment analysis: a knowledge-based approach for interpreting genome-wide expression profiles. Proc Natl Acad Sci U S A. 2005;102(43):15545-15550.
@@ -71,6 +75,14 @@
 - [SummarizedExperiment](https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html)
 
   > Morgan M, Obenchain V, Hester J and Pagès H (2020). SummarizedExperiment: SummarizedExperiment container.
+
+- [variancePartition](https://pubmed.ncbi.nlm.nih.gov/27884101/)
+
+  > Hoffman GE, Schadt EE. variancePartition: interpreting drivers of variation in complex gene expression studies. BMC Bioinformatics. 2016 Nov 25;17(1):483. doi: 10.1186/s12859-016-1323-z. PubMed PMID: 27884101; PubMed Central PMCID: PMC5123296.
+
+- [variancePartition::dream](https://pubmed.ncbi.nlm.nih.gov/32730587/)
+
+  > Hoffman GE, Roussos P. Dream: powerful differential expression analysis for repeated measures designs. Bioinformatics. 2021 Apr 19;37(2):192-201. doi: 10.1093/bioinformatics/btaa687. PubMed PMID: 32730587; PubMed Central PMCID: PMC8055218.
 
 ## Software packaging/containerisation tools
 
