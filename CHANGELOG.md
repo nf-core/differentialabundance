@@ -68,6 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [[#714](https://github.com/nf-core/differentialabundance/issues/714)] - Document the rationale for the different `dream_apply_voom` defaults between the `rnaseq_dream` and `generic_matrix_dream` profiles. ([@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#705](https://github.com/nf-core/differentialabundance/pull/705)] - Bump all modules and subworkflows to latest nf-core versions. Use Seqera containers in all modules. ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#704](https://github.com/nf-core/differentialabundance/pull/704)] - Bump shinyngs modules to improve validation of contrasts and update subworkflows ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila), [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#702](https://github.com/nf-core/differentialabundance/pull/702)] - Update limma and dream modules to put variable of interest first in zero intercept constrasts ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila), [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
