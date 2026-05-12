@@ -321,7 +321,9 @@ workflow DIFFERENTIALABUNDANCE {
         .map{ meta, matrix ->
             def matrix_as_anno_filename = "${workflow.workDir}/${matrix.getBaseName()}_as_anno.${matrix.getExtension()}"
             def matrix_copy = file(matrix_as_anno_filename)
-            matrix_copy.exists() && matrix.getText().md5().equals(matrix_copy.getText().md5()) ?: matrix.copyTo(matrix_as_anno_filename)
+            if (!matrix_copy.exists() || matrix.size() != matrix_copy.size() || matrix.getText().md5() != matrix_copy.getText().md5()) {
+                matrix.copyTo(matrix_as_anno_filename)
+            }
             [ meta, file(matrix_as_anno_filename) ]
         }
 
@@ -390,6 +392,12 @@ workflow DIFFERENTIALABUNDANCE {
         .branch { meta, assay ->
             raw: assay.name.contains('raw')
             normalised: assay.name =~ /normali[sz]ed/
+            other: true
+        }
+
+    ch_multi_validated_assays.other
+        .map { meta, assay ->
+            error "Unexpected affy/maxquant assay name '${assay.name}' for paramset '${meta.paramset_name}'; expected 'raw' or 'normali[sz]ed' in name."
         }
 
     // Get raw matrices from the validation

@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [[#713](https://github.com/nf-core/differentialabundance/issues/713)] - Workflow robustness: rewrite matrix-copy ternary as an explicit conditional and add a fallback `other` branch to `ch_multi_validated_assays` ([@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#694](https://github.com/nf-core/differentialabundance/pull/694)] - Fix data flow for `generic_matrix` study type ([@grst](https://github.com/grst) and [@atrigila](https://github.com/atrigila), review by [@delfiterradas](https://github.com/delfiterradas)).
 - [[#689](https://github.com/nf-core/differentialabundance/pull/689)] - Normalize coefficient names in `variancepartition/dream` before building contrasts ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#684](https://github.com/nf-core/differentialabundance/pull/684)] - Fix intercept getting added automatically in `deseq2` ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst)).
