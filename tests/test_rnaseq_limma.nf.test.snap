@@ -743,7 +743,7 @@
                     "r-base": "4.3.3",
                     "r-ggplot2": "3.4.3",
                     "r-gprofiler2": "0.2.2",
-                    "gprofiler-data": "e114_eg62_p19_fa3a7d2c"
+                    "gprofiler-data": "e114_eg62_p19_27110d83"
                 },
                 "GTF_TO_TABLE": {
                     "atlas-gene-annotation-manipulation": "1.1.1"
