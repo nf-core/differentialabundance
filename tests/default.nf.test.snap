@@ -198,7 +198,8 @@
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-04-29T20:38:23.748749137"
     },
     "Test profile": {
         "content": [
@@ -399,7 +400,8 @@
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-04-29T20:32:19.619669103"
     },
     "Test profile - csv contrasts": {
         "content": [
@@ -600,7 +602,8 @@
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-04-29T20:34:21.086698735"
     },
     "Test profile - with formula": {
         "content": [
@@ -796,11 +799,11 @@
                 "all.rlog.tsv:md5,bce2521996537372c72f4083f66c5d3b"
             ]
         ],
-        "timestamp": "2026-02-06T18:13:19.245082284",
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
-        }
+        },
+        "timestamp": "2026-02-06T18:13:19.245082284"
     },
     "Test profile - multiple reports - csv contrasts": {
         "content": [
@@ -1002,6 +1005,7 @@
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-04-29T20:36:21.59236643"
     }
 }
