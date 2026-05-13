@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - [[#718](https://github.com/nf-core/differentialabundance/issues/718)] - Drop misleading `Error: null` line printed before nf-schema validation errors on paramsheet validation failure ([@pinin4fjords](https://github.com/pinin4fjords)).
+- [[#717](https://github.com/nf-core/differentialabundance/issues/717)] - Fix `-stub-run` aborting in `splitCsv` by bumping `shinyngs/validatefomcomponents` to a version that emits header-bearing stub TSVs ([nf-core/modules#11628](https://github.com/nf-core/modules/pull/11628)) ([@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#694](https://github.com/nf-core/differentialabundance/pull/694)] - Fix data flow for `generic_matrix` study type ([@grst](https://github.com/grst) and [@atrigila](https://github.com/atrigila), review by [@delfiterradas](https://github.com/delfiterradas)).
 - [[#689](https://github.com/nf-core/differentialabundance/pull/689)] - Normalize coefficient names in `variancepartition/dream` before building contrasts ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#684](https://github.com/nf-core/differentialabundance/pull/684)] - Fix intercept getting added automatically in `deseq2` ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst)).
