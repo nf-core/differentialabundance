@@ -165,6 +165,7 @@
                 },
                 "sizefactors_from_controls": {
                     "type": "boolean",
+                    "default": false,
                     "help_text": "When set, use supplied control features in normalization/ scaling operations (currently only supported for differential_method deseq2)",
                     "description": "When set, use the control features in scaling/ normalization (currently only supported for differential_method deseq2)",
                     "fa_icon": "fas fa-expand-arrows-alt"
@@ -242,6 +243,7 @@
                 },
                 "affy_destructive": {
                     "type": "boolean",
+                    "default": false,
                     "description": "logical value. If TRUE, then works on the PM matrix in place as much as possible, good for large datasets.",
                     "fa_icon": "fas fa-bomb"
                 },
@@ -258,16 +260,19 @@
                 },
                 "affy_rm_mask": {
                     "type": "boolean",
+                    "default": false,
                     "description": "should the spots marked as 'MASKS' set to NA?",
                     "fa_icon": "fas fa-mask"
                 },
                 "affy_rm_outliers": {
                     "type": "boolean",
+                    "default": false,
                     "description": "should the spots marked as 'OUTLIERS' set to NA?",
                     "fa_icon": "fas fa-project-diagram"
                 },
                 "affy_rm_extra": {
                     "type": "boolean",
+                    "default": false,
                     "description": "if TRUE, then overrides what is in rm.mask and rm.oultiers.",
                     "fa_icon": "fas fa-external-link-alt"
                 }
@@ -529,6 +534,7 @@
                 },
                 "differential_subset_to_contrast_samples": {
                     "type": "boolean",
+                    "default": false,
                     "fa_icon": "far fa-object-group",
                     "description": "In differential analysis (DEseq2 or Limma), subset to the contrast samples before modelling variance?"
                 }
@@ -581,6 +587,7 @@
                 },
                 "deseq2_use_t": {
                     "type": "boolean",
+                    "default": false,
                     "description": "`useT` parameter passed to DESeq2",
                     "help_text": "logical, passed to nbinomWaldTest, default is FALSE, where Wald statistics are assumed to follow a standard Normal",
                     "fa_icon": "fas fa-mug-hot"
@@ -701,12 +708,14 @@
                 },
                 "limma_trend": {
                     "type": "boolean",
+                    "default": false,
                     "fa_icon": "fas fa-chart-line",
                     "description": "passed to eBayes(), logical, should an intensity-dependent trend be allowed for the prior variance?",
                     "help_text": "If FALSE then the prior variance is constant. Alternatively, trend can be a row-wise numeric vector, which will be used as the covariate for the prior variance."
                 },
                 "limma_robust": {
                     "type": "boolean",
+                    "default": false,
                     "fa_icon": "fab fa-android",
                     "description": "passed to eBayes(), logical, should the estimation of df.prior and var.prior be robustified against outlier sample variances?"
                 },
@@ -731,6 +740,7 @@
                 },
                 "limma_confint": {
                     "type": "boolean",
+                    "default": false,
                     "fa_icon": "fas fa-temperature-low",
                     "description": "passed to topTable(), logical, should confidence 95% intervals be output for logFC? Alternatively, can take a numeric value between zero and one specifying the confidence level required."
                 },
@@ -749,6 +759,7 @@
                 },
                 "limma_use_voom": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Turns on and off usage of voom normalization in the Limma module.",
                     "fa_icon": "far fa-check-square"
                 }
@@ -770,39 +781,69 @@
                     "default": 0
                 },
                 "dream_confint": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": false,
+                    "fa_icon": "fas fa-temperature-low",
+                    "description": "passed to variancePartition::dream(), logical, should 95% confidence intervals be output for logFC? Alternatively, can take a numeric value between zero and one specifying the confidence level required."
                 },
                 "dream_proportion": {
                     "type": "number",
-                    "default": 0.01
+                    "default": 0.01,
+                    "fa_icon": "fas fa-percentage",
+                    "description": "passed to variancePartition::dream() (via eBayes), assumed proportion of genes that are differentially expressed (numeric 0-1)."
                 },
                 "dream_stdev_coef_lim": {
                     "type": "string",
-                    "default": "0.1,4"
+                    "default": "0.1,4",
+                    "fa_icon": "fas fa-arrows-alt-h",
+                    "description": "passed to variancePartition::dream() (via eBayes), comma-separated numeric pair giving the lower and upper limits of the standard deviation of the logFC values used in the prior."
                 },
                 "dream_trend": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": false,
+                    "fa_icon": "fas fa-chart-line",
+                    "description": "passed to variancePartition::dream() (via eBayes), logical, should an intensity-dependent trend be allowed for the prior variance?",
+                    "help_text": "If FALSE then the prior variance is constant. Alternatively, trend can be a row-wise numeric vector, which will be used as the covariate for the prior variance."
                 },
                 "dream_robust": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": false,
+                    "fa_icon": "fab fa-android",
+                    "description": "passed to variancePartition::dream() (via eBayes), logical, should the estimation of df.prior and var.prior be robustified against outlier sample variances?"
                 },
                 "dream_winsor_tail_p": {
                     "type": "string",
-                    "default": "0.05,0.1"
+                    "default": "0.05,0.1",
+                    "fa_icon": "fas fa-cut",
+                    "description": "passed to variancePartition::dream() (via eBayes), comma-separated numeric pair giving the proportion of the lower and upper tails to be winsorized before estimating the standard deviation."
                 },
                 "dream_ddf": {
                     "type": "string",
-                    "default": "adaptive"
+                    "default": "adaptive",
+                    "fa_icon": "fas fa-cogs",
+                    "description": "Method used to estimate effective degrees of freedom for hypothesis testing in the linear mixed model. Allowed values: adaptive (default), Satterthwaite, Kenward-Roger.",
+                    "help_text": "Kenward-Roger gives the most accurate p-values but is much slower; Satterthwaite is usually sufficient; adaptive uses Kenward-Roger for <= 20 samples and Satterthwaite otherwise.",
+                    "enum": ["adaptive", "Satterthwaite", "Kenward-Roger"]
                 },
                 "dream_reml": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": false,
+                    "fa_icon": "fas fa-flask",
+                    "description": "passed to variancePartition::dream(), logical, use REML estimation for mixed-model variance components (passed through to lmer())."
                 },
                 "dream_apply_voom": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": false,
+                    "fa_icon": "far fa-check-square",
+                    "description": "Turns on and off usage of voomWithDreamWeights() normalization in the DREAM module."
                 },
                 "dream_adjust_method": {
                     "type": "string",
-                    "default": "BH"
+                    "default": "BH",
+                    "fa_icon": "fas fa-check-circle",
+                    "description": "Method used to adjust p-values for multiple testing (passed to p.adjust).",
+                    "help_text": "Supported methods include: 'BH' (Benjamini-Hochberg), 'BY', 'holm', 'hochberg', 'hommel', 'bonferroni', 'fdr', and 'none'.",
+                    "enum": ["BH", "BY", "holm", "hochberg", "hommel", "bonferroni", "fdr", "none"]
                 }
             }
         },
@@ -814,8 +855,9 @@
             "properties": {
                 "functional_method": {
                     "type": "string",
-                    "description": "Functional analysis method",
-                    "enum": ["null", "gsea", "gprofiler2", "decoupler"]
+                    "default": "none",
+                    "description": "Functional analysis method. Set to 'none' (default) to disable functional analysis.",
+                    "enum": ["none", "gsea", "gprofiler2", "decoupler"]
                 },
                 "gene_sets_files": {
                     "type": "string",
@@ -916,6 +958,7 @@
                 },
                 "gsea_median": {
                     "type": "boolean",
+                    "default": false,
                     "help_text": "Set to true (default=false) to use the median of each class, instead of the mean, in the metrics for ranking for genes\n\nSee 'advanced fields' at https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Run_GSEA_Page. ",
                     "description": "Use median for class metrics",
                     "fa_icon": "fas fa-align-center"
@@ -936,12 +979,14 @@
                 },
                 "gsea_save_rnd_lists": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Save random ranked lists",
                     "help_text": "Set to 'true' (default=false) to save the random ranked lists of genes created by phenotype permutations. When you save random ranked lists, for each permutation, GSEA saves the rank metric score for each gene (the score used to position the gene in the ranked list). Saving random ranked lists is memory intensive; therefore, this parameter is set to false by default.",
                     "fa_icon": "fas fa-random"
                 },
                 "gsea_zip_report": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Make a zipped file with all reports",
                     "help_text": "Set to True (default=false) to create a zip file of the analysis results. The zip file is saved to the output folder with all of the other files generated by the analysis. This is useful for sharing analysis results",
                     "fa_icon": "fas fa-file-archive"
@@ -968,6 +1013,7 @@
                 },
                 "gprofiler2_measure_underrepresentation": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Should underrepresentation be measured instead of overrepresentation?",
                     "help_text": "Default false; if true, will measure overrepresentation."
                 },
@@ -985,6 +1031,7 @@
                 },
                 "gprofiler2_evcodes": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Whether to include evcodes in the results.",
                     "help_text": "This can decrease performance and make the query slower. See https://rdrr.io/cran/gprofiler2/man/gost.html"
                 },
@@ -1072,6 +1119,7 @@
                 },
                 "shinyngs_deploy_to_shinyapps_io": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Should the app be deployed to shinyapps.io?",
                     "fa_icon": "fas fa-file-import"
                 },
@@ -1153,6 +1201,7 @@
                 },
                 "skip_reports": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Skip generation of reports"
                 },
                 "disable_report_modules": {
