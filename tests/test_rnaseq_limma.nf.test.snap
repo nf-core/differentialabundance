@@ -743,7 +743,7 @@
                     "r-base": "4.3.3",
                     "r-ggplot2": "3.4.3",
                     "r-gprofiler2": "0.2.2",
-                    "gprofiler-data": "e114_eg62_p19_fa3a7d2c"
+                    "gprofiler-data": "e114_eg62_p19_27110d83"
                 },
                 "GTF_TO_TABLE": {
                     "atlas-gene-annotation-manipulation": "1.1.1"
@@ -854,7 +854,7 @@
                 "all.normalised_counts.tsv:md5,534f0f37e10325163656cad95418f34a"
             ]
         ],
-        "timestamp": "2026-05-04T22:25:31.641219486",
+        "timestamp": "2026-05-11T21:59:31.766682579",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
