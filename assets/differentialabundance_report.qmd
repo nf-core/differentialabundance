@@ -527,7 +527,11 @@ render_pca_meta_associations <- function() {
     # d3heatmap chokes on a single-row matrix; duplicate to work around it.
     plot_pca_meta <- if (nrow(pca_vs_meta) == 1) rbind(pca_vs_meta, pca_vs_meta) else pca_vs_meta
 
-    hm <- d3heatmap::d3heatmap(
+    # Wrap in a tagList so `print` goes through the shiny.tag.list method
+    # (which writes the widget HTML via `cat(format(...))`) instead of
+    # `print.htmlwidget`, which would only open an interactive viewer.
+    # The widget's JS dependencies are pre-registered via touch-js-libs.
+    print(htmltools::tagList(d3heatmap::d3heatmap(
         -log10(plot_pca_meta),
         Rowv = FALSE,
         dendrogram = "none",
@@ -535,8 +539,7 @@ render_pca_meta_associations <- function() {
         cexCol = 0.8, cexRow = 0.8,
         height = (100 + (15 * nrow(plot_pca_meta))),
         colors = colorRampPalette(rev(RColorBrewer::brewer.pal(n = 7, name = "RdYlBu")))(100)
-    )
-    print(hm)
+    )))
 
     walk(rownames(pca_vs_meta), \(variable) {
         sig_comps <- pca_vs_meta[variable, ] < 0.1
@@ -1077,9 +1080,13 @@ render_gprofiler2_section <- function() {
 ```{r touch-js-libs}
 #| include: false
 #| warning: false
-# Touch the table libs once so their JS dependencies get embedded
+# Touch widget libs once so their JS dependencies get registered in the
+# document head. Widgets emitted later from inside helper functions go
+# through `cat(format(tagList(...)))`, which writes the widget HTML+JSON
+# but does not register deps - so the touch here is what makes them work.
 datatable(NULL)
 reactable(data.frame(x = 1))
+d3heatmap::d3heatmap(matrix(0, 2, 2))
 ```
 
 ```{r load-versions-and-meta}
@@ -1417,7 +1424,7 @@ The following plots show the abundance value distributions of input matrices. A 
 #### Box plots
 
 ```{r exploratory-boxplots, echo=FALSE, fig.height=8, eval=!module_disabled("boxplot")}
-ggplot_boxplot(
+boxplot <- ggplot_boxplot(
     assay_data,
     experiment       = observations,
     colorby          = main_grouping_variable,
@@ -1426,6 +1433,7 @@ ggplot_boxplot(
     whisker_distance = p$exploratory_whisker_distance,
     base_size        = 8
 )
+boxplot
 ```
 
 Whiskers in the above boxplots show `{r} p$exploratory_whisker_distance` times the inter-quartile range.
