@@ -91,6 +91,11 @@ module_disabled <- function(name) {
     name %in% simpleSplit(mods)
 }
 
+# Treat NULL / NA / empty string as "missing". Used by name_contrast for
+# the per-column "is this populated" decisions that appeared four times
+# in the original implementation.
+blank <- function(x) length(x) == 0L || is.na(x) || !nzchar(as.character(x))
+
 # Pick the label column for a differential results frame: feature_name_col
 # if available, else feature_id_col.
 de_label_col <- function(de_df) {
@@ -284,30 +289,33 @@ generate_boxplots <- function(combined, label_col) {
 
 # ---- Contrast naming -------------------------------------------------------
 
-name_contrast <- function(i) {
-    if (is.na(contrasts$variable[i]) || contrasts$variable[i] == "" || is.null(contrasts$variable[i])) {
-        if (!is.na(contrasts$formula[i]) && contrasts$formula[i] != "") {
-            contrast_name <- paste("Formula:", contrasts$formula[i])
-            if (!is.na(contrasts$make_contrasts_str[i]) && contrasts$make_contrasts_str[i] != "") {
-                contrast_name <- paste0(contrast_name, " (", contrasts$make_contrasts_str[i], ")")
-            }
-        } else if (!is.na(contrasts$make_contrasts_str[i]) && contrasts$make_contrasts_str[i] != "") {
-            contrast_name <- paste("Contrast:", contrasts$make_contrasts_str[i])
+# Build a human-readable name for one contrast row. Two-phase: the main
+# part (either "target versus reference in variable" or a formula/contrast
+# fallback when there is no `variable`), plus a parenthesised
+# "(col: value, ...)" suffix listing any populated non-standard columns
+# (e.g. `blocking`).
+name_contrast <- function(row) {
+    standard <- c("id", "target", "reference", "variable", "formula", "make_contrasts_str")
+
+    main <- if (blank(row$variable)) {
+        if (!blank(row$formula)) {
+            base <- paste("Formula:", row$formula)
+            if (!blank(row$make_contrasts_str)) paste0(base, " (", row$make_contrasts_str, ")") else base
+        } else if (!blank(row$make_contrasts_str)) {
+            paste("Contrast:", row$make_contrasts_str)
         } else {
-            contrast_name <- paste("Contrast:", contrasts$id[i])
+            paste("Contrast:", row$id)
         }
     } else {
-        contrast_name <- paste(contrasts$target[i], "versus", contrasts$reference[i], "in", contrasts$variable[i])
+        paste(row$target, "versus", row$reference, "in", row$variable)
     }
 
-    contrast_vals <- contrasts[i, ]
-    populated <- colnames(contrasts)[!(is.na(contrast_vals) | contrast_vals == "" | is.null(contrast_vals))]
-    optional <- setdiff(populated, c("id", "target", "reference", "variable", "formula", "make_contrasts_str"))
-    optional_part <- if (length(optional) > 0) {
-        paste0("(", paste(paste(optional, contrasts[i, optional], sep = ": "), collapse = ", "), ")")
-    } else ""
+    optional_pairs <- setdiff(names(row), standard) |>
+        keep(\(col) !blank(row[[col]])) |>
+        map_chr(\(col) paste(col, row[[col]], sep = ": "))
+    optional_part <- if (length(optional_pairs)) paste0("(", paste(optional_pairs, collapse = ", "), ")") else ""
 
-    paste(contrast_name, optional_part)
+    paste(main, optional_part)
 }
 
 
@@ -430,29 +438,23 @@ render_pca_panels <- function() {
                         showlegend  = (iv == informative_variables[1]),
                         visible     = (iv == informative_variables[1])
                     )
-                    if (d == "2") {
-                        fig <- do.call(
-                            function(...) plotly::add_markers(fig, ...),
-                            c(common, list(
-                                x = pca_data$coords[, 1][idx],
-                                y = pca_data$coords[, 2][idx],
-                                hoverinfo = "text+x+y",
-                                marker = list(size = 8, color = pcaColorScale[j])
-                            ))
-                        )
+                    fig <- if (d == "2") {
+                        do.call(plotly::add_markers, c(list(fig), common, list(
+                            x = pca_data$coords[, 1][idx],
+                            y = pca_data$coords[, 2][idx],
+                            hoverinfo = "text+x+y",
+                            marker = list(size = 8, color = pcaColorScale[j])
+                        )))
                     } else {
-                        fig <- do.call(
-                            function(...) plotly::add_markers(fig, ...),
-                            c(common, list(
-                                x = pca_data$coords[, 1][idx],
-                                y = pca_data$coords[, 2][idx],
-                                z = pca_data$coords[, 3][idx],
-                                type = "scatter3d",
-                                mode = "markers",
-                                hoverinfo = "text+x+y+z",
-                                marker = list(size = 3, color = pcaColorScale[j])
-                            ))
-                        )
+                        do.call(plotly::add_markers, c(list(fig), common, list(
+                            x = pca_data$coords[, 1][idx],
+                            y = pca_data$coords[, 2][idx],
+                            z = pca_data$coords[, 3][idx],
+                            type = "scatter3d",
+                            mode = "markers",
+                            hoverinfo = "text+x+y+z",
+                            marker = list(size = 3, color = pcaColorScale[j])
+                        )))
                     }
                 }
                 trace_indices[[iv]] <- (start_idx):trace_counter
@@ -1049,7 +1051,7 @@ render_gprofiler2_section <- function() {
             return(invisible())
         }
 
-        all_enriched <- read.table(table_path, header = TRUE, sep = "\t", quote = "\"") |>
+        all_enriched <- read_tsv(table_path, show_col_types = FALSE) |>
             transmute(
                 `Pathway name`          = term_name,
                 `Pathway code`          = term_id,
@@ -1180,7 +1182,10 @@ if (features_provided) {
 contrasts <- read_metadata(file.path(params$input_dir, params$contrasts_file))
 contrasts$blocking <- na.replace(contrasts$blocking, "")
 if (!"id" %in% colnames(contrasts)) {
-    contrasts$id <- apply(contrasts, 1, paste, collapse = "_")
+    # pmap iterates per-row, preserving each cell's type (apply would coerce
+    # the whole frame to a character matrix). Appended as the last column,
+    # matching the previous `contrasts$id <- ...` placement.
+    contrasts$id <- pmap_chr(contrasts, \(...) paste(..., sep = "_"))
 }
 
 # Identify informative variables: those with more than one value but less than
@@ -1300,7 +1305,7 @@ warnings_list <- list_c(map(results, "warnings"))
 ```
 
 ```{r differential-summary, echo=FALSE, warning=FALSE}
-contrast_descriptions <- map_chr(seq_len(nrow(contrasts)), name_contrast)
+contrast_descriptions <- pmap_chr(contrasts, \(...) name_contrast(list(...)))
 
 p_value_types <- list(
     Adjusted   = p$differential_qval_column,
