@@ -523,24 +523,18 @@ render_scree_panels <- function(percentVar_list) {
     cat(":::")
 }
 
-render_pca_meta_associations <- function() {
-    # d3heatmap chokes on a single-row matrix; duplicate to work around it.
-    plot_pca_meta <- if (nrow(pca_vs_meta) == 1) rbind(pca_vs_meta, pca_vs_meta) else pca_vs_meta
+# d3heatmap chokes on a single-row matrix; duplicate to work around it.
+pca_meta_heatmap_matrix <- function() {
+    if (nrow(pca_vs_meta) == 1) rbind(pca_vs_meta, pca_vs_meta) else pca_vs_meta
+}
 
-    # Wrap in a tagList so `print` goes through the shiny.tag.list method
-    # (which writes the widget HTML via `cat(format(...))`) instead of
-    # `print.htmlwidget`, which would only open an interactive viewer.
-    # The widget's JS dependencies are pre-registered via touch-js-libs.
-    print(htmltools::tagList(d3heatmap::d3heatmap(
-        -log10(plot_pca_meta),
-        Rowv = FALSE,
-        dendrogram = "none",
-        cellnote = plot_pca_meta,
-        cexCol = 0.8, cexRow = 0.8,
-        height = (100 + (15 * nrow(plot_pca_meta))),
-        colors = colorRampPalette(rev(RColorBrewer::brewer.pal(n = 7, name = "RdYlBu")))(100)
-    )))
+# The d3heatmap call is intentionally NOT wrapped in a render-* function:
+# emitting it as a top-level chunk expression lets `knit_print.htmlwidget`
+# dispatch with the widget's natural sizing policy. Calling it from inside
+# a function and forwarding via `tagList |> print` works but applies a
+# fixed-pixel sizing that squishes the heatmap vertically.
 
+render_pca_meta_annotations <- function() {
     walk(rownames(pca_vs_meta), \(variable) {
         sig_comps <- pca_vs_meta[variable, ] < 0.1
         sig_comps[is.na(sig_comps)] <- FALSE
@@ -1473,7 +1467,19 @@ For the variance stabilised matrix, an ANOVA test was used to determine associat
 The resulting p values are illustrated below.
 
 ```{r pca-meta, echo=FALSE, results='asis', eval=!module_disabled("pca")}
-render_pca_meta_associations()
+plot_pca_meta <- pca_meta_heatmap_matrix()
+# d3heatmap inline (not wrapped in a helper) so knit_print.htmlwidget can
+# dispatch with the widget's natural sizing policy.
+d3heatmap::d3heatmap(
+    -log10(plot_pca_meta),
+    Rowv = FALSE,
+    dendrogram = "none",
+    cellnote = plot_pca_meta,
+    cexCol = 0.8, cexRow = 0.8,
+    height = (100 + (15 * nrow(plot_pca_meta))),
+    colors = colorRampPalette(rev(RColorBrewer::brewer.pal(n = 7, name = "RdYlBu")))(100)
+)
+render_pca_meta_annotations()
 ```
 
 #### Clustering heatmaps
