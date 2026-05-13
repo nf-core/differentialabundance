@@ -788,11 +788,15 @@
                 },
                 "dream_proportion": {
                     "type": "number",
-                    "default": 0.01
+                    "default": 0.01,
+                    "fa_icon": "fas fa-percentage",
+                    "description": "passed to variancePartition::dream() (via eBayes), assumed proportion of genes that are differentially expressed (numeric 0-1)."
                 },
                 "dream_stdev_coef_lim": {
                     "type": "string",
-                    "default": "0.1,4"
+                    "default": "0.1,4",
+                    "fa_icon": "fas fa-arrows-alt-h",
+                    "description": "passed to variancePartition::dream() (via eBayes), comma-separated numeric pair giving the lower and upper limits of the standard deviation of the logFC values used in the prior."
                 },
                 "dream_trend": {
                     "type": "boolean",
@@ -809,11 +813,17 @@
                 },
                 "dream_winsor_tail_p": {
                     "type": "string",
-                    "default": "0.05,0.1"
+                    "default": "0.05,0.1",
+                    "fa_icon": "fas fa-cut",
+                    "description": "passed to variancePartition::dream() (via eBayes), comma-separated numeric pair giving the proportion of the lower and upper tails to be winsorized before estimating the standard deviation."
                 },
                 "dream_ddf": {
                     "type": "string",
-                    "default": "adaptive"
+                    "default": "adaptive",
+                    "fa_icon": "fas fa-cogs",
+                    "description": "Method used to estimate effective degrees of freedom for hypothesis testing in the linear mixed model. Allowed values: adaptive (default), Satterthwaite, Kenward-Roger.",
+                    "help_text": "Kenward-Roger gives the most accurate p-values but is much slower; Satterthwaite is usually sufficient; adaptive uses Kenward-Roger for <= 20 samples and Satterthwaite otherwise.",
+                    "enum": ["adaptive", "Satterthwaite", "Kenward-Roger"]
                 },
                 "dream_reml": {
                     "type": "boolean",
@@ -829,7 +839,11 @@
                 },
                 "dream_adjust_method": {
                     "type": "string",
-                    "default": "BH"
+                    "default": "BH",
+                    "fa_icon": "fas fa-check-circle",
+                    "description": "Method used to adjust p-values for multiple testing (passed to p.adjust).",
+                    "help_text": "Supported methods include: 'BH' (Benjamini-Hochberg), 'BY', 'holm', 'hochberg', 'hommel', 'bonferroni', 'fdr', and 'none'.",
+                    "enum": ["BH", "BY", "holm", "hochberg", "hommel", "bonferroni", "fdr", "none"]
                 }
             }
         },
