@@ -660,12 +660,17 @@ if (nrow(results_genewise) > 0) {
 # LOCAL PATCH (pending upstream fix in nf-core/modules propr/propd):
 # move gene IDs from rownames into an explicit features_id_col column so the
 # resulting TSV has a properly aligned header for downstream csvtk join.
+# Guard against the empty-results branch, where the data frame is already
+# constructed with features_id_col as a regular column - applying the cbind
+# unconditionally there would emit two columns sharing that name.
 results_genewise <- as.data.frame(results_genewise)
-results_genewise <- cbind(
-    setNames(data.frame(rownames(results_genewise), stringsAsFactors = FALSE), opt\$features_id_col),
-    results_genewise
-)
-rownames(results_genewise) <- NULL
+if (!(opt\$features_id_col %in% colnames(results_genewise))) {
+    results_genewise <- cbind(
+        setNames(data.frame(rownames(results_genewise), stringsAsFactors = FALSE), opt\$features_id_col),
+        results_genewise
+    )
+    rownames(results_genewise) <- NULL
+}
 results_genewise <- results_genewise[order(
     results_genewise\$rcDdis, # sort by increasing rcDdis (from most significant to least significant)
     -abs(results_genewise\$LFC), # sort by decreasing absolute LFC (from most to least differential)
