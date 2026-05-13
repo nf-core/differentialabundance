@@ -507,24 +507,6 @@
                     "description": "The feature identifier column in differential results tables",
                     "fa_icon": "fas fa-address-card"
                 },
-                "differential_fc_column": {
-                    "type": "string",
-                    "default": "log2FoldChange",
-                    "description": "The fold change column in differential results tables",
-                    "fa_icon": "fas fa-adjust"
-                },
-                "differential_pval_column": {
-                    "type": "string",
-                    "default": "pvalue",
-                    "description": "The p value column in differential results tables",
-                    "fa_icon": "fas fa-columns"
-                },
-                "differential_qval_column": {
-                    "type": "string",
-                    "default": "padj",
-                    "description": "The q value column in differential results tables (adjust p values/ q values).",
-                    "fa_icon": "fas fa-columns"
-                },
                 "differential_min_fold_change": {
                     "type": "number",
                     "default": 2,
@@ -543,12 +525,6 @@
                     "description": "Maximum q value used to calculate differential feature numbers",
                     "fa_icon": "fas fa-angle-double-up"
                 },
-                "differential_foldchanges_logged": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Indicate whether or not fold changes are on the log scale (default is to assume they are)",
-                    "fa_icon": "fas fa-calculator"
-                },
                 "differential_palette_name": {
                     "type": "string",
                     "default": "Set1",
@@ -565,8 +541,6 @@
             },
             "required": [
                 "differential_feature_id_column",
-                "differential_fc_column",
-                "differential_qval_column",
                 "differential_min_fold_change",
                 "differential_max_pval",
                 "differential_max_qval",
