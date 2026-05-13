@@ -231,8 +231,8 @@ def validateInputParameters(paramsets) {
                 error("CEL files archive not specified for paramset={${row.paramset_name}}!")
             }
         } else if (row.study_type == 'maxquant') {
-            if (row.functional_method) {
-                error("Functional analysis is not yet possible with maxquant input data; please set --functional_method to null and rerun pipeline!")
+            if (row.functional_method && row.functional_method != 'none') {
+                error("Functional analysis is not yet possible with maxquant input data; please set --functional_method to 'none' and rerun pipeline!")
             }
             if (!row.matrix) {
                 error("Input matrix not specified for paramset={${row.paramset_name}}!")
@@ -248,7 +248,7 @@ def validateInputParameters(paramsets) {
         }
 
         // Validate functional analysis parameters
-        if (row.functional_method) {
+        if (row.functional_method && row.functional_method != 'none') {
             if (row.functional_method == 'gsea' && !row.gene_sets_files) {
                 error("GSEA activated but gene set file not specified for paramset={${row.paramset_name}}!")
             } else if (row.functional_method == 'gprofiler2') {
