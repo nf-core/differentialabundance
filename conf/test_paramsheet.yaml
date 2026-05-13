@@ -123,6 +123,27 @@
   differential_qval_column: adj.P.Val
   shinyngs_build_app: true
 
+- paramset_name: rnaseq_propd_grea
+  study_type: rnaseq
+  study_abundance_type: counts
+  features_type: gene
+  features_id_col: gene_id
+  features_name_col: gene_name
+  features_metadata_cols: gene_id,gene_name,gene_biotype
+  differential_feature_id_column: gene_id
+  observations_id_col: sample
+  observations_name_col: sample
+  differential_method: propd
+  functional_method: grea
+  propd_save_adjacency: true
+  exploratory_assay_names: raw
+  exploratory_final_assay: raw
+  exploratory_log2_assays: null
+  differential_file_suffix: ".propd.genewise.tsv"
+  differential_fc_column: LFC
+  differential_pval_column: rcDdis
+  differential_qval_column: rcDdis
+
 # ============================================================================
 # 3. Test config block
 # ============================================================================
@@ -177,3 +198,26 @@
   differential_max_qval: 0.05
   differential_min_fold_change: 1.5
   gprofiler2_organism: "mmusculus"
+
+- paramset_name: test_rnaseq_propd_grea
+  include: test_paramsheet/rnaseq_propd_grea,test_paramsheet/rnaseq_testdata
+  filtering_min_abundance: 10
+  exploratory_main_variable: contrasts
+  # rcDdis is bounded [0,1]; relax the filter thresholds so that all rows pass to the report
+  differential_max_pval: 1
+  differential_max_qval: 1
+  differential_min_fold_change: 1.5
+  # the propd permutation FDR is expensive; the analytical FDR (permutation = 0) is fine for testing
+  propd_permutation: 0
+  # smallest set_min permitted by grea to allow the trimmed test gmt to surface results
+  grea_set_min: 5
+  grea_permutation: 50
+  report_contributors: |-
+    Jane Doe
+    Director of Institute of Microbiology
+    University of Smallville;John Smith
+    PhD student
+    Institute of Microbiology
+    University of Smallville
+  round_digits: 3
+  seed: 10

@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- [[#724](https://github.com/nf-core/differentialabundance/issues/724)] - Enable `propd` differential and `grea` functional methods. ([@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#692]](https://github.com/nf-core/differentialabundance/pull/692) - Add separate profile for generic, pre-scaled input matrices. ([@grst](https://github.com/grst), review by [@atrigila](https://github.com/atrigila) and [@pinin4fjords](https://github.com/pinin4fjords))
 - [[#683]](https://github.com/nf-core/differentialabundance/pull/683) - Improve documentation around `study_type` parameter. ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst)).
 - [[#649]](https://github.com/nf-core/differentialabundance/pull/649) - Add per-column filters to differentially expressed genes table. ([@antoniasaracco](https://github.com/antoniasaracco), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).

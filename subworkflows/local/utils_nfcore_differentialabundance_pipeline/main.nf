@@ -224,6 +224,19 @@ def validateInputParameters(paramsets) {
                 if (!row.decoupler_network) {
                         error("To run decoupler, please provide a network file!")
                     }
+            } else if (row.functional_method == 'grea') {
+                if (row.differential_method != 'propd') {
+                    error("'--functional_method grea' is only supported with '--differential_method propd' (grea consumes the adjacency matrix produced by propd). Found differential_method='${row.differential_method}' in paramset='${row.paramset_name}'.")
+                }
+                if (!row.gene_sets_files) {
+                    error("grea activated but gene set file not specified for paramset={${row.paramset_name}}!")
+                }
+                if (row.gene_sets_files.split(",").size() > 1) {
+                    error("grea can currently only work with a single gene set file")
+                }
+                if (!row.propd_save_adjacency) {
+                    error("'--functional_method grea' requires '--propd_save_adjacency true' so the propd adjacency matrix is persisted for grea to consume. Found propd_save_adjacency='${row.propd_save_adjacency}' in paramset='${row.paramset_name}'.")
+                }
             }
         }
 

@@ -488,7 +488,7 @@
                 "differential_method": {
                     "type": "string",
                     "description": "Differential analysis method",
-                    "enum": ["deseq2", "limma", "dream"],
+                    "enum": ["deseq2", "limma", "dream", "propd"],
                     "default": "deseq2"
                 },
                 "differential_file_suffix": {
@@ -832,6 +832,54 @@
                 }
             }
         },
+        "differential_propd_specific_options": {
+            "title": "[differential] propd specific options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "propd_alpha": {
+                    "type": "number",
+                    "description": "Alpha value for the Box-Cox transformation used by propd. Leave unset to skip the transformation."
+                },
+                "propd_moderated": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Use moderated theta values in propd."
+                },
+                "propd_fdr": {
+                    "type": "number",
+                    "default": 0.05,
+                    "description": "False discovery rate threshold used to define significantly proportional pairs."
+                },
+                "propd_permutation": {
+                    "type": "integer",
+                    "default": 0,
+                    "description": "Number of permutations for FDR estimation. 0 uses the analytical FDR from F-statistic p-values."
+                },
+                "propd_number_of_cutoffs": {
+                    "type": "integer",
+                    "default": 100,
+                    "description": "Number of theta cutoffs evaluated when estimating FDR by permutation."
+                },
+                "propd_save_pairwise": {
+                    "type": "boolean",
+                    "description": "Save the table of significant pairwise statistics."
+                },
+                "propd_save_pairwise_full": {
+                    "type": "boolean",
+                    "description": "Save the full table of pairwise statistics (very large)."
+                },
+                "propd_save_adjacency": {
+                    "type": "boolean",
+                    "description": "Save the gene-by-gene adjacency matrix. Must be set to true when pairing propd with `--functional_method grea`, which consumes the adjacency."
+                },
+                "propd_save_rdata": {
+                    "type": "boolean",
+                    "description": "Save the propd object as an RDS file."
+                }
+            }
+        },
         "functional_functional_analysis_options": {
             "title": "[functional] Functional analysis options",
             "type": "object",
@@ -841,7 +889,7 @@
                 "functional_method": {
                     "type": "string",
                     "description": "Functional analysis method",
-                    "enum": ["null", "gsea", "gprofiler2", "decoupler"]
+                    "enum": ["null", "gsea", "gprofiler2", "decoupler", "grea"]
                 },
                 "gene_sets_files": {
                     "type": "string",
@@ -1080,6 +1128,29 @@
                     "type": "string",
                     "default": "ulm",
                     "description": "Comma-separated list of methods to use (e.g., 'ora,ulm')"
+                }
+            }
+        },
+        "functional_grea": {
+            "title": "[functional] grea",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "grea_set_min": {
+                    "type": "integer",
+                    "default": 15,
+                    "description": "Minimum number of features in a gene set."
+                },
+                "grea_set_max": {
+                    "type": "integer",
+                    "default": 500,
+                    "description": "Maximum number of features in a gene set."
+                },
+                "grea_permutation": {
+                    "type": "integer",
+                    "default": 100,
+                    "description": "Number of permutations used by grea to estimate enrichment significance."
                 }
             }
         },
@@ -1393,6 +1464,9 @@
             "$ref": "#/$defs/differential_dream_specific_options"
         },
         {
+            "$ref": "#/$defs/differential_propd_specific_options"
+        },
+        {
             "$ref": "#/$defs/functional_functional_analysis_options"
         },
         {
@@ -1403,6 +1477,9 @@
         },
         {
             "$ref": "#/$defs/functional_decoupler_specific_options"
+        },
+        {
+            "$ref": "#/$defs/functional_grea"
         },
         {
             "$ref": "#/$defs/shiny_shiny_app_settings"

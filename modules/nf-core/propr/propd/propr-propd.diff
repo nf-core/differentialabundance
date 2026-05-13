@@ -1,0 +1,40 @@
+Changes in component 'nf-core/propr/propd'
+'modules/nf-core/propr/propd/environment.yml' is unchanged
+'modules/nf-core/propr/propd/meta.yml' is unchanged
+'modules/nf-core/propr/propd/main.nf' is unchanged
+'modules/nf-core/propr/propd/tests/boxcox.config' is unchanged
+'modules/nf-core/propr/propd/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/propr/propd/tests/permutation.config' is unchanged
+'modules/nf-core/propr/propd/tests/save_all.config' is unchanged
+'modules/nf-core/propr/propd/tests/main.nf.test' is unchanged
+'modules/nf-core/propr/propd/tests/default.config' is unchanged
+Changes in 'propr/propd/templates/propd.R':
+--- modules/nf-core/propr/propd/templates/propd.R
++++ modules/nf-core/propr/propd/templates/propd.R
+@@ -657,7 +657,15 @@
+ }
+ 
+ # save main results - genewise
++# LOCAL PATCH (pending upstream fix in nf-core/modules propr/propd):
++# move gene IDs from rownames into an explicit features_id_col column so the
++# resulting TSV has a properly aligned header for downstream csvtk join.
+ results_genewise <- as.data.frame(results_genewise)
++results_genewise <- cbind(
++    setNames(data.frame(rownames(results_genewise), stringsAsFactors = FALSE), opt\$features_id_col),
++    results_genewise
++)
++rownames(results_genewise) <- NULL
+ results_genewise <- results_genewise[order(
+     results_genewise\$rcDdis, # sort by increasing rcDdis (from most significant to least significant)
+     -abs(results_genewise\$LFC), # sort by decreasing absolute LFC (from most to least differential)
+@@ -676,7 +684,7 @@
+     results_genewise,
+     file      = paste0(opt\$prefix, '.propd.genewise.tsv'),
+     col.names = TRUE,
+-    row.names = TRUE,
++    row.names = FALSE,
+     sep       = '\\t',
+     quote     = FALSE
+ )
+
+************************************************************

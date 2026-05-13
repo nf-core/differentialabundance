@@ -534,6 +534,33 @@ If you want to see the full list of available methods and functions, refer to th
 
 **Note**: Then resources mentioned above are provided only for human or mouse datasets. Please ensure your organism is compatible before enabling this module or provide a custom, species-specific dataset.
 
+### grea
+
+[grea](https://github.com/tpq/propr) (Graph Reverse-Engineered Enrichment Analysis) is the gene set enrichment counterpart to the `propd` differential method, implemented in the [propr](https://github.com/tpq/propr) R package. Unlike GSEA / gProfiler2 / Decoupler, which consume per-gene differential statistics, grea consumes the gene-by-gene **adjacency matrix** produced by propd, so it can only be combined with `--differential_method propd`.
+
+```bash
+--differential_method propd \
+--functional_method grea \
+--gene_sets_files gene_sets.gmt
+```
+
+For convenience the pipeline also provides bundled profiles:
+
+```bash
+nextflow run nf-core/differentialabundance -profile rnaseq_propd_grea,docker ...
+```
+
+Key parameters: `--grea_set_min` and `--grea_set_max` bound gene set sizes; `--grea_permutation` controls the number of permutations used to estimate significance. See the [parameter reference](https://nf-co.re/differentialabundance/parameters) for the full list of `propd_*` and `grea_*` options.
+
+## propd: differential proportionality
+
+[propd](https://github.com/tpq/propr) tests for differential proportionality between groups in compositional data. It is normalization-free (it works on the raw counts via log-ratios) and emits a different set of result columns from DESeq2/Limma/DREAM, most importantly:
+
+- `LFC` - log2 fold-change between groups, used as the differential effect-size column.
+- `rcDdis` - reverse cumulative degree distribution; the propd-equivalent of an adjusted p-value, bounded `[0, 1]`. Used as both the p-value and q-value column in pipeline reports.
+
+Because propd does not produce a normalised matrix, downstream plots and reports operate on the raw assay only. The pipeline exposes a `rnaseq_propd` profile for propd-only runs and `rnaseq_propd_grea` to pair propd with grea functional enrichment.
+
 ## Running the pipeline
 
 The typical command for running the pipeline is as follows:

@@ -485,6 +485,7 @@ workflow DIFFERENTIALABUNDANCE {
     ch_differential_results = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.results_genewise, ch_paramsets, meta_keys_to_remove=['differential_method'], use_meta_key=true) // key, meta, results
     ch_differential_results_filtered = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.results_genewise_filtered, ch_paramsets, meta_keys_to_remove=['differential_method'], use_meta_key=true) // key, meta, results_filtered
     ch_differential_model = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.model, ch_paramsets, meta_keys_to_remove=['differential_method'], use_meta_key=true) // key, meta, model
+    ch_differential_adjacency = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.adjacency, ch_paramsets, meta_keys_to_remove=['differential_method'], use_meta_key=true) // key, meta, adjacency
 
     // Whereas these channels, the meta do not contain contrast info, as they come from the NORM modules instead of DIFFERENTIAL modules.
     // We do not need to define an extra key based on meta for later join/combine.
@@ -563,6 +564,7 @@ workflow DIFFERENTIALABUNDANCE {
     // - use normalized matrix, if method is gsea
     // - use filtered differential results, if method is gprofiler2
     // - use unfiltered differential results, if method is decoupler
+    // - use propd adjacency matrix, if method is grea
     ch_functional_analysis_matrices = ch_norm
         .filter{meta, matrix -> meta.params.functional_method == 'gsea'}
         .map{ meta, matrix -> [meta, meta, matrix]}
@@ -577,6 +579,10 @@ workflow DIFFERENTIALABUNDANCE {
             ch_differential_results
                 // For decoupler, use unfiltered differential results
                 .filter{meta, meta_with_contrast, results -> meta.params.functional_method == 'decoupler'}
+        )
+        .mix(
+            ch_differential_adjacency
+                .filter{meta, meta_with_contrast, adjacency -> meta.params.functional_method == 'grea'}
         )
 
     ch_functional_input = ch_functional_analysis_matrices  // meta, meta with contrast, file
@@ -612,6 +618,7 @@ workflow DIFFERENTIALABUNDANCE {
         .join(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_all_enrich, remainder: true)
         .join(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_sub_enrich, remainder: true)
         .mix(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_report_tsv)
+        .mix(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.grea_results)
 
     // Note that 'functional_method' is additionally added to the meta in the functional subworkflow.
     // Remove it to keep a consistent meta structure (needed for join/combine).
@@ -839,10 +846,12 @@ workflow DIFFERENTIALABUNDANCE {
     // So all the files generated with the same paramset meta will go together to report.
     // Note that the files generated with different contrasts will also be grouped together for the same paramset meta.
 
+    // Use remainder:true so methods that don't emit a model (e.g. propd) still
+    // flow through; grep() in the report-input map below drops the null entries.
     ch_differential_grouped = differential_with_contrast.differential_results.transpose()
-        .join(ch_differential_model, by:[0,1])
+        .join(ch_differential_model, by:[0,1], remainder: true)
         .groupTuple()                                 // [ meta, [meta with contrast], [differential results], [differential model] ]
-        .map { [it[0], it.tail().tail().flatten()] }  // [ meta, [differential results and models] ]
+        .map { [it[0], it.tail().tail().flatten().grep()] }  // [ meta, [differential results and models] ]
 
     ch_functional_grouped = ch_functional_results
         .groupTuple()                                 // [ meta, [meta with contrast], [functional results] ]
