@@ -1145,10 +1145,10 @@
                 "report_file": {
                     "type": "string",
                     "default": "${projectDir}/assets/differentialabundance_report.qmd",
-                    "description": "Qmd report template from which to create the pipeline report",
-                    "help_text": "The pipeline will always generate a default report which gives a good overview of the analysis results. Should this default report not suit your needs, you can provide the path to a custom report instead.",
+                    "description": "Qmd/Rmd/ipynb report template(s) from which to create the pipeline report. Supply a single path or a comma-separated list of paths to render multiple reports per paramset.",
+                    "help_text": "The pipeline will always generate a default report which gives a good overview of the analysis results. Should this default report not suit your needs, you can provide the path to a custom report instead. To render multiple reports for the same paramset, pass a comma-separated list of paths (e.g. `path/to/a.qmd,path/to/b.qmd`); each entry must end with `.Rmd`, `.qmd` or `.ipynb` and contain no whitespace within a path.",
                     "format": "file-path",
-                    "pattern": "^\\S+\\.(Rmd|qmd|ipynb)$",
+                    "pattern": "^[^,\\s]+\\.(Rmd|qmd|ipynb)(\\s*,\\s*[^,\\s]+\\.(Rmd|qmd|ipynb))*$",
                     "fa_icon": "fas fa-book"
                 },
                 "email": {
