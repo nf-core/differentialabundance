@@ -1460,7 +1460,7 @@ percentVar_list <- render_pca_panels()
 render_scree_panels(percentVar_list)
 ```
 
-#### Principal components / metadata associations
+#### Principal components/ metadata associations
 
 For the variance stabilised matrix, an ANOVA test was used to determine associations between continuous principal components and categorical covariates (including the variable of interest).
 
