@@ -345,12 +345,11 @@ render_filtering_summary <- function() {
 
     rule_map <- tibble(
         column = names(test_results),
-        rule   = case_match(
-            names(test_results),
-            "abundance"            ~ "minimum_abundance",
-            "na"                   ~ "minimum_samples_not_na",
-            "most_variant_vectors" ~ "most_variant_features",
-            .default               = NA_character_
+        rule   = case_when(
+            names(test_results) == "abundance"            ~ "minimum_abundance",
+            names(test_results) == "na"                   ~ "minimum_samples_not_na",
+            names(test_results) == "most_variant_vectors" ~ "most_variant_features",
+            .default = NA_character_
         )
     )
 
@@ -372,12 +371,11 @@ render_filtering_summary <- function() {
         left_join(rule_map, by = "column") |>
         left_join(thresholds, by = "rule") |>
         mutate(
-            Rule = case_match(
-                column,
-                "abundance"            ~ "Minimum abundance threshold",
-                "na"                   ~ "Minimum non-NA samples",
-                "most_variant_vectors" ~ "Top most variant features",
-                .default               = column
+            Rule = case_when(
+                column == "abundance"            ~ "Minimum abundance threshold",
+                column == "na"                   ~ "Minimum non-NA samples",
+                column == "most_variant_vectors" ~ "Top most variant features",
+                .default = column
             ),
             Threshold = threshold
         ) |>
@@ -1406,7 +1404,7 @@ Input was a matrix of `{r} nrow(assay_data$raw)` `{r} p$features_type`s for `{r}
 
 Filtering is applied to the input matrix according to the `--filtering_*` options, removing features that do not meet the specified criteria. This section summarizes the impact of each filtering rule, reporting how many genes were excluded per rule and how many passed all filters.
 
-```{r filtering-stats, echo=FALSE}
+```{r filtering-stats, echo=FALSE, results='asis', warning=FALSE}
 render_filtering_summary()
 ```
 
