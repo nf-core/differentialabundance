@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [[#718](https://github.com/nf-core/differentialabundance/issues/718)] - Drop misleading `Error: null` line printed before nf-schema validation errors on paramsheet validation failure ([@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#694](https://github.com/nf-core/differentialabundance/pull/694)] - Fix data flow for `generic_matrix` study type ([@grst](https://github.com/grst) and [@atrigila](https://github.com/atrigila), review by [@delfiterradas](https://github.com/delfiterradas)).
 - [[#689](https://github.com/nf-core/differentialabundance/pull/689)] - Normalize coefficient names in `variancepartition/dream` before building contrasts ([@delfiterradas](https://github.com/delfiterradas), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#684](https://github.com/nf-core/differentialabundance/pull/684)] - Fix intercept getting added automatically in `deseq2` ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst)).
@@ -69,6 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - [[#715](https://github.com/nf-core/differentialabundance/pull/715)] - Add `decoupler-py`, `variancePartition` and DREAM citations to `CITATIONS.md`; fix stale `propr` reference and `Then`/`These` typo in `docs/usage.md`; add a `Mixed-effects models with DREAM` usage section. ([@pinin4fjords](https://github.com/pinin4fjords)).
+- [[#676](https://github.com/nf-core/differentialabundance/pull/676)] - Derive differential result display columns at runtime instead of setting them in user-editable profiles. ([@antoniasaracco](https://github.com/antoniasaracco), review by [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#705](https://github.com/nf-core/differentialabundance/pull/705)] - Bump all modules and subworkflows to latest nf-core versions. Use Seqera containers in all modules. ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#704](https://github.com/nf-core/differentialabundance/pull/704)] - Bump shinyngs modules to improve validation of contrasts and update subworkflows ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila), [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#702](https://github.com/nf-core/differentialabundance/pull/702)] - Update limma and dream modules to put variable of interest first in zero intercept constrasts ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila), [@grst](https://github.com/grst) and [@pinin4fjords](https://github.com/pinin4fjords)).

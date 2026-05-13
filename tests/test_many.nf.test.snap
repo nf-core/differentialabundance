@@ -49,7 +49,7 @@
                     "r-base": "4.3.3",
                     "r-ggplot2": "3.4.3",
                     "r-gprofiler2": "0.2.2",
-                    "gprofiler-data": "e114_eg62_p19_fa3a7d2c"
+                    "gprofiler-data": "e114_eg62_p19_27110d83"
                 },
                 "GSEA_GSEA": {
                     "gsea": "4.3.2"
@@ -412,7 +412,7 @@
                 "GSM1229348_Gudjohnsson_008_8470_PN.CEL.gz:md5,ec5129e035badf3b670178d53e24f0cc"
             ]
         ],
-        "timestamp": "2026-05-04T21:27:25.68568505",
+        "timestamp": "2026-05-11T21:24:03.890722214",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
