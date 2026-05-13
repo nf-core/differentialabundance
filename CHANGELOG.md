@@ -70,6 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [[#707](https://github.com/nf-core/differentialabundance/pull/707)] - Template update for nf-core/tools v4.0.2 ([@pinin4fjords](https://github.com/pinin4fjords), review by [@atrigila](https://github.com/atrigila)).
 - [[#712](https://github.com/nf-core/differentialabundance/issues/712)] - Schema completeness: tidy `functional_method` enum (`"null"` → `"none"`, with `default: "none"`), and add missing `description`, `help_text`, `fa_icon`, and `default` fields to DREAM boolean params and other boolean params lacking defaults. The "off" value for `--functional_method` is now `none` instead of `null` ([@pinin4fjords](https://github.com/pinin4fjords), review by [@atrigila](https://github.com/atrigila)).
 - [[#714](https://github.com/nf-core/differentialabundance/issues/714)] - Document the rationale for the different `dream_apply_voom` defaults between the `rnaseq_dream` and `generic_matrix_dream` profiles. ([@pinin4fjords](https://github.com/pinin4fjords), review by [@atrigila](https://github.com/atrigila) and [@grst](https://github.com/grst)).
 - [[#715](https://github.com/nf-core/differentialabundance/pull/715)] - Add `decoupler-py`, `variancePartition` and DREAM citations to `CITATIONS.md`; fix stale `propr` reference and `Then`/`These` typo in `docs/usage.md`; add a `Mixed-effects models with DREAM` usage section. ([@pinin4fjords](https://github.com/pinin4fjords), review by [@atrigila](https://github.com/atrigila)).

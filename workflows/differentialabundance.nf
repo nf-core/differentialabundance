@@ -207,10 +207,10 @@ workflow DIFFERENTIALABUNDANCE {
 
     // Note that the tables are the same across contrasts, only one table will be necessary
     // that is why here we take the first one and remove the contrast variable from meta
-    ch_proteus_raw = prepareModuleOutput(PROTEUS.out.raw_tab, ch_paramsets, meta_keys_to_remove=['contrast'])
+    ch_proteus_raw = prepareModuleOutput(PROTEUS.out.raw_tab, ch_paramsets, ['contrast'])
         .groupTuple()
         .map { meta, files -> [ meta, files[0] ] }
-    ch_proteus_norm = prepareModuleOutput(PROTEUS.out.norm_tab, ch_paramsets, meta_keys_to_remove=['contrast'])
+    ch_proteus_norm = prepareModuleOutput(PROTEUS.out.norm_tab, ch_paramsets, ['contrast'])
         .groupTuple()
         .map { meta, files -> [ meta, files[0] ] }
 
@@ -482,14 +482,14 @@ workflow DIFFERENTIALABUNDANCE {
     // Also note that these channels, the meta contain other info apart from the base paramset meta.
     // Hence we create a key using the simple paramset meta with only meta.id, meta.paramset_name and meta.params,
     // by setting 'use_meta_key' to true. This will facilitate later on to join/combine channels.
-    ch_differential_results = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.results_genewise, ch_paramsets, meta_keys_to_remove=['differential_method'], use_meta_key=true) // key, meta, results
-    ch_differential_results_filtered = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.results_genewise_filtered, ch_paramsets, meta_keys_to_remove=['differential_method'], use_meta_key=true) // key, meta, results_filtered
-    ch_differential_model = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.model, ch_paramsets, meta_keys_to_remove=['differential_method'], use_meta_key=true) // key, meta, model
+    ch_differential_results = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.results_genewise, ch_paramsets, ['differential_method'], true) // key, meta, results
+    ch_differential_results_filtered = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.results_genewise_filtered, ch_paramsets, ['differential_method'], true) // key, meta, results_filtered
+    ch_differential_model = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.model, ch_paramsets, ['differential_method'], true) // key, meta, model
 
     // Whereas these channels, the meta do not contain contrast info, as they come from the NORM modules instead of DIFFERENTIAL modules.
     // We do not need to define an extra key based on meta for later join/combine.
-    ch_differential_norm = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.normalised_matrix, ch_paramsets, meta_keys_to_remove=['differential_method']) // meta, norm file
-    ch_differential_varstab = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.variance_stabilised_matrix, ch_paramsets, meta_keys_to_remove=['differential_method']) // meta, varstab file
+    ch_differential_norm = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.normalised_matrix, ch_paramsets, ['differential_method']) // meta, norm file
+    ch_differential_varstab = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.variance_stabilised_matrix, ch_paramsets, ['differential_method']) // meta, varstab file
 
     ch_versions = ch_versions
         .mix(ABUNDANCE_DIFFERENTIAL_FILTER.out.versions)
@@ -618,7 +618,7 @@ workflow DIFFERENTIALABUNDANCE {
     // Also note that these channels, the meta contain other info apart from the base paramset meta.
     // Hence we create a key using the simple paramset meta with only meta.paramset_name and meta.params,
     // by setting 'use_meta_key' to true. This will facilitate later on to join/combine channels.
-    ch_functional_results = prepareModuleOutput(ch_functional_results, ch_paramsets, meta_keys_to_remove=['functional_method'], use_meta_key=true) // key, meta, [ functional results ]
+    ch_functional_results = prepareModuleOutput(ch_functional_results, ch_paramsets, ['functional_method'], true) // key, meta, [ functional results ]
 
     ch_versions = ch_versions
         .mix(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.versions)
