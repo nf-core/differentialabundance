@@ -71,7 +71,7 @@ round_dataframe_columns <- function(df, columns = NULL, digits = -1) {
     if (digits == -1) return(df)
     df <- data.frame(df, check.names = FALSE)
     if (is.null(columns)) {
-        columns <- colnames(df)[purrr::map_lgl(df, is.numeric)]
+        columns <- colnames(df)[map_lgl(df, is.numeric)]
     }
     df[, columns] <- format(
         data.frame(df[, columns], check.names = FALSE),
@@ -202,14 +202,14 @@ generate_boxplots <- function(combined, label_col) {
 
     cat("\n::: {.panel-tabset .boxplot-container}\n\n")
 
-    for (assay_type in rev(names(assay_data))) {
+    walk(rev(names(assay_data)), \(assay_type) {
         cat(paste0("\n###### ", prettifyVariablename(assay_type), "\n\n"))
 
         expr_mat <- assay_data[[assay_type]]
         top_present <- intersect(top_ids, rownames(expr_mat))
         if (length(top_present) == 0) {
             cat("*No top genes found in this assay matrix.*\n\n")
-            next
+            return(invisible())
         }
 
         obs_sub <- observations[colnames(expr_mat), , drop = FALSE]
@@ -217,13 +217,13 @@ generate_boxplots <- function(combined, label_col) {
         plot_df[[prettifyVariablename(p$features_type)]] <- rownames(plot_df)
         features_pretty <- prettifyVariablename(p$features_type)
 
-        plot_df <- tidyr::pivot_longer(
+        plot_df <- pivot_longer(
             plot_df,
             cols = -tidyselect::all_of(features_pretty),
             names_to = "Sample",
             values_to = "Expression"
         )
-        plot_df <- dplyr::arrange(plot_df, .data[[features_pretty]])
+        plot_df <- arrange(plot_df, .data[[features_pretty]])
 
         cond_var <- if (length(unique(contrast_variables)) > 0) unique(contrast_variables)[1] else main_grouping_variable
         plot_df$Condition <- obs_sub[plot_df$Sample, cond_var]
@@ -241,35 +241,35 @@ generate_boxplots <- function(combined, label_col) {
         }
 
         pvals_grouped <- plot_df |>
-            dplyr::group_by(FeatureName) |>
-            dplyr::summarise(pval = dplyr::first(pval), .groups = "drop")
+            group_by(FeatureName) |>
+            summarise(pval = first(pval), .groups = "drop")
         y_pos <- plot_df |>
-            dplyr::group_by(FeatureName) |>
-            dplyr::summarise(y = max(Expression, na.rm = TRUE) * 1.03, .groups = "drop")
-        pvals_grouped <- dplyr::left_join(pvals_grouped, y_pos, by = "FeatureName")
+            group_by(FeatureName) |>
+            summarise(y = max(Expression, na.rm = TRUE) * 1.03, .groups = "drop")
+        pvals_grouped <- left_join(pvals_grouped, y_pos, by = "FeatureName")
 
-        p_box <- ggplot2::ggplot(plot_df, ggplot2::aes(x = Condition, y = Expression)) +
-            ggplot2::geom_boxplot(outlier.shape = NA) +
+        p_box <- ggplot(plot_df, aes(x = Condition, y = Expression)) +
+            geom_boxplot(outlier.shape = NA) +
             ggbeeswarm::geom_quasirandom(
                 width = 0.2,
-                ggplot2::aes(color = Condition, text = paste0("Sample: ", Sample, "<br>"))
+                aes(color = Condition, text = paste0("Sample: ", Sample, "<br>"))
             ) +
-            ggplot2::facet_wrap(~ FeatureName, scales = "free_y") +
-            ggplot2::scale_color_manual(values = groupColorScale) +
-            ggplot2::theme_light() +
-            ggplot2::theme(
-                axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),
-                axis.title.x = ggplot2::element_text(margin = ggplot2::margin(t = 15)),
+            facet_wrap(~ FeatureName, scales = "free_y") +
+            scale_color_manual(values = groupColorScale) +
+            theme_light() +
+            theme(
+                axis.text.x = element_text(angle = 45, hjust = 1),
+                axis.title.x = element_text(margin = margin(t = 15)),
                 legend.position = "none",
-                strip.text = ggplot2::element_text(color = "black", size = 8),
-                strip.background = ggplot2::element_rect(linewidth = 0.1),
-                panel.spacing.y = ggplot2::unit(1.5, "lines"),
-                panel.spacing.x = ggplot2::unit(1.5, "lines"),
-                plot.margin = ggplot2::margin(t = 15, b = 20)
+                strip.text = element_text(color = "black", size = 8),
+                strip.background = element_rect(linewidth = 0.1),
+                panel.spacing.y = unit(1.5, "lines"),
+                panel.spacing.x = unit(1.5, "lines"),
+                plot.margin = margin(t = 15, b = 20)
             ) +
-            ggplot2::geom_text(
+            geom_text(
                 data = pvals_grouped,
-                ggplot2::aes(x = 1.6, y = y, label = paste0("Padj = ", signif(pval, 3))),
+                aes(x = 1.6, y = y, label = paste0("Padj = ", signif(pval, 3))),
                 inherit.aes = FALSE,
                 size = 2, color = "grey37", fontface = "italic", na.rm = TRUE
             )
@@ -277,7 +277,7 @@ generate_boxplots <- function(combined, label_col) {
         p_box <- plotly::ggplotly(p_box, tooltip = c("x", "y", "color", "text")) |>
             plotly::layout(height = 600)
         print(htmltools::tagList(p_box))
-    }
+    })
     cat("\n:::\n\n")
 }
 
@@ -317,46 +317,46 @@ render_filtering_summary <- function() {
     tests_path      <- file.path(params$input_dir, params$filtering_tests)
     thresholds_path <- file.path(params$input_dir, params$filtering_thresholds)
 
-    tests <- readr::read_tsv(tests_path, show_col_types = FALSE)
+    tests <- read_tsv(tests_path, show_col_types = FALSE)
     test_results <- tests |>
-        dplyr::select(-1) |>
-        dplyr::mutate(dplyr::across(dplyr::everything(),
-                                    ~ as.logical(dplyr::na_if(trimws(as.character(.x)), ""))))
+        select(-1) |>
+        mutate(across(everything(),
+                                    ~ as.logical(na_if(trimws(as.character(.x)), ""))))
 
     total_features <- nrow(test_results)
     passed_all <- test_results |>
-        dplyr::mutate(dplyr::across(dplyr::everything(), ~ tidyr::replace_na(.x, FALSE))) |>
-        dplyr::mutate(pass = rowSums(dplyr::across(dplyr::everything(), as.integer)) == ncol(test_results)) |>
-        dplyr::pull(pass)
+        mutate(across(everything(), ~ replace_na(.x, FALSE))) |>
+        mutate(pass = rowSums(across(everything(), as.integer)) == ncol(test_results)) |>
+        pull(pass)
     retained <- sum(passed_all)
     removed  <- total_features - retained
 
     failures <- test_results |>
-        dplyr::mutate(dplyr::across(dplyr::everything(), ~ .x %in% FALSE))
+        mutate(across(everything(), ~ .x %in% FALSE))
     failure_count <- failures |>
-        dplyr::mutate(n = rowSums(dplyr::across(dplyr::everything(), as.integer))) |>
-        dplyr::pull(n)
+        mutate(n = rowSums(across(everything(), as.integer))) |>
+        pull(n)
 
     thresholds <- if (file.exists(thresholds_path) && file.size(thresholds_path) > 0) {
-        readr::read_tsv(thresholds_path, show_col_types = FALSE)
+        read_tsv(thresholds_path, show_col_types = FALSE)
     } else {
-        tibble::tibble(rule = character(), threshold = numeric())
+        tibble(rule = character(), threshold = numeric())
     }
 
-    rule_map <- tibble::tibble(
+    rule_map <- tibble(
         column = names(test_results),
-        rule   = dplyr::recode(
+        rule   = case_match(
             names(test_results),
-            abundance            = "minimum_abundance",
-            na                   = "minimum_samples_not_na",
-            most_variant_vectors = "most_variant_features",
-            .default             = NA_character_
+            "abundance"            ~ "minimum_abundance",
+            "na"                   ~ "minimum_samples_not_na",
+            "most_variant_vectors" ~ "most_variant_features",
+            .default               = NA_character_
         )
     )
 
     cat("The following tables summarize retention and filtering failures.\n\n")
 
-    summary_tbl <- tibble::tibble(
+    summary_tbl <- tibble(
         Metric  = c("Total features", "Retained after filtering", "Removed by filtering"),
         Count   = c(total_features, retained, removed),
         Percent = c(100, 100 * retained / total_features, 100 * removed / total_features)
@@ -364,24 +364,24 @@ render_filtering_summary <- function() {
     print(captioned_table(summary_tbl, caption = "Filtering summary"))
     cat("\n")
 
-    tbl <- tibble::tibble(
+    tbl <- tibble(
         column = names(failures),
         `Failed (any)`              = colSums(failures),
         `Failed (only this rule)`   = colSums(failures & (failure_count == 1))
     ) |>
-        dplyr::left_join(rule_map, by = "column") |>
-        dplyr::left_join(thresholds, by = "rule") |>
-        dplyr::mutate(
-            Rule = dplyr::recode(
+        left_join(rule_map, by = "column") |>
+        left_join(thresholds, by = "rule") |>
+        mutate(
+            Rule = case_match(
                 column,
-                abundance            = "Minimum abundance threshold",
-                na                   = "Minimum non-NA samples",
-                most_variant_vectors = "Top most variant features",
-                .default             = column
+                "abundance"            ~ "Minimum abundance threshold",
+                "na"                   ~ "Minimum non-NA samples",
+                "most_variant_vectors" ~ "Top most variant features",
+                .default               = column
             ),
             Threshold = threshold
         ) |>
-        dplyr::select(Rule, Threshold, `Failed (any)`, `Failed (only this rule)`)
+        select(Rule, Threshold, `Failed (any)`, `Failed (only this rule)`)
 
     print(captioned_table(tbl, caption = "Filtering rule breakdown (counts may overlap)"))
 }
@@ -465,7 +465,7 @@ render_pca_panels <- function() {
                 type = "dropdown", active = 0,
                 x = 1, xanchor = "right",
                 y = 1.1, yanchor = "top",
-                buttons = purrr::map(informative_variables, \(iv) {
+                buttons = map(informative_variables, \(iv) {
                     vis     <- rep(FALSE, total_traces); vis[trace_indices[[iv]]]     <- TRUE
                     showleg <- rep(FALSE, total_traces); showleg[trace_indices[[iv]]] <- TRUE
                     list(
@@ -515,14 +515,13 @@ render_scree_panels <- function(percentVar_list) {
     cat(paste0("\n#### Scree plot\n"))
     cat("::: {.panel-tabset}")
     cat("\nThe following scree plot visualizes what percentage of total variation in the data can be explained by each of the principal components computed.\n")
-    for (assay_type in names(percentVar_list)) {
-        percentVarData <- data.frame(percentVar_list[[assay_type]])
-        colnames(percentVarData) <- c("var_explained")
+    iwalk(percentVar_list, \(percentVar, assay_type) {
+        percentVarData <- data.frame(var_explained = percentVar)
         percentVarData$PCA <- as.numeric(rownames(percentVarData))
         cat(paste0("\n##### ", prettifyVariablename(assay_type), "\n"))
         print(htmltools::tagList(plot_screeplot(percentVarData)))
         cat("\n")
-    }
+    })
     cat(":::")
 }
 
@@ -541,16 +540,15 @@ render_pca_meta_associations <- function() {
     )
     print(hm)
 
-    for (variable in rownames(pca_vs_meta)) {
+    walk(rownames(pca_vs_meta), \(variable) {
         sig_comps <- pca_vs_meta[variable, ] < 0.1
         sig_comps[is.na(sig_comps)] <- FALSE
-        if (any(sig_comps)) {
-            min_sig_comp <- min(which(sig_comps))
-            min_sig_comp_p <- sprintf("%.2f", pca_vs_meta[variable, min_sig_comp])
-            cat(paste0("The variable '", variable, "' shows an association with ",
-                       colnames(pca_vs_meta)[min_sig_comp], " (p = ", min_sig_comp_p, "). "))
-        }
-    }
+        if (!any(sig_comps)) return(invisible())
+        min_sig_comp <- min(which(sig_comps))
+        cat(paste0("The variable '", variable, "' shows an association with ",
+                   colnames(pca_vs_meta)[min_sig_comp],
+                   " (p = ", sprintf("%.2f", pca_vs_meta[variable, min_sig_comp]), "). "))
+    })
 }
 
 
@@ -561,8 +559,23 @@ render_clustering_heatmaps <- function() {
         if (p$exploratory_n_features == -1) nrow(mat) else p$exploratory_n_features
     }
 
+    annotation_colour <- function(iv) {
+        if (length(unique(observations[[iv]])) > 10) return(NULL)
+        if (is.numeric(observations[[iv]])) {
+            circlize::colorRamp2(
+                c(min(observations[[iv]], na.rm = TRUE), max(observations[[iv]], na.rm = TRUE)),
+                c("blue", "red")
+            )
+        } else {
+            vals <- unique(na.omit(as.character(observations[[iv]])))
+            cscale <- makeColorScale(length(vals), palette = p$exploratory_palette_name)
+            cscale <- rep(cscale, length.out = length(vals))
+            set_names(cscale, sort(vals))
+        }
+    }
+
     cat("::: {.panel-tabset}")
-    for (assay_type in rev(names(assay_data))) {
+    walk(rev(names(assay_data)), \(assay_type) {
         cat(paste0("\n##### ", prettifyVariablename(assay_type), "\n"))
 
         variable_genes <- selectVariableGenes(
@@ -570,22 +583,7 @@ render_clustering_heatmaps <- function() {
             ntop   = ntop_for(assay_data[[assay_type]])
         )
 
-        ann_colors <- list()
-        for (iv in informative_variables) {
-            if (length(unique(observations[[iv]])) > 10) next
-            if (is.numeric(observations[[iv]])) {
-                ann_colors[[iv]] <- circlize::colorRamp2(
-                    c(min(observations[[iv]], na.rm = TRUE), max(observations[[iv]], na.rm = TRUE)),
-                    c("blue", "red")
-                )
-            } else {
-                vals <- unique(na.omit(as.character(observations[[iv]])))
-                cscale <- makeColorScale(length(vals), palette = p$exploratory_palette_name)
-                cscale <- rep(cscale, length.out = length(vals))
-                names(cscale) <- sort(vals)
-                ann_colors[[iv]] <- cscale
-            }
-        }
+        ann_colors <- compact(map(set_names(informative_variables), annotation_colour))
 
         ha <- ComplexHeatmap::HeatmapAnnotation(
             df = observations[, informative_variables, drop = FALSE],
@@ -623,7 +621,7 @@ render_clustering_heatmaps <- function() {
                              annotation_legend_side = "right",
                              legend_grouping = "original")
         cat("\n\n")
-    }
+    })
     cat(":::")
 }
 
@@ -631,7 +629,7 @@ render_clustering_heatmaps <- function() {
 # ---- Section: outlier detection -------------------------------------------
 
 render_outlier_detection <- function() {
-    iv_min_group_sizes <- purrr::map_int(
+    iv_min_group_sizes <- map_int(
         informative_variables,
         \(x) min(table(observations[[x]]))
     )
@@ -641,7 +639,7 @@ render_outlier_detection <- function() {
     cat("::: {.panel-tabset}")
     cat("\nOutlier detection based on [median absolute deviation](https://archive.ph/o3thZ) was undertaken, the outlier scoring is plotted below. For more on MAD, see [this wiki article](https://en.wikipedia.org/wiki/Median_absolute_deviation).\n")
 
-    purrr::walk(informative_variables[iv_min_group_sizes > 2], \(iv) {
+    walk(informative_variables[iv_min_group_sizes > 2], \(iv) {
         cat(paste("\n####", iv, "\n"))
         plotdata <- madScore(
             matrix = assay_data[[p$exploratory_final_assay]],
@@ -717,7 +715,7 @@ render_method_description <- function() {
 
 render_de_count_tables <- function() {
     cat("::: {.panel-tabset}")
-    purrr::walk(names(p_value_types), \(pvt) {
+    walk(names(p_value_types), \(pvt) {
         cat("\n#### ", pvt, "\n")
         caption <- paste0("Differential ", p$features_type, " ", p$abundance_type,
                           " (target relative to reference)")
@@ -740,11 +738,11 @@ render_upset_plots <- function() {
     if (nrow(contrasts) <= 1) return(invisible())
 
     cat("::: {.panel-tabset}")
-    purrr::walk(names(p_value_types), \(pvt) {
+    walk(names(p_value_types), \(pvt) {
         cat("\n#### ", pvt, "\n")
         cat("\n### Upset plot\n\n")
 
-        de_genes <- purrr::map(differential_results, \(de) {
+        de_genes <- map(differential_results, \(de) {
             label_col <- de_label_col(de)
             sig <- de[
                 !is.na(de[[label_col]]) &
@@ -753,12 +751,11 @@ render_upset_plots <- function() {
                 de[[p_value_types[[pvt]]]] < p_value_thresholds[[pvt]],
             ]
             sig[[label_col]]
-        })
-        names(de_genes) <- names(differential_results)
+        }) |> set_names(names(differential_results))
 
-        # Number of contrasts that have at least 2 differential features (UpSet needs >= 2 sets with content)
-        de_con <- sum(!is.na(purrr::map_chr(de_genes, \(x) as.character(x[2]))))
-        if (de_con > 1) {
+        # UpSet needs at least 2 contrasts to overlap, each with >= 2 features
+        contrasts_with_overlap <- sum(map_int(de_genes, length) >= 2)
+        if (contrasts_with_overlap > 1) {
             suppressWarnings(suppressMessages({
                 p_up <- UpSetR::upset(UpSetR::fromList(de_genes))
                 print(p_up)
@@ -841,17 +838,17 @@ render_de_volcano <- function(full_de, pvt, pval_column, p_value_threshold, cont
 # truth even when the de_table module is disabled.
 build_de_combined <- function(full_de, mask) {
     full_de |>
-        dplyr::filter(mask) |>
-        dplyr::select(-tidyselect::any_of("differential_status")) |>
-        dplyr::mutate(
-            Direction = dplyr::if_else(.data[[p$differential_fc_column]] > 0, "Up", "Down")
+        filter(mask) |>
+        select(-tidyselect::any_of("differential_status")) |>
+        mutate(
+            Direction = if_else(.data[[p$differential_fc_column]] > 0, "Up", "Down")
         ) |>
-        dplyr::arrange(
+        arrange(
             .data[[p$differential_qval_column]],
             .data[[p$differential_pval_column]]
         ) |>
-        dplyr::relocate(Direction) |>
-        dplyr::rename_with(prettifyVariablename)
+        relocate(Direction) |>
+        rename_with(prettifyVariablename)
 }
 
 render_de_table <- function(combined, contrast_description, diff_file) {
@@ -892,7 +889,7 @@ render_de_table <- function(combined, contrast_description, diff_file) {
         bordered = TRUE,
         page_size = 20,
         columns = column_defs,
-        default_sorted = setNames(
+        default_sorted = set_names(
             list("asc"),
             prettifyVariablename(p$differential_qval_column)
         ),
@@ -911,27 +908,25 @@ render_biotype_plot <- function(combined) {
     colnames(bt) <- c("Gene biotype", "Direction", "count")
     bt <- bt[bt$count > 0, , drop = FALSE]
 
-    biotype_plot <- ggplot2::ggplot(
+    biotype_plot <- ggplot(
             bt,
-            ggplot2::aes(x = stats::reorder(`Gene biotype`, -count), y = count, fill = Direction)
+            aes(x = stats::reorder(`Gene biotype`, -count), y = count, fill = Direction)
         ) +
-        ggplot2::geom_bar(stat = "identity", position = ggplot2::position_dodge()) +
-        ggplot2::labs(
+        geom_bar(stat = "identity", position = position_dodge()) +
+        labs(
             title = "Differentially Expressed Genes by Gene Biotype and Direction",
             x = "Gene Biotype",
             y = "Number of Differentially Expressed Genes"
         ) +
-        ggplot2::theme_minimal() +
-        ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+        theme_minimal() +
+        theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
     print(biotype_plot)
     cat("\n")
 }
 
 render_de_details <- function(i) {
-    if (i == 1 && length(warnings_list) > 0) {
-        for (warning in warnings_list) cat(warning)
-    }
+    if (i == 1 && length(warnings_list) > 0) walk(warnings_list, cat)
 
     cat("\n#### ", contrast_descriptions[i], "\n")
     cat('::: {.panel-tabset style="width: 1000px; min-width: 1000px;"}\n\n')
@@ -944,7 +939,7 @@ render_de_details <- function(i) {
     }
     label_col <- de_label_col(full_de)
 
-    for (pvt in names(p_value_types)) {
+    walk(names(p_value_types), \(pvt) {
         cat("\n##### ", pvt, " p values", "\n\n")
         pval_column <- p_value_types[[pvt]]
         threshold   <- p_value_thresholds[[pvt]]
@@ -961,24 +956,23 @@ render_de_details <- function(i) {
         cat("\n###### Differential Genes Table\n\n")
         de_fc_sig <- masks$de_fc & masks$de_pval
 
-        if (sum(de_fc_sig) > 0) {
-            combined <- build_de_combined(full_de, de_fc_sig)
-
-            if (!module_disabled("de_table")) {
-                render_de_table(combined, contrast_descriptions[i], differential_files[[i]])
-            }
-
-            cat("\n**Box plots**\n\n")
-            cat("The following box plots show the distribution of expression levels for the top 10 genes ranked by significance.\n\n")
-            generate_boxplots(combined, label_col)
-
-            if (!module_disabled("biotype_plot")) {
-                render_biotype_plot(combined)
-            }
-        } else {
+        if (sum(de_fc_sig) == 0) {
             cat("No significantly differential genes in either direction.\n\n")
+            return(invisible())
         }
-    }
+
+        combined <- build_de_combined(full_de, de_fc_sig)
+
+        if (!module_disabled("de_table")) {
+            render_de_table(combined, contrast_descriptions[i], differential_files[[i]])
+        }
+
+        cat("\n**Box plots**\n\n")
+        cat("The following box plots show the distribution of expression levels for the top 10 genes ranked by significance.\n\n")
+        generate_boxplots(combined, label_col)
+
+        if (!module_disabled("biotype_plot")) render_biotype_plot(combined)
+    })
     cat(":::")
 }
 
@@ -996,40 +990,41 @@ render_gsea_section <- function() {
         return(invisible())
     }
 
+    render_gsea_side <- function(file, role, label) {
+        if (!file.exists(file)) {
+            cat("\n*", role, " GSEA file missing: ", file, "*\n", sep = "")
+            return(invisible())
+        }
+        tbl <- read_metadata(file)[, c(-2, -3)]
+        tbl <- round_dataframe_columns(tbl, digits = p$round_digits)
+        print(captioned_table(tbl,
+                              caption = paste0(role, " (", label, ")"),
+                              searchable = TRUE, page_size = 10))
+    }
+
     cat("::: {.panel-tabset}\n")
-    for (gmt_file in simpleSplit(p$gene_sets_files)) {
+    walk(simpleSplit(p$gene_sets_files), \(gmt_file) {
         gmt_name <- basename(tools::file_path_sans_ext(gmt_file))
         cat("\n##### ", gmt_name, "\n")
         cat("::: {.panel-tabset}\n")
 
-        ref_tables <- paste0(gsea_contrasts$id, ".", gmt_name, ".gsea_report_for_", gsea_contrasts$reference, ".tsv")
-        tgt_tables <- paste0(gsea_contrasts$id, ".", gmt_name, ".gsea_report_for_", gsea_contrasts$target,    ".tsv")
-
-        for (i in seq_len(nrow(gsea_contrasts))) {
-            cat("\n###### ", contrast_descriptions[i], "\n")
-
-            if (file.exists(tgt_tables[i])) {
-                tgt <- read_metadata(tgt_tables[i])[, c(-2, -3)]
-                tgt <- round_dataframe_columns(tgt, digits = p$round_digits)
-                print(captioned_table(tgt, caption = paste0("Target (", gsea_contrasts$target[i], ")"),
-                                      searchable = TRUE, page_size = 10))
-            } else {
-                cat("\n*Target GSEA file missing: ", tgt_tables[i], "*\n")
+        pwalk(
+            list(
+                id          = gsea_contrasts$id,
+                description = contrast_descriptions,
+                target      = gsea_contrasts$target,
+                reference   = gsea_contrasts$reference
+            ),
+            \(id, description, target, reference) {
+                cat("\n###### ", description, "\n")
+                render_gsea_side(paste0(id, ".", gmt_name, ".gsea_report_for_", target,    ".tsv"), "Target",    target)
+                cat("\n\n")
+                render_gsea_side(paste0(id, ".", gmt_name, ".gsea_report_for_", reference, ".tsv"), "Reference", reference)
+                cat("\n")
             }
-            cat("\n\n")
-
-            if (file.exists(ref_tables[i])) {
-                ref <- read_metadata(ref_tables[i])[, c(-2, -3)]
-                ref <- round_dataframe_columns(ref, digits = p$round_digits)
-                print(captioned_table(ref, caption = paste0("Reference (", gsea_contrasts$reference[i], ")"),
-                                      searchable = TRUE, page_size = 10))
-            } else {
-                cat("\n*Reference GSEA file missing: ", ref_tables[i], "*\n")
-            }
-            cat("\n")
-        }
+        )
         cat(":::\n")
-    }
+    })
     cat(":::\n")
 }
 
@@ -1045,37 +1040,38 @@ render_gprofiler2_section <- function() {
         "\n"
     ))
 
-    for (i in seq_along(differential_names)) {
-        name <- differential_names[i]
+    walk2(differential_names, contrasts$id, \(name, contrast_id) {
         cat(paste0("\n##### ", name, "\n"))
 
-        table      <- paste0(contrasts$id[i], ".gprofiler2.all_enriched_pathways.tsv")
+        table      <- paste0(contrast_id, ".gprofiler2.all_enriched_pathways.tsv")
         table_path <- file.path(params$input_dir, table)
 
         if (!file.exists(table_path) || file.size(table_path) == 0) {
-            cat(paste0("No ",
-                       ifelse(p$gprofiler2_significant, "significantly", ""),
-                       " enriched pathways were found for this contrast."))
-        } else {
-            all_enriched <- read.table(table_path, header = TRUE, sep = "\t", quote = "\"")
-            all_enriched <- data.frame(
-                "Pathway name"           = all_enriched$term_name,
-                "Pathway code"           = all_enriched$term_id,
-                "Differential features"  = all_enriched$intersection_size,
-                "Pathway size"           = all_enriched$term_size,
-                "Differential fraction"  = (all_enriched$intersection_size / all_enriched$term_size),
-                "Adjusted p value"       = all_enriched$p_value,
-                check.names = FALSE
-            )
-            all_enriched <- round_dataframe_columns(all_enriched, digits = p$round_digits)
-            print(captioned_table(
-                all_enriched,
-                caption = paste("Enriched pathways in", name, "(check", table, "for more detail)"),
-                searchable = TRUE, page_size = 10
-            ))
+            cat("No ",
+                if (p$gprofiler2_significant) "significantly" else "",
+                " enriched pathways were found for this contrast.", sep = "")
+            cat("\n")
+            return(invisible())
         }
+
+        all_enriched <- read.table(table_path, header = TRUE, sep = "\t", quote = "\"") |>
+            transmute(
+                `Pathway name`          = term_name,
+                `Pathway code`          = term_id,
+                `Differential features` = intersection_size,
+                `Pathway size`          = term_size,
+                `Differential fraction` = intersection_size / term_size,
+                `Adjusted p value`      = p_value
+            ) |>
+            round_dataframe_columns(digits = p$round_digits)
+
+        print(captioned_table(
+            all_enriched,
+            caption = paste("Enriched pathways in", name, "(check", table, "for more detail)"),
+            searchable = TRUE, page_size = 10
+        ))
         cat("\n")
-    }
+    })
     cat(":::\n")
 }
 ```
@@ -1148,15 +1144,15 @@ cat(paste0("
 
 ```{r contributors, results='asis', echo=F, eval=!is.null(p$report_contributors)}
 contributors <- gsub("\n", "<br>", p$report_contributors, fixed = TRUE)
-contributors <- purrr::map_chr(simpleSplit(contributors, ";"), \(s) {
+contributors <- map_chr(simpleSplit(contributors, ";"), \(s) {
     splt <- simpleSplit(s, "<br>")
-    paste0("**", head(splt, 1), "**<br>", paste(tail(splt, -1), collapse = "<br>"))
+    paste0("**", first(splt), "**<br>", paste(splt[-1], collapse = "<br>"))
 })
-for (r in seq_along(contributors)) {
+iwalk(contributors, \(contributor, r) {
     if (r %% 2 == 1) cat("<div class='div-row'>")
-    cat(paste0("<div class='div-column'>", contributors[r], "</div>"))
+    cat(paste0("<div class='div-column'>", contributor, "</div>"))
     if (r %% 2 == 0 || r == length(contributors)) cat("</div>")
-}
+})
 ```
 
 ```{r load-data, echo=FALSE}
@@ -1193,15 +1189,15 @@ if (!"id" %in% colnames(contrasts)) {
 contrast_variables <- contrasts$variable[!is.na(contrasts$variable) & contrasts$variable != "" & !is.null(contrasts$variable)]
 informative_variables <- unique(c(contrast_variables, chooseGroupingVariables(observations)))
 # Drop variables that group observations the same way
-informative_variables <- informative_variables[!duplicated(purrr::map(
-    rlang::set_names(informative_variables),
+informative_variables <- informative_variables[!duplicated(map(
+    set_names(informative_variables),
     \(x) as.numeric(factor(observations[[x]], levels = unique(observations[[x]])))
 ))]
 
 assay_names <- simpleSplit(p$exploratory_assay_names)
 names(assay_names) <- assay_names
-assay_files <- purrr::map(assay_names, \(x) params[[paste0(x, "_matrix")]])
-assay_data  <- purrr::map(assay_files, \(x) {
+assay_files <- map(assay_names, \(x) params[[paste0(x, "_matrix")]])
+assay_data  <- map(assay_files, \(x) {
     mat <- na.omit(read_matrix(x, sample_metadata = observations, row.names = 1))
     colnames(mat) <- observations[[observations_name_col]][match(colnames(mat), rownames(observations))]
     mat
@@ -1209,14 +1205,14 @@ assay_data  <- purrr::map(assay_files, \(x) {
 
 log2_assays <- p$exploratory_log2_assays
 if (!is.null(log2_assays)) {
-    log2_assays <- gsub("\\]$", "", gsub("^\\[", "", log2_assays))
+    log2_assays <- str_remove_all(log2_assays, "^\\[|\\]$")
 }
 assay_data <- cond_log2_transform_assays(assay_data, log2_assays, prettify_names = FALSE)
 
 rownames(observations) <- observations[[observations_name_col]]
 
 # Run PCA early so we know how variables relate to components
-pca_datas <- purrr::map(rlang::set_names(names(assay_data)), \(a) compilePCAData(assay_data[[a]]))
+pca_datas <- map(set_names(names(assay_data)), \(a) compilePCAData(assay_data[[a]]))
 
 pca_vs_meta <- anova_pca_metadata(
     pca_datas[[p$exploratory_final_assay]]$coords,
@@ -1253,12 +1249,12 @@ differential_file_suffix <- p$differential_file_suffix
 if (is.null(differential_file_suffix)) {
     differential_file_suffix <- paste0(".", p$differential_method, ".results.tsv")
 }
-differential_files <- purrr::map(contrasts$id, \(d) {
+differential_files <- map(contrasts$id, \(d) {
     file.path(params$input_dir, paste0(gsub(" |;", "_", d), differential_file_suffix))
 })
 differential_names <- paste0(contrasts$id)
 
-results <- purrr::map(differential_files, \(diff_file) {
+results <- map(differential_files, \(diff_file) {
     if (!file.exists(diff_file)) stop(paste("Differential file", diff_file, "does not exist"))
 
     diff <- read_differential(
@@ -1299,13 +1295,13 @@ results <- purrr::map(differential_files, \(diff_file) {
     list(diff_features = merged, warnings = warnings)
 })
 
-differential_results <- purrr::map(results, "diff_features")
-warnings_list        <- purrr::list_c(purrr::map(results, "warnings"))
-names(differential_results) <- differential_names
+differential_results <- map(results, "diff_features") |>
+    set_names(differential_names)
+warnings_list <- list_c(map(results, "warnings"))
 ```
 
 ```{r differential-summary, echo=FALSE, warning=FALSE}
-contrast_descriptions <- purrr::map_chr(seq_len(nrow(contrasts)), name_contrast)
+contrast_descriptions <- map_chr(seq_len(nrow(contrasts)), name_contrast)
 
 p_value_types <- list(
     Adjusted   = p$differential_qval_column,
@@ -1316,21 +1312,23 @@ p_value_thresholds <- list(
     Unadjusted = p$differential_max_pval
 )
 
-sig_differential <- purrr::map(rlang::set_names(names(p_value_types)), \(pvt) {
-    diff <- purrr::map(seq_len(nrow(contrasts)), \(x) {
+sig_differential <- map(set_names(names(p_value_types)), \(pvt) {
+    map(seq_len(nrow(contrasts)), \(x) {
         de  <- differential_results[[x]]
         sig <- de[, p_value_types[[pvt]]] < p_value_thresholds[[pvt]]
         list(
             up   = de[which(de[, p$differential_fc_column] >  log2(p$differential_min_fold_change) & sig), ],
             down = de[which(de[, p$differential_fc_column] < log2(1 / p$differential_min_fold_change) & sig), ]
         )
-    })
-    names(diff) <- contrast_descriptions
-    diff
+    }) |>
+        set_names(contrast_descriptions)
 })
 
-differential_tables <- purrr::map(sig_differential, \(per_contrast) {
-    do.call(rbind, purrr::map(per_contrast, \(updown) purrr::map(updown, nrow)))
+differential_tables <- map(sig_differential, \(per_contrast) {
+    # rbind a list-of-lists into a matrix-of-singleton-lists; reactable
+    # accepts the shape and shows "up"/"down" columns per contrast.
+    counts <- map(per_contrast, \(updown) map(updown, nrow))
+    do.call(rbind, counts)
 })
 ```
 
@@ -1378,7 +1376,7 @@ contrasts_to_print <- contrasts
 colnames(contrasts_to_print) <- prettifyVariablename(colnames(contrasts_to_print))
 
 de_tool <- p$differential_method
-contrasts_to_print$model <- purrr::map_chr(contrasts_to_print$Id, \(id) {
+contrasts_to_print$model <- map_chr(contrasts_to_print$Id, \(id) {
     model_file <- paste0(id, ".", de_tool, ".model.txt")
     if (file.exists(model_file)) readLines(model_file, n = 1) else NA_character_
 })
@@ -1505,7 +1503,7 @@ render_upset_plots()
 ### Differential `{r} p$features_type` details
 
 ```{r de-details, echo=FALSE, results='asis', warning=FALSE, message=FALSE}
-for (i in seq_len(nrow(contrasts))) render_de_details(i)
+walk(seq_len(nrow(contrasts)), render_de_details)
 ```
 
 ```{r gene-set-analysis, echo=FALSE, results='asis', warning=FALSE, eval=!module_disabled("gsea")}
