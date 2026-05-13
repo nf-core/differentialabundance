@@ -2,7 +2,6 @@ lint:
   files_exist:
     - assets/multiqc_config.yml
   files_unchanged:
-    - .github/CONTRIBUTING.md
     - assets/nf-core-differentialabundance_logo_light.png
     - docs/images/nf-core-differentialabundance_logo_light.png
     - docs/images/nf-core-differentialabundance_logo_dark.png
@@ -14,7 +13,7 @@ lint:
         - params.citations_file
         - params.report_file
         - params.paramsheet
-nf_core_version: 3.5.1
+nf_core_version: 4.0.2
 repository_type: pipeline
 template:
   author: Oskar Wacker, Jonathan Manning
