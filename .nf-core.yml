@@ -2,7 +2,6 @@ lint:
   files_exist:
     - assets/multiqc_config.yml
   files_unchanged:
-    - .github/CONTRIBUTING.md
     - assets/nf-core-differentialabundance_logo_light.png
     - docs/images/nf-core-differentialabundance_logo_light.png
     - docs/images/nf-core-differentialabundance_logo_dark.png

@@ -1,0 +1,140 @@
+{
+    "Test propr/propd using default params": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "treatment_mCherry_hND6_",
+                        "variable": "treatment",
+                        "reference": "mCherry",
+                        "target": "hND6",
+                        "blocking": ""
+                    },
+                    "treatment_mCherry_hND6_.propd.genewise.tsv:md5,f59ac89d54c5c5c48469b40c90293043"
+                ]
+            ],
+            [
+                "versions.yml:md5,a6e655144d7d1d743781538442685666"
+            ],
+            "treatment_mCherry_hND6_.propd.genewise.png"
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.6"
+        },
+        "timestamp": "2025-10-29T13:18:33.094065"
+    },
+    "Test propr/propd when using Box-cox transformation": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "treatment_mCherry_hND6_",
+                        "variable": "treatment",
+                        "reference": "mCherry",
+                        "target": "hND6",
+                        "blocking": ""
+                    },
+                    "treatment_mCherry_hND6_.propd.genewise.tsv:md5,591cbee69aaeff2eb08be10b1709f5eb"
+                ]
+            ],
+            [
+                "versions.yml:md5,a6e655144d7d1d743781538442685666"
+            ],
+            "treatment_mCherry_hND6_.propd.genewise.png"
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.6"
+        },
+        "timestamp": "2025-10-29T13:19:24.03108"
+    },
+    "Test propr/propd when using permutation tests": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "treatment_mCherry_hND6_",
+                        "variable": "treatment",
+                        "reference": "mCherry",
+                        "target": "hND6",
+                        "blocking": ""
+                    },
+                    "treatment_mCherry_hND6_.propd.genewise.tsv:md5,f59ac89d54c5c5c48469b40c90293043"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "treatment_mCherry_hND6_",
+                        "variable": "treatment",
+                        "reference": "mCherry",
+                        "target": "hND6",
+                        "blocking": ""
+                    },
+                    "treatment_mCherry_hND6_.propd.fdr.tsv:md5,dca61ef4ab98984c2dcd884ce85feef8"
+                ]
+            ],
+            [
+                "versions.yml:md5,a6e655144d7d1d743781538442685666"
+            ],
+            "treatment_mCherry_hND6_.propd.genewise.png"
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.6"
+        },
+        "timestamp": "2025-10-29T13:20:49.704914"
+    },
+    "Test propr/propd when saving all outputs": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "treatment_mCherry_hND6_",
+                        "variable": "treatment",
+                        "reference": "mCherry",
+                        "target": "hND6",
+                        "blocking": ""
+                    },
+                    "treatment_mCherry_hND6_.propd.genewise.tsv:md5,f59ac89d54c5c5c48469b40c90293043"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "treatment_mCherry_hND6_",
+                        "variable": "treatment",
+                        "reference": "mCherry",
+                        "target": "hND6",
+                        "blocking": ""
+                    },
+                    "treatment_mCherry_hND6_.propd.pairwise.tsv:md5,ff79479ea826c54aa178b0376784cbf1"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "treatment_mCherry_hND6_",
+                        "variable": "treatment",
+                        "reference": "mCherry",
+                        "target": "hND6",
+                        "blocking": ""
+                    },
+                    "treatment_mCherry_hND6_.propd.pairwise_filtered.tsv:md5,9473f045ca1acfe1f9d6138528f743d1"
+                ]
+            ],
+            null,
+            [
+                "versions.yml:md5,a6e655144d7d1d743781538442685666"
+            ],
+            "treatment_mCherry_hND6_.propd.genewise.png",
+            "treatment_mCherry_hND6_.propd.rds"
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.6"
+        },
+        "timestamp": "2025-10-29T13:21:30.746294"
+    }
+}

@@ -1,0 +1,12 @@
+contrasts:
+  - id: full_model_with_interactions
+    formula: "~ genotype * treatment * time"
+    make_contrasts_str: "genotypeWT.treatmentTreated.time"
+
+  - id: zero_intercept_model_1
+    formula: "~ 0 + genotype"
+    make_contrasts_str: "genotypeWT"
+
+  - id: zero_intercept_model_2
+    formula: "~ genotype - 1"
+    make_contrasts_str: "genotypeWT"

@@ -1,0 +1,103 @@
+{
+    "Test soft profile": {
+        "content": [
+            10,
+            {
+                "CUSTOM_FILTERDIFFERENTIALTABLE": {
+                    "pandas": "1.5.2",
+                    "python": "3.11.15"
+                },
+                "CUSTOM_MATRIXFILTER": {
+                    "r-base": "4.2.1"
+                },
+                "GEOQUERY_GETGEO": {
+                    "r-base": "4.3.2",
+                    "bioconductor-geoquery": "2.70.0"
+                },
+                "LIMMA_DIFFERENTIAL": {
+                    "r-base": "4.3.3",
+                    "bioconductor-limma": "3.58.1"
+                },
+                "PLOT_DIFFERENTIAL": {
+                    "shinyngs": "2.4.0"
+                },
+                "PLOT_EXPLORATORY": {
+                    "shinyngs": "2.4.0"
+                },
+                "SHINYNGS_APP": {
+                    "shinyngs": "2.4.0"
+                },
+                "VALIDATOR": {
+                    "shinyngs": "2.4.0"
+                },
+                "Workflow": {
+                    "nf-core/differentialabundance": "v1.6.0dev"
+                }
+            },
+            [
+                "other",
+                "other/affy",
+                "other/affy/soft",
+                "other/affy/soft/normalised.eset.rds",
+                "other/limma",
+                "other/limma/soft",
+                "other/limma/soft/phenotype_uninvolved_lesional_study.MArrayLM.limma.rds",
+                "other/limma/soft/phenotype_uninvolved_lesional_study.R_sessionInfo.log",
+                "pipeline_info",
+                "pipeline_info/collated_versions.yml",
+                "pipeline_info/nf_core_differentialabundance_software_versions.yml",
+                "plots",
+                "plots/differential",
+                "plots/differential/soft",
+                "plots/differential/soft/phenotype_uninvolved_lesional_study",
+                "plots/differential/soft/phenotype_uninvolved_lesional_study/png",
+                "plots/differential/soft/phenotype_uninvolved_lesional_study/png/volcano.png",
+                "plots/exploratory",
+                "plots/exploratory/soft",
+                "plots/exploratory/soft/phenotype",
+                "plots/exploratory/soft/phenotype/png",
+                "plots/exploratory/soft/phenotype/png/boxplot.png",
+                "plots/exploratory/soft/phenotype/png/density.png",
+                "plots/exploratory/soft/phenotype/png/mad_correlation.png",
+                "plots/exploratory/soft/phenotype/png/pca2d.png",
+                "plots/exploratory/soft/phenotype/png/pca3d.png",
+                "plots/exploratory/soft/phenotype/png/sample_dendrogram.png",
+                "plots/qc",
+                "plots/qc/soft",
+                "plots/qc/soft/phenotype_uninvolved_lesional_study.limma.mean_difference.png",
+                "report",
+                "report/soft",
+                "report/soft/study.zip",
+                "report/soft/study_differentialabundance_report.html",
+                "shinyngs_app",
+                "shinyngs_app/soft",
+                "shinyngs_app/soft/study",
+                "shinyngs_app/soft/study/app.R",
+                "shinyngs_app/soft/study/data.rds",
+                "tables",
+                "tables/annotation",
+                "tables/annotation/soft",
+                "tables/annotation/soft/normalised.annotation.tsv",
+                "tables/differential",
+                "tables/differential/soft",
+                "tables/differential/soft/phenotype_uninvolved_lesional_study.limma.results.tsv",
+                "tables/differential/soft/phenotype_uninvolved_lesional_study.limma.results_filtered.tsv",
+                "tables/processed_abundance",
+                "tables/processed_abundance/soft",
+                "tables/processed_abundance/soft/normalised.matrix.tsv"
+            ],
+            [
+                "normalised.eset.rds:md5,75f2a9015741c00482bca7a8dbcf99d4",
+                "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
+                "normalised.annotation.tsv:md5,40300ae222ae35fa54daf10a1b86e830",
+                "normalised.matrix.tsv:md5,cf90af62c645d4e7d4b4e4fc69b83f72"
+            ]
+        ],
+        "timestamp": "2026-05-04T22:41:59.086844696",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        },
+        "timestamp": "2026-05-04T00:13:48.491822859"
+    }
+}

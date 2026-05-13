@@ -1,0 +1,19 @@
+Changes in component 'nf-core/zip'
+'modules/nf-core/zip/environment.yml' is unchanged
+'modules/nf-core/zip/meta.yml' is unchanged
+Changes in 'zip/main.nf':
+--- modules/nf-core/zip/main.nf
++++ modules/nf-core/zip/main.nf
+@@ -12,7 +12,7 @@
+ 
+     output:
+     tuple val(meta), path("${prefix}.zip"), emit: zipped_archive
+-    tuple val("${task.process}"), val('zip'), eval("7za i 2>&1 | grep 'p7zip Version' | sed 's/.*p7zip Version //; s/(.*//'"), emit: versions_zip, topic: versions
++    tuple val("${task.process}"), val('zip'), eval("7za i 2>&1 | grep 'p7zip Version' | sed 's/.*p7zip Version //; s/(.*//'"), emit: versions_zip
+ 
+     when:
+     task.ext.when == null || task.ext.when
+
+'modules/nf-core/zip/tests/main.nf.test' is unchanged
+'modules/nf-core/zip/tests/main.nf.test.snap' is unchanged
+************************************************************
