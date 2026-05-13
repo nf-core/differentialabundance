@@ -275,6 +275,30 @@ When provided, this value is passed to supported stochastic methods, currently i
 
 If `--seed` is left unset (the default), the pipeline does not set a seed for these methods, so stochastic steps may remain non-deterministic.
 
+## Mixed-effects models with DREAM
+
+When your design has repeated measurements on the same biological unit (e.g. multiple samples per donor, technical replicates within subjects, time-course on the same individuals), the assumption of independent observations that DESeq2 and standard Limma rely on is violated. The pipeline supports DREAM (from the `variancePartition` R package), which extends Limma's linear-modelling framework with random effects so that within-subject correlation can be modelled explicitly.
+
+To run DREAM, select one of the dedicated profiles:
+
+- `-profile rnaseq_dream` for raw RNA-seq counts (voom transformation applied within the module).
+- `-profile generic_matrix_dream` for a pre-scaled abundance matrix.
+
+These profiles set `differential_method = 'dream'` and apply DREAM-specific defaults; do not override `--differential_method` on the command line.
+
+Random effects are specified inside the [YAML contrasts file](#yaml-contrasts-file-format) using the `formula` field, with `(1 | variable)` syntax following `lme4` conventions. For example, with a `donor` column in the samplesheet:
+
+```yaml
+contrasts:
+  - id: condition_control_treated
+    formula: "~ condition + (1 | donor)"
+    make_contrasts_str: "conditiontreated"
+```
+
+DREAM-specific parameters (`--dream_p_value`, `--dream_lfc`, `--dream_ddf`, `--dream_reml`, `--dream_apply_voom`, `--dream_adjust_method`, and others) control p-value adjustment, effect-size thresholds, the degrees-of-freedom approximation, REML vs ML fitting, and whether voom is applied. See the [parameters page](https://nf-co.re/differentialabundance/parameters) (the "Differential dream specific options" section) for the full list and defaults.
+
+For background on the method, see the [DREAM paper (Hoffman & Roussos 2021)](https://pubmed.ncbi.nlm.nih.gov/32730587/) and the upstream [variancePartition documentation](https://bioconductor.org/packages/release/bioc/html/variancePartition.html).
+
 ## Analysis modes
 
 The pipeline supports two modes of operation, each with well-defined parameter precedence rules:
@@ -504,7 +528,7 @@ This tool is turned off by default, the following example shows how to enable it
 
 Decoupler needs a matrix (mat) of molecular readouts (gene expression, logFC, p-values, etc.) and a network (net) that relates target features (genes, proteins, etc.) to “source” biological entities (pathways, transcription factors, molecular processes, etc.).
 
-- The matrix will be taken from the results of the differential expression analysis performed by DESeq2, limma, propr, or variancePartition.
+- The matrix will be taken from the results of the differential expression analysis performed by DESeq2, Limma, or DREAM (variancePartition).
 
 - The network file must be provided explicitly via the '--decoupler_network' parameter. This file should be in long format and contain at least the source and target columns, with optional weight and sign columns describing the strength and direction of each interaction.
 
@@ -532,7 +556,7 @@ You can obtain regulatory networks from well-established databases and tools. Co
 
 If you want to see the full list of available methods and functions, refer to the function's [official guide](https://decoupler-py.readthedocs.io/en/latest/notebooks/benchmark.html#Multiple-networks).
 
-**Note**: Then resources mentioned above are provided only for human or mouse datasets. Please ensure your organism is compatible before enabling this module or provide a custom, species-specific dataset.
+**Note**: These resources mentioned above are provided only for human or mouse datasets. Please ensure your organism is compatible before enabling this module or provide a custom, species-specific dataset.
 
 ## Running the pipeline
 

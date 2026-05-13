@@ -97,6 +97,7 @@ workflow PIPELINE_INITIALISATION {
         ? getParamsheetConfigurations()
         : getDefaultConfigurations()
     paramsets = validateConfigurations(configurations)
+        .collect { paramset -> addDifferentialRuntimeParams(paramset) }
     ch_paramsets = Channel.fromList(paramsets)
         .map { paramset -> [
             id: paramset.study_name,
@@ -166,6 +167,50 @@ workflow PIPELINE_COMPLETION {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 //
+// Per-method DISPLAY columns stamped into meta.params at paramset-parse
+// time, used downstream by report.qmd, shinyngs and the output DSL.
+// FILTER columns are owned separately by the abundance_differential_filter
+// subworkflow's getDifferentialMethodParams (deliberately different for
+// propd: `significant` is the filter column, `rcDdis` is the display score).
+def getDifferentialMethodRuntimeParams(differential_method) {
+    def runtime_params = [
+        'deseq2': [
+            differential_fc_column         : 'log2FoldChange',
+            differential_pval_column       : 'pvalue',
+            differential_qval_column       : 'padj',
+            differential_foldchanges_logged: true
+        ],
+        'limma' : [
+            differential_fc_column         : 'logFC',
+            differential_pval_column       : 'P.Value',
+            differential_qval_column       : 'adj.P.Val',
+            differential_foldchanges_logged: true
+        ],
+        'propd' : [
+            differential_fc_column         : 'LFC',
+            differential_pval_column       : 'rcDdis',
+            differential_qval_column       : 'rcDdis',
+            differential_foldchanges_logged: true
+        ],
+        'dream' : [
+            differential_fc_column         : 'logFC',
+            differential_pval_column       : 'P.Value',
+            differential_qval_column       : 'adj.P.Val',
+            differential_foldchanges_logged: true
+        ]
+    ][differential_method]
+
+    runtime_params ?: [:]
+}
+
+def addDifferentialRuntimeParams(paramset) {
+    def runtime_params = getDifferentialMethodRuntimeParams(paramset.differential_method)
+    def missing_runtime_params = runtime_params.findAll { key, _value ->
+        !paramset.containsKey(key)
+    }
+    paramset + missing_runtime_params
+}
+
 // Check and validate pipeline parameters
 //
 def validateInputParameters(paramsets) {
@@ -186,8 +231,8 @@ def validateInputParameters(paramsets) {
                 error("CEL files archive not specified for paramset={${row.paramset_name}}!")
             }
         } else if (row.study_type == 'maxquant') {
-            if (row.functional_method) {
-                error("Functional analysis is not yet possible with maxquant input data; please set --functional_method to null and rerun pipeline!")
+            if (row.functional_method && row.functional_method != 'none') {
+                error("Functional analysis is not yet possible with maxquant input data; please set --functional_method to 'none' and rerun pipeline!")
             }
             if (!row.matrix) {
                 error("Input matrix not specified for paramset={${row.paramset_name}}!")
@@ -203,7 +248,7 @@ def validateInputParameters(paramsets) {
         }
 
         // Validate functional analysis parameters
-        if (row.functional_method) {
+        if (row.functional_method && row.functional_method != 'none') {
             if (row.functional_method == 'gsea' && !row.gene_sets_files) {
                 error("GSEA activated but gene set file not specified for paramset={${row.paramset_name}}!")
             } else if (row.functional_method == 'gprofiler2') {
@@ -366,8 +411,8 @@ def validateConfigurations(configurations) {
             // Validate against schema
             validate(notnullparams, "${projectDir}/nextflow_schema.json")
         } catch (e) {
-            // if validation fails, print error message and exit
-            println("Validation failed for paramsheet row: ${paramset.paramset_name}. Error: ${e.message}")
+            // Surface the paramset name; nf-schema will then produce a detailed error.
+            log.error "Validation failed for paramsheet row: ${paramset.paramset_name}"
             validate(notnullparams, "${projectDir}/nextflow_schema.json")
         }
 
@@ -597,6 +642,17 @@ def getRelevantParams(paramset, category) {
                     }
                 }
             }
+        }
+    }
+
+    [
+        'differential_fc_column',
+        'differential_pval_column',
+        'differential_qval_column',
+        'differential_foldchanges_logged'
+    ].each { paramName ->
+        if (paramset.containsKey(paramName)) {
+            relevantParams[paramName] = paramset[paramName]
         }
     }
 
