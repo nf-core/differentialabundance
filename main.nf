@@ -320,7 +320,7 @@ output {
                 rdata                      : "other/${meta.params.differential_method}",
                 session_info               : "other/${meta.params.differential_method}"
             ][name] ?: name
-            file >> "${folder}/${meta.paramset_name}/"
+            return "${folder}/${meta.paramset_name}/"
         }
     }
     functional {
@@ -380,22 +380,22 @@ output {
                 exploratory           : 'plots/exploratory',
                 differential_volcanos : 'plots/differential',
             ][name] ?: name
-            file >> "${folder}/${meta.paramset_name}/"
+            return "${folder}/${meta.paramset_name}/"
         }
     }
     shinyngs {
         path { name, meta, file ->
-            file >> "shinyngs_app/${meta.paramset_name}/"
+            return "shinyngs_app/${meta.paramset_name}/"
         }
     }
     report {
         path { name, meta, file ->
-            file >> "report/${meta.paramset_name}/"
+            return "report/${meta.paramset_name}/"
         }
     }
     versions {
         path { name, meta, file ->
-            file >> "pipeline_info/"
+            return "pipeline_info/"
         }
     }
 }

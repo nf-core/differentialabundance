@@ -70,7 +70,7 @@ workflow PIPELINE_INITIALISATION {
     https://github.com/nf-core/differentialabundance/blob/master/CITATIONS.md
 """
     if (monochrome_logs) {
-        before_text = before_text.replaceAll(/\033\[[0-9;]*m/, '')
+        before_text = before_text.replaceAll('\\u001b\\[[0-9;]*m', '')
     }
 
     command = "nextflow run ${workflow.manifest.name} -profile <docker/singularity/.../institute> --input samplesheet.csv --outdir <OUTDIR>"
@@ -483,8 +483,8 @@ def loadYaml(yaml_path) {
 
     // Substitute ${projectDir} with actual value
     // alternative ways? This can be fragile
-    yaml_content = yaml_content.replaceAll(/\$\{projectDir\}/, projectDir.toString())
-    yaml_content = yaml_content.replaceAll(/\$projectDir/, projectDir.toString())
+    yaml_content = yaml_content.replaceAll('\\$\\{projectDir\\}', projectDir.toString())
+    yaml_content = yaml_content.replaceAll('\\$projectDir', projectDir.toString())
 
     // Parse yaml content
     def yaml_parser = new org.yaml.snakeyaml.Yaml()
