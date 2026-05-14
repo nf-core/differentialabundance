@@ -1274,22 +1274,29 @@ results <- map(differential_files, \(diff_file) {
     }
 
     if (features_provided) {
-        merged <- merge(features, diff,
-                        by.x = p$features_id_col,
-                        by.y = p$differential_feature_id_column)
-        n_missing <- length(setdiff(diff[[p$differential_feature_id_column]], merged[[p$features_id_col]]))
+        merged <- features |>
+            inner_join(diff,
+                       by = set_names(p$differential_feature_id_column,
+                                      p$features_id_col))
         warnings <- c(
-            if (n_missing > 0) {
-                sprintf('<p style="color:#DAA520;"><strong>WARNING:</strong> %d IDs from the differential table (%s) were lost on merge with features table (%s).</p>',
-                        n_missing, basename(diff_file), basename(params$features))
-            },
             if (nrow(merged) < nrow(diff)) {
-                sprintf('<p style="color:#DAA520;"><strong>WARNING:</strong> Rows were lost on merge (%s -> %s). Original: %d, Merged: %d.</p>',
-                        basename(diff_file), basename(params$features), nrow(diff), nrow(merged))
+                sprintf(
+                    paste0('<p style="color:#DAA520;"><strong>Note:</strong> ',
+                           '%d of %d features in <code>%s</code> had no matching entry in the annotation table ',
+                           '(<code>%s</code>) and were excluded from this section of the report. ',
+                           'This is expected when the annotation source does not cover every ID in the matrix; ',
+                           'the underlying differential table on disk is unchanged.</p>'),
+                    nrow(diff) - nrow(merged), nrow(diff),
+                    basename(diff_file), basename(params$features))
             },
             if (nrow(merged) > nrow(diff)) {
-                sprintf('<p style="color:#DAA520;"><strong>WARNING:</strong> Rows were duplicated on merge (%s -> %s). Original: %d, Merged: %d.</p>',
-                        basename(diff_file), basename(params$features), nrow(diff), nrow(merged))
+                sprintf(
+                    paste0('<p style="color:#DAA520;"><strong>Warning:</strong> ',
+                           'Merging <code>%s</code> with the annotation table (<code>%s</code>) produced more rows than ',
+                           'the differential table (%d &rarr; %d). The annotation file likely contains duplicate entries ',
+                           'for the same feature ID; consider deduplicating it.</p>'),
+                    basename(diff_file), basename(params$features),
+                    nrow(diff), nrow(merged))
             }
         )
     } else {
@@ -1380,20 +1387,17 @@ Comparisons were made between `{r} p$observations_type` groups defined using
 `{r} p$observations_type` metadata columns, as described in the following table of contrasts:
 
 ```{r contrasts-table, echo=FALSE}
-contrasts_to_print <- contrasts
+# `read_metadata` writes the literal string "null" for empty cells in addition
+# to NA, so blank them both before rendering.
+contrasts_to_print <- contrasts |>
+    mutate(across(where(is.character), \(x) replace_na(na_if(x, "null"), "")))
 colnames(contrasts_to_print) <- prettifyVariablename(colnames(contrasts_to_print))
-
-de_tool <- p$differential_method
-contrasts_to_print$model <- map_chr(contrasts_to_print$Id, \(id) {
-    model_file <- paste0(id, ".", de_tool, ".model.txt")
-    if (file.exists(model_file)) readLines(model_file, n = 1) else NA_character_
-})
 
 captioned_table(
     contrasts_to_print,
     caption = "Table of contrasts",
     pagination = nrow(contrasts_to_print) > 10,
-    full_width = FALSE,
+    full_width = TRUE,
     columns = list(
         Id = reactable::colDef(minWidth = 350, style = list(wordBreak = "break-word"))
     )
