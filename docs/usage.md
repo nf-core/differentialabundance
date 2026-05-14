@@ -17,6 +17,16 @@ With the above in mind, running this workflow requires:
 - a description of the features, for our initial RNA-seq application this can be simply the GTF file from which gene annotations can be derived. For Affymetrix arrays this can be derived from the array platform annotation package automatically. Skip for MaxQuant. You can also supply your own table.
 - a specification of how the matrix should be split, and how the resulting groups should be compared
 
+### Quick start with the test profile
+
+Before configuring your own inputs, you can run the bundled test profile end-to-end against a small public RNA-seq dataset to verify that the pipeline works on your system:
+
+```bash
+nextflow run nf-core/differentialabundance -profile test,docker --outdir test_results
+```
+
+Substitute `docker` for `singularity`, `podman`, or another supported container engine as appropriate for your environment. The run completes in a couple of minutes on a modest workstation and writes results, including the rendered Quarto report, under `test_results/`.
+
 ## Observations (samplesheet) input
 
 ```bash
