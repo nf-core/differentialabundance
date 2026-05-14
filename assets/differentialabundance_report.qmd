@@ -734,10 +734,10 @@ render_de_count_tables <- function() {
 render_upset_plots <- function() {
     if (nrow(contrasts) <= 1) return(invisible())
 
+    cat("\n### Upset plot\n\n")
     cat("::: {.panel-tabset}")
     walk(names(p_value_types), \(pvt) {
         cat("\n#### ", pvt, "\n")
-        cat("\n### Upset plot\n\n")
 
         de_genes <- map(differential_results, \(de) {
             label_col <- de_label_col(de)
@@ -918,7 +918,7 @@ render_biotype_plot <- function(combined) {
         theme_minimal() +
         theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-    print(biotype_plot)
+    print(htmltools::tagList(plotly::ggplotly(biotype_plot)))
     cat("\n")
 }
 
