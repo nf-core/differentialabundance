@@ -586,6 +586,7 @@ If you want to see the full list of available methods and functions, refer to th
 ```bash
 --differential_method propd \
 --functional_method grea \
+--propd_save_adjacency true \
 --gene_sets_files gene_sets.gmt
 ```
 

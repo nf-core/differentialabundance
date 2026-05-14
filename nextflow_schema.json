@@ -879,18 +879,22 @@
                 },
                 "propd_save_pairwise": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Save the table of significant pairwise statistics."
                 },
                 "propd_save_pairwise_full": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Save the full table of pairwise statistics (very large)."
                 },
                 "propd_save_adjacency": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Save the gene-by-gene adjacency matrix. Must be set to true when pairing propd with `--functional_method grea`, which consumes the adjacency."
                 },
                 "propd_save_rdata": {
                     "type": "boolean",
+                    "default": false,
                     "description": "Save the propd object as an RDS file."
                 }
             }
