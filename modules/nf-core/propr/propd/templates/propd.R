@@ -657,12 +657,12 @@ if (nrow(results_genewise) > 0) {
 }
 
 # save main results - genewise
-# LOCAL PATCH (pending upstream fix in nf-core/modules propr/propd):
-# move gene IDs from rownames into an explicit features_id_col column so the
-# resulting TSV has a properly aligned header for downstream csvtk join.
-# Guard against the empty-results branch, where the data frame is already
-# constructed with features_id_col as a regular column - applying the cbind
-# unconditionally there would emit two columns sharing that name.
+# Move gene IDs from rownames into an explicit features_id_col column so the
+# resulting TSV has a header aligned with the data rows (otherwise the first
+# row has one more field than the header line). The empty-results branch
+# above (when no significant theta is found) already builds the data frame
+# with features_id_col as a regular column, so only run the rewrite when it
+# isn't there yet - otherwise we would emit two columns with that name.
 results_genewise <- as.data.frame(results_genewise)
 if (!(opt\$features_id_col %in% colnames(results_genewise))) {
     results_genewise <- cbind(

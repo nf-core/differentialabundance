@@ -87,9 +87,8 @@
                     },
                     "propr/propd": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["abundance_differential_filter"],
-                        "patch": "modules/nf-core/propr/propd/propr-propd.diff"
+                        "git_sha": "ff147c37ffff4b7d1a446acee2ec3daead3af97f",
+                        "installed_by": ["abundance_differential_filter"]
                     },
                     "proteus/readproteingroups": {
                         "branch": "master",
@@ -144,7 +143,7 @@
                 "nf-core": {
                     "abundance_differential_filter": {
                         "branch": "master",
-                        "git_sha": "29275f81931d00665cf8ee6ef81f3dfabe270217",
+                        "git_sha": "ff147c37ffff4b7d1a446acee2ec3daead3af97f",
                         "installed_by": ["subworkflows"]
                     },
                     "differential_functional_enrichment": {
