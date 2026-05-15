@@ -8,8 +8,8 @@ pip install 'git+https://github.com/pinin4fjords/nf-metro.git@differentialabunda
 # Static SVG + PNG
 nf-metro render assets/metro_map.mmd \
   -o docs/images/nf-core-differentialabundance_metro_map.svg \
-  --theme light --x-spacing 60 --y-spacing 40 \
-  --no-straight-diamonds \
+  --theme light --x-spacing 70 --y-spacing 55 \
+  --no-straight-diamonds --line-order definition --center-ports \
   --logo docs/images/nf-core-differentialabundance_logo_light.png
 
 python -c "import cairosvg; cairosvg.svg2png(
@@ -19,8 +19,8 @@ python -c "import cairosvg; cairosvg.svg2png(
 # Animated SVG (used in README)
 nf-metro render assets/metro_map.mmd \
   -o docs/images/nf-core-differentialabundance_metro_map_animated.svg \
-  --theme light --x-spacing 60 --y-spacing 40 --animate \
-  --no-straight-diamonds \
+  --theme light --x-spacing 70 --y-spacing 55 --animate \
+  --no-straight-diamonds --line-order definition --center-ports \
   --logo docs/images/nf-core-differentialabundance_logo_light.png
 
 # Ensure trailing newlines on SVGs (required by pre-commit)
