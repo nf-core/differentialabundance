@@ -309,6 +309,27 @@ DREAM-specific parameters (`--dream_p_value`, `--dream_lfc`, `--dream_ddf`, `--d
 
 For background on the method, see the [DREAM paper (Hoffman & Roussos 2021)](https://pubmed.ncbi.nlm.nih.gov/32730587/) and the upstream [variancePartition documentation](https://bioconductor.org/packages/release/bioc/html/variancePartition.html).
 
+## Differential proportionality with propd
+
+[propd](https://github.com/tpq/propr) tests for differential proportionality between groups in compositional data. It is normalization-free (it operates on raw counts via log-ratios) and emits a different set of result columns to DESeq2/limma/DREAM:
+
+- `LFC` - log2 fold-change between groups (per-gene log-ratio mean), used as the effect-size column.
+- `rcDdis` - reverse cumulative degree distribution; bounded `[0, 1]`. Used as the display p-value / q-value column in pipeline reports.
+- `significant` - 0/1 indicator derived internally from the propd FDR threshold, used as the filter column.
+
+Because propd's LFC is computed against a per-gene reference rather than condition-vs-condition, the global `differential_min_fold_change` default (2.0) tends to read strict for propd; the `rnaseq_propd` profile lowers this to 1.5.
+
+To run propd, select one of the dedicated profiles:
+
+- `-profile rnaseq_propd` for raw RNA-seq counts (propd only).
+- `-profile rnaseq_propd_grea` to pair propd with the `grea` gene set enrichment counterpart (see [grea](#grea) under Gene set enrichment analysis).
+
+These profiles set `differential_method = 'propd'` and apply propd-specific defaults; do not override `--differential_method` on the command line.
+
+propd does not produce a normalised matrix, so downstream plots and reports operate on the raw assay only.
+
+propd-specific parameters (`--propd_alpha`, `--propd_moderated`, `--propd_fdr`, `--propd_permutation`, `--propd_number_of_cutoffs`, `--propd_save_pairwise`, `--propd_save_pairwise_full`, `--propd_save_adjacency`, `--propd_save_rdata`) control the Box-Cox transformation, theta moderation, FDR threshold and estimation method, and which intermediates are persisted. See the [parameters page](https://nf-co.re/differentialabundance/parameters) for the full list and defaults.
+
 ## Analysis modes
 
 The pipeline supports two modes of operation, each with well-defined parameter precedence rules:
@@ -567,6 +588,25 @@ You can obtain regulatory networks from well-established databases and tools. Co
 If you want to see the full list of available methods and functions, refer to the function's [official guide](https://decoupler-py.readthedocs.io/en/latest/notebooks/benchmark.html#Multiple-networks).
 
 **Note**: These resources mentioned above are provided only for human or mouse datasets. Please ensure your organism is compatible before enabling this module or provide a custom, species-specific dataset.
+
+### grea
+
+[grea](https://github.com/tpq/propr) (Graph Reverse-Engineered Enrichment Analysis) is the gene set enrichment counterpart to the [propd](#differential-proportionality-with-propd) differential method, implemented in the [propr](https://github.com/tpq/propr) R package. Unlike GSEA / gProfiler2 / Decoupler, which consume per-gene differential statistics, grea consumes the gene-by-gene **adjacency matrix** produced by propd, so it can only be combined with `--differential_method propd`.
+
+```bash
+--differential_method propd \
+--functional_method grea \
+--propd_save_adjacency true \
+--gene_sets_files gene_sets.gmt
+```
+
+For convenience the pipeline also provides bundled profiles:
+
+```bash
+nextflow run nf-core/differentialabundance -profile rnaseq_propd_grea,docker ...
+```
+
+Key parameters: `--grea_set_min` and `--grea_set_max` bound gene set sizes; `--grea_permutation` controls the number of permutations used to estimate significance. See the [parameter reference](https://nf-co.re/differentialabundance/parameters) for the full list of `propd_*` and `grea_*` options.
 
 ## Running the pipeline
 
