@@ -3,16 +3,14 @@
 The pipeline overview metro map is generated from `assets/metro_map.mmd` using [nf-metro](https://github.com/pinin4fjords/nf-metro). If you add or rename pipeline steps, update the `.mmd` source and regenerate the images:
 
 ```bash
-# Pinned to the `differentialabundance` branch of pinin4fjords/nf-metro until
-# the layout fix stack (PRs #283-#305) is integrated upstream and released.
 pip install 'git+https://github.com/pinin4fjords/nf-metro.git@differentialabundance' cairosvg
 
 # Static SVG + PNG
 nf-metro render assets/metro_map.mmd \
   -o docs/images/nf-core-differentialabundance_metro_map.svg \
-  --theme nfcore --x-spacing 70 --y-spacing 55 \
-  --no-straight-diamonds --line-order definition --center-ports \
-  --logo docs/images/nf-core-differentialabundance_logo_dark.png
+  --theme light --x-spacing 60 --y-spacing 40 \
+  --no-straight-diamonds \
+  --logo docs/images/nf-core-differentialabundance_logo_light.png
 
 python -c "import cairosvg; cairosvg.svg2png(
     url='docs/images/nf-core-differentialabundance_metro_map.svg',
@@ -21,9 +19,9 @@ python -c "import cairosvg; cairosvg.svg2png(
 # Animated SVG (used in README)
 nf-metro render assets/metro_map.mmd \
   -o docs/images/nf-core-differentialabundance_metro_map_animated.svg \
-  --theme nfcore --x-spacing 70 --y-spacing 55 --animate \
-  --no-straight-diamonds --line-order definition --center-ports \
-  --logo docs/images/nf-core-differentialabundance_logo_dark.png
+  --theme light --x-spacing 60 --y-spacing 40 --animate \
+  --no-straight-diamonds \
+  --logo docs/images/nf-core-differentialabundance_logo_light.png
 
 # Ensure trailing newlines on SVGs (required by pre-commit)
 for f in docs/images/nf-core-differentialabundance_metro_map.svg \
