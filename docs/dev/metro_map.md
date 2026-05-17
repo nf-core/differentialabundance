@@ -3,7 +3,7 @@
 The pipeline overview metro map is generated from `assets/metro_map.mmd` using [nf-metro](https://github.com/pinin4fjords/nf-metro). If you add or rename pipeline steps, update the `.mmd` source and regenerate the images:
 
 ```bash
-pip install 'git+https://github.com/pinin4fjords/nf-metro.git@differentialabundance' cairosvg
+pip install 'nf-metro>=0.7.0' cairosvg
 
 # Static SVG + PNG
 nf-metro render assets/metro_map.mmd \
