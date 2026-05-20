@@ -128,7 +128,7 @@
                     },
                     "variancepartition/dream": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "git_sha": "77a353f5f9a174e9ddfc6aa4846d1e51ed0bdfd9",
                         "installed_by": ["abundance_differential_filter", "modules"]
                     },
                     "zip": {
@@ -143,7 +143,7 @@
                 "nf-core": {
                     "abundance_differential_filter": {
                         "branch": "master",
-                        "git_sha": "ff147c37ffff4b7d1a446acee2ec3daead3af97f",
+                        "git_sha": "77a353f5f9a174e9ddfc6aa4846d1e51ed0bdfd9",
                         "installed_by": ["subworkflows"]
                     },
                     "differential_functional_enrichment": {
