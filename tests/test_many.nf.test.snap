@@ -94,7 +94,7 @@
                     "variancePartition": "1.32.2"
                 },
                 "Workflow": {
-                    "nf-core/differentialabundance": "v1.6.0dev"
+                    "nf-core/differentialabundance": "v2.0.0"
                 }
             },
             [
@@ -417,10 +417,10 @@
                 "GSM1229348_Gudjohnsson_008_8470_PN.CEL.gz:md5,ec5129e035badf3b670178d53e24f0cc"
             ]
         ],
+        "timestamp": "2026-05-21T21:10:35.95634764",
         "meta": {
-            "nf-test": "0.9.3",
+            "nf-test": "0.9.5",
             "nextflow": "26.04.1"
-        },
-        "timestamp": "2026-05-20T23:13:23.241432114"
+        }
     }
 }

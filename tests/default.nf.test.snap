@@ -52,7 +52,7 @@
                     "shinyngs": "2.4.0"
                 },
                 "Workflow": {
-                    "nf-core/differentialabundance": "v1.6.0dev"
+                    "nf-core/differentialabundance": "v2.0.0"
                 }
             },
             [
@@ -194,12 +194,11 @@
                 "all.vst.tsv:md5,cba6236668ad089ba9bbaa9801d5b329"
             ]
         ],
-        "timestamp": "2026-05-04T21:04:05.17716763",
+        "timestamp": "2026-05-21T20:51:08.409353085",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-04-29T20:38:23.748749137"
+            "nextflow": "26.04.1"
+        }
     },
     "Test profile": {
         "content": [
@@ -254,7 +253,7 @@
                     "shinyngs": "2.4.0"
                 },
                 "Workflow": {
-                    "nf-core/differentialabundance": "v1.6.0dev"
+                    "nf-core/differentialabundance": "v2.0.0"
                 }
             },
             [
@@ -396,12 +395,11 @@
                 "all.vst.tsv:md5,ae82509f76ed01ad0d041d1a62aef703"
             ]
         ],
-        "timestamp": "2026-05-04T20:53:17.584714169",
+        "timestamp": "2026-05-21T20:44:51.256248409",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-04-29T20:32:19.619669103"
+            "nextflow": "26.04.1"
+        }
     },
     "Test profile - csv contrasts": {
         "content": [
@@ -456,7 +454,7 @@
                     "shinyngs": "2.4.0"
                 },
                 "Workflow": {
-                    "nf-core/differentialabundance": "v1.6.0dev"
+                    "nf-core/differentialabundance": "v2.0.0"
                 }
             },
             [
@@ -598,12 +596,11 @@
                 "all.vst.tsv:md5,ae82509f76ed01ad0d041d1a62aef703"
             ]
         ],
-        "timestamp": "2026-05-04T20:56:55.657107947",
+        "timestamp": "2026-05-21T20:46:57.48210411",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-04-29T20:34:21.086698735"
+            "nextflow": "26.04.1"
+        }
     },
     "Test profile - multiple reports - csv contrasts": {
         "content": [
@@ -658,7 +655,7 @@
                     "shinyngs": "2.4.0"
                 },
                 "Workflow": {
-                    "nf-core/differentialabundance": "v1.6.0dev"
+                    "nf-core/differentialabundance": "v2.0.0"
                 }
             },
             [
@@ -801,11 +798,10 @@
                 "all.vst.tsv:md5,ae82509f76ed01ad0d041d1a62aef703"
             ]
         ],
-        "timestamp": "2026-05-04T21:00:22.914709934",
+        "timestamp": "2026-05-21T20:49:03.018298248",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-04-29T20:36:21.59236643"
+            "nextflow": "26.04.1"
+        }
     }
 }
