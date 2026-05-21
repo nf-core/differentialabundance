@@ -52,7 +52,7 @@
                     "shinyngs": "2.4.0"
                 },
                 "Workflow": {
-                    "nf-core/differentialabundance": "v1.6.0dev"
+                    "nf-core/differentialabundance": "v2.0.0"
                 }
             },
             [
@@ -194,10 +194,10 @@
                 "all.vst.tsv:md5,ae82509f76ed01ad0d041d1a62aef703"
             ]
         ],
-        "timestamp": "2026-05-04T21:38:59.876847649",
+        "timestamp": "2026-05-21T21:16:31.558231803",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.1"
         }
     },
     "Test profile - rnaseq_deseq2_gprofiler2 - with formula": {
@@ -822,7 +822,7 @@
                     "shinyngs": "2.4.0"
                 },
                 "Workflow": {
-                    "nf-core/differentialabundance": "v1.6.0dev"
+                    "nf-core/differentialabundance": "v2.0.0"
                 }
             },
             [
@@ -925,10 +925,10 @@
                 "all.vst.tsv:md5,ae82509f76ed01ad0d041d1a62aef703"
             ]
         ],
-        "timestamp": "2026-05-11T21:31:49.962970595",
+        "timestamp": "2026-05-21T21:18:35.565241802",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.1"
         }
     }
 }
