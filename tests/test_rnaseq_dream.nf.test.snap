@@ -70,11 +70,11 @@
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb"
             ]
         ],
-        "timestamp": "2026-02-24T15:47:26.037232274",
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-02-24T15:47:26.037232274"
     },
     "Test rnaseq dream profile - complex contrast - with zero intercept - 1": {
         "content": [
@@ -173,11 +173,11 @@
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb"
             ]
         ],
-        "timestamp": "2026-05-04T22:03:48.911112031",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-05-04T22:03:48.911112031"
     },
     "Test rnaseq dream profile": {
         "content": [
@@ -192,6 +192,11 @@
                 },
                 "CUSTOM_MATRIXFILTER": {
                     "r-base": "4.2.1"
+                },
+                "DREAM_NORM": {
+                    "r-base": "4.3.3",
+                    "bioconductor-edger": "4.0.16",
+                    "variancePartition": "1.32.2"
                 },
                 "GTF_TO_TABLE": {
                     "atlas-gene-annotation-manipulation": "1.1.1"
@@ -286,11 +291,11 @@
                 "all.normalised_counts.tsv:md5,a06f5e5c50938bb4d93991d7e314c7cf"
             ]
         ],
-        "timestamp": "2026-05-04T21:59:09.178321728",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
-        }
+            "nf-test": "0.9.3",
+            "nextflow": "26.04.1"
+        },
+        "timestamp": "2026-05-20T22:51:39.190865185"
     },
     "Test - Numeric sample IDs - rnaseq dream profile - with decoupler": {
         "content": [
@@ -312,6 +317,11 @@
                     "pandas": "2.2.3",
                     "python": "3.12.9",
                     "scanpy": "1.11.0"
+                },
+                "DREAM_NORM": {
+                    "r-base": "4.3.3",
+                    "bioconductor-edger": "4.0.16",
+                    "variancePartition": "1.32.2"
                 },
                 "GTF_TO_TABLE": {
                     "atlas-gene-annotation-manipulation": "1.1.1"
@@ -410,11 +420,11 @@
                 "all.normalised_counts.tsv:md5,7a2dc10c76784a7621437af839bcde42"
             ]
         ],
-        "timestamp": "2026-05-04T22:18:27.057319854",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
-        }
+            "nf-test": "0.9.3",
+            "nextflow": "26.04.1"
+        },
+        "timestamp": "2026-05-20T23:05:04.929872941"
     },
     "Test rnaseq dream profile - with decoupler": {
         "content": [
@@ -436,6 +446,11 @@
                     "pandas": "2.2.3",
                     "python": "3.12.9",
                     "scanpy": "1.11.0"
+                },
+                "DREAM_NORM": {
+                    "r-base": "4.3.3",
+                    "bioconductor-edger": "4.0.16",
+                    "variancePartition": "1.32.2"
                 },
                 "GTF_TO_TABLE": {
                     "atlas-gene-annotation-manipulation": "1.1.1"
@@ -558,11 +573,11 @@
                 "all.normalised_counts.tsv:md5,a06f5e5c50938bb4d93991d7e314c7cf"
             ]
         ],
-        "timestamp": "2026-05-04T22:14:19.612244557",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
-        }
+            "nf-test": "0.9.3",
+            "nextflow": "26.04.1"
+        },
+        "timestamp": "2026-05-20T23:02:20.371858498"
     },
     "Test generic_matrix dream profile - complex contrast - with zero intercept - 2": {
         "content": [
@@ -639,10 +654,10 @@
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb"
             ]
         ],
-        "timestamp": "2026-05-04T22:08:32.030926873",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-05-04T22:08:32.030926873"
     }
 }
