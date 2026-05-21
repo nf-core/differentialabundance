@@ -31,7 +31,7 @@
                     "shinyngs": "2.4.0"
                 },
                 "Workflow": {
-                    "nf-core/differentialabundance": "v1.6.0dev"
+                    "nf-core/differentialabundance": "v2.0.0"
                 }
             },
             [
@@ -93,11 +93,10 @@
                 "normalised.matrix.tsv:md5,cf90af62c645d4e7d4b4e4fc69b83f72"
             ]
         ],
-        "timestamp": "2026-05-04T22:41:59.086844696",
+        "timestamp": "2026-05-21T22:31:19.123322888",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-05-04T00:13:48.491822859"
+            "nextflow": "26.04.1"
+        }
     }
 }
