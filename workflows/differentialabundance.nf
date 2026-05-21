@@ -805,7 +805,7 @@ workflow DIFFERENTIALABUNDANCE {
 
     // Collate and save software versions
 
-    def topic_versions = Channel.topic("versions")
+    def topic_versions = channel.topic("versions")
         .distinct()
         .branch { entry ->
             versions_file: entry instanceof Path
@@ -911,7 +911,7 @@ workflow DIFFERENTIALABUNDANCE {
         ch_report_input.report_file,
         ch_report_input.report_params,
         ch_report_input.input_files.map{ meta, files -> files },
-        Channel.value([])
+        channel.value([])
     )
 
     // Make a report bundle comprising the markdown document and all necessary
