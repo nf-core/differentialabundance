@@ -47,7 +47,7 @@
                     "shinyngs": "2.4.0"
                 },
                 "Workflow": {
-                    "nf-core/differentialabundance": "v1.6.0dev"
+                    "nf-core/differentialabundance": "v2.0.0"
                 }
             },
             [
@@ -131,10 +131,10 @@
                 "all.normalised_counts.tsv:md5,534f0f37e10325163656cad95418f34a"
             ]
         ],
-        "timestamp": "2026-05-04T22:34:47.786470628",
+        "timestamp": "2026-05-21T22:24:17.867900738",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.1"
         }
     },
     "Test rnaseq limma profile - rnaseq_limma_gsea - with formula and complex contrasts": {
@@ -190,7 +190,7 @@
                     "shinyngs": "2.4.0"
                 },
                 "Workflow": {
-                    "nf-core/differentialabundance": "v1.6.0dev"
+                    "nf-core/differentialabundance": "v2.0.0"
                 }
             },
             [
@@ -530,10 +530,10 @@
                 "all.normalised_counts.tsv:md5,ebe30cc05e93aea1f04ee8598ec62c94"
             ]
         ],
-        "timestamp": "2026-05-04T22:30:20.845028563",
+        "timestamp": "2026-05-21T22:21:14.887543782",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.1"
         }
     },
     "Test rnaseq limma profile - rnaseq_limma_gsea - Numeric sample IDs": {
@@ -589,7 +589,7 @@
                     "shinyngs": "2.4.0"
                 },
                 "Workflow": {
-                    "nf-core/differentialabundance": "v1.6.0dev"
+                    "nf-core/differentialabundance": "v2.0.0"
                 }
             },
             [
@@ -719,10 +719,10 @@
                 "all.normalised_counts.tsv:md5,fd122dfc7ebc8d468075092f5cecb523"
             ]
         ],
-        "timestamp": "2026-05-04T22:37:58.998056575",
+        "timestamp": "2026-05-21T22:26:04.843205105",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.1"
         }
     },
     "Test rnaseq limma profile - rnaseq_limma_gprofiler2": {
@@ -772,7 +772,7 @@
                     "shinyngs": "2.4.0"
                 },
                 "Workflow": {
-                    "nf-core/differentialabundance": "v1.6.0dev"
+                    "nf-core/differentialabundance": "v2.0.0"
                 }
             },
             [
@@ -854,10 +854,10 @@
                 "all.normalised_counts.tsv:md5,534f0f37e10325163656cad95418f34a"
             ]
         ],
-        "timestamp": "2026-05-11T21:59:31.766682579",
+        "timestamp": "2026-05-21T22:17:33.799952247",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.1"
         }
     },
     "Test rnaseq limma profile - rnaseq_limma_gsea": {
@@ -913,7 +913,7 @@
                     "shinyngs": "2.4.0"
                 },
                 "Workflow": {
-                    "nf-core/differentialabundance": "v1.6.0dev"
+                    "nf-core/differentialabundance": "v2.0.0"
                 }
             },
             [
@@ -1043,10 +1043,10 @@
                 "all.normalised_counts.tsv:md5,534f0f37e10325163656cad95418f34a"
             ]
         ],
-        "timestamp": "2026-05-04T22:22:17.70146481",
+        "timestamp": "2026-05-21T22:15:47.120606673",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.1"
         }
     }
 }

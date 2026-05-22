@@ -38,7 +38,7 @@
                     "shinyngs": "2.4.0"
                 },
                 "Workflow": {
-                    "nf-core/differentialabundance": "v1.6.0dev"
+                    "nf-core/differentialabundance": "v2.0.0"
                 }
             },
             [
@@ -128,10 +128,10 @@
                 "treatment_mCherry_hND6_sample_number_SRP254919.grea.tsv:md5,c495a12a0eb9aab836df1daf098b93ac"
             ]
         ],
-        "timestamp": "2026-05-13T15:53:03.125301895",
+        "timestamp": "2026-05-21T22:28:49.017894335",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.3"
+            "nextflow": "26.04.1"
         }
     }
 }
