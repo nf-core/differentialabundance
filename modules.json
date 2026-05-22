@@ -17,7 +17,7 @@
                     },
                     "csvtk/join": {
                         "branch": "master",
-                        "git_sha": "945dd56498e7ec040c1cc0773860b9cc162cdc18",
+                        "git_sha": "2f74af306499775ab48db1ed4077d2fa5aecf9c4",
                         "installed_by": ["modules"]
                     },
                     "custom/filterdifferentialtable": {
