@@ -1365,7 +1365,7 @@ if (all(minimal_fetchngs_cols %in% colnames(observations))) {
     # Coerce per column rather than via apply (which flattens the frame to a
     # character matrix and silently drops any column containing an NA, because
     # max(nchar(NA)) is NA and `NA <= 20` is filtered out by `which`).
-        col_widths <- map_int(observations, \(x) max(nchar(as.character(x)), 0L, na.rm = TRUE))
+    col_widths <- map_int(observations, \(x) max(nchar(as.character(x)), 0L, na.rm = TRUE))
     additional_useful_cols <- names(col_widths)[col_widths <= 20]
 }
 
