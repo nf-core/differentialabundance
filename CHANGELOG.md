@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [[#739](https://github.com/nf-core/differentialabundance/pull/739)] - Fix issue in quarto report data overview table in cases of columns with NAs ([@grst](https://github.com/grst), review by [@pinin4fjords](https://github.com/pinin4fjords)))
 - [[#738](https://github.com/nf-core/differentialabundance/pull/738)] - Fix conda failing tests before release ([@atrigila](https://github.com/atrigila), review by [@mashehu](https://github.com/mashehu)).
 - [[#729](https://github.com/nf-core/differentialabundance/pull/729)] - Skip nf-schema path-existence validation for `igenomes_base` so launches succeed when the default `s3://ngi-igenomes/igenomes/` bucket is not reachable from the user's environment ([@pinin4fjords](https://github.com/pinin4fjords), review by [@atrigila](https://github.com/atrigila)).
 - [[#725](https://github.com/nf-core/differentialabundance/issues/725)] - Tighten `report_file` schema pattern to explicitly model the comma-separated multi-report form and validate each segment's extension ([@pinin4fjords](https://github.com/pinin4fjords), review by [@atrigila](https://github.com/atrigila)).
