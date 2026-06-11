@@ -128,7 +128,7 @@
                     },
                     "variancepartition/dream": {
                         "branch": "master",
-                        "git_sha": "77a353f5f9a174e9ddfc6aa4846d1e51ed0bdfd9",
+                        "git_sha": "87e0996ad70cb449019c505fd5f53f6594e26e4f",
                         "installed_by": ["abundance_differential_filter", "modules"]
                     },
                     "zip": {
