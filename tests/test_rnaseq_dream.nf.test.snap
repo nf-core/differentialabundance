@@ -170,13 +170,22 @@
             ],
             [
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
-                "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb"
+                "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
+                "interaction_genotype_treatment_SRP254919.dream.results.tsv:md5,f74fb129214196cf93fbcb45d3f9f4aa",
+                "interaction_genotype_treatment_SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
+                "interaction_genotype_treatment_SRP254919_dream.annotated.tsv:md5,4e3d691cb96b5916548dd9672c23b75b",
+                "treatment_effect_classic_comparison_SRP254919.dream.results.tsv:md5,1896399186624f98e6a6aaa1fe741757",
+                "treatment_effect_classic_comparison_SRP254919.dream.results_filtered.tsv:md5,d7d82b55f049b2467ced1eafc364c488",
+                "treatment_effect_classic_comparison_SRP254919_dream.annotated.tsv:md5,f96f8e38466e8f1e55e6f773b74c76d8",
+                "treatment_plus_genotype_SRP254919.dream.results.tsv:md5,36a36dba93eb4b84f6b51afc3f3381b6",
+                "treatment_plus_genotype_SRP254919.dream.results_filtered.tsv:md5,243b253e50706d2b1c08ac33b68a065b",
+                "treatment_plus_genotype_SRP254919_dream.annotated.tsv:md5,a55514cd12eff50db66c54de24f725ed"
             ]
         ],
-        "timestamp": "2026-05-21T22:04:42.820418781",
+        "timestamp": "2026-06-17T17:06:45.319785524",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.1"
+            "nextflow": "26.04.0"
         }
     },
     "Test rnaseq dream profile": {
@@ -288,13 +297,25 @@
             [
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
+                "full_model_with_interactions_SRP254919.dream.results.tsv:md5,e3bfb202ff97a05a1cbac42925246ead",
+                "full_model_with_interactions_SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
+                "full_model_with_interactions_SRP254919_dream.annotated.tsv:md5,a7f5049ddf871f56ae8d639ef4759c85",
+                "interaction_genotype_treatment_SRP254919.dream.results.tsv:md5,d9eaa24a3cba16ddfd3bc386b6c7c357",
+                "interaction_genotype_treatment_SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
+                "interaction_genotype_treatment_SRP254919_dream.annotated.tsv:md5,17602c22753330dafb6df264aad1b51b",
+                "treatment_effect_classic_comparison_SRP254919.dream.results.tsv:md5,2e9104b088b8168753c8fa4f3f4c880e",
+                "treatment_effect_classic_comparison_SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
+                "treatment_effect_classic_comparison_SRP254919_dream.annotated.tsv:md5,0152c3d171e242a141fd00e5c9c4b90b",
+                "treatment_plus_genotype_SRP254919.dream.results.tsv:md5,48e4b35bfb71beed1ce11c62f8e2e408",
+                "treatment_plus_genotype_SRP254919.dream.results_filtered.tsv:md5,e4ef84b2c82a7c56ae34cad80a0ec154",
+                "treatment_plus_genotype_SRP254919_dream.annotated.tsv:md5,e195e9caa89eca8ca6c39e01d1020699",
                 "all.normalised_counts.tsv:md5,a06f5e5c50938bb4d93991d7e314c7cf"
             ]
         ],
-        "timestamp": "2026-05-21T22:01:51.990954391",
+        "timestamp": "2026-06-17T17:02:44.50528204",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.1"
+            "nextflow": "26.04.0"
         }
     },
     "Test - Numeric sample IDs - rnaseq dream profile - with decoupler": {
@@ -417,13 +438,19 @@
             [
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
+                "treatment_mCherry_hND6__SRP254919.dream.results.tsv:md5,2b27caf3ec88a84279a4cd972d2355ca",
+                "treatment_mCherry_hND6__SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
+                "treatment_mCherry_hND6__SRP254919_dream.annotated.tsv:md5,a6702db7e33e13efc621ea1dd50ff4ec",
+                "treatment_mCherry_hND6_sample_number_SRP254919.dream.results.tsv:md5,45ea602415ac70fda1f9ee28758ff2bd",
+                "treatment_mCherry_hND6_sample_number_SRP254919.dream.results_filtered.tsv:md5,315311e67e6f86ddf80f6676ca1dfb12",
+                "treatment_mCherry_hND6_sample_number_SRP254919_dream.annotated.tsv:md5,1146e7e47feb5c8efe4239b679838f9e",
                 "all.normalised_counts.tsv:md5,7a2dc10c76784a7621437af839bcde42"
             ]
         ],
-        "timestamp": "2026-05-21T22:14:00.48296014",
+        "timestamp": "2026-06-17T17:20:46.63283806",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.1"
+            "nextflow": "26.04.0"
         }
     },
     "Test rnaseq dream profile - with decoupler": {
@@ -570,13 +597,25 @@
             [
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
+                "full_model_with_interactions_SRP254919.dream.results.tsv:md5,e3bfb202ff97a05a1cbac42925246ead",
+                "full_model_with_interactions_SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
+                "full_model_with_interactions_SRP254919_dream.annotated.tsv:md5,a7f5049ddf871f56ae8d639ef4759c85",
+                "interaction_genotype_treatment_SRP254919.dream.results.tsv:md5,d9eaa24a3cba16ddfd3bc386b6c7c357",
+                "interaction_genotype_treatment_SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
+                "interaction_genotype_treatment_SRP254919_dream.annotated.tsv:md5,17602c22753330dafb6df264aad1b51b",
+                "treatment_effect_classic_comparison_SRP254919.dream.results.tsv:md5,2e9104b088b8168753c8fa4f3f4c880e",
+                "treatment_effect_classic_comparison_SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
+                "treatment_effect_classic_comparison_SRP254919_dream.annotated.tsv:md5,0152c3d171e242a141fd00e5c9c4b90b",
+                "treatment_plus_genotype_SRP254919.dream.results.tsv:md5,48e4b35bfb71beed1ce11c62f8e2e408",
+                "treatment_plus_genotype_SRP254919.dream.results_filtered.tsv:md5,e4ef84b2c82a7c56ae34cad80a0ec154",
+                "treatment_plus_genotype_SRP254919_dream.annotated.tsv:md5,e195e9caa89eca8ca6c39e01d1020699",
                 "all.normalised_counts.tsv:md5,a06f5e5c50938bb4d93991d7e314c7cf"
             ]
         ],
-        "timestamp": "2026-05-21T22:11:29.864818879",
+        "timestamp": "2026-06-17T17:17:17.300471723",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.1"
+            "nextflow": "26.04.0"
         }
     },
     "Test generic_matrix dream profile - complex contrast - with zero intercept - 2": {
@@ -651,13 +690,22 @@
                 "tables/differential/generic_matrix_dream/zero_intercept_model_2_SRP254919_dream.annotated.tsv"
             ],
             [
-                "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb"
+                "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
+                "full_model_with_interactions_SRP254919.dream.results.tsv:md5,28dc9a1e098e1e730b4918abe9211040",
+                "full_model_with_interactions_SRP254919.dream.results_filtered.tsv:md5,74724d2c99fbfc57de2b6ee7a98fe4aa",
+                "full_model_with_interactions_SRP254919_dream.annotated.tsv:md5,8f368e756aa781e40314c9e4e5896d91",
+                "zero_intercept_model_1_SRP254919.dream.results.tsv:md5,af24a417d24edacacc39e506eab1ae66",
+                "zero_intercept_model_1_SRP254919.dream.results_filtered.tsv:md5,85cca59ed2bc612c9042a5e3fbdb2c94",
+                "zero_intercept_model_1_SRP254919_dream.annotated.tsv:md5,4c0085228076cae6ec3cf27030ef620c",
+                "zero_intercept_model_2_SRP254919.dream.results.tsv:md5,af24a417d24edacacc39e506eab1ae66",
+                "zero_intercept_model_2_SRP254919.dream.results_filtered.tsv:md5,85cca59ed2bc612c9042a5e3fbdb2c94",
+                "zero_intercept_model_2_SRP254919_dream.annotated.tsv:md5,4c0085228076cae6ec3cf27030ef620c"
             ]
         ],
-        "timestamp": "2026-05-21T22:07:39.345803638",
+        "timestamp": "2026-06-17T17:10:37.813505474",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.1"
+            "nextflow": "26.04.0"
         }
     }
 }
