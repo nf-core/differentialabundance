@@ -127,6 +127,9 @@
                 "raw._eset.rds:md5,ac3995c3c95bda63c0f35ad9b7c77499",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "hgu133plus2.annotation.tsv:md5,f2b82ef12b2a2e8e575de06766583d96",
+                "phenotype_uninvolved_lesional_GSE50790.limma.results.tsv:md5,099ea1797a834a0cbf5e5a576a2b1a3e",
+                "phenotype_uninvolved_lesional_GSE50790.limma.results_filtered.tsv:md5,445b8fd9dcd34c2d273613b03ead0a7f",
+                "phenotype_uninvolved_lesional_GSE50790_limma.annotated.tsv:md5,5031be994070c33decdbb318b5cad17a",
                 "phenotype_uninvolved_lesional_GSE50790.gprofiler2.all_enriched_pathways.tsv:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "normalised._matrix.tsv:md5,68d849e627d86095cfb48eba81c09853",
                 "raw._matrix.tsv:md5,ea5cccce75c3a9a5d2aab3e3a19910ad",
@@ -140,10 +143,10 @@
                 "GSM1229348_Gudjohnsson_008_8470_PN.CEL.gz:md5,ec5129e035badf3b670178d53e24f0cc"
             ]
         ],
-        "timestamp": "2026-05-21T21:03:13.107680739",
+        "timestamp": "2026-06-17T16:08:47.99618182",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.1"
+            "nextflow": "26.04.0"
         }
     },
     "Test affy profile - affy_limma_gsea": {
@@ -398,6 +401,9 @@
                 "phenotype_uninvolved_lesional_GSE50790.h.all.v2022.1.Hs.symbols.ranked_gene_list_lesional_versus_uninvolved.tsv:md5,72dfaeff534ba9a2b32f63524e835dc4",
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "hgu133plus2.annotation.tsv:md5,f2b82ef12b2a2e8e575de06766583d96",
+                "phenotype_uninvolved_lesional_GSE50790.limma.results.tsv:md5,099ea1797a834a0cbf5e5a576a2b1a3e",
+                "phenotype_uninvolved_lesional_GSE50790.limma.results_filtered.tsv:md5,445b8fd9dcd34c2d273613b03ead0a7f",
+                "phenotype_uninvolved_lesional_GSE50790_limma.annotated.tsv:md5,5031be994070c33decdbb318b5cad17a",
                 "normalised._matrix.tsv:md5,68d849e627d86095cfb48eba81c09853",
                 "raw._matrix.tsv:md5,ea5cccce75c3a9a5d2aab3e3a19910ad",
                 "GSM1229341_Gudjohnsson_001_6690_PP.CEL.gz:md5,259d0908211a071351450f366fd51cad",
@@ -410,10 +416,10 @@
                 "GSM1229348_Gudjohnsson_008_8470_PN.CEL.gz:md5,ec5129e035badf3b670178d53e24f0cc"
             ]
         ],
-        "timestamp": "2026-05-21T20:58:05.486817923",
+        "timestamp": "2026-06-17T16:03:26.359295668",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.1"
+            "nextflow": "26.04.0"
         }
     }
 }

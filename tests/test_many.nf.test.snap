@@ -394,12 +394,33 @@
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
+                "phenotype_uninvolved_lesional_GSE50790.limma.results.tsv:md5,7135e0e3ab3817421734d9308bd47d5f",
+                "phenotype_uninvolved_lesional_GSE50790.limma.results_filtered.tsv:md5,94ccf3b5cd7689ae89464e40bf3acb34",
+                "phenotype_uninvolved_lesional_GSE50790_limma.annotated.tsv:md5,67afecd41c14ad01076d24283e6d9b68",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results.tsv:md5,a6dde65d9e54e8e80e3abf3c14f72d34",
                 "treatment_mCherry_hND6__SRP254919.deseq2.results_filtered.tsv:md5,fd803a83c641e843830057f3a43be27a",
                 "treatment_mCherry_hND6__SRP254919_deseq2.annotated.tsv:md5,14f8c3bcc5665147d494f54b4b2502c9",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results.tsv:md5,3c827ffb53fe7dab8f13f0ef89a3da06",
                 "treatment_mCherry_hND6_sample_number_SRP254919.deseq2.results_filtered.tsv:md5,c88d36f46f7d8a4dd8c169c249f50540",
                 "treatment_mCherry_hND6_sample_number_SRP254919_deseq2.annotated.tsv:md5,7925ca370d660117878fb5132a106f47",
+                "full_model_with_interactions_SRP254919.dream.results.tsv:md5,e3bfb202ff97a05a1cbac42925246ead",
+                "full_model_with_interactions_SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
+                "full_model_with_interactions_SRP254919_dream.annotated.tsv:md5,a7f5049ddf871f56ae8d639ef4759c85",
+                "interaction_genotype_treatment_SRP254919.dream.results.tsv:md5,d9eaa24a3cba16ddfd3bc386b6c7c357",
+                "interaction_genotype_treatment_SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
+                "interaction_genotype_treatment_SRP254919_dream.annotated.tsv:md5,17602c22753330dafb6df264aad1b51b",
+                "treatment_effect_classic_comparison_SRP254919.dream.results.tsv:md5,2e9104b088b8168753c8fa4f3f4c880e",
+                "treatment_effect_classic_comparison_SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
+                "treatment_effect_classic_comparison_SRP254919_dream.annotated.tsv:md5,0152c3d171e242a141fd00e5c9c4b90b",
+                "treatment_plus_genotype_SRP254919.dream.results.tsv:md5,48e4b35bfb71beed1ce11c62f8e2e408",
+                "treatment_plus_genotype_SRP254919.dream.results_filtered.tsv:md5,e4ef84b2c82a7c56ae34cad80a0ec154",
+                "treatment_plus_genotype_SRP254919_dream.annotated.tsv:md5,e195e9caa89eca8ca6c39e01d1020699",
+                "treatment_mCherry_hND6__SRP254919.limma.results.tsv:md5,e44a3f1f7edea37ed356d120a6a52a52",
+                "treatment_mCherry_hND6__SRP254919.limma.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
+                "treatment_mCherry_hND6__SRP254919_limma.annotated.tsv:md5,ab158de12550bd58da81a904edb5481c",
+                "treatment_mCherry_hND6_sample_number_SRP254919.limma.results.tsv:md5,0fdff826c0a2dc5ac340251284a89045",
+                "treatment_mCherry_hND6_sample_number_SRP254919.limma.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
+                "treatment_mCherry_hND6_sample_number_SRP254919_limma.annotated.tsv:md5,8f45903df07de24307886915fee14ba5",
                 "phenotype_uninvolved_lesional_GSE50790.gprofiler2.all_enriched_pathways.tsv:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "normalised._matrix.tsv:md5,68d849e627d86095cfb48eba81c09853",
                 "raw._matrix.tsv:md5,ea5cccce75c3a9a5d2aab3e3a19910ad",
@@ -417,10 +438,10 @@
                 "GSM1229348_Gudjohnsson_008_8470_PN.CEL.gz:md5,ec5129e035badf3b670178d53e24f0cc"
             ]
         ],
-        "timestamp": "2026-05-21T21:10:35.95634764",
+        "timestamp": "2026-06-17T16:21:15.2393262",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.1"
+            "nextflow": "26.04.0"
         }
     }
 }
