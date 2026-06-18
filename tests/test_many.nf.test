@@ -20,6 +20,20 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // debug_table_heads: Header + first five rows for TSVs prone to CI/local drift
+            def output_root = new File(params.outdir.toString())
+            def debug_table_heads = []
+            output_root.eachFileRecurse { file ->
+                if (file.isFile() && (
+                    file.name ==~ /.*\.(limma|dream)\.(results|results_filtered|annotated)\.tsv$/ ||
+                    file.name ==~ /.*normalised_counts\.tsv$/ ||
+                    file.name ==~ /.*proteingroups_tab\.tsv$/
+                )) {
+                    def relative_path = output_root.toPath().relativize(file.toPath()).toString()
+                    debug_table_heads << [(relative_path): file.readLines().take(6)]
+                }
+            }
+            debug_table_heads = debug_table_heads.sort { it.keySet().first() }
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
@@ -30,7 +44,9 @@ nextflow_pipeline {
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
-                    stable_path
+                    stable_path,
+                    // Lightweight table content previews to diagnose CI-only md5 drift
+                    debug_table_heads
                 ).match() }
                 )
         }

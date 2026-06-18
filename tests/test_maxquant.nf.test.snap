@@ -143,9 +143,111 @@
                 "genotype_celltype_t1_t2_PXD043349.limma.results_filtered.tsv:md5,2698496e232c1dc6a56cb74257c89ef5",
                 "normalizeMedian.normalized_proteingroups_tab.tsv:md5,3762cd5aaaa40ba0ad75fe4ed08313a3",
                 "raw_proteingroups_tab.tsv:md5,0f07ca850811c044fb9d0c8e6971c31f"
+            ],
+            [
+                {
+                    "tables/differential/maxquant/fakebatch_fakeBatch_b1_b2_PXD043349.limma.results.tsv": [
+                        "Majority protein IDs\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
+                        "A0A087WNL7;A0A087WQ44;A0A087WNX7\t0.75\t27.56\t3.24\t0.01\t0.04\t-2.2",
+                        "A0A0A6YXN4;A0A075B5U4\t0.78\t25.43\t1.42\t0.19\t0.3\t-5.08",
+                        "A0A0A6YY64;A2AUP3;A2AUP5;A2AUP1;Q7TS91;A2AUP4;A7UAK8;Q3U3S6;A7UAK5;A7UAK4;A0A0A6YW89\t0.05\t27.55\t0.26\t0.8\t0.85\t-6.29",
+                        "A0A0B4J1E6;P08101;A0A0B4J1G1;P08101-2\t0.56\t27.7\t3.75\t0\t0.03\t-1.16",
+                        "A0A0G2JDV3\t0.38\t28.2\t1.89\t0.08\t0.17\t-4.66"
+                    ]
+                },
+                {
+                    "tables/differential/maxquant/fakebatch_fakeBatch_b1_b2_PXD043349.limma.results_filtered.tsv": [
+                        "Majority protein IDs\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
+                        "A0A286YCV9;E9Q4K7\t1.06\t25.75\t2.99\t0.01\t0.05\t-2.68",
+                        "A2AJ88-2;A2AJ88\t1.04\t25.72\t3.55\t0.0\t0.03\t-1.58",
+                        "A2AKX3;A2AKX3-2\t1.11\t26.83\t5.32\t0.0\t0.01\t1.92",
+                        "B2RT41\t1.05\t25.16\t4.33\t0.0\t0.02\t-0.3",
+                        "E9Q512;H3BJG4\t1.43\t25.09\t3.83\t0.0\t0.03\t-1.06"
+                    ]
+                },
+                {
+                    "tables/differential/maxquant/genotype_celltype_t1_FoB_PXD043349.limma.results.tsv": [
+                        "Majority protein IDs\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
+                        "A0A087WNL7;A0A087WQ44;A0A087WNX7\t-0.6\t27.56\t-1.73\t0.1\t0.26\t-5.72",
+                        "A0A0A6YXN4;A0A075B5U4\t-1.35\t25.43\t-2.43\t0.03\t0.12\t-4.37",
+                        "A0A0A6YY64;A2AUP3;A2AUP5;A2AUP1;Q7TS91;A2AUP4;A7UAK8;Q3U3S6;A7UAK5;A7UAK4;A0A0A6YW89\t-0.87\t27.55\t-5.69\t0\t0\t2.28",
+                        "A0A0B4J1E6;P08101;A0A0B4J1G1;P08101-2\t0.55\t27.7\t2.26\t0.04\t0.13\t-4.81",
+                        "A0A0G2JDV3\t0.48\t28.2\t2.38\t0.03\t0.11\t-4.59"
+                    ]
+                },
+                {
+                    "tables/differential/maxquant/genotype_celltype_t1_FoB_PXD043349.limma.results_filtered.tsv": [
+                        "Majority protein IDs\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
+                        "A2A716;A0A3Q4EGW0;F8VQM4\t1.09\t26.37\t3.39\t0.0\t0.02\t-2.57",
+                        "A1KXC4\t1.59\t25.46\t3.11\t0.01\t0.04\t-3.05",
+                        "A2A6Q5;A2A6Q5-3;A2A6Q5-2\t-1.41\t25.86\t-4.23\t0.0\t0.01\t-0.81",
+                        "A2A8U2-2;A2A8U2-3;A2A8U2\t1.17\t26.31\t8.05\t0.0\t0.0\t6.67",
+                        "E9PZF7;A2AF28;A2AF34;A2AF35\t-1.13\t26.09\t-3.44\t0.0\t0.02\t-2.47"
+                    ]
+                },
+                {
+                    "tables/differential/maxquant/genotype_celltype_t1_MZ_fakeBatch_PXD043349.limma.results.tsv": [
+                        "Majority protein IDs\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
+                        "A0A087WNL7;A0A087WQ44;A0A087WNX7\t-0.79\t27.56\t-3.56\t0\t0.01\t-2.46",
+                        "A0A0A6YXN4;A0A075B5U4\t-1.92\t25.43\t-3.9\t0\t0.01\t-1.93",
+                        "A0A0A6YY64;A2AUP3;A2AUP5;A2AUP1;Q7TS91;A2AUP4;A7UAK8;Q3U3S6;A7UAK5;A7UAK4;A0A0A6YW89\t-0.23\t27.55\t-1.68\t0.11\t0.2\t-5.99",
+                        "A0A0B4J1E6;P08101;A0A0B4J1G1;P08101-2\t0.37\t27.7\t2.52\t0.02\t0.05\t-4.55",
+                        "A0A0G2JDV3\t0.88\t28.2\t5.83\t0\t0\t2.16"
+                    ]
+                },
+                {
+                    "tables/differential/maxquant/genotype_celltype_t1_MZ_fakeBatch_PXD043349.limma.results_filtered.tsv": [
+                        "Majority protein IDs\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
+                        "A0A0A6YXN4;A0A075B5U4\t-1.92\t25.43\t-3.9\t0.0\t0.01\t-1.93",
+                        "A0A0G2JEH3;B2RVB9\t1.03\t26.29\t5.33\t0.0\t0.0\t0.73",
+                        "A0A286YCV9;E9Q4K7\t-1.22\t25.75\t-3.87\t0.0\t0.01\t-1.81",
+                        "A2A716;A0A3Q4EGW0;F8VQM4\t1.31\t26.37\t4.23\t0.0\t0.0\t-1.06",
+                        "A2AUY4\t-1.33\t29.58\t-3.34\t0.0\t0.01\t-2.91"
+                    ]
+                },
+                {
+                    "tables/differential/maxquant/genotype_celltype_t1_t2_PXD043349.limma.results.tsv": [
+                        "Majority protein IDs\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
+                        "A0A087WNL7;A0A087WQ44;A0A087WNX7\t-0.22\t27.56\t-0.59\t0.56\t0.94\t-6.27",
+                        "A0A0A6YXN4;A0A075B5U4\t-0.93\t25.43\t-1.69\t0.12\t0.65\t-4.95",
+                        "A0A0A6YY64;A2AUP3;A2AUP5;A2AUP1;Q7TS91;A2AUP4;A7UAK8;Q3U3S6;A7UAK5;A7UAK4;A0A0A6YW89\t-0.58\t27.55\t-3.53\t0\t0.1\t-1.67",
+                        "A0A0B4J1E6;P08101;A0A0B4J1G1;P08101-2\t0.1\t27.7\t0.38\t0.71\t0.97\t-6.38",
+                        "A0A0G2JDV3\t0.16\t28.2\t0.73\t0.47\t0.91\t-6.18"
+                    ]
+                },
+                {
+                    "tables/differential/maxquant/genotype_celltype_t1_t2_PXD043349.limma.results_filtered.tsv": [
+                        "Majority protein IDs\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
+                        "A6H5Y3\t1.93\t26.14\t5.62\t0.0\t0.01\t2.54",
+                        "D3Z6Q9\t1.03\t29.58\t4.14\t0.0\t0.04\t-0.43",
+                        "E9PWG6\t-1.24\t27.11\t-4.43\t0.0\t0.04\t-0.31",
+                        "G3X987\t1.69\t29.31\t9.46\t0.0\t0.0\t8.83",
+                        "O08760\t1.0\t26.05\t4.71\t0.0\t0.02\t0.74"
+                    ]
+                },
+                {
+                    "tables/proteus/maxquant/normalizeMedian.normalized_proteingroups_tab.tsv": [
+                        "Majority protein IDs\tsample 5\tsample 6\tsample 7\tsample 8\tsample 9\tsample 10\tsample 11\tsample 12\tsample 13\tsample 15\tsample 16\tsample 17\tsample 18\tsample 19\tsample 20",
+                        "A0A087WNL7;A0A087WQ44;A0A087WNX7\t27.85\t27.62\t27.28\t26.98\t27.54\t27.35\t26.05\t26.99\t27.96\t27.69\t27.53\t28.54\t28.28\t27.7\t27.99",
+                        "A0A0A6YXN4;A0A075B5U4\t26.27\t24.48\tNA\tNA\tNA\tNA\tNA\t23.98\t26.09\t24.64\tNA\t26.48\t26.21\t24.81\t25.89",
+                        "A0A0A6YY64;A2AUP3;A2AUP5;A2AUP1;Q7TS91;A2AUP4;A7UAK8;Q3U3S6;A7UAK5;A7UAK4;A0A0A6YW89\t28.12\t27.47\t27.89\t27.18\t27.78\t27.41\t27.53\t26.87\t27.88\t27.68\t27.1\t28.08\t27.26\t27.85\t27.22",
+                        "A0A0B4J1E6;P08101;A0A0B4J1G1;P08101-2\t27.09\t27.09\t27.69\t27.84\t27.18\t27.5\t27.41\t27.74\t27.55\t28.05\t27.96\t27.93\t28.02\t28.08\t28.41",
+                        "A0A0G2JDV3\t27.52\t27.84\t28.8\t27.85\t27.71\t27.9\t28.22\t28.32\t28.17\t28.9\t28.56\t27.8\t28.14\t28.8\t28.4"
+                    ]
+                },
+                {
+                    "tables/proteus/maxquant/raw_proteingroups_tab.tsv": [
+                        "Majority protein IDs\tsample 5\tsample 6\tsample 7\tsample 8\tsample 9\tsample 10\tsample 11\tsample 12\tsample 13\tsample 15\tsample 16\tsample 17\tsample 18\tsample 19\tsample 20",
+                        "A0A087WNL7;A0A087WQ44;A0A087WNX7\t27.91\t27.67\t27.18\t27.03\t27.72\t27.48\t26.24\t27.21\t28.05\t27.56\t27.42\t28.28\t28.16\t27.53\t27.8",
+                        "A0A0A6YXN4;A0A075B5U4\t26.33\t24.53\tNA\tNA\tNA\tNA\tNA\t24.21\t26.18\t24.51\tNA\t26.22\t26.09\t24.64\t25.69",
+                        "A0A0A6YY64;A2AUP3;A2AUP5;A2AUP1;Q7TS91;A2AUP4;A7UAK8;Q3U3S6;A7UAK5;A7UAK4;A0A0A6YW89\t28.18\t27.51\t27.79\t27.24\t27.96\t27.53\t27.71\t27.09\t27.97\t27.55\t27\t27.82\t27.13\t27.69\t27.03",
+                        "A0A0B4J1E6;P08101;A0A0B4J1G1;P08101-2\t27.16\t27.14\t27.59\t27.9\t27.36\t27.63\t27.59\t27.96\t27.64\t27.92\t27.86\t27.67\t27.9\t27.91\t28.21",
+                        "A0A0G2JDV3\t27.58\t27.88\t28.7\t27.91\t27.89\t28.02\t28.4\t28.54\t28.26\t28.77\t28.46\t27.54\t28.01\t28.63\t28.21"
+                    ]
+                }
             ]
         ],
-        "timestamp": "2026-06-17T18:26:48.589310183",
+        "timestamp": "2026-06-18T10:14:06.31078603",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.0"
