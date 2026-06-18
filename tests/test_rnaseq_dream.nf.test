@@ -160,6 +160,7 @@ nextflow_pipeline {
     }
 
     test("Test rnaseq dream profile - with decoupler") {
+        tag "decoupler_pipeline_test"
         config "${projectDir}/conf/test/rnaseq/rnaseq_dream_decoupler_complex.config"
 
         when {
@@ -206,6 +207,7 @@ nextflow_pipeline {
     }
 
     test("Test - Numeric sample IDs - rnaseq dream profile - with decoupler") {
+        tag "decoupler_pipeline_test"
         config "${projectDir}/conf/test/rnaseq/rnaseq_dream_decoupler_complex.config"
 
         when {

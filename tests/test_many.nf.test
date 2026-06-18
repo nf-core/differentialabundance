@@ -6,6 +6,7 @@ nextflow_pipeline {
     tag "pipeline"
 
     test("Test profile - many") {
+        tag "decoupler_pipeline_test"
 
         when {
             params {

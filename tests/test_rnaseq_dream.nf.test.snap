@@ -564,6 +564,14 @@
             [
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
+                "dream_treatment_mCherry_hND6__SRP254919_consensus_estimate_decoupler.tsv:md5,fcc29c053d761e6593eea8989140c931",
+                "dream_treatment_mCherry_hND6__SRP254919_consensus_pvals_decoupler.tsv:md5,59259f2c50f28d9bdc71b03afe614729",
+                "dream_treatment_mCherry_hND6__SRP254919_ulm_estimate_decoupler.tsv:md5,a532effcdaf615cfa4c719029dd103ff",
+                "dream_treatment_mCherry_hND6__SRP254919_ulm_pvals_decoupler.tsv:md5,b79dc86c464e8121d72484b473af7465",
+                "dream_treatment_mCherry_hND6_sample_number_SRP254919_consensus_estimate_decoupler.tsv:md5,e22de097c9d8a0437912efdaca778c6e",
+                "dream_treatment_mCherry_hND6_sample_number_SRP254919_consensus_pvals_decoupler.tsv:md5,a06aa76d0367b2c69e917f75548d901c",
+                "dream_treatment_mCherry_hND6_sample_number_SRP254919_ulm_estimate_decoupler.tsv:md5,f6ca21b8914266cd4e93af5d258deef1",
+                "dream_treatment_mCherry_hND6_sample_number_SRP254919_ulm_pvals_decoupler.tsv:md5,79e53534a5b9fddb414b938ab4638d6c",
                 "treatment_mCherry_hND6__SRP254919.dream.results.tsv:md5,de6b4d9a472a8694c65ea6229652d661",
                 "treatment_mCherry_hND6__SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
                 "treatment_mCherry_hND6__SRP254919_dream.annotated.tsv:md5,728a2e5ccf4cb88d2dd1bb900bd83dd0",
@@ -616,7 +624,7 @@
                 }
             ]
         ],
-        "timestamp": "2026-06-18T13:52:54.221184506",
+        "timestamp": "2026-06-18T19:45:01.657734961",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.0"
@@ -766,6 +774,22 @@
             [
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
+                "dream_full_model_with_interactions_SRP254919_consensus_estimate_decoupler.tsv:md5,db4d8694ac151b0cb9aa9840383d6e20",
+                "dream_full_model_with_interactions_SRP254919_consensus_pvals_decoupler.tsv:md5,bb425d1e519debbed53b7fe268425579",
+                "dream_full_model_with_interactions_SRP254919_ulm_estimate_decoupler.tsv:md5,8cc3da8634f75f0d6eb7f830d2fda17b",
+                "dream_full_model_with_interactions_SRP254919_ulm_pvals_decoupler.tsv:md5,f89adb3f55d65dc04262f9ab7dfb4c79",
+                "dream_interaction_genotype_treatment_SRP254919_consensus_estimate_decoupler.tsv:md5,b29886579620571807bddf7eb143f489",
+                "dream_interaction_genotype_treatment_SRP254919_consensus_pvals_decoupler.tsv:md5,8ad33ec2301a3bef2f6303901e4955d1",
+                "dream_interaction_genotype_treatment_SRP254919_ulm_estimate_decoupler.tsv:md5,c8673aa7e9ef6270b03e4bf6eb3d5e51",
+                "dream_interaction_genotype_treatment_SRP254919_ulm_pvals_decoupler.tsv:md5,25fdcb44b553217d6720f98ae01c1df2",
+                "dream_treatment_effect_classic_comparison_SRP254919_consensus_estimate_decoupler.tsv:md5,c2996c3d326ce354eaecb130a99db948",
+                "dream_treatment_effect_classic_comparison_SRP254919_consensus_pvals_decoupler.tsv:md5,ee35304361bcd9e9e9a9e40dbca35794",
+                "dream_treatment_effect_classic_comparison_SRP254919_ulm_estimate_decoupler.tsv:md5,4ac2889ccf8b4c860c66be517d29c9c6",
+                "dream_treatment_effect_classic_comparison_SRP254919_ulm_pvals_decoupler.tsv:md5,b1c63c4f5f4e4b1cc7af0393cab3273f",
+                "dream_treatment_plus_genotype_SRP254919_consensus_estimate_decoupler.tsv:md5,85a7e1fa14c88c53544b78bc7fa5b4e2",
+                "dream_treatment_plus_genotype_SRP254919_consensus_pvals_decoupler.tsv:md5,9c34c8b97d0dac171c4f82cc1efe1050",
+                "dream_treatment_plus_genotype_SRP254919_ulm_estimate_decoupler.tsv:md5,7034857b97de71cf2eb79e21dbd48446",
+                "dream_treatment_plus_genotype_SRP254919_ulm_pvals_decoupler.tsv:md5,59f10ec95fd5277a2252f46d69df4f5e",
                 "full_model_with_interactions_SRP254919.dream.results.tsv:md5,d826e54c776bebebbb1edb82a2de6441",
                 "full_model_with_interactions_SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
                 "full_model_with_interactions_SRP254919_dream.annotated.tsv:md5,cd10b5a219ba4f5c6650c8e8b0c89e12",
@@ -854,7 +878,7 @@
                 }
             ]
         ],
-        "timestamp": "2026-06-18T13:49:23.710382638",
+        "timestamp": "2026-06-18T19:41:33.81087021",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.0"
