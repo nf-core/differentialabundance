@@ -99,6 +99,7 @@ nextflow_pipeline {
     }
 
     test("Test rnaseq limma profile - with decoupler") {
+        tag "decoupler_pipeline_test"
         tag "rnaseq_limma_decoupler"
         config "${projectDir}/conf/test/rnaseq/rnaseq_limma_decoupler.config"
 
@@ -113,6 +114,18 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            def output_root = new File(params.outdir.toString())
+            def md5File = { f -> java.security.MessageDigest.getInstance("MD5").digest(f.bytes).encodeHex().toString() }
+            def decoupler_table_md5s = []
+            output_root.eachFileRecurse { file ->
+                if (file.isFile()) {
+                    def relative_path = output_root.toPath().relativize(file.toPath()).toString()
+                    if (relative_path ==~ /tables\/decoupler\/.+_decoupler\.tsv/) {
+                        decoupler_table_md5s << "${relative_path}:md5,${md5File(file)}"
+                    }
+                }
+            }
+            decoupler_table_md5s = decoupler_table_md5s.sort()
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
@@ -123,7 +136,8 @@ nextflow_pipeline {
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
-                    stable_path
+                    stable_path,
+                    decoupler_table_md5s
                 ).match() }
                 )
         }
