@@ -48,7 +48,8 @@
                     "decoupler/decoupler": {
                         "branch": "master",
                         "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["differential_functional_enrichment"]
+                        "installed_by": ["differential_functional_enrichment"],
+                        "patch": "modules/nf-core/decoupler/decoupler/decoupler-decoupler.diff"
                     },
                     "deseq2/differential": {
                         "branch": "master",
