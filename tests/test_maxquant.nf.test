@@ -31,7 +31,9 @@ nextflow_pipeline {
                     file.name ==~ /.*proteingroups_tab\.tsv$/
                 )) {
                     def relative_path = output_root.toPath().relativize(file.toPath()).toString()
-                    debug_table_heads << [(relative_path): file.readLines().take(6)]
+                    if (!(relative_path ==~ /tables\/differential\/maxquant\/.*\.limma\.results(_filtered)?\.tsv/)) {
+                        debug_table_heads << [(relative_path): file.readLines().take(6)]
+                    }
                 }
             }
             debug_table_heads = debug_table_heads.sort { it.keySet().first() }
