@@ -15,18 +15,17 @@ Changes in component 'nf-core/limma/differential'
 Changes in 'limma/differential/templates/limma_de.R':
 --- modules/nf-core/limma/differential/templates/limma_de.R
 +++ modules/nf-core/limma/differential/templates/limma_de.R
-@@ -361,8 +361,11 @@
-     # Run voom to transform the data
-     data_for_fit <- voom(dge, design)
- } else {
--    # Use as.matrix for regular microarray analysis
-+    # Use as.matrix for regular microarray/proteomics analysis
-     data_for_fit <- as.matrix(intensities.table)
-+    if (! is.null(opt\$round_digits)){
-+        data_for_fit <- round(data_for_fit, opt\$round_digits)
-+    }
- }
+@@ -1,4 +1,11 @@
+ #!/usr/bin/env Rscript
++
++Sys.setenv(
++    OPENBLAS_NUM_THREADS = "1",
++    OMP_NUM_THREADS = "1",
++    MKL_NUM_THREADS = "1",
++    VECLIB_MAXIMUM_THREADS = "1"
++)
  
- if (!is.null(opt\$block)) {
+ ################################################
+ ################################################
 
 ************************************************************

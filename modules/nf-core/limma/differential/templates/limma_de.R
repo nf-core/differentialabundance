@@ -1,5 +1,12 @@
 #!/usr/bin/env Rscript
 
+Sys.setenv(
+    OPENBLAS_NUM_THREADS = "1",
+    OMP_NUM_THREADS = "1",
+    MKL_NUM_THREADS = "1",
+    VECLIB_MAXIMUM_THREADS = "1"
+)
+
 ################################################
 ################################################
 ## Functions                                  ##
@@ -361,11 +368,8 @@ if (!is.null(opt\$use_voom) && opt\$use_voom) {
     # Run voom to transform the data
     data_for_fit <- voom(dge, design)
 } else {
-    # Use as.matrix for regular microarray/proteomics analysis
+    # Use as.matrix for regular microarray analysis
     data_for_fit <- as.matrix(intensities.table)
-    if (! is.null(opt\$round_digits)){
-        data_for_fit <- round(data_for_fit, opt\$round_digits)
-    }
 }
 
 if (!is.null(opt\$block)) {
