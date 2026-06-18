@@ -129,7 +129,8 @@
                     "variancepartition/dream": {
                         "branch": "master",
                         "git_sha": "87e0996ad70cb449019c505fd5f53f6594e26e4f",
-                        "installed_by": ["abundance_differential_filter", "modules"]
+                        "installed_by": ["abundance_differential_filter", "modules"],
+                        "patch": "modules/nf-core/variancepartition/dream/variancepartition-dream.diff"
                     },
                     "zip": {
                         "branch": "master",
