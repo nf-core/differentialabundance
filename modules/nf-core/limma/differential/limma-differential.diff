@@ -1,0 +1,32 @@
+Changes in component 'nf-core/limma/differential'
+'modules/nf-core/limma/differential/environment.yml' is unchanged
+'modules/nf-core/limma/differential/main.nf' is unchanged
+'modules/nf-core/limma/differential/meta.yml' is unchanged
+'modules/nf-core/limma/differential/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/limma/differential/tests/nextflow.voom_blocking.config' is unchanged
+'modules/nf-core/limma/differential/tests/main.nf.test' is unchanged
+'modules/nf-core/limma/differential/tests/nextflow.voom_mixed_seed.config' is unchanged
+'modules/nf-core/limma/differential/tests/nextflow.voom_mixed.config' is unchanged
+'modules/nf-core/limma/differential/tests/nextflow.interaction.config' is unchanged
+'modules/nf-core/limma/differential/tests/nextflow.subset_to_contrast.config' is unchanged
+'modules/nf-core/limma/differential/tests/nextflow.config' is unchanged
+'modules/nf-core/limma/differential/tests/nextflow.voom.config' is unchanged
+'modules/nf-core/limma/differential/tests/nextflow.exclude_samples.config' is unchanged
+Changes in 'limma/differential/templates/limma_de.R':
+--- modules/nf-core/limma/differential/templates/limma_de.R
++++ modules/nf-core/limma/differential/templates/limma_de.R
+@@ -361,8 +361,11 @@
+     # Run voom to transform the data
+     data_for_fit <- voom(dge, design)
+ } else {
+-    # Use as.matrix for regular microarray analysis
++    # Use as.matrix for regular microarray/proteomics analysis
+     data_for_fit <- as.matrix(intensities.table)
++    if (! is.null(opt\$round_digits)){
++        data_for_fit <- round(data_for_fit, opt\$round_digits)
++    }
+ }
+ 
+ if (!is.null(opt\$block)) {
+
+************************************************************

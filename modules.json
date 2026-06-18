@@ -78,7 +78,8 @@
                     "limma/differential": {
                         "branch": "master",
                         "git_sha": "07cee52e08af8100eee4ea1b53abf0660df77701",
-                        "installed_by": ["abundance_differential_filter", "modules"]
+                        "installed_by": ["abundance_differential_filter", "modules"],
+                        "patch": "modules/nf-core/limma/differential/limma-differential.diff"
                     },
                     "propr/grea": {
                         "branch": "master",

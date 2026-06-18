@@ -129,6 +129,18 @@
                 "tables/proteus/maxquant/raw_proteingroups_tab.tsv"
             ],
             [
+                "normalizeMedian.normalized_proteingroups.rds:md5,4463faf22fe79b9cbda4f660a835498e",
+                "raw_proteingroups.rds:md5,43ce6f39dada44045324f93cdac859e0",
+                "normalizeMedian.normalized_proteingroups.rds:md5,87ddc57c2abbc10be4eda0caafdf0bb9",
+                "raw_proteingroups.rds:md5,98055b82ff3b0674487cb2fbde06bb18",
+                "fakebatch_fakeBatch_b1_b2_PXD043349.limma.results.tsv:md5,24e6ad98757837ca6602795699c5c964",
+                "fakebatch_fakeBatch_b1_b2_PXD043349.limma.results_filtered.tsv:md5,0ce3bf095fe125fbc2387a30e722cdde",
+                "genotype_celltype_t1_FoB_PXD043349.limma.results.tsv:md5,142fc5c3e8860b06047522e65dd8cce3",
+                "genotype_celltype_t1_FoB_PXD043349.limma.results_filtered.tsv:md5,3c573a58cc1d075013ba13cc0dc1a198",
+                "genotype_celltype_t1_MZ_fakeBatch_PXD043349.limma.results.tsv:md5,ea9eae54a59264553010d47700b75791",
+                "genotype_celltype_t1_MZ_fakeBatch_PXD043349.limma.results_filtered.tsv:md5,160d80a7d1888f100c7205e5f1f3ade8",
+                "genotype_celltype_t1_t2_PXD043349.limma.results.tsv:md5,a9d95537867525199f6d48f80a764ace",
+                "genotype_celltype_t1_t2_PXD043349.limma.results_filtered.tsv:md5,2698496e232c1dc6a56cb74257c89ef5",
                 "normalizeMedian.normalized_proteingroups_tab.tsv:md5,3762cd5aaaa40ba0ad75fe4ed08313a3",
                 "raw_proteingroups_tab.tsv:md5,0f07ca850811c044fb9d0c8e6971c31f"
             ],
@@ -235,7 +247,7 @@
                 }
             ]
         ],
-        "timestamp": "2026-06-18T14:32:06.633538516",
+        "timestamp": "2026-06-18T14:57:58.56906374",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.0"

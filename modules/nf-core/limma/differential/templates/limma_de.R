@@ -361,8 +361,11 @@ if (!is.null(opt\$use_voom) && opt\$use_voom) {
     # Run voom to transform the data
     data_for_fit <- voom(dge, design)
 } else {
-    # Use as.matrix for regular microarray analysis
+    # Use as.matrix for regular microarray/proteomics analysis
     data_for_fit <- as.matrix(intensities.table)
+    if (! is.null(opt\$round_digits)){
+        data_for_fit <- round(data_for_fit, opt\$round_digits)
+    }
 }
 
 if (!is.null(opt\$block)) {
