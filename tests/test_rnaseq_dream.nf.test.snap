@@ -171,25 +171,25 @@
             [
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
-                "interaction_genotype_treatment_SRP254919.dream.results.tsv:md5,f74fb129214196cf93fbcb45d3f9f4aa",
+                "interaction_genotype_treatment_SRP254919.dream.results.tsv:md5,b843290b05beda3a371853d171438c64",
                 "interaction_genotype_treatment_SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
-                "interaction_genotype_treatment_SRP254919_dream.annotated.tsv:md5,4e3d691cb96b5916548dd9672c23b75b",
-                "treatment_effect_classic_comparison_SRP254919.dream.results.tsv:md5,1896399186624f98e6a6aaa1fe741757",
-                "treatment_effect_classic_comparison_SRP254919.dream.results_filtered.tsv:md5,d7d82b55f049b2467ced1eafc364c488",
-                "treatment_effect_classic_comparison_SRP254919_dream.annotated.tsv:md5,f96f8e38466e8f1e55e6f773b74c76d8",
-                "treatment_plus_genotype_SRP254919.dream.results.tsv:md5,36a36dba93eb4b84f6b51afc3f3381b6",
-                "treatment_plus_genotype_SRP254919.dream.results_filtered.tsv:md5,243b253e50706d2b1c08ac33b68a065b",
-                "treatment_plus_genotype_SRP254919_dream.annotated.tsv:md5,a55514cd12eff50db66c54de24f725ed"
+                "interaction_genotype_treatment_SRP254919_dream.annotated.tsv:md5,8f8cf8fe6b153dc0121904af3ef50e7e",
+                "treatment_effect_classic_comparison_SRP254919.dream.results.tsv:md5,c2c423a19d51b572b1b3d1f722f94519",
+                "treatment_effect_classic_comparison_SRP254919.dream.results_filtered.tsv:md5,9d27bd161a5e0a7a02fa3b5b5d0b8f09",
+                "treatment_effect_classic_comparison_SRP254919_dream.annotated.tsv:md5,9e8580561c9e4f119ba5d9b33d69d62d",
+                "treatment_plus_genotype_SRP254919.dream.results.tsv:md5,c756d21b63800c01837326b7212c3335",
+                "treatment_plus_genotype_SRP254919.dream.results_filtered.tsv:md5,89ca7bf51d5a35c91ee9d8d6a2225336",
+                "treatment_plus_genotype_SRP254919_dream.annotated.tsv:md5,8cb81f271e7cb6d150bb8b00aef900fb"
             ],
             [
                 {
                     "tables/differential/rnaseq_dream/interaction_genotype_treatment_SRP254919.dream.results.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000104399\t-13.5\t21.125\t-3.50375357868911\t0.00217289766053297\t1\t-4.59496678479225",
-                        "ENSMUSG00000055313\t-13.5\t24.7916666666667\t-3.15263886546127\t0.00490304576247752\t1\t-4.59498919235405",
-                        "ENSMUSG00000082792\t-22.6666666666667\t39.25\t-3.10079150284458\t0.00552122940190349\t1\t-4.59499257558894",
-                        "ENSMUSG00000025161\t-586.666666666666\t548.333333333333\t-3.0378702940113\t0.00637322968076385\t1\t-4.59499670240941",
-                        "ENSMUSG00000006958\t-13.1666666666667\t22.2083333333333\t-2.91850535510928\t0.00835085327141639\t1\t-4.59500458599297"
+                        "ENSMUSG00000104399\t-13.5\t21.12\t-3.5\t0\t1\t-4.59",
+                        "ENSMUSG00000055313\t-13.5\t24.79\t-3.15\t0\t1\t-4.59",
+                        "ENSMUSG00000082792\t-22.67\t39.25\t-3.1\t0.01\t1\t-4.59",
+                        "ENSMUSG00000025161\t-586.67\t548.33\t-3.04\t0.01\t1\t-4.59",
+                        "ENSMUSG00000006958\t-13.17\t22.21\t-2.92\t0.01\t1\t-4.6"
                     ]
                 },
                 {
@@ -200,42 +200,42 @@
                 {
                     "tables/differential/rnaseq_dream/treatment_effect_classic_comparison_SRP254919.dream.results.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000032515\t-152.666666666667\t371.75\t-6.44603925605248\t1.56468077317893e-06\t0.0257077051033298\t-3.06884360057032",
-                        "ENSMUSG00000042745\t973.916666666667\t2365.29166666667\t5.77495470878884\t7.58091456904406e-06\t0.0438265792246306\t-3.20780365859541",
-                        "ENSMUSG00000050914\t-54.6666666666667\t89.5\t-5.75230430214917\t8.00241860461909e-06\t0.0438265792246306\t-3.21286993397676",
-                        "ENSMUSG00000015312\t-1378.16666666667\t4030.25\t-5.00908893776895\t4.8437086218039e-05\t0.198955331640595\t-3.39355901722833",
-                        "ENSMUSG00000105954\t34.4166666666667\t58.625\t4.89200238034865\t6.4553747975676e-05\t0.212123615848071\t-3.42463347909762"
+                        "ENSMUSG00000032515\t-152.67\t371.75\t-6.45\t0\t0.03\t-3.07",
+                        "ENSMUSG00000042745\t973.92\t2365.29\t5.77\t0\t0.04\t-3.21",
+                        "ENSMUSG00000050914\t-54.67\t89.5\t-5.75\t0\t0.04\t-3.21",
+                        "ENSMUSG00000015312\t-1378.17\t4030.25\t-5.01\t0\t0.2\t-3.39",
+                        "ENSMUSG00000105954\t34.42\t58.62\t4.89\t0\t0.21\t-3.42"
                     ]
                 },
                 {
                     "tables/differential/rnaseq_dream/treatment_effect_classic_comparison_SRP254919.dream.results_filtered.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000032515\t-152.666666666667\t371.75\t-6.44603925605248\t1.56468077317893e-06\t0.0257077051033298\t-3.06884360057032",
-                        "ENSMUSG00000042745\t973.916666666667\t2365.29166666667\t5.77495470878884\t7.58091456904406e-06\t0.0438265792246306\t-3.20780365859541",
-                        "ENSMUSG00000050914\t-54.6666666666667\t89.5\t-5.75230430214917\t8.00241860461909e-06\t0.0438265792246306\t-3.21286993397676"
+                        "ENSMUSG00000032515\t-152.67\t371.75\t-6.45\t0.0\t0.03\t-3.07",
+                        "ENSMUSG00000042745\t973.92\t2365.29\t5.77\t0.0\t0.04\t-3.21",
+                        "ENSMUSG00000050914\t-54.67\t89.5\t-5.75\t0.0\t0.04\t-3.21"
                     ]
                 },
                 {
                     "tables/differential/rnaseq_dream/treatment_plus_genotype_SRP254919.dream.results.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000042745\t973.916666666667\t2365.29166666667\t6.68443639380261\t1.14380128312227e-06\t0.00991936419870072\t-2.89710709417604",
-                        "ENSMUSG00000032515\t-152.666666666667\t371.75\t-6.65999156386004\t1.20746977464403e-06\t0.00991936419870072\t-2.90182362422183",
-                        "ENSMUSG00000050914\t-54.6666666666667\t89.5\t-6.33454288694149\t2.50160332697154e-06\t0.0137004475540475\t-2.96728647123733",
-                        "ENSMUSG00000105954\t34.4166666666667\t58.625\t4.93147831395807\t6.61565482651213e-05\t0.230009625940275\t-3.31258856940539",
-                        "ENSMUSG00000015312\t-1378.16666666667\t4030.25\t-4.90793483865988\t6.9996842952001e-05\t0.230009625940275\t-3.3193235001129"
+                        "ENSMUSG00000042745\t973.92\t2365.29\t6.68\t0\t0.01\t-2.9",
+                        "ENSMUSG00000032515\t-152.67\t371.75\t-6.66\t0\t0.01\t-2.9",
+                        "ENSMUSG00000050914\t-54.67\t89.5\t-6.33\t0\t0.01\t-2.97",
+                        "ENSMUSG00000105954\t34.42\t58.62\t4.93\t0\t0.23\t-3.31",
+                        "ENSMUSG00000015312\t-1378.17\t4030.25\t-4.91\t0\t0.23\t-3.32"
                     ]
                 },
                 {
                     "tables/differential/rnaseq_dream/treatment_plus_genotype_SRP254919.dream.results_filtered.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000042745\t973.916666666667\t2365.29166666667\t6.68443639380261\t1.14380128312227e-06\t0.0099193641987007\t-2.89710709417604",
-                        "ENSMUSG00000032515\t-152.666666666667\t371.75\t-6.65999156386004\t1.20746977464403e-06\t0.0099193641987007\t-2.90182362422183",
-                        "ENSMUSG00000050914\t-54.6666666666667\t89.5\t-6.33454288694149\t2.50160332697154e-06\t0.0137004475540475\t-2.96728647123733"
+                        "ENSMUSG00000042745\t973.92\t2365.29\t6.68\t0.0\t0.01\t-2.9",
+                        "ENSMUSG00000032515\t-152.67\t371.75\t-6.66\t0.0\t0.01\t-2.9",
+                        "ENSMUSG00000050914\t-54.67\t89.5\t-6.33\t0.0\t0.01\t-2.97"
                     ]
                 }
             ]
         ],
-        "timestamp": "2026-06-18T10:22:31.705962625",
+        "timestamp": "2026-06-18T12:43:27.194133247",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.0"
@@ -350,29 +350,29 @@
             [
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
-                "full_model_with_interactions_SRP254919.dream.results.tsv:md5,e3bfb202ff97a05a1cbac42925246ead",
+                "full_model_with_interactions_SRP254919.dream.results.tsv:md5,c2d813255f9a639953cc3fd28aa0ac3d",
                 "full_model_with_interactions_SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
-                "full_model_with_interactions_SRP254919_dream.annotated.tsv:md5,a7f5049ddf871f56ae8d639ef4759c85",
-                "interaction_genotype_treatment_SRP254919.dream.results.tsv:md5,d9eaa24a3cba16ddfd3bc386b6c7c357",
+                "full_model_with_interactions_SRP254919_dream.annotated.tsv:md5,8040efacdfca20e70f57a65cf512bbb4",
+                "interaction_genotype_treatment_SRP254919.dream.results.tsv:md5,90466a3b56fc237a5ddf020589c72791",
                 "interaction_genotype_treatment_SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
-                "interaction_genotype_treatment_SRP254919_dream.annotated.tsv:md5,17602c22753330dafb6df264aad1b51b",
-                "treatment_effect_classic_comparison_SRP254919.dream.results.tsv:md5,2e9104b088b8168753c8fa4f3f4c880e",
+                "interaction_genotype_treatment_SRP254919_dream.annotated.tsv:md5,df7eafa7afe685d4bd5438ed96cfc7d2",
+                "treatment_effect_classic_comparison_SRP254919.dream.results.tsv:md5,550355935058db18d5c81a6d02c60951",
                 "treatment_effect_classic_comparison_SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
-                "treatment_effect_classic_comparison_SRP254919_dream.annotated.tsv:md5,0152c3d171e242a141fd00e5c9c4b90b",
-                "treatment_plus_genotype_SRP254919.dream.results.tsv:md5,48e4b35bfb71beed1ce11c62f8e2e408",
-                "treatment_plus_genotype_SRP254919.dream.results_filtered.tsv:md5,e4ef84b2c82a7c56ae34cad80a0ec154",
-                "treatment_plus_genotype_SRP254919_dream.annotated.tsv:md5,e195e9caa89eca8ca6c39e01d1020699",
-                "all.normalised_counts.tsv:md5,a06f5e5c50938bb4d93991d7e314c7cf"
+                "treatment_effect_classic_comparison_SRP254919_dream.annotated.tsv:md5,2611c5cc0fdd91493418a71eabf4cfe4",
+                "treatment_plus_genotype_SRP254919.dream.results.tsv:md5,b77d4032718ba867569457a33df01dbd",
+                "treatment_plus_genotype_SRP254919.dream.results_filtered.tsv:md5,fff9750e2f03fc4903313bbeffdb53ac",
+                "treatment_plus_genotype_SRP254919_dream.annotated.tsv:md5,e57fbc539b0e1aa7dd97349b80716798",
+                "all.normalised_counts.tsv:md5,511d248c74bd9c7c9189c0ce8543366b"
             ],
             [
                 {
                     "tables/differential/rnaseq_dream/full_model_with_interactions_SRP254919.dream.results.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000005667\t0.0977375310230506\t5.31319623837135\t13.9859617448705\t2.22862889684788e-14\t3.66163727752106e-10\t22.8467961719119",
-                        "ENSMUSG00000040010\t0.0583288527158043\t6.46550522902157\t10.0527537787973\t6.23710614260393e-11\t5.12378269614913e-07\t14.7129749561448",
-                        "ENSMUSG00000025007\t0.0395411463737269\t6.9880249162389\t8.50443367038099\t2.3828019177347e-09\t1.16777717721209e-05\t10.9410503411852",
-                        "ENSMUSG00000032715\t0.101219039375988\t3.62433053696354\t8.4141397659888\t2.97560651779096e-09\t1.16777717721209e-05\t11.2390415576667",
-                        "ENSMUSG00000004891\t0.0463265535813547\t5.78229780017378\t8.34228276698173\t3.55379542669535e-09\t1.16777717721209e-05\t10.7372084278871"
+                        "ENSMUSG00000005667\t0.1\t5.31\t13.99\t0\t0\t22.85",
+                        "ENSMUSG00000040010\t0.06\t6.47\t10.05\t0\t0\t14.71",
+                        "ENSMUSG00000025007\t0.04\t6.99\t8.5\t0\t0\t10.94",
+                        "ENSMUSG00000032715\t0.1\t3.62\t8.41\t0\t0\t11.24",
+                        "ENSMUSG00000004891\t0.05\t5.78\t8.34\t0\t0\t10.74"
                     ]
                 },
                 {
@@ -383,11 +383,11 @@
                 {
                     "tables/differential/rnaseq_dream/interaction_genotype_treatment_SRP254919.dream.results.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000051747\t1.286577001015\t-2.1455270905722\t4.24412193342222\t0.000324412776001496\t0.999940195489757\t-4.38741760054402",
-                        "ENSMUSG00000104399\t-0.884196468214236\t-0.725848092796683\t-3.83296162442551\t0.000888971907782659\t0.999940195489757\t-4.27350076785049",
-                        "ENSMUSG00000055313\t-0.747775655561654\t-0.498318596031469\t-3.66272371718379\t0.00134565310576481\t0.999940195489757\t-4.2641673581471",
-                        "ENSMUSG00000027204\t-2.00598414281545\t-3.56269035589975\t-3.45322784413806\t0.00223269741723328\t0.999940195489757\t-4.50820897197298",
-                        "ENSMUSG00000043165\t3.21593391294258\t-4.38039487652086\t3.3357618644434\t0.00295862503996257\t0.999940195489757\t-4.53118160588508"
+                        "ENSMUSG00000051747\t1.29\t-2.15\t4.24\t0\t1\t-4.39",
+                        "ENSMUSG00000104399\t-0.88\t-0.73\t-3.83\t0\t1\t-4.27",
+                        "ENSMUSG00000055313\t-0.75\t-0.5\t-3.66\t0\t1\t-4.26",
+                        "ENSMUSG00000027204\t-2.01\t-3.56\t-3.45\t0\t1\t-4.51",
+                        "ENSMUSG00000043165\t3.22\t-4.38\t3.34\t0\t1\t-4.53"
                     ]
                 },
                 {
@@ -398,11 +398,11 @@
                 {
                     "tables/differential/rnaseq_dream/treatment_effect_classic_comparison_SRP254919.dream.results.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000000056\t-0.283144149504957\t6.42743164978599\t-8.8886572672829\t3.89874206640824e-09\t6.40563321510874e-05\t10.8320104627238",
-                        "ENSMUSG00000032515\t-0.602122211802894\t3.37278219837387\t-8.24557272175834\t1.57425729824936e-08\t0.000126011450576591\t8.6999363485408",
-                        "ENSMUSG00000042745\t0.59867848058024\t6.03785357835859\t8.07496036640028\t2.30087858630415e-08\t0.000126011450576591\t9.18805611043629",
-                        "ENSMUSG00000050914\t-0.890301794054776\t1.26537635315959\t-7.41145753002175\t1.04421971967103e-07\t0.000354914508310177\t5.98191799636751",
-                        "ENSMUSG00000037573\t-0.306200573203463\t7.54488498949434\t-7.39692958396712\t1.08008067045093e-07\t0.000354914508310177\t7.7824873213833"
+                        "ENSMUSG00000000056\t-0.28\t6.43\t-8.89\t0\t0\t10.83",
+                        "ENSMUSG00000032515\t-0.6\t3.37\t-8.25\t0\t0\t8.7",
+                        "ENSMUSG00000042745\t0.6\t6.04\t8.07\t0\t0\t9.19",
+                        "ENSMUSG00000050914\t-0.89\t1.27\t-7.41\t0\t0\t5.98",
+                        "ENSMUSG00000037573\t-0.31\t7.54\t-7.4\t0\t0\t7.78"
                     ]
                 },
                 {
@@ -413,32 +413,32 @@
                 {
                     "tables/differential/rnaseq_dream/treatment_plus_genotype_SRP254919.dream.results.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000042745\t0.599549227528994\t6.03785357835859\t10.338965773185\t3.50609368797625e-10\t5.76051192934499e-06\t13.2933355680213",
-                        "ENSMUSG00000000056\t-0.283210549914209\t6.42743164978599\t-9.74654150407536\t1.08228226485557e-09\t8.89094880578849e-06\t12.2615456454179",
-                        "ENSMUSG00000050914\t-0.884764970386571\t1.26537635315959\t-9.41707532079838\t2.06404065030889e-09\t1.13040626281917e-05\t9.53462820614771",
-                        "ENSMUSG00000032515\t-0.599205564726691\t3.37278219837387\t-9.07047765309602\t4.13174422496513e-09\t1.69711394040443e-05\t10.3814616829653",
-                        "ENSMUSG00000037573\t-0.306149486329617\t7.54488498949434\t-7.9267149316475\t4.56244541574505e-08\t0.000149921956361382\t8.70668710080353"
+                        "ENSMUSG00000042745\t0.6\t6.04\t10.34\t0\t0\t13.29",
+                        "ENSMUSG00000000056\t-0.28\t6.43\t-9.75\t0\t0\t12.26",
+                        "ENSMUSG00000050914\t-0.88\t1.27\t-9.42\t0\t0\t9.53",
+                        "ENSMUSG00000032515\t-0.6\t3.37\t-9.07\t0\t0\t10.38",
+                        "ENSMUSG00000037573\t-0.31\t7.54\t-7.93\t0\t0\t8.71"
                     ]
                 },
                 {
                     "tables/differential/rnaseq_dream/treatment_plus_genotype_SRP254919.dream.results_filtered.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000028527\t-1.00599277473866\t2.96496130119087\t-4.6784336059465\t0.000100551868015\t0.0218185127313621\t1.39280855494904"
+                        "ENSMUSG00000028527\t-1.01\t2.96\t-4.68\t0.0\t0.02\t1.39"
                     ]
                 },
                 {
                     "tables/processed_abundance/rnaseq_dream/all.normalised_counts.tsv": [
                         "gene_id\tSample1\tSample2\tSample3\tSample4\tSample5\tSample6\tSample7\tSample8\tSample9\tSample10\tSample11\tSample12\tSample13\tSample14\tSample15\tSample16\tSample17\tSample18\tSample19\tSample20\tSample21\tSample22\tSample23\tSample24",
-                        "ENSMUSG00000025900\t-3.52123676059411\t-1.93800019093735\t-3.80471436352347\t-2.91470619892187\t-2.78799223389324\t-4.39791968946599\t-3.19478969053935\t-3.89380754005792\t-3.74327291988545\t-3.36310728712117\t-3.27723430154295\t-3.75147715853674\t-2.79864226562663\t-3.58411436976736\t-3.86526800176402\t-6.12801949174608\t-2.38117851407415\t-2.59409897537705\t-6.12801949878156\t-4.52993763595592\t-3.89376932255426\t-1.86647613854826\t-3.18456878349906\t-1.98516173310454",
-                        "ENSMUSG00000098104\t-0.21154035299233\t0.455267157823245\t-0.398410404129154\t0.520120587116052\t0.59924488969675\t0.740807803175158\t-0.151738572118453\t0.102743098705263\t-0.168560806172164\t0.693137312314344\t0.887910611578023\t0.414918720073965\t-0.225065959199909\t-0.245869293839717\t-0.270389710275284\t0.455689844111519\t0.816585106055342\t0.611135607562257\t0.028906493812583\t-0.0863171679775938\t0.0667575732844203\t1.01140174103721\t0.947190132682876\t1.03771255844303",
-                        "ENSMUSG00000088000\t-2.10349479206334\t-4.46966725438441\t-2.42599100492757\t-2.91470619892187\t-4.41363723492638\t-2.76765090065736\t-1.9029122738516\t-1.84074808994773\t-2.59741131500869\t-3.36310728712117\t-2.9130805331419\t-3.75147715853674\t-1.87225185043978\t-2.4188242688034\t-2.11043289709875\t-2.57401017964946\t-2.17422035911664\t-2.210540988249\t-3.73189028083746\t-2.94062839372112\t-1.84070204323124\t-2.34916787315492\t-1.58524756150933\t-2.76926068238473",
-                        "ENSMUSG00000033845\t6.08660573029834\t6.11029263398683\t6.09075014801548\t6.03267419873557\t6.00190288477647\t6.10513981874944\t6.06660145214798\t6.13897920167305\t6.0738663906319\t6.04484462457583\t6.11079283604589\t6.11702498134759\t6.25379830095225\t6.23752820376061\t6.20941233024932\t6.17390280199874\t6.11969538240733\t6.13184001351401\t6.20879331508999\t6.22224811301632\t6.26661140322657\t6.21843876511836\t6.17514196781079\t6.13345780762295",
-                        "ENSMUSG00000102275\t-1.96038390655695\t-1.93800019093735\t-2.21952248425091\t-3.19826159075553\t-1.86104648810196\t-3.13660684641222\t-2.2924622651862\t-2.32399726390818\t-2.88846207624304\t-2.26740543142431\t-2.38086224715136\t-1.97651561232832\t-1.87225185043978\t-3.08406594510441\t-2.73602540557845\t-2.03058387272858\t-2.38117851407415\t-2.05126367054767\t-2.87587953381606\t-1.86148417573523\t-2.32395220617363\t-2.01014578380717\t-1.89178400578005\t-2.14491422552656"
+                        "ENSMUSG00000025900\t-3.52\t-1.94\t-3.8\t-2.91\t-2.79\t-4.4\t-3.19\t-3.89\t-3.74\t-3.36\t-3.28\t-3.75\t-2.8\t-3.58\t-3.87\t-6.13\t-2.38\t-2.59\t-6.13\t-4.53\t-3.89\t-1.87\t-3.18\t-1.99",
+                        "ENSMUSG00000098104\t-0.21\t0.46\t-0.4\t0.52\t0.6\t0.74\t-0.15\t0.1\t-0.17\t0.69\t0.89\t0.41\t-0.23\t-0.25\t-0.27\t0.46\t0.82\t0.61\t0.03\t-0.09\t0.07\t1.01\t0.95\t1.04",
+                        "ENSMUSG00000088000\t-2.1\t-4.47\t-2.43\t-2.91\t-4.41\t-2.77\t-1.9\t-1.84\t-2.6\t-3.36\t-2.91\t-3.75\t-1.87\t-2.42\t-2.11\t-2.57\t-2.17\t-2.21\t-3.73\t-2.94\t-1.84\t-2.35\t-1.59\t-2.77",
+                        "ENSMUSG00000033845\t6.09\t6.11\t6.09\t6.03\t6\t6.11\t6.07\t6.14\t6.07\t6.04\t6.11\t6.12\t6.25\t6.24\t6.21\t6.17\t6.12\t6.13\t6.21\t6.22\t6.27\t6.22\t6.18\t6.13",
+                        "ENSMUSG00000102275\t-1.96\t-1.94\t-2.22\t-3.2\t-1.86\t-3.14\t-2.29\t-2.32\t-2.89\t-2.27\t-2.38\t-1.98\t-1.87\t-3.08\t-2.74\t-2.03\t-2.38\t-2.05\t-2.88\t-1.86\t-2.32\t-2.01\t-1.89\t-2.14"
                     ]
                 }
             ]
         ],
-        "timestamp": "2026-06-18T10:18:43.069514784",
+        "timestamp": "2026-06-18T12:39:26.661334881",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.0"
@@ -564,23 +564,23 @@
             [
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
-                "treatment_mCherry_hND6__SRP254919.dream.results.tsv:md5,2b27caf3ec88a84279a4cd972d2355ca",
+                "treatment_mCherry_hND6__SRP254919.dream.results.tsv:md5,0bb4b0c01da5ab3d07801b3b1ce8559b",
                 "treatment_mCherry_hND6__SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
-                "treatment_mCherry_hND6__SRP254919_dream.annotated.tsv:md5,a6702db7e33e13efc621ea1dd50ff4ec",
-                "treatment_mCherry_hND6_sample_number_SRP254919.dream.results.tsv:md5,45ea602415ac70fda1f9ee28758ff2bd",
-                "treatment_mCherry_hND6_sample_number_SRP254919.dream.results_filtered.tsv:md5,315311e67e6f86ddf80f6676ca1dfb12",
-                "treatment_mCherry_hND6_sample_number_SRP254919_dream.annotated.tsv:md5,1146e7e47feb5c8efe4239b679838f9e",
-                "all.normalised_counts.tsv:md5,7a2dc10c76784a7621437af839bcde42"
+                "treatment_mCherry_hND6__SRP254919_dream.annotated.tsv:md5,a8e3457960d3090423db51b2517f6c89",
+                "treatment_mCherry_hND6_sample_number_SRP254919.dream.results.tsv:md5,18b847c37a51b63b88a15ff49689dc68",
+                "treatment_mCherry_hND6_sample_number_SRP254919.dream.results_filtered.tsv:md5,c1900b6d731fd942518d152daec315ed",
+                "treatment_mCherry_hND6_sample_number_SRP254919_dream.annotated.tsv:md5,70ea266faf6b2d9c8162bb64e9e029d7",
+                "all.normalised_counts.tsv:md5,bc131fb2bfd3eae64b651f3480bd120a"
             ],
             [
                 {
                     "tables/differential/rnaseq_dream_decoupler/treatment_mCherry_hND6__SRP254919.dream.results.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000095079\t6.85174179265077\t9.47857435643109\t7.12117842114929\t0.000201850707762389\t0.198217395022666\t0.517167792730069",
-                        "ENSMUSG00000076613\t9.5729712594179\t7.57110700561126\t5.72800263237089\t0.00074773160074856\t0.305786370534233\t-0.847915569590613",
-                        "ENSMUSG00000076609\t9.08660466526075\t10.5528244633166\t5.51248480258694\t0.000934174248067923\t0.305786370534233\t-0.413054845577601",
-                        "ENSMUSG00000067149\t7.46077810197569\t8.63007091402819\t5.08463433501333\t0.00147952527693383\t0.363223455487256\t-1.07703735463892",
-                        "ENSMUSG00000048087\t-2.87380458827328\t6.88281621189043\t-3.26811657703603\t0.0139583926521985\t0.996271232013369\t-2.69299632217557"
+                        "ENSMUSG00000095079\t6.85\t9.48\t7.12\t0\t0.2\t0.52",
+                        "ENSMUSG00000076613\t9.57\t7.57\t5.73\t0\t0.31\t-0.85",
+                        "ENSMUSG00000076609\t9.09\t10.55\t5.51\t0\t0.31\t-0.41",
+                        "ENSMUSG00000067149\t7.46\t8.63\t5.08\t0\t0.36\t-1.08",
+                        "ENSMUSG00000048087\t-2.87\t6.88\t-3.27\t0.01\t1\t-2.69"
                     ]
                 },
                 {
@@ -591,32 +591,32 @@
                 {
                     "tables/differential/rnaseq_dream_decoupler/treatment_mCherry_hND6_sample_number_SRP254919.dream.results.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000076613\t9.78730439596903\t7.57110700561126\t14.418415767103\t5.04742150345329e-05\t0.0495656791639113\t-0.0686249806084778",
-                        "ENSMUSG00000067149\t7.67708924933637\t8.63007091402819\t7.00886196379748\t0.00124416450112846\t0.500204552340691\t-0.919858275052383",
-                        "ENSMUSG00000095079\t6.60463386145883\t9.47857435643109\t6.67969659504704\t0.0015281198136681\t0.500204552340691\t-0.783873912112274",
-                        "ENSMUSG00000076609\t8.38550290311525\t10.5528244633166\t5.47900959620648\t0.00350072010890931\t0.859426786737236\t-1.32134125834793",
-                        "ENSMUSG00000043388\t-1.03008468234857\t9.92298029379557\t-3.3938161943891\t0.0218584482229553\t0.999211936403257\t-3.00363654506063"
+                        "ENSMUSG00000076613\t9.79\t7.57\t14.42\t0\t0.05\t-0.07",
+                        "ENSMUSG00000067149\t7.68\t8.63\t7.01\t0\t0.5\t-0.92",
+                        "ENSMUSG00000095079\t6.6\t9.48\t6.68\t0\t0.5\t-0.78",
+                        "ENSMUSG00000076609\t8.39\t10.55\t5.48\t0\t0.86\t-1.32",
+                        "ENSMUSG00000043388\t-1.03\t9.92\t-3.39\t0.02\t1\t-3"
                     ]
                 },
                 {
                     "tables/differential/rnaseq_dream_decoupler/treatment_mCherry_hND6_sample_number_SRP254919.dream.results_filtered.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000076613\t9.78730439596903\t7.57110700561126\t14.418415767103\t5.04742150345329e-05\t0.0495656791639113\t-0.0686249806084778"
+                        "ENSMUSG00000076613\t9.79\t7.57\t14.42\t0.0\t0.05\t-0.07"
                     ]
                 },
                 {
                     "tables/processed_abundance/rnaseq_dream_decoupler/all.normalised_counts.tsv": [
                         "gene_id\t8042381\t8042382\t8042383\t8042384\t8042385\t8042386",
-                        "ENSMUSG00000023978\t6.08523023021921\t4.16243775551109\t2.82966896452221\t6.0187148707574\t13.2384428718816\t4.21599154661534",
-                        "ENSMUSG00000030324\t10.2262456234403\t6.83867822142105\t4.14547174639209\t8.39056121550188\t15.7302522732996\t6.79199860372349",
-                        "ENSMUSG00000031450\t7.06581765502005\t4.69781729321621\t1.65006263409603\t5.00711590462223\t12.5908309892849\t5.45080564919373",
-                        "ENSMUSG00000056055\t8.43225193252644\t4.69781729321621\t3.91172846909628\t7.42795720718659\t14.0571486742084\t5.70382785630657",
-                        "ENSMUSG00000025900\t6.83479718581354\t4.69781729321621\t2.15769647583101\t4.51234229084683\t11.9098548704279\t4.75320814774286"
+                        "ENSMUSG00000023978\t6.09\t4.16\t2.83\t6.02\t13.24\t4.22",
+                        "ENSMUSG00000030324\t10.23\t6.84\t4.15\t8.39\t15.73\t6.79",
+                        "ENSMUSG00000031450\t7.07\t4.7\t1.65\t5.01\t12.59\t5.45",
+                        "ENSMUSG00000056055\t8.43\t4.7\t3.91\t7.43\t14.06\t5.7",
+                        "ENSMUSG00000025900\t6.83\t4.7\t2.16\t4.51\t11.91\t4.75"
                     ]
                 }
             ]
         ],
-        "timestamp": "2026-06-18T10:36:23.703738175",
+        "timestamp": "2026-06-18T12:56:55.655300146",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.0"
@@ -766,29 +766,29 @@
             [
                 "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
-                "full_model_with_interactions_SRP254919.dream.results.tsv:md5,e3bfb202ff97a05a1cbac42925246ead",
+                "full_model_with_interactions_SRP254919.dream.results.tsv:md5,c2d813255f9a639953cc3fd28aa0ac3d",
                 "full_model_with_interactions_SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
-                "full_model_with_interactions_SRP254919_dream.annotated.tsv:md5,a7f5049ddf871f56ae8d639ef4759c85",
-                "interaction_genotype_treatment_SRP254919.dream.results.tsv:md5,d9eaa24a3cba16ddfd3bc386b6c7c357",
+                "full_model_with_interactions_SRP254919_dream.annotated.tsv:md5,8040efacdfca20e70f57a65cf512bbb4",
+                "interaction_genotype_treatment_SRP254919.dream.results.tsv:md5,90466a3b56fc237a5ddf020589c72791",
                 "interaction_genotype_treatment_SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
-                "interaction_genotype_treatment_SRP254919_dream.annotated.tsv:md5,17602c22753330dafb6df264aad1b51b",
-                "treatment_effect_classic_comparison_SRP254919.dream.results.tsv:md5,2e9104b088b8168753c8fa4f3f4c880e",
+                "interaction_genotype_treatment_SRP254919_dream.annotated.tsv:md5,df7eafa7afe685d4bd5438ed96cfc7d2",
+                "treatment_effect_classic_comparison_SRP254919.dream.results.tsv:md5,550355935058db18d5c81a6d02c60951",
                 "treatment_effect_classic_comparison_SRP254919.dream.results_filtered.tsv:md5,0bfc9215edc6aad064c3ce6abc81bfce",
-                "treatment_effect_classic_comparison_SRP254919_dream.annotated.tsv:md5,0152c3d171e242a141fd00e5c9c4b90b",
-                "treatment_plus_genotype_SRP254919.dream.results.tsv:md5,48e4b35bfb71beed1ce11c62f8e2e408",
-                "treatment_plus_genotype_SRP254919.dream.results_filtered.tsv:md5,e4ef84b2c82a7c56ae34cad80a0ec154",
-                "treatment_plus_genotype_SRP254919_dream.annotated.tsv:md5,e195e9caa89eca8ca6c39e01d1020699",
-                "all.normalised_counts.tsv:md5,a06f5e5c50938bb4d93991d7e314c7cf"
+                "treatment_effect_classic_comparison_SRP254919_dream.annotated.tsv:md5,2611c5cc0fdd91493418a71eabf4cfe4",
+                "treatment_plus_genotype_SRP254919.dream.results.tsv:md5,b77d4032718ba867569457a33df01dbd",
+                "treatment_plus_genotype_SRP254919.dream.results_filtered.tsv:md5,fff9750e2f03fc4903313bbeffdb53ac",
+                "treatment_plus_genotype_SRP254919_dream.annotated.tsv:md5,e57fbc539b0e1aa7dd97349b80716798",
+                "all.normalised_counts.tsv:md5,511d248c74bd9c7c9189c0ce8543366b"
             ],
             [
                 {
                     "tables/differential/rnaseq_dream_decoupler/full_model_with_interactions_SRP254919.dream.results.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000005667\t0.0977375310230506\t5.31319623837135\t13.9859617448705\t2.22862889684788e-14\t3.66163727752106e-10\t22.8467961719119",
-                        "ENSMUSG00000040010\t0.0583288527158043\t6.46550522902157\t10.0527537787973\t6.23710614260393e-11\t5.12378269614913e-07\t14.7129749561448",
-                        "ENSMUSG00000025007\t0.0395411463737269\t6.9880249162389\t8.50443367038099\t2.3828019177347e-09\t1.16777717721209e-05\t10.9410503411852",
-                        "ENSMUSG00000032715\t0.101219039375988\t3.62433053696354\t8.4141397659888\t2.97560651779096e-09\t1.16777717721209e-05\t11.2390415576667",
-                        "ENSMUSG00000004891\t0.0463265535813547\t5.78229780017378\t8.34228276698173\t3.55379542669535e-09\t1.16777717721209e-05\t10.7372084278871"
+                        "ENSMUSG00000005667\t0.1\t5.31\t13.99\t0\t0\t22.85",
+                        "ENSMUSG00000040010\t0.06\t6.47\t10.05\t0\t0\t14.71",
+                        "ENSMUSG00000025007\t0.04\t6.99\t8.5\t0\t0\t10.94",
+                        "ENSMUSG00000032715\t0.1\t3.62\t8.41\t0\t0\t11.24",
+                        "ENSMUSG00000004891\t0.05\t5.78\t8.34\t0\t0\t10.74"
                     ]
                 },
                 {
@@ -799,11 +799,11 @@
                 {
                     "tables/differential/rnaseq_dream_decoupler/interaction_genotype_treatment_SRP254919.dream.results.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000051747\t1.286577001015\t-2.1455270905722\t4.24412193342222\t0.000324412776001496\t0.999940195489757\t-4.38741760054402",
-                        "ENSMUSG00000104399\t-0.884196468214236\t-0.725848092796683\t-3.83296162442551\t0.000888971907782659\t0.999940195489757\t-4.27350076785049",
-                        "ENSMUSG00000055313\t-0.747775655561654\t-0.498318596031469\t-3.66272371718379\t0.00134565310576481\t0.999940195489757\t-4.2641673581471",
-                        "ENSMUSG00000027204\t-2.00598414281545\t-3.56269035589975\t-3.45322784413806\t0.00223269741723328\t0.999940195489757\t-4.50820897197298",
-                        "ENSMUSG00000043165\t3.21593391294258\t-4.38039487652086\t3.3357618644434\t0.00295862503996257\t0.999940195489757\t-4.53118160588508"
+                        "ENSMUSG00000051747\t1.29\t-2.15\t4.24\t0\t1\t-4.39",
+                        "ENSMUSG00000104399\t-0.88\t-0.73\t-3.83\t0\t1\t-4.27",
+                        "ENSMUSG00000055313\t-0.75\t-0.5\t-3.66\t0\t1\t-4.26",
+                        "ENSMUSG00000027204\t-2.01\t-3.56\t-3.45\t0\t1\t-4.51",
+                        "ENSMUSG00000043165\t3.22\t-4.38\t3.34\t0\t1\t-4.53"
                     ]
                 },
                 {
@@ -814,11 +814,11 @@
                 {
                     "tables/differential/rnaseq_dream_decoupler/treatment_effect_classic_comparison_SRP254919.dream.results.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000000056\t-0.283144149504957\t6.42743164978599\t-8.8886572672829\t3.89874206640824e-09\t6.40563321510874e-05\t10.8320104627238",
-                        "ENSMUSG00000032515\t-0.602122211802894\t3.37278219837387\t-8.24557272175834\t1.57425729824936e-08\t0.000126011450576591\t8.6999363485408",
-                        "ENSMUSG00000042745\t0.59867848058024\t6.03785357835859\t8.07496036640028\t2.30087858630415e-08\t0.000126011450576591\t9.18805611043629",
-                        "ENSMUSG00000050914\t-0.890301794054776\t1.26537635315959\t-7.41145753002175\t1.04421971967103e-07\t0.000354914508310177\t5.98191799636751",
-                        "ENSMUSG00000037573\t-0.306200573203463\t7.54488498949434\t-7.39692958396712\t1.08008067045093e-07\t0.000354914508310177\t7.7824873213833"
+                        "ENSMUSG00000000056\t-0.28\t6.43\t-8.89\t0\t0\t10.83",
+                        "ENSMUSG00000032515\t-0.6\t3.37\t-8.25\t0\t0\t8.7",
+                        "ENSMUSG00000042745\t0.6\t6.04\t8.07\t0\t0\t9.19",
+                        "ENSMUSG00000050914\t-0.89\t1.27\t-7.41\t0\t0\t5.98",
+                        "ENSMUSG00000037573\t-0.31\t7.54\t-7.4\t0\t0\t7.78"
                     ]
                 },
                 {
@@ -829,32 +829,32 @@
                 {
                     "tables/differential/rnaseq_dream_decoupler/treatment_plus_genotype_SRP254919.dream.results.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000042745\t0.599549227528994\t6.03785357835859\t10.338965773185\t3.50609368797625e-10\t5.76051192934499e-06\t13.2933355680213",
-                        "ENSMUSG00000000056\t-0.283210549914209\t6.42743164978599\t-9.74654150407536\t1.08228226485557e-09\t8.89094880578849e-06\t12.2615456454179",
-                        "ENSMUSG00000050914\t-0.884764970386571\t1.26537635315959\t-9.41707532079838\t2.06404065030889e-09\t1.13040626281917e-05\t9.53462820614771",
-                        "ENSMUSG00000032515\t-0.599205564726691\t3.37278219837387\t-9.07047765309602\t4.13174422496513e-09\t1.69711394040443e-05\t10.3814616829653",
-                        "ENSMUSG00000037573\t-0.306149486329617\t7.54488498949434\t-7.9267149316475\t4.56244541574505e-08\t0.000149921956361382\t8.70668710080353"
+                        "ENSMUSG00000042745\t0.6\t6.04\t10.34\t0\t0\t13.29",
+                        "ENSMUSG00000000056\t-0.28\t6.43\t-9.75\t0\t0\t12.26",
+                        "ENSMUSG00000050914\t-0.88\t1.27\t-9.42\t0\t0\t9.53",
+                        "ENSMUSG00000032515\t-0.6\t3.37\t-9.07\t0\t0\t10.38",
+                        "ENSMUSG00000037573\t-0.31\t7.54\t-7.93\t0\t0\t8.71"
                     ]
                 },
                 {
                     "tables/differential/rnaseq_dream_decoupler/treatment_plus_genotype_SRP254919.dream.results_filtered.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000028527\t-1.00599277473866\t2.96496130119087\t-4.6784336059465\t0.000100551868015\t0.0218185127313621\t1.39280855494904"
+                        "ENSMUSG00000028527\t-1.01\t2.96\t-4.68\t0.0\t0.02\t1.39"
                     ]
                 },
                 {
                     "tables/processed_abundance/rnaseq_dream_decoupler/all.normalised_counts.tsv": [
                         "gene_id\tSample1\tSample2\tSample3\tSample4\tSample5\tSample6\tSample7\tSample8\tSample9\tSample10\tSample11\tSample12\tSample13\tSample14\tSample15\tSample16\tSample17\tSample18\tSample19\tSample20\tSample21\tSample22\tSample23\tSample24",
-                        "ENSMUSG00000025900\t-3.52123676059411\t-1.93800019093735\t-3.80471436352347\t-2.91470619892187\t-2.78799223389324\t-4.39791968946599\t-3.19478969053935\t-3.89380754005792\t-3.74327291988545\t-3.36310728712117\t-3.27723430154295\t-3.75147715853674\t-2.79864226562663\t-3.58411436976736\t-3.86526800176402\t-6.12801949174608\t-2.38117851407415\t-2.59409897537705\t-6.12801949878156\t-4.52993763595592\t-3.89376932255426\t-1.86647613854826\t-3.18456878349906\t-1.98516173310454",
-                        "ENSMUSG00000098104\t-0.21154035299233\t0.455267157823245\t-0.398410404129154\t0.520120587116052\t0.59924488969675\t0.740807803175158\t-0.151738572118453\t0.102743098705263\t-0.168560806172164\t0.693137312314344\t0.887910611578023\t0.414918720073965\t-0.225065959199909\t-0.245869293839717\t-0.270389710275284\t0.455689844111519\t0.816585106055342\t0.611135607562257\t0.028906493812583\t-0.0863171679775938\t0.0667575732844203\t1.01140174103721\t0.947190132682876\t1.03771255844303",
-                        "ENSMUSG00000088000\t-2.10349479206334\t-4.46966725438441\t-2.42599100492757\t-2.91470619892187\t-4.41363723492638\t-2.76765090065736\t-1.9029122738516\t-1.84074808994773\t-2.59741131500869\t-3.36310728712117\t-2.9130805331419\t-3.75147715853674\t-1.87225185043978\t-2.4188242688034\t-2.11043289709875\t-2.57401017964946\t-2.17422035911664\t-2.210540988249\t-3.73189028083746\t-2.94062839372112\t-1.84070204323124\t-2.34916787315492\t-1.58524756150933\t-2.76926068238473",
-                        "ENSMUSG00000033845\t6.08660573029834\t6.11029263398683\t6.09075014801548\t6.03267419873557\t6.00190288477647\t6.10513981874944\t6.06660145214798\t6.13897920167305\t6.0738663906319\t6.04484462457583\t6.11079283604589\t6.11702498134759\t6.25379830095225\t6.23752820376061\t6.20941233024932\t6.17390280199874\t6.11969538240733\t6.13184001351401\t6.20879331508999\t6.22224811301632\t6.26661140322657\t6.21843876511836\t6.17514196781079\t6.13345780762295",
-                        "ENSMUSG00000102275\t-1.96038390655695\t-1.93800019093735\t-2.21952248425091\t-3.19826159075553\t-1.86104648810196\t-3.13660684641222\t-2.2924622651862\t-2.32399726390818\t-2.88846207624304\t-2.26740543142431\t-2.38086224715136\t-1.97651561232832\t-1.87225185043978\t-3.08406594510441\t-2.73602540557845\t-2.03058387272858\t-2.38117851407415\t-2.05126367054767\t-2.87587953381606\t-1.86148417573523\t-2.32395220617363\t-2.01014578380717\t-1.89178400578005\t-2.14491422552656"
+                        "ENSMUSG00000025900\t-3.52\t-1.94\t-3.8\t-2.91\t-2.79\t-4.4\t-3.19\t-3.89\t-3.74\t-3.36\t-3.28\t-3.75\t-2.8\t-3.58\t-3.87\t-6.13\t-2.38\t-2.59\t-6.13\t-4.53\t-3.89\t-1.87\t-3.18\t-1.99",
+                        "ENSMUSG00000098104\t-0.21\t0.46\t-0.4\t0.52\t0.6\t0.74\t-0.15\t0.1\t-0.17\t0.69\t0.89\t0.41\t-0.23\t-0.25\t-0.27\t0.46\t0.82\t0.61\t0.03\t-0.09\t0.07\t1.01\t0.95\t1.04",
+                        "ENSMUSG00000088000\t-2.1\t-4.47\t-2.43\t-2.91\t-4.41\t-2.77\t-1.9\t-1.84\t-2.6\t-3.36\t-2.91\t-3.75\t-1.87\t-2.42\t-2.11\t-2.57\t-2.17\t-2.21\t-3.73\t-2.94\t-1.84\t-2.35\t-1.59\t-2.77",
+                        "ENSMUSG00000033845\t6.09\t6.11\t6.09\t6.03\t6\t6.11\t6.07\t6.14\t6.07\t6.04\t6.11\t6.12\t6.25\t6.24\t6.21\t6.17\t6.12\t6.13\t6.21\t6.22\t6.27\t6.22\t6.18\t6.13",
+                        "ENSMUSG00000102275\t-1.96\t-1.94\t-2.22\t-3.2\t-1.86\t-3.14\t-2.29\t-2.32\t-2.89\t-2.27\t-2.38\t-1.98\t-1.87\t-3.08\t-2.74\t-2.03\t-2.38\t-2.05\t-2.88\t-1.86\t-2.32\t-2.01\t-1.89\t-2.14"
                     ]
                 }
             ]
         ],
-        "timestamp": "2026-06-18T10:32:57.225789879",
+        "timestamp": "2026-06-18T12:53:29.294969992",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.0"
@@ -933,76 +933,76 @@
             ],
             [
                 "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
-                "full_model_with_interactions_SRP254919.dream.results.tsv:md5,28dc9a1e098e1e730b4918abe9211040",
-                "full_model_with_interactions_SRP254919.dream.results_filtered.tsv:md5,74724d2c99fbfc57de2b6ee7a98fe4aa",
-                "full_model_with_interactions_SRP254919_dream.annotated.tsv:md5,8f368e756aa781e40314c9e4e5896d91",
-                "zero_intercept_model_1_SRP254919.dream.results.tsv:md5,af24a417d24edacacc39e506eab1ae66",
-                "zero_intercept_model_1_SRP254919.dream.results_filtered.tsv:md5,85cca59ed2bc612c9042a5e3fbdb2c94",
-                "zero_intercept_model_1_SRP254919_dream.annotated.tsv:md5,4c0085228076cae6ec3cf27030ef620c",
-                "zero_intercept_model_2_SRP254919.dream.results.tsv:md5,af24a417d24edacacc39e506eab1ae66",
-                "zero_intercept_model_2_SRP254919.dream.results_filtered.tsv:md5,85cca59ed2bc612c9042a5e3fbdb2c94",
-                "zero_intercept_model_2_SRP254919_dream.annotated.tsv:md5,4c0085228076cae6ec3cf27030ef620c"
+                "full_model_with_interactions_SRP254919.dream.results.tsv:md5,c082ba868d06d1d0fe3a0d0dc5723648",
+                "full_model_with_interactions_SRP254919.dream.results_filtered.tsv:md5,3e00a49ec55210056ff76d6eda444cb6",
+                "full_model_with_interactions_SRP254919_dream.annotated.tsv:md5,96a1c45ffa2f957782044014e7b26dc9",
+                "zero_intercept_model_1_SRP254919.dream.results.tsv:md5,59f9a18421f9af48b1ee052f2c2dfa29",
+                "zero_intercept_model_1_SRP254919.dream.results_filtered.tsv:md5,5792626c6209a24c62cb2798e1a7b86b",
+                "zero_intercept_model_1_SRP254919_dream.annotated.tsv:md5,23d5863efbe9218eab9466a91377cdb5",
+                "zero_intercept_model_2_SRP254919.dream.results.tsv:md5,59f9a18421f9af48b1ee052f2c2dfa29",
+                "zero_intercept_model_2_SRP254919.dream.results_filtered.tsv:md5,5792626c6209a24c62cb2798e1a7b86b",
+                "zero_intercept_model_2_SRP254919_dream.annotated.tsv:md5,23d5863efbe9218eab9466a91377cdb5"
             ],
             [
                 {
                     "tables/differential/generic_matrix_dream/full_model_with_interactions_SRP254919.dream.results.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000037188\t22.4666666666667\t190.541666666667\t7.36377053657364\t1.31830634811083e-06\t0.0216597732994609\t-3.36063211719417",
-                        "ENSMUSG00000064294\t-4.95555555555555\t22.625\t-6.3898882102921\t7.70421659389595e-06\t0.0632901393188552\t-3.46275958475656",
-                        "ENSMUSG00000031972\t6.6\t97.9583333333333\t5.70546524476011\t2.87761846716803e-05\t0.157597571385236\t-3.55276460865914",
-                        "ENSMUSG00000048489\t-82.0666666666666\t702.125\t-5.1039612233511\t9.63245092027737e-05\t0.395652921550393\t-3.64700475241589",
-                        "ENSMUSG00000032323\t-1.82222222222222\t7.33333333333333\t-4.73753515149805\t0.000205254284057044\t0.661682016426982\t-3.71223780099072"
+                        "ENSMUSG00000037188\t22.47\t190.54\t7.36\t0\t0.02\t-3.36",
+                        "ENSMUSG00000064294\t-4.96\t22.62\t-6.39\t0\t0.06\t-3.46",
+                        "ENSMUSG00000031972\t6.6\t97.96\t5.71\t0\t0.16\t-3.55",
+                        "ENSMUSG00000048489\t-82.07\t702.12\t-5.1\t0\t0.4\t-3.65",
+                        "ENSMUSG00000032323\t-1.82\t7.33\t-4.74\t0\t0.66\t-3.71"
                     ]
                 },
                 {
                     "tables/differential/generic_matrix_dream/full_model_with_interactions_SRP254919.dream.results_filtered.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000037188\t22.4666666666667\t190.541666666667\t7.36377053657364\t1.31830634811083e-06\t0.0216597732994609\t-3.36063211719417"
+                        "ENSMUSG00000037188\t22.47\t190.54\t7.36\t0.0\t0.02\t-3.36"
                     ]
                 },
                 {
                     "tables/differential/generic_matrix_dream/zero_intercept_model_1_SRP254919.dream.results.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000014158\t495.5\t338.916666666667\t43.1030591919675\t3.98340500971905e-23\t3.30482003164165e-19\t0.430747934649808",
-                        "ENSMUSG00000029223\t1399.33333333333\t795.416666666667\t43.0839390421663\t4.02290935075064e-23\t3.30482003164165e-19\t0.430677576850236",
-                        "ENSMUSG00000038542\t984.916666666666\t886.75\t41.559192615138\t8.96260806334299e-23\t4.90852168269084e-19\t0.424757235728226",
-                        "ENSMUSG00000029101\t1554.66666666667\t1559.95833333333\t39.9232456544584\t2.18687793807369e-22\t6.96484332659458e-19\t0.417653713479554",
-                        "ENSMUSG00000021136\t557.5\t279.875\t39.648573876766\t2.549051428065e-22\t6.96484332659458e-19\t0.416376136306308"
+                        "ENSMUSG00000014158\t495.5\t338.92\t43.1\t0\t0\t0.43",
+                        "ENSMUSG00000029223\t1399.33\t795.42\t43.08\t0\t0\t0.43",
+                        "ENSMUSG00000038542\t984.92\t886.75\t41.56\t0\t0\t0.42",
+                        "ENSMUSG00000029101\t1554.67\t1559.96\t39.92\t0\t0\t0.42",
+                        "ENSMUSG00000021136\t557.5\t279.88\t39.65\t0\t0\t0.42"
                     ]
                 },
                 {
                     "tables/differential/generic_matrix_dream/zero_intercept_model_1_SRP254919.dream.results_filtered.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000014158\t495.5\t338.916666666667\t43.1030591919675\t3.98340500971905e-23\t3.30482003164165e-19\t0.430747934649808",
-                        "ENSMUSG00000029223\t1399.33333333333\t795.416666666667\t43.0839390421663\t4.02290935075064e-23\t3.30482003164165e-19\t0.430677576850236",
-                        "ENSMUSG00000038542\t984.916666666666\t886.75\t41.559192615138\t8.96260806334299e-23\t4.90852168269084e-19\t0.424757235728226",
-                        "ENSMUSG00000029101\t1554.66666666667\t1559.95833333333\t39.9232456544584\t2.1868779380736898e-22\t6.964843326594581e-19\t0.417653713479554",
-                        "ENSMUSG00000021136\t557.5\t279.875\t39.648573876766\t2.549051428065e-22\t6.964843326594581e-19\t0.416376136306308"
+                        "ENSMUSG00000014158\t495.5\t338.92\t43.1\t0.0\t0.0\t0.43",
+                        "ENSMUSG00000029223\t1399.33\t795.42\t43.08\t0.0\t0.0\t0.43",
+                        "ENSMUSG00000038542\t984.92\t886.75\t41.56\t0.0\t0.0\t0.42",
+                        "ENSMUSG00000029101\t1554.67\t1559.96\t39.92\t0.0\t0.0\t0.42",
+                        "ENSMUSG00000021136\t557.5\t279.88\t39.65\t0.0\t0.0\t0.42"
                     ]
                 },
                 {
                     "tables/differential/generic_matrix_dream/zero_intercept_model_2_SRP254919.dream.results.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000014158\t495.5\t338.916666666667\t43.1030591919675\t3.98340500971905e-23\t3.30482003164165e-19\t0.430747934649808",
-                        "ENSMUSG00000029223\t1399.33333333333\t795.416666666667\t43.0839390421663\t4.02290935075064e-23\t3.30482003164165e-19\t0.430677576850236",
-                        "ENSMUSG00000038542\t984.916666666666\t886.75\t41.559192615138\t8.96260806334299e-23\t4.90852168269084e-19\t0.424757235728226",
-                        "ENSMUSG00000029101\t1554.66666666667\t1559.95833333333\t39.9232456544584\t2.18687793807369e-22\t6.96484332659458e-19\t0.417653713479554",
-                        "ENSMUSG00000021136\t557.5\t279.875\t39.648573876766\t2.549051428065e-22\t6.96484332659458e-19\t0.416376136306308"
+                        "ENSMUSG00000014158\t495.5\t338.92\t43.1\t0\t0\t0.43",
+                        "ENSMUSG00000029223\t1399.33\t795.42\t43.08\t0\t0\t0.43",
+                        "ENSMUSG00000038542\t984.92\t886.75\t41.56\t0\t0\t0.42",
+                        "ENSMUSG00000029101\t1554.67\t1559.96\t39.92\t0\t0\t0.42",
+                        "ENSMUSG00000021136\t557.5\t279.88\t39.65\t0\t0\t0.42"
                     ]
                 },
                 {
                     "tables/differential/generic_matrix_dream/zero_intercept_model_2_SRP254919.dream.results_filtered.tsv": [
                         "gene_id\tlogFC\tAveExpr\tt\tP.Value\tadj.P.Val\tB",
-                        "ENSMUSG00000014158\t495.5\t338.916666666667\t43.1030591919675\t3.98340500971905e-23\t3.30482003164165e-19\t0.430747934649808",
-                        "ENSMUSG00000029223\t1399.33333333333\t795.416666666667\t43.0839390421663\t4.02290935075064e-23\t3.30482003164165e-19\t0.430677576850236",
-                        "ENSMUSG00000038542\t984.916666666666\t886.75\t41.559192615138\t8.96260806334299e-23\t4.90852168269084e-19\t0.424757235728226",
-                        "ENSMUSG00000029101\t1554.66666666667\t1559.95833333333\t39.9232456544584\t2.1868779380736898e-22\t6.964843326594581e-19\t0.417653713479554",
-                        "ENSMUSG00000021136\t557.5\t279.875\t39.648573876766\t2.549051428065e-22\t6.964843326594581e-19\t0.416376136306308"
+                        "ENSMUSG00000014158\t495.5\t338.92\t43.1\t0.0\t0.0\t0.43",
+                        "ENSMUSG00000029223\t1399.33\t795.42\t43.08\t0.0\t0.0\t0.43",
+                        "ENSMUSG00000038542\t984.92\t886.75\t41.56\t0.0\t0.0\t0.42",
+                        "ENSMUSG00000029101\t1554.67\t1559.96\t39.92\t0.0\t0.0\t0.42",
+                        "ENSMUSG00000021136\t557.5\t279.88\t39.65\t0.0\t0.0\t0.42"
                     ]
                 }
             ]
         ],
-        "timestamp": "2026-06-18T10:26:20.112191286",
+        "timestamp": "2026-06-18T12:47:02.505452341",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.0"
