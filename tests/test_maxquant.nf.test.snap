@@ -135,31 +135,9 @@
                 "raw_proteingroups.rds:md5,98055b82ff3b0674487cb2fbde06bb18",
                 "normalizeMedian.normalized_proteingroups_tab.tsv:md5,154fcd8d23409981b897d153e7b7e34e",
                 "raw_proteingroups_tab.tsv:md5,33a8791f84c676ea1aea4842231acb6a"
-            ],
-            [
-                {
-                    "tables/proteus/maxquant/normalizeMedian.normalized_proteingroups_tab.tsv": [
-                        "Majority protein IDs\tsample 5\tsample 6\tsample 7\tsample 8\tsample 9\tsample 10\tsample 11\tsample 12\tsample 13\tsample 15\tsample 16\tsample 17\tsample 18\tsample 19\tsample 20",
-                        "A0A087WNL7;A0A087WQ44;A0A087WNX7\t27.8516\t27.6239\t27.2773\t26.9757\t27.5414\t27.355\t26.0547\t26.9867\t27.9643\t27.6937\t27.5277\t28.5363\t28.2833\t27.7017\t27.9942",
-                        "A0A0A6YXN4;A0A075B5U4\t26.2718\t24.4849\tNA\tNA\tNA\tNA\tNA\t23.9809\t26.0939\t24.6358\tNA\t26.4804\t26.2111\t24.8112\t25.8862",
-                        "A0A0A6YY64;A2AUP3;A2AUP5;A2AUP1;Q7TS91;A2AUP4;A7UAK8;Q3U3S6;A7UAK5;A7UAK4;A0A0A6YW89\t28.1231\t27.4669\t27.8917\t27.1811\t27.7849\t27.4104\t27.5254\t26.8671\t27.8825\t27.6802\t27.1002\t28.0843\t27.2558\t27.8537\t27.2188",
-                        "A0A0B4J1E6;P08101;A0A0B4J1G1;P08101-2\t27.0948\t27.0879\t27.6852\t27.8429\t27.1846\t27.5038\t27.413\t27.7366\t27.5475\t28.0482\t27.9616\t27.9329\t28.0226\t28.0777\t28.4065",
-                        "A0A0G2JDV3\t27.5211\t27.8367\t28.8014\t27.8506\t27.714\t27.8988\t28.2198\t28.3181\t28.1671\t28.9049\t28.5628\t27.8032\t28.1361\t28.797\t28.403"
-                    ]
-                },
-                {
-                    "tables/proteus/maxquant/raw_proteingroups_tab.tsv": [
-                        "Majority protein IDs\tsample 5\tsample 6\tsample 7\tsample 8\tsample 9\tsample 10\tsample 11\tsample 12\tsample 13\tsample 15\tsample 16\tsample 17\tsample 18\tsample 19\tsample 20",
-                        "A0A087WNL7;A0A087WQ44;A0A087WNX7\t27.9121\t27.6716\t27.1785\t27.033\t27.7214\t27.4768\t26.2356\t27.2113\t28.0542\t27.5637\t27.4247\t28.2752\t28.1579\t27.5343\t27.8022",
-                        "A0A0A6YXN4;A0A075B5U4\t26.3322\t24.5326\tNA\tNA\tNA\tNA\tNA\t24.2055\t26.1838\t24.5058\tNA\t26.2194\t26.0857\t24.6438\t25.6942",
-                        "A0A0A6YY64;A2AUP3;A2AUP5;A2AUP1;Q7TS91;A2AUP4;A7UAK8;Q3U3S6;A7UAK5;A7UAK4;A0A0A6YW89\t28.1836\t27.5146\t27.7928\t27.2384\t27.9648\t27.5322\t27.7064\t27.0917\t27.9725\t27.5502\t26.9972\t27.8233\t27.1304\t27.6863\t27.0268",
-                        "A0A0B4J1E6;P08101;A0A0B4J1G1;P08101-2\t27.1553\t27.1356\t27.5863\t27.9002\t27.3645\t27.6256\t27.5939\t27.9612\t27.6374\t27.9182\t27.8586\t27.6718\t27.8972\t27.9103\t28.2145",
-                        "A0A0G2JDV3\t27.5815\t27.8844\t28.7026\t27.9079\t27.8939\t28.0207\t28.4007\t28.5427\t28.257\t28.7749\t28.4598\t27.5422\t28.0107\t28.6295\t28.2109"
-                    ]
-                }
             ]
         ],
-        "timestamp": "2026-06-18T17:26:33.533645396",
+        "timestamp": "2026-06-18T20:55:47.380370398",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.0"

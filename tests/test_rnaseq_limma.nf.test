@@ -99,7 +99,6 @@ nextflow_pipeline {
     }
 
     test("Test rnaseq limma profile - with decoupler") {
-        tag "decoupler_pipeline_test"
         tag "rnaseq_limma_decoupler"
         config "${projectDir}/conf/test/rnaseq/rnaseq_limma_decoupler.config"
 
