@@ -47,8 +47,8 @@
                     },
                     "decoupler/decoupler": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["differential_functional_enrichment"],
+                        "git_sha": "95a5fb210d019a00acef7ce1febde2e448e0508e",
+                        "installed_by": ["differential_functional_enrichment", "modules"],
                         "patch": "modules/nf-core/decoupler/decoupler/decoupler-decoupler.diff"
                     },
                     "deseq2/differential": {
@@ -130,7 +130,7 @@
                     },
                     "variancepartition/dream": {
                         "branch": "master",
-                        "git_sha": "87e0996ad70cb449019c505fd5f53f6594e26e4f",
+                        "git_sha": "95a5fb210d019a00acef7ce1febde2e448e0508e",
                         "installed_by": ["abundance_differential_filter", "modules"],
                         "patch": "modules/nf-core/variancepartition/dream/variancepartition-dream.diff"
                     },

@@ -45,7 +45,9 @@ def parse_ext_args(args_string: str):
     )
     parser.add_argument("--features_id_col", type=str, default="gene_id", help="Column name for feature IDs")
     parser.add_argument("--features_symbol_col", type=str, default="gene_name", help="Column name for feature symbols")
-    parser.add_argument("--round_digits", type=int, default=None, help="Number of digits to round numeric output columns")
+    parser.add_argument(
+        "--round_digits", type=int, default=None, help="Number of digits to round numeric output columns"
+    )
     return parser.parse_args(args_list)
 
 
