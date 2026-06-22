@@ -76,6 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [[#743]](https://github.com/nf-core/differentialabundance/pull/743) - Update `variancepartition/dream` to disable implicit parallelism ([@atrigila](https://github.com/atrigila), review by [@grst](https://github.com/grst)).
 - [[#743]](https://github.com/nf-core/differentialabundance/pull/743) - Update `variancepartition/dream` to disable implicit parallelism ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila), [@apeltzer](https://github.com/apeltzer), and [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#734](https://github.com/nf-core/differentialabundance/pull/734)] - Update `variancepartition/dream` module and `abundance_differential_filter` subworkflow ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila) and [@apeltzer](https://github.com/apeltzer)).
 - [[#732](https://github.com/nf-core/differentialabundance/pull/732)] - Bump `nf-metro` pin to `>=0.7.2` and re-render the static and animated metro map images to pick up the upstream rowspan bbox-shrink fix ([@pinin4fjords](https://github.com/pinin4fjords)).

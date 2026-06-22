@@ -158,7 +158,8 @@
     PhD student
     Institute of Microbiology
     University of Smallville
-  round_digits: 3
+  round_digits: 2
+  seed: 10
 
 - paramset_name: test_rnaseq_dream
   include: test_paramsheet/rnaseq_dream,test_paramsheet/rnaseq_testdata_complex
@@ -172,7 +173,8 @@
     PhD student
     Institute of Microbiology
     University of Smallville
-  round_digits: 3
+  round_digits: 2
+  seed: 10
 
 - paramset_name: test_affy_limma_gprofiler2
   include: test_paramsheet/affy_limma_gprofiler2,test_paramsheet/affy_testdata
@@ -183,6 +185,8 @@
   differential_max_qval: 0.05
   differential_min_fold_change: 1.5
   gprofiler2_organism: "mmusculus"
+  round_digits: 2
+  seed: 10
 
 - paramset_name: test_rnaseq_propd_grea
   include: test_paramsheet/rnaseq_propd_grea,test_paramsheet/rnaseq_testdata

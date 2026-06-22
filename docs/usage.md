@@ -79,6 +79,33 @@ The `file` column in this example is used to specify the data file associated wi
 
 This is a numeric matrix file, comma or tab-separated, with features as rows and observations in columns. The features correspond to the supplied feature set. The parameters `--observations_id_col` and `--features_id_col` define which of the associated fields should be matched in those inputs.
 
+For example, with the default `--observations_id_col sample` and `--features_id_col gene_id`, the sample identifiers in the samplesheet should match the matrix column names:
+
+```csv title="samplesheet.csv"
+sample,condition
+sample_1,control
+sample_2,control
+sample_3,treatment
+```
+
+The feature identifiers should match the row identifiers in the matrix:
+
+```tsv title="features.tsv"
+gene_id	gene_name
+ENSG00000141510	TP53
+ENSG00000171862	PTEN
+ENSG00000139618	BRCA2
+```
+
+The matrix can then use those feature identifiers as rows and sample identifiers as columns:
+
+```tsv title="matrix.tsv"
+gene_id	sample_1	sample_2	sample_3
+ENSG00000141510	42	51	96
+ENSG00000171862	108	99	87
+ENSG00000139618	15	18	44
+```
+
 #### Outputs from nf-core/rnaseq and other tximport-processed results
 
 The nf-core RNAseq workflow incorporates [tximport](https://bioconductor.org/packages/release/bioc/html/tximport.html) for producing quantification matrices. From [version 3.12.2](https://github.com/nf-core/rnaseq/releases/tag/3.13.2), it additionally provides transcript/gene length matrices which can be directly consumed by DESeq2 to model length bias across samples.
