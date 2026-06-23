@@ -7,15 +7,21 @@
             "pca2d.png",
             "pca3d.png",
             "sample_dendrogram.png",
-            [
-                "versions.yml:md5,526fbe61b95ad3a722d7470ca1874ca3"
-            ]
+            {
+                "versions_shinyngs": [
+                    [
+                        "SHINYNGS_STATICEXPLORATORY",
+                        "shinyngs",
+                        "2.4.0"
+                    ]
+                ]
+            }
         ],
+        "timestamp": "2026-04-16T19:22:45.037561572",
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
-        },
-        "timestamp": "2024-05-03T08:48:20.908769"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
     },
     "mouse - defaults": {
         "content": [
@@ -25,15 +31,21 @@
             "pca2d.png",
             "pca3d.png",
             "sample_dendrogram.png",
-            [
-                "versions.yml:md5,526fbe61b95ad3a722d7470ca1874ca3"
-            ]
+            {
+                "versions_shinyngs": [
+                    [
+                        "SHINYNGS_STATICEXPLORATORY",
+                        "shinyngs",
+                        "2.4.0"
+                    ]
+                ]
+            }
         ],
+        "timestamp": "2026-04-16T19:22:33.22352375",
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
-        },
-        "timestamp": "2024-05-03T08:48:06.589763"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
     },
     "mouse - specify log": {
         "content": [
@@ -43,15 +55,21 @@
             "pca2d.png",
             "pca3d.png",
             "sample_dendrogram.png",
-            [
-                "versions.yml:md5,526fbe61b95ad3a722d7470ca1874ca3"
-            ]
+            {
+                "versions_shinyngs": [
+                    [
+                        "SHINYNGS_STATICEXPLORATORY",
+                        "shinyngs",
+                        "2.4.0"
+                    ]
+                ]
+            }
         ],
+        "timestamp": "2026-04-16T19:23:04.288910997",
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
-        },
-        "timestamp": "2024-05-03T08:48:41.352789"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
     },
     "mouse - html": {
         "content": [
@@ -66,14 +84,20 @@
             false,
             false,
             false,
-            [
-                "versions.yml:md5,526fbe61b95ad3a722d7470ca1874ca3"
-            ]
+            {
+                "versions_shinyngs": [
+                    [
+                        "SHINYNGS_STATICEXPLORATORY",
+                        "shinyngs",
+                        "2.4.0"
+                    ]
+                ]
+            }
         ],
+        "timestamp": "2026-04-16T19:23:25.065630217",
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
-        },
-        "timestamp": "2024-05-03T08:49:04.969108"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
     }
 }

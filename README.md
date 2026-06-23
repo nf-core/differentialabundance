@@ -5,17 +5,19 @@
   </picture>
 </h1>
 
-[![GitHub Actions CI Status](https://github.com/nf-core/differentialabundance/actions/workflows/ci.yml/badge.svg)](https://github.com/nf-core/differentialabundance/actions/workflows/ci.yml)
-[![GitHub Actions Linting Status](https://github.com/nf-core/differentialabundance/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/differentialabundance/actions/workflows/linting.yml)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/differentialabundance/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.7568000-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.7568000)
+[![Open in GitHub Codespaces](https://img.shields.io/badge/Open_In_GitHub_Codespaces-black?labelColor=grey&logo=github)](https://github.com/codespaces/new/nf-core/differentialabundance)
+[![GitHub Actions CI Status](https://github.com/nf-core/differentialabundance/actions/workflows/nf-test.yml/badge.svg)](https://github.com/nf-core/differentialabundance/actions/workflows/nf-test.yml)
+[![GitHub Actions Linting Status](https://github.com/nf-core/differentialabundance/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/differentialabundance/actions/workflows/linting.yml)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/differentialabundance/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
 [![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
-
-[![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A523.10.0-23aa62.svg)](https://www.nextflow.io/)
+[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.7568000-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.7568000)
+[![Nextflow](https://img.shields.io/badge/version-%E2%89%A525.10.4-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
+[![nf-core template version](https://img.shields.io/badge/nf--core_template-4.0.2-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/4.0.2)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
-[![Launch on Seqera Platform](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Seqera%20Platform-%234256e7)](https://tower.nf/launch?pipeline=https://github.com/nf-core/differentialabundance)
+[![Launch on Seqera Platform](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Seqera%20Platform-%234256e7)](https://cloud.seqera.io/launch?pipeline=https://github.com/nf-core/differentialabundance)
 
-[![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23differentialabundance-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/differentialabundance)[![Follow on Twitter](http://img.shields.io/badge/twitter-%40nf__core-1DA1F2?labelColor=000000&logo=twitter)](https://twitter.com/nf_core)[![Follow on Mastodon](https://img.shields.io/badge/mastodon-nf__core-6364ff?labelColor=FFFFFF&logo=mastodon)](https://mstdn.science/@nf_core)[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)
+[![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23differentialabundance-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/differentialabundance)[![Follow on Bluesky](https://img.shields.io/badge/bluesky-%40nf__core-1185fe?labelColor=000000&logo=bluesky)](https://bsky.app/profile/nf-co.re)[![Follow on Mastodon](https://img.shields.io/badge/mastodon-nf__core-6364ff?labelColor=FFFFFF&logo=mastodon)](https://mstdn.science/@nf_core)[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)
 
 ## Introduction
 
@@ -27,7 +29,9 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 ## Pipeline summary
 
-![nf-core/differentialabundance metro map](docs/images/workflow.png)
+![nf-core/differentialabundance metro map](docs/images/nf-core-differentialabundance_metro_map_animated.svg)
+
+> In case the image above is not loading, please have a look at the [static version](docs/images/nf-core-differentialabundance_metro_map.png).
 
 1. Optionally generate a list of genomic feature annotations using the input GTF file (if a table is not explicitly supplied).
 2. Cross-check matrices, sample annotations, feature set and contrasts to ensure consistency.
@@ -35,62 +39,87 @@ On release, automated continuous integration tests run the pipeline on a full-si
 4. Optionally run a differential gene set analysis.
 5. Generate exploratory and differential analysis plots for interpretation.
 6. Optionally build and (if specified) deploy a Shiny app for fully interactive mining of results.
-7. Build an HTML report based on R markdown, with interactive plots (where possible) and tables.
+7. Build an HTML report based on Quarto markdown, with interactive plots (where possible) and tables.
+
+> [!NOTE]
+> The pipeline supports two modes: **single-run mode** using analysis profiles (e.g. `-profile rnaseq,docker`) for production use, and **multi-run mode** using a custom paramsheet (`--paramsheet`) for comparing multiple configurations in parallel. See the [usage documentation](https://nf-co.re/differentialabundance/usage) for more information.
 
 ## Usage
 
 > [!NOTE]
-> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
+> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/get_started/environment_setup/overview) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/get_started/run-your-first-pipeline) with `-profile test` before running the workflow on actual data.
 
-RNA-seq:
+Select an **analysis profile** that bundles the correct study type, differential method, and output settings. Combine it with a container profile (e.g. `docker`, `singularity`).
+
+RNA-seq with DESeq2 (default method):
 
 ```bash
- nextflow run nf-core/differentialabundance \
-     --input samplesheet.csv \
-     --contrasts contrasts.csv \
-     --matrix assay_matrix.tsv \
-     --gtf mouse.gtf \
-     --outdir <OUTDIR>  \
-     -profile rnaseq,<docker/singularity/podman/shifter/charliecloud/conda/institute>
+nextflow run nf-core/differentialabundance \
+    -profile rnaseq,docker \
+    --input samplesheet.csv \
+    --contrasts contrasts.yaml \
+    --matrix assay_matrix.tsv \
+    --gtf mouse.gtf \
+    --outdir <OUTDIR>
 ```
 
-:::note
-If you are using the outputs of the nf-core rnaseq workflow as input here **either**:
+> [!WARNING]
+> Do not override `--differential_method` when using an analysis profile. Switch methods by using the appropriate profile (e.g. `-profile rnaseq_limma`).
 
-- supply the raw count matrices (file names like **gene_counts.tsv**) alongide the transcript length matrix via `--transcript_length_matrix` (rnaseq versions >=3.12.0, preferred)
-- **or** supply the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices.
+RNA-seq with limma-voom:
 
-See the [usage documentation](https://nf-co.re/differentialabundance/usage) for more information.
-:::
+```bash
+nextflow run nf-core/differentialabundance \
+    -profile rnaseq_limma,docker \
+    --input samplesheet.csv \
+    --contrasts contrasts.yaml \
+    --matrix assay_matrix.tsv \
+    --gtf mouse.gtf \
+    --outdir <OUTDIR>
+```
+
+> [!NOTE]
+> If you are using the outputs of the nf-core rnaseq workflow as input here you should provide either the **gene_counts_length_scaled.tsv** or **gene_counts_scaled.tsv** matrices. This follows the [recommendation from the tximport documentation](https://bioconductor.org/packages/devel/bioc/vignettes/tximport/inst/doc/tximport.html#limma-voom):
+>
+> "Because limma-voom does not use the offset matrix stored in `y$offset`, we recommend using scaled counts generated from abundances, either 'scaledTPM' or 'lengthScaledTPM'."
+
+RNA-seq with DESeq2 and GSEA:
+
+```bash
+nextflow run nf-core/differentialabundance \
+    -profile rnaseq_deseq2_gsea,docker \
+    --input samplesheet.csv \
+    --contrasts contrasts.yaml \
+    --matrix assay_matrix.tsv \
+    --gtf mouse.gtf \
+    --gene_sets_files gene_sets.gmt \
+    --outdir <OUTDIR>
+```
 
 Affymetrix microarray:
 
 ```bash
- nextflow run nf-core/differentialabundance \
-     --input samplesheet.csv \
-     --contrasts contrasts.csv \
-     --affy_cel_files_archive cel_files.tar \
-     --outdir <OUTDIR>  \
-     -profile affy,<docker/singularity/podman/shifter/charliecloud/conda/institute>
+nextflow run nf-core/differentialabundance \
+    -profile affy,docker \
+    --input samplesheet.csv \
+    --contrasts contrasts.yaml \
+    --affy_cel_files_archive cel_files.tar \
+    --outdir <OUTDIR>
 ```
 
-> [!WARNING]
-> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_;
-> see [docs](https://nf-co.re/usage/configuration#custom-configuration-files).
-
-For more details and further functionality, please refer to the [usage documentation](https://nf-co.re/differentialabundance/usage) and the [parameter documentation](https://nf-co.re/differentialabundance/parameters).
+For full usage examples, analysis profiles, paramsheet-based multi-run mode, and input specifics (rnaseq counts, Affymetrix, MaxQuant, GEO SOFT), see the [usage documentation](https://nf-co.re/differentialabundance/usage) and the [parameter documentation](https://nf-co.re/differentialabundance/parameters).
 
 ### Reporting
 
 The pipeline reports its outcomes in two forms.
 
-#### R markdown and HTML
+#### Quarto notebook and HTML
 
-The primary workflow output is an HTML-format report produced from an [R markdown template](assets/differentialabundance_report.Rmd) (you can also supply your own). This leverages helper functions from [shinyngs](https://github.com/pinin4fjords/shinyngs) to produce rich plots and tables, but does not provide significant interactivity.
+The primary workflow output is an HTML-format report produced from an [Quarto notebook template](assets/differentialabundance_report.qmd) (you can also supply your own). This leverages helper functions from [shinyngs](https://github.com/pinin4fjords/shinyngs) to produce rich plots and tables, but does not provide significant interactivity.
 
-![screenshot of the markdown report](docs/images/markdown_report.png "Markdown report")
+![screenshot of the Quarto report](docs/images/markdown_report.png "Quarto report")
 
-Additionally, a zip file is produced by the pipeline, containing an R markdown file and all necessary file inputs for reporting. The markdown file is the same as the input template, but with the parameters set appropriately, so that you can run the reporting yourself in RStudio, and add any customisations you need.
+Additionally, a zip file is produced by the pipeline, containing a Quarto notebook file and all necessary file inputs for reporting. The notebook file is the same as the input template, but with the parameters set appropriately, so that you can run the reporting yourself in RStudio, and add any customisations you need.
 
 #### Shiny-based data mining app
 
@@ -112,6 +141,8 @@ For more details about the output files and reports, please refer to the
 
 nf-core/differentialabundance was originally written by Jonathan Manning ([@pinin4fjords](https://github.com/pinin4fjords)) and Oskar Wacker ([@WackerO](https://github.com/WackerO)). Jonathan Manning (now at Seqera) initially worked on this workflow as an employee of Healx, an AI-powered, patient-inspired tech company, accelerating the discovery and development of treatments for rare diseases. Oskar Wacker works for [QBiC](https://www.qbic.uni-tuebingen.de/) at Tübingen University. We are grateful for the support of open science in this project.
 
+Also, additional contributions were made by Suzanne Jin ([@suzannejin](https://github.com/suzannejin)), Cristina Araiz ([@caraiz2001](https://github.com/caraiz2001)), Björn Langer ([blanger](https://github.com/blanger)), Jose Espinosa-Carrasco ([@JoseEspinosa](https://github.com/JoseEspinosa)) and Júlia Mir Pedrol ([@mirpedrol](https://github.com/mirpedrol)), from [The Comparative Bioinformatics Group](https://www.crg.eu/en/cedric_notredame) at [The Centre for Genomic Regulation, Spain](https://www.crg.eu/).
+
 We thank the many members of the nf-core community who assisted with this pipeline, often by reviewing module pull requests including but not limited to:
 
 - [@ggabernet](https://github.com/ggabernet),
@@ -121,10 +152,14 @@ We thank the many members of the nf-core community who assisted with this pipeli
 - [@mahesh-panchal](https://github.com/mahesh-panchal),
 - [@mashehu](https://github.com/mashehu),
 - [@apeltzer](https://github.com/apeltzer)
+- [@grst](https://github.com/grst)
+- [@atrigila](https://github.com/atrigila)
+- [@alanmmobbs93](https://github.com/alanmmobbs93)
+- [@nschcolnicov](https://github.com/nschcolnicov)
 
 ## Contributions and Support
 
-If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
+If you would like to contribute to this pipeline, please see the [contributing guidelines](docs/CONTRIBUTING.md).
 
 For further information or help, don't hesitate to get in touch on the [Slack `#differentialabundance` channel](https://nfcore.slack.com/channels/differentialabundance) (you can join with [this invite](https://nf-co.re/join/slack)).
 

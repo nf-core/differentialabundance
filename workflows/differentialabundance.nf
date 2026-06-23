@@ -1,104 +1,11 @@
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-def checkPathParamList = [ params.input ]
-for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
-
-// Check mandatory parameters
-def exp_meta = [ "id": params.study_name  ]
-if (params.input) { ch_input = Channel.of([ exp_meta, file(params.input, checkIfExists: true) ]) } else { exit 1, 'Input samplesheet not specified!' }
-
-if (params.study_type == 'affy_array'){
-    if (params.affy_cel_files_archive) {
-        ch_celfiles = Channel.of([ exp_meta, file(params.affy_cel_files_archive, checkIfExists: true) ])
-    } else {
-        error("CEL files archive not specified!")
-    }
-} else if (params.study_type == 'maxquant') {
-
-        // Should the user have enabled --gsea_run, throw an error
-        if (params.gsea_run) {
-            error("Cannot run GSEA for maxquant data; please set --gsea_run to false.")
-        }
-        if (params.gprofiler2_run){
-            error("gprofiler2 pathway analysis is not yet possible with maxquant input data; please set --gprofiler2_run false and rerun pipeline!")
-        }
-        if (!params.matrix) {
-            error("Input matrix not specified!")
-        }
-        matrix_file = file(params.matrix, checkIfExists: true)
-
-        // Make channel for proteus
-        proteus_in = Channel.of([ file(params.input), matrix_file ])
-} else if (params.study_type == 'geo_soft_file'){
-
-    // To pull SOFT files from a GEO a GSE study identifer must be provided
-
-    if (params.querygse && params.features_metadata_cols) {
-        ch_querygse = Channel.of([exp_meta, params.querygse])
-    } else {
-        error("Query GSE not specified or features metadata columns not specified")
-    }
-} else {
-    // If this is not microarray data or maxquant output, and this an RNA-seq dataset,
-    // then assume we're reading from a matrix
-
-    if (params.study_type == "rnaseq" && params.matrix) {
-        matrix_file = file(params.matrix, checkIfExists: true)
-        ch_in_raw = Channel.of([ exp_meta, matrix_file])
-    } else {
-        error("Input matrix not specified!")
-    }
-
-}
-
-// Check optional parameters
-if (params.transcript_length_matrix) { ch_transcript_lengths = Channel.of([ exp_meta, file(params.transcript_length_matrix, checkIfExists: true)]).first() } else { ch_transcript_lengths = [[],[]] }
-if (params.control_features) { ch_control_features = Channel.of([ exp_meta, file(params.control_features, checkIfExists: true)]).first() } else { ch_control_features = [[],[]] }
-
-def run_gene_set_analysis = params.gsea_run || params.gprofiler2_run
-
-if (run_gene_set_analysis) {
-    if (params.gene_sets_files) {
-        gene_sets_files = params.gene_sets_files.split(",")
-        ch_gene_sets = Channel.of(gene_sets_files).map { file(it, checkIfExists: true) }
-        if (params.gprofiler2_run && (!params.gprofiler2_token && !params.gprofiler2_organism) && gene_sets_files.size() > 1) {
-            error("gprofiler2 can currently only work with a single gene set file")
-        }
-    } else if (params.gsea_run) {
-        error("GSEA activated but gene set file not specified!")
-    } else if (params.gprofiler2_run) {
-        if (!params.gprofiler2_token && !params.gprofiler2_organism) {
-            error("To run gprofiler2, please provide a run token, GMT file or organism!")
-        }
-    } else {
-        ch_gene_sets = []    // For methods that can run without gene sets
-    }
-}
-
-report_file = file(params.report_file, checkIfExists: true)
-logo_file = file(params.logo_file, checkIfExists: true)
-css_file = file(params.css_file, checkIfExists: true)
-citations_file = file(params.citations_file, checkIfExists: true)
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    CONFIG FILES
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     IMPORT LOCAL MODULES/SUBWORKFLOWS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { TABULAR_TO_GSEA_CHIP } from '../modules/local/tabular_to_gsea_chip'
-include { FILTER_DIFFTABLE } from '../modules/local/filter_difftable'
+include { prepareModuleInput     } from '../subworkflows/local/utils_nfcore_differentialabundance_pipeline/main'
+include { prepareModuleOutput    } from '../subworkflows/local/utils_nfcore_differentialabundance_pipeline/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -115,22 +22,22 @@ include { SHINYNGS_APP                                      } from '../modules/n
 include { SHINYNGS_STATICEXPLORATORY as PLOT_EXPLORATORY    } from '../modules/nf-core/shinyngs/staticexploratory/main'
 include { SHINYNGS_STATICDIFFERENTIAL as PLOT_DIFFERENTIAL  } from '../modules/nf-core/shinyngs/staticdifferential/main'
 include { SHINYNGS_VALIDATEFOMCOMPONENTS as VALIDATOR       } from '../modules/nf-core/shinyngs/validatefomcomponents/main'
-include { DESEQ2_DIFFERENTIAL as DESEQ2_NORM                } from '../modules/nf-core/deseq2/differential/main'
-include { DESEQ2_DIFFERENTIAL                               } from '../modules/nf-core/deseq2/differential/main'
-include { LIMMA_DIFFERENTIAL                                } from '../modules/nf-core/limma/differential/main'
 include { CUSTOM_MATRIXFILTER                               } from '../modules/nf-core/custom/matrixfilter/main'
 include { ATLASGENEANNOTATIONMANIPULATION_GTF2FEATUREANNOTATION as GTF_TO_TABLE } from '../modules/nf-core/atlasgeneannotationmanipulation/gtf2featureannotation/main'
-include { GSEA_GSEA                                         } from '../modules/nf-core/gsea/gsea/main'
-include { GPROFILER2_GOST                                   } from '../modules/nf-core/gprofiler2/gost/main'
-include { CUSTOM_TABULARTOGSEAGCT                           } from '../modules/nf-core/custom/tabulartogseagct/main'
-include { CUSTOM_TABULARTOGSEACLS                           } from '../modules/nf-core/custom/tabulartogseacls/main'
-include { RMARKDOWNNOTEBOOK                                 } from '../modules/nf-core/rmarkdownnotebook/main'
+include { QUARTONOTEBOOK                                    } from '../modules/nf-core/quartonotebook/main'
 include { AFFY_JUSTRMA as AFFY_JUSTRMA_RAW                  } from '../modules/nf-core/affy/justrma/main'
 include { AFFY_JUSTRMA as AFFY_JUSTRMA_NORM                 } from '../modules/nf-core/affy/justrma/main'
 include { PROTEUS_READPROTEINGROUPS as PROTEUS              } from '../modules/nf-core/proteus/readproteingroups/main'
 include { GEOQUERY_GETGEO                                   } from '../modules/nf-core/geoquery/getgeo/main'
 include { ZIP as MAKE_REPORT_BUNDLE                         } from '../modules/nf-core/zip/main'
+include { CSVTK_JOIN                                        } from '../modules/nf-core/csvtk/join/main'
 include { softwareVersionsToYAML                            } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+
+//
+// SUBWORKFLOW: Installed directly from nf-core/modules
+//
+include { ABUNDANCE_DIFFERENTIAL_FILTER                     } from '../subworkflows/nf-core/abundance_differential_filter/main'
+include { DIFFERENTIAL_FUNCTIONAL_ENRICHMENT                } from '../subworkflows/nf-core/differential_functional_enrichment/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -140,517 +47,986 @@ include { softwareVersionsToYAML                            } from '../subworkfl
 
 workflow DIFFERENTIALABUNDANCE {
 
-    // Set up some basic variables
-    ch_versions = Channel.empty()
-    // Channel for the contrasts file
-    ch_contrasts_file = Channel.from([[exp_meta, file(params.contrasts)]])
+    take:
+    ch_paramsets
 
+    main:
+
+    ch_versions      = channel.empty()
+
+    // ========================================================================
+    // Handle input
+    // ========================================================================
+
+    // Get the sample sheets
+    ch_samplesheet = ch_paramsets
+        .map { meta ->
+            [ meta, file(meta.params.input, checkIfExists: true) ]
+        }
+
+    // Create input channels based on study type
+    ch_input = ch_samplesheet
+        .branch { meta, input ->
+            affy_array: meta.params.study_type == 'affy_array'
+            maxquant: meta.params.study_type == 'maxquant'
+            geo_soft_file: meta.params.study_type == 'geo_soft_file'
+            rnaseq: meta.params.study_type in ['rnaseq', 'generic_matrix']
+        }
+
+    // Handle Affy array inputs
+    ch_celfiles = ch_input.affy_array
+        .map { meta, input ->
+            [ meta, file(meta.params.affy_cel_files_archive, checkIfExists: true) ]
+        }
+
+    // Handle Maxquant inputs
+    ch_maxquant_inputs = ch_input.maxquant
+        .map { meta, input ->
+            [ meta, input, file(meta.params.matrix, checkIfExists: true) ]
+        }
+
+    // Handle GEO soft file inputs
+    ch_querygse = ch_input.geo_soft_file
+        .map { meta, input ->
+            [ meta, meta.params.querygse ]
+        }
+
+    // Create optional parameter channels based on ch_paramsets
+    ch_transcript_lengths = ch_paramsets
+        .map { meta ->
+            [ meta, meta.params.feature_length_matrix ? file(meta.params.feature_length_matrix, checkIfExists: true) : [] ]
+        }
+
+    ch_control_features = ch_paramsets
+        .map { meta ->
+            [ meta, meta.params.control_features ? file(meta.params.control_features, checkIfExists: true) : [] ]
+        }
+
+    ch_gene_sets = ch_paramsets
+        .map { meta ->
+            if (meta.params.functional_method == 'decoupler') {
+                [ meta, [file(meta.params.decoupler_network, checkIfExists: true)] ]
+            } else {
+                [ meta, meta.params.gene_sets_files ? meta.params.gene_sets_files.split(",").collect { file(it, checkIfExists: true) } : [] ]
+            }
+        }
+
+    // ========================================================================
+    // Handle contrasts
+    // ========================================================================
+
+    // Create contrasts channels
+    ch_contrasts_file = ch_paramsets
+        .map { meta ->
+            [ meta, file(meta.params.contrasts, checkIfExists: true) ]
+        }
+
+    ch_contrasts_file_with_extension = ch_contrasts_file
+        .map { meta, file ->
+            [ meta, file, file.extension ]
+        }
+
+    ch_contrast_variables_input = ch_contrasts_file_with_extension
+        .branch{ meta, file, extension ->
+            yml: extension == 'yml' || extension == 'yaml'
+            csv: extension == 'csv'
+            tsv: extension == 'tsv'
+        }
+
+    ch_contrasts_variables_from_yml = ch_contrast_variables_input.yml
+        .flatMap { meta, yaml_file, ext ->
+            def yaml_data = new groovy.yaml.YamlSlurper().parse(yaml_file)
+            yaml_data.contrasts.collect { contrast ->
+                if (contrast.containsKey('formula')) {
+                return null
+                }
+                else if (contrast.containsKey('comparison')) { //  Necessary line for Maxquant to work. Check if it can be simplified to use contrast.id
+                    tuple(meta, contrast.comparison[0])
+                }
+            }
+        }
+            .filter { it != null }
+        .unique() // Uniquify to keep each contrast variable only once (in case it exists in multiple lines for blocking etc.)
+
+    ch_contrasts_variables_from_other = ch_contrast_variables_input.csv.splitCsv(header:true)
+        .mix(ch_contrast_variables_input.tsv.splitCsv(header:true, sep:'\t'))
+        .map { meta, row, ext ->
+            [ meta, row.variable ]
+        }
+        .unique()
+
+    ch_contrast_variables = ch_contrasts_variables_from_yml
+        .mix(ch_contrasts_variables_from_other)
+
+    // ========================================================================
+    // Data type specific preprocessing
+    // ========================================================================
+
+    //
+    // 1. Deal with affy array data
     // If we have affy array data in the form of CEL files we'll be deriving
     // matrix and annotation from them
+    //
 
-    if (params.study_type == 'affy_array'){
+    // Uncompress the CEL files archive
+    UNTAR ( prepareModuleInput(ch_celfiles, 'preprocessing') )
+    ch_untar_out = prepareModuleOutput(UNTAR.out.untar, ch_paramsets)
 
-        // Uncompress the CEL files archive
+    // Run affy
 
-        UNTAR ( ch_celfiles )
+    ch_affy_input = prepareModuleInput(ch_input.affy_array.join(ch_untar_out), 'preprocessing')
 
-        ch_affy_input = ch_input
-            .join(UNTAR.out.untar)
+    AFFY_JUSTRMA_RAW (
+        ch_affy_input,
+        [[],[]]
+    )
+    AFFY_JUSTRMA_NORM (
+        ch_affy_input,
+        [[],[]]
+    )
 
-        // Run affy to derive the matrix. Reset the meta so it can be used to
-        // define a prefix for different matrix flavours
+    ch_affy_raw = prepareModuleOutput(AFFY_JUSTRMA_RAW.out.expression, ch_paramsets)
+    ch_affy_norm = prepareModuleOutput(AFFY_JUSTRMA_NORM.out.expression, ch_paramsets)
+    ch_affy_platform_features = prepareModuleOutput(AFFY_JUSTRMA_RAW.out.annotation, ch_paramsets)
 
-        AFFY_JUSTRMA_RAW (
-            ch_affy_input,
-            [[],[]]
-        )
-        AFFY_JUSTRMA_NORM (
-            ch_affy_input,
-            [[],[]]
-        )
+    //
+    // 2. Deal with maxquant data
+    // We'll be running Proteus once per unique contrast variable to generate plots
+    //
 
-        // Fetch affy outputs and reset the meta
-
-        ch_in_raw = AFFY_JUSTRMA_RAW.out.expression
-        ch_in_norm = AFFY_JUSTRMA_NORM.out.expression
-
-        ch_affy_platform_features = AFFY_JUSTRMA_RAW.out.annotation
-
-        ch_versions = ch_versions
-            .mix(AFFY_JUSTRMA_RAW.out.versions)
-
-    } else if (params.study_type == 'maxquant'){
-
-        // We'll be running Proteus once per unique contrast variable to generate plots
-        // TODO: there should probably be a separate plotting module in proteus to simplify this
-
-        ch_contrast_variables = ch_contrasts_file
-            .splitCsv ( header:true, sep:(params.contrasts.endsWith('tsv') ? '\t' : ','))
-            .map{ it.tail().first() }
-            .map{
-                tuple('id': it.variable)
-            }
-            .unique()   // uniquify to keep each contrast variable only once (in case it exists in multiple lines for blocking etc.)
-
-        // Run proteus to import protein abundances
-        PROTEUS(
-            ch_contrast_variables.combine(proteus_in)
-        )
-
-        // Re-map the proteus output tables to the study ID as the tables are the same across contrasts, only one norm table will be necessary
-        ch_in_raw = PROTEUS.out.raw_tab
-            .first()
-            .map{ meta, matrix -> tuple(exp_meta, matrix) }
-        ch_in_norm = PROTEUS.out.norm_tab
-            .first()
-            .map{ meta, matrix -> tuple(exp_meta, matrix) }
-
-        ch_versions = ch_versions.mix(PROTEUS.out.versions)
-    } else if(params.study_type == 'geo_soft_file'){
-
-        GEOQUERY_GETGEO(ch_querygse)
-        ch_in_norm = GEOQUERY_GETGEO.out.expression
-        ch_soft_features = GEOQUERY_GETGEO.out.annotation
-
-        ch_versions = ch_versions
-            .mix(GEOQUERY_GETGEO.out.versions)
-    }
-    //// Fetch or derive a feature annotation table
-
-    // If user has provided a feature annotation table, use that
-    if (params.features){
-        ch_features = Channel.of([ exp_meta, file(params.features, checkIfExists: true)])
-    } else if (params.study_type == 'affy_array'){
-        ch_features = ch_affy_platform_features
-    } else if(params.study_type == 'geo_soft_file') {
-        ch_features = ch_soft_features
-    } else if (params.gtf){
-        // Get feature annotations from a GTF file, gunzip if necessary
-
-        file_gtf_in = file(params.gtf)
-        file_gtf = [ [ "id": file_gtf_in.simpleName ], file_gtf_in ]
-
-        if ( params.gtf.endsWith('.gz') ){
-            GUNZIP_GTF(file_gtf)
-            file_gtf = GUNZIP_GTF.out.gunzip
-            ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
+    // Add contrast variable
+    ch_proteus_input = ch_maxquant_inputs
+        .combine(ch_contrast_variables, by:0)
+        .map { meta, input, matrix, contrast ->
+            def meta_new = meta + [contrast: contrast]
+            [meta_new, input, matrix]
         }
 
-        // Get a features table from the GTF and combine with the matrix and sample
-        // annotation (fom = features/ observations/ matrix)
+    // Run proteus to import protein abundances
+    PROTEUS( prepareModuleInput(ch_proteus_input, 'preprocessing') )
 
-        GTF_TO_TABLE( file_gtf, [[ "id":""], []])
-        ch_features = GTF_TO_TABLE.out.feature_annotation
-            .map{
-                tuple( exp_meta, it[1])
-            }
+    // Note that the tables are the same across contrasts, only one table will be necessary
+    // that is why here we take the first one and remove the contrast variable from meta
+    ch_proteus_raw = prepareModuleOutput(PROTEUS.out.raw_tab, ch_paramsets, ['contrast'])
+        .groupTuple()
+        .map { meta, files -> [ meta, files[0] ] }
+    ch_proteus_norm = prepareModuleOutput(PROTEUS.out.norm_tab, ch_paramsets, ['contrast'])
+        .groupTuple()
+        .map { meta, files -> [ meta, files[0] ] }
 
-        // Record the version of the GTF -> table tool
+    ch_proteus_plots = prepareModuleOutput(
+        PROTEUS.out.dendro_plot
+            .mix(PROTEUS.out.mean_var_plot)
+            .mix(PROTEUS.out.raw_dist_plot)
+            .mix(PROTEUS.out.norm_dist_plot)
+        , ch_paramsets // here we keep contrast, as the plots are different across contrasts, and we can use it for output folder naming later
+    )
+    ch_versions = ch_versions.mix(PROTEUS.out.versions)
 
-        ch_versions = ch_versions
-            .mix(GTF_TO_TABLE.out.versions)
-    }
-    else{
+    //
+    // 3. Deal with GEO soft file data
+    // Run GEO query to get the annotation
+    //
 
-        // Otherwise we can just use the matrix input; save it to the workdir so that it does not
-        // just appear wherever the user runs the pipeline
-        matrix_as_anno_filename = "${workflow.workDir}/matrix_as_anno.${matrix_file.getExtension()}"
-        if (params.study_type == 'maxquant'){
-            ch_features_matrix = ch_in_norm
-        } else {
-            ch_features_matrix = ch_in_raw
+    GEOQUERY_GETGEO( prepareModuleInput(ch_querygse, 'preprocessing') )
+
+    ch_soft_norm = prepareModuleOutput(GEOQUERY_GETGEO.out.expression, ch_paramsets)
+    ch_soft_features = prepareModuleOutput(GEOQUERY_GETGEO.out.annotation, ch_paramsets)
+
+    ch_versions = ch_versions
+        .mix(GEOQUERY_GETGEO.out.versions)
+
+    // ========================================================================
+    // Parse channels for input matrices and features
+    // ========================================================================
+
+    //
+    // Define raw and normalised input expression/abundance data
+    //
+
+    // Raw inputs
+
+    ch_in_raw = ch_input.rnaseq
+        .map{meta, input -> [meta, file(meta.params.matrix, checkIfExists: true)]}
+        .mix(ch_affy_raw)
+        .mix(ch_proteus_raw)
+
+    // Normalised inputs
+
+    ch_in_norm = ch_affy_norm
+        .mix(ch_proteus_norm)
+        .mix(ch_soft_norm)
+
+    //
+    // Fetch or derive a feature annotation table
+    //
+
+    // Branch ch_paramsets based on feature source
+    ch_feature_sources = ch_paramsets
+        .branch {
+            user_features: it.params.features
+            affy_features: it.params.study_type == 'affy_array'
+            geo_features: it.params.study_type == 'geo_soft_file'
+            gtf_features: it.params.gtf
+            matrix_features: true
         }
-        ch_features = ch_features_matrix
-            .map{ meta, matrix ->
+
+    // Handle user-provided feature annotations
+    ch_user_features = ch_feature_sources.user_features
+        .map { meta -> [ meta, file(meta.params.features, checkIfExists: true) ] }
+
+    // Handle Affy array platform features
+    ch_affy_features = ch_feature_sources.affy_features
+        .join(ch_affy_platform_features)
+
+    // Handle GEO soft file features
+    ch_geo_features = ch_feature_sources.geo_features
+        .join(ch_soft_features)
+
+    // Handle GTF-based feature annotations
+    ch_gtf_files = ch_feature_sources.gtf_features
+        .map { meta -> [ meta, file(meta.params.gtf, checkIfExists: true) ] }
+
+    // Process GTF files if needed
+    ch_gtf_for_processing = ch_gtf_files
+        .branch {
+            compressed: it[1].name.endsWith('.gz')
+            uncompressed: !it[1].name.endsWith('.gz')
+        }
+
+    // Decompress GTF files if needed
+    GUNZIP_GTF( prepareModuleInput(ch_gtf_for_processing.compressed, 'preprocessing') )
+    ch_gunzip_out = prepareModuleOutput(GUNZIP_GTF.out.gunzip, ch_paramsets)
+
+    // Combine compressed and uncompressed GTF files
+    ch_gtf_processed = ch_gtf_for_processing.uncompressed
+        .mix(ch_gunzip_out)
+
+    // Convert GTF to feature annotation table
+    GTF_TO_TABLE(
+        prepareModuleInput(ch_gtf_processed, 'preprocessing'),
+        [tuple('id':""), []]
+    )
+    ch_gtf_features = prepareModuleOutput(GTF_TO_TABLE.out.feature_annotation, ch_paramsets)
+
+    // Extract features from matrix
+    // Note that in the case of maxquant we use the normalised matrix
+    // Whereas for other study types we use the raw matrix
+    ch_pre_matrix_features = ch_feature_sources.matrix_features.branch{ meta ->
+        maxquant: meta.params.study_type == 'maxquant'
+        other: true
+    }
+    ch_matrix_features = ch_pre_matrix_features.maxquant.join(ch_in_norm)
+        .mix(ch_pre_matrix_features.other.join(ch_in_raw))
+        .map{ meta, matrix ->
+            def matrix_as_anno_filename = "${workflow.workDir}/${matrix.getBaseName()}_as_anno.${matrix.getExtension()}"
+            def matrix_copy = file(matrix_as_anno_filename)
+            if (!matrix_copy.exists() || matrix.size() != matrix_copy.size() || matrix.getText().md5() != matrix_copy.getText().md5()) {
                 matrix.copyTo(matrix_as_anno_filename)
-                [ meta, file(matrix_as_anno_filename) ]
             }
-    }
+            [ meta, file(matrix_as_anno_filename) ]
+        }
+
+    // Combine all feature annotation channels
+    ch_features = ch_user_features
+        .mix(ch_affy_features)
+        .mix(ch_geo_features)
+        .mix(ch_gtf_features)
+        .mix(ch_matrix_features)
+
+    // ========================================================================
+    // Validate input
+    // ========================================================================
 
     // Check compatibility of FOM elements and contrasts
-    if (params.study_type == 'affy_array' || params.study_type == 'maxquant'){
-        ch_matrices_for_validation = ch_in_raw
-            .join(ch_in_norm)
-            .map{tuple(it[0], [it[1], it[2]])}
-    }
-    else if (params.study_type == 'geo_soft_file'){
-        ch_matrices_for_validation = ch_in_norm
-    }
-    else{
-        ch_matrices_for_validation = ch_in_raw
+
+    ch_matrix_sources = ch_paramsets.branch{ meta ->
+        affy_or_maxquant: meta.params.study_type == 'affy_array' || meta.params.study_type == 'maxquant'
+        geo_soft_file: meta.params.study_type == 'geo_soft_file'
+        other: true
     }
 
+    // Create a channel with the matrices for validation. For Affy and MaxQuant
+    // we have both raw and norm matrices, for GEO soft file we only have norm,
+    // for other we only have raw
+
+    ch_matrices_for_validation = ch_matrix_sources.affy_or_maxquant
+        .join(ch_in_raw)
+        .join(ch_in_norm)
+        .map{tuple(it[0], [it[1], it[2]])}
+        .mix(ch_matrix_sources.geo_soft_file.join(ch_in_norm))
+        .mix(ch_matrix_sources.other.join(ch_in_raw))
+
+    // Validate the components against one another. We try not to assume too
+    // much about chanel order, so we deploy the multiMap workaround.
+
+    validator_input = ch_samplesheet
+        .join(ch_matrices_for_validation)
+        .join(ch_features)
+        .join(ch_contrasts_file)
+
+    validator_input = prepareModuleInput(validator_input, 'preprocessing')
+        .multiMap{meta, samplesheet, matrices, features_file, contrasts_file ->
+            samplesheet_matrices: [meta, samplesheet, matrices]
+            features_file: [meta, features_file]
+            contrasts_file: [meta, contrasts_file]
+        }
+
     VALIDATOR(
-        ch_input.join(ch_matrices_for_validation),
-        ch_features,
-        ch_contrasts_file
+        validator_input.samplesheet_matrices,
+        validator_input.features_file,
+        validator_input.contrasts_file
     )
+
+    ch_validated_assays = prepareModuleOutput(VALIDATOR.out.assays, ch_paramsets)
+    ch_validated_contrast = prepareModuleOutput(VALIDATOR.out.contrasts, ch_paramsets)
+    ch_validated_samplemeta = prepareModuleOutput(VALIDATOR.out.sample_meta, ch_paramsets)
+    ch_validated_featuremeta = prepareModuleOutput(VALIDATOR.out.feature_meta, ch_paramsets)
 
     // For Affy, we've validated multiple input matrices for raw and norm,
     // we'll separate them out again here
 
-    if (params.study_type == 'affy_array' || params.study_type == 'maxquant'){
-        ch_validated_assays = VALIDATOR.out.assays
-            .transpose()
-            .branch {
-                raw: it[1].name.contains('raw')
-                normalised: it[1].name =~ /normali[sz]ed/
-            }
-        ch_raw = ch_validated_assays.raw
-        ch_norm = ch_validated_assays.normalised
-    }
-    else if (params.study_type == 'geo_soft_file') {
-        ch_norm = VALIDATOR.out.assays
-    }
+    ch_multi_validated_assays = ch_validated_assays
+        .filter{meta, assays -> meta.params.study_type == 'affy_array' || meta.params.study_type == 'maxquant'}
+        .transpose()
+        .branch { meta, assay ->
+            raw: assay.name.contains('raw')
+            normalised: assay.name =~ /normali[sz]ed/
+            other: true
+        }
 
-    if(params.study_type != 'rnaseq') {
-        ch_matrix_for_differential = ch_norm
-    }
-    else{
-        ch_raw = VALIDATOR.out.assays
-        ch_matrix_for_differential = ch_raw
-    }
+    ch_multi_validated_assays.other
+        .map { meta, assay ->
+            error "Unexpected affy/maxquant assay name '${assay.name}' for paramset '${meta.paramset_name}'; expected 'raw' or 'normali[sz]ed' in name."
+        }
+
+    // Get raw matrices from the validation
+
+    ch_raw = ch_multi_validated_assays.raw
+        .mix(ch_validated_assays.filter{meta, assay -> meta.params.study_type in ['rnaseq', 'generic_matrix']})
+
+    // For RNASeq and GEO soft file we've validated a single matrix, raw in the
+    // case of RNASeq and norm in the case of GEO soft file, and these are the
+    // matrices we'll use for differential abundance testing. For affy or maxquant
+    // we'll use the normalised matrices.
+
+    ch_matrix_for_differential = ch_multi_validated_assays.normalised
+        .mix(ch_validated_assays.filter{meta, assay -> meta.params.study_type in ['rnaseq', 'generic_matrix'] || meta.params.study_type == 'geo_soft_file'})
 
     // Split the contrasts up so we can run differential analyses and
     // downstream plots separately.
     // Replace NA strings that might have snuck into the blocking column
 
-    ch_contrasts = VALIDATOR.out.contrasts
-        .map{it[1]}
+    ch_contrasts = ch_validated_contrast
         .splitCsv ( header:true, sep:'\t' )
-        .map{
-            it.blocking = it.blocking.replace('NA', '')
-            if (!it.id){
-                it.id = it.values().join('_')
+        .map{meta, contrast ->
+            contrast.blocking = contrast.blocking.replaceAll('^NA$', '')
+            if (!contrast.id){
+                contrast.id = contrast.values().join('_')
             }
-            tuple(it, it.variable, it.reference, it.target)
-        }
+            contrast.formula = contrast.formula?.trim() ? contrast.formula.trim() : null
+            contrast.make_contrasts_str = contrast.make_contrasts_str?.trim() ? contrast.make_contrasts_str.trim() : null
 
-    // Firstly Filter the input matrix
+            return [meta, contrast, contrast.variable, contrast.reference, contrast.target, contrast.formula, contrast.make_contrasts_str]
+        }
+        .groupTuple() // [meta, [contrast], [variable], [reference], [target], [formula], [comparison]]
+
+    // ========================================================================
+    // Filter matrix
+    // ========================================================================
+
+    ch_matrixfilter_input = ch_matrix_for_differential
+        .join(ch_validated_samplemeta)
+
+    ch_matrixfilter_input = prepareModuleInput(ch_matrixfilter_input, 'preprocessing')
+        .multiMap{meta, matrix, samplesheet ->
+            matrix: [meta, matrix]
+            samplesheet: [meta, samplesheet]
+        }
 
     CUSTOM_MATRIXFILTER(
-        ch_matrix_for_differential,
-        VALIDATOR.out.sample_meta
+        ch_matrixfilter_input.matrix,
+        ch_matrixfilter_input.samplesheet
     )
 
-    // Prepare inputs for differential processes
+    ch_filtered_matrix = prepareModuleOutput(CUSTOM_MATRIXFILTER.out.filtered, ch_paramsets)
+    ch_filter_tests = prepareModuleOutput(CUSTOM_MATRIXFILTER.out.tests, ch_paramsets)
+    ch_filter_thresholds = prepareModuleOutput(CUSTOM_MATRIXFILTER.out.thresholds, ch_paramsets)
 
-    ch_samples_and_matrix = VALIDATOR.out.sample_meta
-        .join(CUSTOM_MATRIXFILTER.out.filtered)     // -> meta, samplesheet, filtered matrix
-        .first()
+    // ========================================================================
+    // Differential analysis
+    // ========================================================================
 
-    if (params.study_type == 'affy_array' || params.study_type == 'geo_soft_file' || params.study_type == 'maxquant'){
+    ch_differential_input = ch_filtered_matrix
+        .join(ch_validated_samplemeta)
+        .join(ch_transcript_lengths)
+        .join(ch_control_features)
+        .join(ch_contrasts)
 
-        LIMMA_DIFFERENTIAL (
-            ch_contrasts,
-            ch_samples_and_matrix
-        )
-        ch_differential = LIMMA_DIFFERENTIAL.out.results
-        ch_model = LIMMA_DIFFERENTIAL.out.model
-
-        ch_versions = ch_versions
-            .mix(LIMMA_DIFFERENTIAL.out.versions)
-
-        ch_processed_matrices = ch_norm
-            .map{ it.tail() }
-            .first()
-    }
-    else{
-
-        DESEQ2_NORM (
-            ch_contrasts.first(),
-            ch_samples_and_matrix,
-            ch_control_features,
-            ch_transcript_lengths
-        )
-
-        // Run the DESeq differential module, which doesn't take the feature
-        // annotations
-
-        DESEQ2_DIFFERENTIAL (
-            ch_contrasts,
-            ch_samples_and_matrix,
-            ch_control_features,
-            ch_transcript_lengths
-        )
-
-        // Let's make the simplifying assumption that the processed matrices from
-        // the DESeq runs are the same across contrasts. We run the DESeq process
-        // with matrices once for each contrast because DESeqDataSetFromMatrix()
-        // takes the model, and the model can vary between contrasts if the
-        // blocking factors included differ. But the normalised and
-        // variance-stabilised matrices are not (IIUC) impacted by the model.
-
-        ch_norm = DESEQ2_NORM.out.normalised_counts
-        ch_differential = DESEQ2_DIFFERENTIAL.out.results
-        ch_model = DESEQ2_DIFFERENTIAL.out.model
-
-        ch_versions = ch_versions
-            .mix(DESEQ2_DIFFERENTIAL.out.versions)
-
-        ch_processed_matrices = ch_norm
-        if ('rlog' in params.deseq2_vs_method){
-            ch_processed_matrices = ch_processed_matrices.join(DESEQ2_NORM.out.rlog_counts)
+    // Use a multiMap to generate synched channels for differential analysis
+    ch_differential_input = prepareModuleInput(ch_differential_input, 'differential')
+        .multiMap{ meta, matrix, samplesheet, transcript_lengths, control_features, contrast, variable, reference, target, formula, comparison ->
+            input: [meta, matrix, meta.params.differential_method, meta.params.differential_min_fold_change, meta.params.differential_max_qval]
+            samplesheet: [meta, samplesheet]
+            transcript_lengths: [meta, transcript_lengths]
+            control_features: [meta, control_features]
+            contrast: [meta, contrast, variable, reference, target, formula, comparison]
         }
-        if ('vst' in params.deseq2_vs_method){
-            ch_processed_matrices = ch_processed_matrices.join(DESEQ2_NORM.out.vst_counts)
-        }
-        ch_processed_matrices = ch_processed_matrices
-            .map{ it.tail() }
-    }
 
-    // We'll use a local module to filter the differential tables and create output files that contain only differential features
-    ch_logfc = Channel.value([ params.differential_fc_column, params.differential_min_fold_change ])
-    ch_padj = Channel.value([ params.differential_qval_column, params.differential_max_qval ])
+    // Run differential analysis
 
-    FILTER_DIFFTABLE(
-        ch_differential,
-        ch_logfc,
-        ch_padj
+    ABUNDANCE_DIFFERENTIAL_FILTER(
+        ch_differential_input.input,
+        ch_differential_input.samplesheet,
+        ch_differential_input.transcript_lengths,
+        ch_differential_input.control_features,
+        ch_differential_input.contrast
     )
 
-    // Run a gene set analysis where directed
+    // Collect differential results
+    // Note that 'differential_method' is additionally added to the meta in the differential subworkflow.
+    // Remove it to keep a consistent meta structure (needed for join/combine).
 
-    // Currently, we're letting GSEA work on the expression data. In future we
-    // will allow use of GSEA preranked instead, which will work with the fold
-    // changes/ p values from DESeq2
+    // Also note that these channels, the meta contain other info apart from the base paramset meta.
+    // Hence we create a key using the simple paramset meta with only meta.id, meta.paramset_name and meta.params,
+    // by setting 'use_meta_key' to true. This will facilitate later on to join/combine channels.
+    ch_differential_results = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.results_genewise, ch_paramsets, ['differential_method'], true) // key, meta, results
+    ch_differential_results_filtered = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.results_genewise_filtered, ch_paramsets, ['differential_method'], true) // key, meta, results_filtered
+    ch_differential_model = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.model, ch_paramsets, ['differential_method'], true) // key, meta, model
+    ch_differential_adjacency = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.adjacency, ch_paramsets, ['differential_method'], true) // key, meta, adjacency
 
-    if (params.gsea_run){
+    // Whereas these channels, the meta do not contain contrast info, as they come from the NORM modules instead of DIFFERENTIAL modules.
+    // We do not need to define an extra key based on meta for later join/combine.
+    ch_differential_norm = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.normalised_matrix, ch_paramsets, ['differential_method']) // meta, norm file
+    ch_differential_varstab = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.variance_stabilised_matrix, ch_paramsets, ['differential_method']) // meta, varstab file
 
-        // For GSEA, we need to convert normalised counts to a GCT format for
-        // input, and process the sample sheet to generate class definitions
-        // (CLS) for the variable used in each contrast
+    ch_versions = ch_versions
+        .mix(ABUNDANCE_DIFFERENTIAL_FILTER.out.versions)
 
-        CUSTOM_TABULARTOGSEAGCT ( ch_norm )
+    // ========================================================================
+    // Annotate differential results with feature metadata using csvtk_join
+    // ========================================================================
 
-        // TODO: update CUSTOM_TABULARTOGSEACLS for value channel input per new
-        // guidlines (rather than meta usage employed here)
-
-        ch_contrasts_and_samples = ch_contrasts
-            .map{it[0]} // revert back to contrasts meta map
-            .combine( VALIDATOR.out.sample_meta.map { it[1] } )
-
-        CUSTOM_TABULARTOGSEACLS(ch_contrasts_and_samples)
-
-        TABULAR_TO_GSEA_CHIP(
-            VALIDATOR.out.feature_meta.map{ it[1] },
-            [params.features_id_col, params.features_name_col]
-        )
-
-        // The normalised matrix does not always have a contrast meta, so we
-        // need a combine rather than a join here
-        // Also add file name to metamap for easy access from modules.config
-
-        ch_gsea_inputs = CUSTOM_TABULARTOGSEAGCT.out.gct
-            .map{ it.tail() }
-            .combine(CUSTOM_TABULARTOGSEACLS.out.cls)
-            .map{ tuple(it[1], it[0], it[2]) }
-            .combine(ch_gene_sets)
-
-        GSEA_GSEA(
-            ch_gsea_inputs,
-            ch_gsea_inputs.map{ tuple(it[0].reference, it[0].target) }, // *
-            TABULAR_TO_GSEA_CHIP.out.chip.first()
-        )
-
-        // * Note: GSEA module currently uses a value channel for the mandatory
-        // non-file arguments used to define contrasts, hence the indicated
-        // usage of map to perform that transformation. An active subject of
-        // debate
-
-        ch_gsea_results = GSEA_GSEA.out.report_tsvs_ref
-            .join(GSEA_GSEA.out.report_tsvs_target)
-
-        // Record GSEA versions
-        ch_versions = ch_versions
-            .mix(TABULAR_TO_GSEA_CHIP.out.versions)
-            .mix(GSEA_GSEA.out.versions)
-    }
-
-    if (params.gprofiler2_run) {
-
-        // For gprofiler2, use only features that are considered differential
-        ch_filtered_diff = FILTER_DIFFTABLE.out.filtered
-
-        if (!params.gprofiler2_background_file) {
-            // If deactivated, use empty list as "background"
-            ch_background = []
-        } else if (params.gprofiler2_background_file == "auto") {
-            // If auto, use input matrix as background
-            ch_background = CUSTOM_MATRIXFILTER.out.filtered.map{it.tail()}.first()
-        } else {
-            ch_background = Channel.from(file(params.gprofiler2_background_file, checkIfExists: true))
+    // Prepare input for annotation - combine differential results with feature metadata
+    ch_annotation_input = ch_differential_results
+        .filter { tuple ->
+            def meta = tuple[0]
+            def study_type = meta?.params?.study_type
+            return study_type in ['rnaseq', 'generic_matrix'] || study_type == 'affy_array'
         }
 
-        // For gprofiler2, token and organism have priority and will override a gene_sets file
-
-        GPROFILER2_GOST(
-            ch_filtered_diff,
-            ch_gene_sets.first(),
-            ch_background
-        )
-    }
-
-    // The exploratory plots are made by coloring by every unique variable used
-    // to define contrasts
-
-    ch_contrast_variables = ch_contrasts
-        .map{
-            [ "id": it[1] ]
+    ch_annotation_input
+        .combine(ch_validated_featuremeta, by: 0) // Join by meta_key (first element)
+        .map { meta_key, meta_with_contrast, results_file, features_file ->
+            // Return: [meta_with_contrast, [results_file, features_file]]
+            [meta_with_contrast, [results_file, features_file]]
         }
-        .unique()
+        .set { ch_final_annotation_input }
+
+    CSVTK_JOIN(
+        prepareModuleInput(ch_final_annotation_input, 'differential')
+    )
+
+    // Derive a channel of normalised matrices
+    // - from differential analysis for RNASeq
+    // - from normalisedvalidated assays for Affy and MaxQuant
+    // - from validated assays for GEO soft file
+
+    ch_norm = ch_differential_norm
+        .filter{meta, matrix -> meta.params.study_type in ['rnaseq', 'generic_matrix']}
+        .mix(ch_multi_validated_assays.normalised)
+        .mix(ch_validated_assays.filter{meta, assay -> meta.params.study_type == 'geo_soft_file'})
+
+    // Prepare channel with normalized matrix, and variance stabilized matrices when available
+
+    ch_processed_matrices = ch_norm.join(ch_differential_varstab, remainder: true)
+        .map { meta, norm, vs ->
+            def matrices = vs ? [norm, vs].flatten() : [norm]
+            [meta, matrices]
+        }
+
+    // ========================================================================
+    // Functional analysis
+    // ========================================================================
+
+    // Prepare background file - for the moment it is only needed for gprofiler2
+    // The background file might come from:
+    // - the filter matrix, if auto
+    // - the gprofiler2 background file, if provided
+    // - empty, if not gprofiler2
+
+    ch_background = ch_filtered_matrix
+        .filter{meta, matrix -> meta.params.functional_method == 'gprofiler2' && meta.params.gprofiler2_background_file == "auto"}
+        .mix(
+            ch_paramsets
+                .filter{meta -> meta.params.functional_method == 'gprofiler2' && meta.params.gprofiler2_background_file && meta.params.gprofiler2_background_file != "auto"}
+                .map{meta -> [meta, file(meta.params.gprofiler2_background_file, checkIfExists: true)]}
+        )
+        .mix(
+            ch_paramsets
+                .filter{ meta -> meta.params.functional_method != 'gprofiler2'}
+                .map{meta -> [meta, []]}
+        )
+    // Prepare input for functional analysis
+
+    // - use normalized matrix, if method is gsea
+    // - use filtered differential results, if method is gprofiler2
+    // - use unfiltered differential results, if method is decoupler
+    // - use propd adjacency matrix, if method is grea
+    ch_functional_analysis_matrices = ch_norm
+        .filter{meta, matrix -> meta.params.functional_method == 'gsea'}
+        .map{ meta, matrix -> [meta, meta, matrix]}
+        .mix(
+            ch_differential_results_filtered
+                // Remember that the meta from differential results contain contrast info.
+                // Here the key is the meta without contrast info (same as the meta in other channels)
+                // So we can use this key to combine channels
+                .filter{meta, meta_with_contrast, results -> meta.params.functional_method == 'gprofiler2'}
+        )
+        .mix(
+            ch_differential_results
+                // For decoupler, use unfiltered differential results
+                .filter{meta, meta_with_contrast, results -> meta.params.functional_method == 'decoupler'}
+        )
+        .mix(
+            ch_differential_adjacency
+                .filter{meta, meta_with_contrast, adjacency -> meta.params.functional_method == 'grea'}
+        )
+
+    ch_functional_input = ch_functional_analysis_matrices  // meta, meta with contrast, file
+        .combine(ch_gene_sets, by:0)             // meta, [gmt files]
+        .combine(ch_background, by:0)            // meta, background
+        .combine(ch_contrasts, by:0)             // meta, [contrast], [variable], [reference], [target], [formula], [comparison]
+        .combine(ch_validated_samplemeta, by:0)  // meta, samplesheet
+        .combine(ch_validated_featuremeta, by:0) // meta, features
+        .map { it.tail() } // remove the meta without contrast info that is used as key
+                        // the remaining meta will contain the contrast info, if any
+
+    // Use a multiMap to generate synched channels for functional enrichment analysis
+    ch_functional_input = prepareModuleInput(ch_functional_input, 'functional')
+        .multiMap{ meta, input, gene_sets, background, contrasts, variable, reference, target, formula, comparison, samplesheet, features ->
+            input: [meta, input, gene_sets, background, meta.params.functional_method]
+            contrasts: [meta, contrasts, variable, reference, target, formula, comparison]
+            samplesheet: [meta, samplesheet]
+            features: [meta, features, meta.params.features_id_col, meta.params.features_name_col]
+        }
+
+    // Run functional analysis
+
+    DIFFERENTIAL_FUNCTIONAL_ENRICHMENT(
+        ch_functional_input.input,
+        ch_functional_input.contrasts,
+        ch_functional_input.samplesheet,
+        ch_functional_input.features
+    )
+
+    // Collect functional analysis results
+
+    ch_functional_results = DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_plot_html
+        .join(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_all_enrich, remainder: true)
+        .join(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_sub_enrich, remainder: true)
+        .mix(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_report_tsv)
+        .mix(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.grea_results)
+
+    // Note that 'functional_method' is additionally added to the meta in the functional subworkflow.
+    // Remove it to keep a consistent meta structure (needed for join/combine).
+    // Also note that these channels, the meta contain other info apart from the base paramset meta.
+    // Hence we create a key using the simple paramset meta with only meta.paramset_name and meta.params,
+    // by setting 'use_meta_key' to true. This will facilitate later on to join/combine channels.
+    ch_functional_results = prepareModuleOutput(ch_functional_results, ch_paramsets, ['functional_method'], true) // key, meta, [ functional results ]
+
+    ch_versions = ch_versions
+        .mix(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.versions)
+
+
+    // ========================================================================
+    // Plot figures
+    // ========================================================================
 
     // For geoquery we've done no matrix processing and been supplied with the
     // normalised matrix, which can be passed through to downstream analysis
 
-    if(params.study_type == "geo_soft_file") {
-        ch_mat = ch_norm
-    }else{
-        ch_mat = ch_raw.combine(ch_processed_matrices)
-    }
+    ch_mat = ch_norm.filter{meta, matrix -> meta.params.study_type == 'geo_soft_file'}
+        .map{meta, norm -> [meta, [norm]]}
+        .mix(
+            ch_raw
+                .filter{meta, raw -> meta.params.study_type != 'geo_soft_file'}
+                .join(ch_processed_matrices, remainder: true)
+                .map { meta, raw, matrices ->
+                def processed_matrices = matrices ?: []
+                    [meta, [raw] + processed_matrices]
+                }
+        )
 
-    ch_all_matrices = VALIDATOR.out.sample_meta                // meta, samples
-        .join(VALIDATOR.out.feature_meta)                       // meta, samples, features
-        .join(ch_mat)                                           // meta, samples, features, raw, norm (or just norm)
-        .map{
-            tuple(it[0], it[1], it[2], it[3..it.size()-1])
+    ch_all_matrices = ch_validated_samplemeta                // meta, samples
+        .join(ch_validated_featuremeta)                      // meta, features
+        .join(ch_mat)                                        // meta, list of matrices (raw, norm, variance stabilized)
+        .map { meta, samples, features, matrices ->
+            return [meta, samples, features, matrices]
         }
-        .first()
+
+    // Exploratory analysis
+
+    ch_exploratory_input = ch_contrast_variables         // [meta, variable]
+        .combine(ch_all_matrices, by:0)                  // [meta, samples, features, [matrices]]
+        .map { meta, variable, samples, features, matrices ->
+            // we need to add variable info into meta, otherwise the channel will have the same meta no
+            // matter the variable information and prepareModuleInput will group them together.
+            def meta_new = meta + [id: variable]
+            [meta_new, samples, features, matrices, variable]
+        }
 
     PLOT_EXPLORATORY(
-        ch_contrast_variables
-            .combine(ch_all_matrices.map{ it.tail() })
+        prepareModuleInput(ch_exploratory_input, 'exploratory')
     )
 
-    // Differential analysis using the results of DESeq2
+    // Plot differential analysis results
+
+    ch_plot_differential_input = ch_differential_results  // [meta, meta with contrast, results]
+        .combine(ch_all_matrices, by: 0)                  // [meta, samples, features, matrices]
+        .map{it.tail()}  // remove the meta without contrast info that is used as key
+                        // the remaining meta will contain the contrast info
+
+    ch_plot_differential_input = prepareModuleInput(ch_plot_differential_input, 'differential')
+        .multiMap{ meta, differential_results, samples, features, matrices ->
+            differential_results: [meta, differential_results]
+            samples_features_matrices: [meta, samples, features, matrices]
+        }
 
     PLOT_DIFFERENTIAL(
-        ch_differential,
-        ch_all_matrices
+        ch_plot_differential_input.differential_results,
+        ch_plot_differential_input.samples_features_matrices
     )
 
-    // Gather software versions
+    // ========================================================================
+    // ShinyNGS app
+    // ========================================================================
 
-    ch_versions = ch_versions
-        .mix(VALIDATOR.out.versions)
-        .mix(PLOT_EXPLORATORY.out.versions)
-        .mix(PLOT_DIFFERENTIAL.out.versions)
+    // Make (and optionally deploy) the shinyngs app
 
-    //
+    // To prepare the input for shinyngs app we need to first make sure that the differential
+    // results are parsed in the same order as the contrast file
+    // To do so, as we cannot rely on the order of the channels as they are asynchronous, we
+    // create temporary contrast files with the entries based on the order of the gathered
+    // differential results
+
+    // As contrasts having 'formula' and 'comparison' won't have a variable,
+    // and it is needed for "checkListIsSubset()" in `SHINYNGS` make_app_from_files.R
+    // for backwards-compatibility, keep only the channels that have non-empty variable
+
+    // Create a channel with the differential results and the corresponding map with
+    // the contrast entries
+    differential_with_contrast = ch_paramsets
+        .join( ch_differential_results
+            .groupTuple()
+        )   // [meta, [meta with contrast], [differential results]]
+        .join( ch_contrasts )   // [meta, [contrast], [variable], [reference], [target], [formula], [comparison]]
+        .map { meta, meta_with_contrast, results, contrast, variable, reference, target, formula, comparison ->
+            // extract the contrast entries from the meta dynamically
+            // in this way we don't need to harcode the contrast keys
+            def paramset_contrast_keys = contrast[0].keySet()
+            def contrast_maps = meta_with_contrast.collect { it.subMap(paramset_contrast_keys) }
+            [meta, meta_with_contrast, results, contrast_maps]
+        }
+        .multiMap { meta, meta_with_contrast, results, contrast_maps ->
+            differential_results: [meta, meta_with_contrast, results]
+            contrast_maps: [meta, contrast_maps]
+        }
+
+    // Save temporary contrast csv files with the entries ordered by the differential results
+    ch_contrasts_sorted = differential_with_contrast.contrast_maps
+        .collectFile { meta, contrast_map ->
+            def header = contrast_map[0].keySet().join(',')
+            def content = contrast_map.collect { it.values().join(',') }.sort().reverse()
+            def lines = header + '\n' + content.join('\n') + '\n'
+            ["${meta.paramset_name}.csv", lines]
+        }
+        // parse the channel to have the contrast file with the corresponding meta
+        .map { [it.baseName, it] }
+        .join( ch_paramsets.map { [it.paramset_name, it] } )
+        .map { paramset_name, contrast_file, meta ->
+            [meta, contrast_file]
+        }
+
+    // For shinyngs: filter to keep only simple contrasts (non-empty variable)
+    differential_with_contrast_shinyngs = differential_with_contrast.differential_results
+        .transpose()
+        .filter { meta, contrast, results -> contrast.variable?.trim() }
+        .groupTuple()
+        .join( ch_contrasts )
+        .map { meta, meta_with_contrast, results, contrast, variable, reference, target, formula, comparison ->
+            def paramset_contrast_keys = contrast[0].keySet()
+            def contrast_maps = meta_with_contrast.collect { it.subMap(paramset_contrast_keys) }
+            [meta, meta_with_contrast, results, contrast_maps]
+        }
+        .multiMap { meta, meta_with_contrast, results, contrast_maps ->
+            differential_results: [meta, meta_with_contrast, results]
+            contrast_maps: [meta, contrast_maps]
+        }
+
+    // Create filtered contrast file for shinyngs
+    ch_contrasts_sorted_shinyngs = differential_with_contrast_shinyngs.contrast_maps
+        .collectFile { meta, contrast_map ->
+            def header = contrast_map[0].keySet().join(',')
+            def content = contrast_map.collect { it.values().collect { val ->
+                    val ? val.toString() : ''
+                }.join(',') }.sort().reverse()
+            def lines = header + '\n' + content.join('\n') + '\n'
+            ["${meta.paramset_name}_shinyngs.csv", lines]
+        }
+        .map { [it.baseName.replaceAll('_shinyngs$', ''), it] }
+        .join( ch_paramsets.map { [it.paramset_name, it] } )
+        .map { paramset_name, contrast_file, meta ->
+            [meta, contrast_file]
+        }
+
+    // Parse input for shinyngs app
+    ch_shinyngs_input = differential_with_contrast_shinyngs.differential_results
+        .join(ch_contrasts_sorted_shinyngs)
+        .join(ch_all_matrices)
+        .filter { row ->
+            row[0].params.shinyngs_build_app
+        }
+        .multiMap { meta, meta_with_contrast, differential_results, contrast_file, samplesheet, features, matrices ->
+            matrices: [meta, samplesheet, features, matrices]
+            contrasts_and_differential: [meta, contrast_file, differential_results]
+            contrast_stats_assay: meta.params.exploratory_assay_names.split(',').findIndexOf { it == meta.params.exploratory_final_assay } + 1
+        }
+
+    SHINYNGS_APP(
+        ch_shinyngs_input.matrices,    // meta, samples, features, [  matrices ]
+        ch_shinyngs_input.contrasts_and_differential,   // meta, contrast file, [ differential results ]
+        ch_shinyngs_input.contrast_stats_assay
+    )
+
+    // ========================================================================
+    // Generate report
+    // ========================================================================
+
     // Collate and save software versions
-    //
 
-    ch_collated_versions = softwareVersionsToYAML(ch_versions)
-        .collectFile(storeDir: "${params.outdir}/pipeline_info", name: 'collated_versions.yml', sort: true, newLine: true)
+    def topic_versions = channel.topic("versions")
+        .distinct()
+        .branch { entry ->
+            versions_file: entry instanceof Path
+            versions_tuple: true
+        }
 
-    // Generate a list of files that will be used by the markdown report
+    def topic_versions_string = topic_versions.versions_tuple
+        .map { process, tool, version ->
+            [ process[process.lastIndexOf(':')+1..-1], "  ${tool}: ${version}" ]
+        }
+        .groupTuple(by:0)
+        .map { process, tool_versions ->
+            tool_versions.unique().sort()
+            "${process}:\n${tool_versions.join('\n')}"
+        }
 
-    ch_report_file = Channel.from(report_file)
-        .map{ tuple(exp_meta, it) }
+    softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
+        .mix(topic_versions_string)
+        .collectFile(
+            name: 'nf_core_'  +  'differentialabundance_software_'  + 'versions.yml',
+            sort: true,
+            newLine: true
+        ).set { ch_nfcore_versions }
 
-    ch_logo_file = Channel.from(logo_file)
-    ch_css_file = Channel.from(css_file)
-    ch_citations_file = Channel.from(citations_file)
+    softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
+        .mix(topic_versions_string)
+        .collectFile(
+            name: 'collated_versions.yml',
+            sort: true,
+            newLine: true
+        ).set { ch_collated_versions }
 
-    ch_report_input_files = ch_all_matrices
-        .map{ it.tail() }
-        .map{it.flatten()}
-        .combine(VALIDATOR.out.contrasts.map{it.tail()})
-        .combine(ch_collated_versions)
-        .combine(ch_logo_file)
-        .combine(ch_css_file)
-        .combine(ch_citations_file)
-        .combine(ch_differential.map{it[1]}.toList())
-        .combine(ch_model.map{it[1]}.toList())
+    // Get the report file, logo, css, and citations
 
-    if (params.gsea_run){
-        ch_report_input_files = ch_report_input_files
-            .combine(ch_gsea_results
-                .map{it.tail()}.flatMap().toList()
-            )
-    }
+    ch_report_files = ch_paramsets
+        .map { meta ->
+            [ meta, [
+                meta.params.report_file,  // can be a string of multiple files, gets split later
+                file(meta.params.logo_file, checkIfExists: true),
+                file(meta.params.css_file, checkIfExists: true),
+                file(meta.params.citations_file, checkIfExists: true)
+            ]]
+        }
 
-    if (params.gprofiler2_run){
-        ch_report_input_files = ch_report_input_files
-            .combine(GPROFILER2_GOST.out.plot_html.map{it[1]}.flatMap().toList())
-            .combine(GPROFILER2_GOST.out.all_enrich.map{it[1]}.flatMap().toList())
-            .combine(GPROFILER2_GOST.out.sub_enrich.map{it[1]}.flatMap().toList())
-        GPROFILER2_GOST.out.plot_html
-    }
+    // Group differential and functional results by paramset meta [id: study_name, paramset_name: paramset_name, params: paramset]
+    // So all the files generated with the same paramset meta will go together to report.
+    // Note that the files generated with different contrasts will also be grouped together for the same paramset meta.
 
-    if (params.shinyngs_build_app){
+    // Use remainder:true so methods that don't emit a model (e.g. propd) still
+    // flow through; grep() in the report-input map below drops the null entries.
+    ch_differential_grouped = differential_with_contrast.differential_results.transpose()
+        .join(ch_differential_model, by:[0,1], remainder: true)
+        .groupTuple()                                 // [ meta, [meta with contrast], [differential results], [differential model] ]
+        .map { [it[0], it.tail().tail().flatten().grep()] }  // [ meta, [differential results and models] ]
 
-        // Make (and optionally deploy) the shinyngs app
+    ch_functional_grouped = ch_functional_results
+        .groupTuple()                                 // [ meta, [meta with contrast], [functional results] ]
+        .map { [it[0], it.tail().tail().flatten()] }  // [ meta, [functional results] ]
 
-        // Make a new contrasts file from the differential metas to guarantee the
-        // same order as the differential results
+    // Prepare input for report generation
+    // Each paramset will generate one markdown report by gathering all the files created with the same paramset
 
-        ch_app_differential = ch_differential.first().map{it[0].keySet().join(',')}
-            .concat(
-                ch_differential.map{it[0].values().join(',')}
-            )
-            .collectFile(name: 'contrasts.csv', newLine: true, sort: false)
-            .map{
-                tuple(exp_meta, it)
+    ch_report_input = ch_report_files    // [meta, [report_file, logo_file, css_file, citations_file]]
+        .combine(ch_collated_versions)   // [versions file]
+        .join(ch_all_matrices)           // [meta, samplesheet, features, [matrices]]
+        .join(ch_filter_tests)           // [meta, filtering tests]
+        .join(ch_filter_thresholds)      // [meta, filtering thresholds]
+        .join(ch_contrasts_sorted)       // [meta, contrast file]
+        .join(ch_differential_grouped)   // [meta, [differential results and models]]
+        .join(ch_functional_grouped, remainder: true) // [meta, [functional results]]
+        .map { [it[0], it.tail().flatten().grep()] }  // [meta, [files]]   // note that grep() would remove null files from join with remainder true
+        .map { meta, files -> [meta, files[0], files.tail()] }   // [meta, report_file, [files]]
+        .flatMap { meta, report_file, files ->
+            // Split comma-separated report files and create separate entries for each
+            meta.params.report_file.split(',').collect { report_path ->
+                def report_file_obj = file(report_path.trim(), checkIfExists: true)
+                [meta, report_file_obj, files]
             }
-            .combine(ch_differential.map{it[1]}.collect().map{[it]})
+        }
+        .multiMap { meta, report_file, files ->
+            // add report_file base name
+            def new_meta = meta + [ report_file_name: report_file.baseName ]
 
-        SHINYNGS_APP(
-            ch_all_matrices,     // meta, samples, features, [  matrices ]
-            ch_app_differential, // meta, contrasts, [differential results]
-            params.exploratory_assay_names.split(',').findIndexOf { it == params.exploratory_final_assay } + 1
-        )
-        ch_versions = ch_versions.mix(SHINYNGS_APP.out.versions)
-    }
+            report_file:
+            [new_meta, report_file]
 
-    // Make a params list - starting with the input matrices and the relevant
-    // params to use in reporting
+            report_params:
+            def paramset = [paramset_name: meta.paramset_name] + meta.params.subMap('exploratory_assay_names') // flatten the map
+            def report_file_names = ['logo','css','citations','versions_file','observations','features'] +
+                paramset.exploratory_assay_names.split(',').collect { "${it}_matrix".toString() } +
+                [ 'filtering_tests', 'filtering_thresholds', 'contrasts_file' ]
+            // Create a map from expected report file names to actual file names.
+            // This is used to parameterize the report generation, ensuring each logical input (e.g. 'logo', 'css', assay matrices) is mapped to its corresponding file.
+            [report_file_names, files.collect{ f -> f.name}].transpose().collectEntries()
 
-    def report_file_names = [ 'observations', 'features' ] +
-        params.exploratory_assay_names.split(',').collect { "${it}_matrix".toString() } +
-        [ 'contrasts_file', 'versions_file', 'logo', 'css', 'citations' ]
-
-    // Condition params reported on study type
-
-    def params_pattern = "report|gene_sets|study|observations|features|filtering|exploratory|differential"
-    if (params.study_type == 'rnaseq'){
-        params_pattern += "|deseq2"
-    }
-    if (params.study_type == 'affy_array' || params.study_type == 'geo_soft_file'){
-        params_pattern += "|affy|limma"
-    }
-    if (params.study_type == 'maxquant'){
-        params_pattern += "|proteus|limma"
-    }
-    if (params.gprofiler2_run){
-        params_pattern += "|gprofiler2"
-    }
-    if (params.gsea_run){
-        params_pattern += "|gsea"
-    }
-    params_pattern = ~/(${params_pattern}).*/
-
-    ch_report_params = ch_report_input_files
-        .map{
-            params.findAll{ k,v -> k.matches(params_pattern) } +
-            [report_file_names, it.collect{ f -> f.name}].transpose().collectEntries()
+            input_files:
+            [new_meta, files]
         }
 
     // Render the final report
-    RMARKDOWNNOTEBOOK(
-        ch_report_file,
-        ch_report_params,
-        ch_report_input_files
+    // One report per paramset will be created
+    QUARTONOTEBOOK(
+        ch_report_input.report_file,
+        ch_report_input.report_params,
+        ch_report_input.input_files.map{ meta, files -> files },
+        channel.value([])
     )
 
     // Make a report bundle comprising the markdown document and all necessary
     // input files
+    ch_bundle_input = ch_report_input.input_files
+        .join(
+            QUARTONOTEBOOK.out.notebook
+                .groupTuple() // [ meta, [notebooks] ]
+        ).join(
+            QUARTONOTEBOOK.out.params_yaml
+                .groupTuple()
+        )
+        .map { meta, input_files, all_notebooks, params_yaml->
+            [meta, input_files + all_notebooks + params_yaml]
+        }
+    MAKE_REPORT_BUNDLE( ch_bundle_input )
 
-    MAKE_REPORT_BUNDLE(
-        RMARKDOWNNOTEBOOK.out.parameterised_notebook
-            .combine(ch_report_input_files)
-            .map{[it[0], it[1..-1]]}
+    emit:
+
+    // --- Preprocessing: Affy ---
+    affy_cel_files             = ch_untar_out
+    affy_raw_expression        = ch_affy_raw
+    affy_norm_expression       = ch_affy_norm
+    affy_annotation            = ch_affy_platform_features
+    affy_raw_rds               = prepareModuleOutput(AFFY_JUSTRMA_RAW.out.rds, ch_paramsets)
+
+    // --- Preprocessing: Proteus ---
+    proteus_raw                = ch_proteus_raw
+    proteus_norm               = ch_proteus_norm
+    proteus_plots              = ch_proteus_plots
+    proteus_raw_rdata          = prepareModuleOutput(PROTEUS.out.raw_rdata, ch_paramsets)
+    proteus_norm_rdata         = prepareModuleOutput(PROTEUS.out.norm_rdata, ch_paramsets)
+    proteus_session_info       = prepareModuleOutput(PROTEUS.out.session_info, ch_paramsets)
+
+    // --- Preprocessing: GEO ---
+    geo_expression             = ch_soft_norm
+    geo_annotation             = ch_soft_features
+    geo_rds                    = prepareModuleOutput(GEOQUERY_GETGEO.out.rds, ch_paramsets)
+
+    // --- Preprocessing: GTF ---
+    gtf_annotation             = ch_gtf_features
+
+    // --- Differential ---
+    diff_results               = ch_differential_results
+    diff_results_filtered      = ch_differential_results_filtered
+    diff_normalised_matrix     = ch_differential_norm
+    diff_variance_stabilised   = ch_differential_varstab
+    diff_size_factors          = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.size_factors, ch_paramsets)
+    diff_dispersion_plot       = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.dispersion_plot, ch_paramsets)
+    diff_md_plot               = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.md_plot, ch_paramsets)
+    diff_rdata                 = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.rdata, ch_paramsets)
+    diff_session_info          = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.session_info, ch_paramsets)
+    diff_annotated             = prepareModuleOutput(CSVTK_JOIN.out.csv, ch_paramsets)
+
+    // --- Functional: GSEA ---
+    gsea_report_tsv            = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_report_tsv, ch_paramsets)
+    gsea_report_html           = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_report_html, ch_paramsets)
+    gsea_index_html            = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_index_html, ch_paramsets)
+    gsea_heat_map_corr_plot    = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_heat_map_corr_plot, ch_paramsets)
+    gsea_ranked_gene_list      = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_ranked_gene_list, ch_paramsets)
+    gsea_gene_set_sizes        = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_gene_set_sizes, ch_paramsets)
+    gsea_histogram             = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_histogram, ch_paramsets)
+    gsea_heatmap               = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_heatmap, ch_paramsets)
+    gsea_pvalues_vs_nes_plot   = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_pvalues_vs_nes_plot, ch_paramsets)
+    gsea_ranked_list_corr      = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_ranked_list_corr, ch_paramsets)
+    gsea_butterfly_plot        = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_butterfly_plot, ch_paramsets)
+    gsea_gene_set_tsv          = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_gene_set_tsv, ch_paramsets)
+    gsea_gene_set_html         = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_gene_set_html, ch_paramsets)
+    gsea_gene_set_heatmap      = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_gene_set_heatmap, ch_paramsets)
+    gsea_gene_set_enplot       = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_gene_set_enplot, ch_paramsets)
+    gsea_gene_set_dist         = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_gene_set_dist, ch_paramsets)
+    gsea_snapshot              = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_snapshot, ch_paramsets)
+    gsea_archive               = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_archive, ch_paramsets)
+    gsea_rpt                   = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_rpt, ch_paramsets)
+
+    // --- Functional: gprofiler2 ---
+    gprofiler2_html            = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_plot_html, ch_paramsets)
+    gprofiler2_all_enrichment  = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_all_enrich, ch_paramsets)
+    gprofiler2_sub_enrichment  = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_sub_enrich, ch_paramsets)
+    gprofiler2_plot_png        = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_artifacts, ch_paramsets)
+    gprofiler2_sub_plot        = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_sub_plot, ch_paramsets)
+    gprofiler2_rds             = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_rds, ch_paramsets)
+    gprofiler2_filtered_gmt    = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gprofiler2_filtered_gmt, ch_paramsets)
+
+    // --- Functional: decoupler ---
+    decoupler_estimate         = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_dc_estimate, ch_paramsets)
+    decoupler_pvals            = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_dc_pvals, ch_paramsets)
+    decoupler_png              = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_png, ch_paramsets)
+
+    // --- Functional: common ---
+    functional_session_info    = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.session_info, ch_paramsets)
+
+    // --- Plotting ---
+    plot_exploratory           = prepareModuleOutput(
+        PLOT_EXPLORATORY.out.boxplots_png
+            .mix(PLOT_EXPLORATORY.out.densities_png)
+            .mix(PLOT_EXPLORATORY.out.pca2d_png)
+            .mix(PLOT_EXPLORATORY.out.pca3d_png)
+            .mix(PLOT_EXPLORATORY.out.mad_png)
+            .mix(PLOT_EXPLORATORY.out.dendro),
+        ch_paramsets
     )
+    plot_volcanos              = prepareModuleOutput(PLOT_DIFFERENTIAL.out.volcanos_png, ch_paramsets)
+
+    // --- ShinyNGS ---
+    shinyngs_data              = SHINYNGS_APP.out.app.map { meta, data_rds, _app_r -> [meta, data_rds] }
+    shinyngs_app_file          = SHINYNGS_APP.out.app.map { meta, _data_rds, app_r -> [meta, app_r] }
+
+    // --- Report ---
+    report_html                = QUARTONOTEBOOK.out.html
+    report_bundle              = MAKE_REPORT_BUNDLE.out.zipped_archive
+
+    // --- Versions ---
+    nfcore_versions            = ch_nfcore_versions
+    collated_versions          = ch_collated_versions
 
 }
 

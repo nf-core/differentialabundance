@@ -1,8 +1,29 @@
-repository_type: pipeline
 lint:
+  files_exist:
+    - assets/multiqc_config.yml
+  files_unchanged:
+    - assets/nf-core-differentialabundance_logo_light.png
+    - docs/images/nf-core-differentialabundance_logo_light.png
+    - docs/images/nf-core-differentialabundance_logo_dark.png
+  multiqc_config: false
   nextflow_config:
     - config_defaults:
         - params.logo_file
         - params.css_file
         - params.citations_file
         - params.report_file
+        - params.paramsheet
+nf_core_version: 4.0.2
+repository_type: pipeline
+template:
+  author: Oskar Wacker, Jonathan Manning
+  description: Differential abundance analysis
+  force: false
+  is_nfcore: true
+  name: differentialabundance
+  org: nf-core
+  outdir: .
+  skip_features:
+    - fastqc
+    - multiqc
+  version: 2.0.0

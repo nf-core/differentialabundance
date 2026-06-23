@@ -1,0 +1,97 @@
+{
+    "test": {
+        "content": [
+            "volcano.png",
+            [
+                
+            ],
+            {
+                "versions_shinyngs": [
+                    [
+                        "SHINYNGS_STATICDIFFERENTIAL",
+                        "shinyngs",
+                        "2.4.0"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-04-16T19:22:01.222412911",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "treatment_mCherry_hND6_",
+                            "variable": "treatment",
+                            "reference": "mCherry",
+                            "target": "hND6",
+                            "blocking": ""
+                        },
+                        "volcano.png:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "treatment_mCherry_hND6_",
+                            "variable": "treatment",
+                            "reference": "mCherry",
+                            "target": "hND6",
+                            "blocking": ""
+                        },
+                        "volcano.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    [
+                        "SHINYNGS_STATICDIFFERENTIAL",
+                        "shinyngs",
+                        "2.4.0"
+                    ]
+                ],
+                "versions_shinyngs": [
+                    [
+                        "SHINYNGS_STATICDIFFERENTIAL",
+                        "shinyngs",
+                        "2.4.0"
+                    ]
+                ],
+                "volcanos_html": [
+                    [
+                        {
+                            "id": "treatment_mCherry_hND6_",
+                            "variable": "treatment",
+                            "reference": "mCherry",
+                            "target": "hND6",
+                            "blocking": ""
+                        },
+                        "volcano.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "volcanos_png": [
+                    [
+                        {
+                            "id": "treatment_mCherry_hND6_",
+                            "variable": "treatment",
+                            "reference": "mCherry",
+                            "target": "hND6",
+                            "blocking": ""
+                        },
+                        "volcano.png:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-04-16T19:22:14.145006911",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}

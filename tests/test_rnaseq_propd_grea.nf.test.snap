@@ -1,0 +1,137 @@
+{
+    "Test rnaseq propd + grea profile": {
+        "content": [
+            18,
+            {
+                "CSVTK_JOIN": {
+                    "csvtk": "0.37.0"
+                },
+                "CUSTOM_FILTERDIFFERENTIALTABLE": {
+                    "pandas": "1.5.2",
+                    "python": "3.11.15"
+                },
+                "CUSTOM_MATRIXFILTER": {
+                    "r-base": "4.2.1"
+                },
+                "GTF_TO_TABLE": {
+                    "atlas-gene-annotation-manipulation": "1.1.1"
+                },
+                "GUNZIP_GTF": {
+                    "gunzip": 1.13
+                },
+                "PLOT_DIFFERENTIAL": {
+                    "shinyngs": "2.4.0"
+                },
+                "PLOT_EXPLORATORY": {
+                    "shinyngs": "2.4.0"
+                },
+                "PROPR_GREA": {
+                    "r-propr": "5.1.5"
+                },
+                "PROPR_PROPD": {
+                    "r-propr": "5.1.8"
+                },
+                "SHINYNGS_APP": {
+                    "shinyngs": "2.4.0"
+                },
+                "VALIDATOR": {
+                    "shinyngs": "2.4.0"
+                },
+                "Workflow": {
+                    "nf-core/differentialabundance": "v2.0.0"
+                }
+            },
+            [
+                "other",
+                "other/grea",
+                "other/grea/treatment_mCherry_hND6__SRP254919",
+                "other/grea/treatment_mCherry_hND6__SRP254919/treatment_mCherry_hND6__SRP254919.R_sessionInfo.log",
+                "other/grea/treatment_mCherry_hND6_sample_number_SRP254919",
+                "other/grea/treatment_mCherry_hND6_sample_number_SRP254919/treatment_mCherry_hND6_sample_number_SRP254919.R_sessionInfo.log",
+                "other/propd",
+                "other/propd/treatment_mCherry_hND6__SRP254919",
+                "other/propd/treatment_mCherry_hND6__SRP254919/treatment_mCherry_hND6__SRP254919.R_sessionInfo.log",
+                "other/propd/treatment_mCherry_hND6__SRP254919/treatment_mCherry_hND6__SRP254919.propd.adjacency.csv",
+                "other/propd/treatment_mCherry_hND6_sample_number_SRP254919",
+                "other/propd/treatment_mCherry_hND6_sample_number_SRP254919/treatment_mCherry_hND6_sample_number_SRP254919.R_sessionInfo.log",
+                "other/propd/treatment_mCherry_hND6_sample_number_SRP254919/treatment_mCherry_hND6_sample_number_SRP254919.propd.adjacency.csv",
+                "pipeline_info",
+                "pipeline_info/collated_versions.yml",
+                "pipeline_info/nf_core_differentialabundance_software_versions.yml",
+                "plots",
+                "plots/differential",
+                "plots/differential/rnaseq_propd_grea",
+                "plots/differential/rnaseq_propd_grea/treatment_mCherry_hND6__SRP254919",
+                "plots/differential/rnaseq_propd_grea/treatment_mCherry_hND6__SRP254919/png",
+                "plots/differential/rnaseq_propd_grea/treatment_mCherry_hND6__SRP254919/png/volcano.png",
+                "plots/differential/rnaseq_propd_grea/treatment_mCherry_hND6_sample_number_SRP254919",
+                "plots/differential/rnaseq_propd_grea/treatment_mCherry_hND6_sample_number_SRP254919/png",
+                "plots/differential/rnaseq_propd_grea/treatment_mCherry_hND6_sample_number_SRP254919/png/volcano.png",
+                "plots/differential/treatment_mCherry_hND6__SRP254919",
+                "plots/differential/treatment_mCherry_hND6__SRP254919/treatment_mCherry_hND6__SRP254919.propd.genewise.png",
+                "plots/differential/treatment_mCherry_hND6_sample_number_SRP254919",
+                "plots/differential/treatment_mCherry_hND6_sample_number_SRP254919/treatment_mCherry_hND6_sample_number_SRP254919.propd.genewise.png",
+                "plots/exploratory",
+                "plots/exploratory/rnaseq_propd_grea",
+                "plots/exploratory/rnaseq_propd_grea/treatment",
+                "plots/exploratory/rnaseq_propd_grea/treatment/png",
+                "plots/exploratory/rnaseq_propd_grea/treatment/png/boxplot.png",
+                "plots/exploratory/rnaseq_propd_grea/treatment/png/density.png",
+                "plots/exploratory/rnaseq_propd_grea/treatment/png/mad_correlation.png",
+                "plots/exploratory/rnaseq_propd_grea/treatment/png/pca2d.png",
+                "plots/exploratory/rnaseq_propd_grea/treatment/png/pca3d.png",
+                "plots/exploratory/rnaseq_propd_grea/treatment/png/sample_dendrogram.png",
+                "report",
+                "report/rnaseq_propd_grea",
+                "report/rnaseq_propd_grea/SRP254919.zip",
+                "report/rnaseq_propd_grea/SRP254919_differentialabundance_report.html",
+                "shinyngs_app",
+                "shinyngs_app/rnaseq_propd_grea",
+                "shinyngs_app/rnaseq_propd_grea/SRP254919",
+                "shinyngs_app/rnaseq_propd_grea/SRP254919/app.R",
+                "shinyngs_app/rnaseq_propd_grea/SRP254919/data.rds",
+                "tables",
+                "tables/annotation",
+                "tables/annotation/rnaseq_propd_grea",
+                "tables/annotation/rnaseq_propd_grea/SRP254919.anno.tsv",
+                "tables/differential",
+                "tables/differential/rnaseq_propd_grea",
+                "tables/differential/rnaseq_propd_grea/treatment_mCherry_hND6__SRP254919.propd.genewise.tsv",
+                "tables/differential/rnaseq_propd_grea/treatment_mCherry_hND6__SRP254919.propd.genewise_filtered.tsv",
+                "tables/differential/rnaseq_propd_grea/treatment_mCherry_hND6__SRP254919_propd.annotated.tsv",
+                "tables/differential/rnaseq_propd_grea/treatment_mCherry_hND6_sample_number_SRP254919.propd.genewise.tsv",
+                "tables/differential/rnaseq_propd_grea/treatment_mCherry_hND6_sample_number_SRP254919.propd.genewise_filtered.tsv",
+                "tables/differential/rnaseq_propd_grea/treatment_mCherry_hND6_sample_number_SRP254919_propd.annotated.tsv",
+                "tables/differential/treatment_mCherry_hND6__SRP254919.propd.genewise.tsv",
+                "tables/differential/treatment_mCherry_hND6_sample_number_SRP254919.propd.genewise.tsv",
+                "tables/functional",
+                "tables/functional/grea",
+                "tables/functional/grea/treatment_mCherry_hND6__SRP254919",
+                "tables/functional/grea/treatment_mCherry_hND6__SRP254919/treatment_mCherry_hND6__SRP254919.grea.tsv",
+                "tables/functional/grea/treatment_mCherry_hND6_sample_number_SRP254919",
+                "tables/functional/grea/treatment_mCherry_hND6_sample_number_SRP254919/treatment_mCherry_hND6_sample_number_SRP254919.grea.tsv"
+            ],
+            [
+                "treatment_mCherry_hND6__SRP254919.propd.adjacency.csv:md5,c60bfbafae4f7e3fa621374654bb8498",
+                "treatment_mCherry_hND6_sample_number_SRP254919.propd.adjacency.csv:md5,c60bfbafae4f7e3fa621374654bb8498",
+                "app.R:md5,bedcfc45b6cdcc2b8fe3627987e2b17a",
+                "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
+                "treatment_mCherry_hND6__SRP254919.propd.genewise.tsv:md5,ca7a72d554cef0e1f3b72ba63ff07575",
+                "treatment_mCherry_hND6__SRP254919.propd.genewise_filtered.tsv:md5,849d52c3f015686234d085bb4e69d9e4",
+                "treatment_mCherry_hND6__SRP254919_propd.annotated.tsv:md5,967f7137c425098feed63acd563528e0",
+                "treatment_mCherry_hND6_sample_number_SRP254919.propd.genewise.tsv:md5,ca7a72d554cef0e1f3b72ba63ff07575",
+                "treatment_mCherry_hND6_sample_number_SRP254919.propd.genewise_filtered.tsv:md5,849d52c3f015686234d085bb4e69d9e4",
+                "treatment_mCherry_hND6_sample_number_SRP254919_propd.annotated.tsv:md5,967f7137c425098feed63acd563528e0",
+                "treatment_mCherry_hND6__SRP254919.propd.genewise.tsv:md5,ca7a72d554cef0e1f3b72ba63ff07575",
+                "treatment_mCherry_hND6_sample_number_SRP254919.propd.genewise.tsv:md5,ca7a72d554cef0e1f3b72ba63ff07575",
+                "treatment_mCherry_hND6__SRP254919.grea.tsv:md5,c495a12a0eb9aab836df1daf098b93ac",
+                "treatment_mCherry_hND6_sample_number_SRP254919.grea.tsv:md5,c495a12a0eb9aab836df1daf098b93ac"
+            ]
+        ],
+        "timestamp": "2026-05-21T22:28:49.017894335",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.1"
+        }
+    }
+}

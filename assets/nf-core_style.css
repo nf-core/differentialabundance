@@ -1,5 +1,6 @@
 body {
   font-family: Calibri, helvetica, sans-serif;
+  font-size: 0.85em;
 }
 
 h1 {
@@ -44,6 +45,7 @@ h4 {
   background-color: #24b064;
   border-color: #24b064;
 }
+
 .list-group-item.active:hover {
   z-index: 2;
   color: #fff;
@@ -60,8 +62,8 @@ h4 {
 .nav-pills > li.active > a,
 .nav-pills > li.active > a:hover,
 .nav-pills > li.active > a:focus {
-  color: #fff;
-  background-color: #24b064;
+  color: #fff !important;
+  background-color: #24b064 !important;
 }
 
 a {
@@ -78,4 +80,16 @@ a {
   flex: 1;
   display: inline-block;
   box-sizing: border-box;
+}
+
+.nav-tabs > li > a {
+  color: #24b064 !important;
+}
+
+.boxplot-container .tab-content {
+  min-height: 650px;
+}
+
+.reactable {
+  margin-bottom: 25px;
 }
