@@ -422,8 +422,9 @@ workflow DIFFERENTIALABUNDANCE {
         .map{meta, contrast ->
             contrast.blocking = contrast.blocking.replaceAll('^NA$', '')
             if (!contrast.id){
-                contrast.id = contrast.values().join('_')
+                contrast.id = contrast.values().findAll { value -> value != null && value != '' }.join('_')
             }
+            contrast.id = contrast.id.replaceAll(/_+$/, '')
             contrast.formula = contrast.formula?.trim() ? contrast.formula.trim() : null
             contrast.make_contrasts_str = contrast.make_contrasts_str?.trim() ? contrast.make_contrasts_str.trim() : null
 
