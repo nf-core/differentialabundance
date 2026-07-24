@@ -1,10 +1,13 @@
 lint:
   files_exist:
     - assets/multiqc_config.yml
+    - .github/workflows/linting_comment.yml
   files_unchanged:
     - assets/nf-core-differentialabundance_logo_light.png
     - docs/images/nf-core-differentialabundance_logo_light.png
     - docs/images/nf-core-differentialabundance_logo_dark.png
+    - .github/workflows/branch.yml
+    - .github/workflows/linting.yml
   multiqc_config: false
   nextflow_config:
     - config_defaults:
