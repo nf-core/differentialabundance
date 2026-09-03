@@ -129,6 +129,14 @@ It is important to note that the documentation advises:
 
 So we **do not recommend** raw counts files such as `salmon.merged.gene_counts.tsv` as input for this workflow **except** where the transcript/gene lengths are also provided.
 
+#### 3' tag / DGE protocols
+
+The length-offset approach above assumes coverage scales with transcript length, which holds for full-length (e.g. standard paired-end mRNA-seq) libraries but not for 3' tag-based protocols (e.g. QuantSeq, Lexogen 3' FWD). In 3' tag/DGE data each transcript contributes a single read/tag regardless of its length, so counts are **independent of transcript length**. Supplying `--feature_length_matrix` for this kind of data would apply a length correction that isn't appropriate, introducing a length-dependent bias into the differential expression results.
+
+For 3' tag/DGE data, use `salmon.merged.gene_counts_scaled.tsv` via `--matrix` and do not pass `--feature_length_matrix`. This matrix is scaled for library size only (tximport's `scaledTPM`), with no length correction, and no offset is applied downstream — the correct handling for this library type.
+
+Note this is **not** interchangeable with `salmon.merged.gene_counts_length_scaled.tsv`: that matrix is additionally scaled by transcript length (tximport's `lengthScaledTPM`) and is intended for full-length libraries, not 3' tag/DGE data.
+
 ### MaxQuant intensities
 
 ```bash

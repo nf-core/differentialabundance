@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- [[#756]](https://github.com/nf-core/differentialabundance/pull/756) - Clarify docs for 3' tag/DGE RNA-seq: use the pre-scaled matrix, no length offset ([@YannVRB](https://github.com/YannVRB), review by [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#748](https://github.com/nf-core/differentialabundance/pull/748)] - Bake GSEA enrichment results into the shinyngs application object (shinyngs >= 3.1 `--enrichment_*` options). ([@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#748](https://github.com/nf-core/differentialabundance/pull/748)] - Document running the Shiny app from the shinyngs container image, so no local ShinyNGS install is required. ([@pinin4fjords](https://github.com/pinin4fjords)).
 
