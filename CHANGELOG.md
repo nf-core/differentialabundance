@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [[#754](https://github.com/nf-core/differentialabundance/pull/754)] - Fix `GSEA_GSEA` failing during cleanup when `gene_sets_files` lists two or more GMT files, because `gsea-cli`'s multi-collection output directory name breaks the module's `mv` glob and unquoted `mv`. ([@pinin4fjords](https://github.com/pinin4fjords))
 - [[#747](https://github.com/nf-core/differentialabundance/pull/747)] - Fix silent contrast/result ordering mismatch in shinyngs Shiny app caused by `.sort().reverse()` in `collectFile` closures decoupling CSV row order from differential result file order. ([@jozsefkun](https://github.com/jozsefkun), review by [@pinin4fjords](https://github.com/pinin4fjords))
 
 ## v2.0.0 - 2026-05-26

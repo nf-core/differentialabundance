@@ -59,12 +59,17 @@ process GSEA_GSEA {
         $args
 
     # Un-timestamp the outputs for path consistency
-    mv ${rpt_label}.Gsea.*/* .
+    # gsea-cli inserts the comma-and-space-separated list of gene set collection
+    # names between the rpt_label and ".Gsea." when multiple -gmx files are given,
+    # so match on "*.Gsea.*" rather than anchoring on the literal rpt_label, and
+    # quote mv's arguments below since that collection list can contain spaces.
+    mv *.Gsea.*/* .
+    rmdir *.Gsea.*
     timestamp=\$(cat *.rpt | grep producer_timestamp | awk '{print \$2}')
 
     for pattern in _\${timestamp} .\${timestamp}; do
         find . -name "*\${pattern}*" | sed "s|^\\./||" | while read -r f; do
-            mv \$f \${f//\$pattern/}
+            mv "\$f" "\${f//\$pattern/}"
         done
     done
     sed -i.bak "s/[_\\.]\$timestamp//g" *.rpt *.html && rm *.bak
