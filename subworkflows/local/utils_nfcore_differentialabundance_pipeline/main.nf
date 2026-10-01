@@ -30,10 +30,10 @@ workflow PIPELINE_INITIALISATION {
     monochrome_logs   // boolean: Do not use coloured log outputs
     nextflow_cli_args //   array: List of positional nextflow CLI args
     outdir            //  string: The output directory where the results will be saved
-    input             //  string: Path to input samplesheet
     help              // boolean: Display help message and exit
     help_full         // boolean: Show the full help message
     show_hidden       // boolean: Show hidden parameters in the help message
+    params            //  record: The params of the pipeline, passed in because an including pipeline has its own
 
     main:
 
@@ -95,19 +95,17 @@ workflow PIPELINE_INITIALISATION {
     )
 
     //
-    // Get paramsets based on paramsheet or default parameters
+    // The paramsets of a paramsheet. Without one, the paramset is built from the params once the files of the
+    // run are known (see buildParamset)
     //
-    def configurations = params.paramsheet
-        ? getParamsheetConfigurations()
-        : getDefaultConfigurations()
-    paramsets = validateConfigurations(configurations)
-        .collect { paramset -> addDifferentialRuntimeParams(paramset) }
-    ch_paramsets = Channel.fromList(paramsets)
-        .map { paramset -> toParamsetMeta(paramset) }
-    //
-    // Custom validate input parameters
-    //
-    validateInputParameters(paramsets)
+    ch_paramsets = Channel.empty()
+    if (params.paramsheet) {
+        def paramsets = validateConfigurations(getParamsheetConfigurations(params))
+            .collect { paramset -> addDifferentialRuntimeParams(paramset) }
+        validateInputParameters(paramsets)
+        ch_paramsets = Channel.fromList(paramsets)
+            .map { paramset -> toParamsetMeta(paramset) }
+    }
 
     emit:
     paramsets = ch_paramsets
@@ -439,7 +437,7 @@ def validateConfigurations(configurations) {
 }
 
 // Get configurations from paramsheet
-def getParamsheetConfigurations() {
+def getParamsheetConfigurations(params) {
     // Get paramsheet path
     def paramsheet_path = file(params.paramsheet, checkIfExists: true)
 
@@ -468,26 +466,36 @@ def getParamsheetConfigurations() {
         .collect{ row ->
             // Note that the paramsheet may not contain all the parameters
             // defined in the pipeline, so we need to merge them
-            def fullparamset = params + row
+            def fullparamset = paramsetParams(params) + row
             return fullparamset
         }
 }
 
-// Get default configurations from pipeline parameters (profile mode)
-def getDefaultConfigurations() {
-    // Use paramset_name from profile if set, otherwise fall back to 'contrasts'
-    def pname = params.paramset_name ?: 'contrasts'
-    // Only the params that the pipeline declares: a pipeline that includes this one has params of its own
-    def declared = declaredParamNames()
-    return [params.findAll { k, v -> k in declared } + [paramset_name: pname]]
+// The types of the params declared in the pipeline schema
+def declaredParamTypes() {
+    def schema = new groovy.json.JsonSlurper().parse(file("${pipelineDir()}/nextflow_schema.json").toFile())
+    def types = [:]
+    (schema.properties ?: [:]).each { name, definition -> types[name] = definition.type }
+    (schema['$defs'] ?: [:]).each { _name, group -> (group.properties ?: [:]).each { name, definition -> types[name] = definition.type } }
+    return types
 }
 
 // Names of the params declared in the pipeline schema
 def declaredParamNames() {
-    def schema = new groovy.json.JsonSlurper().parse(file("${pipelineDir()}/nextflow_schema.json").toFile())
-    def names = (schema.properties ?: [:]).keySet() as Set
-    (schema['$defs'] ?: [:]).each { _name, definition -> names += (definition.properties ?: [:]).keySet() }
-    return names
+    return declaredParamTypes().keySet()
+}
+
+// A param that the schema allows to be an integer or a boolean arrives from the command line as a string
+def coerceUnionTypes(paramset) {
+    def types = declaredParamTypes()
+    return paramset.collectEntries { k, v ->
+        def allowed = types[k]
+        if (v instanceof String && allowed instanceof List) {
+            if ('boolean' in allowed && v in ['true', 'false']) { return [k, v == 'true'] }
+            if ('integer' in allowed && v ==~ /-?\d+/) { return [k, v as Integer] }
+        }
+        return [k, v]
+    }
 }
 
 // The meta of a paramset in the channel that the workflow takes
@@ -499,12 +507,27 @@ def toParamsetMeta(paramset) {
     ]
 }
 
-// Builds the paramset of one run from the pipeline params, with `overrides` replacing them. Meant for a
-// pipeline that includes this one and takes input files from its own dataflow, which cannot be params at launch.
-def buildParamset(Map overrides) {
-    // Files are strings in the paramset, as they are when given on the command line: processes serialise it
-    def values = overrides.collectEntries { k, v -> [k, v instanceof Path ? v.toUriString() : v] }
-    def paramset = validateConfigurations(getDefaultConfigurations().collect { paramset -> paramset + values })
+// The params that are files of a run and can be given as values from the dataflow of an including pipeline
+def paramsetFileNames() {
+    return ['input', 'contrasts', 'matrix', 'feature_length_matrix', 'gtf']
+}
+
+// The params of the pipeline that go into a paramset: the declared ones, without the files of the run, which
+// are given as values. A pipeline that includes this one has params of its own.
+def paramsetParams(params) {
+    def declared = declaredParamNames()
+    def files = paramsetFileNames()
+    return coerceUnionTypes(params.findAll { k, v -> k in declared && !(k in files) })
+}
+
+// Builds the paramset of a run without a paramsheet, from the params and the files of the run. Files are strings
+// in the paramset, as they are when given on the command line: processes serialise it.
+def buildParamset(params, files) {
+    def values = paramsetFileNames()
+        .findAll { name -> files[name] != null }
+        .collectEntries { name -> [name, files[name].toUriString()] }
+    def pname = params.paramset_name ?: 'contrasts'
+    def paramset = validateConfigurations([paramsetParams(params) + [paramset_name: pname] + values])
         .collect { paramset -> addDifferentialRuntimeParams(paramset) }
         .first()
     validateInputParameters([paramset])

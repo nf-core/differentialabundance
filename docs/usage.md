@@ -452,6 +452,31 @@ A paramsheet entry looks like this:
 
 Each entry must include a unique `paramset_name`. Entries can override any pipeline parameter.
 
+## Including the pipeline in another pipeline
+
+:::warning
+Pipeline composition is experimental and needs a Nextflow version that includes [nextflow-io/nextflow#7213](https://github.com/nextflow-io/nextflow/pull/7213).
+:::
+
+The pipeline can be included in a larger pipeline, for example one that quantifies RNA-seq samples with nf-core/rnaseq and then analyses the merged matrices. The files of a run (`input`, `contrasts`, `matrix`, `feature_length_matrix` and `gtf`) are values, so the including pipeline can give them from its own dataflow:
+
+```groovy
+include { params as DiffabParams ; workflow as NFCORE_DIFFERENTIALABUNDANCE } from './pipelines/nf-core/differentialabundance'
+
+params {
+    diffab: DiffabParams
+}
+
+workflow {
+    main:
+    abundance = NFCORE_DIFFERENTIALABUNDANCE(
+        params.diffab + record(matrix: ch_matrix, feature_length_matrix: ch_lengths, gtf: ch_gtf, input: ch_samplesheet, contrasts: ch_contrasts)
+    )
+}
+```
+
+The included pipeline builds the paramset of the run from its params, as it does in single-run mode (`--paramsheet` is not used). Only the script and its modules are included, so the including pipeline provides the configuration: the manifest, resources, the container profile, the `nf-schema` plugin and the params that the process config reads as top-level params (`outdir`, `publish_dir_mode` and `shinyngs_deploy_to_shinyapps_io`). Files the pipeline publishes are returned to the including pipeline, which decides what to publish.
+
 ## Working with the output Quarto file
 
 The pipeline produces a Quarto document file which, if you're proficient in R, you can use to tweak the report after it's generated.

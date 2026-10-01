@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- [[#758](https://github.com/nf-core/differentialabundance/pull/758)] - Locate the schema, conf and paramsheet includes relative to the pipeline instead of `projectDir`, move the config params defaults to `conf/params.config`, and add `buildParamset()` for a pipeline that takes the input files from its own dataflow, so the workflow can be called from another pipeline. ([@pinin4fjords](https://github.com/pinin4fjords))
+- [[#758](https://github.com/nf-core/differentialabundance/pull/758)] - Locate the schema, conf and paramsheet includes relative to the pipeline instead of `projectDir`, move the config params defaults to `conf/params.config`, and make the pipeline a typed pipeline (`params {}` block, `output {}` block, files of a run as optional values), so it can be included in another pipeline with Nextflow pipeline composition. ([@pinin4fjords](https://github.com/pinin4fjords))
 - [[#747](https://github.com/nf-core/differentialabundance/pull/747)] - Fix silent contrast/result ordering mismatch in shinyngs Shiny app caused by `.sort().reverse()` in `collectFile` closures decoupling CSV row order from differential result file order. ([@jozsefkun](https://github.com/jozsefkun), review by [@pinin4fjords](https://github.com/pinin4fjords))
 
 ## v2.0.0 - 2026-05-26
