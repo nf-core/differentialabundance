@@ -116,7 +116,7 @@ params {
     exploratory_mad_threshold: Integer = -5
     exploratory_assay_names: String = "raw,normalised,variance_stabilised"
     exploratory_final_assay: String = "variance_stabilised"
-    exploratory_log2_assays: String = 'raw,normalised'
+    exploratory_log2_assays: String? = 'raw,normalised'
     exploratory_palette_name: String = 'Set1'
 
     // Differential options
