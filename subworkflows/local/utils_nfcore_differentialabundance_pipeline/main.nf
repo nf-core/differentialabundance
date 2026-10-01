@@ -502,7 +502,9 @@ def toParamsetMeta(paramset) {
 // Builds the paramset of one run from the pipeline params, with `overrides` replacing them. Meant for a
 // pipeline that includes this one and takes input files from its own dataflow, which cannot be params at launch.
 def buildParamset(Map overrides) {
-    def paramset = validateConfigurations(getDefaultConfigurations().collect { paramset -> paramset + overrides })
+    // Files are strings in the paramset, as they are when given on the command line: processes serialise it
+    def values = overrides.collectEntries { k, v -> [k, v instanceof Path ? v.toUriString() : v] }
+    def paramset = validateConfigurations(getDefaultConfigurations().collect { paramset -> paramset + values })
         .collect { paramset -> addDifferentialRuntimeParams(paramset) }
         .first()
     validateInputParameters([paramset])
