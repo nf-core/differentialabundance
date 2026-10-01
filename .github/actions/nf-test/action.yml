@@ -19,10 +19,37 @@ inputs:
 runs:
   using: "composite"
   steps:
+    # TEMPORARY: the typed pipeline needs nextflow-io/nextflow#7213, #7646 and #7674, which are not in a
+    # release yet. Every entry except latest-everything runs the launcher built by the
+    # build-nextflow job. Restore the plain setup-nextflow step once a release contains them.
     - name: Setup Nextflow
+      if: env.NXF_VERSION == 'latest-everything'
       uses: nf-core/setup-nextflow@b4ec1bc7c16a94435159de94a05253542fddf6ef # v3
       with:
         version: "${{ env.NXF_VERSION }}"
+
+    - name: Set up Java for custom Nextflow
+      if: env.NXF_VERSION != 'latest-everything'
+      uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+      with:
+        distribution: temurin
+        java-version: "21"
+
+    - name: Download custom Nextflow
+      if: env.NXF_VERSION != 'latest-everything'
+      uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+      with:
+        name: nextflow-custom
+        path: ${{ runner.temp }}/nextflow-custom
+
+    - name: Install custom Nextflow
+      if: env.NXF_VERSION != 'latest-everything'
+      shell: bash
+      run: |
+        mkdir -p "$HOME/.local/bin"
+        install -m 755 "${{ runner.temp }}/nextflow-custom/nextflow" "$HOME/.local/bin/nextflow"
+        echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+        "$HOME/.local/bin/nextflow" -version
 
     - name: Set up Python
       uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
@@ -60,6 +87,8 @@ runs:
       shell: bash
       env:
         NFT_WORKDIR: ${{ env.NFT_WORKDIR }}
+        # TEMPORARY: patched nf-schema (validateParameters blocks on Channel params), remove once released
+        NXF_PLUGINS_TEST_REPOSITORY: https://github.com/pinin4fjords/nf-schema/releases/download/2.7.2-channel.3/nf-schema-2.7.2-channel.3-meta.json
       run: |
         nf-test test \
           --profile=+${{ inputs.profile }} \
