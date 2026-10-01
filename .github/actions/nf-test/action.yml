@@ -88,7 +88,7 @@ runs:
       env:
         NFT_WORKDIR: ${{ env.NFT_WORKDIR }}
         # TEMPORARY: patched nf-schema (validateParameters blocks on Channel params), remove once released
-        NXF_PLUGINS_TEST_REPOSITORY: https://github.com/pinin4fjords/nf-schema/releases/download/2.7.2-channel.3/nf-schema-2.7.2-channel.3-meta.json
+        NXF_PLUGINS_TEST_REPOSITORY: https://github.com/pinin4fjords/nf-schema/releases/download/2.7.2-channel.4/nf-schema-2.7.2-channel.4-meta.json
       run: |
         nf-test test \
           --profile=+${{ inputs.profile }} \
