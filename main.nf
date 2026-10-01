@@ -55,7 +55,6 @@ params {
     sizefactors_from_controls: Boolean = false
 
     // Output options
-    outdir: String?
     round_digits: Integer = -1
     seed: Integer?
 
@@ -262,11 +261,8 @@ params {
 
     // References
     genome: String?
-    igenomes_base: String = 's3:  //ngi-igenomes/igenomes/'
-    igenomes_ignore: Boolean = false
 
     // Boilerplate options
-    publish_dir_mode: String = 'copy'
     email: String?
     email_on_fail: String?
     plaintext_email: Boolean = false
@@ -275,20 +271,10 @@ params {
     help_full: Boolean = false
     show_hidden: Boolean = false
     version: Boolean = false
-    pipelines_testdata_base_path: String = 'https:  //raw.githubusercontent.com/nf-core/test-datasets/'
-    trace_report_suffix: String = new java.util.Date().format( 'yyyy-MM-dd_HH-mm-ss')
-
-    // Config options
-    config_profile_name: String?
-    config_profile_description: String?
-
-    custom_config_version: String = 'master'
-    custom_config_base: String = "https://raw.githubusercontent.com/nf-core/configs/master"  //raw.githubusercontent.com/nf-core/configs/${params.custom_config_version}"
-    config_profile_contact: String?
-    config_profile_url: String?
 
     // Schema validation default options
-    validate_params: Boolean = true}
+    validate_params: Boolean = true
+}
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -308,7 +294,6 @@ workflow {
         params.validate_params,
         params.monochrome_logs,
         args,
-        params.outdir,
         params.help,
         params.help_full,
         params.show_hidden,
@@ -348,7 +333,6 @@ workflow {
         params.email,
         params.email_on_fail,
         params.plaintext_email,
-        params.outdir,
         params.monochrome_logs
     )
 
@@ -425,10 +409,25 @@ workflow {
     ch_pub_versions = abundance.nfcore_versions.map { file -> record(name: 'versions', meta: [:], files: [file].flatten()) }
         .mix(abundance.collated_versions.map      { file -> record(name: 'collated_versions', meta: [:], files: [file].flatten()) })
 
+    // The files of propd and grea go in folders named after the run, without the paramset
+    ch_pub_propd = abundance.propd_results.map  { meta, file -> record(name: 'results', meta: meta, files: [file].flatten()) }
+        .mix(abundance.propd_pairwise.map          { meta, file -> record(name: 'pairwise', meta: meta, files: [file].flatten()) })
+        .mix(abundance.propd_pairwise_filtered.map { meta, file -> record(name: 'pairwise_filtered', meta: meta, files: [file].flatten()) })
+        .mix(abundance.propd_fdr.map               { meta, file -> record(name: 'fdr', meta: meta, files: [file].flatten()) })
+        .mix(abundance.propd_genewise_plot.map     { meta, file -> record(name: 'genewise_plot', meta: meta, files: [file].flatten()) })
+        .mix(abundance.propd_rdata.map             { meta, file -> record(name: 'rdata', meta: meta, files: [file].flatten()) })
+        .mix(abundance.propd_adjacency.map         { meta, file -> record(name: 'adjacency', meta: meta, files: [file].flatten()) })
+        .mix(abundance.propd_session_info.map      { file -> record(name: 'session_info', meta: [id: file.name.replace('.R_sessionInfo.log', '')], files: [file].flatten()) })
+
+    ch_pub_grea = abundance.grea_results.map { meta, file -> record(name: 'results', meta: meta, files: [file].flatten()) }
+        .mix(abundance.grea_session_info.map { file -> record(name: 'session_info', meta: [id: file.name.replace('.R_sessionInfo.log', '')], files: [file].flatten()) })
+
     publish:
     preprocessing = ch_pub_preprocessing
     differential  = ch_pub_differential
     functional    = ch_pub_functional
+    propd         = ch_pub_propd
+    grea          = ch_pub_grea
     plotting      = ch_pub_plotting
     shinyngs      = ch_pub_shinyngs
     report        = ch_pub_report
@@ -487,6 +486,28 @@ def differentialTarget(r: Published) -> String {
         session_info               : "other/${r.meta.params.differential_method}"
     ][r.name] ?: r.name
     return "${folder}/${r.meta.paramset_name}/"
+}
+
+def propdTarget(r: Published) -> String {
+    def folder = [
+        results           : 'tables/differential',
+        pairwise          : 'tables/differential',
+        pairwise_filtered : 'tables/differential',
+        fdr               : 'tables/differential',
+        genewise_plot     : "plots/differential/${r.meta.id}",
+        rdata             : "other/propd/${r.meta.id}",
+        adjacency         : "other/propd/${r.meta.id}",
+        session_info      : "other/propd/${r.meta.id}"
+    ][r.name] ?: r.name
+    return "${folder}/"
+}
+
+def greaTarget(r: Published) -> String {
+    def folder = [
+        results      : "tables/functional/grea/${r.meta.id}",
+        session_info : "other/grea/${r.meta.id}"
+    ][r.name] ?: r.name
+    return "${folder}/"
 }
 
 def functionalTarget(r: Published) -> String {
@@ -559,6 +580,12 @@ output {
     }
     plotting: Channel<Published> {
         path { r -> r.files >> plottingTarget(r) }
+    }
+    propd: Channel<Published> {
+        path { r -> r.files >> propdTarget(r) }
+    }
+    grea: Channel<Published> {
+        path { r -> r.files >> greaTarget(r) }
     }
     shinyngs: Channel<Published> {
         path { r -> r.files >> "shinyngs_app/${r.meta.paramset_name}/" }

@@ -29,7 +29,6 @@ workflow PIPELINE_INITIALISATION {
     validate_params   // boolean: Boolean whether to validate parameters against the schema at runtime
     monochrome_logs   // boolean: Do not use coloured log outputs
     nextflow_cli_args //   array: List of positional nextflow CLI args
-    outdir            //  string: The output directory where the results will be saved
     help              // boolean: Display help message and exit
     help_full         // boolean: Show the full help message
     show_hidden       // boolean: Show hidden parameters in the help message
@@ -45,7 +44,7 @@ workflow PIPELINE_INITIALISATION {
     UTILS_NEXTFLOW_PIPELINE (
         version,
         true,
-        outdir,
+        workflow.outputDir,
         workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1
     )
 
@@ -63,7 +62,7 @@ workflow PIPELINE_INITIALISATION {
 \033[0;35m  nf-core/differentialabundance ${workflow.manifest.version}\033[0m
 -\033[2m----------------------------------------------------\033[0m-
 """
-    def after_text = """${workflow.manifest.doi ? "\n* The pipeline\n" : ""}${workflow.manifest.doi.tokenize(",").collect { doi -> "    https://doi.org/${doi.trim().replace('https://doi.org/','')}"}.join("\n")}${workflow.manifest.doi ? "\n" : ""}
+    def after_text = """${workflow.manifest.doi ? "\n* The pipeline\n" : ""}${(workflow.manifest.doi ?: '').tokenize(",").collect { doi -> "    https://doi.org/${doi.trim().replace('https://doi.org/','')}"}.join("\n")}${workflow.manifest.doi ? "\n" : ""}
 * The nf-core framework
     https://doi.org/10.1038/s41587-020-0439-x
 * Software dependencies
@@ -73,7 +72,7 @@ workflow PIPELINE_INITIALISATION {
         before_text = before_text.replaceAll('\\u001b\\[[0-9;]*m', '')
     }
 
-    command = "nextflow run ${workflow.manifest.name} -profile <docker/singularity/.../institute> --input samplesheet.csv --outdir <OUTDIR>"
+    command = "nextflow run ${workflow.manifest.name} -profile <docker/singularity/.../institute> --input samplesheet.csv -output-dir <OUTDIR>"
 
     UTILS_NFSCHEMA_PLUGIN (
         workflow,
@@ -124,7 +123,6 @@ workflow PIPELINE_COMPLETION {
     email           //  string: email address
     email_on_fail   //  string: email address sent on pipeline failure
     plaintext_email // boolean: Send plain-text email instead of HTML
-    outdir          //    path: Path to output directory where results will be published
     monochrome_logs // boolean: Disable ANSI colour codes in log output
 
 
@@ -141,7 +139,7 @@ workflow PIPELINE_COMPLETION {
                 email,
                 email_on_fail,
                 plaintext_email,
-                outdir,
+                workflow.outputDir,
                 monochrome_logs,
                 []
             )

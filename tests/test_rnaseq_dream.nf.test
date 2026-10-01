@@ -6,19 +6,15 @@ nextflow_pipeline {
     tag "pipeline"
 
     test("Test rnaseq dream profile") {
+
+        options "-output-dir $outputDir"
         config "${projectDir}/conf/test/rnaseq/rnaseq_dream_complex.config"
 
-        when {
-            params {
-                outdir = "$outputDir"
-            }
-        }
-
         then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // stable_name: All files + folders in the output directory with a stable name
+            def stable_name = getAllFilesFromDir(outputDir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in the output directory with stable content
+            def stable_path = getAllFilesFromDir(outputDir, ignoreFile: 'tests/.nftignore')
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
@@ -36,11 +32,12 @@ nextflow_pipeline {
     }
 
     test("Test rnaseq dream profile - complex contrast - with zero intercept - 1") {
+
+        options "-output-dir $outputDir"
         config "${projectDir}/conf/test/rnaseq/rnaseq_dream_complex.config"
 
         when {
             params {
-                outdir = "$outputDir"
 
                 // Override contrasts for zero intercept test
                 contrasts = "${projectDir}/tests/assets/zero_intercept_contrasts_1.yml"
@@ -54,10 +51,10 @@ nextflow_pipeline {
         }
 
         then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // stable_name: All files + folders in the output directory with a stable name
+            def stable_name = getAllFilesFromDir(outputDir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in the output directory with stable content
+            def stable_path = getAllFilesFromDir(outputDir, ignoreFile: 'tests/.nftignore')
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
@@ -75,12 +72,13 @@ nextflow_pipeline {
     }
 
     test("Test generic_matrix dream profile - complex contrast - with zero intercept - 2") {
+
+        options "-output-dir $outputDir"
         tag "generic_matrix_dream"
         config "${projectDir}/conf/test/generic_matrix/generic_matrix_dream.config"
 
         when {
             params {
-                outdir = "$outputDir"
 
                 // Override contrasts for zero intercept test
                 contrasts = "${projectDir}/tests/assets/zero_intercept_contrasts_2.yml"
@@ -91,10 +89,10 @@ nextflow_pipeline {
         }
 
         then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // stable_name: All files + folders in the output directory with a stable name
+            def stable_name = getAllFilesFromDir(outputDir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in the output directory with stable content
+            def stable_path = getAllFilesFromDir(outputDir, ignoreFile: 'tests/.nftignore')
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
@@ -112,19 +110,15 @@ nextflow_pipeline {
     }
 
     test("Test rnaseq dream profile - with decoupler") {
+
+        options "-output-dir $outputDir"
         config "${projectDir}/conf/test/rnaseq/rnaseq_dream_decoupler_complex.config"
 
-        when {
-            params {
-                outdir = "$outputDir"
-            }
-        }
-
         then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // stable_name: All files + folders in the output directory with a stable name
+            def stable_name = getAllFilesFromDir(outputDir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in the output directory with stable content
+            def stable_path = getAllFilesFromDir(outputDir, ignoreFile: 'tests/.nftignore')
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
@@ -142,11 +136,12 @@ nextflow_pipeline {
     }
 
     test("Test - Numeric sample IDs - rnaseq dream profile - with decoupler") {
+
+        options "-output-dir $outputDir"
         config "${projectDir}/conf/test/rnaseq/rnaseq_dream_decoupler_complex.config"
 
         when {
             params {
-                outdir = "$outputDir"
 
                 // change input data
                 contrasts = "${projectDir}/tests/assets/SRP254919_dream.contrasts.yaml"
@@ -157,10 +152,10 @@ nextflow_pipeline {
         }
 
         then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // stable_name: All files + folders in the output directory with a stable name
+            def stable_name = getAllFilesFromDir(outputDir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in the output directory with stable content
+            def stable_path = getAllFilesFromDir(outputDir, ignoreFile: 'tests/.nftignore')
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(

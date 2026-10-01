@@ -986,6 +986,16 @@ workflow DIFFERENTIALABUNDANCE {
     diff_session_info          = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.session_info, ch_paramsets)
     diff_annotated             = prepareModuleOutput(CSVTK_JOIN.out.csv, ch_paramsets)
 
+    // --- Differential: propd ---
+    propd_results              = ABUNDANCE_DIFFERENTIAL_FILTER.out.propd_results
+    propd_pairwise             = ABUNDANCE_DIFFERENTIAL_FILTER.out.propd_pairwise
+    propd_pairwise_filtered    = ABUNDANCE_DIFFERENTIAL_FILTER.out.propd_pairwise_filtered
+    propd_fdr                  = ABUNDANCE_DIFFERENTIAL_FILTER.out.propd_fdr
+    propd_genewise_plot        = ABUNDANCE_DIFFERENTIAL_FILTER.out.propd_genewise_plot
+    propd_rdata                = ABUNDANCE_DIFFERENTIAL_FILTER.out.propd_rdata
+    propd_adjacency            = ABUNDANCE_DIFFERENTIAL_FILTER.out.adjacency
+    propd_session_info         = ABUNDANCE_DIFFERENTIAL_FILTER.out.propd_session_info
+
     // --- Functional: GSEA ---
     gsea_report_tsv            = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_report_tsv, ch_paramsets)
     gsea_report_html           = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_report_html, ch_paramsets)
@@ -1020,6 +1030,10 @@ workflow DIFFERENTIALABUNDANCE {
     decoupler_estimate         = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_dc_estimate, ch_paramsets)
     decoupler_pvals            = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_dc_pvals, ch_paramsets)
     decoupler_png              = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_png, ch_paramsets)
+
+    // --- Functional: grea ---
+    grea_results               = DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.grea_results
+    grea_session_info          = DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.grea_session_info
 
     // --- Functional: common ---
     functional_session_info    = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.session_info, ch_paramsets)

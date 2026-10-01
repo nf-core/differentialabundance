@@ -13,11 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [[#758](https://github.com/nf-core/differentialabundance/pull/758)] - Make the pipeline a typed pipeline (`params {}` block, `output {}` block, files of a run as optional values) that can be included in another pipeline with Nextflow pipeline composition, with its own files located relative to the pipeline and the config params defaults in `conf/params.config`; the `--outdir` param is replaced by Nextflow's `-output-dir`, and the propd and grea results are published through the output block. ([@pinin4fjords](https://github.com/pinin4fjords))
 - [[#748](https://github.com/nf-core/differentialabundance/pull/748)] - Update `shinyngs` modules to 3.2.0 and modernise the Quarto report to use shinyngs 3.x plotting helpers, replacing hand-written PCA, clustering heatmap, top-gene boxplot, scree, upset, volcano and biotype code and reducing the report's container dependencies. ([@pinin4fjords](https://github.com/pinin4fjords)).
 
 ### Fixed
 
-- [[#758](https://github.com/nf-core/differentialabundance/pull/758)] - Locate the schema, conf and paramsheet includes relative to the pipeline instead of `projectDir`, move the config params defaults to `conf/params.config`, and make the pipeline a typed pipeline (`params {}` block, `output {}` block, files of a run as optional values), so it can be included in another pipeline with Nextflow pipeline composition. ([@pinin4fjords](https://github.com/pinin4fjords))
+- [[#758](https://github.com/nf-core/differentialabundance/pull/758)] - Apply the `cache = 'deep'` setting to the processes of the differential filter and functional enrichment subworkflows, which its selectors never matched, and allow profiles to unset `exploratory_log2_assays`. ([@pinin4fjords](https://github.com/pinin4fjords))
 - [[#747](https://github.com/nf-core/differentialabundance/pull/747)] - Fix silent contrast/result ordering mismatch in shinyngs Shiny app caused by `.sort().reverse()` in `collectFile` closures decoupling CSV row order from differential result file order. ([@jozsefkun](https://github.com/jozsefkun), review by [@pinin4fjords](https://github.com/pinin4fjords))
 
 ## v2.0.0 - 2026-05-26

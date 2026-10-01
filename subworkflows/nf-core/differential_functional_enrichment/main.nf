@@ -193,6 +193,7 @@ workflow DIFFERENTIAL_FUNCTIONAL_ENRICHMENT {
 
     // grea-specific outputs
     grea_results                    = PROPR_GREA.out.results
+    grea_session_info               = PROPR_GREA.out.session_info
 
     // tool versions
     session_info                    = ch_session_info
