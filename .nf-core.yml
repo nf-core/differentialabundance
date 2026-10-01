@@ -2,17 +2,163 @@ lint:
   files_exist:
     - assets/multiqc_config.yml
   files_unchanged:
+    - .github/PULL_REQUEST_TEMPLATE.md
     - assets/nf-core-differentialabundance_logo_light.png
     - docs/images/nf-core-differentialabundance_logo_light.png
     - docs/images/nf-core-differentialabundance_logo_dark.png
   multiqc_config: false
+  # Pipeline parameters and their defaults are declared in the typed `params {}` block of main.nf,
+  # which `nextflow config` (used by the lint) does not see. Each parameter is ignored individually.
   nextflow_config:
+    - params.outdir
+    - params.input
     - config_defaults:
         - params.logo_file
         - params.css_file
         - params.citations_file
         - params.report_file
         - params.paramsheet
+        - params.affy_background
+        - params.affy_bgversion
+        - params.affy_build_annotation
+        - params.affy_destructive
+        - params.affy_file_name_col
+        - params.affy_rm_extra
+        - params.affy_rm_mask
+        - params.affy_rm_outliers
+        - params.decoupler_methods
+        - params.decoupler_min_n
+        - params.deseq2_alpha
+        - params.deseq2_alt_hypothesis
+        - params.deseq2_fit_type
+        - params.deseq2_independent_filtering
+        - params.deseq2_lfc_threshold
+        - params.deseq2_min_replicates_for_replace
+        - params.deseq2_minmu
+        - params.deseq2_p_adjust_method
+        - params.deseq2_sf_type
+        - params.deseq2_shrink_lfc
+        - params.deseq2_test
+        - params.deseq2_use_t
+        - params.deseq2_vs_blind
+        - params.deseq2_vs_method
+        - params.deseq2_vst_nsub
+        - params.differential_feature_id_column
+        - params.differential_max_pval
+        - params.differential_max_qval
+        - params.differential_method
+        - params.differential_min_fold_change
+        - params.differential_palette_name
+        - params.differential_subset_to_contrast_samples
+        - params.dream_adjust_method
+        - params.dream_apply_voom
+        - params.dream_confint
+        - params.dream_ddf
+        - params.dream_lfc
+        - params.dream_p_value
+        - params.dream_proportion
+        - params.dream_reml
+        - params.dream_robust
+        - params.dream_stdev_coef_lim
+        - params.dream_trend
+        - params.dream_winsor_tail_p
+        - params.exploratory_assay_names
+        - params.exploratory_clustering_method
+        - params.exploratory_cor_method
+        - params.exploratory_final_assay
+        - params.exploratory_log2_assays
+        - params.exploratory_mad_threshold
+        - params.exploratory_main_variable
+        - params.exploratory_n_features
+        - params.exploratory_palette_name
+        - params.exploratory_whisker_distance
+        - params.features_gtf_feature_type
+        - params.features_gtf_table_first_field
+        - params.features_id_col
+        - params.features_metadata_cols
+        - params.features_name_col
+        - params.features_type
+        - params.filtering_min_proportion_not_na
+        - params.filtering_min_samples
+        - params.functional_method
+        - params.gprofiler2_background_file
+        - params.gprofiler2_correction_method
+        - params.gprofiler2_domain_scope
+        - params.gprofiler2_evcodes
+        - params.gprofiler2_max_qval
+        - params.gprofiler2_measure_underrepresentation
+        - params.gprofiler2_min_diff
+        - params.gprofiler2_palette_name
+        - params.gprofiler2_significant
+        - params.grea_permutation
+        - params.grea_set_max
+        - params.grea_set_min
+        - params.gsea_make_sets
+        - params.gsea_median
+        - params.gsea_metric
+        - params.gsea_norm
+        - params.gsea_nperm
+        - params.gsea_num
+        - params.gsea_order
+        - params.gsea_permute
+        - params.gsea_plot_top_x
+        - params.gsea_rnd_type
+        - params.gsea_save_rnd_lists
+        - params.gsea_scoring_scheme
+        - params.gsea_set_max
+        - params.gsea_set_min
+        - params.gsea_sort
+        - params.gsea_zip_report
+        - params.limma_adjust_method
+        - params.limma_confint
+        - params.limma_lfc
+        - params.limma_method
+        - params.limma_p_value
+        - params.limma_proportion
+        - params.limma_robust
+        - params.limma_stdev_coef_lim
+        - params.limma_trend
+        - params.limma_use_voom
+        - params.limma_winsor_tail_p
+        - params.observations_id_col
+        - params.observations_type
+        - params.propd_fdr
+        - params.propd_moderated
+        - params.propd_number_of_cutoffs
+        - params.propd_permutation
+        - params.propd_save_adjacency
+        - params.propd_save_pairwise
+        - params.propd_save_pairwise_full
+        - params.propd_save_rdata
+        - params.proteus_measurecol_prefix
+        - params.proteus_norm_function
+        - params.proteus_palette_name
+        - params.proteus_plotmv_loess
+        - params.proteus_plotsd_method
+        - params.round_digits
+        - params.shinyngs_build_app
+        - params.shinyngs_deploy_to_shinyapps_io
+        - params.sizefactors_from_controls
+        - params.skip_reports
+        - params.study_abundance_type
+        - params.study_name
+        - params.study_type
+        - params.validate_params
+  # Every schema default is declared in main.nf rather than nextflow.config, so the schema/config
+  # comparison has nothing to compare.
+  schema_params: false
+  # Tests pass no `outdir` because the pipeline publishes with `-output-dir`.
+  nf_test_content:
+    - tests/default.nf.test
+    - tests/test_affy.nf.test
+    - tests/test_many.nf.test
+    - tests/test_maxquant.nf.test
+    - tests/test_nogtf.nf.test
+    - tests/test_rnaseq_deseq2.nf.test
+    - tests/test_rnaseq_dream.nf.test
+    - tests/test_rnaseq_limma.nf.test
+    - tests/test_rnaseq_propd_grea.nf.test
+    - tests/test_soft.nf.test
 nf_core_version: 4.0.2
 repository_type: pipeline
 template:
