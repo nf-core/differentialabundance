@@ -77,7 +77,7 @@ workflow PIPELINE_INITIALISATION {
     UTILS_NFSCHEMA_PLUGIN (
         workflow,
         false,
-        null,
+        "${pipelineDir()}/nextflow_schema.json",
         help,
         help_full,
         show_hidden,
@@ -127,7 +127,7 @@ workflow PIPELINE_COMPLETION {
 
 
     main:
-    summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
+    summary_params = paramsSummaryMap(workflow, parameters_schema: "${pipelineDir()}/nextflow_schema.json")
 
     //
     // Completion email and summary
