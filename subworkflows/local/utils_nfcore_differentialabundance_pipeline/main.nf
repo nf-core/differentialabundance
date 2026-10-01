@@ -103,11 +103,7 @@ workflow PIPELINE_INITIALISATION {
     paramsets = validateConfigurations(configurations)
         .collect { paramset -> addDifferentialRuntimeParams(paramset) }
     ch_paramsets = Channel.fromList(paramsets)
-        .map { paramset -> [
-            id: paramset.study_name,
-            paramset_name: paramset.paramset_name,
-            params: paramset.findAll{ k,v -> k != 'paramset_name' }
-        ]}
+        .map { paramset -> toParamsetMeta(paramset) }
     //
     // Custom validate input parameters
     //
@@ -426,13 +422,16 @@ def validateConfigurations(configurations) {
         // This is needed because validate() will fail otherwise
         def notnullparams = cleanparamset.findAll { k, v -> v != null } as Map
 
+        // The validator cannot serialise Path objects
+        def validatable = notnullparams.collectEntries { k, v -> [k, v instanceof Path ? v.toUriString() : v] }
+
         try {
             // Validate against schema
-            validate(notnullparams, "${pipelineDir()}/nextflow_schema.json")
+            validate(validatable, "${pipelineDir()}/nextflow_schema.json")
         } catch (e) {
             // Surface the paramset name; nf-schema will then produce a detailed error.
             log.error "Validation failed for paramsheet row: ${paramset.paramset_name}"
-            validate(notnullparams, "${pipelineDir()}/nextflow_schema.json")
+            validate(validatable, "${pipelineDir()}/nextflow_schema.json")
         }
 
         return cleanparamset
@@ -478,7 +477,36 @@ def getParamsheetConfigurations() {
 def getDefaultConfigurations() {
     // Use paramset_name from profile if set, otherwise fall back to 'contrasts'
     def pname = params.paramset_name ?: 'contrasts'
-    return [params + [paramset_name: pname]]
+    // Only the params that the pipeline declares: a pipeline that includes this one has params of its own
+    def declared = declaredParamNames()
+    return [params.findAll { k, v -> k in declared } + [paramset_name: pname]]
+}
+
+// Names of the params declared in the pipeline schema
+def declaredParamNames() {
+    def schema = new groovy.json.JsonSlurper().parse(file("${pipelineDir()}/nextflow_schema.json").toFile())
+    def names = (schema.properties ?: [:]).keySet() as Set
+    (schema['$defs'] ?: [:]).each { _name, definition -> names += (definition.properties ?: [:]).keySet() }
+    return names
+}
+
+// The meta of a paramset in the channel that the workflow takes
+def toParamsetMeta(paramset) {
+    return [
+        id: paramset.study_name,
+        paramset_name: paramset.paramset_name,
+        params: paramset.findAll { k, v -> k != 'paramset_name' }
+    ]
+}
+
+// Builds the paramset of one run from the pipeline params, with `overrides` replacing them. Meant for a
+// pipeline that includes this one and takes input files from its own dataflow, which cannot be params at launch.
+def buildParamset(Map overrides) {
+    def paramset = validateConfigurations(getDefaultConfigurations().collect { paramset -> paramset + overrides })
+        .collect { paramset -> addDifferentialRuntimeParams(paramset) }
+        .first()
+    validateInputParameters([paramset])
+    return toParamsetMeta(paramset)
 }
 
 // Load configurations from yaml file
