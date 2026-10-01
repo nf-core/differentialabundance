@@ -406,6 +406,11 @@ def methodsDescriptionText(mqc_methods_yaml) {
     return description_html.toString()
 }
 
+// Root of this pipeline. projectDir is the project of an including pipeline when this one is included.
+def pipelineDir() {
+    return file("${moduleDir}/../../..").toRealPath().toString()
+}
+
 // Validate configurations against the schema.
 def validateConfigurations(configurations) {
     return configurations.collect { paramset ->
@@ -423,11 +428,11 @@ def validateConfigurations(configurations) {
 
         try {
             // Validate against schema
-            validate(notnullparams, "${projectDir}/nextflow_schema.json")
+            validate(notnullparams, "${pipelineDir()}/nextflow_schema.json")
         } catch (e) {
             // Surface the paramset name; nf-schema will then produce a detailed error.
             log.error "Validation failed for paramsheet row: ${paramset.paramset_name}"
-            validate(notnullparams, "${projectDir}/nextflow_schema.json")
+            validate(notnullparams, "${pipelineDir()}/nextflow_schema.json")
         }
 
         return cleanparamset
@@ -496,8 +501,8 @@ def loadYaml(yaml_path) {
 
     // Substitute ${projectDir} with actual value
     // alternative ways? This can be fragile
-    yaml_content = yaml_content.replaceAll('\\$\\{projectDir\\}', projectDir.toString())
-    yaml_content = yaml_content.replaceAll('\\$projectDir', projectDir.toString())
+    yaml_content = yaml_content.replaceAll('\\$\\{projectDir\\}', pipelineDir())
+    yaml_content = yaml_content.replaceAll('\\$projectDir', pipelineDir())
 
     // Parse yaml content
     def yaml_parser = new org.yaml.snakeyaml.Yaml()
@@ -518,7 +523,7 @@ def resolveIncludes(config) {
             def paramsetName = includeParts[1]
 
             // Load the included YAML file
-            def includeFilePath = file("${projectDir}/conf/${includeFile}.yaml")
+            def includeFilePath = file("${pipelineDir()}/conf/${includeFile}.yaml")
             if (!includeFilePath.exists()) {
                 error("Included file '${includeFilePath}' not found.")
             }
@@ -622,7 +627,7 @@ def prepareModuleOutput(channel, paramsets, List meta_keys_to_remove = null, Boo
 // @param category: the category name
 def getRelevantParams(paramset, category) {
     // Define schema URL - in practice this would be loaded from file
-    def schema = new groovy.json.JsonSlurper().parseText(new File("${projectDir}/nextflow_schema.json").text)
+    def schema = new groovy.json.JsonSlurper().parseText(new File("${pipelineDir()}/nextflow_schema.json").text)
 
     // the relevant groups are the one defined by the category
     // and all the preceding ones
