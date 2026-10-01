@@ -207,7 +207,7 @@
             "url": {
                 "@id": "https://www.nextflow.io/"
             },
-            "version": "!>=25.10.4"
+            "version": "!>=26.09.0-edge"
         },
         {
             "@id": "docs/images/nf-core-differentialabundance_metro_map.png",
