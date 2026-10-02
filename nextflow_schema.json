@@ -10,7 +10,7 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["study_name", "study_type", "input", "outdir"],
+            "required": ["study_name", "study_type", "input"],
             "properties": {
                 "study_name": {
                     "type": "string",
@@ -46,12 +46,6 @@
                     "format": "file-path",
                     "schema": "assets/schema_contrasts.json",
                     "fa_icon": "fas fa-adjust"
-                },
-                "outdir": {
-                    "type": "string",
-                    "format": "directory-path",
-                    "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
-                    "fa_icon": "fas fa-folder-open"
                 },
                 "study_abundance_type": {
                     "type": "string",

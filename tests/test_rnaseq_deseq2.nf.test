@@ -6,19 +6,15 @@ nextflow_pipeline {
     tag "pipeline"
 
     test("Test profile - rnaseq_deseq2_gsea") {
+
+        options "-output-dir $outputDir"
         config "${projectDir}/conf/test/rnaseq/rnaseq_deseq2_gsea.config"
 
-        when {
-            params {
-                outdir = "$outputDir"
-            }
-        }
-
         then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // stable_name: All files + folders in the output directory with a stable name
+            def stable_name = getAllFilesFromDir(outputDir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in the output directory with stable content
+            def stable_path = getAllFilesFromDir(outputDir, ignoreFile: 'tests/.nftignore')
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
@@ -36,19 +32,15 @@ nextflow_pipeline {
     }
 
     test("Test profile - rnaseq_deseq2_gprofiler2") {
+
+        options "-output-dir $outputDir"
         config "${projectDir}/conf/test/rnaseq/rnaseq_deseq2_gprofiler2.config"
 
-        when {
-            params {
-                outdir = "$outputDir"
-            }
-        }
-
         then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // stable_name: All files + folders in the output directory with a stable name
+            def stable_name = getAllFilesFromDir(outputDir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in the output directory with stable content
+            def stable_path = getAllFilesFromDir(outputDir, ignoreFile: 'tests/.nftignore')
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
@@ -66,20 +58,16 @@ nextflow_pipeline {
     }
 
     test("Test profile - rnaseq_deseq2_gprofiler2 - with formula") {
+
+        options "-output-dir $outputDir"
         tag "rnaseq_deseq2_gprofiler2_complex"
         config "${projectDir}/conf/test/rnaseq/rnaseq_deseq2_gprofiler2_complex.config"
 
-        when {
-            params {
-                outdir = "$outputDir"
-            }
-        }
-
         then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // stable_name: All files + folders in the output directory with a stable name
+            def stable_name = getAllFilesFromDir(outputDir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in the output directory with stable content
+            def stable_path = getAllFilesFromDir(outputDir, ignoreFile: 'tests/.nftignore')
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
@@ -97,11 +85,12 @@ nextflow_pipeline {
     }
 
     test("Test - Numeric sample IDs - rnaseq_deseq2_gsea") {
+
+        options "-output-dir $outputDir"
         config "${projectDir}/conf/test/rnaseq/rnaseq_deseq2_gsea.config"
 
         when {
             params {
-                outdir = "$outputDir"
 
                 // change input data
                 input = "${projectDir}/tests/assets/SRP254919.samplesheet.csv"
@@ -111,10 +100,10 @@ nextflow_pipeline {
         }
 
         then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // stable_name: All files + folders in the output directory with a stable name
+            def stable_name = getAllFilesFromDir(outputDir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in the output directory with stable content
+            def stable_path = getAllFilesFromDir(outputDir, ignoreFile: 'tests/.nftignore')
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
@@ -132,11 +121,12 @@ nextflow_pipeline {
     }
 
     test("Test - Numeric sample IDs - rnaseq_deseq2_gprofiler2") {
+
+        options "-output-dir $outputDir"
         config "${projectDir}/conf/test/rnaseq/rnaseq_deseq2_gprofiler2.config"
 
         when {
             params {
-                outdir = "$outputDir"
 
                 // change input data
                 input = "${projectDir}/tests/assets/SRP254919.samplesheet.csv"
@@ -146,10 +136,10 @@ nextflow_pipeline {
         }
 
         then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // stable_name: All files + folders in the output directory with a stable name
+            def stable_name = getAllFilesFromDir(outputDir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in the output directory with stable content
+            def stable_path = getAllFilesFromDir(outputDir, ignoreFile: 'tests/.nftignore')
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(

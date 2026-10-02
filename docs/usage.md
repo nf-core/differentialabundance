@@ -22,7 +22,7 @@ With the above in mind, running this workflow requires:
 Before configuring your own inputs, you can run the bundled test profile end-to-end against a small public RNA-seq dataset to verify that the pipeline works on your system:
 
 ```bash
-nextflow run nf-core/differentialabundance -profile test,docker --outdir test_results
+nextflow run nf-core/differentialabundance -profile test,docker -output-dir test_results
 ```
 
 Substitute `docker` for `singularity`, `podman`, or another supported container engine as appropriate for your environment. The run completes in a couple of minutes on a modest workstation and writes results, including the rendered Quarto report, under `test_results/`.
@@ -393,7 +393,7 @@ nextflow run nf-core/differentialabundance \
     --contrasts contrasts.yaml \
     --matrix counts.tsv \
     --gtf genes.gtf \
-    --outdir results/
+    -output-dir results/
 ```
 
 You can override any profile parameter from the command line. For example, to switch from DESeq2's default variance-stabilising transform to rlog:
@@ -406,7 +406,7 @@ nextflow run nf-core/differentialabundance \
     --contrasts contrasts.yaml \
     --matrix counts.tsv \
     --gtf genes.gtf \
-    --outdir results/
+    -output-dir results/
 ```
 
 > [!WARNING]
@@ -426,11 +426,11 @@ nextflow run nf-core/differentialabundance \
     --contrasts contrasts.yaml \
     --matrix counts.tsv \
     --gtf genes.gtf \
-    --outdir results/
+    -output-dir results/
 ```
 
 > [!WARNING]
-> In multi-run mode, paramsheet parameters take precedence over CLI flags. The priority order is: `paramsheet > CLI flags > defaults`. This is by design — each paramsheet entry fully defines its configuration. CLI parameters are still used for values not specified in the paramsheet (e.g. `--input`, `--outdir`).
+> In multi-run mode, paramsheet parameters take precedence over CLI flags. The priority order is: `paramsheet > CLI flags > defaults`. This is by design — each paramsheet entry fully defines its configuration. CLI parameters are still used for values not specified in the paramsheet (e.g. `--input`).
 
 To run only a subset of configurations from your paramsheet, use `--paramset_name` with a comma-separated list:
 
@@ -451,6 +451,31 @@ A paramsheet entry looks like this:
 ```
 
 Each entry must include a unique `paramset_name`. Entries can override any pipeline parameter.
+
+## Including the pipeline in another pipeline
+
+:::warning
+Pipeline composition is experimental and needs a Nextflow version that includes [nextflow-io/nextflow#7213](https://github.com/nextflow-io/nextflow/pull/7213).
+:::
+
+The pipeline can be included in a larger pipeline, for example one that quantifies RNA-seq samples with nf-core/rnaseq and then analyses the merged matrices. The files of a run (`input`, `contrasts`, `matrix`, `feature_length_matrix` and `gtf`) are `Value<Path>` params: from the command line Nextflow loads each from a path, and a pipeline that includes this one can pass values from its own dataflow.
+
+```groovy
+include { params as DiffabParams ; workflow as NFCORE_DIFFERENTIALABUNDANCE } from './pipelines/nf-core/differentialabundance'
+
+params {
+    diffab: DiffabParams
+}
+
+workflow {
+    main:
+    abundance = NFCORE_DIFFERENTIALABUNDANCE(
+        params.diffab + record(matrix: ch_matrix, feature_length_matrix: ch_lengths, gtf: ch_gtf, input: ch_samplesheet, contrasts: ch_contrasts)
+    )
+}
+```
+
+The included pipeline builds the paramset of the run from its params, as it does in single-run mode (`--paramsheet` is not used). Only the script and its modules are included, so the including pipeline has to provide the rest of the configuration: the manifest, resource settings, the executor and container profile, the `nf-schema` plugin, and the process settings, by including `conf/modules.config` of this pipeline. The params of this pipeline, including every analysis option such as `deseq2_alpha`, are set in the `diffab` record. The only params that an including pipeline needs at the top level are the config params, whose defaults are in `conf/params.config` (`publish_dir_mode` and the like). The pipeline has no output directory param: the files it publishes are returned to the including pipeline, which decides what to publish and where. Set `validate_params` to `false` for the included pipeline, since `nextflow_schema.json` validation applies to the params of the pipeline that is run. Genome shortcuts (`--genome`) and the completion email templates are not available when included.
 
 ## Working with the output Quarto file
 
@@ -679,7 +704,7 @@ nextflow run nf-core/differentialabundance \
     --contrasts contrasts.yaml \
     --matrix assay_matrix.tsv \
     --gtf mouse.gtf \
-    --outdir <OUTDIR> \
+    -output-dir <OUTDIR> \
     --report_contributors $'Jane Doe\nDirector of Institute of Microbiology\nUniversity of Smallville;John Smith\nPhD student\nInstitute of Microbiology\nUniversity of Smallville'
 ```
 
@@ -694,7 +719,7 @@ nextflow run nf-core/differentialabundance \
     --input samplesheet.csv \
     --contrasts contrasts.yaml \
     --affy_cel_files_archive cel_files.tar \
-    --outdir <OUTDIR>
+    -output-dir <OUTDIR>
 
 # MaxQuant proteomics
 nextflow run nf-core/differentialabundance \
@@ -702,7 +727,7 @@ nextflow run nf-core/differentialabundance \
     --input samplesheet.csv \
     --contrasts contrasts.yaml \
     --matrix proteinGroups.txt \
-    --outdir <OUTDIR>
+    -output-dir <OUTDIR>
 
 # GEO SOFT files
 nextflow run nf-core/differentialabundance \
@@ -710,7 +735,7 @@ nextflow run nf-core/differentialabundance \
     --input samplesheet.csv \
     --contrasts contrasts.yaml \
     --querygse GSE12345 \
-    --outdir <OUTDIR>
+    -output-dir <OUTDIR>
 
 # Generic pre-scaled matrix (Limma)
 nextflow run nf-core/differentialabundance \
@@ -718,7 +743,7 @@ nextflow run nf-core/differentialabundance \
     --input samplesheet.csv \
     --contrasts contrasts.yaml \
     --matrix my_matrix.tsv \
-    --outdir <OUTDIR>
+    -output-dir <OUTDIR>
 
 ```
 
@@ -726,7 +751,7 @@ Note that the pipeline will create the following files in your working directory
 
 ```bash
 work                # Directory containing the nextflow working files
-<OUTDIR>            # Finished results in specified location (defined with --outdir)
+<OUTDIR>            # Finished results in specified location (defined with -output-dir)
 .nextflow_log       # Log file from Nextflow
 # Other nextflow hidden files, eg. history of pipeline runs and old logs.
 ```
@@ -778,7 +803,6 @@ with:
 
 ```yaml title="params.yaml"
 input: './samplesheet.csv'
-outdir: './results/'
 genome: 'GRCh37'
 report_contributors: |
   Jane Doe
@@ -912,11 +936,11 @@ Whilst the default requirements set within the pipeline will hopefully work for 
 For example, if the nf-core/differentialabundance pipeline is failing after multiple re-submissions of the `DESEQ2_DIFFERENTIAL` process due to an exit code of `137` this would indicate that there is an out of memory issue:
 
 ```console
-[62/149eb0] NOTE: Process `NFCORE_DIFFERENTIALABUNDANCE:DIFFERENTIALABUNDANCE::DESEQ2_DIFFERENTIAL ([variable:treatment, reference:WT, target:P23H, blocking:, id:treatment_WT_P23H_)` terminated with an error exit status (137) -- Execution is retried (1)
-Error executing process > 'NFCORE_DIFFERENTIALABUNDANCE:DIFFERENTIALABUNDANCE::DESEQ2_DIFFERENTIAL ([variable:treatment, reference:WT, target:P23H, blocking:, id:treatment_WT_P23H_)'
+[62/149eb0] NOTE: Process `DIFFERENTIALABUNDANCE:ABUNDANCE_DIFFERENTIAL_FILTER:DESEQ2_DIFFERENTIAL ([variable:treatment, reference:WT, target:P23H, blocking:, id:treatment_WT_P23H_)` terminated with an error exit status (137) -- Execution is retried (1)
+Error executing process > 'DIFFERENTIALABUNDANCE:ABUNDANCE_DIFFERENTIAL_FILTER:DESEQ2_DIFFERENTIAL ([variable:treatment, reference:WT, target:P23H, blocking:, id:treatment_WT_P23H_)'
 
 Caused by:
-    Process `NFCORE_DIFFERENTIALABUNDANCE:DIFFERENTIALABUNDANCE::DESEQ2_DIFFERENTIAL (WT_REP1)` terminated with an error exit status (137)
+    Process `DIFFERENTIALABUNDANCE:ABUNDANCE_DIFFERENTIAL_FILTER:DESEQ2_DIFFERENTIAL (WT_REP1)` terminated with an error exit status (137)
 
 Command executed:
     template 'deseq_de.R'

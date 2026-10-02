@@ -283,6 +283,15 @@ workflow ABUNDANCE_DIFFERENTIAL_FILTER {
     // pairwise results
     adjacency                  = PROPR_PROPD.out.adjacency
 
+    // propd-specific outputs, with the meta of the propd run
+    propd_results              = PROPR_PROPD.out.results_genewise
+    propd_pairwise             = PROPR_PROPD.out.results_pairwise
+    propd_pairwise_filtered    = PROPR_PROPD.out.results_pairwise_filtered
+    propd_fdr                  = PROPR_PROPD.out.fdr
+    propd_genewise_plot        = PROPR_PROPD.out.genewise_plot
+    propd_rdata                = PROPR_PROPD.out.rdata
+    propd_session_info         = PROPR_PROPD.out.session_info
+
     // other matrices
     normalised_matrix          = ch_normalised_matrix
     variance_stabilised_matrix = ch_variance_stabilised_matrix

@@ -1,0 +1,38 @@
+Changes in component 'nf-core/differential_functional_enrichment'
+'subworkflows/nf-core/differential_functional_enrichment/meta.yml' is unchanged
+Changes in 'differential_functional_enrichment/main.nf':
+--- subworkflows/nf-core/differential_functional_enrichment/main.nf
++++ subworkflows/nf-core/differential_functional_enrichment/main.nf
+@@ -193,6 +193,7 @@
+ 
+     // grea-specific outputs
+     grea_results                    = PROPR_GREA.out.results
++    grea_session_info               = PROPR_GREA.out.session_info
+ 
+     // tool versions
+     session_info                    = ch_session_info
+
+'subworkflows/nf-core/differential_functional_enrichment/tests/gprofiler2.config' is unchanged
+'subworkflows/nf-core/differential_functional_enrichment/tests/main.nf.test.snap' is unchanged
+'subworkflows/nf-core/differential_functional_enrichment/tests/decoupler.config' is unchanged
+'subworkflows/nf-core/differential_functional_enrichment/tests/deseq2_gprofiler2.config' is unchanged
+Changes in 'differential_functional_enrichment/tests/main.nf.test':
+--- subworkflows/nf-core/differential_functional_enrichment/tests/main.nf.test
++++ subworkflows/nf-core/differential_functional_enrichment/tests/main.nf.test
+@@ -126,6 +126,11 @@
+                     .map { meta, file, genesets, background, method ->
+                         [meta, [], '', '']
+                     }
++                ch_samplesheet = ch_input
++                    .map { meta, file, genesets, background, method ->
++                        [meta, []]
++                    }
++
+                 ch_samplesheet = ch_input
+                     .map { meta, file, genesets, background, method ->
+                         [meta, []]
+
+'subworkflows/nf-core/differential_functional_enrichment/tests/deseq2_gsea.config' is unchanged
+'subworkflows/nf-core/differential_functional_enrichment/tests/propd_grea.config' is unchanged
+'subworkflows/nf-core/differential_functional_enrichment/tests/all.config' is unchanged
+************************************************************

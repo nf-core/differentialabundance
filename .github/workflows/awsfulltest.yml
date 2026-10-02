@@ -53,10 +53,7 @@ jobs:
                 message = ':x: *differentialabundance/test_full* failed :crying_cat_face:'
               }
             }
-          parameters: |
-            {
-              "outdir": "s3://${{ vars.AWS_S3_BUCKET }}/differentialabundance/results-${{ steps.revision.outputs.revision }}"
-            }
+            outputDir = 's3://${{ vars.AWS_S3_BUCKET }}/differentialabundance/results-${{ steps.revision.outputs.revision }}'
           profiles: test_full
 
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
