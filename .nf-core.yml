@@ -3,6 +3,7 @@ lint:
     - assets/multiqc_config.yml
   files_unchanged:
     - .github/PULL_REQUEST_TEMPLATE.md
+    - .github/workflows/linting.yml
     - assets/nf-core-differentialabundance_logo_light.png
     - docs/images/nf-core-differentialabundance_logo_light.png
     - docs/images/nf-core-differentialabundance_logo_dark.png
