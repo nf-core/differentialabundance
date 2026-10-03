@@ -10,10 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[#756]](https://github.com/nf-core/differentialabundance/pull/756) - Clarify docs for 3' tag/DGE RNA-seq: use the pre-scaled matrix, no length offset ([@YannVRB](https://github.com/YannVRB), review by [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#748](https://github.com/nf-core/differentialabundance/pull/748)] - Bake GSEA enrichment results into the shinyngs application object (shinyngs >= 3.1 `--enrichment_*` options). ([@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#748](https://github.com/nf-core/differentialabundance/pull/748)] - Document running the Shiny app from the shinyngs container image, so no local ShinyNGS install is required. ([@pinin4fjords](https://github.com/pinin4fjords)).
+- Add support for 'apeglm' shrinkage in DESeq2 differential analysis via the `--deseq2_shrink_lfc_type` parameter ([@priyalT](https://github.com/priyalT)).
 
 ### Changed
 
 - [[#748](https://github.com/nf-core/differentialabundance/pull/748)] - Update `shinyngs` modules to 3.2.0 and modernise the Quarto report to use shinyngs 3.x plotting helpers, replacing hand-written PCA, clustering heatmap, top-gene boxplot, scree, upset, volcano and biotype code and reducing the report's container dependencies. ([@pinin4fjords](https://github.com/pinin4fjords)).
+- Update `deseq2/differential` module to include `apeglm` shrinkage method ([@priyalT](https://github.com/priyalT)).
 
 ### Fixed
 
