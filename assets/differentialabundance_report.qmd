@@ -40,6 +40,16 @@ library(plotly)
 library(tidyverse)
 library(reactable)
 
+# The quarto/notebook module fails unless the notebook writes the packages it uses to versions.csv
+report_packages <- c("knitr", "yaml", "shinyngs", "plotly", "tidyverse", "reactable", "htmltools")
+write.table(
+    data.frame(
+        c("r-base", paste0("r-", report_packages)),
+        c(as.character(getRversion()), vapply(report_packages, function(p) as.character(packageVersion(p)), character(1)))
+    ),
+    "versions.csv", sep = ",", quote = FALSE, row.names = FALSE, col.names = FALSE
+)
+
 knitr::opts_chunk$set(echo = TRUE)
 
 # Short alias for the deeply-nested user-configurable params subtree.

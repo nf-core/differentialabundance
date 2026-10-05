@@ -1,12 +1,17 @@
-// NB: You'll likely want to override this with a container containing all
+// NB 1: You'll likely want to override this with a container containing all
 // required dependencies for your analyses. Or use wave to build the container
 // for you from the environment.yml You'll at least need Quarto itself,
 // Papermill and whatever language you are running your analyses on; you can see
 // an example in this module's environment file.
-process QUARTONOTEBOOK {
+//
+// NB 2: You'll need to export the versions of the packages you are using inside
+// your notebook to a `versions.csv` file (formatted as `package,version`),
+// which will be added to the `versions` topic; module versions are handled
+// separately by `eval()` statements.
+process QUARTO_NOTEBOOK {
     tag "${meta.id}"
     label 'process_low'
-    conda "${moduleDir}/../../../assets/report_environment.yml"
+    conda "${moduleDir}/../../../../assets/report_environment.yml"
     container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
         ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/28/28717ccd9ce22dbfc219f3db088d5a1fc2ca1f575b5c65621218596dcdbaac95/data'
         : 'community.wave.seqera.io/library/jupyter_matplotlib_papermill_quarto_r-rmarkdown:6d15193ce3dfc665'}"
@@ -23,7 +28,8 @@ process QUARTONOTEBOOK {
     tuple val(meta), path("params.yml")                                                        , emit: params_yaml
     tuple val(meta), path("${notebook_parameters.artifact_dir}/*")                             , emit: artifacts  , optional: true
     tuple val(meta), path("_extensions")                                                       , emit: extensions , optional: true
-    tuple val("${task.process}"), val('quarto'), eval('quarto -v'), emit: versions_quarto
+    path "versions.yml"                                                                        , emit: versions
+    tuple val("${task.process}"), val('quarto'), eval('quarto -v')                             , emit: versions_quarto
     tuple val("${task.process}"), val('papermill'), eval('papermill --version | cut -f1 -d" "'), emit: versions_papermill
 
     when:
@@ -58,6 +64,10 @@ process QUARTONOTEBOOK {
     export XDG_CACHE_HOME="./.xdg_cache_home"
     export XDG_DATA_HOME="./.xdg_data_home"
 
+    # Without a _quarto.yml here, Quarto searches parent directories for a project and can
+    # pick one outside the task (https://github.com/quarto-dev/quarto-cli/issues/14980)
+    [ -e _quarto.yml ] || printf 'project:\\n  type: default\\n' > _quarto.yml
+
     # Fix Quarto for Apptainer (see https://community.seqera.io/t/confusion-over-why-a-tool-works-in-docker-but-fails-in-singularity-when-the-installation-doesnt-differ-i-e-using-wave-micromamba/1244)
     ENV_QUARTO=/opt/conda/etc/conda/activate.d/quarto.sh
     set +u
@@ -78,6 +88,18 @@ process QUARTONOTEBOOK {
         ${args} \\
         --execute-params params.yml \\
         --output ${prefix}.html
+
+    # Check that notebook package versions is exported
+    if [ ! -f versions.csv ]; then
+        echo "ERROR: versions.csv not found; the notebook must write out [tool,version] pairs used within it." >&2
+        exit 1
+    fi
+
+    # Write notebook package versions to YAML
+    cat <<- END_VERSIONS > versions.yml
+    "${task.process}":
+    \$(awk -F',' '{printf "    %s: %s\\n", \$1, \$2}' versions.csv)
+    END_VERSIONS
     """
 
     stub:
@@ -100,5 +122,6 @@ process QUARTONOTEBOOK {
 
     touch ${prefix}.html
     touch params.yml
+    touch versions.yml
     """
 }

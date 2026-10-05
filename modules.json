@@ -95,11 +95,11 @@
                         "git_sha": "07cee52e08af8100eee4ea1b53abf0660df77701",
                         "installed_by": ["modules"]
                     },
-                    "quartonotebook": {
+                    "quarto/notebook": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "git_sha": "3c53591c9b39ecd17929c4660bf9b67b7e6ad12d",
                         "installed_by": ["modules"],
-                        "patch": "modules/nf-core/quartonotebook/quartonotebook.diff"
+                        "patch": "modules/nf-core/quarto/notebook/quarto-notebook.diff"
                     },
                     "shinyngs/app": {
                         "branch": "master",

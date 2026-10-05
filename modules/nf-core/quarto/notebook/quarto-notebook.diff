@@ -1,31 +1,33 @@
-Changes in component 'nf-core/quartonotebook'
-'modules/nf-core/quartonotebook/environment.yml' is unchanged
-'modules/nf-core/quartonotebook/meta.yml' is unchanged
-Changes in 'quartonotebook/main.nf':
---- modules/nf-core/quartonotebook/main.nf
-+++ modules/nf-core/quartonotebook/main.nf
-@@ -6,7 +6,7 @@
- process QUARTONOTEBOOK {
+Changes in component 'nf-core/quarto/notebook'
+'modules/nf-core/quarto/notebook/environment.yml' is unchanged
+'modules/nf-core/quarto/notebook/meta.yml' is unchanged
+Changes in 'quarto/notebook/main.nf':
+--- modules/nf-core/quarto/notebook/main.nf
++++ modules/nf-core/quarto/notebook/main.nf
+@@ -11,7 +11,7 @@
+ process QUARTO_NOTEBOOK {
      tag "${meta.id}"
      label 'process_low'
 -    conda "${moduleDir}/environment.yml"
-+    conda "${moduleDir}/../../../assets/report_environment.yml"
++    conda "${moduleDir}/../../../../assets/report_environment.yml"
      container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
          ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/28/28717ccd9ce22dbfc219f3db088d5a1fc2ca1f575b5c65621218596dcdbaac95/data'
          : 'community.wave.seqera.io/library/jupyter_matplotlib_papermill_quarto_r-rmarkdown:6d15193ce3dfc665'}"
-@@ -23,8 +23,8 @@
+@@ -28,9 +28,9 @@
      tuple val(meta), path("params.yml")                                                        , emit: params_yaml
      tuple val(meta), path("${notebook_parameters.artifact_dir}/*")                             , emit: artifacts  , optional: true
      tuple val(meta), path("_extensions")                                                       , emit: extensions , optional: true
--    tuple val("${task.process}"), val('quarto'), eval('quarto -v'), emit: versions_quarto, topic: versions
+-    path "versions.yml"                                                                        , emit: versions          , topic: versions
+-    tuple val("${task.process}"), val('quarto'), eval('quarto -v')                             , emit: versions_quarto   , topic: versions
 -    tuple val("${task.process}"), val('papermill'), eval('papermill --version | cut -f1 -d" "'), emit: versions_papermill, topic: versions
-+    tuple val("${task.process}"), val('quarto'), eval('quarto -v'), emit: versions_quarto
++    path "versions.yml"                                                                        , emit: versions
++    tuple val("${task.process}"), val('quarto'), eval('quarto -v')                             , emit: versions_quarto
 +    tuple val("${task.process}"), val('papermill'), eval('papermill --version | cut -f1 -d" "'), emit: versions_papermill
  
      when:
      task.ext.when == null || task.ext.when
 
-'modules/nf-core/quartonotebook/tests/main.nf.test' is unchanged
-'modules/nf-core/quartonotebook/tests/main.nf.test.snap' is unchanged
-'modules/nf-core/quartonotebook/tests/nextflow.config' is unchanged
+'modules/nf-core/quarto/notebook/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/quarto/notebook/tests/nextflow.config' is unchanged
+'modules/nf-core/quarto/notebook/tests/main.nf.test' is unchanged
 ************************************************************

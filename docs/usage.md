@@ -770,7 +770,7 @@ A number of workflow steps are not optimised to deal with large sample numbers a
 
 ```
 process {
-    withName:'PLOT_EXPLORATORY|PLOT_DIFFERENTIAL|QUARTONOTEBOOK|MAKE_REPORT_BUNDLE|SHINYNGS_APP'{
+    withName:'PLOT_EXPLORATORY|PLOT_DIFFERENTIAL|QUARTO_NOTEBOOK|MAKE_REPORT_BUNDLE|SHINYNGS_APP'{
         ext.when = false
     }
 }
@@ -778,7 +778,7 @@ process {
 
 You will not get the final reporting outcomes of the workflow, but you will get the differential tables produced by DESeq2, Limma, or DREAM, and the results of any gene sets analysis you have enabled.
 
-We have also added a dedicated pipeline parameter, `--skip_reports` that allows you to skip only the Quarto notebook and bundled report while leaving other reporting processes active. The `QUARTONOTEBOOK` process assumes that every grouping variable you pass to it (from the contrasts file’s variable column or PCA-derived informative_variables) exists as a valid, named column in your sample metadata. If you know your metadata or contrasts might be incomplete or non-standard (such as using formula-based yaml files), the you can use this flag to skip these steps.
+We have also added a dedicated pipeline parameter, `--skip_reports` that allows you to skip only the Quarto notebook and bundled report while leaving other reporting processes active. The `QUARTO_NOTEBOOK` process assumes that every grouping variable you pass to it (from the contrasts file’s variable column or PCA-derived informative_variables) exists as a valid, named column in your sample metadata. If you know your metadata or contrasts might be incomplete or non-standard (such as using formula-based yaml files), the you can use this flag to skip these steps.
 
 #### Restricting samples considered by DESeq2, Limma, or DREAM
 
