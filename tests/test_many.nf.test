@@ -7,19 +7,20 @@ nextflow_pipeline {
 
     test("Test profile - many") {
 
+        options "-output-dir $outputDir"
+
         when {
             params {
-                outdir        = "$outputDir"
                 paramsheet    = "${projectDir}/conf/test_paramsheet.yaml"
                 paramset_name = "test_rnaseq_deseq2_gsea,test_rnaseq_limma_decoupler,test_rnaseq_dream,test_affy_limma_gprofiler2"
             }
         }
 
         then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // stable_name: All files + folders in the output directory with a stable name
+            def stable_name = getAllFilesFromDir(outputDir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in the output directory with stable content
+            def stable_path = getAllFilesFromDir(outputDir, ignoreFile: 'tests/.nftignore')
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(

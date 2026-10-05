@@ -6,19 +6,15 @@ nextflow_pipeline {
     tag "pipeline"
 
     test("Test profile") {
+
+        options "-output-dir $outputDir"
         config "${projectDir}/conf/test.config"
 
-        when {
-            params {
-                outdir        = "$outputDir"
-            }
-        }
-
         then {
-            // stable_path: All files + folders in ${params.outdir}/ with a stable path (including file name)
-            def stable_path = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_content: All files in ${params.outdir}/ with stable content
-            def stable_content = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // stable_path: All files + folders in the output directory with a stable path (including file name)
+            def stable_path = getAllFilesFromDir(outputDir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_content: All files in the output directory with stable content
+            def stable_content = getAllFilesFromDir(outputDir, ignoreFile: 'tests/.nftignore')
             assert workflow.success
             assertAll(
                 { assert snapshot(
@@ -36,20 +32,21 @@ nextflow_pipeline {
     }
 
     test("Test profile - csv contrasts") { // make sure we keep backwards compatibility with csv contrasts
+
+        options "-output-dir $outputDir"
         config "${projectDir}/conf/test.config"
 
         when {
             params {
-                outdir        = "$outputDir"
                 contrasts     = "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.contrasts.csv"
             }
         }
 
         then {
-            // stable_path: All files + folders in ${params.outdir}/ with a stable path (including file name)
-            def stable_path = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_content: All files in ${params.outdir}/ with stable content
-            def stable_content = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // stable_path: All files + folders in the output directory with a stable path (including file name)
+            def stable_path = getAllFilesFromDir(outputDir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_content: All files in the output directory with stable content
+            def stable_content = getAllFilesFromDir(outputDir, ignoreFile: 'tests/.nftignore')
             assert workflow.success
             assertAll(
                 { assert snapshot(
@@ -67,21 +64,22 @@ nextflow_pipeline {
     }
 
     test("Test profile - multiple reports - csv contrasts") { // make sure we keep backwards compatibility with csv contrasts
+
+        options "-output-dir $outputDir"
         config "${projectDir}/conf/test.config"
 
         when {
             params {
-                outdir        = "$outputDir"
                 contrasts     = "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/mus_musculus/rnaseq_expression/SRP254919.contrasts.csv"
                 report_file   = "$projectDir/tests/quarto.qmd,$projectDir/assets/differentialabundance_report.qmd"
             }
         }
 
         then {
-            // stable_path: All files + folders in ${params.outdir}/ with a stable path (including file name)
-            def stable_path = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_content: All files in ${params.outdir}/ with stable content
-            def stable_content = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // stable_path: All files + folders in the output directory with a stable path (including file name)
+            def stable_path = getAllFilesFromDir(outputDir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_content: All files in the output directory with stable content
+            def stable_content = getAllFilesFromDir(outputDir, ignoreFile: 'tests/.nftignore')
             assert workflow.success
             assertAll(
                 { assert snapshot(
@@ -98,21 +96,22 @@ nextflow_pipeline {
         }
     }
     test("Test profile - filtering_min_abundance false") {
+
+        options "-output-dir $outputDir"
         tag "abundance_false"
         config "${projectDir}/conf/test.config"
 
         when {
             params {
-                outdir        = "$outputDir"
                 filtering_min_abundance = false
             }
         }
 
         then {
-            // stable_path: All files + folders in ${params.outdir}/ with a stable path (including file name)
-            def stable_path = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_content: All files in ${params.outdir}/ with stable content
-            def stable_content = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // stable_path: All files + folders in the output directory with a stable path (including file name)
+            def stable_path = getAllFilesFromDir(outputDir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_content: All files in the output directory with stable content
+            def stable_content = getAllFilesFromDir(outputDir, ignoreFile: 'tests/.nftignore')
             assert workflow.success
             assertAll(
                 { assert snapshot(

@@ -24,7 +24,7 @@ include { SHINYNGS_STATICDIFFERENTIAL as PLOT_DIFFERENTIAL  } from '../modules/n
 include { SHINYNGS_VALIDATEFOMCOMPONENTS as VALIDATOR       } from '../modules/nf-core/shinyngs/validatefomcomponents/main'
 include { CUSTOM_MATRIXFILTER                               } from '../modules/nf-core/custom/matrixfilter/main'
 include { ATLASGENEANNOTATIONMANIPULATION_GTF2FEATUREANNOTATION as GTF_TO_TABLE } from '../modules/nf-core/atlasgeneannotationmanipulation/gtf2featureannotation/main'
-include { QUARTONOTEBOOK                                    } from '../modules/nf-core/quartonotebook/main'
+include { QUARTO_NOTEBOOK                                   } from '../modules/nf-core/quarto/notebook/main'
 include { AFFY_JUSTRMA as AFFY_JUSTRMA_RAW                  } from '../modules/nf-core/affy/justrma/main'
 include { AFFY_JUSTRMA as AFFY_JUSTRMA_NORM                 } from '../modules/nf-core/affy/justrma/main'
 include { PROTEUS_READPROTEINGROUPS as PROTEUS              } from '../modules/nf-core/proteus/readproteingroups/main'
@@ -927,7 +927,7 @@ workflow DIFFERENTIALABUNDANCE {
 
     // Render the final report
     // One report per paramset will be created
-    QUARTONOTEBOOK(
+    QUARTO_NOTEBOOK(
         ch_report_input.report_file,
         ch_report_input.report_params,
         ch_report_input.input_files.map{ meta, files -> files },
@@ -938,10 +938,10 @@ workflow DIFFERENTIALABUNDANCE {
     // input files
     ch_bundle_input = ch_report_input.input_files
         .join(
-            QUARTONOTEBOOK.out.notebook
+            QUARTO_NOTEBOOK.out.notebook
                 .groupTuple() // [ meta, [notebooks] ]
         ).join(
-            QUARTONOTEBOOK.out.params_yaml
+            QUARTO_NOTEBOOK.out.params_yaml
                 .groupTuple()
         )
         .map { meta, input_files, all_notebooks, params_yaml->
@@ -986,6 +986,16 @@ workflow DIFFERENTIALABUNDANCE {
     diff_session_info          = prepareModuleOutput(ABUNDANCE_DIFFERENTIAL_FILTER.out.session_info, ch_paramsets)
     diff_annotated             = prepareModuleOutput(CSVTK_JOIN.out.csv, ch_paramsets)
 
+    // --- Differential: propd ---
+    propd_results              = ABUNDANCE_DIFFERENTIAL_FILTER.out.propd_results
+    propd_pairwise             = ABUNDANCE_DIFFERENTIAL_FILTER.out.propd_pairwise
+    propd_pairwise_filtered    = ABUNDANCE_DIFFERENTIAL_FILTER.out.propd_pairwise_filtered
+    propd_fdr                  = ABUNDANCE_DIFFERENTIAL_FILTER.out.propd_fdr
+    propd_genewise_plot        = ABUNDANCE_DIFFERENTIAL_FILTER.out.propd_genewise_plot
+    propd_rdata                = ABUNDANCE_DIFFERENTIAL_FILTER.out.propd_rdata
+    propd_adjacency            = ABUNDANCE_DIFFERENTIAL_FILTER.out.adjacency
+    propd_session_info         = ABUNDANCE_DIFFERENTIAL_FILTER.out.propd_session_info
+
     // --- Functional: GSEA ---
     gsea_report_tsv            = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_report_tsv, ch_paramsets)
     gsea_report_html           = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.gsea_report_html, ch_paramsets)
@@ -1021,6 +1031,10 @@ workflow DIFFERENTIALABUNDANCE {
     decoupler_pvals            = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_dc_pvals, ch_paramsets)
     decoupler_png              = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.decoupler_png, ch_paramsets)
 
+    // --- Functional: grea ---
+    grea_results               = DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.grea_results
+    grea_session_info          = DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.grea_session_info
+
     // --- Functional: common ---
     functional_session_info    = prepareModuleOutput(DIFFERENTIAL_FUNCTIONAL_ENRICHMENT.out.session_info, ch_paramsets)
 
@@ -1041,7 +1055,7 @@ workflow DIFFERENTIALABUNDANCE {
     shinyngs_app_file          = SHINYNGS_APP.out.app.map { meta, _data_rds, app_r -> [meta, app_r] }
 
     // --- Report ---
-    report_html                = QUARTONOTEBOOK.out.html
+    report_html                = QUARTO_NOTEBOOK.out.html
     report_bundle              = MAKE_REPORT_BUNDLE.out.zipped_archive
 
     // --- Versions ---

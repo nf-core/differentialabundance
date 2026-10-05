@@ -29,11 +29,10 @@ workflow PIPELINE_INITIALISATION {
     validate_params   // boolean: Boolean whether to validate parameters against the schema at runtime
     monochrome_logs   // boolean: Do not use coloured log outputs
     nextflow_cli_args //   array: List of positional nextflow CLI args
-    outdir            //  string: The output directory where the results will be saved
-    input             //  string: Path to input samplesheet
     help              // boolean: Display help message and exit
     help_full         // boolean: Show the full help message
     show_hidden       // boolean: Show hidden parameters in the help message
+    params            //  record: The params of the pipeline, passed in because an including pipeline has its own
 
     main:
 
@@ -45,7 +44,7 @@ workflow PIPELINE_INITIALISATION {
     UTILS_NEXTFLOW_PIPELINE (
         version,
         true,
-        outdir,
+        workflow.outputDir,
         workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1
     )
 
@@ -63,7 +62,7 @@ workflow PIPELINE_INITIALISATION {
 \033[0;35m  nf-core/differentialabundance ${workflow.manifest.version}\033[0m
 -\033[2m----------------------------------------------------\033[0m-
 """
-    def after_text = """${workflow.manifest.doi ? "\n* The pipeline\n" : ""}${workflow.manifest.doi.tokenize(",").collect { doi -> "    https://doi.org/${doi.trim().replace('https://doi.org/','')}"}.join("\n")}${workflow.manifest.doi ? "\n" : ""}
+    def after_text = """${workflow.manifest.doi ? "\n* The pipeline\n" : ""}${(workflow.manifest.doi ?: '').tokenize(",").collect { doi -> "    https://doi.org/${doi.trim().replace('https://doi.org/','')}"}.join("\n")}${workflow.manifest.doi ? "\n" : ""}
 * The nf-core framework
     https://doi.org/10.1038/s41587-020-0439-x
 * Software dependencies
@@ -73,12 +72,12 @@ workflow PIPELINE_INITIALISATION {
         before_text = before_text.replaceAll('\\u001b\\[[0-9;]*m', '')
     }
 
-    command = "nextflow run ${workflow.manifest.name} -profile <docker/singularity/.../institute> --input samplesheet.csv --outdir <OUTDIR>"
+    command = "nextflow run ${workflow.manifest.name} -profile <docker/singularity/.../institute> --input samplesheet.csv -output-dir <OUTDIR>"
 
     UTILS_NFSCHEMA_PLUGIN (
         workflow,
         false,
-        null,
+        "${pipelineDir()}/nextflow_schema.json",
         help,
         help_full,
         show_hidden,
@@ -95,23 +94,17 @@ workflow PIPELINE_INITIALISATION {
     )
 
     //
-    // Get paramsets based on paramsheet or default parameters
+    // The paramsets of a paramsheet. Without one, the paramset is built from the params once the files of the
+    // run are known (see buildParamset)
     //
-    def configurations = params.paramsheet
-        ? getParamsheetConfigurations()
-        : getDefaultConfigurations()
-    paramsets = validateConfigurations(configurations)
-        .collect { paramset -> addDifferentialRuntimeParams(paramset) }
-    ch_paramsets = Channel.fromList(paramsets)
-        .map { paramset -> [
-            id: paramset.study_name,
-            paramset_name: paramset.paramset_name,
-            params: paramset.findAll{ k,v -> k != 'paramset_name' }
-        ]}
-    //
-    // Custom validate input parameters
-    //
-    validateInputParameters(paramsets)
+    ch_paramsets = Channel.empty()
+    if (params.paramsheet) {
+        def paramsets = validateConfigurations(getParamsheetConfigurations(params))
+            .collect { paramset -> addDifferentialRuntimeParams(paramset) }
+        validateInputParameters(paramsets)
+        ch_paramsets = Channel.fromList(paramsets)
+            .map { paramset -> toParamsetMeta(paramset) }
+    }
 
     emit:
     paramsets = ch_paramsets
@@ -130,12 +123,11 @@ workflow PIPELINE_COMPLETION {
     email           //  string: email address
     email_on_fail   //  string: email address sent on pipeline failure
     plaintext_email // boolean: Send plain-text email instead of HTML
-    outdir          //    path: Path to output directory where results will be published
     monochrome_logs // boolean: Disable ANSI colour codes in log output
 
 
     main:
-    summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
+    summary_params = paramsSummaryMap(workflow, parameters_schema: "${pipelineDir()}/nextflow_schema.json")
 
     //
     // Completion email and summary
@@ -147,7 +139,7 @@ workflow PIPELINE_COMPLETION {
                 email,
                 email_on_fail,
                 plaintext_email,
-                outdir,
+                workflow.outputDir,
                 monochrome_logs,
                 []
             )
@@ -406,6 +398,11 @@ def methodsDescriptionText(mqc_methods_yaml) {
     return description_html.toString()
 }
 
+// Root of this pipeline. projectDir is the project of an including pipeline when this one is included.
+def pipelineDir() {
+    return file("${moduleDir}/../../..").toRealPath().toString()
+}
+
 // Validate configurations against the schema.
 def validateConfigurations(configurations) {
     return configurations.collect { paramset ->
@@ -421,13 +418,16 @@ def validateConfigurations(configurations) {
         // This is needed because validate() will fail otherwise
         def notnullparams = cleanparamset.findAll { k, v -> v != null } as Map
 
+        // The validator cannot serialise Path objects
+        def validatable = notnullparams.collectEntries { k, v -> [k, v instanceof Path ? v.toUriString() : v] }
+
         try {
             // Validate against schema
-            validate(notnullparams, "${projectDir}/nextflow_schema.json")
+            validate(validatable, "${pipelineDir()}/nextflow_schema.json")
         } catch (e) {
             // Surface the paramset name; nf-schema will then produce a detailed error.
             log.error "Validation failed for paramsheet row: ${paramset.paramset_name}"
-            validate(notnullparams, "${projectDir}/nextflow_schema.json")
+            validate(validatable, "${pipelineDir()}/nextflow_schema.json")
         }
 
         return cleanparamset
@@ -435,7 +435,7 @@ def validateConfigurations(configurations) {
 }
 
 // Get configurations from paramsheet
-def getParamsheetConfigurations() {
+def getParamsheetConfigurations(params) {
     // Get paramsheet path
     def paramsheet_path = file(params.paramsheet, checkIfExists: true)
 
@@ -464,16 +464,72 @@ def getParamsheetConfigurations() {
         .collect{ row ->
             // Note that the paramsheet may not contain all the parameters
             // defined in the pipeline, so we need to merge them
-            def fullparamset = params + row
+            def fullparamset = paramsetParams(params) + row
             return fullparamset
         }
 }
 
-// Get default configurations from pipeline parameters (profile mode)
-def getDefaultConfigurations() {
-    // Use paramset_name from profile if set, otherwise fall back to 'contrasts'
+// The types of the params declared in the pipeline schema
+def declaredParamTypes() {
+    def schema = new groovy.json.JsonSlurper().parse(file("${pipelineDir()}/nextflow_schema.json").toFile())
+    def types = [:]
+    (schema.properties ?: [:]).each { name, definition -> types[name] = definition.type }
+    (schema['$defs'] ?: [:]).each { _name, group -> (group.properties ?: [:]).each { name, definition -> types[name] = definition.type } }
+    return types
+}
+
+// Names of the params declared in the pipeline schema
+def declaredParamNames() {
+    return declaredParamTypes().keySet()
+}
+
+// A param that the schema allows to be an integer or a boolean arrives from the command line as a string
+def coerceUnionTypes(paramset) {
+    def types = declaredParamTypes()
+    return paramset.collectEntries { k, v ->
+        def allowed = types[k]
+        if (v instanceof String && allowed instanceof List) {
+            if ('boolean' in allowed && v in ['true', 'false']) { return [k, v == 'true'] }
+            if ('integer' in allowed && v ==~ /-?\d+/) { return [k, v as Integer] }
+        }
+        return [k, v]
+    }
+}
+
+// The meta of a paramset in the channel that the workflow takes
+def toParamsetMeta(paramset) {
+    return [
+        id: paramset.study_name,
+        paramset_name: paramset.paramset_name,
+        params: paramset.findAll { k, v -> k != 'paramset_name' }
+    ]
+}
+
+// The params that are files of a run and can be given as values from the dataflow of an including pipeline
+def paramsetFileNames() {
+    return ['input', 'contrasts', 'matrix', 'feature_length_matrix', 'gtf']
+}
+
+// The params of the pipeline that go into a paramset: the declared ones, without the files of the run, which
+// are given as values. A pipeline that includes this one has params of its own.
+def paramsetParams(params) {
+    def declared = declaredParamNames()
+    def files = paramsetFileNames()
+    return coerceUnionTypes(params.findAll { k, v -> k in declared && !(k in files) })
+}
+
+// Builds the paramset of a run without a paramsheet, from the params and the files of the run. Files are strings
+// in the paramset, as they are when given on the command line: processes serialise it.
+def buildParamset(params, files) {
+    def values = paramsetFileNames()
+        .findAll { name -> files[name] != null }
+        .collectEntries { name -> [name, files[name].toUriString()] }
     def pname = params.paramset_name ?: 'contrasts'
-    return [params + [paramset_name: pname]]
+    def paramset = validateConfigurations([paramsetParams(params) + [paramset_name: pname] + values])
+        .collect { paramset -> addDifferentialRuntimeParams(paramset) }
+        .first()
+    validateInputParameters([paramset])
+    return toParamsetMeta(paramset)
 }
 
 // Load configurations from yaml file
@@ -496,8 +552,8 @@ def loadYaml(yaml_path) {
 
     // Substitute ${projectDir} with actual value
     // alternative ways? This can be fragile
-    yaml_content = yaml_content.replaceAll('\\$\\{projectDir\\}', projectDir.toString())
-    yaml_content = yaml_content.replaceAll('\\$projectDir', projectDir.toString())
+    yaml_content = yaml_content.replaceAll('\\$\\{projectDir\\}', pipelineDir())
+    yaml_content = yaml_content.replaceAll('\\$projectDir', pipelineDir())
 
     // Parse yaml content
     def yaml_parser = new org.yaml.snakeyaml.Yaml()
@@ -518,7 +574,7 @@ def resolveIncludes(config) {
             def paramsetName = includeParts[1]
 
             // Load the included YAML file
-            def includeFilePath = file("${projectDir}/conf/${includeFile}.yaml")
+            def includeFilePath = file("${pipelineDir()}/conf/${includeFile}.yaml")
             if (!includeFilePath.exists()) {
                 error("Included file '${includeFilePath}' not found.")
             }
@@ -622,7 +678,7 @@ def prepareModuleOutput(channel, paramsets, List meta_keys_to_remove = null, Boo
 // @param category: the category name
 def getRelevantParams(paramset, category) {
     // Define schema URL - in practice this would be loaded from file
-    def schema = new groovy.json.JsonSlurper().parseText(new File("${projectDir}/nextflow_schema.json").text)
+    def schema = new groovy.json.JsonSlurper().parseText(new File("${pipelineDir()}/nextflow_schema.json").text)
 
     // the relevant groups are the one defined by the category
     // and all the preceding ones

@@ -10,7 +10,7 @@
 [![GitHub Actions Linting Status](https://github.com/nf-core/differentialabundance/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/differentialabundance/actions/workflows/linting.yml)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/differentialabundance/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
 [![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
 [![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.7568000-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.7568000)
-[![Nextflow](https://img.shields.io/badge/version-%E2%89%A525.10.4-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
+[![Nextflow](https://img.shields.io/badge/version-%E2%89%A526.09.0--edge-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
 [![nf-core template version](https://img.shields.io/badge/nf--core_template-4.0.2-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/4.0.2)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
@@ -60,7 +60,7 @@ nextflow run nf-core/differentialabundance \
     --contrasts contrasts.yaml \
     --matrix assay_matrix.tsv \
     --gtf mouse.gtf \
-    --outdir <OUTDIR>
+    -output-dir <OUTDIR>
 ```
 
 > [!WARNING]
@@ -75,7 +75,7 @@ nextflow run nf-core/differentialabundance \
     --contrasts contrasts.yaml \
     --matrix assay_matrix.tsv \
     --gtf mouse.gtf \
-    --outdir <OUTDIR>
+    -output-dir <OUTDIR>
 ```
 
 > [!NOTE]
@@ -93,7 +93,7 @@ nextflow run nf-core/differentialabundance \
     --matrix assay_matrix.tsv \
     --gtf mouse.gtf \
     --gene_sets_files gene_sets.gmt \
-    --outdir <OUTDIR>
+    -output-dir <OUTDIR>
 ```
 
 Affymetrix microarray:
@@ -104,7 +104,7 @@ nextflow run nf-core/differentialabundance \
     --input samplesheet.csv \
     --contrasts contrasts.yaml \
     --affy_cel_files_archive cel_files.tar \
-    --outdir <OUTDIR>
+    -output-dir <OUTDIR>
 ```
 
 For full usage examples, analysis profiles, paramsheet-based multi-run mode, and input specifics (rnaseq counts, Affymetrix, MaxQuant, GEO SOFT), see the [usage documentation](https://nf-co.re/differentialabundance/usage) and the [parameter documentation](https://nf-co.re/differentialabundance/parameters).
