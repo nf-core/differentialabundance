@@ -1,0 +1,4 @@
+contrasts:
+  - id: interaction_genotype_treatment_apeglm
+    formula: "~ genotype * treatment"
+    make_contrasts_str: "genotypeWT.treatmentTreated"
