@@ -653,7 +653,7 @@
                     "type": "string",
                     "default": "ashr",
                     "description": "Which method to use for shrinking fold changes in results?",
-                    "help_text": "'ashr' or 'apeglm'. 'apeglm' can only shrink contrasts given as a model coefficient name.",
+                    "help_text": "'ashr' or 'apeglm'. 'apeglm' needs the contrast given as a model coefficient name (--contrasts comparison column); any other contrast stops with an error.",
                     "enum": ["ashr", "apeglm"],
                     "fa_icon": "fas fa-microscope"
                 },
