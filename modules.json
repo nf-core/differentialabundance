@@ -52,7 +52,7 @@
                     },
                     "deseq2/differential": {
                         "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "git_sha": "103e34a7c2eb5d2862f97c6225793ddad6f4e0bd",
                         "installed_by": ["abundance_differential_filter"]
                     },
                     "geoquery/getgeo": {

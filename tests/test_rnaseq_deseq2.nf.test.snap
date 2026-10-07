@@ -418,6 +418,108 @@
             "nextflow": "26.04.1"
         }
     },
+    "Test profile - rnaseq_deseq2_gprofiler2 - with formula - apeglm": {
+        "content": [
+            10,
+            {
+                "CSVTK_JOIN": {
+                    "csvtk": "0.37.0"
+                },
+                "CUSTOM_FILTERDIFFERENTIALTABLE": {
+                    "pandas": "1.5.2",
+                    "python": "3.11.15"
+                },
+                "CUSTOM_MATRIXFILTER": {
+                    "r-base": "4.2.1"
+                },
+                "DESEQ2_DIFFERENTIAL": {
+                    "r-base": "4.1.3",
+                    "bioconductor-deseq2": "1.34.0"
+                },
+                "DESEQ2_NORM": {
+                    "r-base": "4.1.3",
+                    "bioconductor-deseq2": "1.34.0"
+                },
+                "GPROFILER2_GOST\"": {
+                    "r-base": "4.3.3",
+                    "r-ggplot2": "3.4.3",
+                    "r-gprofiler2": "0.2.2",
+                    "gprofiler-data": "e114_eg62_p19_27110d83"
+                },
+                "GTF_TO_TABLE": {
+                    "atlas-gene-annotation-manipulation": "1.1.1"
+                },
+                "GUNZIP_GTF": {
+                    "gunzip": 1.13
+                },
+                "PLOT_DIFFERENTIAL": {
+                    "shinyngs": "3.2.1"
+                },
+                "VALIDATOR": {
+                    "shinyngs": "3.2.1"
+                },
+                "Workflow": {
+                    "nf-core/differentialabundance": "v2.0.0"
+                }
+            },
+            [
+                "other",
+                "other/deseq2",
+                "other/deseq2/rnaseq_deseq2_gprofiler2",
+                "other/deseq2/rnaseq_deseq2_gprofiler2/interaction_genotype_treatment_apeglm_SRP254919.R_sessionInfo.log",
+                "other/deseq2/rnaseq_deseq2_gprofiler2/interaction_genotype_treatment_apeglm_SRP254919.dds.rld.rds",
+                "other/deseq2/rnaseq_deseq2_gprofiler2/interaction_genotype_treatment_apeglm_SRP254919.deseq2.sizefactors.tsv",
+                "other/gprofiler2",
+                "other/gprofiler2/rnaseq_deseq2_gprofiler2",
+                "other/gprofiler2/rnaseq_deseq2_gprofiler2/interaction_genotype_treatment_apeglm_SRP254919",
+                "other/gprofiler2/rnaseq_deseq2_gprofiler2/interaction_genotype_treatment_apeglm_SRP254919/R_sessionInfo.log",
+                "pipeline_info",
+                "pipeline_info/collated_versions.yml",
+                "pipeline_info/nf_core_differentialabundance_software_versions.yml",
+                "plots",
+                "plots/differential",
+                "plots/differential/rnaseq_deseq2_gprofiler2",
+                "plots/differential/rnaseq_deseq2_gprofiler2/interaction_genotype_treatment_apeglm_SRP254919",
+                "plots/differential/rnaseq_deseq2_gprofiler2/interaction_genotype_treatment_apeglm_SRP254919/png",
+                "plots/differential/rnaseq_deseq2_gprofiler2/interaction_genotype_treatment_apeglm_SRP254919/png/volcano.png",
+                "plots/qc",
+                "plots/qc/rnaseq_deseq2_gprofiler2",
+                "plots/qc/rnaseq_deseq2_gprofiler2/interaction_genotype_treatment_apeglm_SRP254919.deseq2.dispersion.png",
+                "tables",
+                "tables/annotation",
+                "tables/annotation/rnaseq_deseq2_gprofiler2",
+                "tables/annotation/rnaseq_deseq2_gprofiler2/SRP254919.anno.tsv",
+                "tables/differential",
+                "tables/differential/rnaseq_deseq2_gprofiler2",
+                "tables/differential/rnaseq_deseq2_gprofiler2/interaction_genotype_treatment_apeglm_SRP254919.deseq2.results.tsv",
+                "tables/differential/rnaseq_deseq2_gprofiler2/interaction_genotype_treatment_apeglm_SRP254919.deseq2.results_filtered.tsv",
+                "tables/differential/rnaseq_deseq2_gprofiler2/interaction_genotype_treatment_apeglm_SRP254919_deseq2.annotated.tsv",
+                "tables/gprofiler2",
+                "tables/gprofiler2/rnaseq_deseq2_gprofiler2",
+                "tables/gprofiler2/rnaseq_deseq2_gprofiler2/interaction_genotype_treatment_apeglm_SRP254919",
+                "tables/gprofiler2/rnaseq_deseq2_gprofiler2/interaction_genotype_treatment_apeglm_SRP254919/interaction_genotype_treatment_apeglm_SRP254919.gprofiler2.all_enriched_pathways.tsv",
+                "tables/processed_abundance",
+                "tables/processed_abundance/rnaseq_deseq2_gprofiler2",
+                "tables/processed_abundance/rnaseq_deseq2_gprofiler2/all.normalised_counts.tsv",
+                "tables/processed_abundance/rnaseq_deseq2_gprofiler2/all.rlog.tsv"
+            ],
+            [
+                "interaction_genotype_treatment_apeglm_SRP254919.deseq2.sizefactors.tsv:md5,727aa118b484c9956c9abac80f09cafe",
+                "SRP254919.anno.tsv:md5,c1d7f21e64bd00f845ec6545c123a1fb",
+                "interaction_genotype_treatment_apeglm_SRP254919.deseq2.results.tsv:md5,8228f39ea08004a2d5e938b67a01e500",
+                "interaction_genotype_treatment_apeglm_SRP254919.deseq2.results_filtered.tsv:md5,fb11e416e76395d0dac9eb6276674208",
+                "interaction_genotype_treatment_apeglm_SRP254919_deseq2.annotated.tsv:md5,adabee9252bce87cfed4de5c6953d2e2",
+                "interaction_genotype_treatment_apeglm_SRP254919.gprofiler2.all_enriched_pathways.tsv:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "all.normalised_counts.tsv:md5,c2d7cc11637ad01ea49fff4a744965c9",
+                "all.rlog.tsv:md5,bce2521996537372c72f4083f66c5d3b"
+            ]
+        ],
+        "timestamp": "2026-10-07T19:58:37.708034",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
     "Test - Numeric sample IDs - rnaseq_deseq2_gprofiler2": {
         "content": [
             19,

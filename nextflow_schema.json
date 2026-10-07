@@ -646,7 +646,15 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Shrink fold changes in results?",
-                    "help_text": "'ashr' method is the only method currently implemented",
+                    "help_text": "Whether to apply shrinkage to log2 fold changes",
+                    "fa_icon": "fas fa-microscope"
+                },
+                "deseq2_shrink_lfc_type": {
+                    "type": "string",
+                    "default": "ashr",
+                    "description": "Which method to use for shrinking fold changes in results?",
+                    "help_text": "'ashr' or 'apeglm'. 'apeglm' needs the contrast given as a model coefficient name (`make_contrasts_str` in the --contrasts file); any other contrast stops with an error.",
+                    "enum": ["ashr", "apeglm"],
                     "fa_icon": "fas fa-microscope"
                 },
                 "deseq2_vs_blind": {
