@@ -1,0 +1,13 @@
+name: differentialabundance-report
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - r-shinyngs=3.2.1
+  - jupyter=1.1.1
+  - matplotlib=3.10.3
+  - papermill=2.6.0
+  - quarto=1.7.31
+  - r-rmarkdown=2.29
+  - r-tidyverse=2.0.0
+  - r-reactable=0.4.5
