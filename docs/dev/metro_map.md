@@ -1,0 +1,31 @@
+# Metro map
+
+The pipeline overview metro map is generated from `assets/metro_map.mmd` using [nf-metro](https://github.com/pinin4fjords/nf-metro). If you add or rename pipeline steps, update the `.mmd` source and regenerate the images:
+
+```bash
+pip install 'nf-metro>=0.7.2' cairosvg
+
+# Static SVG + PNG
+nf-metro render assets/metro_map.mmd \
+  -o docs/images/nf-core-differentialabundance_metro_map.svg \
+  --theme light --x-spacing 70 --y-spacing 55 \
+  --no-straight-diamonds --line-order definition --center-ports \
+  --logo docs/images/nf-core-differentialabundance_logo_light.png
+
+python -c "import cairosvg; cairosvg.svg2png(
+    url='docs/images/nf-core-differentialabundance_metro_map.svg',
+    write_to='docs/images/nf-core-differentialabundance_metro_map.png', output_width=2265)"
+
+# Animated SVG (used in README)
+nf-metro render assets/metro_map.mmd \
+  -o docs/images/nf-core-differentialabundance_metro_map_animated.svg \
+  --theme light --x-spacing 70 --y-spacing 55 --animate \
+  --no-straight-diamonds --line-order definition --center-ports \
+  --logo docs/images/nf-core-differentialabundance_logo_light.png
+
+# Ensure trailing newlines on SVGs (required by pre-commit)
+for f in docs/images/nf-core-differentialabundance_metro_map.svg \
+         docs/images/nf-core-differentialabundance_metro_map_animated.svg; do
+  sed -i '' -e '$a\' "$f"
+done
+```

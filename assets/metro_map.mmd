@@ -1,0 +1,133 @@
+%%metro title: nf-core/differentialabundance
+%%metro logo: nf-core-differentialabundance_logo_dark.png
+%%metro style: dark
+%%metro legend: bl
+%%metro line_order: definition
+%%metro compact_offsets: true
+%%metro file: meta_in | YAML | Contrasts
+%%metro file: meta_in | CSV | Samples
+%%metro file: matrix_in | TSV | Matrix
+%%metro file: cel_in | CEL | Affy CEL
+%%metro file: mq_in | TSV | MaxQuant
+%%metro file: geo_in | STR | GEO ID
+%%metro file: gtf_in | GTF | GTF
+%%metro file: gmt_in | GMT | Gene sets
+%%metro file: net_in | TSV | Network
+%%metro file: report_html | HTML | Report
+%%metro file: bundle_zip | ZIP | Bundle
+%%metro file: shiny_html | HTML | Shiny
+%%metro file: plots_png | PNG | Plots
+%%metro line: rnaseq | RNA-seq counts | #2db572
+%%metro line: affy | Affymetrix microarray | #e6550d
+%%metro line: maxquant | MaxQuant proteomics | #0570b0
+%%metro line: geo | GEO SOFT file | #756bb1
+%%metro grid: data_prep | 0,0,2,1
+%%metro grid: differential | 1,0,1,1
+%%metro grid: functional | 2,0,1,1
+%%metro grid: reporting | 3,0,1,1
+%%metro grid: plots | 2,1,1,1
+%%metro off_track: gmt_in, net_in
+
+graph LR
+    subgraph data_prep [Data import and preparation]
+        %%metro exit: right | rnaseq, affy, maxquant, geo
+        meta_in[ ]
+        matrix_in[ ]
+        gtf_in[ ]
+        cel_in[ ]
+        mq_in[ ]
+        geo_in[ ]
+        gtf_to_table[GTF to table]
+        affy_load[affy load]
+        proteus[proteus]
+        geoquery[GEOquery]
+        validator[Validate]
+        matrix_filter[Filter matrix]
+
+        meta_in -->|rnaseq,affy,maxquant,geo| validator
+        matrix_in -->|rnaseq| validator
+        gtf_in -->|rnaseq,maxquant| gtf_to_table
+        gtf_to_table -->|rnaseq,maxquant| validator
+        cel_in -->|affy| affy_load
+        affy_load -->|affy| validator
+        mq_in -->|maxquant| proteus
+        proteus -->|maxquant| validator
+        geo_in -->|geo| geoquery
+        geoquery -->|geo| validator
+        validator -->|rnaseq,affy,maxquant,geo| matrix_filter
+    end
+
+    subgraph differential [Differential analysis]
+        %%metro entry: left | rnaseq, affy, maxquant, geo
+        %%metro exit: right | rnaseq, affy, maxquant, geo
+        limma[limma]
+        deseq2[DESeq2]
+        dream[dream]
+        propd[propd]
+        annotate[Annotate results]
+
+        limma -->|rnaseq,affy| annotate
+        deseq2 -->|rnaseq| annotate
+        dream -->|rnaseq| annotate
+        propd -->|rnaseq| annotate
+    end
+
+    subgraph functional [Functional enrichment]
+        %%metro entry: left | rnaseq, affy, maxquant, geo
+        %%metro exit: right | rnaseq, affy, maxquant, geo
+        gmt_in[ ]
+        net_in[ ]
+        gsea[GSEA]
+        gprofiler2[gprofiler2]
+        decoupler[decoupler]
+        grea[grea]
+
+        gmt_in -->|rnaseq,affy,maxquant,geo| gsea
+        net_in -->|rnaseq,affy,maxquant,geo| decoupler
+    end
+
+    subgraph reporting [Reporting]
+        %%metro entry: left | rnaseq, affy, maxquant, geo
+        shinyngs[shinyngs]
+        quarto[Quarto report]
+        bundle[Zip bundle]
+        shiny_html[ ]
+        report_html[ ]
+        bundle_zip[ ]
+
+        shinyngs -->|rnaseq,affy,maxquant,geo| shiny_html
+        quarto -->|rnaseq,affy,maxquant,geo| report_html
+        quarto -->|rnaseq,affy,maxquant,geo| bundle
+        bundle -->|rnaseq,affy,maxquant,geo| bundle_zip
+    end
+
+    subgraph plots [Plots]
+        %%metro entry: left | rnaseq, affy, maxquant, geo
+        plot_expl[Exploratory]
+        plot_diff[Differential]
+        plots_png[ ]
+
+        plot_expl -->|rnaseq,affy,maxquant,geo| plots_png
+        plot_diff -->|rnaseq,affy,maxquant,geo| plots_png
+    end
+
+    %% Inter-section edges
+    matrix_filter -->|rnaseq,affy,maxquant,geo| limma
+    matrix_filter -->|rnaseq| deseq2
+    matrix_filter -->|rnaseq| dream
+    matrix_filter -->|rnaseq| propd
+    %% Section 2 -> Section 3 (functional from differential results)
+    limma -->|rnaseq,affy,maxquant,geo| gsea
+    limma -->|rnaseq,affy,maxquant,geo| gprofiler2
+    limma -->|rnaseq,affy,maxquant,geo| decoupler
+    limma -->|rnaseq| grea
+    %% Section 2 -> Section 4 (plots are parallel, both from differential trunk)
+    limma -->|rnaseq,affy,maxquant,geo| plot_expl
+    limma -->|rnaseq,affy,maxquant,geo| plot_diff
+    %% Section 2/3 -> Section 5 (reporting from differential + functional)
+    limma -->|rnaseq,affy,maxquant,geo| shinyngs
+    limma -->|rnaseq,affy,maxquant,geo| quarto
+    gsea -->|rnaseq,affy,maxquant,geo| quarto
+    gprofiler2 -->|rnaseq,affy,maxquant,geo| quarto
+    decoupler -->|rnaseq,affy,maxquant,geo| quarto
+    grea -->|rnaseq| quarto
