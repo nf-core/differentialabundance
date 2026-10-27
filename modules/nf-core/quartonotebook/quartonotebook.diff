@@ -1,0 +1,22 @@
+Changes in component 'nf-core/quartonotebook'
+'modules/nf-core/quartonotebook/environment.yml' is unchanged
+'modules/nf-core/quartonotebook/meta.yml' is unchanged
+Changes in 'quartonotebook/main.nf':
+--- modules/nf-core/quartonotebook/main.nf
++++ modules/nf-core/quartonotebook/main.nf
+@@ -23,8 +23,8 @@
+     tuple val(meta), path("params.yml")                                                        , emit: params_yaml
+     tuple val(meta), path("${notebook_parameters.artifact_dir}/*")                             , emit: artifacts  , optional: true
+     tuple val(meta), path("_extensions")                                                       , emit: extensions , optional: true
+-    tuple val("${task.process}"), val('quarto'), eval('quarto -v'), emit: versions_quarto, topic: versions
+-    tuple val("${task.process}"), val('papermill'), eval('papermill --version | cut -f1 -d" "'), emit: versions_papermill, topic: versions
++    tuple val("${task.process}"), val('quarto'), eval('quarto -v'), emit: versions_quarto
++    tuple val("${task.process}"), val('papermill'), eval('papermill --version | cut -f1 -d" "'), emit: versions_papermill
+
+     when:
+     task.ext.when == null || task.ext.when
+
+'modules/nf-core/quartonotebook/tests/main.nf.test' is unchanged
+'modules/nf-core/quartonotebook/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/quartonotebook/tests/nextflow.config' is unchanged
+************************************************************

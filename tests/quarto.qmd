@@ -1,0 +1,113 @@
+---
+title-block: none
+format:
+    html:
+        css: nf-core_style.css
+        toc: true                               # table of contents
+        toc-location: left                      # float the table of contents to the left of the main document content
+        toc-depth: 4                            # header levels 1,2,3
+        toc-image: nf-core-differentialabundance_logo_light.png
+        theme: default
+        number-sections: false                  # add section numbering to headers
+        df-print: paged                         # tables are printed as an html table with support for pagination over rows and columns
+        embed-resources: true
+        self-contained: true
+params:
+    meta: NULL
+    input_dir: ./
+    artifact_dir: NULL
+    cpus: 1
+    logo: NULL
+    css: NULL
+    citations: NULL
+    versions_file: NULL
+    observations: NULL
+    features: NULL
+    raw_matrix: NULL
+    normalised_matrix: NULL
+    variance_stabilised_matrix: NULL
+    filtering_tests: NULL
+    filtering_thresholds: NULL
+    contrasts_file: NULL
+
+---
+
+<!-- Load libraries -->
+
+```{r}
+#| include: false
+library(knitr)
+library(yaml)
+library(shinyngs)
+library(plotly)
+library(DT)
+```
+
+<!-- Define some functions -->
+
+```{r}
+#| include: false
+round_dataframe_columns <- function(df, columns = NULL, digits = -1) {
+    if (digits == -1) {
+        return(df)                              # if -1, return df without rounding
+    }
+
+    df <- data.frame(df, check.names = FALSE)   # make data.frame from vector as otherwise, the format will get messed up
+    if (is.null(columns)) {
+        columns <- colnames(df)[(unlist(lapply(df, is.numeric), use.names=F))]    # extract only numeric columns for rounding
+    }
+    df[,columns] <- format(data.frame(df[, columns], check.names = FALSE), scientific=T, digits=params$meta$params$round_digits)
+    # Convert columns back to numeric
+
+    for (c in columns) {
+        df[[c]][grep("^ *NA$", df[[c]])] <- NA
+        df[[c]] <- as.numeric(df[[c]])
+    }
+    df
+}
+```
+
+```{r, warning=FALSE}
+#| include: false
+# Load the datatables js
+datatable(NULL)
+```
+
+```{r, warning=FALSE}
+#| include: false
+#| warning: false
+cat("input_dir:", params$input_dir, "\n")
+cat("versions_file:", params$versions_file, "\n")
+
+file_path <- file.path(params$input_dir, params$versions_file)
+cat("Full path:", file_path, "\n")
+
+if (!file.exists(file_path)) {
+  stop("Versions file does not exist at: ", file_path)
+}
+versions <- unlist(yaml.load_file(file.path(params$input_dir, params$versions_file)), recursive = FALSE)
+params_table <- data.frame(Parameter = names(unlist(params)), Value = unlist(params), row.names = NULL)
+
+# We'll subset the params table for different report sections
+make_params_table <- function(name, pattern = NULL, remove_pattern = FALSE){
+    subparams <- params_table
+    if (! is.null(pattern)){
+        subparams <- subparams[grep(pattern, subparams$Parameter),]
+    }
+    if (remove_pattern){
+        subparams$Parameter <- sub(pattern, '', subparams$Parameter)
+    }
+
+    if (nrow(subparams) > 10){
+        dom <- 'tp'
+    }else{
+        dom <- 't'
+    }
+
+    print( htmltools::tagList(datatable(subparams, caption = paste("Parameters used for", name), rownames = FALSE, options = list(dom = dom)) ))
+}
+
+report_title <- paste0('Differential ',  params$meta$params$features_type, ' abundance report', ifelse(is.null(params$meta$params$report_title), '', paste0(': ', params$meta$params$report_title)))
+report_subtitle <- paste0(ifelse(is.null(params$meta$params$report_author), '', paste0('By ', params$meta$params$report_author, ', ')), '<br>differentialabundance workflow version', versions[["Workflow.nf-core/differentialabundance"]])
+
+```

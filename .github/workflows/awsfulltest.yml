@@ -42,7 +42,7 @@ jobs:
               enabled = true
               bot {
                 token = '${{ secrets.NFSLACK_BOT_TOKEN }}'
-                channel = 'differentialabundance'
+                channel = 'differentialabundance-dev'
               }
               onStart {
                 enabled = false
