@@ -117,6 +117,14 @@ captioned_table <- function(df,
                             columns    = NULL,
                             default_sorted = NULL,
                             ...) {
+    # Guard: drop columns with empty/NA names. GSEA report TSVs from the GSEA
+    # tool carry a trailing tab -> an unnamed trailing column. reactable/
+    # react-table throws "A column ID is required!" on an empty column id,
+    # which aborts HTMLWidgets.staticRender and blanks EVERY widget on the page.
+    if (is.data.frame(df) && !is.null(names(df))) {
+        keep <- !is.na(names(df)) & nzchar(names(df))
+        if (any(!keep)) df <- df[, keep, drop = FALSE]
+    }
     args <- list(
         df,
         striped    = TRUE,
