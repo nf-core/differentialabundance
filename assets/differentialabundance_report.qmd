@@ -1172,31 +1172,21 @@ This report summarises differential `{r} p$features_type` analysis as performed 
 cat(paste0("\n## ", capitalize_first(p$observations_type), "s\n"))
 ```
 
-A summary of `{r} p$observations_type` metadata is below:
+The full samplesheet is below. Use the search box or the column filters to find specific `{r} p$observations_type`s:
 
 ```{r observations-table, echo=FALSE, results='asis'}
-display_columns <- union(c(p$observations_id_col, unique(contrast_variables)), informative_variables)
-minimal_fetchngs_cols <- c("sample", "sample_title", "strandedness", "library_strategy", "scientific_name")
-
-if (all(minimal_fetchngs_cols %in% colnames(observations))) {
-    additional_useful_cols <- minimal_fetchngs_cols
-} else {
-    # Coerce per column rather than via apply (which flattens the frame to a
-    # character matrix and silently drops any column containing an NA, because
-    # max(nchar(NA)) is NA and `NA <= 20` is filtered out by `which`).
-    col_widths <- map_int(observations, \(x) max(nchar(as.character(x)), 0L, na.rm = TRUE))
-    additional_useful_cols <- names(col_widths)[col_widths <= 20]
-}
-
-display_columns <- head(union(display_columns, additional_useful_cols), 5)
-display_columns <- unique(c(display_columns, informative_variables))
-observations_to_print <- observations[, unique(display_columns)]
-colnames(observations_to_print) <- prettify_variable_name(colnames(observations_to_print))
+observations_to_print <- observations
+# reactable requires unique column IDs, and prettified names can collide
+colnames(observations_to_print) <- make.unique(prettify_variable_name(colnames(observations_to_print)))
 rownames(observations_to_print) <- NULL
 
 print(captioned_table(
     observations_to_print,
-    caption = paste(capitalize_first(p$observations_type), "metadata")
+    caption    = paste(capitalize_first(p$observations_type), "metadata"),
+    pagination = FALSE,
+    searchable = TRUE,
+    filterable = TRUE,
+    style      = list(maxHeight = "500px")
 ))
 ```
 
