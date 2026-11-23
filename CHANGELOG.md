@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- [[#776](https://github.com/nf-core/differentialabundance/pull/776)] - Add a 200-sample pipeline test that runs under the test resource limit and bounds the size of the report ([@apeltzer](https://github.com/apeltzer)).
 - [[#756]](https://github.com/nf-core/differentialabundance/pull/756) - Clarify docs for 3' tag/DGE RNA-seq: use the pre-scaled matrix, no length offset ([@YannVRB](https://github.com/YannVRB), review by [@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#748](https://github.com/nf-core/differentialabundance/pull/748)] - Bake GSEA enrichment results into the shinyngs application object (shinyngs >= 3.1 `--enrichment_*` options). ([@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#748](https://github.com/nf-core/differentialabundance/pull/748)] - Document running the Shiny app from the shinyngs container image, so no local ShinyNGS install is required. ([@pinin4fjords](https://github.com/pinin4fjords)).
@@ -18,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [[#776](https://github.com/nf-core/differentialabundance/pull/776)] - Stop the Quarto report running out of memory on studies of a hundred or more samples: embedded plot data is cut from 67 MB to 12 MB at 150 samples, which takes pandoc from 11.6 GB to about 2 GB ([@apeltzer](https://github.com/apeltzer)).
+- [[#776](https://github.com/nf-core/differentialabundance/pull/776)] - Vectorise the feature tests in `CUSTOM_MATRIXFILTER`, which took minutes with hundreds of samples ([#693](https://github.com/nf-core/differentialabundance/issues/693)) ([@apeltzer](https://github.com/apeltzer)).
 - [[#769](https://github.com/nf-core/differentialabundance/pull/769)] - Fix `tower.yml` report patterns so Seqera Platform lists the HTML report, report bundle, differential and processed abundance tables, QC plots and Shiny app files written under the per-paramset output folders. ([@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#747](https://github.com/nf-core/differentialabundance/pull/747)] - Fix silent contrast/result ordering mismatch in shinyngs Shiny app caused by `.sort().reverse()` in `collectFile` closures decoupling CSV row order from differential result file order. ([@jozsefkun](https://github.com/jozsefkun), review by [@pinin4fjords](https://github.com/pinin4fjords))
 
