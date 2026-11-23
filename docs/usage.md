@@ -741,7 +741,17 @@ work                # Directory containing the nextflow working files
 
 #### Deactivating reporting processes
 
-A number of workflow steps are not optimised to deal with large sample numbers and will cause the overall workflow to fail. If you have sample numbers on the order of 100s or more, you should disable these processes like:
+The static exploratory plots (`PLOT_EXPLORATORY`) need memory that grows steeply with the number of samples, and the step will fail for studies of more than about 150 samples. The HTML report draws its own versions of these plots and does not depend on this step, so for larger studies you can switch it off:
+
+```
+process {
+    withName:'PLOT_EXPLORATORY'{
+        ext.when = false
+    }
+}
+```
+
+The report itself is sized to stay within the default resources for studies of several hundred samples. If it still outgrows them, for example with a very large number of contrasts, individual sections can be left out with `--disable_report_modules` (the clustering heatmaps and volcano plots are the largest), or the reporting processes can be disabled altogether:
 
 ```
 process {
@@ -751,7 +761,7 @@ process {
 }
 ```
 
-You will not get the final reporting outcomes of the workflow, but you will get the differential tables produced by DESeq2, Limma, or DREAM, and the results of any gene sets analysis you have enabled.
+You will then not get the final reporting outcomes of the workflow, but you will get the differential tables produced by DESeq2, Limma, or DREAM, and the results of any gene sets analysis you have enabled.
 
 We have also added a dedicated pipeline parameter, `--skip_reports` that allows you to skip only the Quarto notebook and bundled report while leaving other reporting processes active. The `QUARTONOTEBOOK` process assumes that every grouping variable you pass to it (from the contrasts file’s variable column or PCA-derived informative_variables) exists as a valid, named column in your sample metadata. If you know your metadata or contrasts might be incomplete or non-standard (such as using formula-based yaml files), the you can use this flag to skip these steps.
 
