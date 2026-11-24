@@ -1,11 +1,14 @@
+// Copyright (c) the nf-core community under an open-source MIT license.
+// See https://github.com/nf-core/modules for full license, file patching instructions and upstream contributing.
+
 process SHINYNGS_STATICDIFFERENTIAL {
     tag "$meta.id"
     label 'process_single'
 
     conda "${moduleDir}/environment.yml"
     container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
-        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/d5/d5f79ef0afe3e3831496c61c81aeda56312f49ac324dc378d3312af7acae2ec6/data'
-        : 'community.wave.seqera.io/library/r-shinyngs:3.2.1--d43071e62bc500d3'}"
+        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/98/98984dd3efd309d77e7de09dfdc354603b4fd600998b6581654ccfc4ad89d9df/data'
+        : 'community.wave.seqera.io/library/r-shinyngs:3.3.0--d9c8248ed4ddb856'}"
 
     input:
     tuple val(meta), path(differential_result)                              // Differential info: contrast and differential stats

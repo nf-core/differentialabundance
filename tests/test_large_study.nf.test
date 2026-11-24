@@ -1,0 +1,83 @@
+// Writes a deterministic synthetic RNA-seq study: a sample sheet, a count
+// matrix and a contrasts file. Generated at test time rather than stored,
+// since a matrix with this many samples is larger than the other test
+// assets. A class, because test blocks cannot see functions defined here.
+class SyntheticStudy {
+    static void write(File dir, int nSamples, int nGenes) {
+        dir.mkdirs()
+        def rng     = new Random(42)
+        def groups  = ['control', 'treated_a', 'treated_b']
+        def samples = (1..nSamples).collect { i ->
+            [id: String.format('S%03d', i), group: groups[(i - 1) % 3], batch: "batch${((i - 1).intdiv(3)) % 4 + 1}"]
+        }
+
+        new File(dir, 'samplesheet.csv').text =
+            (['sample,treatment,batch'] + samples.collect { s -> "${s.id},${s.group},${s.batch}" }).join('\n') + '\n'
+
+        new File(dir, 'contrasts.csv').text = [
+            'id,variable,reference,target,blocking',
+            'treated_a_vs_control,treatment,control,treated_a,',
+            'treated_b_vs_control,treatment,control,treated_b,batch',
+        ].join('\n') + '\n'
+
+        def matrix = new StringBuilder()
+        matrix << (['gene_id', 'gene_name'] + samples.collect { s -> s.id }).join('\t') << '\n'
+        (1..nGenes).each { g ->
+            // Per-gene abundance, with every tenth gene responding to treatment
+            def abundance = Math.exp(4.0 + 1.5 * rng.nextGaussian())
+            def effect    = (g % 10 == 0) ? [0.0, 2.0 * rng.nextGaussian(), 2.0 * rng.nextGaussian()] : [0.0, 0.0, 0.0]
+            def counts    = samples.collect { s ->
+                Math.round(abundance * Math.pow(2.0, effect[groups.indexOf(s.group)] + 0.3 * rng.nextGaussian()))
+            }
+            matrix << ([String.format('ENSG%011d', g), "GENE${g}"] + counts).join('\t') << '\n'
+        }
+        new File(dir, 'counts.tsv').text = matrix.toString()
+    }
+}
+
+nextflow_pipeline {
+
+    name "Test Workflow main.nf - DIFFERENTIALABUNDANCE (large study)"
+    script "../main.nf"
+    tag "large_study"
+    tag "pipeline"
+
+    // Memory use used to grow steeply with the number of samples (see
+    // https://github.com/nf-core/differentialabundance/issues/214). tests/nextflow.config
+    // caps every process at the test resource limit, so with a container
+    // engine that enforces it this run fails if a step outgrows that limit.
+    test("Test 200 samples within the test resource limits") {
+        config "${projectDir}/conf/test/rnaseq/rnaseq_large_study.config"
+
+        when {
+            def study = new File("${launchDir}/large_study_inputs")
+            SyntheticStudy.write(study, 200, 1000)
+
+            params {
+                outdir    = "$outputDir"
+                input     = "${study}/samplesheet.csv"
+                matrix    = "${study}/counts.tsv"
+                contrasts = "${study}/contrasts.csv"
+            }
+        }
+
+        then {
+            def report = new File("$outputDir/report/rnaseq/large_study_differentialabundance_report.html")
+            assertAll(
+                { assert workflow.success },
+                { assert report.exists() },
+                // Every interactive plot is embedded in the report, and the memory
+                // pandoc needs to assemble it grows with the size of the page. This
+                // holds for every profile, including those that do not enforce
+                // memory limits.
+                { assert report.length() < 25 * 1024 * 1024 },
+                { assert snapshot(
+                    // Number of successful tasks
+                    workflow.trace.succeeded().size(),
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_differentialabundance_software_versions.yml")
+                ).match() }
+            )
+        }
+    }
+}

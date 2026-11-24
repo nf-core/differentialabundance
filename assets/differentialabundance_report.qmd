@@ -102,6 +102,128 @@ de_label_col <- function(de_df) {
 }
 
 
+# ---- Interactive plot payload ------------------------------------------------
+
+# Every interactive plot is embedded in the page as JSON, and the memory
+# pandoc needs to assemble the self-contained report grows with the size of
+# that JSON (roughly 0.17 GB per MB). With a hundred or more samples the
+# plots below add up to tens of MB, so each one is passed through
+# slim_plotly() before it is emitted. It builds the figure, exactly as
+# printing would, then removes what the browser never reads or cannot show:
+#
+#   - `attrs`, `visdat` and `cur_data`: plotly's R-side recipe for the
+#     figure, which repeats every trace's data and is ignored by plotly.js;
+#   - coordinate precision beyond `digits` significant figures;
+#   - a heatmap's per-cell hover strings, where they only repeat the axis
+#     labels and the cell value (see slim_heatmap_hover()).
+#
+# Anything that is not a plotly figure is returned untouched.
+slim_plotly <- function(fig, digits = 5) {
+    if (!inherits(fig, "plotly")) return(fig)
+
+    fig <- plotly::plotly_build(fig)
+    fig$x$attrs    <- NULL
+    fig$x$visdat   <- NULL
+    fig$x$cur_data <- NULL
+
+    fig$x$data <- map(fig$x$data, \(trace) {
+        if (identical(trace$type, "heatmap")) {
+            trace <- slim_heatmap_hover(trace, fig$x$layout, digits)
+        }
+        for (coord in c("x", "y", "z")) {
+            trace[[coord]] <- round_coordinates(trace[[coord]], digits)
+        }
+        trace
+    })
+    fig
+}
+
+# Round fractional coordinates; whole numbers (positions, counts) and
+# anything non-numeric are left exactly as they are.
+round_coordinates <- function(values, digits) {
+    if (!is.double(values) || inherits(values, c("Date", "POSIXt"))) return(values)
+    finite <- values[is.finite(values)]
+    if (length(finite) == 0 || all(finite == round(finite))) return(values)
+    values[] <- signif(values, digits)
+    values
+}
+
+# shinyngs gives every heatmap cell its own "Row: .. / Column: .. / Value: .."
+# string, which for 500 features is about 35 KB per sample. The row and
+# column labels are already on the axes as tick text, so when the strings
+# hold nothing else a hover template produces the same text from the axis
+# labels and the cell value. If they differ in any cell (a scaled heatmap
+# shows unscaled values, for instance) the trace is left as it is.
+slim_heatmap_hover <- function(trace, layout, digits) {
+    cell_text <- trace$text
+    z <- trace$z
+    if (!is.matrix(cell_text) || !is.matrix(z) || !identical(dim(cell_text), dim(z))) return(trace)
+
+    axis_labels <- function(axis_id, positions) {
+        axis <- layout[[sub("^([xy])", "\\1axis", axis_id %||% "")]]
+        if (is.null(axis$tickvals) || length(axis$tickvals) != length(axis$ticktext)) return(NULL)
+        as.character(unlist(axis$ticktext))[match(positions, unlist(axis$tickvals))]
+    }
+    row_labels <- axis_labels(trace$yaxis %||% "y", trace$y)
+    col_labels <- axis_labels(trace$xaxis %||% "x", trace$x)
+    if (is.null(row_labels) || is.null(col_labels) || anyNA(row_labels) || anyNA(col_labels)) return(trace)
+
+    from_axes <- paste0(
+        "Row: ", row_labels[row(z)], "<br>",
+        "Column: ", col_labels[col(z)], "<br>",
+        "Value: ", trimws(formatC(z, format = "g", digits = digits))
+    )
+    if (!identical(as.vector(cell_text), from_axes)) return(trace)
+
+    trace$text <- NULL
+    trace$hoverinfo <- NULL
+    trace$hovertemplate <- paste0(
+        "Row: %{y}<br>Column: %{x}<br>Value: %{z:.", digits, "~g}<extra></extra>"
+    )
+    trace
+}
+
+# Points that fall on top of one another add to the page without adding
+# anything visible. Divide the plot area into a `grid` x `grid` lattice and
+# keep the first point of each `group` in each cell, plus every point
+# flagged in `always`. Returns a logical mask; points without finite
+# coordinates are kept and left to the plot.
+thin_overplotted <- function(x, y, group, always, grid) {
+    plottable <- is.finite(x) & is.finite(y)
+    cell_index <- function(v) {
+        index <- rep(0L, length(v))
+        span <- diff(range(v[plottable]))
+        if (any(plottable) && span > 0) {
+            index[plottable] <- as.integer(floor((v[plottable] - min(v[plottable])) / span * grid))
+        }
+        index
+    }
+    candidate <- plottable & !always
+    cell <- paste(group, cell_index(x), cell_index(y))
+    !candidate | (candidate & !duplicated(ifelse(candidate, cell, NA), incomparables = NA))
+}
+
+# Thin only as far as needed to draw at most `max_points`: nothing is
+# dropped when the plot is already within the limit, and otherwise the
+# finest lattice that fits is used. The finer lattices have cells far
+# smaller than a marker, so they leave the plot looking the same even when
+# zoomed in. Points flagged in `always` are never dropped.
+thin_to_budget <- function(x, y, group, always, max_points) {
+    drawn <- rep(TRUE, length(x))
+    if (length(x) <= max_points) return(drawn)
+    for (grid in c(4800, 2400, 1200, 600, 300, 150, 75)) {
+        drawn <- thin_overplotted(x, y, group, always, grid)
+        if (sum(drawn) <= max_points) break
+    }
+    drawn
+}
+
+# Features drawn across all volcano plots of the report, at roughly 35
+# bytes of page each. Reports with few contrasts stay within it and draw
+# every feature.
+volcano_point_budget <- 100000
+
+
 # ---- Table rendering --------------------------------------------------------
 
 # Single replacement for the reactable + tagList + caption div pattern that
@@ -210,7 +332,7 @@ generate_boxplots <- function(combined, label_col) {
             return(invisible())
         }
 
-        print(htmltools::tagList(interactive_topgene_boxplots(
+        print(htmltools::tagList(slim_plotly(interactive_topgene_boxplots(
             assay          = expr_mat,
             groupby        = observations[colnames(expr_mat), cond_var],
             genes          = top_present,
@@ -219,7 +341,7 @@ generate_boxplots <- function(combined, label_col) {
             palette_name   = p$exploratory_palette_name,
             expressiontype = paste("count per", p$features_type),
             should_transform = FALSE
-        )))
+        ))))
     })
     cat("\n:::\n\n")
 }
@@ -373,7 +495,7 @@ render_pca_panels <- function() {
                     palette_name = p$exploratory_palette_name
                 )
             }
-            print(htmltools::tagList(fig))
+            print(htmltools::tagList(slim_plotly(fig)))
         }
 
         percentVar_list[[assay_type]] <- percentVar
@@ -388,7 +510,7 @@ render_scree_panels <- function(percentVar_list) {
     cat("\nThe following scree plot visualizes what percentage of total variation in the data can be explained by each of the principal components computed.\n")
     iwalk(percentVar_list, \(percentVar, assay_type) {
         cat(paste0("\n##### ", prettify_variable_name(assay_type), "\n"))
-        print(htmltools::tagList(interactive_screeplot(percentVar)))
+        print(htmltools::tagList(slim_plotly(interactive_screeplot(percentVar))))
         cat("\n")
     })
     cat(":::")
@@ -435,7 +557,7 @@ render_clustering_heatmaps <- function() {
         variable_genes <- select_variable_genes(matrix = mat, ntop = ntop_for(mat))
         heat_mat       <- mat[variable_genes, ]
 
-        print(htmltools::tagList(interactive_heatmap(
+        print(htmltools::tagList(slim_plotly(interactive_heatmap(
             plotmatrix        = heat_mat,
             displaymatrix     = heat_mat,
             sample_annotation = observations[colnames(heat_mat), informative_variables, drop = FALSE],
@@ -447,7 +569,7 @@ render_clustering_heatmaps <- function() {
             grid_gap          = 0,
             cor_method        = p$exploratory_cor_method,
             cluster_method    = p$exploratory_clustering_method
-        )))
+        ))))
         cat("\n\n")
     })
     cat(":::")
@@ -476,7 +598,7 @@ render_outlier_detection <- function() {
         )
         if (is.null(plotdata)) return(NULL)
 
-        print(htmltools::tagList(interactive_scatterplot(
+        print(htmltools::tagList(slim_plotly(interactive_scatterplot(
             x = plotdata$group,
             y = plotdata$mad,
             colorby = plotdata$outlier,
@@ -487,7 +609,7 @@ render_outlier_detection <- function() {
             show_labels = TRUE,
             xlab = "Sample group",
             ylab = "MAD score"
-        )))
+        ))))
 
         outliers <- rownames(plotdata)[plotdata$outlier]
         if (length(outliers) == 0) {
@@ -584,7 +706,7 @@ render_upset_plots <- function() {
         # UpSet needs at least 2 contrasts to overlap, each with >= 2 features
         contrasts_with_overlap <- sum(map_int(de_genes, length) >= 2)
         if (contrasts_with_overlap > 1) {
-            print(htmltools::tagList(interactive_upset(de_genes)))
+            print(htmltools::tagList(slim_plotly(interactive_upset(de_genes))))
         }
         cat("\n\n")
     })
@@ -630,15 +752,29 @@ render_de_volcano <- function(full_de, pvt, pval_column, p_value_threshold, cont
 
     max_fc <- max(abs(full_de[[p$differential_fc_column]])) * 1.1
 
+    # There is one volcano per contrast and p value type, each with a point
+    # and a hover label per feature, so with many contrasts they come to
+    # dominate the page. Share the point budget between them. Features that
+    # are differential by both criteria are always drawn; the rest mostly
+    # sit on top of one another and are thinned where the budget requires.
+    volcano_x <- full_de[[p$differential_fc_column]]
+    volcano_y <- -log10(full_de[[pval_column]])
+    drawn <- thin_to_budget(
+        volcano_x, volcano_y,
+        group      = full_de$differential_status,
+        always     = !is.na(de_fc & de_pval) & de_fc & de_pval,
+        max_points = floor(volcano_point_budget / (nrow(contrasts) * length(p_value_types)))
+    )
+
     p_volc <- interactive_scatterplot(
-        x = full_de[[p$differential_fc_column]],
-        y = -log10(full_de[[pval_column]]),
-        colorby = full_de$differential_status,
+        x = volcano_x[drawn],
+        y = volcano_y[drawn],
+        colorby = full_de$differential_status[drawn],
         ylab = paste("-log(10)", pval_column),
         xlab = paste("higher in", contrast_row$reference,
                      "          <<", p$differential_fc_column,
                      ">>           higher in", contrast_row$target),
-        labels = hover_labels,
+        labels = hover_labels[drawn],
         vline_thresholds = vline_thresholds,
         hline_thresholds = set_names(list(-log10(p_value_threshold)),
                                      paste(pval_column, "=", p_value_threshold)),
@@ -648,7 +784,14 @@ render_de_volcano <- function(full_de, pvt, pval_column, p_value_threshold, cont
         palette = palette_volcano
     )
 
-    print(htmltools::tagList(p_volc))
+    print(htmltools::tagList(slim_plotly(p_volc)))
+
+    if (!all(drawn)) {
+        cat(sprintf(
+            "\n<i>%s of %s features are drawn: where features that are not differential by both criteria overlap, one is shown. The results tables contain all of them.</i><br><br>\n",
+            format(sum(drawn), big.mark = ","), format(length(drawn), big.mark = ",")
+        ))
+    }
 
     list(de_fc = de_fc, de_pval = de_pval)
 }
@@ -724,13 +867,13 @@ render_biotype_plot <- function(combined) {
         return(invisible())
     }
 
-    print(htmltools::tagList(interactive_count_barplot(
+    print(htmltools::tagList(slim_plotly(interactive_count_barplot(
         annotation = combined,
         category   = "Gene biotype",
         fill       = "Direction",
         ylab       = "Number of differentially expressed genes",
         title      = "Differentially expressed genes by gene biotype and direction"
-    )))
+    ))))
     cat("\n")
 }
 
@@ -1256,7 +1399,7 @@ if (features_provided && !is.null(p$features_name_col) && p$features_name_col %i
         id_vals
     )
 }
-interactive_boxplot(
+slim_plotly(interactive_boxplot(
     assay_data,
     experiment       = observations,
     colorby          = main_grouping_variable,
@@ -1264,7 +1407,7 @@ interactive_boxplot(
     palette          = groupColorScale,
     whisker_distance = p$exploratory_whisker_distance,
     labels           = boxplot_labels
-)
+))
 ```
 
 Whiskers in the above boxplots show `{r} p$exploratory_whisker_distance` times the inter-quartile range.
@@ -1272,13 +1415,13 @@ Whiskers in the above boxplots show `{r} p$exploratory_whisker_distance` times t
 #### Density plots
 
 ```{r exploratory-density, echo=FALSE, fig.height=8, eval=!module_disabled("density")}
-interactive_densityplot(
+slim_plotly(interactive_densityplot(
     assay_data,
     experiment     = observations,
     colorby        = observations_name_col,
     expressiontype = paste("count per", p$features_type),
     make_color_scale(length(unique(observations[[p$observations_id_col]])), palette = "Set1")
-)
+))
 ```
 
 ```{r relationships-header, echo=FALSE, results='asis'}
@@ -1307,11 +1450,11 @@ The resulting p values are illustrated below.
 # Emitted inline (not wrapped in a helper) so knit_print.htmlwidget can
 # dispatch with the widget's natural sizing policy.
 final_pca <- pca_datas[[p$exploratory_final_assay]]
-interactive_pca_metadata_heatmap(
+slim_plotly(interactive_pca_metadata_heatmap(
     pca_coords         = final_pca$coords,
     pcameta            = observations[rownames(final_pca$coords), informative_variables, drop = FALSE],
     fraction_explained = final_pca$percentVar
-)
+))
 render_pca_meta_annotations()
 ```
 

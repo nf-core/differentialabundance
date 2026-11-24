@@ -20,10 +20,10 @@
                     "gunzip": 1.13
                 },
                 "PLOT_DIFFERENTIAL": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "PLOT_EXPLORATORY": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "PROPR_GREA": {
                     "r-propr": "5.1.5"
@@ -32,10 +32,10 @@
                     "r-propr": "5.1.8"
                 },
                 "SHINYNGS_APP": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "VALIDATOR": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "Workflow": {
                     "nf-core/differentialabundance": "v2.0.0"

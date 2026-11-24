@@ -1,0 +1,47 @@
+{
+    "Test 200 samples within the test resource limits": {
+        "content": [
+            15,
+            {
+                "CSVTK_JOIN": {
+                    "csvtk": "0.37.0"
+                },
+                "CUSTOM_FILTERDIFFERENTIALTABLE": {
+                    "pandas": "1.5.2",
+                    "python": "3.11.15"
+                },
+                "CUSTOM_MATRIXFILTER": {
+                    "r-base": "4.2.1"
+                },
+                "DESEQ2_DIFFERENTIAL": {
+                    "r-base": "4.1.3",
+                    "bioconductor-deseq2": "1.34.0"
+                },
+                "DESEQ2_NORM": {
+                    "r-base": "4.1.3",
+                    "bioconductor-deseq2": "1.34.0"
+                },
+                "PLOT_DIFFERENTIAL": {
+                    "shinyngs": "3.3.0"
+                },
+                "PLOT_EXPLORATORY": {
+                    "shinyngs": "3.3.0"
+                },
+                "SHINYNGS_APP": {
+                    "shinyngs": "3.3.0"
+                },
+                "VALIDATOR": {
+                    "shinyngs": "3.3.0"
+                },
+                "Workflow": {
+                    "nf-core/differentialabundance": "v2.0.0"
+                }
+            }
+        ],
+        "timestamp": "2026-11-24T12:49:19.447903",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.10.6"
+        }
+    }
+}

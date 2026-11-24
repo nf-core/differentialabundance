@@ -15,10 +15,10 @@
                     "bioconductor-limma": "3.58.1"
                 },
                 "PLOT_DIFFERENTIAL": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "PLOT_EXPLORATORY": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "PROTEUS": {
                     "r-base": "4.2.1",
@@ -27,7 +27,7 @@
                     "bioconductor-limma": "3.54.0"
                 },
                 "VALIDATOR": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "Workflow": {
                     "nf-core/differentialabundance": "v2.0.0"
