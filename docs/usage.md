@@ -743,7 +743,6 @@ work                # Directory containing the nextflow working files
 
 The static exploratory plots (`PLOT_EXPLORATORY`) and the HTML report are sized to stay within the default resources for studies of several hundred samples. If the report still outgrows them, for example with a very large number of contrasts, individual sections can be left out with `--disable_report_modules` (the clustering heatmaps and volcano plots are the largest), or the reporting processes can be disabled altogether:
 
-
 ```
 process {
     withName:'PLOT_EXPLORATORY|PLOT_DIFFERENTIAL|QUARTONOTEBOOK|MAKE_REPORT_BUNDLE|SHINYNGS_APP'{
