@@ -530,14 +530,14 @@ From the app directory (`[output directory]/[study id]`), with Docker:
 
 ```bash
 docker run --rm -p 3838:3838 -v "$PWD":/app \
-    community.wave.seqera.io/library/r-shinyngs:3.2.0--19cca4636e20b0f7 \
+    community.wave.seqera.io/library/r-shinyngs:3.3.0--d9c8248ed4ddb856 \
     R -e "shiny::runApp('/app', host = '0.0.0.0', port = 3838)"
 ```
 
 or with Singularity/Apptainer:
 
 ```bash
-singularity exec docker://community.wave.seqera.io/library/r-shinyngs:3.2.0--19cca4636e20b0f7 \
+singularity exec docker://community.wave.seqera.io/library/r-shinyngs:3.3.0--d9c8248ed4ddb856 \
     R -e "shiny::runApp('.', host = '0.0.0.0', port = 3838)"
 ```
 
@@ -741,17 +741,8 @@ work                # Directory containing the nextflow working files
 
 #### Deactivating reporting processes
 
-The static exploratory plots (`PLOT_EXPLORATORY`) need memory that grows steeply with the number of samples, and the step will fail for studies of more than about 150 samples. The HTML report draws its own versions of these plots and does not depend on this step, so for larger studies you can switch it off:
+The static exploratory plots (`PLOT_EXPLORATORY`) and the HTML report are sized to stay within the default resources for studies of several hundred samples. If the report still outgrows them, for example with a very large number of contrasts, individual sections can be left out with `--disable_report_modules` (the clustering heatmaps and volcano plots are the largest), or the reporting processes can be disabled altogether:
 
-```
-process {
-    withName:'PLOT_EXPLORATORY'{
-        ext.when = false
-    }
-}
-```
-
-The report itself is sized to stay within the default resources for studies of several hundred samples. If it still outgrows them, for example with a very large number of contrasts, individual sections can be left out with `--disable_report_modules` (the clustering heatmaps and volcano plots are the largest), or the reporting processes can be disabled altogether:
 
 ```
 process {

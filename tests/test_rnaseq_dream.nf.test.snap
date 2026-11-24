@@ -20,16 +20,16 @@
                     "gunzip": 1.13
                 },
                 "PLOT_DIFFERENTIAL": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "PLOT_EXPLORATORY": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "SHINYNGS_APP": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "VALIDATOR": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "VARIANCEPARTITION_DREAM": {
                     "r-base": "4.3.3",
@@ -137,16 +137,16 @@
                     "gunzip": 1.13
                 },
                 "PLOT_DIFFERENTIAL": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "PLOT_EXPLORATORY": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "SHINYNGS_APP": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "VALIDATOR": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "VARIANCEPARTITION_DREAM": {
                     "r-base": "4.3.3",
@@ -274,16 +274,16 @@
                     "gunzip": 1.13
                 },
                 "PLOT_DIFFERENTIAL": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "PLOT_EXPLORATORY": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "SHINYNGS_APP": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "VALIDATOR": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "VARIANCEPARTITION_DREAM": {
                     "r-base": "4.3.3",
@@ -417,16 +417,16 @@
                     "gunzip": 1.13
                 },
                 "PLOT_DIFFERENTIAL": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "PLOT_EXPLORATORY": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "SHINYNGS_APP": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "VALIDATOR": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "VARIANCEPARTITION_DREAM": {
                     "r-base": "4.3.3",
@@ -586,10 +586,10 @@
                     "gunzip": 1.13
                 },
                 "PLOT_DIFFERENTIAL": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "VALIDATOR": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "VARIANCEPARTITION_DREAM": {
                     "r-base": "4.3.3",

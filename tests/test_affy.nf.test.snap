@@ -25,26 +25,26 @@
                     "r-base": "4.3.3",
                     "r-ggplot2": "3.4.3",
                     "r-gprofiler2": "0.2.2",
-                    "gprofiler-data": "e114_eg62_p19_27110d83"
+                    "gprofiler-data": "e114_eg62_p19_9dc92ac8"
                 },
                 "LIMMA_DIFFERENTIAL": {
                     "r-base": "4.3.3",
                     "bioconductor-limma": "3.58.1"
                 },
                 "PLOT_DIFFERENTIAL": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "PLOT_EXPLORATORY": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "SHINYNGS_APP": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "UNTAR": {
                     "untar": 1.34
                 },
                 "VALIDATOR": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "Workflow": {
                     "nf-core/differentialabundance": "v2.0.0"
@@ -188,19 +188,19 @@
                     "bioconductor-limma": "3.58.1"
                 },
                 "PLOT_DIFFERENTIAL": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "PLOT_EXPLORATORY": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "SHINYNGS_APP": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "UNTAR": {
                     "untar": 1.34
                 },
                 "VALIDATOR": {
-                    "shinyngs": "3.2.1"
+                    "shinyngs": "3.3.0"
                 },
                 "Workflow": {
                     "nf-core/differentialabundance": "v2.0.0"
