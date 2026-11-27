@@ -155,7 +155,7 @@ captioned_table <- function(df,
     )
 }
 
-make_params_table <- function(name, pattern = NULL, remove_pattern = FALSE) {
+make_params_table <- function(params_table, name, pattern = NULL, remove_pattern = FALSE) {
     sub <- params_table
     if (!is.null(pattern))   sub <- sub[grep(pattern, sub$Parameter), ]
     if (remove_pattern)      sub$Parameter <- sub(pattern, "", sub$Parameter)
@@ -504,37 +504,36 @@ render_outlier_detection <- function() {
 # ---- Section: differential method description -----------------------------
 
 render_method_description <- function() {
-    cat(switch(
+    adjusted_with <- function(method) {
+        paste0(" was used for differential analysis. p-values were adjusted with the ",
+               method, " method to reduce the number of false positives. ")
+    }
+    method_text <- switch(
         p$differential_method,
-        "deseq2" = paste0(
-            "The `DESeq2 R` package was used for differential analysis. p-values were adjusted with the ",
-            p$deseq2_p_adjust_method, " method to reduce the number of false positives. ",
-            capitalize_first(p$features_type),
-            "s were considered differential if, for the respective contrast, the adjusted p-value was equal to or lower than ",
-            p$deseq2_alpha, " and the absolute log2 fold change was equal to or higher than ",
-            p$deseq2_lfc_threshold, "."
-        ),
+        "deseq2" = paste0("The `DESeq2 R` package", adjusted_with(p$deseq2_p_adjust_method)),
         "limma" = paste0(
             "The `limma R` package",
             ifelse(isTRUE(p$limma_use_voom), " with `voom` transformation", ""),
-            " was used for differential analysis. p-values were adjusted with the ",
-            p$limma_adjust_method, " method to reduce the number of false positives. ",
-            capitalize_first(p$features_type),
-            "s were considered differential if, for the respective contrast, the adjusted p-value was equal to or lower than ",
-            p$limma_p_value, " and the absolute log2 fold change was equal to or higher than ",
-            p$limma_lfc, "."
+            adjusted_with(p$limma_adjust_method)
         ),
         "dream" = paste0(
             "The `variancePartition` `dream` workflow",
             ifelse(isTRUE(p$dream_apply_voom), " with `voom` transformation", ""),
-            " was used for differential analysis. p-values were adjusted with the ",
-            p$dream_adjust_method, " method to reduce the number of false positives. ",
-            capitalize_first(p$features_type),
-            "s were considered differential if, for the respective contrast, the adjusted p-value was equal to or lower than ",
-            p$dream_p_value, " and the absolute log2 fold change was equal to or higher than ",
-            p$dream_lfc, "."
+            adjusted_with(p$dream_adjust_method)
         ),
-        paste0("The `", p$differential_method, "` method was used for differential analysis.")
+        paste0("The `", p$differential_method, "` method was used for differential analysis. ")
+    )
+
+    # The thresholds quoted here are the ones the tables and plots below apply
+    # (differential_*), not the method's own options (e.g. deseq2_alpha).
+    cat(paste0(
+        method_text,
+        capitalize_first(p$features_type),
+        "s were considered differential if, for the respective contrast, the absolute log2 fold change was equal to or higher than ",
+        signif(log2(p$differential_min_fold_change), 3),
+        " and the p-value was equal to or lower than the threshold of the selected tab: ",
+        p$differential_max_qval, " for the adjusted p-value ('Adjusted' tabs) or ",
+        p$differential_max_pval, " for the unadjusted p-value ('Unadjusted' tabs)."
     ))
 }
 
@@ -1145,10 +1144,10 @@ p_value_thresholds <- list(
 sig_differential <- map(set_names(names(p_value_types)), \(pvt) {
     map(seq_len(nrow(contrasts)), \(x) {
         de  <- differential_results[[x]]
-        sig <- de[, p_value_types[[pvt]]] < p_value_thresholds[[pvt]]
+        sig <- de[, p_value_types[[pvt]]] <= p_value_thresholds[[pvt]]
         list(
-            up   = de[which(de[, p$differential_fc_column] >  log2(p$differential_min_fold_change) & sig), ],
-            down = de[which(de[, p$differential_fc_column] < log2(1 / p$differential_min_fold_change) & sig), ]
+            up   = de[which(de[, p$differential_fc_column] >= log2(p$differential_min_fold_change) & sig), ],
+            down = de[which(de[, p$differential_fc_column] <= log2(1 / p$differential_min_fold_change) & sig), ]
         )
     }) |>
         set_names(contrast_descriptions)
@@ -1368,13 +1367,13 @@ if (!is.null(p$functional_method)) {
 
 ```{r maxquant-import-params, echo=FALSE, results='asis', eval=p$study_type == 'maxquant'}
 cat(paste0("\n## Protein abundance import\n"))
-make_params_table("importing maxquant output", "proteus_", remove_pattern = TRUE)
+make_params_table(params_table, "importing maxquant output", "proteus_", remove_pattern = TRUE)
 ```
 
 ## Filtering
 
 ```{r filtering-params, echo=FALSE, results='asis'}
-make_params_table("feature-wise filtering", "filtering_", remove_pattern = TRUE)
+make_params_table(params_table, "feature-wise filtering", "filtering_", remove_pattern = TRUE)
 ```
 
 ```{r filtering-description, echo=FALSE, results='asis'}
@@ -1406,23 +1405,23 @@ cat(filtering_string)
 ## Exploratory analysis
 
 ```{r exploratory-params, echo=FALSE, results='asis'}
-make_params_table("exploratory analysis", "exploratory_", remove_pattern = TRUE)
+make_params_table(params_table, "exploratory analysis", "exploratory_", remove_pattern = TRUE)
 ```
 
 ## Differential analysis
 
 ```{r diff-params, echo=FALSE, results='asis'}
 if (p$differential_method == "deseq2") {
-    make_params_table("DESeq2", "deseq2_", remove_pattern = TRUE)
+    make_params_table(params_table, "DESeq2", "deseq2_", remove_pattern = TRUE)
 }
-make_params_table("downstream differential analysis", "differential_", remove_pattern = TRUE)
+make_params_table(params_table, "downstream differential analysis", "differential_", remove_pattern = TRUE)
 ```
 
 ```{r gene-set-params, echo=FALSE, results='asis'}
 if (!is.null(p$functional_method)) {
     cat("\n### Gene set analysis\n")
     cat("\n#### ", toupper(p$functional_method), "\n")
-    make_params_table(toupper(p$functional_method),
+    make_params_table(params_table, toupper(p$functional_method),
                       paste0(p$functional_method, "_"),
                       remove_pattern = TRUE)
 }
