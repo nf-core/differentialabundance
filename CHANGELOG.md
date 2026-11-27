@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [[#769](https://github.com/nf-core/differentialabundance/pull/769)] - Fix `tower.yml` report patterns so Seqera Platform lists the HTML report, report bundle, differential and processed abundance tables, QC plots and Shiny app files written under the per-paramset output folders. ([@pinin4fjords](https://github.com/pinin4fjords)).
 - [[#747](https://github.com/nf-core/differentialabundance/pull/747)] - Fix silent contrast/result ordering mismatch in shinyngs Shiny app caused by `.sort().reverse()` in `collectFile` closures decoupling CSV row order from differential result file order. ([@jozsefkun](https://github.com/jozsefkun), review by [@pinin4fjords](https://github.com/pinin4fjords))
+- [[#777](https://github.com/nf-core/differentialabundance/issues/777)] - Fix the differential analysis description in the report, which quoted method options (e.g. `deseq2_alpha`, `limma_p_value`) instead of the `differential_*` thresholds actually applied, and make the summary counts use the same inclusive thresholds as the per-contrast sections. ([@apeltzer](https://github.com/apeltzer)).
 
 ## v2.0.0 - 2026-05-26
 
